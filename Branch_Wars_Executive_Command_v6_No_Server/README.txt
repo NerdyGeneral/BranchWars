@@ -176,6 +176,26 @@ If DIRECT LINK STALLED says the data channel never opened, the network is
 blocking direct browser traffic between the two computers. No amount of waiting
 will change that. Use INTRANET ROOM instead.
 
+CONNECTING ACROSS TWO DIFFERENT NETWORKS
+-----------------------------------------
+Browsers hide your computer's network address from web pages, replacing it with
+a name that can only be looked up on your own network segment. Two computers on
+the same segment resolve it and connect. Two on different segments cannot, and
+the connection desk sits at PEER NEW forever.
+
+OPEN_BRANCH_WARS.bat now works out this computer's address and passes it to the
+game, which fills in THIS COMPUTER'S NETWORK ADDRESS on the Direct P2P screen.
+Both players should open the game that way. The address is added to the
+invitation alongside the hidden name, so nothing is lost if you are on the same
+segment after all, and the game remembers it if you later open the page directly.
+
+You are only telling your own opponent your own computer's address. If the field
+is empty, run ipconfig and copy the IPv4 address of your active adapter.
+
+If the link still will not form with both addresses filled in, the two networks
+do not permit direct traffic between workstations, and no setting in the game
+changes that.
+
 WHEN THE INTRANET ROOM ADDRESS DOES NOT WORK
 --------------------------------------------
 The server window prints the address it believes friends should use, plus any

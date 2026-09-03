@@ -788,6 +788,20 @@ assert(peerBody.includes("s==='disconnected'") && peerBody.includes('dropGrace')
 assert(clientFn('linkLost').includes('new pair of codes'), 'an unrecoverable link must say what is needed');
 assert(clientFn('waitIce').includes('onProgress'), 'route discovery must report progress');
 
+// Browsers hide local addresses from pages, which is what stops a direct link
+// forming across subnets. The launcher supplies it; the page adds a candidate
+// naming it and keeps the mDNS one as a fallback.
+const addressBody = clientFn('withLocalAddress');
+assert(addressBody.includes('typ host'), 'only host candidates may be rewritten');
+assert(addressBody.includes('.local'), 'only mDNS candidates may be replaced');
+assert(addressBody.includes('lines.slice(at)'), 'the original candidates must be kept as fallbacks');
+assert(clientFn('loadLanIp').includes('lanip='), 'the launcher must be able to supply the address');
+assert(clientFn('loadLanIp').includes('branchWarsLanIp'), 'the address must be remembered between sessions');
+for (const fn of ['createOffer', 'createAnswer']) {
+  assert(clientFn(fn).includes('rememberLanIp()'), `${fn}() must pick up the entered address`);
+  assert(clientFn(fn).includes('withLocalAddress('), `${fn}() must publish the address it was given`);
+}
+
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
