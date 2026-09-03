@@ -673,6 +673,110 @@ assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');
 
+// A later duplicate silently shadows the earlier definition and the page still
+// parses, so a redefined client function is a real defect the syntax check misses.
+{
+  const client = html.slice(html.indexOf('<script>', html.indexOf('</script>')));
+  const seen = new Map();
+  for (const match of client.matchAll(/^\s*(?:async\s+)?function ([A-Za-z0-9_$]+)\(/gm)) {
+    seen.set(match[1], (seen.get(match[1]) || 0) + 1);
+  }
+  const duplicated = [...seen].filter(([, count]) => count > 1).map(([name]) => name);
+  assert.deepEqual(duplicated, [], 'no client function may be declared twice');
+}
+
+// --- direct-link (P2P) session contract -------------------------------------
+// A green "connected" peer says nothing about the data channel the game runs on.
+// These guard the fixes for a link that connects but never advances a cycle.
+function clientFn(name) {
+  const start = html.indexOf(`function ${name}(`);
+  assert(start >= 0, `client function ${name} must exist`);
+  const end = html.indexOf('\nfunction ', start + 1);
+  return html.slice(start, end === -1 ? html.length : end);
+}
+
+// The transport is chosen by the transport that is actually open, never by the
+// setup screen the player last looked at.
+const sendBody = clientFn('send');
+assert(sendBody.includes('lan.active'), 'send() must route on the live transport');
+assert(!/if\(mode==='lan'\)/.test(sendBody), 'send() must not route on the UI mode flag');
+for (const fn of ['createOffer', 'createAnswer']) {
+  assert(clientFn(fn).includes("mode='p2p'"), `${fn}() must own the session mode`);
+}
+
+// The rival's copy of the state leaves before the host redraws itself, so a
+// display failure on the host can never strand the guest on a stale cycle.
+const syncBody = clientFn('syncPeers');
+assert(
+  syncBody.indexOf("send({type:'state'") < syncBody.indexOf('render()'),
+  'syncPeers() must transmit the rival state before redrawing the host view',
+);
+
+// The handshake is retried and watched: a single dropped hello used to hang the
+// session forever behind a green "DIRECT LINK CONNECTED".
+assert(clientFn('startHandshake').includes('setInterval'), 'the handshake must retry');
+const watchBody = clientFn('armLinkWatch');
+assert(watchBody.includes("dc.readyState!=='open'"), 'the watchdog must check the data channel, not just the peer');
+assert(watchBody.includes('DIRECT LINK STALLED'), 'a stalled link must say so on screen');
+assert(
+  clientFn('wireChannel').includes("if(dc.readyState==='open')opened()"),
+  'a channel handed over already open must still start the handshake',
+);
+
+// A guest plan is provisional until the host confirms it.
+const submitBody = clientFn('submitPlan');
+assert(submitBody.includes('planAckTimer'), 'a guest plan must be confirmed or released');
+assert(
+  !clientFn('recallPlan').includes('view.me.submitted=false'),
+  'only the host may unlock a submitted plan',
+);
+const messageBody = clientFn('handleMessage');
+assert(
+  messageBody.includes("m.type==='error'") && messageBody.includes('view.me.submitted=false'),
+  'a rejected plan must release the guest instead of locking it forever',
+);
+assert(messageBody.includes('lan.active?'), 'the host must open the campaign on the live transport');
+
+// --- connection code handling -----------------------------------------------
+// Codes travel through chat and mail, which wrap lines, quote replies and
+// rewrite punctuation. base64url survives that; + / and = do not.
+const packBody = clientFn('pack');
+assert(packBody.includes("g,'-')") && packBody.includes("g,'_')"),
+  'codes must be base64url so chat and mail cannot corrupt them');
+const cleanBody = clientFn('cleanCode');
+for (const [pattern, why] of [
+  ['\\s+', 'wrapped lines must be repaired'],
+  ['^[>\\s]+', 'quoted replies must be unwrapped'],
+  ['u200B', 'zero-width characters must be removed'],
+  ['u201C', 'smart quotes must be removed'],
+]) assert(cleanBody.includes(pattern), why);
+
+// Every rejection names what is actually wrong, so nobody is left guessing.
+const unpackBody = clientFn('unpack');
+assert(unpackBody.includes('indexOf(prefix)'), 'a code must be found anywhere in a pasted blob');
+assert(unpackBody.includes('It belongs in the other box'), 'the wrong kind of code must be named');
+assert(unpackBody.includes('Only part of the code'), 'a truncated code must be named');
+assert(clientFn('decodeCode').includes('altered in transit'), 'a corrupted code must be named');
+assert(clientFn('applyAnswer').includes('older invitation'), 'a superseded code must be named');
+
+// A reconnect replaces the transport and keeps the campaign.
+for (const fn of ['createOffer', 'createAnswer']) {
+  assert(clientFn(fn).includes('rejoin'), `${fn}() must support reconnecting mid-campaign`);
+  assert(clientFn(fn).includes("$('#outCode').value=''"),
+    `${fn}() must clear the previous code so a stale one is never copied`);
+}
+// Completion belongs to the link, not to whether a campaign happens to exist,
+// or a reconnect would never re-introduce the players to each other.
+assert.equal(clientFn('handshakeDone').includes('game'), false,
+  'handshake completion must not be inferred from game state');
+
+// A brief drop is given time to heal; a failed one needs codes only a human can carry.
+const peerBody = clientFn('newPeer');
+assert(peerBody.includes("s==='disconnected'") && peerBody.includes('dropGrace'),
+  'a brief disconnect must be given time to recover');
+assert(clientFn('linkLost').includes('new pair of codes'), 'an unrecoverable link must say what is needed');
+assert(clientFn('waitIce').includes('onProgress'), 'route discovery must report progress');
+
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
@@ -685,4 +789,4 @@ for (const cls of ['signal watch', 'signal hot', 'signal safe']) {
   assert(html.includes(`.${cls.split(' ').join('.')}`), `stylesheet must define .${cls.split(' ').join('.')}`);
 }
 
-console.log('Branch Wars engine tests passed: 48 complete campaigns plus capability, validation, migration, rematch, AI-coverage and UI contract checks.');
+console.log('Branch Wars engine tests passed: 48 complete campaigns plus capability, validation, migration, rematch, AI-coverage, direct-link session and UI contract checks.');
