@@ -365,7 +365,7 @@ function newPeer(){if(!window.RTCPeerConnection)throw Error('This browser has di
  if(s==='failed'){linkLost('The network refused or dropped the direct connection.');return}
  setConnection(open?'DIRECT LINK CONNECTED':s==='connected'?'NETWORK LINKED // OPENING GAME CHANNEL':`DIRECT LINK: ${s.toUpperCase()}`,open?'good':s==='closed'?'bad':'warn');if(s==='connected')armLinkWatch()};return p}
 // WebRTC cannot restart ICE without a signalling path, and ours is a human with a chat window.
-function linkLost(why){stopHandshake();setConnection(`${why} A new pair of codes is needed to reconnect.`,'bad');offerRelink()}
+function linkLost(why){stopHandshake();if($('#answerInput'))$('#answerInput').value='';setConnection(`${why} A new pair of codes is needed to reconnect: press NEW LINK CODE.`,'bad');offerRelink()}
 function offerRelink(){if($('#rejoinBtn'))$('#rejoinBtn').classList.toggle('hidden',!(p2pRole==='guest'&&!lan.active));paintRelink();if((game||view)&&p2pRole==='guest'&&!linkReady)toast('The link dropped. Ask the host for a replacement invitation code.')}
 function paintRelink(){const btn=$('#relinkBtn');if(!btn)return;const usable=!lan.active&&(game||view)&&(p2pRole==='host'||p2pRole==='guest');btn.classList.toggle('hidden',!usable);btn.textContent=p2pRole==='host'?'[ NEW LINK CODE ]':'[ PASTE NEW HOST CODE ]'}
 function startRejoin(){relinking=true;show('#startScreen');setMode('p2p');setStartMessage('Paste the replacement invitation from the host, then create a response. Your campaign is held in place.');$('#offerInput').value='';$('#offerInput').focus()}
@@ -392,6 +392,7 @@ async function createAnswer(reconnect=false){try{setStartMessage('');const rejoi
  $('#answerArea').classList.add('hidden');setConnection('WAITING FOR HOST','warn')}catch(e){setConnection(e.message,'bad');show('#startScreen');setMode('p2p');setStartMessage(e.message)}}
 async function applyAnswer(){try{if(!pc)throw Error('Create the invitation first, then paste the rival response.');const answer=unpack($('#answerInput').value,'BW7-ANSWER-');
  if(answer.session&&linkSession&&answer.session!==linkSession)throw Error('That response answers an older invitation. Send your rival the invitation currently shown above, or generate a new one.');
+ if(pc.signalingState!=='have-local-offer'){if(dc&&dc.readyState==='open')throw Error('This link is already connected. Close this desk and keep playing.');throw Error('This invitation has already been used. Press NEW LINK CODE, send your rival the fresh invitation, and paste the response they send back.')}
  await pc.setRemoteDescription(answer.sdp);if(!dc||dc.readyState!=='open')setConnection('CONNECTING DIRECTLY','warn')}catch(e){setConnection(e.message,'bad')}}
 
 function copyCode(){const t=$('#outCode');t.select();t.setSelectionRange(0,t.value.length);const fallback=()=>{try{document.execCommand('copy');$('#copyStatus').textContent='COPIED.'}catch{$('#copyStatus').textContent='Select the code and press Ctrl+C.'}};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t.value).then(()=>$('#copyStatus').textContent='COPIED.').catch(fallback);else fallback()}

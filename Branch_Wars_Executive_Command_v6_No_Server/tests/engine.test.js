@@ -758,6 +758,17 @@ assert(unpackBody.includes('It belongs in the other box'), 'the wrong kind of co
 assert(unpackBody.includes('Only part of the code'), 'a truncated code must be named');
 assert(clientFn('decodeCode').includes('altered in transit'), 'a corrupted code must be named');
 assert(clientFn('applyAnswer').includes('older invitation'), 'a superseded code must be named');
+// An invitation absorbs exactly one response. Pressing connect again used to reach
+// WebRTC and surface "Called in wrong state: stable", which explains nothing.
+{
+  const body = clientFn('applyAnswer');
+  const guard = body.indexOf("signalingState!=='have-local-offer'");
+  assert(guard >= 0, 'applyAnswer must check the peer state before using a response');
+  assert(guard < body.indexOf('setRemoteDescription'),
+    'the state check must come before setRemoteDescription so WebRTC cannot throw at the player');
+  assert(body.includes('already connected'), 'a link already up must say so');
+  assert(body.includes('NEW LINK CODE'), 'a consumed invitation must point at the fix');
+}
 
 // A reconnect replaces the transport and keeps the campaign.
 for (const fn of ['createOffer', 'createAnswer']) {
