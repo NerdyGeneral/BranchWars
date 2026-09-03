@@ -848,13 +848,20 @@ const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
   .map((item) => item[1])
   .filter((id) => !ids.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
+assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
+assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');
+for (const instruction of ['organization member', 'contents → read and write', 'pending requests', 'api.github.com']) {
+  assert(html.toLowerCase().includes(instruction), `Repository Link setup guide must explain: ${instruction}`);
+}
 
 const lanServer = fs.readFileSync(path.join(root, 'BRANCH_WARS_LAN_SERVER.ps1'), 'utf8');
+assert(lanServer.includes('[int]$Port = 8765'), 'the LAN server default port must remain 8765');
 assert(lanServer.includes('[Net.IPAddress]::Any'), 'the LAN server must listen on every IPv4 interface, not only localhost');
 assert(lanServer.includes('clientId') && lanServer.includes('SeenIds'), 'the LAN relay must deduplicate retried client messages');
 assert(lanServer.includes('Messages.Count -gt 256'), 'the LAN relay must bound its in-memory message history');
 assert(lanServer.includes("Get-NetIPConfiguration"), 'the launcher must prefer an active adapter with a default gateway');
 assert(lanServer.includes("'/api/health'"), 'the LAN relay must expose a remote health check');
+assert(lanServer.includes('${lanUrl}api/health'), 'the LAN server window must print its exact remote health-check address');
 const launcher = fs.readFileSync(path.join(root, 'OPEN_BRANCH_WARS.bat'), 'utf8');
 assert(launcher.includes("AddressFamily IPv4"), 'the local launcher must discover an IPv4 address for direct P2P');
 assert(launcher.includes('#lanip='), 'the local launcher must pass the discovered address to the game');
