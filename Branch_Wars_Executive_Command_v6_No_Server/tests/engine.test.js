@@ -737,6 +737,46 @@ assert(
 );
 assert(messageBody.includes('lan.active?'), 'the host must open the campaign on the live transport');
 
+// --- repository link --------------------------------------------------------
+// Neither computer connects to the other: each writes only its own file, so two
+// writers never touch one file and no merge can occur.
+assert(clientFn('ghPath').includes('${side}'), 'each side must own a separate file');
+const flushBody = clientFn('ghFlush');
+assert(flushBody.includes('gh.side'), 'a player may only write their own side');
+assert(flushBody.includes('gh.sha'), 'writes must carry the expected version');
+assert(clientFn('ghRead').includes('If-None-Match'), 'polling must be conditional to stay inside the rate limit');
+assert(clientFn('ghRead').includes('gh.branch'), 'repository reads must use the discovered default branch');
+assert(!clientFn('ghRead').includes('ref=HEAD'), 'HEAD is not a reliable Contents API ref');
+assert(clientFn('ghPoll').includes("gh.side==='host'?'guest':'host'"), 'each side reads only the other');
+// A token is a credential: it is never handed to the rival, and it is forgettable.
+assert(!clientFn('ghCreateRoom').match(/pack\('BW7-ROOM-',\{[^}]*token/), 'the join code must never carry a token');
+assert(!clientFn('ghCreateRoom').match(/pack\('BW7-ROOM-',\{[^}]*api/), 'a join code must never choose where the rival sends a token');
+assert(clientFn('ghJoinRoom').includes('Never use your rival'), 'the guest must be told to use their own token');
+assert(clientFn('ghJoinRoom').includes('ghNormalizeApi'), 'the guest must type and validate their own API address');
+assert(clientFn('ghForget').includes('removeItem'), 'a saved token must be removable');
+assert(clientFn('ghRemember').includes('sessionStorage'), 'tokens must be session-scoped rather than permanently stored');
+assert(!clientFn('ghRemember').match(/localStorage\.setItem\([^;]*token/), 'tokens must never be written to permanent local storage');
+assert(clientFn('send').indexOf('gh.active') < clientFn('send').indexOf('lan.active'),
+  'messages must route to the repository room when one is open');
+assert(clientFn('ghCheckRepo').includes('default_branch'), 'the repository default branch must be discovered before room I/O');
+assert(clientFn('ghCheckRepo').includes('permissions.push'), 'write permission must be checked before opening a room');
+assert(clientFn('ghNormalizeApi').includes("parsed.protocol!=='https:'"), 'repository credentials may only be sent to an HTTPS API address');
+assert(clientFn('ghHeaders').includes("2026-03-10"), 'GitHub requests must pin the current REST API version');
+assert(flushBody.includes('while(gh.active&&gh.published<gh.mine)'), 'messages arriving during a write must be flushed before the sender goes idle');
+assert(flushBody.includes('queued for retry'), 'a failed write must remain queued for retry');
+assert(flushBody.includes('if(gh.sendFailures)'), 'a retry must reconcile the room file in case GitHub accepted a write whose response was lost');
+assert(clientFn('ghWrite').includes("response.status===409"), 'write conflicts must be retried');
+assert(!clientFn('ghWrite').includes("response.status===409||response.status===422"), 'validation errors must not be mistaken for write conflicts');
+for (const [status, why] of [['401','a rejected token'],['404','a missing repository'],['403','a refused request']])
+  assert(clientFn('ghFail').includes(status), `${why} must be explained`);
+
+// LAN sends have an application-level id so retrying after a lost acknowledgement
+// cannot submit the same plan twice. The queue is drained serially and backed off.
+assert(clientFn('lanSend').includes('messageId()'), 'every LAN message must have an idempotency id');
+assert(clientFn('lanFlush').includes('while(lan.active&&lan.outbox.length)'), 'LAN messages must be sent in order');
+assert(clientFn('lanFlush').includes('queued for retry'), 'an interrupted LAN send must remain queued');
+assert(clientFn('lanRequest').includes('AbortController'), 'a dead LAN request must time out instead of hanging forever');
+
 // --- connection code handling -----------------------------------------------
 // Codes travel through chat and mail, which wrap lines, quote replies and
 // rewrite punctuation. base64url survives that; + / and = do not.
@@ -758,6 +798,17 @@ assert(unpackBody.includes('It belongs in the other box'), 'the wrong kind of co
 assert(unpackBody.includes('Only part of the code'), 'a truncated code must be named');
 assert(clientFn('decodeCode').includes('altered in transit'), 'a corrupted code must be named');
 assert(clientFn('applyAnswer').includes('older invitation'), 'a superseded code must be named');
+// An invitation absorbs exactly one response. Pressing connect again used to reach
+// WebRTC and surface "Called in wrong state: stable", which explains nothing.
+{
+  const body = clientFn('applyAnswer');
+  const guard = body.indexOf("signalingState!=='have-local-offer'");
+  assert(guard >= 0, 'applyAnswer must check the peer state before using a response');
+  assert(guard < body.indexOf('setRemoteDescription'),
+    'the state check must come before setRemoteDescription so WebRTC cannot throw at the player');
+  assert(body.includes('already connected'), 'a link already up must say so');
+  assert(body.includes('NEW LINK CODE'), 'a consumed invitation must point at the fix');
+}
 
 // A reconnect replaces the transport and keeps the campaign.
 for (const fn of ['createOffer', 'createAnswer']) {
@@ -777,12 +828,36 @@ assert(peerBody.includes("s==='disconnected'") && peerBody.includes('dropGrace')
 assert(clientFn('linkLost').includes('new pair of codes'), 'an unrecoverable link must say what is needed');
 assert(clientFn('waitIce').includes('onProgress'), 'route discovery must report progress');
 
+// Browsers hide local addresses from pages, which is what stops a direct link
+// forming across subnets. The launcher supplies it; the page adds a candidate
+// naming it and keeps the mDNS one as a fallback.
+const addressBody = clientFn('withLocalAddress');
+assert(addressBody.includes('typ host'), 'only host candidates may be rewritten');
+assert(addressBody.includes('.local'), 'only mDNS candidates may be replaced');
+assert(addressBody.includes('lines.slice(at)'), 'the original candidates must be kept as fallbacks');
+assert(clientFn('loadLanIp').includes('lanip='), 'the launcher must be able to supply the address');
+assert(clientFn('loadLanIp').includes('branchWarsLanIp'), 'the address must be remembered between sessions');
+for (const fn of ['createOffer', 'createAnswer']) {
+  assert(clientFn(fn).includes('rememberLanIp()'), `${fn}() must pick up the entered address`);
+  assert(clientFn(fn).includes('withLocalAddress('), `${fn}() must publish the address it was given`);
+}
+
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
   .map((item) => item[1])
   .filter((id) => !ids.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
+
+const lanServer = fs.readFileSync(path.join(root, 'BRANCH_WARS_LAN_SERVER.ps1'), 'utf8');
+assert(lanServer.includes('[Net.IPAddress]::Any'), 'the LAN server must listen on every IPv4 interface, not only localhost');
+assert(lanServer.includes('clientId') && lanServer.includes('SeenIds'), 'the LAN relay must deduplicate retried client messages');
+assert(lanServer.includes('Messages.Count -gt 256'), 'the LAN relay must bound its in-memory message history');
+assert(lanServer.includes("Get-NetIPConfiguration"), 'the launcher must prefer an active adapter with a default gateway');
+assert(lanServer.includes("'/api/health'"), 'the LAN relay must expose a remote health check');
+const launcher = fs.readFileSync(path.join(root, 'OPEN_BRANCH_WARS.bat'), 'utf8');
+assert(launcher.includes("AddressFamily IPv4"), 'the local launcher must discover an IPv4 address for direct P2P');
+assert(launcher.includes('#lanip='), 'the local launcher must pass the discovered address to the game');
 
 // Every dynamic CSS state the client can emit must be defined somewhere in the stylesheets.
 for (const cls of ['signal watch', 'signal hot', 'signal safe']) {

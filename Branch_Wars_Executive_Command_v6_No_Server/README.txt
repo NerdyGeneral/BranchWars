@@ -1,5 +1,5 @@
 BRANCH WARS: EXECUTIVE COMMAND v7.1
-LONG-FORM / LOCAL-INTRANET EDITION
+LONG-FORM / MULTIPLAYER EDITION
 =================================
 
 QUICK START
@@ -9,6 +9,8 @@ QUICK START
 3. For an intranet room, the host double-clicks OPEN_LAN_GAME.bat.
 4. Friends on the same local network open the yellow address shown in the host's
    server window. Both players select INTRANET ROOM and use the room code.
+5. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
+   REPOSITORY LINK after completing the one-time GitHub setup below.
 
 HOW A PLANNING CYCLE WORKS
 --------------------------
@@ -176,6 +178,26 @@ If DIRECT LINK STALLED says the data channel never opened, the network is
 blocking direct browser traffic between the two computers. No amount of waiting
 will change that. Use INTRANET ROOM instead.
 
+CONNECTING ACROSS TWO DIFFERENT NETWORKS
+-----------------------------------------
+Browsers hide your computer's network address from web pages, replacing it with
+a name that can only be looked up on your own network segment. Two computers on
+the same segment resolve it and connect. Two on different segments cannot, and
+the connection desk sits at PEER NEW forever.
+
+OPEN_BRANCH_WARS.bat now works out this computer's address and passes it to the
+game, which fills in THIS COMPUTER'S NETWORK ADDRESS on the Direct P2P screen.
+Both players should open the game that way. The address is added to the
+invitation alongside the hidden name, so nothing is lost if you are on the same
+segment after all, and the game remembers it if you later open the page directly.
+
+You are only telling your own opponent your own computer's address. If the field
+is empty, run ipconfig and copy the IPv4 address of your active adapter.
+
+If the link still will not form with both addresses filled in, the two networks
+do not permit direct traffic between workstations, and no setting in the game
+changes that.
+
 WHEN THE INTRANET ROOM ADDRESS DOES NOT WORK
 --------------------------------------------
 The server window prints the address it believes friends should use, plus any
@@ -195,13 +217,55 @@ If that times out, it is one of two things and the window tells you which:
 
 Branch-to-branch play across sites is a different problem again: the two
 computers are usually on separate networks with no direct route between them.
-Neither mode can create one. Pass & Play and Solo AI need no network at all.
+Neither local-network mode can create one. Use Repository Link between offices.
+Pass & Play and Solo AI need no network at all.
+
+REPOSITORY LINK (PLAY BETWEEN OFFICES)
+---------------------------------------
+The two computers never connect to each other. Each one reads and writes a
+GitHub repository over ordinary outbound HTTPS, so no inbound port, no firewall
+rule and no route between the two sites is required. A private repository is
+strongly recommended. A public repository works, but its fictional campaign
+files are public too, and the game displays a warning. This is the mode that
+works between branches when outbound GitHub access is permitted.
+
+Both players need their OWN access token. GitHub has no unauthenticated write,
+so there is no way for one player to carry the other. Never send anyone your
+token, and never accept theirs.
+
+Setting it up once:
+  1. Create a free GitHub organization and a private repository inside it.
+     An organization lets each member create a fine-grained token scoped to this
+     one shared repository instead of granting broad account access.
+  2. Add the other player to the organization, give both players write access,
+     and allow fine-grained tokens in the organization settings.
+  3. Each player creates a fine-grained token scoped to that one repository,
+     with Contents set to read and write. Nothing else is needed.
+  4. The host enters the repository and their token, opens a room, and sends the
+     join code. The join code contains the repository and room only, never a
+     token.
+  5. The rival pastes the join code and enters their own token.
+
+The game writes only two files per room, one per player, so the two of you never
+write the same file and no edit can be lost. Turns appear within a few seconds.
+The token is kept in session storage, not permanent local storage, and normally
+disappears when the browser session closes. FORGET SESSION TOKEN removes it
+immediately. The repository name is remembered for convenience.
+
+Repository Link writes to the repository's default branch. Do not enable branch
+protection that blocks direct file updates on the repository used for game rooms.
+The game checks the default branch and write permission before opening or joining.
+
+For GitHub Enterprise, both players type the internal HTTPS API address in their
+own API ADDRESS field. The join code intentionally never supplies an API address,
+so pasting a room code cannot redirect a player's token to another server.
 
 IMPORTANT NETWORK LIMITATION
 ----------------------------
 The game does not bypass company network or browser security policy. Intranet
 rooms require both computers to be on a network that allows direct local traffic.
-AI and Pass & Play remain fully local and require no network at all.
+Repository Link requires outbound HTTPS access to the selected GitHub API. AI and
+Pass & Play remain fully local and require no network at all.
 
 NEW IN v7.1
 -----------
