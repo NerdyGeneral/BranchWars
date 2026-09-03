@@ -144,6 +144,23 @@ Both players plan concurrently in separate browsers. WebRTC exchanges plans
 directly using manually copied invitation and response codes. There is no
 hosted service, web server, listening TCP port, IP address, or room database.
 
+The connection desk reports two separate things, because a network link can come
+up while the channel the game actually runs on does not:
+
+  PEER      the network link between the two browsers
+  CHANNEL   the data channel that carries plans and results
+
+The campaign only starts once CHANNEL reads OPEN and both browsers have exchanged
+an opening handshake. If the desk reads DIRECT LINK STALLED, the codes were
+exchanged but one of those two steps never completed: press CANCEL on both
+computers and exchange a fresh invitation and response. Codes are single use, so
+a code from an earlier attempt will not connect. If it stalls again, the network
+is blocking direct browser traffic; use INTRANET ROOM, Pass & Play, or Solo AI.
+
+During a campaign the same readout stays in the header. If a plan is not
+acknowledged by the host, the guest is released to plan again rather than being
+left waiting on a rival who never received it.
+
 IMPORTANT NETWORK LIMITATION
 ----------------------------
 The game does not bypass company network or browser security policy. Intranet

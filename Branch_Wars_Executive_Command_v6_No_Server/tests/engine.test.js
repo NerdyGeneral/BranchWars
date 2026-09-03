@@ -673,6 +673,58 @@ assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');
 
+// --- direct-link (P2P) session contract -------------------------------------
+// A green "connected" peer says nothing about the data channel the game runs on.
+// These guard the fixes for a link that connects but never advances a cycle.
+function clientFn(name) {
+  const start = html.indexOf(`function ${name}(`);
+  assert(start >= 0, `client function ${name} must exist`);
+  const end = html.indexOf('\nfunction ', start + 1);
+  return html.slice(start, end === -1 ? html.length : end);
+}
+
+// The transport is chosen by the transport that is actually open, never by the
+// setup screen the player last looked at.
+const sendBody = clientFn('send');
+assert(sendBody.includes('lan.active'), 'send() must route on the live transport');
+assert(!/if\(mode==='lan'\)/.test(sendBody), 'send() must not route on the UI mode flag');
+for (const fn of ['createOffer', 'createAnswer']) {
+  assert(clientFn(fn).includes("mode='p2p'"), `${fn}() must own the session mode`);
+}
+
+// The rival's copy of the state leaves before the host redraws itself, so a
+// display failure on the host can never strand the guest on a stale cycle.
+const syncBody = clientFn('syncPeers');
+assert(
+  syncBody.indexOf("send({type:'state'") < syncBody.indexOf('render()'),
+  'syncPeers() must transmit the rival state before redrawing the host view',
+);
+
+// The handshake is retried and watched: a single dropped hello used to hang the
+// session forever behind a green "DIRECT LINK CONNECTED".
+assert(clientFn('startHandshake').includes('setInterval'), 'the handshake must retry');
+const watchBody = clientFn('armLinkWatch');
+assert(watchBody.includes("dc.readyState!=='open'"), 'the watchdog must check the data channel, not just the peer');
+assert(watchBody.includes('DIRECT LINK STALLED'), 'a stalled link must say so on screen');
+assert(
+  clientFn('wireChannel').includes("if(dc.readyState==='open')opened()"),
+  'a channel handed over already open must still start the handshake',
+);
+
+// A guest plan is provisional until the host confirms it.
+const submitBody = clientFn('submitPlan');
+assert(submitBody.includes('planAckTimer'), 'a guest plan must be confirmed or released');
+assert(
+  !clientFn('recallPlan').includes('view.me.submitted=false'),
+  'only the host may unlock a submitted plan',
+);
+const messageBody = clientFn('handleMessage');
+assert(
+  messageBody.includes("m.type==='error'") && messageBody.includes('view.me.submitted=false'),
+  'a rejected plan must release the guest instead of locking it forever',
+);
+assert(messageBody.includes('lan.active?'), 'the host must open the campaign on the live transport');
+
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
@@ -685,4 +737,4 @@ for (const cls of ['signal watch', 'signal hot', 'signal safe']) {
   assert(html.includes(`.${cls.split(' ').join('.')}`), `stylesheet must define .${cls.split(' ').join('.')}`);
 }
 
-console.log('Branch Wars engine tests passed: 48 complete campaigns plus capability, validation, migration, rematch, AI-coverage and UI contract checks.');
+console.log('Branch Wars engine tests passed: 48 complete campaigns plus capability, validation, migration, rematch, AI-coverage, direct-link session and UI contract checks.');
