@@ -234,17 +234,25 @@ so there is no way for one player to carry the other. Never send anyone your
 token, and never accept theirs.
 
 Setting it up once:
-  1. Create a free GitHub organization and a private repository inside it.
-     An organization lets each member create a fine-grained token scoped to this
-     one shared repository instead of granting broad account access.
-  2. Add the other player to the organization, give both players write access,
-     and allow fine-grained tokens in the organization settings.
-  3. Each player creates a fine-grained token scoped to that one repository,
-     with Contents set to read and write. Nothing else is needed.
-  4. The host enters the repository and their token, opens a room, and sends the
-     join code. The join code contains the repository and room only, never a
-     token.
-  5. The rival pastes the join code and enters their own token.
+  1. Create a private repository inside the GitHub organization. If it is new,
+     add a README so that it has a working default branch.
+  2. Invite the other player as an ORGANIZATION MEMBER, wait for acceptance, and
+     give that member Write access to the repository. An outside collaborator is
+     not sufficient for this fine-grained-token setup.
+  3. Each player creates their OWN fine-grained token. Select the organization
+     as Resource owner, choose Only select repositories and the game repository,
+     then set Repository permissions > Contents to Read and write. Leave every
+     other permission unchanged.
+  4. The organization owner checks Organization Settings > Personal access
+     tokens > Pending requests and approves the other player's token. GitHub
+     requires owner approval by default for organization members' tokens. The
+     organization owner's own token normally does not require approval.
+  5. The host enters OrganizationName/RepositoryName and their own token, opens
+     a room, and sends only the join code. The rival pastes that code and enters
+     their own token.
+
+The API Address fields stay blank when using regular GitHub.com; the game uses
+https://api.github.com automatically. They are only for GitHub Enterprise Server.
 
 The game writes only two files per room, one per player, so the two of you never
 write the same file and no edit can be lost. Turns appear within a few seconds.
