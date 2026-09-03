@@ -1,4 +1,4 @@
-param([int]$Port = 8765, [switch]$NoBrowser)
+param([int]$Port = 8765, [switch]$NoBrowser, [switch]$LoopbackOnly)
 
 $ErrorActionPreference = 'Stop'
 $gameRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -96,7 +96,7 @@ function Handle-Request($Stream, $Request) {
         return
     }
     if ($Request.Method -eq 'GET' -and $path -eq '/api/health') {
-        Send-Json $Stream 200 @{ ok = $true; version = '7.0'; rooms = $rooms.Count }
+        Send-Json $Stream 200 @{ ok = $true; version = '7.1'; rooms = $rooms.Count }
         return
     }
     if ($Request.Method -eq 'GET' -and $path -eq '/favicon.ico') {
@@ -105,6 +105,9 @@ function Handle-Request($Stream, $Request) {
     }
     if ($Request.Method -eq 'POST' -and $path -eq '/api/create') {
         $payload = $Request.Body | ConvertFrom-Json
+        foreach ($oldCode in @($rooms.Keys)) {
+            if (([DateTime]::UtcNow - $rooms[$oldCode].Touched).TotalHours -gt 12) { [void]$rooms.Remove($oldCode) }
+        }
         $code = New-RoomCode
         $room = [pscustomobject]@{
             Code = $code
@@ -115,6 +118,8 @@ function Handle-Request($Stream, $Request) {
             NextSequence = 1
             Messages = [Collections.ArrayList]::new()
             Created = [DateTime]::UtcNow
+            Touched = [DateTime]::UtcNow
+            SeenIds = @{ host = @{}; guest = @{} }
         }
         $rooms[$code] = $room
         Send-Json $Stream 200 @{ room = $code; token = $room.HostToken }
@@ -129,6 +134,7 @@ function Handle-Request($Stream, $Request) {
         if ($room.GuestToken) { Send-Json $Stream 409 @{ error = 'That room already has two institutions.' }; return }
         $room.GuestToken = [guid]::NewGuid().ToString('N')
         $room.GuestName = [string]$payload.name
+        $room.Touched = [DateTime]::UtcNow
         Send-Json $Stream 200 @{ room = $code; token = $room.GuestToken }
         Write-Host "$($room.GuestName) joined room $code." -ForegroundColor Green
         return
@@ -136,9 +142,18 @@ function Handle-Request($Stream, $Request) {
     if ($Request.Method -eq 'POST' -and $path -eq '/api/send') {
         $payload = $Request.Body | ConvertFrom-Json
         try { $auth = Get-RoomAndRole ([string]$payload.room) ([string]$payload.token) } catch { Send-Json $Stream 403 @{ error = $_.Exception.Message }; return }
+        $clientId = ([string]$payload.clientId).Trim()
+        $seen = $auth.Room.SeenIds[$auth.Role]
+        if ($clientId -and $seen.ContainsKey($clientId)) {
+            Send-Json $Stream 200 @{ ok = $true; seq = $seen[$clientId]; duplicate = $true }
+            return
+        }
         $item = [pscustomobject]@{ seq = $auth.Room.NextSequence; sender = $auth.Role; message = $payload.message }
         $auth.Room.NextSequence++
         [void]$auth.Room.Messages.Add($item)
+        if ($clientId) { $seen[$clientId] = $item.seq }
+        if ($auth.Room.Messages.Count -gt 256) { $auth.Room.Messages.RemoveRange(0, $auth.Room.Messages.Count - 256) }
+        $auth.Room.Touched = [DateTime]::UtcNow
         Send-Json $Stream 200 @{ ok = $true; seq = $item.seq }
         return
     }
@@ -147,6 +162,7 @@ function Handle-Request($Stream, $Request) {
         $after = 0
         [void][int]::TryParse([string]$query.after, [ref]$after)
         $messages = @($auth.Room.Messages | Where-Object { $_.seq -gt $after -and $_.sender -ne $auth.Role })
+        $auth.Room.Touched = [DateTime]::UtcNow
         Send-Json $Stream 200 @{ messages = $messages; connected = [bool]$auth.Room.GuestToken }
         return
     }
@@ -156,9 +172,10 @@ function Handle-Request($Stream, $Request) {
 if (-not (Test-Path -LiteralPath $gameFile -PathType Leaf)) { throw "Missing game file: $gameFile" }
 
 $listener = $null
+$listenAddress = if ($LoopbackOnly) { [Net.IPAddress]::Loopback } else { [Net.IPAddress]::Any }
 foreach ($candidate in $Port..($Port + 10)) {
     try {
-        $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Any, $candidate)
+        $listener = [Net.Sockets.TcpListener]::new($listenAddress, $candidate)
         $listener.Start()
         $Port = $candidate
         break
@@ -171,10 +188,19 @@ if (-not $listener) { throw 'Could not open a LAN port between 8765 and 8775.' }
 # the adapter carrying the default route, then list the rest as fallbacks.
 $ranked = New-Object System.Collections.Generic.List[string]
 try {
+    Get-NetIPConfiguration -ErrorAction Stop |
+        Where-Object { $_.NetAdapter.Status -eq 'Up' -and $_.IPv4DefaultGateway -and $_.IPv4Address } |
+        Sort-Object { $_.NetIPInterface.InterfaceMetric } |
+        ForEach-Object {
+            foreach ($address in @($_.IPv4Address)) { $ranked.Add($address.IPAddress) }
+        }
+} catch { }
+try {
     Get-NetRoute -DestinationPrefix '0.0.0.0/0' -ErrorAction Stop |
-        Sort-Object RouteMetric |
+        Sort-Object { $_.RouteMetric + $_.InterfaceMetric } |
         ForEach-Object {
             Get-NetIPAddress -InterfaceIndex $_.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+                Where-Object { $_.AddressState -eq 'Preferred' -and -not $_.SkipAsSource } |
                 ForEach-Object { $ranked.Add($_.IPAddress) }
         }
 } catch { }
@@ -186,7 +212,7 @@ try {
 
 $addresses = New-Object System.Collections.Generic.List[string]
 foreach ($ip in $ranked) {
-    if ($ip -and -not $ip.StartsWith('127.') -and -not $ip.StartsWith('169.254.') -and -not $addresses.Contains($ip)) {
+    if ($ip -and $ip -ne '0.0.0.0' -and -not $ip.StartsWith('127.') -and -not $ip.StartsWith('169.254.') -and -not $addresses.Contains($ip)) {
         $addresses.Add($ip)
     }
 }
@@ -204,8 +230,9 @@ Write-Host '============================================================' -Foreg
 Write-Host "Host browser:  $localUrl"
 Write-Host "Friends join:  $lanUrl" -ForegroundColor Yellow
 if ($addresses.Count -gt 1) {
-    Write-Host ("Other addresses here: " + (($addresses | Select-Object -Skip 1) -join ', '))
-    Write-Host 'If the yellow address does not work, try one of those instead.'
+    Write-Host 'Other possible addresses:'
+    foreach ($address in ($addresses | Select-Object -Skip 1)) { Write-Host "  http://${address}:$Port/" }
+    Write-Host 'If the yellow address does not work, try those from the other computer.'
 } elseif ($addresses.Count -eq 0) {
     Write-Host 'No LAN address detected. Run ipconfig and use the IPv4 address of your active adapter.' -ForegroundColor Red
 }
