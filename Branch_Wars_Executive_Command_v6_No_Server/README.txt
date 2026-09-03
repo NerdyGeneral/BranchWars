@@ -161,6 +161,42 @@ During a campaign the same readout stays in the header. If a plan is not
 acknowledged by the host, the guest is released to plan again rather than being
 left waiting on a rival who never received it.
 
+Codes may be pasted exactly as they arrive. Line breaks added by Teams, Outlook
+or any chat window are removed automatically, along with quote markers from
+forwarded mail. If a code is refused, the message says why: the wrong kind of
+code, only part of one, a code damaged in transit, or a code that answers an
+invitation you have since replaced.
+
+A dropped link no longer ends the campaign. The header carries NEW LINK CODE:
+the host generates a replacement invitation, the rival pastes it and returns a
+response, and play resumes on the cycle where it stopped. A brief interruption
+is given time to recover on its own before the game reports it as lost.
+
+If DIRECT LINK STALLED says the data channel never opened, the network is
+blocking direct browser traffic between the two computers. No amount of waiting
+will change that. Use INTRANET ROOM instead.
+
+WHEN THE INTRANET ROOM ADDRESS DOES NOT WORK
+--------------------------------------------
+The server window prints the address it believes friends should use, plus any
+other addresses on the machine. Test it from the OTHER computer first by opening
+the /api/health address shown in the window: it should return {"ok":true}.
+
+If that times out, it is one of two things and the window tells you which:
+
+  Wrong address    A laptop with a VPN, Hyper-V, WSL, Docker or VirtualBox has
+                   several addresses and only one is reachable from another
+                   desk. Try the other addresses listed in the window.
+
+  Firewall         Windows blocks inbound connections by default. If no firewall
+                   prompt appeared when the server started, run the
+                   New-NetFirewallRule command shown in the window once, from an
+                   administrator PowerShell.
+
+Branch-to-branch play across sites is a different problem again: the two
+computers are usually on separate networks with no direct route between them.
+Neither mode can create one. Pass & Play and Solo AI need no network at all.
+
 IMPORTANT NETWORK LIMITATION
 ----------------------------
 The game does not bypass company network or browser security policy. Intranet

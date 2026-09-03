@@ -166,8 +166,34 @@ foreach ($candidate in $Port..($Port + 10)) {
 }
 if (-not $listener) { throw 'Could not open a LAN port between 8765 and 8775.' }
 
-$addresses = [Net.Dns]::GetHostAddresses([Net.Dns]::GetHostName()) | Where-Object { $_.AddressFamily -eq [Net.Sockets.AddressFamily]::InterNetwork -and -not $_.IPAddressToString.StartsWith('127.') -and -not $_.IPAddressToString.StartsWith('169.254.') }
-$lanAddress = if ($addresses) { $addresses[0].IPAddressToString } else { 'THIS-COMPUTER-IP' }
+# DNS returns adapters in no useful order, so a VPN, Hyper-V, WSL, Docker or
+# VirtualBox address is often first and is unreachable from another desk. Prefer
+# the adapter carrying the default route, then list the rest as fallbacks.
+$ranked = New-Object System.Collections.Generic.List[string]
+try {
+    Get-NetRoute -DestinationPrefix '0.0.0.0/0' -ErrorAction Stop |
+        Sort-Object RouteMetric |
+        ForEach-Object {
+            Get-NetIPAddress -InterfaceIndex $_.ifIndex -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+                ForEach-Object { $ranked.Add($_.IPAddress) }
+        }
+} catch { }
+try {
+    [Net.Dns]::GetHostAddresses([Net.Dns]::GetHostName()) |
+        Where-Object { $_.AddressFamily -eq [Net.Sockets.AddressFamily]::InterNetwork } |
+        ForEach-Object { $ranked.Add($_.IPAddressToString) }
+} catch { }
+
+$addresses = New-Object System.Collections.Generic.List[string]
+foreach ($ip in $ranked) {
+    if ($ip -and -not $ip.StartsWith('127.') -and -not $ip.StartsWith('169.254.') -and -not $addresses.Contains($ip)) {
+        $addresses.Add($ip)
+    }
+}
+$lanAddress = if ($addresses.Count -gt 0) { $addresses[0] } else { 'THIS-COMPUTER-IP' }
+
+$networkProfile = ''
+try { $networkProfile = (Get-NetConnectionProfile -ErrorAction Stop | ForEach-Object { $_.NetworkCategory }) -join ', ' } catch { }
 $localUrl = "http://127.0.0.1:$Port/"
 $lanUrl = "http://${lanAddress}:$Port/"
 
@@ -177,10 +203,23 @@ Write-Host ' BRANCH WARS v7.1 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
 Write-Host '============================================================' -ForegroundColor DarkCyan
 Write-Host "Host browser:  $localUrl"
 Write-Host "Friends join:  $lanUrl" -ForegroundColor Yellow
+if ($addresses.Count -gt 1) {
+    Write-Host ("Other addresses here: " + (($addresses | Select-Object -Skip 1) -join ', '))
+    Write-Host 'If the yellow address does not work, try one of those instead.'
+} elseif ($addresses.Count -eq 0) {
+    Write-Host 'No LAN address detected. Run ipconfig and use the IPv4 address of your active adapter.' -ForegroundColor Red
+}
+Write-Host ''
+Write-Host "Test it from the other computer first:  ${lanUrl}api/health" -ForegroundColor DarkCyan
+Write-Host 'That should return {"ok":true}. If it times out, the address or the'
+Write-Host 'firewall is the problem, not the game.'
 Write-Host ''
 Write-Host 'Keep this window open during the game. Press Ctrl+C to stop.'
-Write-Host 'A Windows Firewall prompt may appear the first time; allow only' 
-Write-Host 'the network profiles where you intend to play.'
+if ($networkProfile) { Write-Host "Active network profile: $networkProfile" }
+Write-Host 'A Windows Firewall prompt may appear the first time; allow only'
+Write-Host 'the network profiles where you intend to play. If no prompt appears'
+Write-Host 'and friends cannot connect, run this once in an ADMIN PowerShell:'
+Write-Host "  New-NetFirewallRule -DisplayName 'Branch Wars LAN' -Direction Inbound -Protocol TCP -LocalPort $Port -Action Allow -Profile Domain,Private" -ForegroundColor Yellow
 Write-Host '============================================================' -ForegroundColor DarkCyan
 if (-not $NoBrowser) { Start-Process $localUrl }
 
