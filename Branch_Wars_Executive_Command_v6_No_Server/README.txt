@@ -217,6 +217,37 @@ Branch-to-branch play across sites is a different problem again: the two
 computers are usually on separate networks with no direct route between them.
 Neither mode can create one. Pass & Play and Solo AI need no network at all.
 
+REPOSITORY LINK (PLAY BETWEEN OFFICES)
+---------------------------------------
+The two computers never connect to each other. Each one reads and writes a
+private GitHub repository over ordinary outbound HTTPS, so no inbound port, no
+firewall rule and no route between the two sites is required. This is the mode
+that works between branches.
+
+Both players need their OWN access token. GitHub has no unauthenticated write,
+so there is no way for one player to carry the other. Never send anyone your
+token, and never accept theirs.
+
+Setting it up once:
+  1. Create a free GitHub organisation and a private repository inside it.
+     An organisation matters: a token can only reach repositories owned by its
+     own account, so a repository on a personal account would force the other
+     player to use a token with access to everything they own.
+  2. Add the other player to the organisation, and allow fine-grained tokens in
+     the organisation settings.
+  3. Each player creates a fine-grained token scoped to that one repository,
+     with Contents set to read and write. Nothing else is needed.
+  4. The host enters the repository and their token, opens a room, and sends the
+     join code. The join code contains the repository and room only, never a
+     token.
+  5. The rival pastes the join code and enters their own token.
+
+The game writes only two files per room, one per player, so the two of you never
+write the same file and no edit can be lost. Turns appear within a few seconds.
+FORGET SAVED TOKEN clears the token from this browser.
+
+For GitHub Enterprise, put your internal API address in the API ADDRESS field.
+
 IMPORTANT NETWORK LIMITATION
 ----------------------------
 The game does not bypass company network or browser security policy. Intranet

@@ -737,6 +737,24 @@ assert(
 );
 assert(messageBody.includes('lan.active?'), 'the host must open the campaign on the live transport');
 
+// --- repository link --------------------------------------------------------
+// Neither computer connects to the other: each writes only its own file, so two
+// writers never touch one file and no merge can occur.
+assert(clientFn('ghPath').includes('${side}'), 'each side must own a separate file');
+const flushBody = clientFn('ghFlush');
+assert(flushBody.includes('gh.side'), 'a player may only write their own side');
+assert(flushBody.includes('gh.sha'), 'writes must carry the expected version');
+assert(clientFn('ghRead').includes('If-None-Match'), 'polling must be conditional to stay inside the rate limit');
+assert(clientFn('ghPoll').includes("gh.side==='host'?'guest':'host'"), 'each side reads only the other');
+// A token is a credential: it is never handed to the rival, and it is forgettable.
+assert(!clientFn('ghCreateRoom').match(/pack\('BW7-ROOM-',\{[^}]*token/), 'the join code must never carry a token');
+assert(clientFn('ghJoinRoom').includes('Never use your rival'), 'the guest must be told to use their own token');
+assert(clientFn('ghForget').includes('removeItem'), 'a saved token must be removable');
+assert(clientFn('send').indexOf('gh.active') < clientFn('send').indexOf('lan.active'),
+  'messages must route to the repository room when one is open');
+for (const [status, why] of [['401','a rejected token'],['404','a missing repository'],['403','a refused request']])
+  assert(clientFn('ghFail').includes(status), `${why} must be explained`);
+
 // --- connection code handling -----------------------------------------------
 // Codes travel through chat and mail, which wrap lines, quote replies and
 // rewrite punctuation. base64url survives that; + / and = do not.
