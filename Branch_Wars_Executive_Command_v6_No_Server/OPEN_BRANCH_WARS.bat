@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0"
-title Branch Wars - Executive Command v8.0
+title Branch Wars - Executive Command v8.1
 
 rem Work out this computer's LAN address and hand it to the page. Browsers hide
 rem local addresses from web pages (mDNS obfuscation), which stops a direct link

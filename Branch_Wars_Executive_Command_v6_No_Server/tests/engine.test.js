@@ -28,8 +28,10 @@ assert(E, 'BWEngine must be exported');
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.keys(E.PROJECTS).length, 16);
+assert.equal(Object.keys(E.PROJECTS).length, 18);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
+assert.equal(Object.keys(E.STRATEGY_SPECIALIZATIONS).length, 5);
+assert.equal(Object.keys(E.PRODUCT_PORTFOLIOS).length, 3);
 assert.equal(Object.keys(E.COMPETITIVE_ACTIONS).length, 8);
 for (const branch of Object.values(E.STRATEGY_BRANCHES)) assert.equal(branch.nodes.length, 4, `${branch.name} has four tiers`);
 assert.equal(E.EVENTS.length, 26);
@@ -49,7 +51,7 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
 const SIGNED_STATS = new Set(['lastProfit']);
 
 function checkGame(g) {
-  assert.equal(g.version, '8.0');
+  assert.equal(g.version, '8.1');
   assert.equal(g.maxCycles, null, 'campaigns are open-ended');
   assert(Number.isInteger(g.consolidationStalemate) && g.consolidationStalemate >= 0, 'consolidation countdown remains a nonnegative integer');
   assert(Array.isArray(g.trend));
@@ -73,6 +75,11 @@ function checkGame(g) {
     assert.equal(Object.keys(player.strategy).length, 5, 'every player carries all five strategy lanes');
     for (const level of Object.values(player.strategy)) assert(level >= 0 && level <= 4, 'strategy tiers stay within 0-4');
     if (player.primaryStrategy) assert(E.STRATEGY_BRANCHES[player.primaryStrategy], 'primary strategy names a real lane');
+    for (const [line, group] of Object.entries(E.PRODUCT_PORTFOLIOS)) assert(group.options[player.products[line]], `player carries a valid ${line} product`);
+    for (const [branch, key] of Object.entries(player.specializations)) assert(E.STRATEGY_SPECIALIZATIONS[branch][key], 'strategy specialization names a real fork');
+    assert.deepEqual(Object.keys(player.facilities).sort(), ['commercial', 'digital', 'retail']);
+    const facilityTotal = Object.values(player.facilities).reduce((a, b) => a + b, 0);
+    assert.equal(facilityTotal, Object.values(player.branches).reduce((a, b) => a + b, 0), 'facility mix reconciles to the branch ledger');
     assert(Number.isInteger(player.boardConcessions) && player.boardConcessions >= 0);
     assert(Number.isInteger(player.capitalRestriction) && player.capitalRestriction >= 0);
     assert(E.COMPETITIVE_ACTIONS[player.lastCompetitiveAction], 'last competitive action names a real action');
@@ -148,11 +155,53 @@ function basePlan(g, p) {
     depositPolicy: 'balanced',
     lendingPolicy: 'balanced',
     capitalPolicy: 'balanced',
+    products: { ...p.products },
+    specializations: { ...p.specializations },
     opportunity: null,
     newProject: null,
     competitiveAction: 'none',
     decision: 'a',
   };
+}
+
+// --- Products, facility models, and research forks are real mechanics -------
+{
+  const baseline = E.createGame({ mode: 'hotseat', name1: 'Essential', name2: 'Control', scope: 'town' });
+  const highYield = JSON.parse(JSON.stringify(baseline));
+  baseline.players[0].products.retail = 'essential';
+  highYield.players[0].products.retail = 'highYield';
+  const before = baseline.players[0].stats.deposits;
+  testSeed = 0xabc12345;
+  E.operate(baseline, baseline.players[0]);
+  testSeed = 0xabc12345;
+  E.operate(highYield, highYield.players[0]);
+  assert(highYield.players[0].stats.deposits - before > baseline.players[0].stats.deposits - before, 'high-yield savings produces more deposits');
+  assert(highYield.players[0].stats.fundingCost > baseline.players[0].stats.fundingCost, 'high-yield savings costs more to fund');
+  assert(highYield.players[0].stats.rateSensitiveDeposits > baseline.players[0].stats.rateSensitiveDeposits, 'high-yield savings creates runoff exposure');
+}
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Builder', name2: 'Rival', scope: 'town' });
+  const p = g.players[0];
+  E.finishProject(g, p, { key: 'branchCommercial', target: 'industrial' });
+  E.finishProject(g, p, { key: 'branchDigital', target: 'northside' });
+  assert.equal(p.facilities.commercial, 1);
+  assert.equal(p.facilities.digital, 1);
+  assert.deepEqual(Array.from(p.facilityMarkets.industrial), ['commercial']);
+  assert.deepEqual(Array.from(p.facilityMarkets.northside), ['digital']);
+}
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Strategist', name2: 'Rival', scope: 'town' });
+  const p = g.players[0];
+  p.strategy.network = 1;
+  p.stats.cash = 9e6;
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'roadmapNetwork' }), /operating specialization/i, 'tier two requires a real research fork');
+  const plan = { ...basePlan(g, p), newProject: 'roadmapNetwork', specializations: { network: 'regionalHub' } };
+  assert.doesNotThrow(() => E.submit(g, 0, plan));
+  E.submit(g, 1, basePlan(g, g.players[1]));
+  const running = p.projects.find((project) => project.key === 'roadmapNetwork');
+  assert.equal(running.specialization, 'regionalHub', 'the selected specialization is sealed into the project');
+  E.finishProject(g, p, running);
+  assert.equal(p.specializations.network, 'regionalHub', 'the research fork locks when tier two completes');
 }
 
 // --- Competitive actions are paid, countered, and resolved simultaneously --
@@ -672,7 +721,7 @@ function opsCycle(g, newProject) {
   const lines = E.resolveMarketExits(g);
   assert.equal(market.exited[1], true);
   assert.deepEqual(Array.from(market.shares), [100, 0]);
-  assert(lines.some((line) => /closed every branch/.test(line)));
+  assert(lines.some((line) => /closed every (branch|facility)/.test(line)));
   const rivalView = E.publicState(g, 1);
   assert.deepEqual(Array.from(rivalView.territories.downtown.exited), [true, false], 'exit state is oriented to each player');
 }
@@ -823,7 +872,7 @@ function opsCycle(g, newProject) {
     delete p.policies.capital;
   }
   const migrated = migrateGame(legacy);
-  assert.equal(migrated.version, '8.0');
+  assert.equal(migrated.version, '8.1');
   const migratedView = E.publicState(migrated, 0);
   assert(migratedView.me.mandate.name, 'a migrated save still has a readable mandate');
   assert.equal(migratedView.rematchReady, false);
@@ -887,7 +936,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0, v7.0, v7.1, and v8.0/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.1/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -917,8 +966,12 @@ assert(html.includes('id="capitalPolicies"'));
 assert(html.includes('id="isometric-city-overhaul"'));
 assert(html.includes('function districtArt'));
 assert(html.includes('id="trendChart"'));
-assert(html.includes('BRANCH WARS v8.0'));
+assert(html.includes('BRANCH WARS v8.1'));
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
+assert(html.includes('id="productPortfolio"'));
+assert(html.includes('function renderProducts'));
+assert(html.includes('data-specialization-branch'));
+assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert.equal((html.match(/data-workspace-tab=/g) || []).length, 6, 'command center has six bounded workspaces');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
