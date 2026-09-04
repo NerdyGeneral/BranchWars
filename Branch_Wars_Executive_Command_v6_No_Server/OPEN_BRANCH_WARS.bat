@@ -18,7 +18,19 @@ for /f "usebackq delims=" %%I in (`powershell -NoProfile -ExecutionPolicy Bypass
 
 if defined LANIP (
   echo Direct-link address for this computer: %LANIP%
-  start "" "%~dp0BRANCH_WARS.html#lanip=%LANIP%"
+  set "GAMEURL="
+  set "GAMEFILE=%~dp0BRANCH_WARS.html"
+  set "GAMEIP=%LANIP%"
+  for /f "usebackq delims=" %%U in (`powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+    "$path=(Resolve-Path -LiteralPath $env:GAMEFILE).Path;" ^
+    "$uri=([Uri]$path).AbsoluteUri + '#lanip=' + [Uri]::EscapeDataString($env:GAMEIP);" ^
+    "$uri"`) do set "GAMEURL=%%U"
+  if defined GAMEURL (
+    start "" "%GAMEURL%"
+  ) else (
+    echo Could not build the direct-link URL. The game will open normally.
+    start "" "%~dp0BRANCH_WARS.html"
+  )
 ) else (
   echo Could not detect a LAN address. The game will open normally.
   start "" "%~dp0BRANCH_WARS.html"

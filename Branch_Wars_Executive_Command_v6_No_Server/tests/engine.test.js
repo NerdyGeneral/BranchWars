@@ -13,7 +13,13 @@ for (const script of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)) 
   new vm.Script(script[1], { filename: 'embedded-script-syntax-check.js' });
 }
 
-const context = { console, Math, Date, globalThis: null };
+let testSeed = 0xb4a9c001;
+const testMath = Object.create(Math);
+testMath.random = () => {
+  testSeed = (Math.imul(testSeed, 1664525) + 1013904223) >>> 0;
+  return testSeed / 0x100000000;
+};
+const context = { console, Math: testMath, Date, globalThis: null };
 context.globalThis = context;
 vm.runInNewContext(match[1], context, { filename: 'embedded-engine.js' });
 const E = context.BWEngine;
@@ -24,6 +30,7 @@ assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carr
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
 assert.equal(Object.keys(E.PROJECTS).length, 16);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
+assert.equal(Object.keys(E.COMPETITIVE_ACTIONS).length, 8);
 for (const branch of Object.values(E.STRATEGY_BRANCHES)) assert.equal(branch.nodes.length, 4, `${branch.name} has four tiers`);
 assert.equal(E.EVENTS.length, 26);
 assert.equal(Object.keys(E.MILESTONES).length, 6);
@@ -44,6 +51,7 @@ const SIGNED_STATS = new Set(['lastProfit']);
 function checkGame(g) {
   assert.equal(g.version, '8.0');
   assert.equal(g.maxCycles, null, 'campaigns are open-ended');
+  assert(Number.isInteger(g.consolidationStalemate) && g.consolidationStalemate >= 0, 'consolidation countdown remains a nonnegative integer');
   assert(Array.isArray(g.trend));
   assert(g.trend.length >= 1, 'campaign trend must retain at least the opening snapshot');
   assert(E.MACRO_REGIMES[g.economy.key]);
@@ -67,6 +75,7 @@ function checkGame(g) {
     if (player.primaryStrategy) assert(E.STRATEGY_BRANCHES[player.primaryStrategy], 'primary strategy names a real lane');
     assert(Number.isInteger(player.boardConcessions) && player.boardConcessions >= 0);
     assert(Number.isInteger(player.capitalRestriction) && player.capitalRestriction >= 0);
+    assert(E.COMPETITIVE_ACTIONS[player.lastCompetitiveAction], 'last competitive action names a real action');
     assert(Array.isArray(player.projects), 'players carry a list of running projects');
     assert(player.projects.length <= 2, 'no more than two projects ever run at once');
     assert.equal(new Set(player.projects.map((x) => x.key)).size, player.projects.length, 'the same project never runs twice');
@@ -141,8 +150,83 @@ function basePlan(g, p) {
     capitalPolicy: 'balanced',
     opportunity: null,
     newProject: null,
+    competitiveAction: 'none',
     decision: 'a',
   };
+}
+
+// --- Competitive actions are paid, countered, and resolved simultaneously --
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Raider', name2: 'Defender', scope: 'town' });
+  const cash = g.players[0].stats.cash;
+  const before = { business: g.players[1].stats.business, merchant: g.players[1].stats.merchant, customers: g.players[1].stats.customers };
+  g.players.forEach((p) => { p.turnEffects = {}; });
+  const lines = E.resolveCompetitiveActions(g, [
+    { focus: 'downtown', competitiveAction: 'commercialRaid' },
+    { focus: 'northside', competitiveAction: 'relationshipDefense' },
+  ]);
+  assert.equal(g.players[0].stats.cash, cash - E.COMPETITIVE_ACTIONS.commercialRaid.cost, 'attack cost is paid exactly once');
+  assert.equal(g.players[1].stats.business, before.business - 1, 'relationship defense sharply limits business losses');
+  assert.equal(g.players[1].stats.merchant, before.merchant - 1, 'relationship defense sharply limits merchant losses');
+  assert(g.players[1].stats.customers > before.customers - 55, 'relationship defense limits household losses');
+  assert(lines.some((line) => line.includes('relationship book')));
+}
+{
+  const setTalentPosition = (g) => {
+    g.players[0].stats.influence = 25;
+    g.players[1].stats.influence = 10;
+    g.players[1].stats.morale = 30;
+    g.players.forEach((p) => { p.turnEffects = {}; });
+  };
+  const open = E.createGame({ mode: 'hotseat', name1: 'Raider', name2: 'Target', scope: 'town' });
+  setTalentPosition(open);
+  const attackerStaff = open.players[0].stats.staff;
+  E.resolveCompetitiveActions(open, [
+    { focus: 'downtown', competitiveAction: 'talentRaid' },
+    { focus: 'northside', competitiveAction: 'none' },
+  ]);
+  assert.equal(open.players[0].stats.staff, attackerStaff + 1, 'an undefended successful poach transfers a staff member');
+  for (const p of open.players) assert.equal(Object.values(p.allocation).reduce((a, b) => a + b, 0), p.stats.staff, 'staff transfer normalizes allocations');
+
+  const guarded = E.createGame({ mode: 'hotseat', name1: 'Raider', name2: 'Target', scope: 'town' });
+  setTalentPosition(guarded);
+  E.resolveCompetitiveActions(guarded, [
+    { focus: 'downtown', competitiveAction: 'talentRaid' },
+    { focus: 'northside', competitiveAction: 'retentionDefense' },
+  ]);
+  assert.equal(guarded.players[0].stats.staff, attackerStaff, 'retention defense blocks the same poach position');
+}
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  g.players.forEach((p) => { p.turnEffects = {}; });
+  E.resolveCompetitiveActions(g, [
+    { focus: 'downtown', competitiveAction: 'depositRaid' },
+    { focus: 'northside', competitiveAction: 'liquidityDefense' },
+  ]);
+  assert(g.players[0].turnEffects.depositAttack > 0, 'deposit raid adds targeted market pressure');
+  assert(g.players[1].turnEffects.depositDefense > 0, 'liquidity defense adds counter-pressure');
+}
+{
+  const takeoverGame = (guarded) => {
+    const g = E.createGame({ mode: 'hotseat', name1: 'Bidder', name2: 'Target', scope: 'town' });
+    g.act = 2;
+    Object.assign(g.players[0].stats, { deposits: 90e6, loans: 70e6, cash: 8e6, capital: 12e6, influence: 80, reputation: 90 });
+    Object.assign(g.players[1].stats, { deposits: 12e6, loans: 10e6, cash: 300000, capital: 300000, influence: 12, reputation: 30 });
+    g.lastPlans = { [g.players[1].id]: { competitiveAction: guarded ? 'takeoverDefense' : 'none' } };
+    return g;
+  };
+  const exposed = takeoverGame(false);
+  E.evaluateStrategicEnd(exposed);
+  assert.equal(exposed.buyoutPressure[0], 1, 'an exposed weak target advances hostile-buyout pressure');
+  const guarded = takeoverGame(true);
+  E.evaluateStrategicEnd(guarded);
+  assert.equal(guarded.buyoutPressure[0], 0, 'shareholder defense breaks hostile-buyout pressure for the cycle');
+}
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, g.players[0]), competitiveAction: 'not-real' }), /Unknown competitive action/);
+  g.players[0].stats.cash = 1000;
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, g.players[0]), competitiveAction: 'depositRaid' }), /Requires/);
 }
 for (const [key, def] of Object.entries(E.PROJECTS)) {
   if (!def.max) continue;
@@ -556,6 +640,29 @@ function opsCycle(g, newProject) {
 }
 
 {
+  const g = E.createGame({ mode: 'hotseat', name1: 'Deposit Winner', name2: 'Deposit Loser', scope: 'town' });
+  g.act = 2;
+  g.cycle = 30;
+  const winner = g.players[0], loser = g.players[1];
+  winner.policies.deposit = 'aggressive';
+  loser.policies.deposit = 'margin';
+  winner.stats.reputation = 100;
+  winner.stats.digital = 100;
+  winner.allocation = { service: 8, business: 0, lending: 0, operations: 0 };
+  loser.allocation = { service: 0, business: 2, lending: 2, operations: 4 };
+  for (const key of Object.keys(g.territories)) {
+    winner.branches[key] = 3;
+    loser.branches[key] = 0;
+  }
+  const cashBefore = winner.stats.cash + loser.stats.cash;
+  const contest = E.depositContest(g);
+  assert(contest.outflow[1] > 0, 'the configured winner pulls deposits from the loser');
+  assert.equal(winner.stats.cash, 2400000 + contest.outflow[1], 'transferred deposits arrive with matching cash');
+  E.settleFunding(g, loser, contest.outflow[1]);
+  assert.equal(winner.stats.cash + loser.stats.cash, cashBefore, 'a cash-funded deposit transfer conserves system liquidity');
+}
+
+{
   const g = E.createGame({ mode: 'hotseat', name1: 'Leader', name2: 'Rival', scope: 'town' });
   const market = g.territories.downtown;
   market.shares = [91, 9];
@@ -573,10 +680,12 @@ function opsCycle(g, newProject) {
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
   assert.equal(g.act, 0);
-  g.players[0].stats.deposits = 33000000;
+  g.players[0].stats.deposits = 37000000;
   assert.match(E.updateCampaignAct(g), /ACT II BEGINS/);
   assert.equal(g.act, 1);
   g.players[1].stats.capital = 1;
+  g.players[0].strategy.network = 4;
+  g.players[0].strategy.digital = 1;
   assert.match(E.updateCampaignAct(g), /ACT III BEGINS/);
   assert.equal(g.act, 2);
 }
@@ -604,6 +713,44 @@ function opsCycle(g, newProject) {
 }
 
 {
+  const g = E.createGame({ mode: 'hotseat', name1: 'Split Leader', name2: 'Split Rival', scope: 'town' });
+  g.act = 2;
+  Object.values(g.territories).forEach((territory, index) => {
+    const loser = index % 2;
+    territory.exited[loser] = true;
+    territory.shares = loser === 0 ? [0, 100] : [100, 0];
+  });
+  const leader = g.players[0], rival = g.players[1];
+  leader.stats.deposits = 90000000;
+  leader.stats.loans = 60000000;
+  leader.stats.cash = 12000000;
+  leader.stats.capital = 18000000;
+  leader.stats.influence = 50;
+  rival.stats.capital = 5000000;
+  assert(E.tierRank(rival) < 2, 'the split rival remains financially healthy');
+  assert.equal(E.evaluateStrategicEnd(g), '', 'a healthy split-market buyout still requires a sustained position');
+  assert.equal(g.buyoutPressure[0], 1);
+  assert.match(E.evaluateStrategicEnd(g), /HOSTILE BUYOUT/, 'a dominant bank can acquire a healthy split-market rival');
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Auction Leader', name2: 'Auction Rival', scope: 'town' });
+  g.act = 2;
+  Object.values(g.territories).forEach((territory, index) => {
+    const loser = index % 2;
+    territory.exited[loser] = true;
+    territory.shares = loser === 0 ? [0, 100] : [100, 0];
+  });
+  g.players[0].stats.cash += 3000000;
+  g.players[0].stats.influence = 0;
+  g.players[1].stats.influence = 0;
+  for (let cycle = 0; cycle < 8; cycle++) assert.equal(E.evaluateStrategicEnd(g), '', 'the franchise auction gives a divided market time to resolve normally');
+  assert.equal(g.buyoutPressure[0], 1, 'the enterprise leader enters the mandated auction after eight divided cycles');
+  assert.match(E.evaluateStrategicEnd(g), /MANDATED CONSOLIDATION/, 'the mandated auction ends an otherwise permanent split-map deadlock');
+  assert.equal(g.endReason, 'buyout');
+}
+
+{
   const g = E.createGame({ mode: 'hotseat', name1: 'Winner', name2: 'Defeated', scope: 'town' });
   for (const territory of Object.values(g.territories)) {
     territory.exited[1] = true;
@@ -612,6 +759,24 @@ function opsCycle(g, newProject) {
   assert.match(E.evaluateStrategicEnd(g), /TOTAL MARKET DOMINATION/);
   assert.equal(g.endReason, 'domination');
   assert.equal(g.winnerId, g.players[0].id);
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Early Leader', name2: 'Future Rival', scope: 'national' });
+  for (const territory of Object.values(g.territories)) {
+    if (territory.unlock <= g.cycle) {
+      territory.exited[1] = true;
+      territory.shares = [100, 0];
+    }
+  }
+  assert.equal(E.evaluateStrategicEnd(g), '', 'locked national markets prevent premature total domination');
+  assert.equal(g.gameOver, false);
+  g.cycle = Math.max(...Object.values(g.territories).map((territory) => territory.unlock));
+  for (const territory of Object.values(g.territories)) {
+    territory.exited[1] = true;
+    territory.shares = [100, 0];
+  }
+  assert.match(E.evaluateStrategicEnd(g), /TOTAL MARKET DOMINATION/);
 }
 
 // Both sides can read each other's regulatory standing -- that is the point of the system.
@@ -755,6 +920,8 @@ assert(html.includes('id="trendChart"'));
 assert(html.includes('BRANCH WARS v8.0'));
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 6, 'command center has six bounded workspaces');
+for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');
 
 // A later duplicate silently shadows the earlier definition and the page still
@@ -949,6 +1116,8 @@ assert(lanServer.includes('${lanUrl}api/health'), 'the LAN server window must pr
 const launcher = fs.readFileSync(path.join(root, 'OPEN_BRANCH_WARS.bat'), 'utf8');
 assert(launcher.includes("AddressFamily IPv4"), 'the local launcher must discover an IPv4 address for direct P2P');
 assert(launcher.includes('#lanip='), 'the local launcher must pass the discovered address to the game');
+assert(!launcher.includes('BRANCH_WARS.html#lanip='), 'the launcher must not treat the URL fragment as part of a Windows filename');
+assert(launcher.includes('.AbsoluteUri') && launcher.includes('EscapeDataString'), 'the launcher must build and escape a real file URI');
 
 // Every dynamic CSS state the client can emit must be defined somewhere in the stylesheets.
 for (const cls of ['signal watch', 'signal hot', 'signal safe']) {

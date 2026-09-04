@@ -61,6 +61,7 @@ async function testRepositoryQueue() {
   const statuses = [];
   const context = vm.createContext({
     URL,
+    TextEncoder,
     console,
     crypto: webcrypto,
     globalThis: null,
@@ -109,7 +110,7 @@ async function testRepositoryQueue() {
   };
 
   const functions = [
-    'ghPath', 'ghUrl', 'ghHeaders', 'ghEncode', 'ghDecode', 'ghFail',
+    'ghPath', 'ghUrl', 'ghHeaders', 'ghEncode', 'ghDecode', 'ghNonce', 'ghPlanHash', 'ghFail',
     'ghNormalizeRepo', 'ghNormalizeApi', 'ghCheckRepo', 'ghRead', 'ghWrite',
     'ghFlush', 'ghSend',
   ];
@@ -117,6 +118,11 @@ async function testRepositoryQueue() {
   context.gh = { active: true, api: 'https://api.github.com', repo: 'test/branchwars', branch: '', private: true, room: 'ABCDEFGH', token: 'token', side: 'guest', mine: 0, published: 0, seen: 0, sha: '', etag: '', outbox: [], busy: false, sendFailures: 0, pollFailures: 0, retryTimer: null };
   await context.ghCheckRepo();
   assert.equal(context.gh.branch, 'trunk');
+  const sealedPlan = { focus: 'downtown', decision: 'a' };
+  const nonce = 'ab'.repeat(24);
+  const planHash = await context.ghPlanHash(sealedPlan, nonce);
+  assert.match(planHash, /^[0-9a-f]{64}$/, 'repository plans use a SHA-256 commitment');
+  assert.notEqual(await context.ghPlanHash({ ...sealedPlan, decision: 'b' }, nonce), planHash, 'changing a sealed plan changes its commitment');
   context.ghSend({ type: 'hello' });
   context.ghSend({ type: 'plan', plan: { focus: 'downtown' } });
   await waitFor(() => context.gh.published === 2, 'repository queue did not reconcile and publish both messages');
@@ -129,6 +135,9 @@ async function testRepositoryQueue() {
   context.gh.active = false;
   timers.close();
 }
+
+assert.match(clientFunction('submitPlan'), /gh\.active\)await ghCommitPlan\(plan\)/, 'Repository Link sends a commitment before revealing a plan');
+assert.match(clientFunction('handleMessage'), /This Repository Link client is outdated and did not seal its plan/, 'Repository Link rejects legacy plaintext plans');
 
 async function testLanQueue() {
   const timers = quickTimers();

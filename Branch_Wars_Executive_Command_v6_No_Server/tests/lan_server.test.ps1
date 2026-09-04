@@ -27,18 +27,18 @@ try {
     if (-not $health.ok) { throw 'LAN test server did not become healthy.' }
     if ($health.version -ne '8.0') { throw "Unexpected LAN server version $($health.version)." }
 
-    $host = Invoke-RestMethod -Method Post -Uri "$base/api/create" -ContentType 'application/json' -Body '{"hostName":"Host Test Bank"}'
-    $guestBody = @{ room = $host.room; name = 'Guest Test Bank' } | ConvertTo-Json -Compress
+    $hostRoom = Invoke-RestMethod -Method Post -Uri "$base/api/create" -ContentType 'application/json' -Body '{"hostName":"Host Test Bank"}'
+    $guestBody = @{ room = $hostRoom.room; name = 'Guest Test Bank' } | ConvertTo-Json -Compress
     $guest = Invoke-RestMethod -Method Post -Uri "$base/api/join" -ContentType 'application/json' -Body $guestBody
 
     $clientId = [guid]::NewGuid().ToString('N')
-    $messageBody = @{ room = $host.room; token = $guest.token; clientId = $clientId; message = @{ type = 'hello'; name = 'Guest Test Bank' } } | ConvertTo-Json -Depth 8 -Compress
+    $messageBody = @{ room = $hostRoom.room; token = $guest.token; clientId = $clientId; message = @{ type = 'hello'; name = 'Guest Test Bank' } } | ConvertTo-Json -Depth 8 -Compress
     $first = Invoke-RestMethod -Method Post -Uri "$base/api/send" -ContentType 'application/json' -Body $messageBody
     $duplicate = Invoke-RestMethod -Method Post -Uri "$base/api/send" -ContentType 'application/json' -Body $messageBody
     if (-not $first.ok -or -not $duplicate.ok -or -not $duplicate.duplicate) { throw 'Duplicate LAN message was not acknowledged idempotently.' }
     if ($first.seq -ne $duplicate.seq) { throw 'Duplicate LAN message received a second sequence number.' }
 
-    $poll = Invoke-RestMethod -Uri "$base/api/poll?room=$($host.room)&token=$($host.token)&after=0" -TimeoutSec 2
+    $poll = Invoke-RestMethod -Uri "$base/api/poll?room=$($hostRoom.room)&token=$($hostRoom.token)&after=0" -TimeoutSec 2
     if (@($poll.messages).Count -ne 1) { throw "Host received $(@($poll.messages).Count) copies of one guest message." }
     if ($poll.messages[0].message.type -ne 'hello') { throw 'LAN relay changed the message payload.' }
 

@@ -21,6 +21,7 @@ The market is paused while both institutions prepare. You may:
 - Change persistent deposit pricing, lending standards, and capital strategy
 - Select one focus market
 - Prioritize one optional live opportunity
+- Choose one concealed competitive attack, countermeasure, or Hold Position
 - Begin one optional multi-cycle roadmap investment or operating initiative
 - Request emergency board capital when the institution is in genuine distress
 - Answer the current executive call
@@ -29,6 +30,45 @@ Click MARK READY when finished. Once both institutions are ready, the game
 simulates the month: customer activity, deposit and loan production, credit
 losses, earnings, opportunity contests, project progress, branch influence,
 career milestones, and market-share movement all resolve simultaneously.
+
+COMMAND CENTER WORKSPACES
+-------------------------
+The campaign is divided into six persistent workspaces instead of one continuous
+planning page:
+
+  OVERVIEW      enterprise trend, balance sheet, doctrine, and capital signals
+  MARKETS       isometric city, district focus, and opportunity pipeline
+  OPERATIONS    executive call, staffing, and operating policies
+  COMPETITION   concealed attacks, counters, focus, and committed spend
+  STRATEGY      research tree, active initiatives, and emergency board capital
+  INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire
+
+The Ready bar remains available above every workspace. A player can build the
+plan in any order and move between workspaces without losing selections.
+
+COMPETITIVE ACTIONS AND COUNTERS
+--------------------------------
+Each institution may secretly select one action per cycle. Actions spend cash
+when both plans resolve, attacks create Corporate Attention, and the rival sees
+the action only after resolution. Project and action costs are checked together,
+so a plan cannot silently promise the same cash twice.
+
+  Targeted Deposit Campaign  adds pressure in the chosen focus market
+  Commercial Client Raid     transfers business, merchant, and household clients
+  Talent Poach               can transfer one staff member and staffing capacity
+  Liquidity Defense          counters deposit pressure and protects funding
+  Relationship Defense       sharply reduces a commercial raid
+  Retention Package          counters a talent raid and supports morale
+  Shareholder Defense        breaks a hostile-buyout position for one cycle
+  Hold Position              preserves cash and takes no special action
+
+The Intelligence workspace reports visible threats and the rival's last revealed
+action, but never exposes the current sealed plan. Strategy lanes create useful
+synergies: Digital and Acquisition strengthen deposit pressure, Commercial
+improves relationship raids, Operations strengthens defenses, Community receives
+stronger funding and relationship protection, and People-First strengthens staff
+retention. This creates a recurring read-and-counter layer rather than a fixed
+build order.
 
 Nothing requires frantic clicking. Policies and staffing remain in place until
 you change them. Projects continue automatically until completed.
@@ -72,11 +112,18 @@ HOSTILE BUYOUT. During Act III, a well-capitalized institution that maintains at
 least 1.85 times its vulnerable rival's enterprise value, holds sufficient
 executive influence, and sustains that position for two cycles absorbs the rival.
 
+If every operating market has already been divided permanently between two
+surviving institutions, the endgame cannot freeze. A dominant, well-capitalized
+bank may pursue a healthy rival at a lower takeover threshold. If neither bank
+creates that position within eight divided cycles, the regulator opens a
+mandatory franchise auction; the stronger institution must hold the winning
+position for two cycles before absorbing the other bank.
+
 DEPOSITS ARE CONTESTED. Deposit growth is no longer parallel. Each cycle the two
 institutions compete directly for deposits in every open market, and the weaker
-side loses balances to the stronger one. Losing deposits forces you to fund the
-outflow from cash, and if cash runs short you must sell loans at a loss, which
-comes straight out of capital. Aggressive pricing can win balances quickly, but
+side loses balances and the associated cash to the stronger one. Losing deposits
+forces you to fund the outflow from cash, and if cash runs short you must sell
+loans at a loss, which comes straight out of capital. Aggressive pricing can win balances quickly, but
 it creates a visible pool of rate-sensitive funding with a higher recurring cost.
 Moving those customers back toward margin pricing causes runoff, so deposit growth
 must now be timed against earnings, liquidity, and capital. That is the pressure
@@ -95,9 +142,11 @@ institutions themselves change the strategic position:
   ACT II   REGIONAL EXPANSION   strategy platforms intensify competition
   ACT III  CONSOLIDATION WAR    market exits, deposit runs, and buyouts decide it
 
-Acts advance when players reach strategic scale, control meaningful territory,
-complete a capstone, force a market exit, or create regulatory distress. They are
-not tied to a final-cycle countdown.
+Acts advance when players reach strategic scale and control meaningful territory.
+Consolidation cannot begin until every market in the selected campaign has opened;
+after that, capstones, multiple market exits, or serious regulatory stress can
+trigger Act III. Total domination likewise requires the full map to be in play.
+The acts are not tied to a final-cycle countdown.
 
 ENTERPRISE STRATEGY TREE
 ------------------------
@@ -281,6 +330,10 @@ https://api.github.com automatically. They are only for GitHub Enterprise Server
 
 The game writes only two files per room, one per player, so the two of you never
 write the same file and no edit can be lost. Turns appear within a few seconds.
+Repository plans use a commit/reveal seal: the guest first publishes only a
+SHA-256 commitment, and the actual plan is revealed only after the host has also
+locked a plan. A changed reveal is rejected. Both players must use the same
+current game version; older clients that send plaintext plans are refused.
 The token is kept in session storage, not permanent local storage, and normally
 disappears when the browser session closes. FORGET SESSION TOKEN removes it
 immediately. The repository name is remembered for convenience.
