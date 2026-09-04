@@ -84,7 +84,10 @@ function checkGame(g) {
     assert(Number.isInteger(player.capitalRestriction) && player.capitalRestriction >= 0);
     assert(E.COMPETITIVE_ACTIONS[player.lastCompetitiveAction], 'last competitive action names a real action');
     assert(Array.isArray(player.projects), 'players carry a list of running projects');
-    assert(player.projects.length <= 2, 'no more than two projects ever run at once');
+    // Initiatives are bounded by staffed execution capacity, not by a fixed slot count.
+    // A player who pulls bankers out of Operations can transiently carry stalled work,
+    // so the invariant is a sane ceiling plus the stall rule asserted separately.
+    assert(player.projects.length <= 8, 'the initiative portfolio stays within a sane ceiling');
     assert.equal(new Set(player.projects.map((x) => x.key)).size, player.projects.length, 'the same project never runs twice');
     for (const project of player.projects) {
       assert(E.PROJECTS[project.key], `running project ${project.key} exists in the catalog`);
@@ -371,20 +374,30 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
   assert.equal(E.projectCycles(p, branch), 3);
   assert.equal(E.projectCycles(p, hire), 2);
   assert.equal(E.projectCost(p, branch), branch.cost);
-  assert.equal(E.projectSlots(p), 1);
+
+  // Capacity is people first: a 1.5 executive baseline plus 2.0 per Operations banker.
+  p.upgrades.operations = 0;
+  assert.equal(E.executionCapacity(p, { service: 8, business: 0, lending: 0, operations: 0 }), 1.5,
+    'the executive team can always carry one modest initiative');
+  assert.equal(E.executionCapacity(p, { service: 7, business: 0, lending: 0, operations: 1 }), 3.5);
+  assert.equal(E.executionCapacity(p, { service: 4, business: 0, lending: 0, operations: 4 }), 9.5);
+
+  // Operating infrastructure adds capacity on top of the people.
+  p.upgrades.operations = 2;
+  assert.equal(E.executionCapacity(p, { service: 7, business: 0, lending: 0, operations: 1 }), 6.5,
+    'two levels of operations infrastructure add 3.0 capacity');
 
   // Level 1: large builds land a cycle sooner; short utility projects do not.
   p.upgrades.operations = 1;
   assert.equal(E.projectCycles(p, branch), 2, 'level 1 must shorten a 3-cycle project');
   assert.equal(E.projectCycles(p, hire), 2, 'level 1 must not trivialise 2-cycle projects');
-  assert.equal(E.projectSlots(p), 1, 'level 1 does not yet grant a second team');
 
-  // Level 2: a second team, but only while it is actually staffed.
-  p.upgrades.operations = 2;
-  p.allocation = { service: 6, business: 1, lending: 1, operations: 0 };
-  assert.equal(E.projectSlots(p), 1, 'an unstaffed second team does not count');
-  p.allocation = { service: 4, business: 1, lending: 1, operations: 2 };
-  assert.equal(E.projectSlots(p), 2, 'two Operations bankers staff the second team');
+  // Every selectable initiative declares what it costs to execute.
+  for (const [key, def] of Object.entries(E.PROJECTS)) {
+    if (def.legacy) continue;
+    assert(Number.isFinite(E.projectCapacity(def)) && E.projectCapacity(def) > 0,
+      `${key} must declare a positive execution capacity`);
+  }
 
   // Level 3: projects get cheaper.
   p.upgrades.operations = 3;
@@ -414,28 +427,31 @@ function opsCycle(g, newProject) {
   E.submit(g, 0, opsCycle(g, 'acquisition'));
   E.submit(g, 1, E.chooseBot(g, 1));
   assert.equal(p.projects.length, 1);
-  assert.equal(E.projectSlots(p), 2, 'the second team is staffed');
+  // Two Operations bankers plus two levels of infrastructure: 2*2 + 2*1.5 = 7.0 capacity.
+  assert.equal(E.executionCapacity(p, { service: p.stats.staff - 2, business: 0, lending: 0, operations: 2 }), 8.5);
 
   E.submit(g, 0, opsCycle(g, 'operationsCenter'));
   E.submit(g, 1, E.chooseBot(g, 1));
-  assert.equal(p.projects.length, 2, 'a staffed second team runs a second project');
+  assert.equal(p.projects.length, 2, 'staffed capacity runs a second initiative');
 
-  // Only one new project may be committed per cycle, even with a free team.
-  assert.throws(() => E.submit(g, 0, opsCycle(g, 'hire')), /already committed|already active/);
-
-  // Pull the second team off the line: the trailing project must stop advancing.
-  const trailing = p.projects[1].key;
-  const before = p.projects[1].progress;
-  const leadBefore = p.projects[0].progress;
+  // Pull the bankers off the line. Work that no longer fits inside the staffed capacity
+  // must stall rather than quietly continue, and nothing may be silently discarded.
+  p.upgrades.operations = 0;                       // remove the infrastructure cushion too
+  const beforeProgress = new Map(p.projects.map((x) => [x.key, x.progress]));
+  const keysBefore = p.projects.map((x) => x.key).sort();
   const stripped = opsCycle(g, null);
   stripped.allocation = { service: p.stats.staff, business: 0, lending: 0, operations: 0 };
   E.submit(g, 0, stripped);
   E.submit(g, 1, E.chooseBot(g, 1));
-  const stalled = p.projects.find((x) => x.key === trailing);
-  assert(stalled, 'a stalled project is not discarded');
-  assert.equal(stalled.progress, before, 'an unstaffed second project stalls');
-  const lead = p.projects.find((x) => x.key !== trailing);
-  assert(!lead || lead.progress > leadBefore, 'the primary project keeps moving');
+
+  assert.deepEqual(p.projects.map((x) => x.key).sort(), keysBefore, 'stalled work is carried, not dropped');
+  const budget = E.executionCapacity(p, stripped.allocation);
+  const advanced = p.projects.filter((x) => x.progress > beforeProgress.get(x.key));
+  const held = p.projects.filter((x) => x.progress === beforeProgress.get(x.key));
+  assert(held.length >= 1, 'at least one initiative stalls once capacity is withdrawn');
+  const advancedLoad = advanced.reduce((s, x) => s + E.projectCapacity(E.PROJECTS[x.key]), 0);
+  assert(advancedLoad <= budget + 1e-9, 'only work that fits the staffed capacity advances');
+  assert(g.resolution.some((line) => /stalled/.test(line)), 'the wire explains the stall');
 }
 
 // The same project cannot be run twice at once.
@@ -452,7 +468,7 @@ function opsCycle(g, newProject) {
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const p = g.players[0];
-  p.upgrades.operations = 2;
+  p.upgrades.operations = 0;   // capacity comes purely from the submitted staffing
   p.stats.cash = 9e6;
   p.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   p.allocation = { service: 3, business: 2, lending: 2, operations: 1 };
@@ -463,12 +479,89 @@ function opsCycle(g, newProject) {
 
   const h = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const q = h.players[0];
-  q.upgrades.operations = 2;
+  q.upgrades.operations = 0;
   q.stats.cash = 9e6;
   q.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   q.allocation = { service: 2, business: 2, lending: 2, operations: 2 };
   const staffDown = { ...basePlan(h, q), allocation: { service: 4, business: 2, lending: 2, operations: 0 }, newProject: 'training' };
-  assert.throws(() => E.submit(h, 0, staffDown), /already active/, 'removing the second team must reject a second project before lock-in');
+  assert.throws(() => E.submit(h, 0, staffDown), /execution capacity/, 'unstaffing Operations must reject the extra initiative before lock-in');
+}
+
+// The headline of the capacity model: several initiatives may begin in the SAME cycle,
+// bounded only by the bankers assigned to Operations and the cash on hand.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Builder', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  g.event = QUIET;
+  p.stats.cash = 9e6;
+  const allocation = { service: p.stats.staff - 4, business: 0, lending: 0, operations: 4 };
+  assert.equal(E.executionCapacity(p, allocation), 9.5, 'four Operations bankers plus the baseline supply 9.5 capacity');
+
+  const portfolio = ['branchDigital', 'marketing', 'remediation'];   // 1.0 + 1.0 + 1.0
+  E.submit(g, 0, { ...basePlan(g, p), allocation, newProject: null, newProjects: portfolio });
+  E.submit(g, 1, E.chooseBot(g, 1));
+  assert.equal(p.projects.length, 3, 'three initiatives start together in one cycle');
+  for (const key of portfolio) assert(p.projects.some((x) => x.key === key), `${key} actually started`);
+
+  // Over-committing is refused, and the message tells the player what to do about it.
+  const h = E.createGame({ mode: 'hotseat', name1: 'Overreach', name2: 'B', scope: 'national' });
+  const q = h.players[0];
+  h.event = QUIET;
+  q.stats.cash = 9e6;
+  assert.throws(
+    () => E.submit(h, 0, {
+      ...basePlan(h, q),
+      allocation: { service: q.stats.staff - 1, business: 0, lending: 0, operations: 1 },
+      newProject: null,
+      newProjects: ['branch', 'branchCommercial', 'acquisition'],
+    }),
+    /execution capacity.*Operations & Risk/s,
+    'over-committing is refused with actionable guidance'
+  );
+
+  // Cash is the other real limit, and it is checked across the whole portfolio.
+  const c = E.createGame({ mode: 'hotseat', name1: 'Broke', name2: 'B', scope: 'national' });
+  const r = c.players[0];
+  c.event = QUIET;
+  r.stats.cash = 700000;
+  assert.throws(
+    () => E.submit(c, 0, {
+      ...basePlan(c, r),
+      allocation: { service: r.stats.staff - 4, business: 0, lending: 0, operations: 4 },
+      newProject: null,
+      newProjects: ['branch', 'branchCommercial'],
+    }),
+    /commits \$.* but only \$.* is available/,
+    'the portfolio is priced as a whole against available cash'
+  );
+}
+
+// Hiring is a direct action, not a two-cycle capital project.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  g.event = QUIET;
+  p.stats.cash = 9e6;
+  const before = p.stats.staff;
+  const bill = E.hireCost(p, 3);
+  assert(bill > 0 && Number.isFinite(bill), 'hiring is priced');
+  assert(E.hireCost(p, 6) > E.hireCost(p, 3) * 1.9, 'hiring in bulk costs progressively more per head');
+
+  E.submit(g, 0, { ...basePlan(g, p), hires: 3 });
+  E.submit(g, 1, E.chooseBot(g, 1));
+  assert.equal(p.stats.staff, before + 3, 'hired bankers join the institution');
+  assert.equal(Object.values(p.allocation).reduce((a, b) => a + b, 0), p.stats.staff, 'new hires are absorbed into the allocation');
+  assert(g.resolution.some((line) => /hired 3 banker/.test(line)), 'the wire reports the hire');
+
+  // Hiring beyond the per-cycle limit is refused.
+  const h = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  h.players[0].stats.cash = 9e6;
+  assert.throws(() => E.submit(h, 0, { ...basePlan(h, h.players[0]), hires: E.hireLimit(h.players[0]) + 1 }), /at most/);
+
+  // And hiring you cannot afford is refused as part of the plan's total spend.
+  const c = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  c.players[0].stats.cash = 100000;
+  assert.throws(() => E.submit(c, 0, { ...basePlan(c, c.players[0]), hires: 4 }), /is available/);
 }
 
 // Aggressive deposits create visible funding cost and a rate-sensitive liability.
@@ -627,9 +720,9 @@ function opsCycle(g, newProject) {
         allocation: { service: Math.max(0, p.stats.staff - lending - business), business, lending, operations: 0 },
         depositPolicy: 'aggressive', lendingPolicy: 'growth', capitalPolicy: 'reinvest',
         capitalAction: false,
-        newProject: ['capital', 'remediation', 'operationsCenter'].includes(bot.newProject) ? null : bot.newProject,
+        newProject: null, newProjects: (bot.newProjects || []).filter((k) => !['capital', 'remediation', 'operationsCenter'].includes(k)),
       };
-      try { E.submit(g, 0, plan) } catch { E.submit(g, 0, { ...plan, newProject: null }) }
+      try { E.submit(g, 0, plan) } catch { E.submit(g, 0, { ...plan, newProject: null, newProjects: [] }) }
       if (!g.gameOver && !g.players[1].submitted) E.submit(g, 1, E.chooseBot(g, 1));
     }
     if (g.endReason === 'receivership') {
