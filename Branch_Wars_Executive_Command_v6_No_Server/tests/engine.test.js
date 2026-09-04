@@ -640,6 +640,55 @@ function opsCycle(g, newProject) {
   assert.equal(E.publicState(g, 1).projects.branch.cycles, 3, 'the rival sees undiscounted numbers');
 }
 
+// --- Institutional character is derived, never chosen ---------------------
+{
+  // Nothing at setup selects it, and a supplied doctrine is ignored.
+  const a = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const b = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town', doctrine1: 'digital', doctrine2: 'people' });
+  assert.equal(a.players[0].doctrine, b.players[0].doctrine, 'a supplied doctrine no longer changes the opening character');
+  assert.equal(a.players[0].doctrine, a.players[1].doctrine, 'two identical fresh institutions read the same');
+  for (const p of a.players) assert(E.DOCTRINES[p.doctrine], 'the derived character is a real doctrine');
+
+  // The profile is a normalised share over every character.
+  const profile = E.doctrineProfile(a.players[0]);
+  assert.deepEqual(Object.keys(profile).sort(), Object.keys(E.DOCTRINES).sort(), 'every character is scored');
+  const total = Object.values(profile).reduce((x, y) => x + y, 0);
+  assert(Math.abs(total - 1) < 1e-9, 'the profile sums to one');
+  for (const v of Object.values(profile)) assert(v > 0 && v < 1, 'each share is a real fraction');
+
+  // It is read from decisions, so it responds to how the bank is staffed and funded.
+  const p = a.players[0];
+  p.allocation = { service: 1, business: 1, lending: 1, operations: p.stats.staff - 3 };
+  p.capability.operations = E.CAPABILITY_TIERS.operations[1];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'efficiency', 'staffing and funding operations reads as an efficiency operator');
+
+  p.allocation = { service: 1, business: p.stats.staff - 3, lending: 1, operations: 1 };
+  p.capability.operations = 0;
+  p.capability.commercial = E.CAPABILITY_TIERS.commercial[1];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'commercial', 'redirecting people and money re-reads the institution');
+}
+
+// Hysteresis keeps the label from flickering on a marginal lead.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const p = g.players[0];
+  p.allocation = { service: 1, business: 1, lending: 1, operations: p.stats.staff - 3 };
+  p.capability.operations = E.CAPABILITY_TIERS.operations[2];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'efficiency');
+  const settled = E.doctrineProfile(p);
+  // Nudge a rival trait to just under the switching margin: the reading must hold.
+  const target = settled.efficiency - 0.02;
+  p.capability.commercial = 1;
+  for (let i = 0; i < 400 && E.doctrineProfile(p).commercial < target; i++) p.capability.commercial += 20000;
+  const before = p.doctrine;
+  E.syncDoctrine(p);
+  const now = E.doctrineProfile(p);
+  if (now.commercial - now.efficiency <= 0.05) assert.equal(p.doctrine, before, 'a marginal lead does not flip the character');
+}
+
 // --- No lane is ever locked, and identity follows the money --------------
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
@@ -1114,7 +1163,10 @@ function opsCycle(g, newProject) {
   assert.equal(g.scope, 'town');
   assert.equal(g.scenario, 'growth');
   assert.equal(g.difficulty, 'chairman');
-  assert.equal(g.players[0].doctrine, 'digital');
+  // Character is derived, so a rematch re-reads it from the fresh balance sheet rather
+  // than carrying a chosen label forward.
+  assert(E.DOCTRINES[g.players[0].doctrine], 'a rematch re-reads institutional character');
+  assert.equal(g.players[0].doctrine, g.players[1].doctrine, 'two identical fresh institutions read the same');
   checkGame(g);
 }
 

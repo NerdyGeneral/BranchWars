@@ -37,7 +37,7 @@ COMMAND CENTER WORKSPACES
 The campaign is divided into six persistent workspaces instead of one continuous
 planning page:
 
-  OVERVIEW      enterprise trend, balance sheet, doctrine, and capital signals
+  OVERVIEW      enterprise trend, balance sheet, character, and capital signals
   MARKETS       isometric city, district focus, and opportunity pipeline
   OPERATIONS    executive call, staffing, policies, and product portfolios
   COMPETITION   concealed attacks, counters, focus, and committed spend
@@ -401,7 +401,8 @@ FOUNDATION FROM v7.0
 - Project capacity tied to the staffing plan being submitted
 - Reliable room-code play over a local intranet
 - National Legacy map with twelve staged markets
-- Five permanent executive doctrines with distinct compounding advantages
+- Institutional character is read from how you staff, fund and build the bank
+  rather than chosen at setup, and it shifts as you change direction
 - Rotating macroeconomic regimes: expansion, steady growth, tight money,
   downturn, and recovery
 - Capital strategy, liquidity warnings, credit losses, funding costs, and deposit runoff
