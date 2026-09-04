@@ -20,7 +20,8 @@ const E = context.BWEngine;
 assert(E, 'BWEngine must be exported');
 
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
-assert.equal(E.SCOPES.national.cycles, 36);
+assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
+assert.equal(E.CAMPAIGN_ACTS.length, 3);
 assert.equal(Object.keys(E.PROJECTS).length, 16);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
 for (const branch of Object.values(E.STRATEGY_BRANCHES)) assert.equal(branch.nodes.length, 4, `${branch.name} has four tiers`);
@@ -41,14 +42,20 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
 const SIGNED_STATS = new Set(['lastProfit']);
 
 function checkGame(g) {
-  assert.equal(g.version, '7.1');
+  assert.equal(g.version, '8.0');
+  assert.equal(g.maxCycles, null, 'campaigns are open-ended');
   assert(Array.isArray(g.trend));
   assert(g.trend.length >= 1, 'campaign trend must retain at least the opening snapshot');
   assert(E.MACRO_REGIMES[g.economy.key]);
   for (const territory of Object.values(g.territories)) {
     assert(Math.abs(territory.shares[0] + territory.shares[1] - 100) < 0.01);
     assert(territory.shares.every(Number.isFinite));
-    assert(territory.shares.every((s) => s >= 15 - 1e-9 && s <= 85 + 1e-9), 'shares stay inside the contest band');
+    assert(territory.shares.every((s) => s >= 0 && s <= 100), 'shares stay inside the full market range');
+    assert(Array.isArray(territory.exitStreak) && territory.exitStreak.length === 2);
+    assert(Array.isArray(territory.exited) && territory.exited.length === 2);
+    assert(!territory.exited.every(Boolean), 'a transferred market must retain one active owner');
+    if (territory.exited[0]) assert.deepEqual(Array.from(territory.shares), [0, 100]);
+    if (territory.exited[1]) assert.deepEqual(Array.from(territory.shares), [100, 0]);
   }
   for (const player of g.players) {
     assert.equal(Object.keys(E.ROLES).length, Object.keys(player.allocation).length, 'allocation carries exactly the four roles');
@@ -92,19 +99,19 @@ for (let run = 0; run < 48; run++) {
     doctrine1: Object.keys(E.DOCTRINES)[run % Object.keys(E.DOCTRINES).length],
   });
   checkGame(g);
-  let guard = 0;
-  while (!g.gameOver && guard++ < 40) {
+  let resolved = 0;
+  while (!g.gameOver && resolved < 60) {
     eventsSeen.add(g.event.key);
     E.submit(g, 0, E.chooseBot(g, 0));
+    resolved++;
     checkGame(g);
   }
-  assert(g.gameOver, 'campaign should reach a final result');
   assert(g.winnerId === null || g.players.some((p) => p.id === g.winnerId));
+  assert.notEqual(g.endReason, 'horizon', 'elapsed time must never end an open-ended campaign');
   const view = E.publicState(g, 0);
-  assert.equal(view.trend.length, g.maxCycles + 1, 'public trend includes opening plus every resolved cycle');
-  assert.equal(view.trend.at(-1).cycle, g.maxCycles);
-  assert(view.final[g.players[0].id]);
-  assert.equal(view.gameOver, true);
+  assert.equal(view.trend.length, resolved + 1, 'public trend includes opening plus every resolved cycle');
+  if (view.gameOver) assert(view.final[g.players[0].id]);
+  else assert.equal(g.cycle, resolved + 1, 'an unfinished campaign continues to the next cycle');
 }
 assert.equal(eventsSeen.size, E.EVENTS.length, 'every executive call should appear across the sample');
 
@@ -170,7 +177,7 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
   assert.throws(() => E.submit(g, 0, { ...basePlan(g, g.players[0]), newProject: 'moonbase' }), /does not exist/);
 }
 
-// --- Branch goals scale with campaign length --------------------------------
+// --- Branch goals scale with map size, not a campaign deadline ---------------
 {
   const seen = {};
   for (const scope of ['town', 'regional', 'state', 'national']) {
@@ -179,12 +186,10 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
     const goal = Number(E.mandateStatus(g, 0).progress.split('/')[1].trim().split(' ')[0]);
     const builderDesc = E.publicState(g, 0).milestoneDefinitions.builder.desc;
     const builderGoal = Number(builderDesc.match(/\d+/)[0]);
-    // A branch level costs at least two cycles of project time, so the goal has to fit the campaign.
-    assert(goal * 2 <= g.maxCycles, `${scope}: network mandate goal ${goal} does not fit ${g.maxCycles} cycles`);
-    assert(builderGoal * 2 <= g.maxCycles, `${scope}: builder milestone goal ${builderGoal} does not fit ${g.maxCycles} cycles`);
+    assert.equal(g.maxCycles, null);
     seen[scope] = [goal, builderGoal];
   }
-  assert(seen.town[1] < seen.national[1], 'short campaigns must ask for a smaller network than long ones');
+  assert(seen.town[1] < seen.national[1], 'larger maps must ask for a larger branch network');
 }
 
 // --- Event market effects are multipliers, not flat points ------------------
@@ -202,7 +207,7 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
   const doctrines = Object.keys(E.DOCTRINES);
   for (let run = 0; run < 60; run++) {
     const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national', doctrine1: doctrines[run % doctrines.length], doctrine2: doctrines[(run + 2) % doctrines.length] });
-    while (!g.gameOver) {
+    for (let cycle = 0; cycle < 60 && !g.gameOver; cycle++) {
       g.players[0].stats.cash = Math.max(g.players[0].stats.cash, 4e6);
       g.players[1].stats.cash = Math.max(g.players[1].stats.cash, 4e6);
       // Cash alone never puts the bot under compliance pressure, so exercise that branch too.
@@ -475,11 +480,11 @@ function opsCycle(g, newProject) {
 // Reckless balance-sheet management ends in receivership; the campaign stops immediately
 // and the survivor takes the franchise.
 {
-  let receivership = 0, earliest = Infinity, endedEarly = 0;
+  let receivership = 0, earliest = Infinity;
   const RUNS = 40;
   for (let r = 0; r < RUNS; r++) {
     const g = E.createGame({ mode: 'hotseat', name1: 'Reckless', name2: 'Control', scope: 'national' });
-    while (!g.gameOver) {
+    for (let guard = 0; guard < 120 && !g.gameOver; guard++) {
       const p = g.players[0];
       const bot = E.chooseBot(g, 0);
       const lending = Math.max(1, Math.floor(p.stats.staff * 0.6));
@@ -499,10 +504,6 @@ function opsCycle(g, newProject) {
       earliest = Math.min(earliest, g.cycle);
       assert.equal(g.failedId, g.players[0].id, 'the reckless institution is the one that fails');
       assert.equal(g.winnerId, g.players[1].id, 'the survivor assumes the franchise');
-      // A failure landing on the last cycle is legitimate; what matters is that receivership
-      // CAN stop a campaign short, which is asserted in aggregate below.
-      assert(g.cycle <= g.maxCycles);
-      if (g.cycle < g.maxCycles) endedEarly++;
       assert(g.log.some((x) => x.kind === 'FINAL' && /RECEIVERSHIP/.test(x.text)), 'the wire reports the failure');
       const view = E.publicState(g, 1);
       assert.equal(view.endReason, 'receivership');
@@ -511,11 +512,11 @@ function opsCycle(g, newProject) {
     }
   }
   assert(receivership / RUNS > 0.5, `reckless play should usually end in receivership (got ${receivership}/${RUNS})`);
-  assert(endedEarly > 0, 'receivership must be able to stop a campaign before its horizon');
   assert(earliest >= 6, `receivership must never arrive without warning (earliest cycle ${earliest})`);
 }
 
-// Two competent institutions must never eliminate each other.
+// Two competent institutions remain solvent through a long campaign unless another
+// strategic ending has already decided it.
 {
   let receivership = 0;
   const RUNS = 60;
@@ -525,11 +526,92 @@ function opsCycle(g, newProject) {
       scope: ['town', 'regional', 'state', 'national'][r % 4],
       scenario: Object.keys(E.SCENARIOS)[r % 4],
     });
-    while (!g.gameOver) { E.submit(g, 0, E.chooseBot(g, 0)); E.submit(g, 1, E.chooseBot(g, 1)) }
+    for (let cycle = 0; cycle < 60 && !g.gameOver; cycle++) {
+      E.submit(g, 0, E.chooseBot(g, 0));
+      E.submit(g, 1, E.chooseBot(g, 1));
+    }
     if (g.endReason === 'receivership') receivership++;
-    assert(['receivership', 'horizon'].includes(g.endReason), 'every campaign records how it ended');
+    assert.notEqual(g.endReason, 'horizon', 'elapsed cycles never decide a campaign');
+    checkGame(g);
   }
-  assert.equal(receivership, 0, 'competent play must not produce a bank failure');
+  assert(receivership / RUNS < 0.2, `competent play should rarely produce a bank failure (got ${receivership}/${RUNS})`);
+}
+
+// --- Open-ended competitive endings ----------------------------------------
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Buyer', name2: 'Seller', scope: 'town' });
+  const buyer = g.players[0], seller = g.players[1];
+  buyer.strategy.acquisition = 3;
+  const before = {
+    deposits: buyer.stats.deposits + seller.stats.deposits,
+    loans: buyer.stats.loans + seller.stats.loans,
+    customers: buyer.stats.customers + seller.stats.customers,
+  };
+  const message = E.finishProject(g, buyer, { key: 'acquisition', target: 'northside' });
+  assert.match(message, /directly from Seller/, 'an acquisition identifies the rival whose book was taken');
+  assert.equal(buyer.stats.deposits + seller.stats.deposits, before.deposits, 'acquisitions transfer rather than mint deposits');
+  assert.equal(buyer.stats.loans + seller.stats.loans, before.loans, 'acquisitions transfer rather than mint loans');
+  assert.equal(buyer.stats.customers + seller.stats.customers, before.customers, 'acquisitions transfer rather than mint customers');
+  assert.equal(seller.branches.northside, 0, 'a developed acquisition strategy can remove a rival branch');
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Leader', name2: 'Rival', scope: 'town' });
+  const market = g.territories.downtown;
+  market.shares = [91, 9];
+  E.resolveMarketExits(g);
+  E.resolveMarketExits(g);
+  assert.equal(market.exited[1], false, 'two weak cycles produce a warning, not an immediate closure');
+  const lines = E.resolveMarketExits(g);
+  assert.equal(market.exited[1], true);
+  assert.deepEqual(Array.from(market.shares), [100, 0]);
+  assert(lines.some((line) => /closed every branch/.test(line)));
+  const rivalView = E.publicState(g, 1);
+  assert.deepEqual(Array.from(rivalView.territories.downtown.exited), [true, false], 'exit state is oriented to each player');
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  assert.equal(g.act, 0);
+  g.players[0].stats.deposits = 33000000;
+  assert.match(E.updateCampaignAct(g), /ACT II BEGINS/);
+  assert.equal(g.act, 1);
+  g.players[1].stats.capital = 1;
+  assert.match(E.updateCampaignAct(g), /ACT III BEGINS/);
+  assert.equal(g.act, 2);
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Acquirer', name2: 'Target', scope: 'town' });
+  const acquirer = g.players[0], target = g.players[1];
+  g.act = 2;
+  acquirer.stats.deposits = 90000000;
+  acquirer.stats.loans = 75000000;
+  acquirer.stats.capital = 18000000;
+  acquirer.stats.cash = 12000000;
+  acquirer.stats.influence = 80;
+  target.stats.deposits = 8000000;
+  target.stats.loans = 5000000;
+  target.stats.capital = 350000;
+  target.stats.cash = 150000;
+  assert.equal(E.evaluateStrategicEnd(g), '', 'a hostile buyout requires a sustained position');
+  assert.equal(g.buyoutPressure[0], 1);
+  assert.match(E.evaluateStrategicEnd(g), /HOSTILE BUYOUT/);
+  assert.equal(g.endReason, 'buyout');
+  assert.equal(g.winnerId, acquirer.id);
+  assert.equal(target.stats.deposits, 8000000, 'the target record remains available for final reporting');
+  assert(acquirer.stats.deposits > 90000000, 'the acquirer absorbs part of the target franchise');
+}
+
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Winner', name2: 'Defeated', scope: 'town' });
+  for (const territory of Object.values(g.territories)) {
+    territory.exited[1] = true;
+    territory.shares = [100, 0];
+  }
+  assert.match(E.evaluateStrategicEnd(g), /TOTAL MARKET DOMINATION/);
+  assert.equal(g.endReason, 'domination');
+  assert.equal(g.winnerId, g.players[0].id);
 }
 
 // Both sides can read each other's regulatory standing -- that is the point of the system.
@@ -576,7 +658,7 @@ function opsCycle(g, newProject) {
     delete p.policies.capital;
   }
   const migrated = migrateGame(legacy);
-  assert.equal(migrated.version, '7.1');
+  assert.equal(migrated.version, '8.0');
   const migratedView = E.publicState(migrated, 0);
   assert(migratedView.me.mandate.name, 'a migrated save still has a readable mandate');
   assert.equal(migratedView.rematchReady, false);
@@ -640,17 +722,19 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0, v7.0, and v7.1/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0, v7.0, v7.1, and v8.0/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
 // --- Rematch keeps the campaign settings ------------------------------------
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town', scenario: 'growth', difficulty: 'chairman', doctrine1: 'digital', doctrine2: 'people' });
-  while (!g.gameOver) {
-    E.submit(g, 0, E.chooseBot(g, 0));
-    E.submit(g, 1, E.chooseBot(g, 1));
+  for (const territory of Object.values(g.territories)) {
+    territory.exited[1] = true;
+    territory.shares = [100, 0];
   }
+  E.evaluateStrategicEnd(g);
+  assert.equal(g.endReason, 'domination');
   assert.equal(E.rematch(g, 0), false, 'one vote is not enough');
   assert.equal(E.rematch(g, 1), true);
   assert.equal(g.cycle, 1);
@@ -668,7 +752,7 @@ assert(html.includes('id="capitalPolicies"'));
 assert(html.includes('id="isometric-city-overhaul"'));
 assert(html.includes('function districtArt'));
 assert(html.includes('id="trendChart"'));
-assert(html.includes('BRANCH WARS v7.1'));
+assert(html.includes('BRANCH WARS v8.0'));
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');
@@ -871,4 +955,4 @@ for (const cls of ['signal watch', 'signal hot', 'signal safe']) {
   assert(html.includes(`.${cls.split(' ').join('.')}`), `stylesheet must define .${cls.split(' ').join('.')}`);
 }
 
-console.log('Branch Wars engine tests passed: 48 complete campaigns plus capability, validation, migration, rematch, AI-coverage, direct-link session and UI contract checks.');
+console.log('Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session and UI contract checks.');
