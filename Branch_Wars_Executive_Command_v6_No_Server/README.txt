@@ -1,4 +1,4 @@
-BRANCH WARS: EXECUTIVE COMMAND v7.1
+BRANCH WARS: EXECUTIVE COMMAND v8.0
 LONG-FORM / MULTIPLAYER EDITION
 =================================
 
@@ -34,8 +34,10 @@ Nothing requires frantic clicking. Policies and staffing remain in place until
 you change them. Projects continue automatically until completed.
 
 HOW A CAMPAIGN IS WON
---------------------
-There are two ways a campaign ends.
+---------------------
+There is no cycle limit and no score comparison at an arbitrary deadline.
+Cycles measure elapsed operating periods only. A campaign continues until one
+institution actually defeats the other through one of three strategic outcomes.
 
 RECEIVERSHIP. Every institution carries regulatory capital, and its capital ratio
 is capital measured against its loan book and deposit base. Both institutions can
@@ -49,10 +51,9 @@ regulator escalates:
   below 2%       CRITICALLY UNDERCAPITALIZED  three straight cycles here forces receivership
 
 Receivership ends the campaign immediately and the surviving institution assumes
-the failed bank's deposits and branch network. This is not a sudden death: the
-slide from healthy to failed takes well over ten cycles and every step is visible
-to both players, so there is always time to raise capital, shrink the balance
-sheet, or tighten lending. Two well-run institutions will never fail.
+most of the failed bank's deposits, loans, customers, and branch network. This is
+not a sudden death: every stage is visible to both players, leaving time to raise
+capital, shrink the balance sheet, or tighten lending.
 
 Capital is built primarily through retained earnings. Emergency Board Capital is
 available only at critical capital levels, or during severe liquidity stress while
@@ -61,6 +62,15 @@ cycles of expansion restrictions, attracts Corporate Attention, permanently cost
 enterprise value, and can be used no more than twice in one campaign. Capital is
 destroyed by losses, credit charge-offs, selling loans to fund deposit outflow,
 and losing depositors to your rival.
+
+MARKET DOMINATION. Market share can now move below the old 15% floor. Remaining
+below 12% in one market for three consecutive cycles permanently closes that
+institution's branches there. The winner receives recurring franchise income.
+Driving a rival out of every operating market ends the campaign.
+
+HOSTILE BUYOUT. During Act III, a well-capitalized institution that maintains at
+least 1.85 times its vulnerable rival's enterprise value, holds sufficient
+executive influence, and sustains that position for two cycles absorbs the rival.
 
 DEPOSITS ARE CONTESTED. Deposit growth is no longer parallel. Each cycle the two
 institutions compete directly for deposits in every open market, and the weaker
@@ -72,8 +82,22 @@ Moving those customers back toward margin pricing causes runoff, so deposit grow
 must now be timed against earnings, liquidity, and capital. That is the pressure
 that can drive a rival under.
 
-THE PLANNING HORIZON. If neither institution fails, the campaign runs its full
-cycle count and is decided on enterprise value as before.
+In Act III, aggressive pricing against a weak or illiquid rival can trigger a
+genuine deposit run. The transfer ceiling rises sharply and the loser may have to
+sell loans at a haircut or draw directly from capital.
+
+CAMPAIGN ACTS
+-------------
+The game clock never ends the campaign. Instead, competition advances when the
+institutions themselves change the strategic position:
+
+  ACT I    LOCAL RIVALRY        build the franchise and establish positions
+  ACT II   REGIONAL EXPANSION   strategy platforms intensify competition
+  ACT III  CONSOLIDATION WAR    market exits, deposit runs, and buyouts decide it
+
+Acts advance when players reach strategic scale, control meaningful territory,
+complete a capstone, force a market exit, or create regulatory distress. They are
+not tied to a final-cycle countdown.
 
 ENTERPRISE STRATEGY TREE
 ------------------------
@@ -85,9 +109,9 @@ effects.
 Tier one can be sampled in any number of lanes without committing the institution.
 The first lane completed to tier two becomes the permanent primary strategy.
 Secondary lanes then cost more and cannot advance beyond tier two. Only the primary
-lane can reach its campaign-defining tier-four capstone. A national campaign is
-long enough to master one strategy and selectively support it with other capabilities,
-but not to complete every lane.
+lane can reach its campaign-defining tier-four capstone. An open-ended campaign
+gives the chosen primary strategy time to mature while secondary lanes remain
+intentionally limited.
 
 Operational Excellence can still unlock a second project team, reduce initiative
 times, and lower costs. Those benefits apply to operating initiatives; they do not
@@ -96,15 +120,16 @@ not a compulsory opening upgrade for every bank.
 
 CAMPAIGN MAPS
 -------------
-TOWN      4 markets // 12 planning cycles
-REGION    6 markets // 16 planning cycles
-STATE     8 markets // 20 planning cycles
-NATIONAL 12 markets // 36 planning cycles
+TOWN      4 markets // open-ended
+REGION    6 markets // open-ended
+STATE     8 markets // open-ended
+NATIONAL 12 markets // open-ended
 
 Larger maps unlock County Seat and University District on cycle 5, Metro Core
 on cycle 10, State Capital on cycle 14, Agricultural Heartland on cycle 18,
 Innovation Hub on cycle 22, Logistics Gateway on cycle 26, and Coastal Resort
-District on cycle 30. Reach 55% share to control a market.
+District on cycle 30. Reach 55% share to control a market. Fall below 12% for
+three consecutive cycles and your institution permanently exits that market.
 
 The main game view presents these markets as a modern isometric city. District
 platforms, roads, parks, skyline height, branch markers, and blue/red influence
@@ -275,8 +300,19 @@ rooms require both computers to be on a network that allows direct local traffic
 Repository Link requires outbound HTTPS access to the selected GitHub API. AI and
 Pass & Play remain fully local and require no network at all.
 
-NEW IN v7.1
+NEW IN v8.0
 -----------
+- Open-ended campaigns with no cycle limit or horizon score ending
+- Three state-driven acts: Local Rivalry, Regional Expansion, Consolidation War
+- Permanent market exits after three cycles below 12% share
+- Recurring dividends from uncontested markets
+- Acquisitions that transfer rival deposits, loans, customers, and branches
+- Late-game deposit runs that can force loan fire sales and destroy capital
+- Hostile-buyout and total-market-domination victory conditions
+- v6.0, v7.0, and v7.1 save migration into the open-ended campaign model
+
+FOUNDATION FROM v7.1
+--------------------
 - Five-lane Enterprise Strategy Tree with four named tiers per lane
 - Permanent primary-strategy commitment at tier two
 - More expensive secondary strategies with a tier-two ceiling
@@ -284,7 +320,7 @@ NEW IN v7.1
 - Branch, digital, commercial, operational, and acquisition strategy effects
 - Emergency Board Capital separated from the project system
 - Board concessions, expansion restrictions, influence costs, and a two-rescue cap
-- Strategy-aware AI identities and v6.0/v7.0 save migration
+- Strategy-aware AI identities and earlier save migration
 
 FOUNDATION FROM v7.0
 -----------
@@ -294,7 +330,7 @@ FOUNDATION FROM v7.0
 - Credit losses that genuinely respond to lending standards and risk controls
 - Project capacity tied to the staffing plan being submitted
 - Reliable room-code play over a local intranet
-- 36-cycle National Legacy campaign with twelve staged markets
+- National Legacy map with twelve staged markets
 - Five permanent executive doctrines with distinct compounding advantages
 - Rotating macroeconomic regimes: expansion, steady growth, tight money,
   downturn, and recovery
@@ -305,7 +341,7 @@ FOUNDATION FROM v7.0
 - Deeper AI responses to liquidity, credit risk, economic regime, and projects
 - Modern isometric city map with live district control and branch visualization
 - Persistent enterprise-value graph and visible balance-sheet comparison
-- Backward import support for v6.0 and v7.0 local save files
+- Backward import support for earlier local save files
 - Solo AI, Pass & Play, Direct P2P, export/import, and sealed WEGO play retained
 
 FILES

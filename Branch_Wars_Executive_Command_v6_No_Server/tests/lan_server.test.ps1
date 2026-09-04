@@ -25,7 +25,7 @@ try {
         try { $health = Invoke-RestMethod -Uri "$base/api/health" -TimeoutSec 2 } catch { }
     }
     if (-not $health.ok) { throw 'LAN test server did not become healthy.' }
-    if ($health.version -ne '7.1') { throw "Unexpected LAN server version $($health.version)." }
+    if ($health.version -ne '8.0') { throw "Unexpected LAN server version $($health.version)." }
 
     $host = Invoke-RestMethod -Method Post -Uri "$base/api/create" -ContentType 'application/json' -Body '{"hostName":"Host Test Bank"}'
     $guestBody = @{ room = $host.room; name = 'Guest Test Bank' } | ConvertTo-Json -Compress

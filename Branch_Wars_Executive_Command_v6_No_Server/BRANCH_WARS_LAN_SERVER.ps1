@@ -96,7 +96,7 @@ function Handle-Request($Stream, $Request) {
         return
     }
     if ($Request.Method -eq 'GET' -and $path -eq '/api/health') {
-        Send-Json $Stream 200 @{ ok = $true; version = '7.1'; rooms = $rooms.Count }
+        Send-Json $Stream 200 @{ ok = $true; version = '8.0'; rooms = $rooms.Count }
         return
     }
     if ($Request.Method -eq 'GET' -and $path -eq '/favicon.ico') {
@@ -225,7 +225,7 @@ $lanUrl = "http://${lanAddress}:$Port/"
 
 Clear-Host
 Write-Host '============================================================' -ForegroundColor DarkCyan
-Write-Host ' BRANCH WARS v7.1 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
+Write-Host ' BRANCH WARS v8.0 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
 Write-Host '============================================================' -ForegroundColor DarkCyan
 Write-Host "Host browser:  $localUrl"
 Write-Host "Friends join:  $lanUrl" -ForegroundColor Yellow
