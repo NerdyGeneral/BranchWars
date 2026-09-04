@@ -225,7 +225,7 @@ $lanUrl = "http://${lanAddress}:$Port/"
 
 Clear-Host
 Write-Host '============================================================' -ForegroundColor DarkCyan
-Write-Host ' BRANCH WARS v8.0 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
+Write-Host ' BRANCH WARS v8.1 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
 Write-Host '============================================================' -ForegroundColor DarkCyan
 Write-Host "Host browser:  $localUrl"
 Write-Host "Friends join:  $lanUrl" -ForegroundColor Yellow

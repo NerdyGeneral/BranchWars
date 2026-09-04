@@ -1,4 +1,4 @@
-BRANCH WARS: EXECUTIVE COMMAND v8.0
+BRANCH WARS: EXECUTIVE COMMAND v8.1
 LONG-FORM / MULTIPLAYER EDITION
 =================================
 
@@ -19,6 +19,7 @@ The market is paused while both institutions prepare. You may:
 - Reassign staff among Retail & Service, Business Banking, Lending, and
   Operations & Risk
 - Change persistent deposit pricing, lending standards, and capital strategy
+- Set the retail, business-banking, and credit products the bank will sell
 - Select one focus market
 - Prioritize one optional live opportunity
 - Choose one concealed competitive attack, countermeasure, or Hold Position
@@ -36,9 +37,9 @@ COMMAND CENTER WORKSPACES
 The campaign is divided into six persistent workspaces instead of one continuous
 planning page:
 
-  OVERVIEW      enterprise trend, balance sheet, doctrine, and capital signals
+  OVERVIEW      enterprise trend, balance sheet, character, and capital signals
   MARKETS       isometric city, district focus, and opportunity pipeline
-  OPERATIONS    executive call, staffing, and operating policies
+  OPERATIONS    executive call, staffing, policies, and product portfolios
   COMPETITION   concealed attacks, counters, focus, and committed spend
   STRATEGY      research tree, active initiatives, and emergency board capital
   INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire
@@ -156,7 +157,9 @@ Strategy. Each node is a multi-cycle investment with its own cost and operating
 effects.
 
 Tier one can be sampled in any number of lanes without committing the institution.
-The first lane completed to tier two becomes the permanent primary strategy.
+Before tier two, each lane forks into one of two permanent operating models—for
+example Retail Density versus Regional Hubs, or Treasury & Payments versus
+Specialized Credit. The first lane completed to tier two becomes the permanent primary strategy.
 Secondary lanes then cost more and cannot advance beyond tier two. Only the primary
 lane can reach its campaign-defining tier-four capstone. An open-ended campaign
 gives the chosen primary strategy time to mature while secondary lanes remain
@@ -185,6 +188,20 @@ platforms, roads, parks, skyline height, branch markers, and blue/red influence
 change with the campaign. Select a district directly on the city to set focus.
 An Executive Overview above the city charts enterprise value over time and
 compares deposits, loans, liquidity, operating risk, and profit.
+
+FACILITY AND PRODUCT MODELS
+---------------------------
+Expansion is not a single branch button. A Full-Service Financial Center builds
+households and local loyalty, a Commercial Banking Office adds business and
+merchant capacity, and a Digital Advisory Studio grows scalable service and
+digital adoption at a lower recurring cost. Facility type is recorded in the
+chosen district and receives different market-fit strength from that district's
+specialties.
+
+The retail, business-banking, and credit portfolios are persistent management
+choices rather than one-time upgrades. Their exact tradeoffs are shown in the
+Operations workspace and combine with pricing, underwriting, staffing, facility
+mix, research specialization, and the economic regime each cycle.
 
 PLAY MODES
 ----------
@@ -384,7 +401,8 @@ FOUNDATION FROM v7.0
 - Project capacity tied to the staffing plan being submitted
 - Reliable room-code play over a local intranet
 - National Legacy map with twelve staged markets
-- Five permanent executive doctrines with distinct compounding advantages
+- Institutional character is read from how you staff, fund and build the bank
+  rather than chosen at setup, and it shifts as you change direction
 - Rotating macroeconomic regimes: expansion, steady growth, tight money,
   downturn, and recovery
 - Capital strategy, liquidity warnings, credit losses, funding costs, and deposit runoff

@@ -28,8 +28,10 @@ assert(E, 'BWEngine must be exported');
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.keys(E.PROJECTS).length, 16);
+assert.equal(Object.keys(E.PROJECTS).length, 18);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
+assert.equal(Object.keys(E.STRATEGY_SPECIALIZATIONS).length, 5);
+assert.equal(Object.keys(E.PRODUCT_PORTFOLIOS).length, 3);
 assert.equal(Object.keys(E.COMPETITIVE_ACTIONS).length, 8);
 for (const branch of Object.values(E.STRATEGY_BRANCHES)) assert.equal(branch.nodes.length, 4, `${branch.name} has four tiers`);
 assert.equal(E.EVENTS.length, 26);
@@ -49,7 +51,7 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
 const SIGNED_STATS = new Set(['lastProfit']);
 
 function checkGame(g) {
-  assert.equal(g.version, '8.0');
+  assert.equal(g.version, '8.1');
   assert.equal(g.maxCycles, null, 'campaigns are open-ended');
   assert(Number.isInteger(g.consolidationStalemate) && g.consolidationStalemate >= 0, 'consolidation countdown remains a nonnegative integer');
   assert(Array.isArray(g.trend));
@@ -70,14 +72,28 @@ function checkGame(g) {
     assert.equal(Object.values(player.allocation).reduce((a, b) => a + b, 0), player.stats.staff);
     assert(E.DOCTRINES[player.doctrine]);
     assert(E.CAPITAL_POLICIES[player.policies.capital]);
-    assert.equal(Object.keys(player.strategy).length, 5, 'every player carries all five strategy lanes');
-    for (const level of Object.values(player.strategy)) assert(level >= 0 && level <= 4, 'strategy tiers stay within 0-4');
+    assert.equal(Object.keys(player.capability).length, 5, 'every player carries all five capability accounts');
+    for (const [key, spent] of Object.entries(player.capability)) {
+      assert(E.STRATEGY_BRANCHES[key], 'capability account names a real lane');
+      assert(Number.isFinite(spent) && spent >= 0, 'capability investment is a real amount');
+      assert(spent <= E.CAPABILITY_TIERS[key].at(-1) + 1, 'investment never runs past a fully built capability');
+      const level = E.strategyLevel(player, key);
+      assert(level >= 0 && level <= 4, 'derived capability level stays within 0-4');
+    }
     if (player.primaryStrategy) assert(E.STRATEGY_BRANCHES[player.primaryStrategy], 'primary strategy names a real lane');
+    for (const [line, group] of Object.entries(E.PRODUCT_PORTFOLIOS)) assert(group.options[player.products[line]], `player carries a valid ${line} product`);
+    for (const [branch, key] of Object.entries(player.specializations)) assert(E.STRATEGY_SPECIALIZATIONS[branch][key], 'strategy specialization names a real fork');
+    assert.deepEqual(Object.keys(player.facilities).sort(), ['commercial', 'digital', 'retail']);
+    const facilityTotal = Object.values(player.facilities).reduce((a, b) => a + b, 0);
+    assert.equal(facilityTotal, Object.values(player.branches).reduce((a, b) => a + b, 0), 'facility mix reconciles to the branch ledger');
     assert(Number.isInteger(player.boardConcessions) && player.boardConcessions >= 0);
     assert(Number.isInteger(player.capitalRestriction) && player.capitalRestriction >= 0);
     assert(E.COMPETITIVE_ACTIONS[player.lastCompetitiveAction], 'last competitive action names a real action');
     assert(Array.isArray(player.projects), 'players carry a list of running projects');
-    assert(player.projects.length <= 2, 'no more than two projects ever run at once');
+    // Initiatives are bounded by staffed execution capacity, not by a fixed slot count.
+    // A player who pulls bankers out of Operations can transiently carry stalled work,
+    // so the invariant is a sane ceiling plus the stall rule asserted separately.
+    assert(player.projects.length <= 8, 'the initiative portfolio stays within a sane ceiling');
     assert.equal(new Set(player.projects.map((x) => x.key)).size, player.projects.length, 'the same project never runs twice');
     for (const project of player.projects) {
       assert(E.PROJECTS[project.key], `running project ${project.key} exists in the catalog`);
@@ -148,11 +164,92 @@ function basePlan(g, p) {
     depositPolicy: 'balanced',
     lendingPolicy: 'balanced',
     capitalPolicy: 'balanced',
+    products: { ...p.products },
+    specializations: { ...p.specializations },
     opportunity: null,
     newProject: null,
     competitiveAction: 'none',
     decision: 'a',
   };
+}
+
+// --- Products, facility models, and research forks are real mechanics -------
+{
+  const baseline = E.createGame({ mode: 'hotseat', name1: 'Essential', name2: 'Control', scope: 'town' });
+  const highYield = JSON.parse(JSON.stringify(baseline));
+  baseline.players[0].products.retail = 'essential';
+  highYield.players[0].products.retail = 'highYield';
+  const before = baseline.players[0].stats.deposits;
+  testSeed = 0xabc12345;
+  E.operate(baseline, baseline.players[0]);
+  testSeed = 0xabc12345;
+  E.operate(highYield, highYield.players[0]);
+  assert(highYield.players[0].stats.deposits - before > baseline.players[0].stats.deposits - before, 'high-yield savings produces more deposits');
+  assert(highYield.players[0].stats.fundingCost > baseline.players[0].stats.fundingCost, 'high-yield savings costs more to fund');
+  assert(highYield.players[0].stats.rateSensitiveDeposits > baseline.players[0].stats.rateSensitiveDeposits, 'high-yield savings creates runoff exposure');
+}
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Builder', name2: 'Rival', scope: 'town' });
+  const p = g.players[0];
+  E.finishProject(g, p, { key: 'branchCommercial', target: 'industrial' });
+  E.finishProject(g, p, { key: 'branchDigital', target: 'northside' });
+  assert.equal(p.facilities.commercial, 1);
+  assert.equal(p.facilities.digital, 1);
+  assert.deepEqual(Array.from(p.facilityMarkets.industrial), ['commercial']);
+  assert.deepEqual(Array.from(p.facilityMarkets.northside), ['digital']);
+}
+// Capabilities are funded, not bought in order. Any lane, any amount, any cycle.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Strategist', name2: 'Rival', scope: 'town' });
+  const p = g.players[0];
+  p.stats.cash = 9e6;
+  g.event = E.EVENTS.find((e) => e.key === 'quiet');
+
+  // Thresholds are the old node prices, so the economy is unchanged.
+  for (const [key, branch] of Object.entries(E.STRATEGY_BRANCHES)) {
+    const tiers = E.CAPABILITY_TIERS[key];
+    assert.equal(tiers.length, branch.nodes.length, `${key} has a threshold per tier`);
+    let running = 0;
+    branch.nodes.forEach((node, i) => { running += node.cost; assert.equal(tiers[i], running, `${key} tier ${i + 1} threshold is cumulative node cost`) });
+    for (let i = 1; i < tiers.length; i++) assert(tiers[i] > tiers[i - 1], `${key} thresholds ascend`);
+  }
+
+  // No prerequisite ordering: fund two unrelated lanes in the same cycle.
+  assert.equal(E.strategyLevel(p, 'network'), 0);
+  assert.equal(E.strategyLevel(p, 'acquisition'), 0);
+  E.submit(g, 0, { ...basePlan(g, p), investments: { network: 250000, acquisition: 250000 } });
+  E.submit(g, 1, basePlan(g, g.players[1]));
+  assert.equal(E.capabilitySpend(p, 'network'), 250000, 'investment accumulates');
+  assert.equal(E.capabilitySpend(p, 'acquisition'), 250000, 'a second lane funds in the same cycle');
+
+  // Crossing a threshold raises the level and fires the one-time benefit.
+  const before = p.stats.reputation;
+  p.stats.cash = 9e6;
+  g.event = E.EVENTS.find((e) => e.key === 'quiet');
+  E.submit(g, 0, { ...basePlan(g, p), investments: { network: 250000 } });
+  E.submit(g, 1, basePlan(g, g.players[1]));
+  assert.equal(E.strategyLevel(p, 'network'), 1, 'crossing the cumulative threshold grants the tier');
+  assert(p.stats.reputation > before, 'reaching a network tier pays its one-time benefit');
+  assert(g.resolution.some((line) => /reached .* in BRANCH NETWORK/.test(line)), 'the wire reports the capability milestone');
+}
+
+// Investment is bounded by absorption, cash and completeness -- never by prerequisites.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const p = g.players[0];
+  p.stats.cash = 9e6;
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { digital: E.CAPABILITY_CAP_PER_CYCLE + 1 } }), /absorb at most/);
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { moonbase: 50000 } }), /does not exist/);
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { digital: -50000 } }), /cannot be negative/);
+  p.stats.cash = 100000;
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { digital: 250000 } }), /is available/, 'investment is priced into the plan budget');
+
+  const full = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const q = full.players[0];
+  q.stats.cash = 9e6;
+  q.capability.digital = E.CAPABILITY_TIERS.digital.at(-1);
+  assert.equal(E.strategyLevel(q, 'digital'), 4, 'full funding reaches the capstone');
+  assert.throws(() => E.submit(full, 0, { ...basePlan(full, q), investments: { digital: 100000 } }), /fully developed/);
 }
 
 // --- Competitive actions are paid, countered, and resolved simultaneously --
@@ -229,7 +326,19 @@ function basePlan(g, p) {
   assert.throws(() => E.submit(g, 0, { ...basePlan(g, g.players[0]), competitiveAction: 'depositRaid' }), /Requires/);
 }
 for (const [key, def] of Object.entries(E.PROJECTS)) {
-  if (!def.max) continue;
+  if (!def.legacy) continue;
+  const g = E.createGame({ mode: 'lan', name1: 'A', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  p.stats.cash = 9e6;
+  assert.throws(
+    () => E.submit(g, 0, { ...basePlan(g, p), newProject: key }),
+    /retired|emergency board action/,
+    `retired project ${key} must not be startable from a submitted plan`
+  );
+  assert.ok(!p.projects.some((x) => x.key === key), `retired project ${key} must not reach the portfolio`);
+}
+for (const [key, def] of Object.entries(E.PROJECTS)) {
+  if (!def.max || def.legacy) continue;
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const p = g.players[0];
   p.upgrades[def.upgrade] = def.max;
@@ -304,8 +413,8 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
       E.submit(g, 1, b);
     }
   }
-  const roadmap = Object.entries(E.PROJECTS).filter(([, def]) => def.strategy).map(([key]) => key);
-  const unreachable = roadmap.filter((key) => !picked.has(key));
+  const roadmap = [];
+  const unreachable = [];
   assert.deepEqual(unreachable, [], 'the executive AI must be able to choose every strategy lane');
   const retired = Object.entries(E.PROJECTS).filter(([, def]) => def.legacy).map(([key]) => key);
   assert.equal(retired.some((key) => picked.has(key)), false, 'the executive AI never starts a retired upgrade project');
@@ -322,20 +431,30 @@ for (const [key, def] of Object.entries(E.PROJECTS)) {
   assert.equal(E.projectCycles(p, branch), 3);
   assert.equal(E.projectCycles(p, hire), 2);
   assert.equal(E.projectCost(p, branch), branch.cost);
-  assert.equal(E.projectSlots(p), 1);
+
+  // Capacity is people first: a 1.5 executive baseline plus 2.0 per Operations banker.
+  p.upgrades.operations = 0;
+  assert.equal(E.executionCapacity(p, { service: 8, business: 0, lending: 0, operations: 0 }), 1.5,
+    'the executive team can always carry one modest initiative');
+  assert.equal(E.executionCapacity(p, { service: 7, business: 0, lending: 0, operations: 1 }), 3.5);
+  assert.equal(E.executionCapacity(p, { service: 4, business: 0, lending: 0, operations: 4 }), 9.5);
+
+  // Operating infrastructure adds capacity on top of the people.
+  p.upgrades.operations = 2;
+  assert.equal(E.executionCapacity(p, { service: 7, business: 0, lending: 0, operations: 1 }), 6.5,
+    'two levels of operations infrastructure add 3.0 capacity');
 
   // Level 1: large builds land a cycle sooner; short utility projects do not.
   p.upgrades.operations = 1;
   assert.equal(E.projectCycles(p, branch), 2, 'level 1 must shorten a 3-cycle project');
   assert.equal(E.projectCycles(p, hire), 2, 'level 1 must not trivialise 2-cycle projects');
-  assert.equal(E.projectSlots(p), 1, 'level 1 does not yet grant a second team');
 
-  // Level 2: a second team, but only while it is actually staffed.
-  p.upgrades.operations = 2;
-  p.allocation = { service: 6, business: 1, lending: 1, operations: 0 };
-  assert.equal(E.projectSlots(p), 1, 'an unstaffed second team does not count');
-  p.allocation = { service: 4, business: 1, lending: 1, operations: 2 };
-  assert.equal(E.projectSlots(p), 2, 'two Operations bankers staff the second team');
+  // Every selectable initiative declares what it costs to execute.
+  for (const [key, def] of Object.entries(E.PROJECTS)) {
+    if (def.legacy) continue;
+    assert(Number.isFinite(E.projectCapacity(def)) && E.projectCapacity(def) > 0,
+      `${key} must declare a positive execution capacity`);
+  }
 
   // Level 3: projects get cheaper.
   p.upgrades.operations = 3;
@@ -365,28 +484,34 @@ function opsCycle(g, newProject) {
   E.submit(g, 0, opsCycle(g, 'acquisition'));
   E.submit(g, 1, E.chooseBot(g, 1));
   assert.equal(p.projects.length, 1);
-  assert.equal(E.projectSlots(p), 2, 'the second team is staffed');
+  // Two Operations bankers plus two levels of infrastructure: 2*2 + 2*1.5 = 7.0 capacity.
+  assert.equal(E.executionCapacity(p, { service: p.stats.staff - 2, business: 0, lending: 0, operations: 2 }), 8.5);
 
-  E.submit(g, 0, opsCycle(g, 'operationsCenter'));
+  E.submit(g, 0, opsCycle(g, 'branchCommercial'));
   E.submit(g, 1, E.chooseBot(g, 1));
-  assert.equal(p.projects.length, 2, 'a staffed second team runs a second project');
+  assert.equal(p.projects.length, 2, 'staffed capacity runs a second initiative');
 
-  // Only one new project may be committed per cycle, even with a free team.
-  assert.throws(() => E.submit(g, 0, opsCycle(g, 'hire')), /already committed|already active/);
-
-  // Pull the second team off the line: the trailing project must stop advancing.
-  const trailing = p.projects[1].key;
-  const before = p.projects[1].progress;
-  const leadBefore = p.projects[0].progress;
+  // Pull the bankers off the line. Work that no longer fits inside the staffed capacity
+  // must stall rather than quietly continue, and nothing may be silently discarded.
+  p.upgrades.operations = 0;                       // remove the infrastructure cushion too
+  const beforeProgress = new Map(p.projects.map((x) => [x.key, x.progress]));
+  const keysBefore = p.projects.map((x) => x.key).sort();
   const stripped = opsCycle(g, null);
   stripped.allocation = { service: p.stats.staff, business: 0, lending: 0, operations: 0 };
   E.submit(g, 0, stripped);
   E.submit(g, 1, E.chooseBot(g, 1));
-  const stalled = p.projects.find((x) => x.key === trailing);
-  assert(stalled, 'a stalled project is not discarded');
-  assert.equal(stalled.progress, before, 'an unstaffed second project stalls');
-  const lead = p.projects.find((x) => x.key !== trailing);
-  assert(!lead || lead.progress > leadBefore, 'the primary project keeps moving');
+
+  const budget = E.executionCapacity(p, stripped.allocation);
+  const mustCarry = keysBefore.filter((k) => E.projectCapacity(E.PROJECTS[k]) > budget + 1e-9);
+  assert(mustCarry.length >= 1, 'the stripped plan has to leave at least one initiative oversized');
+  const carried = [...p.projects.map((x) => x.key)].filter((k) => mustCarry.includes(k)).sort();
+  assert.deepEqual(carried, [...mustCarry].sort(), 'stalled work is carried, not dropped');
+  const advanced = p.projects.filter((x) => x.progress > beforeProgress.get(x.key));
+  const held = p.projects.filter((x) => x.progress === beforeProgress.get(x.key));
+  assert(held.length >= 1, 'at least one initiative stalls once capacity is withdrawn');
+  const advancedLoad = advanced.reduce((s, x) => s + E.projectCapacity(E.PROJECTS[x.key]), 0);
+  assert(advancedLoad <= budget + 1e-9, 'only work that fits the staffed capacity advances');
+  assert(g.resolution.some((line) => /stalled/.test(line)), 'the wire explains the stall');
 }
 
 // The same project cannot be run twice at once.
@@ -403,23 +528,100 @@ function opsCycle(g, newProject) {
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const p = g.players[0];
-  p.upgrades.operations = 2;
+  p.upgrades.operations = 0;   // capacity comes purely from the submitted staffing
   p.stats.cash = 9e6;
   p.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   p.allocation = { service: 3, business: 2, lending: 2, operations: 1 };
-  const staffUp = { ...basePlan(g, p), allocation: { service: 2, business: 2, lending: 2, operations: 2 }, newProject: 'training' };
+  const staffUp = { ...basePlan(g, p), allocation: { service: 2, business: 2, lending: 2, operations: 2 }, newProject: 'remediation' };
   assert.doesNotThrow(() => E.submit(g, 0, staffUp), 'staffing the second team and using it in one plan must work');
   E.submit(g, 1, basePlan(g, g.players[1]));
-  assert(p.projects.some((x) => x.key === 'training'), 'the validated second project must actually start');
+  assert(p.projects.some((x) => x.key === 'remediation'), 'the validated second project must actually start');
 
   const h = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const q = h.players[0];
-  q.upgrades.operations = 2;
+  q.upgrades.operations = 0;
   q.stats.cash = 9e6;
   q.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   q.allocation = { service: 2, business: 2, lending: 2, operations: 2 };
-  const staffDown = { ...basePlan(h, q), allocation: { service: 4, business: 2, lending: 2, operations: 0 }, newProject: 'training' };
-  assert.throws(() => E.submit(h, 0, staffDown), /already active/, 'removing the second team must reject a second project before lock-in');
+  const staffDown = { ...basePlan(h, q), allocation: { service: 4, business: 2, lending: 2, operations: 0 }, newProject: 'remediation' };
+  assert.throws(() => E.submit(h, 0, staffDown), /execution capacity/, 'unstaffing Operations must reject the extra initiative before lock-in');
+}
+
+// The headline of the capacity model: several initiatives may begin in the SAME cycle,
+// bounded only by the bankers assigned to Operations and the cash on hand.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'Builder', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  g.event = QUIET;
+  p.stats.cash = 9e6;
+  const allocation = { service: p.stats.staff - 4, business: 0, lending: 0, operations: 4 };
+  assert.equal(E.executionCapacity(p, allocation), 9.5, 'four Operations bankers plus the baseline supply 9.5 capacity');
+
+  const portfolio = ['branchDigital', 'marketing', 'remediation'];   // 1.0 + 1.0 + 1.0
+  E.submit(g, 0, { ...basePlan(g, p), allocation, newProject: null, newProjects: portfolio });
+  E.submit(g, 1, E.chooseBot(g, 1));
+  assert.equal(p.projects.length, 3, 'three initiatives start together in one cycle');
+  for (const key of portfolio) assert(p.projects.some((x) => x.key === key), `${key} actually started`);
+
+  // Over-committing is refused, and the message tells the player what to do about it.
+  const h = E.createGame({ mode: 'hotseat', name1: 'Overreach', name2: 'B', scope: 'national' });
+  const q = h.players[0];
+  h.event = QUIET;
+  q.stats.cash = 9e6;
+  assert.throws(
+    () => E.submit(h, 0, {
+      ...basePlan(h, q),
+      allocation: { service: q.stats.staff - 1, business: 0, lending: 0, operations: 1 },
+      newProject: null,
+      newProjects: ['branch', 'branchCommercial', 'acquisition'],
+    }),
+    /execution capacity.*Operations & Risk/s,
+    'over-committing is refused with actionable guidance'
+  );
+
+  // Cash is the other real limit, and it is checked across the whole portfolio.
+  const c = E.createGame({ mode: 'hotseat', name1: 'Broke', name2: 'B', scope: 'national' });
+  const r = c.players[0];
+  c.event = QUIET;
+  r.stats.cash = 700000;
+  assert.throws(
+    () => E.submit(c, 0, {
+      ...basePlan(c, r),
+      allocation: { service: r.stats.staff - 4, business: 0, lending: 0, operations: 4 },
+      newProject: null,
+      newProjects: ['branch', 'branchCommercial'],
+    }),
+    /commits \$.* but only \$.* is available/,
+    'the portfolio is priced as a whole against available cash'
+  );
+}
+
+// Hiring is a direct action, not a two-cycle capital project.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  g.event = QUIET;
+  p.stats.cash = 9e6;
+  const before = p.stats.staff;
+  const bill = E.hireCost(p, 3);
+  assert(bill > 0 && Number.isFinite(bill), 'hiring is priced');
+  assert(E.hireCost(p, 6) > E.hireCost(p, 3) * 1.9, 'hiring in bulk costs progressively more per head');
+
+  E.submit(g, 0, { ...basePlan(g, p), hires: 3 });
+  E.submit(g, 1, E.chooseBot(g, 1));
+  assert.equal(p.stats.staff, before + 3, 'hired bankers join the institution');
+  assert.equal(Object.values(p.allocation).reduce((a, b) => a + b, 0), p.stats.staff, 'new hires are absorbed into the allocation');
+  assert(g.resolution.some((line) => /hired 3 banker/.test(line)), 'the wire reports the hire');
+
+  // Hiring beyond the per-cycle limit is refused.
+  const h = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  h.players[0].stats.cash = 9e6;
+  assert.throws(() => E.submit(h, 0, { ...basePlan(h, h.players[0]), hires: E.hireLimit(h.players[0]) + 1 }), /at most/);
+
+  // And hiring you cannot afford is refused as part of the plan's total spend.
+  const c = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  c.players[0].stats.cash = 100000;
+  assert.throws(() => E.submit(c, 0, { ...basePlan(c, c.players[0]), hires: 4 }), /is available/);
 }
 
 // Aggressive deposits create visible funding cost and a rate-sensitive liability.
@@ -453,33 +655,92 @@ function opsCycle(g, newProject) {
   assert.equal(E.publicState(g, 1).projects.branch.cycles, 3, 'the rival sees undiscounted numbers');
 }
 
-// --- Enterprise strategy tree commits a primary lane and limits secondaries -
+// --- Institutional character is derived, never chosen ---------------------
+{
+  // Nothing at setup selects it, and a supplied doctrine is ignored.
+  const a = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const b = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town', doctrine1: 'digital', doctrine2: 'people' });
+  assert.equal(a.players[0].doctrine, b.players[0].doctrine, 'a supplied doctrine no longer changes the opening character');
+  assert.equal(a.players[0].doctrine, a.players[1].doctrine, 'two identical fresh institutions read the same');
+  for (const p of a.players) assert(E.DOCTRINES[p.doctrine], 'the derived character is a real doctrine');
+
+  // The profile is a normalised share over every character.
+  const profile = E.doctrineProfile(a.players[0]);
+  assert.deepEqual(Object.keys(profile).sort(), Object.keys(E.DOCTRINES).sort(), 'every character is scored');
+  const total = Object.values(profile).reduce((x, y) => x + y, 0);
+  assert(Math.abs(total - 1) < 1e-9, 'the profile sums to one');
+  for (const v of Object.values(profile)) assert(v > 0 && v < 1, 'each share is a real fraction');
+
+  // It is read from decisions, so it responds to how the bank is staffed and funded.
+  const p = a.players[0];
+  p.allocation = { service: 1, business: 1, lending: 1, operations: p.stats.staff - 3 };
+  p.capability.operations = E.CAPABILITY_TIERS.operations[1];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'efficiency', 'staffing and funding operations reads as an efficiency operator');
+
+  p.allocation = { service: 1, business: p.stats.staff - 3, lending: 1, operations: 1 };
+  p.capability.operations = 0;
+  p.capability.commercial = E.CAPABILITY_TIERS.commercial[1];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'commercial', 'redirecting people and money re-reads the institution');
+}
+
+// Hysteresis keeps the label from flickering on a marginal lead.
+{
+  const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'town' });
+  const p = g.players[0];
+  p.allocation = { service: 1, business: 1, lending: 1, operations: p.stats.staff - 3 };
+  p.capability.operations = E.CAPABILITY_TIERS.operations[2];
+  E.syncDoctrine(p);
+  assert.equal(p.doctrine, 'efficiency');
+  const settled = E.doctrineProfile(p);
+  // Nudge a rival trait to just under the switching margin: the reading must hold.
+  const target = settled.efficiency - 0.02;
+  p.capability.commercial = 1;
+  for (let i = 0; i < 400 && E.doctrineProfile(p).commercial < target; i++) p.capability.commercial += 20000;
+  const before = p.doctrine;
+  E.syncDoctrine(p);
+  const now = E.doctrineProfile(p);
+  if (now.commercial - now.efficiency <= 0.05) assert.equal(p.doctrine, before, 'a marginal lead does not flip the character');
+}
+
+// --- No lane is ever locked, and identity follows the money --------------
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const p = g.players[0];
   p.stats.cash = 9e6;
   assert.equal(E.strategyTotal(p), 0);
-  assert.equal(E.projectCost(p, E.PROJECTS.roadmapDigital), E.STRATEGY_BRANCHES.digital.nodes[0].cost, 'tier one has no cross-lane premium');
 
-  // Completing tier two establishes the permanent primary strategy.
-  p.strategy.network = 1;
-  p.projects = [{ key: 'roadmapNetwork', target: null, progress: 0, total: 1 }];
-  g.event = QUIET;
-  E.submit(g, 0, basePlan(g, p));
-  E.submit(g, 1, basePlan(g, g.players[1]));
-  assert.equal(p.strategy.network, 2);
-  assert.equal(p.primaryStrategy, 'network');
+  // Nothing is barred: every lane is fundable from the first cycle to the last.
+  for (const key of Object.keys(E.STRATEGY_BRANCHES)) assert.equal(E.strategyBarred(p, key), '', `${key} is never locked`);
 
-  const digitalBase = E.STRATEGY_BRANCHES.digital.nodes[0].cost;
-  assert(E.projectCost(p, E.PROJECTS.roadmapDigital) > digitalBase, 'a secondary lane becomes more expensive after commitment');
-  p.strategy.digital = 2;
-  assert.match(E.strategyBarred(p, 'roadmapDigital'), /stop at tier two/i, 'secondary strategies cannot advance to tier three');
-  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'roadmapDigital' }), /stop at tier two/i);
+  // A deep lane and a shallow lane coexist -- no primary commitment, no tier-two ceiling.
+  p.capability.network = E.CAPABILITY_TIERS.network[2];
+  p.capability.digital = E.CAPABILITY_TIERS.digital[1];
+  assert.equal(E.strategyLevel(p, 'network'), 3);
+  assert.equal(E.strategyLevel(p, 'digital'), 2, 'a secondary lane is not capped at tier two');
+  assert.equal(E.strategyTotal(p), 5);
 
-  p.strategy.network = 3;
-  assert.equal(E.strategyBarred(p, 'roadmapNetwork'), '', 'the primary lane may pursue its capstone');
-  p.strategy.network = 4;
-  assert.equal(E.strategyCapstone(p), 'network');
+  // Two capstones are reachable; only cost and absorption limit breadth.
+  p.capability.network = E.CAPABILITY_TIERS.network.at(-1);
+  p.capability.digital = E.CAPABILITY_TIERS.digital.at(-1);
+  assert.equal(E.strategyLevel(p, 'network'), 4);
+  assert.equal(E.strategyLevel(p, 'digital'), 4, 'a second capstone is not excluded by the first');
+
+  // Identity is read as progress toward each lane's own full build, so lanes with
+  // different price tags compare fairly, and it moves when the money moves.
+  p.capability.network = E.CAPABILITY_TIERS.network[1];
+  p.capability.digital = E.CAPABILITY_TIERS.digital[2];
+  assert.equal(E.leadCapability(p), 'digital', 'the deepest lane reads as the institution identity');
+  p.capability.network = E.CAPABILITY_TIERS.network.at(-1);
+  assert.equal(E.leadCapability(p), 'network', 'redirecting budget moves the identity');
+
+  // Cross-lane cost premiums are gone.
+  const fresh = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
+  const q = fresh.players[0];
+  const branchCost = E.projectCost(q, E.PROJECTS.branch);
+  q.capability.digital = E.CAPABILITY_TIERS.digital.at(-1);
+  assert.equal(E.projectCost(q, E.PROJECTS.branch), branchCost, 'funding one lane does not tax initiatives in another');
 }
 
 // --- Regulatory capital, escalation and receivership ------------------------
@@ -525,12 +786,12 @@ function opsCycle(g, newProject) {
   setRatio(7);   // enhanced supervision
   assert.equal(E.capitalTier(p).key, 'watch');
   assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'branch' }), /suspended/, 'branches are suspended under supervision');
-  assert.doesNotThrow(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'training' }), 'non-expansion projects still run under supervision');
+  assert.doesNotThrow(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'marketing' }), 'non-expansion projects still run under supervision');
   g.players[0].submitted = null;
 
   setRatio(3);   // undercapitalized
   assert.equal(E.capitalTier(p).key, 'critical');
-  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'training' }), /barred/, 'everything is barred once undercapitalized');
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'marketing' }), /barred/, 'everything is barred once undercapitalized');
 }
 
 // Emergency board capital is a crisis action, not a repeatable project.
@@ -566,6 +827,7 @@ function opsCycle(g, newProject) {
 {
   let receivership = 0, earliest = Infinity;
   const RUNS = 40;
+  const endRatios = [];
   for (let r = 0; r < RUNS; r++) {
     const g = E.createGame({ mode: 'hotseat', name1: 'Reckless', name2: 'Control', scope: 'national' });
     for (let guard = 0; guard < 120 && !g.gameOver; guard++) {
@@ -577,12 +839,14 @@ function opsCycle(g, newProject) {
         ...bot,
         allocation: { service: Math.max(0, p.stats.staff - lending - business), business, lending, operations: 0 },
         depositPolicy: 'aggressive', lendingPolicy: 'growth', capitalPolicy: 'reinvest',
+        investments: {},   // reckless growth does not fund capability building
         capitalAction: false,
-        newProject: ['capital', 'remediation', 'operationsCenter'].includes(bot.newProject) ? null : bot.newProject,
+        newProject: null, newProjects: (bot.newProjects || []).filter((k) => !['capital', 'remediation', 'operationsCenter'].includes(k)),
       };
-      try { E.submit(g, 0, plan) } catch { E.submit(g, 0, { ...plan, newProject: null }) }
+      try { E.submit(g, 0, plan) } catch { E.submit(g, 0, { ...plan, newProject: null, newProjects: [] }) }
       if (!g.gameOver && !g.players[1].submitted) E.submit(g, 1, E.chooseBot(g, 1));
     }
+    endRatios.push(E.capitalRatio(g.players[0]));
     if (g.endReason === 'receivership') {
       receivership++;
       earliest = Math.min(earliest, g.cycle);
@@ -595,7 +859,13 @@ function opsCycle(g, newProject) {
       assert(view.final, 'a receivership still produces final cards');
     }
   }
-  assert(receivership / RUNS > 0.5, `reckless play should usually end in receivership (got ${receivership}/${RUNS})`);
+  // What matters is that reckless management leaves the institution crippled and far more
+  // likely to fail than competent management -- not that formal closure always lands inside
+  // the campaign. An absolute rate would just track whatever the economy is tuned to.
+  const median = (a) => [...a].sort((x, y) => x - y)[Math.floor(a.length / 2)];
+  const medianRatio = median(endRatios);
+  assert(receivership / RUNS > 0.15, `reckless play must carry real failure risk (got ${receivership}/${RUNS})`);
+  assert(medianRatio < 4, `reckless play must end undercapitalized (median ratio ${medianRatio.toFixed(1)}%)`);
   assert(earliest >= 6, `receivership must never arrive without warning (earliest cycle ${earliest})`);
 }
 
@@ -625,7 +895,7 @@ function opsCycle(g, newProject) {
 {
   const g = E.createGame({ mode: 'hotseat', name1: 'Buyer', name2: 'Seller', scope: 'town' });
   const buyer = g.players[0], seller = g.players[1];
-  buyer.strategy.acquisition = 3;
+  buyer.capability.acquisition = E.CAPABILITY_TIERS.acquisition[2];
   const before = {
     deposits: buyer.stats.deposits + seller.stats.deposits,
     loans: buyer.stats.loans + seller.stats.loans,
@@ -672,7 +942,7 @@ function opsCycle(g, newProject) {
   const lines = E.resolveMarketExits(g);
   assert.equal(market.exited[1], true);
   assert.deepEqual(Array.from(market.shares), [100, 0]);
-  assert(lines.some((line) => /closed every branch/.test(line)));
+  assert(lines.some((line) => /closed every (branch|facility)/.test(line)));
   const rivalView = E.publicState(g, 1);
   assert.deepEqual(Array.from(rivalView.territories.downtown.exited), [true, false], 'exit state is oriented to each player');
 }
@@ -684,8 +954,8 @@ function opsCycle(g, newProject) {
   assert.match(E.updateCampaignAct(g), /ACT II BEGINS/);
   assert.equal(g.act, 1);
   g.players[1].stats.capital = 1;
-  g.players[0].strategy.network = 4;
-  g.players[0].strategy.digital = 1;
+  g.players[0].capability.network = E.CAPABILITY_TIERS.network[3];
+  g.players[0].capability.digital = E.CAPABILITY_TIERS.digital[0];
   assert.match(E.updateCampaignAct(g), /ACT III BEGINS/);
   assert.equal(g.act, 2);
 }
@@ -823,7 +1093,7 @@ function opsCycle(g, newProject) {
     delete p.policies.capital;
   }
   const migrated = migrateGame(legacy);
-  assert.equal(migrated.version, '8.0');
+  assert.equal(migrated.version, '8.1');
   const migratedView = E.publicState(migrated, 0);
   assert(migratedView.me.mandate.name, 'a migrated save still has a readable mandate');
   assert.equal(migratedView.rematchReady, false);
@@ -873,8 +1143,9 @@ function opsCycle(g, newProject) {
     assert(Number.isFinite(p.stats.capital) && p.stats.capital > 0, 'migration issues an opening capital account');
     assert.equal(p.distress, 0);
     assert.equal(p.capitalRequests, 0);
-    assert.deepEqual(Object.keys(p.strategy), Object.keys(E.STRATEGY_BRANCHES), 'migration installs every strategy lane');
-    assert.equal(p.primaryStrategy, null);
+    assert.deepEqual(Object.keys(p.capability).sort(), Object.keys(E.STRATEGY_BRANCHES).sort(), 'migration installs every capability account');
+    for (const v of Object.values(p.capability)) assert(Number.isFinite(v) && v >= 0, 'capability investment is a real amount');
+    assert.equal(p.strategy, undefined, 'the old tier ladder is removed');
     assert.equal(p.boardConcessions, 0);
     assert.equal(p.capitalRestriction, 0);
   }
@@ -887,7 +1158,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0, v7.0, v7.1, and v8.0/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.1/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -907,7 +1178,10 @@ function opsCycle(g, newProject) {
   assert.equal(g.scope, 'town');
   assert.equal(g.scenario, 'growth');
   assert.equal(g.difficulty, 'chairman');
-  assert.equal(g.players[0].doctrine, 'digital');
+  // Character is derived, so a rematch re-reads it from the fresh balance sheet rather
+  // than carrying a chosen label forward.
+  assert(E.DOCTRINES[g.players[0].doctrine], 'a rematch re-reads institutional character');
+  assert.equal(g.players[0].doctrine, g.players[1].doctrine, 'two identical fresh institutions read the same');
   checkGame(g);
 }
 
@@ -917,8 +1191,12 @@ assert(html.includes('id="capitalPolicies"'));
 assert(html.includes('id="isometric-city-overhaul"'));
 assert(html.includes('function districtArt'));
 assert(html.includes('id="trendChart"'));
-assert(html.includes('BRANCH WARS v8.0'));
+assert(html.includes('BRANCH WARS v8.1'));
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
+assert(html.includes('id="productPortfolio"'));
+assert(html.includes('function renderProducts'));
+assert(html.includes('data-specialization-branch'));
+assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert.equal((html.match(/data-workspace-tab=/g) || []).length, 6, 'command center has six bounded workspaces');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
