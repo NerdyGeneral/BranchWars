@@ -326,7 +326,19 @@ function basePlan(g, p) {
   assert.throws(() => E.submit(g, 0, { ...basePlan(g, g.players[0]), competitiveAction: 'depositRaid' }), /Requires/);
 }
 for (const [key, def] of Object.entries(E.PROJECTS)) {
-  if (!def.max) continue;
+  if (!def.legacy) continue;
+  const g = E.createGame({ mode: 'lan', name1: 'A', name2: 'B', scope: 'national' });
+  const p = g.players[0];
+  p.stats.cash = 9e6;
+  assert.throws(
+    () => E.submit(g, 0, { ...basePlan(g, p), newProject: key }),
+    /retired|emergency board action/,
+    `retired project ${key} must not be startable from a submitted plan`
+  );
+  assert.ok(!p.projects.some((x) => x.key === key), `retired project ${key} must not reach the portfolio`);
+}
+for (const [key, def] of Object.entries(E.PROJECTS)) {
+  if (!def.max || def.legacy) continue;
   const g = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const p = g.players[0];
   p.upgrades[def.upgrade] = def.max;
@@ -475,7 +487,7 @@ function opsCycle(g, newProject) {
   // Two Operations bankers plus two levels of infrastructure: 2*2 + 2*1.5 = 7.0 capacity.
   assert.equal(E.executionCapacity(p, { service: p.stats.staff - 2, business: 0, lending: 0, operations: 2 }), 8.5);
 
-  E.submit(g, 0, opsCycle(g, 'operationsCenter'));
+  E.submit(g, 0, opsCycle(g, 'branchCommercial'));
   E.submit(g, 1, E.chooseBot(g, 1));
   assert.equal(p.projects.length, 2, 'staffed capacity runs a second initiative');
 
@@ -489,8 +501,11 @@ function opsCycle(g, newProject) {
   E.submit(g, 0, stripped);
   E.submit(g, 1, E.chooseBot(g, 1));
 
-  assert.deepEqual(p.projects.map((x) => x.key).sort(), keysBefore, 'stalled work is carried, not dropped');
   const budget = E.executionCapacity(p, stripped.allocation);
+  const mustCarry = keysBefore.filter((k) => E.projectCapacity(E.PROJECTS[k]) > budget + 1e-9);
+  assert(mustCarry.length >= 1, 'the stripped plan has to leave at least one initiative oversized');
+  const carried = [...p.projects.map((x) => x.key)].filter((k) => mustCarry.includes(k)).sort();
+  assert.deepEqual(carried, [...mustCarry].sort(), 'stalled work is carried, not dropped');
   const advanced = p.projects.filter((x) => x.progress > beforeProgress.get(x.key));
   const held = p.projects.filter((x) => x.progress === beforeProgress.get(x.key));
   assert(held.length >= 1, 'at least one initiative stalls once capacity is withdrawn');
@@ -517,10 +532,10 @@ function opsCycle(g, newProject) {
   p.stats.cash = 9e6;
   p.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   p.allocation = { service: 3, business: 2, lending: 2, operations: 1 };
-  const staffUp = { ...basePlan(g, p), allocation: { service: 2, business: 2, lending: 2, operations: 2 }, newProject: 'training' };
+  const staffUp = { ...basePlan(g, p), allocation: { service: 2, business: 2, lending: 2, operations: 2 }, newProject: 'remediation' };
   assert.doesNotThrow(() => E.submit(g, 0, staffUp), 'staffing the second team and using it in one plan must work');
   E.submit(g, 1, basePlan(g, g.players[1]));
-  assert(p.projects.some((x) => x.key === 'training'), 'the validated second project must actually start');
+  assert(p.projects.some((x) => x.key === 'remediation'), 'the validated second project must actually start');
 
   const h = E.createGame({ mode: 'hotseat', name1: 'A', name2: 'B', scope: 'national' });
   const q = h.players[0];
@@ -528,7 +543,7 @@ function opsCycle(g, newProject) {
   q.stats.cash = 9e6;
   q.projects = [{ key: 'acquisition', target: 'downtown', progress: 0, total: 4 }];
   q.allocation = { service: 2, business: 2, lending: 2, operations: 2 };
-  const staffDown = { ...basePlan(h, q), allocation: { service: 4, business: 2, lending: 2, operations: 0 }, newProject: 'training' };
+  const staffDown = { ...basePlan(h, q), allocation: { service: 4, business: 2, lending: 2, operations: 0 }, newProject: 'remediation' };
   assert.throws(() => E.submit(h, 0, staffDown), /execution capacity/, 'unstaffing Operations must reject the extra initiative before lock-in');
 }
 
@@ -771,12 +786,12 @@ function opsCycle(g, newProject) {
   setRatio(7);   // enhanced supervision
   assert.equal(E.capitalTier(p).key, 'watch');
   assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'branch' }), /suspended/, 'branches are suspended under supervision');
-  assert.doesNotThrow(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'training' }), 'non-expansion projects still run under supervision');
+  assert.doesNotThrow(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'marketing' }), 'non-expansion projects still run under supervision');
   g.players[0].submitted = null;
 
   setRatio(3);   // undercapitalized
   assert.equal(E.capitalTier(p).key, 'critical');
-  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'training' }), /barred/, 'everything is barred once undercapitalized');
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), newProject: 'marketing' }), /barred/, 'everything is barred once undercapitalized');
 }
 
 // Emergency board capital is a crisis action, not a repeatable project.

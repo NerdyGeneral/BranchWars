@@ -55,15 +55,14 @@ for (const left of doctrines) {
         for (const player of g.players) actionCounts[player.doctrine][player.lastCompetitiveAction]++;
         if (beforeAct < 2 && g.act === 2) {
           actThreeStarts[g.scope].push(g.cycle);
-          actThreeStrategies[g.scope].push(g.players.reduce((sum, player) => sum + Object.values(player.strategy).reduce((a, b) => a + b, 0), 0));
+          actThreeStrategies[g.scope].push(g.players.reduce((sum, player) => sum + E.strategyTotal(player), 0));
         }
       }
-      stats[left].games++;
-      stats[right].games++;
       if (!g.gameOver) {
         unfinished++;
         continue;
       }
+      for (const player of g.players) stats[player.doctrine].games++;
       if (g.cycle > 250) over250++;
       const winner = g.players.find((p) => p.id === g.winnerId);
       if (winner) stats[winner.doctrine].wins++;
@@ -76,11 +75,11 @@ for (const left of doctrines) {
 
 lengths.sort((a, b) => a - b);
 const percentile = (p) => lengths[Math.min(lengths.length - 1, Math.floor(lengths.length * p))];
-console.log(`Seeded doctrine audit: ${run} games; ${unfinished} unfinished at cycle 500; ${over250} exceeded cycle 250.`);
+console.log(`Emergent character audit: ${run} games; ${unfinished} unfinished at cycle 500; ${over250} exceeded cycle 250.`);
 for (const key of doctrines) {
   const item = stats[key];
   const plays = Object.entries(actionCounts[key]).filter(([action]) => action !== 'none').sort((a, b) => b[1] - a[1]).map(([action, count]) => `${action}:${count}`).join(', ');
-  console.log(`${key.padEnd(11)} ${(item.wins / item.games * 100).toFixed(1)}% wins (${item.wins}/${item.games}); actions ${plays}`);
+  console.log(`${key.padEnd(11)} ${item.games ? (item.wins / item.games * 100).toFixed(1) + '%' : '  --  '} wins (${item.wins}/${item.games}); actions ${plays}`);
 }
 console.log(`Endings: ${JSON.stringify(endings)}`);
 console.log(`Length: median ${percentile(.5)}, p90 ${percentile(.9)}, max ${lengths[lengths.length - 1]}`);
