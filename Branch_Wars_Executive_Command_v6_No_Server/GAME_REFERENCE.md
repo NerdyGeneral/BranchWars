@@ -887,3 +887,22 @@ growth or portfolio changes may differ from that trend. Rival internal quality
 is private. New linked games require customer-demand capability 2; older clients
 refuse the 8.4 save format. Department specialization and segment-owned books are
 still future work.
+
+### Service workforce planning
+
+Goodwill campaigns now have Markets > Service Workforce Planner. The current
+draft and six one-banker reallocations are compared through the operating engine:
+after-growth service coverage, bank profit after funding-sale losses, net deposit
+and loan growth, and focus-market goodwill pull. Moving bankers conserves staff
+and payroll; the planner protects commercial-service reservations, sales capacity
+for an explicit service bid and existing/planned execution loads.
+
+Stage allocation changes only the draft. Recruitment is separate: it quotes
+incremental recruiting cost and future base payroll, respects hiring/cash/capital
+limits, and grants no current-turn staff. Review the next turn's allocation after
+recruits arrive. Previews exclude events, rival actions, opportunities and project
+completions. The comparison is calculated only while the panel is open.
+
+This is decision support for existing workforce rules, not specialist careers,
+new training budgets, or a new simulation/save version. See BLUEPRINT_PROGRESS.md
+for the remaining package-level work.

@@ -2,6 +2,8 @@
 
 Date: 2026-09-05
 
+Historical mechanics batch. The follow-on [service workforce planner](SERVICE_WORKFORCE_STATUS.md) makes staffing comparisons actionable without changing these rules. See [blueprint progress](BLUEPRINT_PROGRESS.md) for the current package-level position.
+
 ## This batch
 
 Partial N-04/N-05/N-06 expansion: customer relationships now remember service quality across turns instead of responding only to this month's sales choices.

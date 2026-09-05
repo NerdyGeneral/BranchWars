@@ -35,6 +35,10 @@ QUICK START
    These new campaigns use save format 8.4; older saves retain their rules.
    Both friends must update before starting a new preview campaign.
    See CUSTOMER_RELATIONSHIPS_STATUS.md for scope and current test evidence.
+   Markets > Service Workforce Planner compares reallocations with actual
+   operating forecasts and can stage an allocation or a next-cycle recruit.
+   Existing goodwill campaigns gain this tool without changing save rules.
+   See SERVICE_WORKFORCE_STATUS.md and BLUEPRINT_PROGRESS.md for current scope.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
