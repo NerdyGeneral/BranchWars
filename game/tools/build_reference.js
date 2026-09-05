@@ -22,7 +22,9 @@ const GAME = path.join(ROOT, 'BRANCH_WARS.html');
 const TEMPLATE = path.join(__dirname, 'reference-template.md');
 const OUT = path.join(ROOT, 'docs', 'game-reference.md');
 
-const html = fs.readFileSync(GAME, 'utf8');
+// Normalize before parsing/formatting: sourceOf inserts LF line breaks, so
+// normalizing only the final comparison cannot undo mixed-EOL blank lines.
+const html = fs.readFileSync(GAME, 'utf8').replace(/\r\n/g, '\n');
 const engineSource = html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 const context = { console, Math, Date, globalThis: null };
 context.globalThis = context;
@@ -231,7 +233,7 @@ for (const fn of ['doctrineProfile', 'executionCapacity', 'hireCost', 'projectCo
 
 // -------------------------------------------------------------------- render
 
-let out = fs.readFileSync(TEMPLATE, 'utf8');
+let out = fs.readFileSync(TEMPLATE, 'utf8').replace(/\r\n/g, '\n');
 const used = new Set();
 out = out.replace(/<!--\{\{([A-Za-z_]+)\}\}-->/g, (m, token) => {
   if (!(token in sections)) throw new Error('Template asks for unknown section: ' + token);
