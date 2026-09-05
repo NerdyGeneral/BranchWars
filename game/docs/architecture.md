@@ -44,7 +44,7 @@ Moving player repair into the engine exposed a textual guard false positive: `pl
 
 `finishProject` dispatches service/product deployment directly, then owns deposit/credit cohort transfers, market context and accounting settlement. Regional office work and re-entry rules are explicit settlement steps; facility effects remain separate from financial settlement. These are not new game rules: sequencing, cancellation messages, rounding and retained journals are preserved.
 
-The three ceilings are zero. This removes ten operating wrappers, nine completion wrappers and three resolution wrappers; the separate operation API assignment was also folded into the original export object. The new runtime comparison suite exercises 192 operations, 864 completions and 64 fault/recovery pairs against the frozen implementation. Fixed campaigns and save continuations pass unchanged. Full release evidence is recorded separately after the remaining architecture work.
+The three ceilings are zero. This removes ten operating wrappers, nine completion wrappers and three resolution wrappers; the separate operation API assignment was also folded into the original export object. The new runtime comparison suite exercises 192 operations, 864 completions and 64 fault/recovery pairs against the frozen implementation. Fixed campaigns and save continuations pass unchanged. The complete four-step batch passes 47/47 local Windows regression invocations; paired campaign audits show no outcome drift in 2,880 sampled turns. Exact reports and acceptance limits are in [release status](release-status.md).
 
 ## AI and policy validation: implemented
 
