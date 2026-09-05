@@ -11,7 +11,7 @@
   "awardMilestones": 2,
   "awardOpportunity": 2,
   "campaignAct": 1,
-  "chooseOpenBot": 14,
+  "chooseOpenBot": 0,
   "competitiveForecast": 0,
   "consequences": 2,
   "contractIncome": 1,
@@ -51,7 +51,7 @@
   "syncAccounts": 3,
   "transferMarket": 1,
   "updateCampaignAct": 1,
-  "validatePilot": 14,
+  "validatePilot": 0,
   "validatePlan": 0,
-  "validatePortfolioPlan": 3
+  "validatePortfolioPlan": 0
 }

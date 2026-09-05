@@ -46,6 +46,12 @@ Moving player repair into the engine exposed a textual guard false positive: `pl
 
 The three ceilings are zero. This removes ten operating wrappers, nine completion wrappers and three resolution wrappers; the separate operation API assignment was also folded into the original export object. The new runtime comparison suite exercises 192 operations, 864 completions and 64 fault/recovery pairs against the frozen implementation. Fixed campaigns and save continuations pass unchanged. Full release evidence is recorded separately after the remaining architecture work.
 
+## AI and policy validation: implemented
+
+`chooseOpenBot` prepares one intent through named reserve, regional, funding, product, contract, service, management and customer stages. It no longer captures previous planners. Market scope and the separate AI random stream retain their original boundaries. This does not revise the AI's strategy or promise that every stressed draft is optimal.
+
+`validatePilot` explicitly runs fifteen domain save validators in order; an absent optional feature returns from its own check, not from the whole validation sequence. `validatePortfolioPlan` runs product normalization, deployment, service and management rules in their original order. UI/network submission and AI still use the same engine entry points. All three override ceilings are zero, removing 31 more replacement layers. The runtime suite additionally compares 64 AI preparations, 160 policy normalizations and 416 damaged-save validations against the frozen implementation.
+
 ## Next: staged engine cleanup
 
 1. Extend the shared-rule pattern to remaining policy and plan normalization boundaries. Keep project execution's explicit, uncharged cancellation notices and verify each change against preserved behavior.

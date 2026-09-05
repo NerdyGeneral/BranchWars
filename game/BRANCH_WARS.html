@@ -747,7 +747,7 @@ function planInvestments(g,p,committed){const out={};if(tierRank(p)>=2)return ou
 function planHiring(g,p,committed){if(tierRank(p)>=2||p.stats.morale<45||p.stats.lastProfit<=0)return 0;const spare=p.stats.cash-committed;if(spare<900000)return 0;const target=p.stats.staff<12?2:p.stats.staff<22?1:0;let count=0;while(count<target&&hireCost(p,count+1)<=spare*.22)count++;return count}
 function chooseCompetitiveAction(g,index){const p=g.players[index],r=g.players[1-index],cash=p.stats.cash,liquidity=p.stats.cash/Math.max(1,p.stats.deposits),last=r.lastCompetitiveAction||'none',pressure=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,candidates=[];const add=(key,weight)=>{const status=competitiveActionStatus(p,key);if(status.eligible&&cash-COMPETITIVE_ACTIONS[key].cost>=220000)candidates.push([key,weight])};if(pressure||tierRank(p)>=2)add('takeoverDefense',10+pressure*5);if(liquidity<.025||last==='depositRaid')add('liquidityDefense',8);if(last==='commercialRaid'||r.stats.business>p.stats.business*1.18)add('relationshipDefense',6);if(last==='talentRaid'||p.stats.morale<48)add('retentionDefense',7);if(r.stats.cash/Math.max(1,r.stats.deposits)<.035||tierRank(r)>=1)add('depositRaid',7+strategyLevel(p,'digital'));if(r.stats.business+r.stats.merchant>p.stats.business+p.stats.merchant*.9)add('commercialRaid',5+strategyLevel(p,'commercial'));if(r.stats.staff>6&&p.stats.influence>=20&&p.stats.morale>=45)add('talentRaid',3+strategyLevel(p,'acquisition'));if(!candidates.length)return'none';candidates.sort((a,b)=>b[1]-a[1]);const chance=g.difficulty==='analyst'?.35:g.difficulty==='chairman'?.82:.62;return simulationRandom()<chance?pick(candidates.slice(0,Math.min(2,candidates.length)))[0]:'none'}
 function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);const opportunities=[...g.opportunities].sort((a,b)=>marketOpportunityScore(g,p,b)-marketOpportunityScore(g,p,a)),opp=g.difficulty==='analyst'&&simulationRandom()<.3?null:opportunities[0],open=activeTerritories(g).filter(([,t])=>unlocked(g,t)),focus=opp?opp.market:[...open].sort((a,b)=>a[1].shares[index]-b[1].shares[index]+(b[1].value-a[1].value)/5)[0][0],allocation={...p.allocation};const opsTarget=Math.min(4,1+Math.floor(p.stats.staff/9));let desired=(allocation.operations<opsTarget)?'operations':(operationsLevel(p)>=2&&allocation.operations<2)?'operations':opp?opp.dept:p.stats.compliance>40?'operations':g.economy.key==='downturn'?'lending':'service';if(g.difficulty==='analyst')desired=pick(Object.keys(ROLES));const donor=Object.keys(allocation).filter(k=>k!==desired).sort((a,b)=>allocation[b]-allocation[a])[0];if(allocation[donor]>1){allocation[donor]--;allocation[desired]++}const deposit=g.event.key==='ratewar'||g.economy.key==='tight'?'aggressive':p.stats.cash<500000?'margin':g.scenario==='growth'?'aggressive':'balanced',lending=tierRank(p)>=1||g.economy.credit>1.3||p.stats.compliance>45?'conservative':g.scenario==='growth'?'growth':'balanced',liquidity=p.stats.cash/p.stats.deposits*100,capital=tierRank(p)>=1?'liquid':liquidity<2?'liquid':g.economy.key==='expansion'?'reinvest':'balanced',decision=(p.stats.cash<350000&&['ratewar','community','outage','talent','viral','manager'].includes(g.event.key))?'b':(p.stats.compliance>45&&['audit','fraud','cyber','losses'].includes(g.event.key))?'a':simulationRandom()<.62?'a':'b',capitalAction=capitalRequestStatus(p).eligible&&(tierRank(p)>=2||liquidity<1.25)&&simulationRandom()<.82,competitiveAction=chooseCompetitiveAction(g,index);const actionCost=COMPETITIVE_ACTIONS[competitiveAction].cost;const investments=planInvestments(g,p,actionCost);const investTotal=Object.values(investments).reduce((s,x)=>s+x,0);let newProjects=planPortfolio(g,p,focus,allocation,actionCost+investTotal);if(capitalAction)newProjects=newProjects.filter(k=>!['branch','acquisition'].includes(PROJECTS[k].kind));let running=actionCost+investTotal;newProjects=newProjects.filter(k=>{const c=projectCost(p,PROJECTS[k]);if(running+c>p.stats.cash)return false;running+=c;return true});const hires=planHiring(g,p,running);const newProject=newProjects[0]||null;const products={retail:g.economy.key==='tight'&&liquidity<2.5?'highYield':p.doctrine==='digital'||p.doctrine==='commercial'?'rewards':'essential',business:p.doctrine==='commercial'&&desired==='business'?'treasury':p.doctrine==='digital'?'entrepreneur':'relationship',credit:tierRank(p)>=1||g.economy.credit>1.3?'mortgage':g.economy.key==='expansion'&&['commercial','efficiency'].includes(p.doctrine)?'middleMarket':g.scenario==='growth'&&p.doctrine==='digital'?'consumer':'mortgage'},specializations={...p.specializations};for(const branch of Object.keys(investments)){if(strategyLevel(p,branch)>=1&&!p.specializations[branch]&&!specializations[branch]){const doctrineChoice={community:{network:'retailDensity'},commercial:{commercial:'treasury',acquisition:'dealmaker'},digital:{digital:'customerExperience'},efficiency:{operations:'lean'},people:{network:'regionalHub'}}[p.doctrine]||{};specializations[branch]=doctrineChoice[branch]||Object.keys(STRATEGY_SPECIALIZATIONS[branch])[index%2]}}return{focus,allocation,depositPolicy:deposit,lendingPolicy:lending,capitalPolicy:capital,products,specializations,opportunity:opp?opp.id:null,newProject,newProjects,investments,hires,capitalAction,competitiveAction,decision}}
-function chooseOpenBot(g,index){const plan=chooseBot(g,index),territory=g.territories[plan.focus];if(territory&&territory.exited&&territory.exited[index]){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&!(t.exited&&t.exited[index])).sort((a,b)=>a[1].shares[index]-b[1].shares[index]);if(open.length)plan.focus=open[0][0]}if(plan.opportunity){const opportunity=g.opportunities.find(o=>o.id===plan.opportunity),market=opportunity&&g.territories[opportunity.market];if(market&&market.exited&&market.exited[index])plan.opportunity=null}if(Array.isArray(plan.newProjects)&&(g.players[index].branches[plan.focus]||0)>=3)plan.newProjects=plan.newProjects.filter(k=>PROJECTS[k].kind!=='branch');plan.newProject=(plan.newProjects&&plan.newProjects[0])||null;return plan}
+function chooseBaselinePlan(g,index){const plan=chooseBot(g,index),territory=g.territories[plan.focus];if(territory&&territory.exited&&territory.exited[index]){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&!(t.exited&&t.exited[index])).sort((a,b)=>a[1].shares[index]-b[1].shares[index]);if(open.length)plan.focus=open[0][0]}if(plan.opportunity){const opportunity=g.opportunities.find(o=>o.id===plan.opportunity),market=opportunity&&g.territories[opportunity.market];if(market&&market.exited&&market.exited[index])plan.opportunity=null}if(Array.isArray(plan.newProjects)&&(g.players[index].branches[plan.focus]||0)>=3)plan.newProjects=plan.newProjects.filter(k=>PROJECTS[k].kind!=='branch');plan.newProject=(plan.newProjects&&plan.newProjects[0])||null;return plan}
 function validatePlan(g,p,plan){
  if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');
  if(regionalOperations(p))p={...p,focus:plan.focus};
@@ -799,7 +799,16 @@ function resolveMonthlySteps(g){
  g.players.forEach((p,i)=>{p.allocation=Object.fromEntries(Object.keys(ROLES).map(k=>[k,plans[i].allocation[k]]));p.policies={deposit:plans[i].depositPolicy,lending:plans[i].lendingPolicy,capital:plans[i].capitalPolicy};p.products={...p.products,...plans[i].products};if(p.termFunding&&plans[i].termPolicy)p.termFunding.policy={...plans[i].termPolicy};if(p.retailLifecycle)applyRetailMix(p,plans[i].retailMix||p.retailLifecycle.mix);applyServicePolicy(p,plans[i].servicePolicy);applyManagementPolicy(p,plans[i].management);p.focus=plans[i].focus;applyDecision(g,p,plans[i].decision);const aid=applyCapitalRequest(g,p,!!plans[i].capitalAction);if(aid)L.push(aid)});L.push(...resolveCompetitiveActions(g,plans));g.players.forEach((p,i)=>{for(const key of planInitiatives(plans[i])){const msg=startProject(g,p,key,plans[i].specializations);if(msg)L.push(msg)}});
  g.players.forEach(p=>L.push(operate(g,p)));g.players.forEach(p=>{const msg=deleverage(g,p);if(msg)L.push(msg)});const contest=depositContest(g);L.push(...contest.lines);g.players.forEach((p,i)=>L.push(...settleFunding(g,p,contest.outflow[i])));L.push(...resolveOpportunities(g,plans));L.push(...simulateMarkets(g));L.push(...resolveMarketExits(g));L.push(...franchiseDividends(g));L.push(...advanceProjects(g));g.players.forEach(p=>L.push(...consequences(g,p)));g.players.forEach((p,i)=>{L.push(...applyInvestments(g,p,plans[i].investments,plans[i].specializations));const late=plans[i].specializations||{};for(const key of Object.keys(STRATEGY_BRANCHES))if(strategyLevel(p,key)>=1&&!p.specializations[key]&&late[key]&&STRATEGY_SPECIALIZATIONS[key][late[key]]){p.specializations[key]=late[key];L.push(`${p.name} adopted the ${STRATEGY_SPECIALIZATIONS[key][late[key]].name} operating model in ${STRATEGY_BRANCHES[key].name}.`)}syncPrimaryStrategy(p);syncDoctrine(p);const msg=applyHiring(g,p,planHires(plans[i]));if(msg)L.push(msg)});L.push(...awardMilestones(g));const actMessage=updateCampaignAct(g);if(actMessage)L.push(actMessage);g.lastPlans={[g.players[0].id]:plans[0],[g.players[1].id]:plans[1]};g.players.forEach((p,i)=>{if(!plans[i].capitalAction&&p.capitalRestriction>0)p.capitalRestriction--;p.submitted=null;p.turnEffects={}});g.scoreDelta={[g.players[0].id]:Math.round((baseScore(g,0)-before[0])*10)/10,[g.players[1].id]:Math.round((baseScore(g,1)-before[1])*10)/10};const ending=evaluateStrategicEnd(g);if(ending)L.push(ending);g.resolution=L;g.resolutionId++;addLog(g,`CYCLE ${g.cycle} // ${L.join(' ')}`,'RESOLUTION');captureTrend(g,g.cycle);if(g.gameOver)addLog(g,ending,'FINAL');else{g.cycle++;const newly=activeTerritories(g).filter(([,t])=>t.unlock===g.cycle).map(([,t])=>t.name);if(newly.length)addLog(g,`EXPANSION AUTHORIZED // ${newly.join(' and ')} are now open.`,'EXPANSION');if((g.cycle-1)%4===0){chooseEconomy(g);addLog(g,`ECONOMIC REGIME // ${g.economy.name}: ${g.economy.text}`,'ECONOMY')}g.event=chooseEvent(g);g.opportunities=makeOpportunities(g)}return g
 }
-function validatePortfolioPlan(p,plan){if(p.retailLifecycle){plan.retailMix=plan.retailMix||{...p.retailLifecycle.mix};validateRetailMix(plan.retailMix)}else if(plan.retailMix)throw Error('Retail offer mix requires a new pilot campaign.');if(p.termFunding){plan.termPolicy=plan.termPolicy||{...p.termFunding.policy};validateTermPolicy(plan.termPolicy)}else if(plan.termPolicy)throw Error('Term funding requires a new pilot campaign.');plan.products={...p.products,...(plan.products||{})};for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[plan.products[line]])throw Error(`Choose a valid ${group.name.toLowerCase()} product.`);plan.specializations=plan.specializations&&typeof plan.specializations==='object'?plan.specializations:{};const def=PROJECTS[plan.newProject];if(def&&def.kind==='branch'&&p.branches[plan.focus]>=3)throw Error('That market already has maximum facility capacity.');if(def&&def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]){const choice=plan.specializations[def.strategy];if(!STRATEGY_SPECIALIZATIONS[def.strategy][choice])throw Error(`Choose an operating specialization for ${STRATEGY_BRANCHES[def.strategy].name}.`)}}
+function normalizePortfolioProducts(p,plan){
+ if(p.retailLifecycle){plan.retailMix=plan.retailMix||{...p.retailLifecycle.mix};validateRetailMix(plan.retailMix)}else if(plan.retailMix)throw Error('Retail offer mix requires a new pilot campaign.');
+ if(p.termFunding){plan.termPolicy=plan.termPolicy||{...p.termFunding.policy};validateTermPolicy(plan.termPolicy)}else if(plan.termPolicy)throw Error('Term funding requires a new pilot campaign.');
+ plan.products={...p.products,...(plan.products||{})};
+ for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[plan.products[line]])throw Error(`Choose a valid ${group.name.toLowerCase()} product.`);
+ plan.specializations=plan.specializations&&typeof plan.specializations==='object'?plan.specializations:{};
+ const def=PROJECTS[plan.newProject];
+ if(def&&def.kind==='branch'&&p.branches[plan.focus]>=3)throw Error('That market already has maximum facility capacity.');
+ if(def&&def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]){const choice=plan.specializations[def.strategy];if(!STRATEGY_SPECIALIZATIONS[def.strategy][choice])throw Error(`Choose an operating specialization for ${STRATEGY_BRANCHES[def.strategy].name}.`)}
+}
 function submit(g,index,plan){if(g.gameOver)throw Error('The campaign is complete.');const p=g.players[index],target=plan&&g.territories[plan.focus];if(p.submitted)throw Error('Your plan is already locked.');if(target&&target.exited&&target.exited[index])throw Error('Your institution permanently exited that market. Choose an operating market.');validatePortfolioPlan(p,plan);validatePlan(g,p,plan);p.submitted=JSON.parse(JSON.stringify(plan));if(g.mode==='ai'&&index===0)g.players[1].submitted=chooseOpenBot(g,1);if(g.players.every(x=>x.submitted))resolveCycle(g);return g}
 function competitiveForecast(g,index){const me=g.players[index],r=g.players[1-index],items=[],liquidity=me.stats.cash/Math.max(1,me.stats.deposits)*100,hostile=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,weak=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&t.exitStreak&&t.exitStreak[index]>0).sort((a,b)=>b[1].exitStreak[index]-a[1].exitStreak[index]);if(hostile)items.push({severity:'hot',title:'HOSTILE POSITION',text:`The rival has held ${hostile}/2 required takeover cycles. Shareholder Defense can break the position.`});if(tierRank(me)>=2)items.push({severity:'hot',title:'CAPITAL DISTRESS',text:`${capitalTier(me).name} limits expansion and makes the franchise vulnerable.`});if(liquidity<2.5)items.push({severity:'hot',title:'FUNDING EXPOSURE',text:`Liquid cash equals ${liquidity.toFixed(1)}% of deposits. A targeted deposit campaign could force asset sales.`});if(weak.length)items.push({severity:'watch',title:'MARKET EXIT WARNING',text:`${weak.map(([k,t])=>`${t.name} ${t.exitStreak[index]}/3`).join(' · ')} below the 12% survival line.`});if(r.lastCompetitiveAction&&r.lastCompetitiveAction!=='none'){const a=COMPETITIVE_ACTIONS[r.lastCompetitiveAction];items.push({severity:'watch',title:'RIVAL PLAYBOOK',text:`The rival's last revealed action was ${a.name}. Its direct counter is ${a.counter}.`})}if(r.stats.business+r.stats.merchant>(me.stats.business+me.stats.merchant)*1.2)items.push({severity:'watch',title:'RELATIONSHIP GAP',text:'The rival holds a material commercial relationship advantage. A raid can narrow it; Relationship Defense protects against retaliation.'});if(!items.length)items.push({severity:'stable',title:'POSITION STABLE',text:'No immediate franchise-level threat is visible. Intelligence cannot reveal the rival plan before both sides lock.'});return items}
 function publicState(g,index){const me=g.players[index],r=g.players[1-index],publicStats=p=>({deposits:p.stats.deposits,loans:p.stats.loans,customers:p.stats.customers,business:p.stats.business,merchant:p.stats.merchant,wealth:p.stats.wealth,reputation:p.stats.reputation,digital:p.stats.digital,staff:p.stats.staff,earnings:p.stats.earnings,lastProfit:p.stats.lastProfit,chargeoffs:p.stats.chargeoffs,capital:p.stats.capital}),pub=(p,i,self)=>({id:p.id,name:p.name,score:baseScore(g,i),controlled:controlledCount(g,i),submitted:!!p.submitted,branches:{...p.branches},upgrades:{...p.upgrades},strategy:{...p.strategy},primaryStrategy:p.primaryStrategy||null,boardConcessions:p.boardConcessions||0,capitalRestriction:p.capitalRestriction||0,doctrine:{key:p.doctrine,...DOCTRINES[p.doctrine]},doctrineProfile:doctrineProfile(p),achievements:[...(p.achievements||[])],milestones:milestoneStatus(g,p,i),capability:self?{...p.capability}:undefined,strategyLevels:Object.fromEntries(Object.keys(STRATEGY_BRANCHES).map(k=>[k,strategyLevel(p,k)])),capitalRatio:Math.round(capitalRatio(p)*10)/10,capitalTier:{...capitalTier(p)},distress:p.distress||0,stats:self?{...p.stats}:publicStats(p),policies:self?{...p.policies}:undefined,focus:self?p.focus:undefined,projects:self?p.projects.map(x=>({...x})):undefined,projectSlots:self?projectSlots(p):undefined,marketingTurns:self?p.marketingTurns:undefined,...(self?{allocation:{...p.allocation},mandate:mandateStatus(g,i),capitalRequest:capitalRequestStatus(p),corporateStatus:['CORPORATE UNAWARE','MARKET MANAGER HAS HEARD RUMORS','SURPRISE CONFERENCE CALL','REGIONAL INTERVENTION','PERFORMANCE ACTION PLAN'][p.stats.attention>=90?4:p.stats.attention>=70?3:p.stats.attention>=45?2:p.stats.attention>=22?1:0]}:{})});const territories={};for(const[k,t]of activeTerritories(g))territories[k]={...t,shares:index===0?[...t.shares]:[t.shares[1],t.shares[0]],branches:[g.players[index].branches[k]||0,g.players[1-index].branches[k]||0],unlocked:unlocked(g,t)};const trend=(g.trend||[]).map(x=>({cycle:x.cycle,meScore:x.scores[index],rivalScore:x.scores[1-index],meDeposits:x.deposits[index],rivalDeposits:x.deposits[1-index],meLoans:x.loans[index],rivalLoans:x.loans[1-index],meCash:x.cash[index],rivalCash:x.cash[1-index],meProfit:x.profits[index],rivalProfit:x.profits[1-index],meMarkets:x.markets[index],rivalMarkets:x.markets[1-index]}));const out={version:g.version,mode:g.mode,scope:g.scope,scenario:g.scenario,difficulty:g.difficulty,cycle:g.cycle,maxCycles:g.maxCycles,event:g.event,economy:{...g.economy},opportunities:g.opportunities,gameOver:g.gameOver,winnerId:g.winnerId,endReason:g.endReason||null,failedId:g.failedId||null,receivershipCycles:RECEIVERSHIP_CYCLES,capitalTiers:CAPITAL_TIERS,me:pub(me,index,true),rival:pub(r,1-index,false),territories,trend,lastPlans:g.lastPlans,scoreDelta:g.scoreDelta,resolution:g.resolution,resolutionId:g.resolutionId,log:g.log.slice(0,24),capabilityTiers:CAPABILITY_TIERS,capabilityCap:CAPABILITY_CAP_PER_CYCLE,doctrines:DOCTRINES,roles:ROLES,depositPolicies:DEPOSIT_POLICIES,lendingPolicies:LENDING_POLICIES,capitalPolicies:CAPITAL_POLICIES,strategyBranches:STRATEGY_BRANCHES,projects:projectCatalog(me),milestoneDefinitions:milestoneDefinitions(g),rematchReady:g.rematchVotes.includes(me.id),rivalRematchReady:g.rematchVotes.includes(r.id)};if(g.gameOver)out.final={[me.id]:{base:baseScore(g,index),mandate:mandateStatus(g,index),total:finalScore(g,index),markets:controlledCount(g,index),earnings:me.stats.earnings,achievements:me.achievements.length},[r.id]:{base:baseScore(g,1-index),mandate:mandateStatus(g,1-index),total:finalScore(g,1-index),markets:controlledCount(g,1-index),earnings:r.stats.earnings,achievements:r.achievements.length}};return out}
@@ -821,8 +830,8 @@ function createSeededCampaign(o){
   return g;
  });
 }
-const chooseOpenBotCore=chooseOpenBot;
-chooseOpenBot=function(g,...args){return withRandom(g,'aiState',()=>chooseOpenBotCore(g,...args))};
+
+
 const submitCore=submit;
 submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resolutionId,result=submitCore(g,...args);if(g.resolutionId!==before){g.eventLedger=g.eventLedger||[];g.ledgerSequence=g.ledgerSequence||0;for(const p of g.players){if(!p.operatingReport)continue;g.eventLedger.push({id:++g.ledgerSequence,cycle:p.operatingReport.cycle,category:'operations.result',source:'operate',target:p.id,visibility:'owner',report:{...p.operatingReport}})}if(g.eventLedger.length>2000){const removed=g.eventLedger.splice(0,g.eventLedger.length-2000);g.ledgerPrunedThrough=removed[removed.length-1].id}}return result})};
 
@@ -973,26 +982,25 @@ function initializeRegionalPilot(g,o){
 
 function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
 
-const pilotBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=pilotBot(g,index);if(!pilot(g))return plan;
+
+function planPilotReserve(g,index,plan){
+ if(!pilot(g))return plan;
  const p=g.players[index],forecast=operatingPreview(p,plan,g.economy),limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-forecast.profit)*2);
  if(plan.competitiveAction==='takeoverDefense')plan.competitiveAction='none';
  let available=limit-(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  if(available<0){plan.competitiveAction='none';available=limit}
  plan.hires=0;
  const projects=[];
- // When a market was lost, reserve the next affordable expansion for a real re-entry.
  if(!(p.branches[plan.focus]||0)&&!p.projects.some(x=>x.key==='branch')&&!projectBarred(p,'branch')&&projectCost(p,PROJECTS.branch)<=available&&usedCapacity(p,[PROJECTS.branch])<=executionCapacity(p,plan.allocation)){
   projects.push('branch');available-=projectCost(p,PROJECTS.branch);
  }else for(const key of planInitiatives(plan)){const cost=projectCost(p,PROJECTS[key]);if(cost<=available){projects.push(key);available-=cost}}
- plan.newProjects=projects;plan.newProject=projects[0]||null;
+ plan.newProjects=projects;
+ plan.newProject=projects[0]||null;
  for(const key of Object.keys(plan.investments||{})){const amount=Math.min(plan.investments[key],Math.floor(available));plan.investments[key]=amount>=1000?amount:0;available-=plan.investments[key]}
- // Restore hiring only when the forecast covers payroll and preserves reserves.
  if(forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
  return plan;
-};
-function validatePilot(g){
+}
+function validateAccountingSave(g){
  if(g.campaignRulesVersion===undefined){if(g.players.some(p=>p.accounting))throw Error('Unversioned accounting save');return g}
  if(g.campaignRulesVersion!==1||g.fundingRulesVersion!==2)throw Error('Unsupported pilot save');
  if(!g.regions||Object.keys(g.territories).length!==6)throw Error('Invalid pilot geography');
@@ -1071,9 +1079,8 @@ function initializeRegionalOffices(g,o){
  for(const p of g.players)p.regionalOperations={version:1,markets:Object.fromEntries(Object.keys(g.territories).map(k=>[k,{service:0,automation:0}]))};
  return g;
 }
-const regionalPilotValidation=validatePilot;
-validatePilot=function(g){
- regionalPilotValidation(g);
+
+function validateRegionalSave(g){
  if(g.regionalEconomyVersion===undefined){if(g.players.some(p=>p.regionalOperations))throw Error('Unversioned regional operations');return g}
  if(g.regionalEconomyVersion!==1||!pilot(g))throw Error('Unsupported regional operations save');
  for(const p of g.players){
@@ -1081,29 +1088,28 @@ validatePilot=function(g){
   for(const key of Object.keys(g.territories)){const state=p.regionalOperations.markets[key];if(!REGIONAL_MARKETS[key]||!state||Object.keys(state).length!==2||!['service','automation'].every(k=>Number.isInteger(state[k])&&state[k]>=0&&state[k]<=2))throw Error('Invalid regional branch upgrades')}
  }
  return g;
-};
+}
 
-const regionalBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=regionalBot(g,index),actual=g.players[index];if(!regionalOperations(actual))return plan;
+
+function planRegionalOffice(g,index,plan){
+ const actual=g.players[index];
+ if(!regionalOperations(actual))return plan;
  const p={...actual,focus:plan.focus},local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
  let occupied=p.projects.some(x=>x.target===plan.focus&&local(x.key));
  plan.newProjects=planInitiatives(plan).filter(key=>{if(!local(key))return true;if(occupied)return false;occupied=true;return !projectBarred(p,key)});
  plan.newProject=plan.newProjects[0]||null;
- // Add an upgrade only with surplus earnings/capital; never stack work at one market.
  if(!occupied&&p.branches[plan.focus]>0&&p.stats.lastProfit>50000){
   const state=p.regionalOperations.markets[plan.focus],key=state.automation<2?'branchAutomation':state.service<2?'branchService':null;
   if(key&&!p.projects.some(x=>x.key===key)&&!projectBarred(p,key)&&projectCost(p,PROJECTS[key])<=Math.max(0,pilotSpendingLimit(p,.10,300000)-planBudget(p,plan).total)&&usedCapacity(p,[...plan.newProjects.map(k=>PROJECTS[k]),PROJECTS[key]])<=executionCapacity(p,plan.allocation))plan.newProjects.push(key);
  }
  plan.newProject=plan.newProjects[0]||null;
- // Quote the selected region and preserve the same cautious reserve used by the pilot AI.
  const limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-operatingPreview(p,plan,g.economy).profit)*2);
  for(const key of Object.keys(plan.investments||{})){const over=Math.max(0,planBudget(p,plan).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(over));if(plan.investments[key]<1000)delete plan.investments[key]}
  if(planBudget(p,plan).total>limit)plan.hires=0;
  while(plan.newProjects.length&&planBudget(p,plan).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
  if(planBudget(p,plan).total>limit)plan.competitiveAction='none';
  return plan;
-};
+}
 // Market economy v1: conserved deposit and relationship franchises.
 // Supporting institutions are customer-book competitors, not full simulated balance sheets.
 const MARKET_RESOURCES=['deposits','customers','business','merchant','wealth'];
@@ -1270,11 +1276,10 @@ resolveCompetitiveActions=function(g,plans){
 };
 
 
-const marketBot=chooseOpenBot;
-chooseOpenBot=function(g,index){return g.marketEconomy?withMarket(g,()=>marketBot(g,index)):marketBot(g,index)};
-const marketValidation=validatePilot;
-validatePilot=function(g){
- marketValidation(g);
+
+
+
+function validateMarketSave(g){
  if(g.marketEconomyVersion===undefined){if(g.marketEconomy||g.players.some(p=>p.marketBook))throw Error('Unversioned market economy');return g}
  if(g.marketEconomyVersion!==1||g.regionalEconomyVersion!==1||!g.marketEconomy||g.marketEconomy.version!==1)throw Error('Unsupported market economy save');
  const uint=n=>Number.isSafeInteger(n)&&n>=0,keys=Object.keys(g.territories);
@@ -1295,7 +1300,7 @@ validatePilot=function(g){
   for(const r of MARKET_RESOURCES)if(!m.community||!m.union||!m.total||![m.community[r],m.union[r],m.total[r]].every(uint)||m.community[r]+m.union[r]+g.players.reduce((n,p)=>n+p.marketBook.markets[k][r],0)!==m.total[r])throw Error('Market franchise conservation failed');
  }
  return g;
-};
+}
 // Credit lifecycle v1: fixed origination terms, scheduled principal, local book reconciliation.
 const CREDIT_TERMS={mortgage:120,middleMarket:48,consumer:24};
 let creditWorld=null,creditBypass=false;
@@ -1353,9 +1358,8 @@ function repayCredit(p){
 // Transfer the seller's actual remaining terms, then reconcile any separate funding sales.
 
 
-const creditValidation=validatePilot;
-validatePilot=function(g){
- creditValidation(g);
+
+function validateCreditSave(g){
  if(g.creditLifecycleVersion===undefined){if(g.players.some(p=>p.creditBook))throw Error('Unversioned credit lifecycle');return g}
  if(g.creditLifecycleVersion!==1||g.marketEconomyVersion!==1)throw Error('Unsupported credit lifecycle save');
  for(const p of g.players){
@@ -1365,7 +1369,7 @@ validatePilot=function(g){
   for(const [k,m]of Object.entries(p.marketBook.markets))if(b.cohorts.filter(c=>c.market===k).reduce((n,c)=>n+c.principal,0)!==m.loans)throw Error('Credit cohorts disagree with local loans');
  }
  return g;
-};
+}
 
 // Funding covenants v1: explicit resolution bridge, never a hidden balancing plug.
 function fundingPosition(p){
@@ -1392,9 +1396,9 @@ settleFunding=function(g,p,outflow){
 };
 
 
-const covenantBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=covenantBot(g,index),p=g.players[index],f=fundingPosition(p);
+
+function planFundingRecovery(g,index,plan){
+ const p=g.players[index],f=fundingPosition(p);
  if(f&&f.excess>0){
   plan.capitalPolicy='liquid';plan.lendingPolicy='conservative';
   const released=plan.allocation.lending;plan.allocation.lending=0;plan.allocation.service+=released;
@@ -1402,7 +1406,7 @@ chooseOpenBot=function(g,index){
   if(plan.opportunity&&g.opportunities.some(o=>o.id===plan.opportunity&&o.type==='loan'))plan.opportunity=null;
  }
  return plan;
-};
+}
 const covenantEnd=evaluateStrategicEnd;
 evaluateStrategicEnd=function(g){
  if(!g.fundingCovenantVersion)return covenantEnd(g);
@@ -1422,14 +1426,13 @@ evaluateStrategicEnd=function(g){
  }else{const end=covenantEnd(g);if(end)lines.push(end)}
  return lines.join(' ');
 };
-const covenantValidation=validatePilot;
-validatePilot=function(g){
- covenantValidation(g);
+
+function validateFundingSave(g){
  if(g.fundingCovenantVersion===undefined){if(g.players.some(p=>p.fundingCovenant))throw Error('Unversioned funding covenant');return g}
  if(g.fundingCovenantVersion!==1||g.creditLifecycleVersion!==1)throw Error('Unsupported funding covenant save');
  for(const p of g.players){const c=p.fundingCovenant;if(!c||c.version!==1||!Number.isInteger(c.streak)||c.streak<0||c.streak>3||!Number.isInteger(c.lastCycle)||c.lastCycle<0||c.lastCycle>g.cycle)throw Error('Invalid funding covenant state')}
  return g;
-};
+}
 
 // Deposit products v1: withdrawable savings with six-month promotional rate guarantees.
 let depositWorld=null,depositBypass=false;
@@ -1498,9 +1501,8 @@ transferMarket=function(g,from,to,...args){
 };
 
 
-const depositValidation=validatePilot;
-validatePilot=function(g){
- depositValidation(g);
+
+function validateDepositSave(g){
  if(g.depositProductsVersion===undefined){if(g.players.some(p=>p.depositBook))throw Error('Unversioned deposit products');return g}
  if(g.depositProductsVersion!==1||g.fundingCovenantVersion!==1)throw Error('Unsupported deposit products save');
  for(const p of g.players){
@@ -1510,7 +1512,7 @@ validatePilot=function(g){
   for(const [k,m]of Object.entries(p.marketBook.markets))if(b.cohorts.filter(c=>c.market===k).reduce((n,c)=>n+c.principal,0)!==m.deposits)throw Error('Deposit cohorts disagree with local balances');
  }
  return g;
-};
+}
 
 // Term funding v1: capped customer uptake, six fixed payments, no early redemption.
 function validateTermPolicy(policy){
@@ -1556,11 +1558,14 @@ function prepareTermFunding(g,p,preview=false){
  compactDeposits(p);
  return {opened,renewed,released};
 }
-const termBot=chooseOpenBot;
-chooseOpenBot=function(g,index){const plan=termBot(g,index),p=g.players[index];if(p.termFunding)plan.termPolicy={offer:p.stats.lastProfit>0&&p.policies.deposit!=='margin'?'six':'off',maturity:p.stats.lastProfit>0?'renew':'release'};return plan};
-const termValidation=validatePilot;
-validatePilot=function(g){
- termValidation(g);
+
+function planTermFunding(g,index,plan){
+ const p=g.players[index];
+ if(p.termFunding)plan.termPolicy={offer:p.stats.lastProfit>0&&p.policies.deposit!=='margin'?'six':'off',maturity:p.stats.lastProfit>0?'renew':'release'};
+ return plan
+}
+
+function validateTermSave(g){
  if(g.termFundingVersion===undefined){if(g.players.some(p=>p.termFunding||p.depositBook&&p.depositBook.cohorts.some(c=>c.locked!==undefined)))throw Error('Unversioned term funding');return g}
  if(g.termFundingVersion!==1||g.depositProductsVersion!==1)throw Error('Unsupported term funding save');
  for(const p of g.players){
@@ -1570,7 +1575,7 @@ validatePilot=function(g){
   if(p.submitted)validateTermPolicy(p.submitted.termPolicy);
  }
  return g;
-};
+}
 // Retail lifecycle v1: concurrent offers; legacy portfolios are serviced, not rewritten.
 const RETAIL_PLATFORM={essential:0,rewards:12000,highYield:10000};
 function validateRetailMix(mix){
@@ -1599,18 +1604,17 @@ function initializeRetailOffers(g,o){
  g.retailLifecycleVersion=1;for(const p of g.players)p.retailLifecycle={version:1,mix:{essential:4,rewards:0,highYield:0}};
  return g;
 }
-const retailBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=retailBot(g,index),p=g.players[index];if(!p.retailLifecycle)return plan;
- // Change acquisition focus, not existing customers' products. Avoid breadth costs under stress.
+
+function planRetailMix(g,index,plan){
+ const p=g.players[index];
+ if(!p.retailLifecycle)return plan;
  const preferred=plan.products.retail;
  plan.retailMix={essential:preferred==='essential'?4:1,rewards:preferred==='rewards'?3:0,highYield:preferred==='highYield'?3:0};
  if(p.stats.lastProfit<0||fundingPosition(p).excess>0)plan.retailMix={essential:4,rewards:0,highYield:0};
  return plan;
-};
-const retailValidation=validatePilot;
-validatePilot=function(g){
- retailValidation(g);
+}
+
+function validateRetailSave(g){
  if(g.retailLifecycleVersion===undefined){if(g.players.some(p=>p.retailLifecycle))throw Error('Unversioned retail lifecycle');return g}
  if(g.retailLifecycleVersion!==1||g.termFundingVersion!==1)throw Error('Unsupported retail lifecycle save');
  for(const p of g.players){
@@ -1618,7 +1622,7 @@ validatePilot=function(g){
   validateRetailMix(p.retailLifecycle.mix);if(p.submitted)validateRetailMix(p.submitted.retailMix);
  }
  return g;
-};
+}
 // Product deployment v1: research unlocks a staffed rollout, not immediate sales.
 const RETAIL_DEPLOYMENTS={
  rewards:{project:'deployRewards',branch:'network',name:'Rewards Checking',cost:180000},
@@ -1640,11 +1644,14 @@ projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productDeploymen
 
 const deploymentMix=applyRetailMix;
 applyRetailMix=function(p,mix){validateDeployedMix(p,mix);return deploymentMix(p,mix)};
-const deploymentPortfolio=validatePortfolioPlan;
-validatePortfolioPlan=function(p,plan){deploymentPortfolio(p,plan);if(p.productDeployment)validateDeployedMix(p,plan.retailMix)};
-const deploymentBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=deploymentBot(g,index),p=g.players[index];if(!p.productDeployment)return plan;
+
+function validateDeploymentPolicy(p,plan){
+ if(p.productDeployment)validateDeployedMix(p,plan.retailMix)
+}
+
+function planProductDeployment(g,index,plan){
+ const p=g.players[index];
+ if(!p.productDeployment)return plan;
  for(const key of Object.keys(RETAIL_DEPLOYMENTS))if(!p.productDeployment.ready[key])plan.retailMix[key]=0;
  if(!Object.values(plan.retailMix).some(Boolean))plan.retailMix.essential=4;
  const key=index===0?'rewards':'highYield',d=RETAIL_DEPLOYMENTS[key];
@@ -1657,10 +1664,9 @@ chooseOpenBot=function(g,index){
   if(q.remaining>=projectCost(p,def)&&q.freeCapacity>=projectCapacity(def)){plan.newProjects=[...planInitiatives(plan),d.project];plan.newProject=plan.newProjects[0]}
  }
  return plan;
-};
-const deploymentValidation=validatePilot;
-validatePilot=function(g){
- deploymentValidation(g);
+}
+
+function validateDeploymentSave(g){
  if(g.productDeploymentVersion===undefined){if(g.players.some(p=>p.productDeployment||(p.projects||[]).some(x=>PROJECTS[x.key]&&PROJECTS[x.key].deploymentProduct)))throw Error('Unversioned product deployment');return g}
  if(g.productDeploymentVersion!==1||g.retailLifecycleVersion!==1)throw Error('Unsupported product deployment save');
  for(const p of g.players){
@@ -1670,7 +1676,7 @@ validatePilot=function(g){
   const seen=new Set();for(const x of p.projects){const def=PROJECTS[x.key];if(!def||!def.deploymentProduct)continue;if(seen.has(x.key)||state.ready[def.deploymentProduct]||strategyLevel(p,RETAIL_DEPLOYMENTS[def.deploymentProduct].branch)<1||x.target!==null)throw Error('Invalid deployment project');seen.add(x.key)}
  }
  return g;
-};
+}
 // Renewable service agreements v1. Fees are revenue, never invented deposit balances.
 const CONTRACT_FEE=8000,CONTRACT_SERVICE=2000,CONTRACT_TERM=6;
 PROJECTS.contractAdvertising={name:'Targeted Relationship Advertising',desc:'Four future turns of +3 bid strength for service agreements in the selected market. No guaranteed win, deposits, or broad market bonus.',cost:24000,cycles:1,capacity:1,target:true,kind:'contractAdvertising',contractOnly:true};
@@ -1717,17 +1723,16 @@ resolveOpportunities=function(g,plans){
  for(const p of g.players)p.serviceContracts=g.serviceAgreements.filter(c=>c.owner===p.id).map(c=>c.id);
  return L;
 };
-const contractBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=contractBot(g,index);if(g.contractRulesVersion!==1)return plan;
+
+function planContractBid(g,index,plan){
+ if(g.contractRulesVersion!==1)return plan;
  const p=g.players[index],due=g.serviceAgreements.filter(c=>c.due===g.cycle&&c.owner!==p.id);
  if(plan.allocation.business>0&&due.length){const candidate=due.sort((a,b)=>contractPower(g,p,b)-contractPower(g,p,a)||a.id.localeCompare(b.id))[0];if(contractPower(g,p,candidate)>=8){plan.contractBid=candidate.id;plan.opportunity=null}else plan.contractBid=null}
  else plan.contractBid=null;
  return plan;
-};
-const contractValidation=validatePilot;
-validatePilot=function(g){
- contractValidation(g);
+}
+
+function validateContractSave(g){
  if(g.contractRulesVersion===undefined){if(g.serviceAgreements||g.players.some(p=>p.serviceContracts||p.contractAds||(p.projects||[]).some(x=>x.key==='contractAdvertising')))throw Error('Unversioned service contracts');return g}
  if(g.contractRulesVersion!==1||g.productDeploymentVersion!==1||!Array.isArray(g.serviceAgreements)||g.serviceAgreements.length!==Object.keys(g.territories).length)throw Error('Invalid service contracts');
  const seen=new Set();
@@ -1743,7 +1748,7 @@ validatePilot=function(g){
   if(p.submitted&&p.submitted.contractBid!=null){const c=g.serviceAgreements.find(c=>c.id===p.submitted.contractBid);if(!c||c.due!==g.cycle||p.submitted.allocation.business<1||p.submitted.opportunity)throw Error('Invalid service contract bid')}
  }
  return g;
-};
+}
 // Service expansion v1: dedicated capacity, cross-capability applications and priced renewals.
 // Kept behind a new-game flag; existing contract-v1 campaigns retain their economics.
 const SERVICE_TYPES={
@@ -1813,12 +1818,11 @@ const serviceCatalog=projectCatalog;
 projectCatalog=function(p){const out=serviceCatalog(p);if(!p.serviceDesk)for(const k of Object.keys(SERVICE_APPLICATIONS))delete out[k];return out};
 
 
-const servicePortfolio=validatePortfolioPlan;
-validatePortfolioPlan=function(p,plan){
- servicePortfolio(p,plan);
+
+function normalizeServicePolicy(p,plan){
  if(p.serviceDesk){plan.servicePolicy=plan.servicePolicy||JSON.parse(JSON.stringify(p.serviceDesk.policy));validateServicePolicy(p,plan.servicePolicy,plan.allocation)}
  else if(plan.servicePolicy||plan.contractExit)throw Error('Service desk policies require a new expanded-service pilot.');
-};
+}
 
 const serviceResolveV1=resolveOpportunities;
 resolveOpportunities=function(g,plans){
@@ -1844,22 +1848,27 @@ resolveOpportunities=function(g,plans){
  }
  return L;
 };
-const serviceBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- const plan=serviceBot(g,index),p=g.players[index];if(!p.serviceDesk)return plan;
- const policy=JSON.parse(JSON.stringify(p.serviceDesk.policy));policy.outsourcing=0;policy.payroll=!!p.serviceDesk.applications.payroll&&p.serviceDesk.contracts.some(c=>c.kind==='payroll');policy.treasury=!!p.serviceDesk.applications.treasury;
+
+function planServiceDesk(g,index,plan){
+ const p=g.players[index];
+ if(!p.serviceDesk)return plan;
+ const policy=JSON.parse(JSON.stringify(p.serviceDesk.policy));
+ policy.outsourcing=0;
+ policy.payroll=!!p.serviceDesk.applications.payroll&&p.serviceDesk.contracts.some(c=>c.kind==='payroll');
+ policy.treasury=!!p.serviceDesk.applications.treasury;
  policy.pricing={payroll:'standard',merchant:'standard',treasury:'standard'};
  const due=g.serviceAgreements.filter(c=>c.due===g.cycle&&c.owner!==p.id&& (c.kind!=='treasury'||policy.treasury));
  const demand=p.serviceDesk.contracts.reduce((n,c)=>n+SERVICE_TYPES[c.kind].load,0);
- // Preserve the sales pipeline while the mandate book is small; buy bounded flexible
- // capacity first, then dedicate staff for workload beyond the four-point vendor cap.
- policy.outsourcing=Math.min(4,demand);policy.staff=Math.min(plan.allocation.business,Math.ceil(Math.max(0,demand-4)/2));plan.servicePolicy=policy;plan.contractBid=null;plan.contractExit=null;
+ policy.outsourcing=Math.min(4,demand);
+ policy.staff=Math.min(plan.allocation.business,Math.ceil(Math.max(0,demand-4)/2));
+ plan.servicePolicy=policy;
+ plan.contractBid=null;
+ plan.contractExit=null;
  for(const c of due){
   const need=demand+SERVICE_TYPES[c.kind].load,bidPolicy={...policy,outsourcing:Math.min(4,need),staff:Math.min(plan.allocation.business,Math.ceil(Math.max(0,need-4)/2))};
   const proposed={...p,allocation:plan.allocation,serviceDesk:{...p.serviceDesk,policy:bidPolicy}};
   if(serviceBidStatus(proposed,c).eligible&&contractPower(g,proposed,c)>=10){policy.staff=bidPolicy.staff;policy.outsourcing=bidPolicy.outsourcing;plan.contractBid=c.id;plan.opportunity=null;break}
  }
- // No speculative capacity reservation or idle treasury subscription when not pursuing work.
  if(!p.serviceDesk.contracts.some(c=>c.kind==='treasury')&&!g.serviceAgreements.some(c=>c.id===plan.contractBid&&c.kind==='treasury'))policy.treasury=false;
  if(p.stats.lastProfit>100000&&fundingPosition(p).excess===0){
   const key=p.serviceDesk.contracts.some(c=>c.kind==='payroll')&&!p.serviceDesk.applications.payroll?'deployPayrollDesk':!p.serviceDesk.applications.treasury?'buildTreasuryDesk':null,d=SERVICE_APPLICATIONS[key];
@@ -1869,7 +1878,7 @@ chooseOpenBot=function(g,index){
   }
  }
  return plan;
-};
+}
 // Advisory planning tools share the real operating preview, not a second economy.
 // No saved balances, quoted contract terms or human intents are changed here.
 function servicePlanReview(p,plan,economy){
@@ -1910,12 +1919,12 @@ function serviceRecoveryPlan(p,plan,economy){
  for(const candidate of candidates){const r=servicePlanReview(p,candidate,economy);if(r.netOperating>bestScore+1000){best=candidate;bestScore=r.netOperating}}
  return best;
 }
-const servicePlanningBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- let plan=servicePlanningBot(g,index);const original=g.players[index];if(!original.serviceDesk)return plan;
+
+function planServiceReserve(g,index,plan){
+ const original=g.players[index];
+ if(!original.serviceDesk)return plan;
  const p={...original,focus:plan.focus,marketSnapshot:g.marketEconomy};
  plan=serviceRecoveryPlan(p,plan,g.economy);
- // Re-apply the reserve AFTER every department has added its commitments.
  const limit=servicePlanReview(p,plan,g.economy).spendingLimit;
  for(const key of Object.keys(plan.investments||{})){const excess=Math.max(0,planBudget(p,plan).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(excess));if(plan.investments[key]<1000)delete plan.investments[key]}
  if(planBudget(p,plan).total>limit)plan.hires=0;
@@ -1923,13 +1932,12 @@ chooseOpenBot=function(g,index){
  while(plan.newProjects.length&&planBudget(p,plan).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
  if(planBudget(p,plan).total>limit)plan.competitiveAction='none';
  return plan;
-};
+}
 // An accepted initiative can lose cash/capacity between planning and execution.
 // Preserve the cancellation rule, but never silently drop the player's order.
 
-const serviceValidation=validatePilot;
-validatePilot=function(g){
- serviceValidation(g);
+
+function validateServiceSave(g){
  if(g.serviceExpansionVersion===undefined){if(g.players.some(p=>p.serviceDesk||(p.projects||[]).some(x=>SERVICE_APPLICATIONS[x.key]))||(g.serviceAgreements||[]).some(c=>c.kind!==undefined||c.fee!==undefined||c.misses!==undefined))throw Error('Unversioned service expansion');return g}
  if(g.serviceExpansionVersion!==1||g.contractRulesVersion!==1)throw Error('Unsupported service expansion save');
  g.serviceAgreements.forEach((c,i)=>{if(c.kind!==['payroll','merchant','treasury'][i%3]||!Number.isInteger(c.misses)||c.misses<0||c.misses>2||!Object.values(SERVICE_PRICING).some(x=>c.fee===Math.round(SERVICE_TYPES[c.kind].fee*x.mult)))throw Error('Invalid service terms')});
@@ -1943,7 +1951,7 @@ validatePilot=function(g){
   if(p.submitted){validateServicePolicy(p,p.submitted.servicePolicy,p.submitted.allocation);validatePlan(g,p,p.submitted)}
  }
  return g;
-};
+}
 const serviceNormalizeAllocation=normalizeAllocation;
 normalizeAllocation=function(p){serviceNormalizeAllocation(p);if(p.serviceDesk)p.serviceDesk.policy.staff=Math.min(p.serviceDesk.policy.staff,p.allocation.business)};
 // Living institution v1: bounded client differentiation and pre-lock delegation.
@@ -1982,12 +1990,11 @@ function initializeManagement(g,o){
 }
 const institutionPower=contractPower;
 contractPower=function(g,p,c){return institutionPower(g,p,c)+clientBidAdjustment(p,c)};
-const institutionPortfolio=validatePortfolioPlan;
-validatePortfolioPlan=function(p,plan){
- institutionPortfolio(p,plan);
+
+function normalizeManagementPolicy(p,plan){
  if(p.management){plan.management=JSON.parse(JSON.stringify(validateManagement(plan.management||p.management)))}
  else if(plan.management)throw Error('Management mandates require a Living institution campaign.');
-};
+}
 // This is a pure DRAFT preparer, never called after a human locks a plan.
 // Existing explicit bids, offers, projects, hires and manual investments are preserved.
 function managementPlan(p,input,economy){
@@ -2021,25 +2028,25 @@ function managementPlan(p,input,economy){
  }
  return {plan,notes};
 }
-const institutionBot=chooseOpenBot;
-chooseOpenBot=function(g,index){
- let plan=institutionBot(g,index),p=g.players[index];if(!p.management)return plan;
+
+function planInstitutionManagement(g,index,plan){
+ let p=g.players[index];
+ if(!p.management)return plan;
  plan.management=JSON.parse(JSON.stringify(p.management));
- // AI uses the same bounded draft preparation. It keeps its explicit research and bids.
- plan.management.research.enabled=true;plan.management.research.budget=25000;
+ plan.management.research.enabled=true;
+ plan.management.research.budget=25000;
  plan.management.delivery.mode='profit';
  return managementPlan({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy).plan;
-};
-const institutionValidation=validatePilot;
-validatePilot=function(g){
- institutionValidation(g);
+}
+
+function validateManagementSave(g){
  if(g.managementVersion===undefined){if(g.players.some(p=>p.management)||(g.serviceAgreements||[]).some(c=>c.clientIndex!==undefined))throw Error('Unversioned institution management');return g}
  if(![1,2].includes(g.managementVersion)||g.serviceExpansionVersion!==1)throw Error('Unsupported institution management save');
  if(g.serviceAgreements.length!==ANCHOR_CLIENTS.length)throw Error('Invalid anchor client roster');
  g.serviceAgreements.forEach((c,i)=>{if(c.clientIndex!==i)throw Error('Invalid anchor client identity')});
  for(const p of g.players){validateManagement(p.management);if(p.submitted)validateManagement(p.submitted.management)}
  return g;
-};
+}
 
 // Relationship operations v1 (management v2): public delivery record, not free assets.
 function relationshipBonus(g,p,c){const r=g.relationshipRecords&&g.relationshipRecords[c.id];return r&&c.owner===p.id&&r.owner===p.id?Math.min(2,r.streak*.25):0}
@@ -2096,11 +2103,10 @@ function renewalPricingPlan(g,p,input){
  }
  return {plan,choices};
 }
-const relationshipBot=chooseOpenBot;
-chooseOpenBot=function(g,index){const plan=relationshipBot(g,index);return g.managementVersion===2?renewalPricingPlan(g,g.players[index],plan).plan:plan};
-const relationshipValidation=validatePilot;
-validatePilot=function(g){
- relationshipValidation(g);
+
+
+
+function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
  if(g.version!=='8.2'&&!(['8.3','8.4'].includes(g.version)&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
@@ -2116,7 +2122,7 @@ validatePilot=function(g){
   let streak=0;for(const e of [...r.history].reverse()){if(!r.owner||e.from!==r.owner||e.to!==r.owner||e.served!==true)break;streak=Math.min(8,streak+1)}if(streak!==r.streak)throw Error('Inconsistent service streak');
  }
  return g;
-};
+}
 
 
 // Customer demand v1: prospect-flow composition, not a second ownership/customer ledger.
@@ -2207,11 +2213,10 @@ function customerMixPlan(g,p,input){
  }
  return chosen;
 }
-const customerBot=chooseOpenBot;
-chooseOpenBot=function(g,index){return customerMixPlan(g,g.players[index],customerBot(g,index))};
-const customerValidation=validatePilot;
-validatePilot=function(g){
- customerValidation(g);
+
+
+
+function validateCustomerSave(g){
  if(g.customerDemandVersion===undefined){if(g.players.some(p=>p.customerDemandVersion!==undefined||p._customerIntake!==undefined))throw Error('Unversioned customer demand');return g}
  if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
  for(const p of g.players){
@@ -2220,7 +2225,7 @@ validatePilot=function(g){
 if(report&&(!['customerAcquisitionCost','customerAcquiredDeposits'].every(k=>Number.isSafeInteger(report[k])&&report[k]>=0)||report.customerAcquiredDeposits!==report.depositGrowth+report.depositRunoff))throw Error('Invalid customer acquisition report');
  }
  return g;
-};
+}
 
 
 // Relationship quality v1: persistent service goodwill, not customer ownership.
@@ -2290,9 +2295,8 @@ function updateCustomerRelationships(g,p,preview=false){
  p.operatingReport.relationshipPressure=customerRelationshipPressure(p,p.focus);
 
 }
-const goodwillValidation=validatePilot;
-validatePilot=function(g){
- goodwillValidation(g);
+
+function validateGoodwillSave(g){
  if(g.customerDemandVersion!==2){if(g.players.some(p=>p.customerRelationships!==undefined))throw Error('Unversioned customer relationships');return g}
  for(const p of g.players){
   const r=p.customerRelationships,keys=Object.keys(g.territories).sort();
@@ -2300,7 +2304,7 @@ validatePilot=function(g){
   for(const row of Object.values(r.markets))if(!row||Object.keys(row).sort().join()!=='connected,everyday,reserve'||Object.values(row).some(n=>!Number.isInteger(n)||n<0||n>100))throw Error('Invalid relationship quality');
  }
  return g;
-};
+}
 
 function depositLedgerSummary(p,g){
  const d=depositSummary(p,g);return d?{...(p.management?{management:JSON.parse(JSON.stringify(p.management))}:{}),serviceDesk:p.serviceDesk?JSON.parse(JSON.stringify(p.serviceDesk)):null,agreements:p.serviceContracts?[...p.serviceContracts]:null,advertising:p.contractAds?{...p.contractAds}:null,deployment:p.productDeployment?{...p.productDeployment.ready}:null,mix:p.retailLifecycle?{...p.retailLifecycle.mix}:null,term:termSummary(p),interest:d.interest,fees:d.fees,service:d.service,guaranteed:Object.values(d.rows).reduce((n,r)=>n+r.guaranteed,0),renewing:Object.values(d.rows).reduce((n,r)=>n+r.renewing,0)}:null;
@@ -2849,6 +2853,50 @@ function resolveCycle(g){
  }finally{ledgerContext=previous}
 }
 
+// Intent preparation is ordered and uses the same policy rules as human plans.
+function chooseOpenBot(g,index){
+ const initial=()=>{
+  let plan=withRandom(g,'aiState',()=>chooseBaselinePlan(g,index));
+  plan=planPilotReserve(g,index,plan);
+  return planRegionalOffice(g,index,plan);
+ };
+ // Only initial selection needs a live market scope; later previews use snapshots.
+ let plan=g.marketEconomy?withMarket(g,initial):initial();
+ plan=planFundingRecovery(g,index,plan);
+ plan=planTermFunding(g,index,plan);
+ plan=planRetailMix(g,index,plan);
+ plan=planProductDeployment(g,index,plan);
+ plan=planContractBid(g,index,plan);
+ plan=planServiceDesk(g,index,plan);
+ plan=planServiceReserve(g,index,plan);
+ plan=planInstitutionManagement(g,index,plan);
+ if(g.managementVersion===2)plan=renewalPricingPlan(g,g.players[index],plan).plan;
+ return customerMixPlan(g,g.players[index],plan);
+}
+function validatePilot(g){
+ validateAccountingSave(g);
+ validateRegionalSave(g);
+ validateMarketSave(g);
+ validateCreditSave(g);
+ validateFundingSave(g);
+ validateDepositSave(g);
+ validateTermSave(g);
+ validateRetailSave(g);
+ validateDeploymentSave(g);
+ validateContractSave(g);
+ validateServiceSave(g);
+ validateManagementSave(g);
+ validateRelationshipSave(g);
+ validateCustomerSave(g);
+ validateGoodwillSave(g);
+ return g;
+}
+function validatePortfolioPlan(p,plan){
+ normalizePortfolioProducts(p,plan);
+ validateDeploymentPolicy(p,plan);
+ normalizeServicePolicy(p,plan);
+ normalizeManagementPolicy(p,plan);
+}
 root.BWEngine={migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
