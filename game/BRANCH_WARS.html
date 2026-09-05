@@ -519,7 +519,79 @@ function normalizeAllocation(p){for(const k of Object.keys(ROLES))p.allocation[k
 function chooseEvent(g){let pool=EVENTS.filter(e=>!g.event||e.key!==g.event.key),fav={rate:['ratewar','downturn'],regulatory:['audit','fraud','cyber'],growth:['closure','viral','board']}[g.scenario]||[];pool=pool.concat(pool.filter(e=>fav.includes(e.key)),pool.filter(e=>fav.includes(e.key)));return pick(pool)}
 function makeOpportunities(g){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)).map(([k])=>k),types=shuffled(Object.keys(OPPORTUNITY_TYPES)).slice(0,3);return types.map((type,i)=>{const t=OPPORTUNITY_TYPES[type],market=pick(open),value=Math.round(t.base*(.78+simulationRandom()*.55)/10000)*10000;return{id:`${g.cycle}-${i}-${rint(100,999)}`,type,market,value,name:t.name,dept:t.dept,desc:t.desc}})}
 function chooseEconomy(g,initial=false){const pools={balanced:['steady','steady','expansion','tight','recovery','downturn'],rate:['tight','tight','tight','steady','downturn'],regulatory:['steady','tight','downturn','recovery'],growth:['expansion','expansion','expansion','steady','recovery']},prior=g.economy&&g.economy.key,next=initial?pick(pools[g.scenario]||pools.balanced):pick((pools[g.scenario]||pools.balanced).filter(x=>x!==prior));g.economy={key:next,...MACRO_REGIMES[next]};return g.economy}
-function createGame(o){const scope=SCOPES[o.scope]?o.scope:'national',g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};g.players[0].focus='downtown';g.players[1].focus='northside';for(const p of g.players)for(const k of Object.keys(g.territories))p.branches[k]=0;g.players[0].branches.downtown=1;g.players[1].branches.northside=1;g.players[0].facilityMarkets.downtown=['retail'];g.players[1].facilityMarkets.northside=['retail'];g.territories.downtown.shares=[56,44];g.territories.northside.shares=[44,56];if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);delta(p,'cash',250000)});if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;p.stats.attention=14});if(g.scenario==='growth')g.players.forEach(p=>{p.stats.cash=2850000;p.stats.morale=73;p.stats.momentum=58});g.players.forEach(syncDoctrine);chooseEconomy(g,true);g.event=chooseEvent(g);g.opportunities=makeOpportunities(g);addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');captureTrend(g,0);return g}
+function createBaseCampaign(o){
+ const scope=SCOPES[o.scope]?o.scope:'national';
+
+ const g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',
+  cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],
+  players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],
+  territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],
+  gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};
+ g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));
+ for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};
+ g.players[0].focus='downtown';
+ g.players[1].focus='northside';
+ for(const p of g.players)for(const k of Object.keys(g.territories))p.branches[k]=0;
+ g.players[0].branches.downtown=1;
+ g.players[1].branches.northside=1;
+ g.players[0].facilityMarkets.downtown=['retail'];
+ g.players[1].facilityMarkets.northside=['retail'];
+ g.territories.downtown.shares=[56,44];
+ g.territories.northside.shares=[44,56];
+ if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);
+ delta(p,'cash',250000)});
+ if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;
+ p.stats.attention=14});
+ if(g.scenario==='growth')g.players.forEach(p=>{p.stats.cash=2850000;
+ p.stats.morale=73;
+ p.stats.momentum=58});
+ g.players.forEach(syncDoctrine);
+ chooseEconomy(g,true);
+ g.event=chooseEvent(g);
+ g.opportunities=makeOpportunities(g);
+ addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');
+ captureTrend(g,0);
+ return g;
+}
+function validateCreationOptions(o){
+ // Match the former outer-to-inner checks, including errors on disabled features.
+ if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
+ if(o.serviceExpansionVersion!==undefined&&![0,1].includes(o.serviceExpansionVersion))throw Error('Unsupported service expansion');
+ if(o.contractRulesVersion!==undefined&&![0,1].includes(o.contractRulesVersion))throw Error('Unsupported service contracts');
+ if(o.productDeploymentVersion!==undefined&&![0,1].includes(o.productDeploymentVersion))throw Error('Unsupported product deployment');
+ if(o.retailLifecycleVersion!==undefined&&![0,1].includes(o.retailLifecycleVersion))throw Error('Unsupported retail lifecycle');
+ if(o.termFundingVersion!==undefined&&![0,1].includes(o.termFundingVersion))throw Error('Unsupported term funding');
+ if(o.depositProductsVersion!==undefined&&![0,1].includes(o.depositProductsVersion))throw Error('Unsupported deposit products');
+ if(o.fundingCovenantVersion!==undefined&&![0,1].includes(o.fundingCovenantVersion))throw Error('Unsupported funding covenant');
+ if(o.creditLifecycleVersion!==undefined&&![0,1].includes(o.creditLifecycleVersion))throw Error('Unsupported credit lifecycle');
+ if(o.marketEconomyVersion!==undefined&&![0,1].includes(o.marketEconomyVersion))throw Error('Unsupported market economy');
+ if(o.regionalEconomyVersion!==undefined&&![0,1].includes(o.regionalEconomyVersion))throw Error('Unsupported regional economy version');
+ if(o.campaignRulesVersion!==undefined&&o.campaignRulesVersion!==1)throw Error('Unsupported campaign rules');
+}
+function createGame(o){
+ validateCreationOptions(o);
+ // A pilot has always forced regional scope and funding v2. Do not mutate options.
+ const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
+ const g=createSeededCampaign(baseOptions);
+ // Order is part of the save/replay contract. Later stages depend on earlier books.
+ initializeRegionalPilot(g,o);
+ initializeRegionalOffices(g,o);
+ initializeMarketBooks(g,o);
+ initializeCreditBooks(g,o);
+ initializeFundingCovenants(g,o);
+ initializeDepositBooks(g,o);
+ initializeTermFunding(g,o);
+ initializeRetailOffers(g,o);
+ initializeProductDeployments(g,o);
+ initializeServiceContracts(g,o);
+ initializeServiceDesk(g,o);
+ initializeManagement(g,o);
+ initializeRelationships(g,o);
+ initializeCustomerDemand(g,o);
+ initializeCustomerGoodwill(g,o);
+ return g;
+}
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
 function applyDecision(g,p,choice){p.turnEffects={};const a=choice==='a';switch(g.event.key){case'quiet':a?delta(p,'momentum',4):delta(p,'compliance',-4);if(a)delta(p,'compliance',2);break;case'ratewar':a?(delta(p,'cash',-100000),p.turnEffects.deposit=1.28,delta(p,'attention',2)):p.turnEffects.profit=1.15;break;case'staffing':a?(delta(p,'cash',-70000),p.turnEffects.service=1.22,delta(p,'morale',-2)):(delta(p,'reputation',-3),delta(p,'morale',-4));break;case'audit':a?(delta(p,'cash',-130000),delta(p,'compliance',-12),delta(p,'attention',-6)):(p.turnEffects.audit=true);break;case'community':a?(delta(p,'cash',-90000),delta(p,'reputation',6),p.turnEffects.market=1.18):delta(p,'influence',-2);break;case'outage':a?(delta(p,'cash',-160000),p.turnEffects.resilience=3):p.turnEffects.outage=true;break;case'stretch':a?(delta(p,'influence',7),delta(p,'morale',-5),delta(p,'attention',3)):(delta(p,'morale',3),delta(p,'attention',5));break;case'fraud':a?(delta(p,'compliance',-7),delta(p,'cash',-60000),p.turnEffects.production=.9):(delta(p,'cash',90000),delta(p,'compliance',9),delta(p,'attention',5));break;case'downturn':a?(p.turnEffects.lending=.7,delta(p,'compliance',-4)):(p.turnEffects.lending=1.15,delta(p,'compliance',7));break;case'closure':a?(delta(p,'cash',-140000),p.turnEffects.market=1.35,p.turnEffects.deposit=1.2):p.turnEffects.market=1.12;break;case'talent':a?(delta(p,'cash',-120000),delta(p,'morale',8)):delta(p,'morale',-7);break;case'viral':a?(delta(p,'cash',-75000),delta(p,'reputation',7),p.turnEffects.market=1.16):delta(p,'reputation',3);break;case'board':a?(delta(p,'influence',9),delta(p,'attention',6)):(delta(p,'influence',4),delta(p,'attention',1));break;case'cyber':a?(delta(p,'cash',-150000),p.turnEffects.resilience=3):p.turnEffects.cyber=true;break;case'coffee':a?(delta(p,'cash',-18000),delta(p,'morale',8)):delta(p,'morale',-5);break;case'manager':a?(delta(p,'cash',-55000),delta(p,'reputation',4),delta(p,'influence',4)):p.turnEffects.manager=true;break;case'fintech':a?(delta(p,'cash',-140000),p.turnEffects.digital=1.5,p.turnEffects.service=1.1):p.turnEffects.relationship=true;break;case'merger':a?(delta(p,'cash',-170000),p.turnEffects.recruit=true,p.turnEffects.market=1.18):delta(p,'morale',4);break;case'losses':a?(delta(p,'cash',-130000),p.turnEffects.credit=.55,delta(p,'compliance',-3)):p.turnEffects.watchlist=true;break;case'housing':a?(p.turnEffects.lending=1.35,p.turnEffects.credit=1.25,delta(p,'attention',2)):(p.turnEffects.deposit=1.24,delta(p,'cash',-50000));break;case'publicity':a?(delta(p,'influence',7),delta(p,'attention',p.stats.reputation>=70?1:6)):(delta(p,'morale',3),delta(p,'influence',2));break;case'storm':a?(delta(p,'cash',-150000),delta(p,'reputation',8),p.turnEffects.market=1.18):p.turnEffects.storm=true;break;case'activist':a?(p.turnEffects.profit=1.22,delta(p,'morale',-5),delta(p,'attention',2)):(delta(p,'attention',p.stats.influence>=35?-3:7),delta(p,'morale',3));break;case'succession':a?p.turnEffects.succession=true:(delta(p,'cash',-210000),delta(p,'staff',1),delta(p,'morale',-2),normalizeAllocation(p));break;case'vendor':a?(p.turnEffects.profit=1.1,p.turnEffects.vendor=true):(delta(p,'cash',-90000),p.turnEffects.resilience=2);break;case'expansion':a?(delta(p,'cash',350000+p.stats.influence*3500),delta(p,'attention',5),delta(p,'influence',-4)):(delta(p,'morale',4),delta(p,'attention',-2))}}
 function startProject(g,p,key,specializations={}){
@@ -721,8 +793,19 @@ function rematch(g,index){if(!g.gameOver)throw Error('Campaign still active.');i
 
 // Public and internal simulation entry points share the same scoped campaign RNG.
 // AI planning has its own stream, so supplied human intents do not consume world RNG.
-const createGameCore=createGame;
-createGame=function(o){const seed=o.seed===undefined?Math.floor(Math.random()*0x100000000):seedHash(o.seed),shell={simulationVersion:1,rng:{algorithm:'lcg32-v1',seed,state:seed,aiState:(seed^0x9e3779b9)>>>0}};return withRandom(shell,'state',()=>{const g=createGameCore(o);g.fundingRulesVersion=o.fundingRulesVersion===undefined?2:o.fundingRulesVersion;if(![1,2].includes(g.fundingRulesVersion))throw Error('Unsupported funding rules version.');for(const p of g.players)p.fundingRulesVersion=g.fundingRulesVersion;g.created=o.created===undefined?g.created:o.created;g.simulationVersion=1;g.rng=shell.rng;return g})};
+function createSeededCampaign(o){
+ const seed=o.seed===undefined?Math.floor(Math.random()*0x100000000):seedHash(o.seed);
+ const shell={simulationVersion:1,rng:{algorithm:'lcg32-v1',seed,state:seed,aiState:(seed^0x9e3779b9)>>>0}};
+ return withRandom(shell,'state',()=>{
+  const g=createBaseCampaign(o);
+  g.fundingRulesVersion=o.fundingRulesVersion===undefined?2:o.fundingRulesVersion;
+  if(![1,2].includes(g.fundingRulesVersion))throw Error('Unsupported funding rules version.');
+  for(const p of g.players)p.fundingRulesVersion=g.fundingRulesVersion;
+  g.created=o.created===undefined?g.created:o.created;
+  g.simulationVersion=1;g.rng=shell.rng;
+  return g;
+ });
+}
 const chooseOpenBotCore=chooseOpenBot;
 chooseOpenBot=function(g,...args){return withRandom(g,'aiState',()=>chooseOpenBotCore(g,...args))};
 const submitCore=submit;
@@ -867,10 +950,7 @@ resolveMarketExits=function(g){
  }
  return lines;
 };
-const pilotCreate=createGame;
-createGame=function(o){
- if(o.campaignRulesVersion!==undefined&&o.campaignRulesVersion!==1)throw Error('Unsupported campaign rules');
- const g=pilotCreate(o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o);
+function initializeRegionalPilot(g,o){
  if(o.campaignRulesVersion!==1)return g;
  g.campaignRulesVersion=1;
  g.regions={heartland:{name:'Heartland',markets:['downtown','northside','industrial']},growthCoast:{name:'Growth Coast',markets:['suburbs','county','university']}};
@@ -885,7 +965,7 @@ createGame=function(o){
  }
  g.trend=[];captureTrend(g,0);
  return g;
-};
+}
 const pilotCycle=resolveCycle;
 resolveCycle=function(g){
  const result=pilotCycle(g);
@@ -999,14 +1079,12 @@ resolveMarketExits=function(g){
  }
  return lines;
 };
-const regionalCreate=createGame;
-createGame=function(o){
- if(o.regionalEconomyVersion!==undefined&&![0,1].includes(o.regionalEconomyVersion))throw Error('Unsupported regional economy version');
- const g=regionalCreate(o);if(!pilot(g)||o.regionalEconomyVersion===0)return g;
+function initializeRegionalOffices(g,o){
+ if(!pilot(g)||o.regionalEconomyVersion===0)return g;
  g.regionalEconomyVersion=1;
  for(const p of g.players)p.regionalOperations={version:1,markets:Object.fromEntries(Object.keys(g.territories).map(k=>[k,{service:0,automation:0}]))};
  return g;
-};
+}
 const regionalPilotValidation=validatePilot;
 validatePilot=function(g){
  regionalPilotValidation(g);
@@ -1093,10 +1171,8 @@ function transferMarket(g,from,to,key,resource,requested){
  const old=marketBypass;marketBypass=true;try{marketDelta(from,resource,-n);marketDelta(to,resource,n);if(sensitive){marketDelta(from,'rateSensitiveDeposits',-sensitive);marketDelta(to,'rateSensitiveDeposits',sensitive)}}finally{marketBypass=old}
  from.marketBook.markets[key][resource]-=n;to.marketBook.markets[key][resource]+=n;return n;
 }
-const marketCreate=createGame;
-createGame=function(o){
- if(o.marketEconomyVersion!==undefined&&![0,1].includes(o.marketEconomyVersion))throw Error('Unsupported market economy');
- const g=marketCreate(o);if(g.regionalEconomyVersion!==1||o.marketEconomyVersion===0)return g;
+function initializeMarketBooks(g,o){
+ if(g.regionalEconomyVersion!==1||o.marketEconomyVersion===0)return g;
  g.marketEconomyVersion=1;g.marketEconomy={version:1,markets:{}};
  for(const p of g.players){
   const weights=Object.fromEntries(Object.keys(g.territories).map(k=>[k,k===p.focus?5:1]));
@@ -1108,7 +1184,7 @@ createGame=function(o){
   g.marketEconomy.markets[key]={community,union,total:Object.fromEntries(MARKET_RESOURCES.map(r=>[r,community[r]+union[r]+g.players.reduce((n,p)=>n+p.marketBook.markets[key][r],0)]))};
  }
  return g;
-};
+}
 function marketContribution(p){
  const r=p.operatingReport,books=p.marketBook.markets,metrics=regionalBranchMetrics(p),rows=Object.fromEntries(Object.keys(books).map(k=>[k,{income:0,funding:0,credit:0,facility:0,contribution:0}]));
  const allocate=(amount,weights,field)=>{for(const [k,n]of Object.entries(marketSplit(Math.round(amount),weights)))rows[k][field]+=n};
@@ -1282,10 +1358,8 @@ function reconcileCredit(p){
 }
 const creditSync=syncAccounts;
 syncAccounts=function(p){creditSync(p);reconcileCredit(p)};
-const creditCreate=createGame;
-createGame=function(o){
- if(o.creditLifecycleVersion!==undefined&&![0,1].includes(o.creditLifecycleVersion))throw Error('Unsupported credit lifecycle');
- const g=creditCreate(o);if(!g.marketEconomy||o.creditLifecycleVersion===0)return g;
+function initializeCreditBooks(g,o){
+ if(!g.marketEconomy||o.creditLifecycleVersion===0)return g;
  g.creditLifecycleVersion=1;
  for(const p of g.players){
   p.creditBook={version:1,cohorts:[]};
@@ -1295,7 +1369,7 @@ createGame=function(o){
   }
  }
  return g;
-};
+}
 function creditSummary(p){
  if(!p.creditBook)return null;
  const c=p.creditBook.cohorts,principal=c.reduce((n,x)=>n+x.principal,0);
@@ -1348,12 +1422,10 @@ function fundingPosition(p){
  const limit=Math.max(250000,Math.floor(p.stats.deposits*.05+Math.max(0,p.stats.capital)*.5)),debt=p.stats.emergencyDebt||0;
  return {limit,debt,excess:Math.max(0,debt-limit),headroom:Math.max(0,limit-debt),streak:p.fundingCovenant.streak};
 }
-const covenantCreate=createGame;
-createGame=function(o){
- if(o.fundingCovenantVersion!==undefined&&![0,1].includes(o.fundingCovenantVersion))throw Error('Unsupported funding covenant');
- const g=covenantCreate(o);if(g.creditLifecycleVersion!==1||o.fundingCovenantVersion===0)return g;
+function initializeFundingCovenants(g,o){
+ if(g.creditLifecycleVersion!==1||o.fundingCovenantVersion===0)return g;
  g.fundingCovenantVersion=1;for(const p of g.players)p.fundingCovenant={version:1,streak:0,lastCycle:0};return g;
-};
+}
 const covenantLimit=pilotSpendingLimit;
 pilotSpendingLimit=function(p,...args){return p.fundingCovenant&&fundingPosition(p).excess>0?0:covenantLimit(p,...args)};
 const covenantPull=depositPull;
@@ -1457,14 +1529,12 @@ function adjustDepositReport(p,g,r){
  const change=r.depositIncome-oldIncome-(r.fundingCost-oldFunding)-d.service;
  r.eventAdjustment+=change*((p.turnEffects.profit||1)-1);r.profit=Math.round(r.profit+change*(p.turnEffects.profit||1));
 }
-const depositCreate=createGame;
-createGame=function(o){
- if(o.depositProductsVersion!==undefined&&![0,1].includes(o.depositProductsVersion))throw Error('Unsupported deposit products');
- const g=depositCreate(o);if(g.fundingCovenantVersion!==1||o.depositProductsVersion===0)return g;
+function initializeDepositBooks(g,o){
+ if(g.fundingCovenantVersion!==1||o.depositProductsVersion===0)return g;
  g.depositProductsVersion=1;
  for(const p of g.players)p.depositBook={version:1,asOfCycle:0,cohorts:Object.entries(p.marketBook.markets).map(([market,m])=>({market,product:p.products.retail,principal:m.deposits,remaining:0,quotedCycle:0,rate:depositRate(p,g,p.products.retail)}))};
  return g;
-};
+}
 const depositOperate=operate;
 operate=function(g,p,preview=false){
  if(!p.depositBook)return depositOperate(g,p,preview);
@@ -1517,13 +1587,11 @@ function termSummary(p){
  const rows=p.depositBook.cohorts.filter(c=>c.locked);
  return {locked:rows.reduce((n,c)=>n+c.principal,0),maturing:rows.filter(c=>c.remaining===1).reduce((n,c)=>n+c.principal,0),interest:Math.round(rows.reduce((n,c)=>n+c.principal*c.rate/1000000,0))};
 }
-const termCreate=createGame;
-createGame=function(o){
- if(o.termFundingVersion!==undefined&&![0,1].includes(o.termFundingVersion))throw Error('Unsupported term funding');
- const g=termCreate(o);if(!g.depositProductsVersion||o.termFundingVersion===0)return g;
+function initializeTermFunding(g,o){
+ if(!g.depositProductsVersion||o.termFundingVersion===0)return g;
  g.termFundingVersion=1;for(const p of g.players)p.termFunding={version:1,policy:{offer:'off',maturity:'release'}};
  return g;
-};
+}
 const termOperate=operate;
 operate=function(g,p,preview=false){
  if(!p.termFunding)return termOperate(g,p,preview);
@@ -1590,13 +1658,11 @@ productOption=function(p,line){
  }
  return out;
 };
-const retailCreate=createGame;
-createGame=function(o){
- if(o.retailLifecycleVersion!==undefined&&![0,1].includes(o.retailLifecycleVersion))throw Error('Unsupported retail lifecycle');
- const g=retailCreate(o);if(g.termFundingVersion!==1||o.retailLifecycleVersion===0)return g;
+function initializeRetailOffers(g,o){
+ if(g.termFundingVersion!==1||o.retailLifecycleVersion===0)return g;
  g.retailLifecycleVersion=1;for(const p of g.players)p.retailLifecycle={version:1,mix:{essential:4,rewards:0,highYield:0}};
  return g;
-};
+}
 const retailBot=chooseOpenBot;
 chooseOpenBot=function(g,index){
  const plan=retailBot(g,index),p=g.players[index];if(!p.retailLifecycle)return plan;
@@ -1627,13 +1693,11 @@ function validateDeployedMix(p,mix){
  validateRetailMix(mix);
  if(p.productDeployment)for(const key of Object.keys(RETAIL_DEPLOYMENTS))if(mix[key]>0&&!p.productDeployment.ready[key])throw Error('Deploy '+RETAIL_DEPLOYMENTS[key].name+' in Operations initiatives before opening sales.');
 }
-const deploymentCreate=createGame;
-createGame=function(o){
- if(o.productDeploymentVersion!==undefined&&![0,1].includes(o.productDeploymentVersion))throw Error('Unsupported product deployment');
- const g=deploymentCreate(o);if(g.retailLifecycleVersion!==1||o.productDeploymentVersion===0)return g;
+function initializeProductDeployments(g,o){
+ if(g.retailLifecycleVersion!==1||o.productDeploymentVersion===0)return g;
  g.productDeploymentVersion=1;for(const p of g.players)p.productDeployment={version:1,ready:{rewards:false,highYield:false}};
  return g;
-};
+}
 const deploymentCatalog=projectCatalog;
 projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
 const deploymentFinish=finishProject;
@@ -1690,13 +1754,11 @@ function contractPower(g,p,c){
  const load=contractIncome(p),incumbent=c.owner===p.id;
  return p.allocation.business*2+p.allocation.operations*.5+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+(incumbent?(load.served===load.count?2:-3):0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
 }
-const contractCreate=createGame;
-createGame=function(o){
- if(o.contractRulesVersion!==undefined&&![0,1].includes(o.contractRulesVersion))throw Error('Unsupported service contracts');
- const g=contractCreate(o);if(g.productDeploymentVersion!==1||o.contractRulesVersion===0)return g;
+function initializeServiceContracts(g,o){
+ if(g.productDeploymentVersion!==1||o.contractRulesVersion===0)return g;
  g.contractRulesVersion=1;g.serviceAgreements=Object.keys(g.territories).map((market,i)=>({id:'service-'+market,market,owner:null,due:1+i}));
  for(const p of g.players){p.serviceContracts=[];p.contractAds=null}return g;
-};
+}
 const contractReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){
  contractReport(p,g,r);if(!p.serviceContracts)return;
@@ -1808,15 +1870,13 @@ function serviceBidStatus(p,c){
 function syncServiceBook(g){
  for(const p of g.players){p.serviceContracts=g.serviceAgreements.filter(c=>c.owner===p.id).map(c=>c.id);p.serviceDesk.contracts=g.serviceAgreements.filter(c=>c.owner===p.id).map(({id,kind,fee,due,misses})=>({id,kind,fee,due,misses}))}
 }
-const serviceCreate=createGame;
-createGame=function(o){
- if(o.serviceExpansionVersion!==undefined&&![0,1].includes(o.serviceExpansionVersion))throw Error('Unsupported service expansion');
- const g=serviceCreate(o);if(g.contractRulesVersion!==1||o.serviceExpansionVersion===0)return g;
+function initializeServiceDesk(g,o){
+ if(g.contractRulesVersion!==1||o.serviceExpansionVersion===0)return g;
  g.serviceExpansionVersion=1;
  g.serviceAgreements.forEach((c,i)=>Object.assign(c,{kind:['payroll','merchant','treasury'][i%3],fee:SERVICE_TYPES[['payroll','merchant','treasury'][i%3]].fee,misses:0}));
  for(const p of g.players)p.serviceDesk={version:1,policy:defaultServicePolicy(),applications:{payroll:false,treasury:null},contracts:[]};
  return g;
-};
+}
 const serviceIncomeV1=contractIncome;
 contractIncome=function(p){return p.serviceDesk?serviceLoad(p):serviceIncomeV1(p)};
 const servicePowerV1=contractPower;
@@ -1996,15 +2056,13 @@ function clientBidAdjustment(p,c){
  const load=serviceLoad(p),demand=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0)+SERVICE_TYPES[c.kind].load;
  return load.staff*2>=demand?2:0;
 }
-const institutionCreate=createGame;
-createGame=function(o){
- if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
- const g=institutionCreate(o);if(![1,2].includes(o.managementVersion))return g;
+function initializeManagement(g,o){
+ if(![1,2].includes(o.managementVersion))return g;
  if(g.serviceExpansionVersion!==1)throw Error('Living institution requires the expanded commercial services preview.');
  g.managementVersion=o.managementVersion;g.version='8.2';g.serviceAgreements.forEach((c,i)=>c.clientIndex=i);
  for(const p of g.players)p.management=defaultManagement();
  return g;
-};
+}
 const institutionPower=contractPower;
 contractPower=function(g,p,c){return institutionPower(g,p,c)+clientBidAdjustment(p,c)};
 const institutionPortfolio=validatePortfolioPlan;
@@ -2068,12 +2126,11 @@ validatePilot=function(g){
 
 // Relationship operations v1 (management v2): public delivery record, not free assets.
 function relationshipBonus(g,p,c){const r=g.relationshipRecords&&g.relationshipRecords[c.id];return r&&c.owner===p.id&&r.owner===p.id?Math.min(2,r.streak*.25):0}
-const relationshipCreate=createGame;
-createGame=function(o){
- const g=relationshipCreate(o);if(g.managementVersion!==2)return g;
+function initializeRelationships(g,o){
+ if(g.managementVersion!==2)return g;
  g.relationshipRecords=Object.fromEntries(g.serviceAgreements.map(c=>[c.id,{owner:c.owner,streak:0,lastCycle:0,history:[]}]));
  return g;
-};
+}
 const relationshipPower=contractPower;
 contractPower=function(g,p,c){return relationshipPower(g,p,c)+relationshipBonus(g,p,c)};
 const relationshipResolve=resolveOpportunities;
@@ -2180,13 +2237,11 @@ function customerBankFit(p,g,mix=p.retailLifecycle.mix){
  return total?rows.reduce((n,r)=>n+r.weight*r.demand.fit,0)/total:1;
 }
 function retailAcquisitionMix(p,g,market){return p.customerDemandVersion>=1?customerDemand(p,g,market).weights:p.retailLifecycle.mix}
-const customerCreate=createGame;
-createGame=function(o){
- if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
- const g=customerCreate(o);if(![1,2].includes(o.customerDemandVersion))return g;
+function initializeCustomerDemand(g,o){
+ if(![1,2].includes(o.customerDemandVersion))return g;
  if(g.managementVersion!==2)throw Error('Customer needs requires Living institution relationship rules');
  g.customerDemandVersion=o.customerDemandVersion;g.version=o.customerDemandVersion===2?'8.4':'8.3';for(const p of g.players)p.customerDemandVersion=o.customerDemandVersion;return g;
-};
+}
 const customerSupply=marketSupply;
 marketSupply=function(g,p,freeze=false){
  const supply=customerSupply(g,p);if(![1,2].includes(p.customerDemandVersion)||freeze)return supply;
@@ -2303,12 +2358,11 @@ function customerRelationshipPressure(p,key){
  const mix=CUSTOMER_MARKETS[key],values=p.customerRelationships.markets[key];
  return clamp(Object.keys(mix).reduce((n,k)=>n+(values[k]-50)*mix[k]/100,0)*.03,-1.5,1.5);
 }
-const goodwillCreate=createGame;
-createGame=function(o){
- const g=goodwillCreate(o);if(g.customerDemandVersion!==2)return g;
+function initializeCustomerGoodwill(g,o){
+ if(g.customerDemandVersion!==2)return g;
  for(const p of g.players)p.customerRelationships={version:1,lastCycle:0,markets:Object.fromEntries(Object.keys(g.territories).map(k=>[k,{everyday:50,connected:50,reserve:50}]))};
  return g;
-};
+}
 const goodwillPull=depositPull;
 depositPull=function(p,key,t){return goodwillPull(p,key,t)+customerRelationshipPressure(p,key)};
 const goodwillOperate=operate;
@@ -2577,7 +2631,143 @@ const AccountingPrototype=(()=>{
  }
  return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore});
 })();
-root.BWEngine={projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
+// Save repair is engine-owned. Validate the cloned save before legacy defaults.
+// Repair helpers mutate their argument; migrateCampaign gives them a private clone.
+// Browser/storage/transport code stays outside.
+function repairSavedMetadata(g){
+ g.mode=['ai','hotseat','lan','p2p'].includes(g.mode)?g.mode:'hotseat';
+ g.scope=SCOPES[g.scope]?g.scope:'national';
+ g.scenario=SCENARIOS[g.scenario]?g.scenario:'balanced';
+ g.difficulty=['analyst','vp','chairman'].includes(g.difficulty)?g.difficulty:'vp';
+ g.cycle=Number(g.cycle)||1;
+ g.maxCycles=null;
+ g.economy=g.economy&&MACRO_REGIMES[g.economy.key]?g.economy:{key:'steady',...MACRO_REGIMES.steady};
+ g.trend=Array.isArray(g.trend)?g.trend:[];
+ g.opportunities=Array.isArray(g.opportunities)?g.opportunities:[];
+ g.resolution=Array.isArray(g.resolution)?g.resolution:[];
+ g.log=Array.isArray(g.log)?g.log:[];
+ g.rematchVotes=Array.isArray(g.rematchVotes)?g.rematchVotes:[];
+ g.lastPlans=g.lastPlans&&typeof g.lastPlans==='object'?g.lastPlans:{};
+ g.scoreDelta=g.scoreDelta&&typeof g.scoreDelta==='object'?g.scoreDelta:{};
+ g.resolutionId=Number(g.resolutionId)||0;
+ g.gameOver=!!g.gameOver;
+ g.winnerId=g.winnerId||null;
+ if(!g.event||!EVENTS.some(e=>e.key===g.event.key))g.event=EVENTS[0];
+ for(const t of Object.values(g.territories)){if(!Array.isArray(t.shares)||t.shares.length!==2||!t.shares.every(Number.isFinite))t.shares=[50,50]}
+}
+function repairSavedPlayer(g,p,i){
+ p.id=p.id||'legacy-institution-'+i;
+ p.name=String(p.name||(i?'Institution Two':'Institution One'));
+ p.stats={...OPENING_STATS,...p.stats};
+ for(const k of Object.keys(OPENING_STATS))if(!Number.isFinite(p.stats[k]))p.stats[k]=OPENING_STATS[k];
+ p.upgrades={technology:0,training:0,analytics:0,wealth:0,operations:0,...p.upgrades};
+ p.strategy={network:0,digital:0,commercial:0,operations:0,acquisition:0,...(p.strategy||{})};
+ for(const k of Object.keys(STRATEGY_BRANCHES))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));
+ p.boardConcessions=Math.max(0,Math.round(Number(p.boardConcessions)||0));
+ p.capitalRestriction=Math.max(0,Math.round(Number(p.capitalRestriction)||0));
+ p.policies={deposit:'balanced',lending:'balanced',capital:'balanced',...p.policies};
+ if(!DEPOSIT_POLICIES[p.policies.deposit])p.policies.deposit='balanced';
+ if(!LENDING_POLICIES[p.policies.lending])p.policies.lending='balanced';
+ if(!CAPITAL_POLICIES[p.policies.capital])p.policies.capital='balanced';
+ if(!DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';
+ if(!MANDATES[p.mandate])p.mandate=Object.keys(MANDATES)[i];
+ p.achievements=Array.isArray(p.achievements)?p.achievements:[];
+ p.branches=p.branches&&typeof p.branches==='object'?p.branches:{};
+ for(const k of Object.keys(g.territories))p.branches[k]=Number(p.branches[k])||0;
+ p.allocation=p.allocation&&typeof p.allocation==='object'?p.allocation:{service:3,business:2,lending:2,operations:1};
+ p.marketingTurns=Number(p.marketingTurns)||0;
+ p.capability=p.capability&&typeof p.capability==='object'?p.capability:{};
+ for(const key of Object.keys(STRATEGY_BRANCHES)){
+  let spent=Number(p.capability[key]);
+  if(!Number.isFinite(spent)||spent<0){
+   const level=Math.max(0,Math.min(4,Math.round(Number(p.strategy&&p.strategy[key])||0)));
+   spent=level>0?CAPABILITY_TIERS[key][level-1]:0;
+  }
+  p.capability[key]=spent;
+ }
+ delete p.strategy;
+ p.primaryStrategy=leadCapability(p);
+ syncDoctrine(p);
+ p.lastCompetitiveAction=COMPETITIVE_ACTIONS[p.lastCompetitiveAction]?p.lastCompetitiveAction:'none';
+ p.distress=Number(p.distress)||0;
+ p.fundingGap=Number(p.fundingGap)||0;
+ p.capitalRequests=Number(p.capitalRequests)||0;
+ p.payrollSpend=Math.max(0,Number(p.payrollSpend)||0);
+ p.buildSpend=Math.max(0,Number(p.buildSpend)||0);
+ p.hiresTotal=Number(p.hiresTotal)||0;
+ if(!Number.isFinite(p.stats.capital))p.stats.capital=Math.max(200000,Math.round((p.stats.loans+p.stats.deposits*.2)*.11));
+ p.turnEffects=p.turnEffects&&typeof p.turnEffects==='object'?p.turnEffects:{};
+ if(!g.territories[p.focus])p.focus=Object.keys(g.territories)[0];
+ p.projects=Array.isArray(p.projects)?p.projects:(p.project?[p.project]:[]);
+ delete p.project;
+ p.projects=p.projects.filter(x=>x&&PROJECTS[x.key]&&Number.isFinite(x.progress)&&Number.isFinite(x.total)&&x.total>0);
+ normalizeAllocation(p);
+}
+function repairSavedPortfolio(g,p){
+ p.products={retail:'essential',business:'relationship',credit:'mortgage',...(p.products||{})};
+ for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[p.products[line]])p.products[line]=Object.keys(group.options)[0];
+ p.specializations=p.specializations&&typeof p.specializations==='object'?p.specializations:{};
+ for(const[branch,key]of Object.entries(p.specializations))if(!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][key])delete p.specializations[branch];
+ p.facilityMarkets=p.facilityMarkets&&typeof p.facilityMarkets==='object'?p.facilityMarkets:{};
+ for(const market of Object.keys(g.territories)){
+  const expected=Math.max(0,p.branches[market]||0);
+  if(expected===0&&p.facilityMarkets[market]===undefined)continue;
+  p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>['retail','commercial','digital'].includes(x)).slice(0,expected):[];
+  while(p.facilityMarkets[market].length<expected)p.facilityMarkets[market].push('retail');
+ }
+ p.facilities={retail:0,commercial:0,digital:0};
+ for(const models of Object.values(p.facilityMarkets))for(const type of models)p.facilities[type]++;
+ p.projects.forEach(project=>{
+  if(project.specialization){
+   const def=PROJECTS[project.key],branch=def&&def.strategy;
+   if(!branch||!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][project.specialization])delete project.specialization;
+  }
+ });
+}
+function repairSavedCampaign(g){
+ repairSavedMetadata(g);
+ g.players.forEach((p,i)=>repairSavedPlayer(g,p,i));
+ g.version='8.1';
+ g.players.forEach(p=>repairSavedPortfolio(g,p));
+ return g;
+}
+function repairSavedRivalry(g){
+ repairSavedCampaign(g);
+ g.version=g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
+ g.maxCycles=null;
+ g.act=Math.max(0,Math.min(2,Number(g.act)||0));
+ g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];
+ while(g.buyoutPressure.length<2)g.buyoutPressure.push(0);
+ g.consolidationStalemate=Math.max(0,Math.round(Number(g.consolidationStalemate)||0));
+ for(const t of Object.values(g.territories)){
+  t.exitStreak=Array.isArray(t.exitStreak)?t.exitStreak.slice(0,2):[0,0];
+  t.exited=Array.isArray(t.exited)?t.exited.slice(0,2):[false,false];
+  while(t.exitStreak.length<2)t.exitStreak.push(0);
+  while(t.exited.length<2)t.exited.push(false);
+  if(t.exited[0])t.shares=[0,100];
+  else if(t.exited[1])t.shares=[100,0];
+ }
+ return g;
+}
+function migrateCampaign(g){
+ if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
+ if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version))throw Error('Only v6.0 through v8.4 saves are supported.');
+ g=JSON.parse(JSON.stringify(g));
+ // Never repair over invalid accounting, ledger or funding versions.
+ validateLedger(g);
+ const fundingVersion=g.fundingRulesVersion===undefined?1:g.fundingRulesVersion;
+ if(![1,2].includes(fundingVersion)||g.players.some(p=>p.fundingRulesVersion!==undefined&&p.fundingRulesVersion!==fundingVersion))throw Error('Unsupported or inconsistent funding rules version.');
+ if(fundingVersion===2&&g.players.some(p=>!p.stats||!Number.isSafeInteger(p.stats.emergencyDebt)||p.stats.emergencyDebt<0))throw Error('Invalid saved emergency funding debt.');
+ g.fundingRulesVersion=fundingVersion;
+ g.players.forEach(p=>p.fundingRulesVersion=fundingVersion);
+ validatePilot(g);
+ if(g.version==='6.0'){
+  g.trend=[];g.economy={key:'steady',...MACRO_REGIMES.steady};
+  g.players.forEach((p,i)=>{if(!DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';p.achievements=[]});
+ }
+ return ensureSimulation(repairSavedRivalry(g));
+}
+root.BWEngine={migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
 root.BWEngine.operate=operate;
 const publicStateCore=root.BWEngine.publicState;
 root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;return out};
@@ -2605,10 +2795,9 @@ function currentView(){return game?E.publicState(game,seat):view}
 function newDraft(v){draft={contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
 function setWorkspaceTab(tab){const valid=['overview','markets','operations','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab))}
-function repairGame(g){g.mode=['ai','hotseat','lan','p2p'].includes(g.mode)?g.mode:'hotseat';g.scope=E.SCOPES[g.scope]?g.scope:'national';g.scenario=E.SCENARIOS[g.scenario]?g.scenario:'balanced';g.difficulty=['analyst','vp','chairman'].includes(g.difficulty)?g.difficulty:'vp';g.cycle=Number(g.cycle)||1;g.maxCycles=null;g.economy=g.economy&&E.MACRO_REGIMES[g.economy.key]?g.economy:{key:'steady',...E.MACRO_REGIMES.steady};g.trend=Array.isArray(g.trend)?g.trend:[];g.opportunities=Array.isArray(g.opportunities)?g.opportunities:[];g.resolution=Array.isArray(g.resolution)?g.resolution:[];g.log=Array.isArray(g.log)?g.log:[];g.rematchVotes=Array.isArray(g.rematchVotes)?g.rematchVotes:[];g.lastPlans=g.lastPlans&&typeof g.lastPlans==='object'?g.lastPlans:{};g.scoreDelta=g.scoreDelta&&typeof g.scoreDelta==='object'?g.scoreDelta:{};g.resolutionId=Number(g.resolutionId)||0;g.gameOver=!!g.gameOver;g.winnerId=g.winnerId||null;if(!g.event||!E.EVENTS.some(e=>e.key===g.event.key))g.event=E.EVENTS[0];for(const t of Object.values(g.territories)){if(!Array.isArray(t.shares)||t.shares.length!==2||!t.shares.every(Number.isFinite))t.shares=[50,50]}g.players.forEach((p,i)=>{p.id=p.id||'legacy-institution-'+i;p.name=String(p.name||(i?'Institution Two':'Institution One'));p.stats={...E.OPENING_STATS,...p.stats};for(const k of Object.keys(E.OPENING_STATS))if(!Number.isFinite(p.stats[k]))p.stats[k]=E.OPENING_STATS[k];p.upgrades={technology:0,training:0,analytics:0,wealth:0,operations:0,...p.upgrades};p.strategy={network:0,digital:0,commercial:0,operations:0,acquisition:0,...(p.strategy||{})};for(const k of Object.keys(E.STRATEGY_BRANCHES))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));p.boardConcessions=Math.max(0,Math.round(Number(p.boardConcessions)||0));p.capitalRestriction=Math.max(0,Math.round(Number(p.capitalRestriction)||0));p.policies={deposit:'balanced',lending:'balanced',capital:'balanced',...p.policies};if(!E.DEPOSIT_POLICIES[p.policies.deposit])p.policies.deposit='balanced';if(!E.LENDING_POLICIES[p.policies.lending])p.policies.lending='balanced';if(!E.CAPITAL_POLICIES[p.policies.capital])p.policies.capital='balanced';if(!E.DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';if(!E.MANDATES[p.mandate])p.mandate=Object.keys(E.MANDATES)[i];p.achievements=Array.isArray(p.achievements)?p.achievements:[];p.branches=p.branches&&typeof p.branches==='object'?p.branches:{};for(const k of Object.keys(g.territories))p.branches[k]=Number(p.branches[k])||0;p.allocation=p.allocation&&typeof p.allocation==='object'?p.allocation:{service:3,business:2,lending:2,operations:1};p.marketingTurns=Number(p.marketingTurns)||0;p.capability=p.capability&&typeof p.capability==='object'?p.capability:{};for(const key of Object.keys(E.STRATEGY_BRANCHES)){let spent=Number(p.capability[key]);if(!Number.isFinite(spent)||spent<0){const level=Math.max(0,Math.min(4,Math.round(Number(p.strategy&&p.strategy[key])||0)));spent=level>0?E.CAPABILITY_TIERS[key][level-1]:0}p.capability[key]=spent}delete p.strategy;p.primaryStrategy=E.leadCapability(p);E.syncDoctrine(p);p.lastCompetitiveAction=E.COMPETITIVE_ACTIONS[p.lastCompetitiveAction]?p.lastCompetitiveAction:'none';p.distress=Number(p.distress)||0;p.fundingGap=Number(p.fundingGap)||0;p.capitalRequests=Number(p.capitalRequests)||0;p.payrollSpend=Math.max(0,Number(p.payrollSpend)||0);p.buildSpend=Math.max(0,Number(p.buildSpend)||0);p.hiresTotal=Number(p.hiresTotal)||0;if(!Number.isFinite(p.stats.capital))p.stats.capital=Math.max(200000,Math.round((p.stats.loans+p.stats.deposits*.2)*.11));p.turnEffects=p.turnEffects&&typeof p.turnEffects==='object'?p.turnEffects:{};if(!g.territories[p.focus])p.focus=Object.keys(g.territories)[0];p.projects=Array.isArray(p.projects)?p.projects:(p.project?[p.project]:[]);delete p.project;p.projects=p.projects.filter(x=>x&&E.PROJECTS[x.key]&&Number.isFinite(x.progress)&&Number.isFinite(x.total)&&x.total>0);E.normalizeAllocation(p)});return g}
-const repairGameCore=repairGame;repairGame=function(g){const out=repairGameCore(g);out.version='8.1';out.players.forEach(p=>{p.products={retail:'essential',business:'relationship',credit:'mortgage',...(p.products||{})};for(const[line,group]of Object.entries(E.PRODUCT_PORTFOLIOS))if(!group.options[p.products[line]])p.products[line]=Object.keys(group.options)[0];p.specializations=p.specializations&&typeof p.specializations==='object'?p.specializations:{};for(const[branch,key]of Object.entries(p.specializations))if(!E.STRATEGY_SPECIALIZATIONS[branch]||!E.STRATEGY_SPECIALIZATIONS[branch][key])delete p.specializations[branch];p.facilityMarkets=p.facilityMarkets&&typeof p.facilityMarkets==='object'?p.facilityMarkets:{};for(const market of Object.keys(out.territories)){const expected=Math.max(0,p.branches[market]||0);if(expected===0&&p.facilityMarkets[market]===undefined)continue;p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>['retail','commercial','digital'].includes(x)).slice(0,expected):[];while(p.facilityMarkets[market].length<expected)p.facilityMarkets[market].push('retail')}p.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(p.facilityMarkets))for(const type of models)p.facilities[type]++;p.projects.forEach(project=>{if(project.specialization){const def=E.PROJECTS[project.key],branch=def&&def.strategy;if(!branch||!E.STRATEGY_SPECIALIZATIONS[branch]||!E.STRATEGY_SPECIALIZATIONS[branch][project.specialization])delete project.specialization}})});return out};
-function repairOpenEnded(g){repairGame(g);g.version=g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';g.maxCycles=null;g.act=Math.max(0,Math.min(2,Number(g.act)||0));g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];while(g.buyoutPressure.length<2)g.buyoutPressure.push(0);g.consolidationStalemate=Math.max(0,Math.round(Number(g.consolidationStalemate)||0));for(const t of Object.values(g.territories)){t.exitStreak=Array.isArray(t.exitStreak)?t.exitStreak.slice(0,2):[0,0];t.exited=Array.isArray(t.exited)?t.exited.slice(0,2):[false,false];while(t.exitStreak.length<2)t.exitStreak.push(0);while(t.exited.length<2)t.exited.push(false);if(t.exited[0])t.shares=[0,100];else if(t.exited[1])t.shares=[100,0]}return g}
-function migrateGame(g){if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version))throw Error('Only v6.0 through v8.4 saves are supported.');g=JSON.parse(JSON.stringify(g));E.validateLedger(g);const fundingVersion=g.fundingRulesVersion===undefined?1:g.fundingRulesVersion;if(![1,2].includes(fundingVersion)||g.players.some(p=>p.fundingRulesVersion!==undefined&&p.fundingRulesVersion!==fundingVersion))throw Error('Unsupported or inconsistent funding rules version.');if(fundingVersion===2&&g.players.some(p=>!p.stats||!Number.isSafeInteger(p.stats.emergencyDebt)||p.stats.emergencyDebt<0))throw Error('Invalid saved emergency funding debt.');g.fundingRulesVersion=fundingVersion;g.players.forEach(p=>p.fundingRulesVersion=fundingVersion);E.validatePilot(g);const legacy=g.version==='6.0';if(legacy){g.trend=[];g.economy={key:'steady',...E.MACRO_REGIMES.steady};g.players.forEach((p,i)=>{if(!E.DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';p.achievements=[]})}return E.ensureSimulation(repairOpenEnded(g))}
+function repairGame(g){return E.repairSavedCampaign(g)}
+function repairOpenEnded(g){return E.repairSavedRivalry(g)}
+function migrateGame(g){return E.migrateCampaign(g)}
 function saveLocal(){try{if(game&&(['ai','hotseat'].includes(game.mode)||(game.mode==='lan'&&p2pRole==='host')))localStorage.setItem('branchWarsV7Save',JSON.stringify(game))}catch(e){if(!storageWarned){storageWarned=true;toast('This browser blocks local storage, so the campaign cannot autosave. Use EXPORT to keep a copy.')}}updateContinue()}
 function savedGame(){try{return JSON.parse(localStorage.getItem('branchWarsV7Save')||localStorage.getItem('branchWarsV6Save')||'null')}catch{return null}}
 function updateContinue(){let ok=false;try{const g=savedGame();ok=g&&['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version)&&!g.gameOver}catch{}$('#continueBtn').classList.toggle('hidden',!ok)}

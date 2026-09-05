@@ -7,9 +7,9 @@ Updated: 2026-09-05. This is the current implementation plan; the user's separat
 - The active package is `game/`, with repository-root launchers. HTML/server filenames, simulation bytes and save rules are unchanged by this relocation.
 - Twenty committed seeded campaign expectations cover four legacy scopes, both funding generations, regional pilots, services, management, customer needs and goodwill. Hashes cover the full state, chosen plans, public views and each turn, not just an end score.
 - Three preserved half-ready saves exercise the real importer and continued play. Existing reference-engine comparisons remain active.
-- A conservative textual override ceiling detects increases in assignments to declared engine function names. It is a smoke check, not a full JavaScript parser or proof that every form of indirection is forbidden.
+- A conservative textual override ceiling detects increases in assignments to declared engine function names and their exported engine API. Data-member writes are excluded. It is a smoke check, not a full JavaScript parser or proof that every form of indirection is forbidden.
 - One non-interactive developer command runs fast or full validation. Windows full checks retain the LAN suite. GitHub PR checks use pinned actions, read-only contents access and no relay credentials, following [GitHub's secure-use guidance](https://docs.github.com/en/actions/reference/security/secure-use).
-- The foundation recorded existing runtime debt rather than fixing it. Initial counts included 16 `createGame`, 14 `chooseOpenBot`, 9 `operate`, 9 `finishProject` and 4 `validatePlan` reassignments. The project-rule batch below removes the validation layers; the other named stacks remain.
+- The foundation recorded existing runtime debt rather than fixing it. Subsequent batches removed the creation and project-validation stacks; operations, project completion and AI still have multiple layers. The committed ceiling is the machine-checked count; it also includes explicit API assignments, not just wrappers.
 
 ## Shared project rules: implemented
 
@@ -26,10 +26,22 @@ Project choices now explain the shared blocking reason, selected initiatives rem
 
 The targeted rule suite compares 1,296 cases against the preserved pre-refactor engine, including valid-plan acceptance, quotes, restrictions and execution side effects. It also executes real renderer/handler functions in DOM sinks; this is not screenshot or physical multiplayer acceptance. Fixed campaign and half-ready save expectations are unchanged. See [release status](release-status.md) for full-run evidence.
 
+## Campaign creation and migration: implemented
+
+`createGame` is now one explicit coordinator. It validates creation options in the original order, creates the seeded base campaign, then initializes pilot accounting/geography, regional offices and books, credit/funding/products, service contracts, management and customer relationships in order. The fifteen feature initializers sit beside their domain code; there is no mutable registration system or captured chain of prior constructors.
+
+- All sixteen `createGame` reassignments are gone, and its override ceiling is zero.
+- Pilot scope/funding defaults, optional-stage dependencies, validation errors, object field order and ambient/world random consumption are preserved. Unsupported flags still fail even when their feature would otherwise be disabled.
+- `migrateCampaign` lives in the engine. It clones the incoming save, validates ledger/accounting/funding versions, applies existing legacy repairs, then restores or validates the simulation state. Save formats and campaign rule versions are not changed.
+- Repair is separated into metadata, player, portfolio and rivalry helpers. These helpers mutate their argument; only the migration entry point guarantees a private clone. Browser import/continue retain three thin compatibility adapters and no repair override.
+- Tests compare 1,387 creation cases and 41 imports with the frozen pre-refactor implementation. Coverage includes every on/off combination of ten pilot stages, both funding generations, all local/network modes, either seat's sealed plan, v6.0–v8.4 labels, corrupted saves, idempotence and non-mutating rejection.
+
+Moving player repair into the engine exposed a textual guard false positive: `player.stats = ...` is not an override of the accounting `stats` function. The guard now excludes data-member assignments while retaining exported engine API replacements; sensitivity tests cover both. Corresponding false-positive ceilings were lowered, not counted as additional removed wrappers.
+
 ## Next: staged engine cleanup
 
 1. Extend the shared-rule pattern to remaining policy and plan normalization boundaries. Keep project execution's explicit, uncharged cancellation notices and verify each change against preserved behavior.
-2. Flatten one override family per behavior-preserving commit. The first project validation/cost family is complete; continue with creation/migrations, operations, project completion and the remaining AI stack. Lower the committed override ceiling when a layer is removed.
+2. Flatten one override family per behavior-preserving commit. Project rules and creation/migration are now explicit; next trace monthly operations and project completion, then the remaining AI stack. Preserve accounting/ledger timing and lower the committed override ceiling when a layer is removed.
 3. Extract pure simulation/content modules only after the behavioral baseline remains stable. Separate UI, transport and save adapters at explicit boundaries.
 4. Generate a portable single-file release from source only when a reproducible build and freshness check are in place. Do not create empty `src/` or `dist/` folders or duplicate editable sources in anticipation.
 
@@ -58,7 +70,7 @@ git switch -c recovery/direct-p2p archive/2026-09-05/claude/direct-p2p-turn-bug-
 
 The multiplayer-reliability unmatched commit is patch-equivalent to a commit in main; the other divergent histories were retained rather than assumed redundant. Tags can restore every retired branch.
 
-Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. The project-rule batch uses `refactor/shared-project-rules`, stacked on `refactor/stabilization-foundation` while its PR is open. Review and merge the foundation first, then retarget the dependent PR to main; neither is automatically merged. Do not reuse merged branch names for subsequent releases.
+Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. Pending review, the current stack is `refactor/stabilization-foundation` → `refactor/shared-project-rules` → `refactor/campaign-lifecycle`. Review the foundation first, then retarget each dependent PR to main after its prerequisite merges. No PR is automatically merged. Do not reuse merged branch names for subsequent releases.
 
 ## Local folders and compatibility
 

@@ -11,9 +11,15 @@ const file = path.join(__dirname, 'fixtures', 'override-ceilings.json');
 function counts(text) {
   // Conservative source smoke check, not a JavaScript parser. Detect assignments
   // (including arrow replacements) to names declared with function syntax.
+  // Data-member writes such as player.stats are not assignments to the stats
+  // function. Keep counting replacements on the exported engine API.
   const names = [...new Set([...text.matchAll(/\bfunction\s+([\w$]+)\s*\(/g)].map(m => m[1]))].sort();
   return Object.fromEntries(names.map(name => [name,
-    [...text.matchAll(new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*=(?!=|>)', 'g'))].length
+    [...text.matchAll(new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*=(?!=|>)', 'g'))]
+      .filter(match => {
+        const prefix = text.slice(0, match.index).trimEnd();
+        return !prefix.endsWith('.') || /root\.BWEngine\.$/.test(prefix);
+      }).length
   ]).filter(([, count]) => count));
 }
 const current = counts(engine);
@@ -32,7 +38,10 @@ function check(actual) {
 }
 check(current);
 assert.throws(() => check(counts(engine + '\noperate = function () {};')), /override/);
+assert.throws(() => check(counts(engine + '\nroot.BWEngine.operate = function () {};')), /override/);
 assert.throws(() => check(counts(engine + '\nfunction freshRule() {} freshRule = () => 1;')), /override/);
+assert.equal(counts(engine + '\nplayer.operate = function () {};').operate, current.operate,
+  'Member assignments must not masquerade as runtime function overrides');
 for (const script of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)) new vm.Script(script[1]);
 for (const launcher of ['OPEN_BRANCH_WARS.bat', 'OPEN_LAN_GAME.bat']) {
   const wrapper = fs.readFileSync(path.join(root, '..', launcher), 'utf8');

@@ -16,6 +16,7 @@ files.push('tests/behavior-golden.test.js','tests/architecture.test.js','tests/f
 files.push('tests/save-baseline.test.js','tests/launcher-path.test.js','tests/fixtures/save-continuation.json');
 files.push('tests/reference-eol.test.js');
 files.push('tests/project-rules.test.js');
+files.push('tests/campaign-lifecycle.test.js');
 function run(label, command, args) {
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
@@ -36,6 +37,7 @@ report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/ser
 report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
 report.tests.push(run('reference-eol.test.js', process.execPath, ['tests/reference-eol.test.js']));
 report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project-rules.test.js']));
+report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/campaign-lifecycle.test.js']));
 report.tests.push(run('architecture.test.js', process.execPath, ['tests/architecture.test.js']));
 report.tests.push(run('behavior-golden.test.js', process.execPath, ['tests/behavior-golden.test.js']));
 report.tests.push(run('save-baseline.test.js', process.execPath, ['tests/save-baseline.test.js']));
