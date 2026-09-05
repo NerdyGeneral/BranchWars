@@ -78,22 +78,24 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;return Math.round((BASE_CAPACITY+ops*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
 function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
 function hireCost(p,count){let total=0;const staff=p.stats.staff;for(let i=0;i<count;i++)total+=Math.round(HIRE_BASE_COST*(1+(staff+i)/45));return total}
 function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
-function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return n>0?n:0}
+function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return (n>0?n:0)+specialistHireCount(plan)}
 function planBudget(p,plan){
  if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
  const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
- const hires=planHires(plan),recruiting=hires?hireCost(p,hires):0,total=action+projects+research+recruiting;
+ const hires=planHires(plan),recruiting=(hires?hireCost(p,hires):0)+(p.workforce?specialistHirePremium(plan):0);
+ const base=action+projects+research+recruiting,training=p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.workforce){quote.training=training;quote.specialistPayrollAdded=Object.entries(SPECIALIST_ROLES).reduce((n,[k,d])=>n+(Number(plan.specialistHires?.[k])||0)*d.payroll,0)}
  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
  return quote;
 }

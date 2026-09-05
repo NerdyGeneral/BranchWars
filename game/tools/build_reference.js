@@ -128,6 +128,8 @@ sections.TERRITORIES = table(
 );
 
 sections.ROLES = table(['Role', 'Name', 'What it drives'], Object.entries(E.ROLES).map(([k, r]) => [k, r.name, r.desc]));
+sections.SPECIALISTS = table(['Department', 'Specialist', 'Recruiting premium', 'Monthly salary premium', 'Workload effect'],
+  Object.entries(E.SPECIALIST_ROLES).map(([k, r]) => [k, r.name, money(r.premium), '$' + r.payroll.toLocaleString('en-US'), r.effect]));
 
 sections.POLICIES = [
   ['Deposit pricing', E.DEPOSIT_POLICIES],

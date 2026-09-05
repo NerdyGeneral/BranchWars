@@ -14,6 +14,8 @@ function resolveMonthlySteps(g) {
     if (p.retailLifecycle) applyRetailMix(p, plans[i].retailMix || p.retailLifecycle.mix);
     applyServicePolicy(p, plans[i].servicePolicy);
     applyManagementPolicy(p, plans[i].management);
+    applyWorkforcePolicy(p, plans[i].workforcePolicy);
+    if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
     applyDecision(g, p, plans[i].decision);
     const aid = applyCapitalRequest(g, p, !!plans[i].capitalAction);
@@ -41,6 +43,8 @@ function resolveMonthlySteps(g) {
   L.push(...advanceProjects(g));
   g.players.forEach((p) => L.push(...consequences(g, p)));
   g.players.forEach((p, i) => {
+    const trained = settleWorkforceTraining(g, p);
+    if (trained) L.push(trained);
     L.push(...applyInvestments(g, p, plans[i].investments, plans[i].specializations));
     const late = plans[i].specializations || {};
     for (const key of Object.keys(STRATEGY_BRANCHES))
@@ -57,7 +61,7 @@ function resolveMonthlySteps(g) {
       }
     syncPrimaryStrategy(p);
     syncDoctrine(p);
-    const msg = applyHiring(g, p, planHires(plans[i]));
+    const msg = applyHiring(g, p, planHires(plans[i]), plans[i].specialistHires);
     if (msg) L.push(msg);
   });
   L.push(...awardMilestones(g));

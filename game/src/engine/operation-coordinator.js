@@ -12,6 +12,7 @@ function operate(g, p, preview = false) {
       );
     let text;
     try {
+      if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
       // Locked maturities precede promotion repricing; repayment precedes new lending.
       const term = prepareTermFunding(g, p),
         oldDepositWorld = depositWorld;
@@ -59,6 +60,7 @@ function operate(g, p, preview = false) {
       }
     } finally {
       if (intake) delete p._customerIntake;
+      if (p.workforce) { delete p._workforceCosts; delete p._workforceReserved; }
     }
     updateCustomerRelationships(g, p);
     return text;

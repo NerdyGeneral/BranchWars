@@ -1,0 +1,10 @@
+.workspace-tabs:has(#workforceNav:not(.hidden)){grid-template-columns:repeat(7,minmax(0,1fr))}
+.workforce-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.workforce-summary>div,.workforce-card,.workforce-results{border:1px solid #c7d5e3;border-radius:10px;padding:16px;background:#f7fafc;min-width:0}
+.workforce-summary span,.workforce-summary small{display:block;color:#52657b;font-size:.75rem}.workforce-summary b{display:block;margin:7px 0;color:#183c60}
+.workforce-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+.workforce-card h3{margin:16px 0 8px}.workforce-card label{margin-top:12px}.workforce-card select,.workforce-card input{width:100%;min-height:40px;margin-top:6px}.workforce-card .hire-row{gap:14px}
+.workforce-skill{height:9px;background:#dfe7ef;border-radius:6px;overflow:hidden;margin:14px 0}.workforce-skill span{display:block;height:100%;background:var(--bank-me,#2878e0)}
+.workforce-results p{line-height:1.65}#workforcePanel .regional-table th,#workforcePanel .regional-table td{white-space:normal;min-width:95px}#workforcePanel .table-scroll{overflow-x:auto}#workforcePanel button:focus-visible,#workforcePanel select:focus-visible,#workforcePanel input:focus-visible{outline:3px solid #215ea1;outline-offset:3px}
+@media(max-width:1050px){.workspace-tabs:has(#workforceNav:not(.hidden)){grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:720px){.workspace-tabs:has(#workforceNav:not(.hidden)){grid-template-columns:repeat(2,minmax(0,1fr))}.workforce-summary,.workforce-grid{grid-template-columns:1fr}.workforce-summary>div,.workforce-card,.workforce-results{padding:12px}}

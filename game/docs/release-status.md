@@ -2,6 +2,87 @@
 
 Updated: 2026-09-05.
 
+## Specialist workforce — validated N-05 preview
+
+This gameplay slice is on `feat/specialist-workforce`, based on the pending
+explicit-runtime branch. It is not automatically merged into `main`.
+The opt-in **Specialist workforce preview** creates v8.5 campaigns and requires
+the Customer needs preview and its prerequisites. Both multiplayer clients must
+support it; existing campaigns keep their original workforce and save rules.
+
+- Four specialist roles have separate signing/salary premiums and persistent
+  department skill. They are included in total bank headcount, share the six-hire
+  limit, and add capacity only when assigned to their specialty.
+- Recurring department training ceilings buy next-month expertise. Skill starts
+  at 20 and caps at 100; training costs $1K per point per specialist, up to four
+  points monthly. Recruiting dilutes average skill rather than inheriting free
+  expertise. Generalist attrition and specialist talent transfers conserve staff.
+- Training is an operating expense, not an event-multiplied bonus. Affordability
+  is rechecked after production, protecting a configurable cash reserve, current
+  capital requirements, ordinary losses and later hiring/research commitments.
+  Every department pauses together when the combined training bill cannot be
+  funded. Premium salaries remain payable even when specialists are reassigned.
+- A separate Workforce workspace shows staffing, cost breakdowns, skill timing,
+  forecast profit and realized expenses. The shared plan bar separates base pay
+  from specialist premiums. The older service recruiting planner now adds one
+  generalist without double-counting staged specialists.
+
+Candidate SHA-256 (canonical LF output):
+`031103150fd23cba0ac016056e793fdeff4d9d81fe63665dfa664efb70dc888d`.
+[Full Windows regression](../reports/baselines/N-00-2026-09-05T23-01-08-715Z.json):
+**50/50 invocations passed**, with all fingerprinted source/test files unchanged
+and repeated seeded balance output reproduced. Includes Windows LAN, six GitHub
+relay configurations, workforce/save/privacy, fixed campaign/save expectations,
+and architecture/build checks. The final fast gate also passed; the subsequent
+tab-contract correction passed both targeted suites and this full rerun.
+
+The full gate's build/reference freshness checks, regression runner and separate
+previous-rules campaign audit all passed. The rerun executed the latter two
+components in parallel; it did not remove a test. Hosted PR checks remain
+separate from this local evidence.
+
+[Previous-rules campaign audit](../reports/baselines/release-balance-2026-09-05T23-02-20-530Z.json):
+16 expanded-services campaigns / 1,920 turns passed with management/customer
+previews OFF. Every non-source-fingerprint field matches the prior architecture
+audit, and no initiative was skipped or cancelled. This is the separate campaign
+audit required by the full check gate, not a substitute for workforce testing.
+
+The [initial full run](../reports/baselines/N-00-2026-09-05T22-45-11-288Z.json)
+passed 49/50 invocations, with unchanged source fingerprints and reproducible
+seeded balance output. The only failure was the legacy assertion that markup
+must contain exactly six workspace buttons. The updated test expects six core
+tabs plus Workforce; an additional real-renderer test verifies the seventh tab
+is hidden for legacy campaigns and shown for workforce campaigns. Game code and
+fixed golden/save expectations were not changed for this test correction.
+
+[Workforce campaign audit](../reports/baselines/release-balance-2026-09-05T22-48-54-146Z.json):
+16 campaigns / 1,868 turns passed the accounting, cohort, local-book and
+initiative-execution checks. Fifteen campaigns reached month 120; Growth seed 0
+ended in receivership at month 68. No initiatives were skipped or cancelled.
+AI plans staged 439 specialist hires and paid $8.209M in training across the
+sample; 63 bank-months paused training for affordability. There were 432
+competitive actions and 159 service-provider changes, 37 after month 60.
+The largest serialized player view was 681,221 bytes, below the 1 MiB test limit.
+
+The failed bank's final months had one specialist, no elective training or new
+hires, and persistent operating losses followed by regulatory loan sales.
+This is not evidence that training itself caused the failure, nor proof that AI
+recovery is satisfactory. Opening-bank marginal previews also show specialist
+premiums can outweigh immediate earnings, especially at capacity limits:
+expertise must be used to relieve a real workload. Role value and endgame pacing
+remain provisional, not certified equal or enjoyable by these simulations.
+
+An isolated local browser campaign verified setup dependencies, recruiting,
+paid skill growth from 20 to 24, reload/Continue persistence and the payroll
+breakdown. Default, 950px and 500px layouts were inspected; the narrow table
+scrolls inside its panel without page-wide horizontal overflow. No browser
+warnings/errors were captured. This is not physical two-PC or human balance
+acceptance. No existing user campaign or live Repository Link room was changed.
+
+N-05 remains partial: department leaders, facility condition/conversion and
+broader operating budgets remain ahead. Group accounting, subsidiaries, company
+shares, national management and underwriting are not part of this batch.
+
 ## Explicit runtime and modular source — validated delivery
 
 The approved four-step architecture batch is implemented and published in [PR #11](https://github.com/NerdyGeneral/BranchWars/pull/11) on `refactor/explicit-runtime`, following the separate lobby delivery in [PR #10](https://github.com/NerdyGeneral/BranchWars/pull/10). Monthly operations and project settlement now have explicit processing steps; AI preparation, save validators and portfolio normalization no longer replace previous implementations. This removes 53 runtime layers and folds one redundant API assignment into the initial export. Save versions, mechanics and fixed golden/reference fixtures are unchanged. The PRs remain open, not merged into `main`.

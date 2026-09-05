@@ -39,6 +39,21 @@ Executive Command v8.1 · Long-form / multiplayer edition
    operating forecasts and can stage an allocation or a next-cycle recruit.
    Existing goodwill campaigns gain this tool without changing save rules.
    See archive/service-workforce-status.md and roadmap.md for current scope.
+   Specialist workforce preview adds Retail advisers, Relationship bankers,
+   Credit analysts and Risk specialists in a separate Workforce workspace.
+   This option enables its prerequisites and creates a v8.5 campaign; both
+   computers must update. Existing saves are not silently upgraded.
+   Specialists are part of bank headcount. They add capacity only when assigned
+   to their own department; their premium salary is paid even when reassigned.
+   Generalists and specialists share a limit of six recruits per month.
+   Recruitment pays the combined size-adjusted signing cost plus specialist
+   premiums. New bankers begin work next month, at skill 20.
+   Give each department a recurring training ceiling and protect a bank-wide
+   cash reserve. Training costs $1K per skill point per existing specialist,
+   up to four points a month and skill 100. Skill applies the following month.
+   All training pauses together when cash/capital protection cannot fund the
+   combined bill; unused ceilings are not charged. Compare the forecast and
+   last month's actual costs before expanding a team.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
@@ -66,12 +81,13 @@ career milestones, and market-share movement all resolve simultaneously.
 
 ## COMMAND CENTER WORKSPACES
 
-The campaign is divided into six persistent workspaces instead of one continuous
-planning page:
+The campaign is divided into six persistent workspaces, plus Workforce in new
+specialist campaigns, instead of one continuous planning page:
 
   OVERVIEW      enterprise trend, balance sheet, character, and capital signals
   MARKETS       isometric city, district focus, opportunities, renewal contracts
   OPERATIONS    executive call, staffing, policies, products, operating initiatives
+  WORKFORCE     specialist recruiting, skill, training ceilings and premium payroll
   COMPETITION   concealed attacks, counters, focus, and committed spend
   STRATEGY      capability funding and operating specializations
   INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire

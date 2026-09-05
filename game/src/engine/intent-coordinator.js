@@ -15,7 +15,8 @@ function chooseOpenBot(g, index) {
   plan = planServiceReserve(g, index, plan);
   plan = planInstitutionManagement(g, index, plan);
   if (g.managementVersion === 2) plan = renewalPricingPlan(g, g.players[index], plan).plan;
-  return customerMixPlan(g, g.players[index], plan);
+  plan = customerMixPlan(g, g.players[index], plan);
+  return planSpecialistWorkforce(g, index, plan);
 }
 function validatePilot(g) {
   validateAccountingSave(g);
@@ -33,6 +34,7 @@ function validatePilot(g) {
   validateRelationshipSave(g);
   validateCustomerSave(g);
   validateGoodwillSave(g);
+  validateWorkforceSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
@@ -40,4 +42,5 @@ function validatePortfolioPlan(p, plan) {
   validateDeploymentPolicy(p, plan);
   normalizeServicePolicy(p, plan);
   normalizeManagementPolicy(p, plan);
+  normalizeWorkforcePlan(p, plan);
 }
