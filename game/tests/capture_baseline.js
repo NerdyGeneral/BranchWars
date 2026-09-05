@@ -12,6 +12,8 @@ const files = ['BRANCH_WARS.html', 'BRANCH_WARS_LAN_SERVER.ps1', 'tests/engine.t
 files.push('tests/customer_needs.test.js','reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html','tests/customer_relationships.test.js','reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html');
 files.push('tests/service_workforce.test.js','reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html');
 files.push('tests/docs.test.js','tools/build_reference.js','tools/reference-template.md','docs/game-reference.md');
+files.push('tests/behavior-golden.test.js','tests/architecture.test.js','tests/fixtures/behavior-golden.json','tests/fixtures/override-ceilings.json','tests/fixtures/legacy-half-ready.json','tests/fixtures/pilot-half-ready.json','tests/fixtures/goodwill-half-ready.json','tools/check.js');
+files.push('tests/save-baseline.test.js','tests/launcher-path.test.js','tests/fixtures/save-continuation.json');
 function run(label, command, args) {
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
@@ -30,6 +32,10 @@ for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activiti
 }
 report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/service_workforce.test.js']));
 report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
+report.tests.push(run('architecture.test.js', process.execPath, ['tests/architecture.test.js']));
+report.tests.push(run('behavior-golden.test.js', process.execPath, ['tests/behavior-golden.test.js']));
+report.tests.push(run('save-baseline.test.js', process.execPath, ['tests/save-baseline.test.js']));
+report.tests.push(run('launcher-path.test.js', process.execPath, ['tests/launcher-path.test.js']));
 report.tests.push(run('customer_needs.test.js', process.execPath, ['tests/customer_needs.test.js']));
 report.tests.push(run('Customer needs GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--customer-needs']));
 report.tests.push(run('customer_relationships.test.js', process.execPath, ['tests/customer_relationships.test.js']));

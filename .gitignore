@@ -1,0 +1,8 @@
+# Generated local runs are not automatically release evidence.
+# Existing committed reports remain tracked. Publish chosen new evidence with git add -f.
+/game/reports/baselines/*.json
+/game/reports/local/
+# Local diagnostics and editor files, never source or save fixtures.
+*.log
+.DS_Store
+Thumbs.db

@@ -22,6 +22,8 @@ The v6 crosswalk in the screenshot maps old packages into the newer plan; it is 
 
 ## Next implementation order
 
+First complete the [architecture stabilization sequence](architecture.md): behavior/save guards and repository cleanup, shared plan rules, then incremental override flattening. The first foundation batch does not advance a gameplay package or complete N-00–N-14.
+
 1. N-05: versioned specialist roles and recurring training budgets. Skills must take time, cost real operating funds and affect a specific workload—not every business at once. Preserve existing saves and sealed plans.
 2. N-04/N-06: conserved segment-owned books and delayed servicing/credit problems, so retention and cross-selling have real owners and costs.
 3. N-07/N-08: broader product deployment and advertising funnels; improve AI cash-reserve/retry behavior and playtest recovery before adding map content.

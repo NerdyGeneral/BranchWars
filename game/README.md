@@ -21,4 +21,4 @@ The deeper two-region banking systems are opt-in campaign previews. Existing sav
 
 Run `RUN_TESTS.bat` for the standard checks. Developer commands and the complete regression runner are documented in [tools](tools/README.md).
 
-New docs use lowercase-kebab-case; `README.md` is the entry-point exception. Stable game, launcher, server and test filenames are preserved for compatibility. Do not rename the HTML or versioned package folder without also updating launchers, server routes and tests.
+New docs use lowercase-kebab-case; `README.md` is the entry-point exception. Stable game, launcher, server and test filenames are preserved for compatibility. The package is now `game/`; root launchers provide the main entry points. See the [architecture plan](docs/architecture.md) before structural work.
