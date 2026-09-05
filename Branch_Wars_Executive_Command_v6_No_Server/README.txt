@@ -9,7 +9,10 @@ QUICK START
 3. For an intranet room, the host double-clicks OPEN_LAN_GAME.bat.
 4. Friends on the same local network open the yellow address shown in the host's
    server window. Both players select INTRANET ROOM and use the room code.
-5. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
+5. To use the new banking systems, check Try Regional Rivalry pilot before
+   starting or hosting. This currently uses two regions and six markets.
+   Existing saves retain their rules. Both multiplayer clients need this build.
+6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
 HOW A PLANNING CYCLE WORKS
@@ -21,9 +24,11 @@ The market is paused while both institutions prepare. You may:
 - Change persistent deposit pricing, lending standards, and capital strategy
 - Set the retail, business-banking, and credit products the bank will sell
 - Select one focus market
-- Prioritize one optional live opportunity
+- Prioritize one optional live opportunity (or a renewable service agreement
+  in new pilots; these share one pursuit slot)
 - Choose one concealed competitive attack, countermeasure, or Hold Position
-- Begin one optional multi-cycle roadmap investment or operating initiative
+- Fund capabilities incrementally and run multiple operating initiatives within
+  available cash, capital, and Operations execution capacity
 - Request emergency board capital when the institution is in genuine distress
 - Answer the current executive call
 
@@ -38,10 +43,10 @@ The campaign is divided into six persistent workspaces instead of one continuous
 planning page:
 
   OVERVIEW      enterprise trend, balance sheet, character, and capital signals
-  MARKETS       isometric city, district focus, and opportunity pipeline
-  OPERATIONS    executive call, staffing, policies, and product portfolios
+  MARKETS       isometric city, district focus, opportunities, renewal contracts
+  OPERATIONS    executive call, staffing, policies, products, operating initiatives
   COMPETITION   concealed attacks, counters, focus, and committed spend
-  STRATEGY      research tree, active initiatives, and emergency board capital
+  STRATEGY      capability funding and operating specializations
   INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire
 
 The Ready bar remains available above every workspace. A player can build the

@@ -1,0 +1,42 @@
+'use strict';
+
+// N-00: read-only game inspection and reproducible regression evidence.
+// Writes a new timestamped report only; never modifies the game or prior reports.
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const { spawnSync } = require('node:child_process');
+const root = path.resolve(__dirname, '..');
+const hash = file => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
+const files = ['BRANCH_WARS.html', 'BRANCH_WARS_LAN_SERVER.ps1', 'tests/engine.test.js', 'tests/accounting.test.js', 'tests/accounting_activities.test.js', 'tests/accounting_persistence.test.js', 'tests/bank_identity.test.js', 'tests/regional_pilot.test.js', 'tests/regional_operations.test.js', 'tests/market_economy.test.js', 'tests/credit_lifecycle.test.js', 'tests/funding_covenants.test.js', 'tests/deposit_products.test.js', 'tests/term_funding.test.js', 'tests/retail_lifecycle.test.js', 'tests/product_deployment.test.js', 'tests/service_contracts.test.js', 'tests/funding.test.js', 'tests/determinism.test.js', 'tests/ledger.test.js', 'tests/save_integrity.test.js', 'tests/transport.test.js', 'tests/github_resilience.test.js', 'tests/balance_audit.js', 'tests/lan_server.test.ps1', 'tests/capture_baseline.js'];
+function run(label, command, args) {
+  process.stdout.write(`Running ${label}...\n`);
+  const start = Date.now();
+  const r = spawnSync(command, args, { cwd: root, encoding: 'utf8', windowsHide: true, timeout: 600000, maxBuffer: 8 * 1024 * 1024 });
+  return { label, command: [command, ...args], exitCode: r.status, signal: r.signal, error: r.error ? r.error.message : null, elapsedMs: Date.now() - start, stdout: r.stdout || '', stderr: r.stderr || '' };
+}
+const report = {
+  package: 'N-00', createdAt: new Date().toISOString(), node: process.version, platform: process.platform,
+  filesBefore: Object.fromEntries(files.map(f => [f, hash(f)])),
+  head: run('git HEAD', 'git', ['rev-parse', 'HEAD']),
+  statusBefore: run('git status', 'git', ['status', '--short']),
+  diffStat: run('git diff stat', 'git', ['diff', '--stat']), tests: []
+};
+for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activities.test.js', 'accounting_persistence.test.js', 'bank_identity.test.js', 'regional_pilot.test.js', 'regional_operations.test.js', 'market_economy.test.js', 'credit_lifecycle.test.js', 'funding_covenants.test.js', 'deposit_products.test.js', 'term_funding.test.js', 'retail_lifecycle.test.js', 'product_deployment.test.js', 'service_contracts.test.js', 'funding.test.js', 'determinism.test.js', 'ledger.test.js', 'save_integrity.test.js', 'transport.test.js', 'github_resilience.test.js', 'balance_audit.js', 'balance_audit.js']) {
+  report.tests.push(run(file, process.execPath, [path.join('tests', file)]));
+}
+report.tests.push(run('legacy funding balance audit', process.execPath, ['tests/balance_audit.js', '--legacy-funding']));
+if (process.platform === 'win32') report.tests.push(run('Windows LAN', 'powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', 'tests/lan_server.test.ps1']));
+else report.lanNotRun = 'Windows acceptance suite requires Windows; not a pass.';
+report.filesAfter = Object.fromEntries(files.map(f => [f, hash(f)]));
+report.sourceUnchanged = JSON.stringify(report.filesBefore) === JSON.stringify(report.filesAfter);
+const audits = report.tests.filter(t => t.label === 'balance_audit.js');
+report.balanceOutputReproduced = audits.every(t => t.exitCode === 0) && audits[0].stdout === audits[1].stdout;
+report.passed = report.tests.every(t => t.exitCode === 0 && !t.error) && report.sourceUnchanged && report.balanceOutputReproduced && !report.lanNotRun;
+report.limitations = ['Passing regression suites does not certify accounting correctness or strategic balance.', 'Repeated seeded harness output does not prove saved-game RNG/replay determinism.', 'No browser or physical two-computer acceptance was performed by this runner.'];
+const dir = path.join(root, 'reports', 'baselines');
+fs.mkdirSync(dir, { recursive: true });
+const target = path.join(dir, `N-00-${report.createdAt.replace(/[:.]/g, '-')}.json`);
+fs.writeFileSync(target, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+console.log(JSON.stringify({ passed: report.passed, sourceUnchanged: report.sourceUnchanged, balanceOutputReproduced: report.balanceOutputReproduced, report: target, tests: report.tests.map(t => ({ label: t.label, exitCode: t.exitCode, stdout: t.stdout, stderr: t.stderr })) }, null, 2));
+process.exitCode = report.passed ? 0 : 1;
