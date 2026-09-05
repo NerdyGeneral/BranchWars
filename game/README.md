@@ -21,4 +21,6 @@ The deeper two-region banking systems are opt-in campaign previews. Existing sav
 
 Run `RUN_TESTS.bat` for the standard checks. Developer commands and the complete regression runner are documented in [tools](tools/README.md).
 
+Developers edit `src/` and run `node tools/build_game.js` from this folder. The generated `BRANCH_WARS.html` remains the portable game; players do not need the source files or Node. Source/output freshness is enforced by the checks.
+
 New docs use lowercase-kebab-case; `README.md` is the entry-point exception. Stable game, launcher, server and test filenames are preserved for compatibility. The package is now `game/`; root launchers provide the main entry points. See the [architecture plan](docs/architecture.md) before structural work.

@@ -2,6 +2,18 @@
 
 Updated: 2026-09-05.
 
+## Explicit runtime and modular source — current candidate
+
+The approved four-step architecture batch is implemented on `refactor/explicit-runtime`, following the separate lobby delivery in [PR #10](https://github.com/NerdyGeneral/BranchWars/pull/10). Monthly operations and project settlement now have explicit processing steps; AI preparation, save validators and portfolio normalization no longer replace previous implementations. This removes 53 runtime layers and folds one redundant API assignment into the initial export. Save versions, mechanics and fixed golden/reference fixtures are unchanged.
+
+Editable code lives in `src/`, grouped into engine/content, UI/styles, network and persistence modules. The dependency-free builder generates the same standalone `BRANCH_WARS.html`; both test gates reject stale output. This is an ordered source-module architecture with shared private scopes, not full ES-module isolation. Other engine feature adapters and client/CSS coupling remain; see [architecture](architecture.md).
+
+Candidate SHA-256 (canonical LF output): `87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac`.
+
+Fast checks passed, including 20 fixed campaigns / 790 turns, three preserved save continuations, creation/migration/project-rule comparisons, transport/lobby, build reproducibility and the new runtime suite. That suite compares 192 operations, 864 completions, 64 fault/recovery pairs, 64 AI preparations, 160 policy normalizations and 416 damaged-save validations against the frozen implementation. Full Windows regression and the separate long campaign audit are running; their results are not yet claimed here.
+
+This is a behavior-preserving refactor, not a balance redesign, UI redesign or national-blueprint completion. There is no fresh physical two-PC acceptance in this batch. The source extraction preserved client/markup/style bytes, and the local two-tab lobby evidence below applies to the unchanged client. Hosted lifecycle checks have passed; multiplayer hosted checks remain in progress as of this entry.
+
 ## Multiplayer patch — separate delivery branch
 
 Patch source SHA-256: `245a1ee3c527c7718072eaaf8301f98382238065be04325c0cd5b498c8e3bced`; LF-normalized: `0155cf7b9610bc0b4000c272b798d8cd783096fdd849a23f62642f9edecacb10`.
@@ -56,7 +68,7 @@ The reports below cover the previous source hash `ff15fce9f8e4af3ebb6024c0b4d984
 - [Same-source long audit](../reports/baselines/release-balance-2026-09-05T13-48-56-199Z.json): 16 campaigns / 2,880 turns; accounts reconciled and all campaigns remained active. Four cash-change cancellations were explicit and uncharged.
 - [Workforce batch details](archive/service-workforce-status.md): browser layout, draft actions and save continuation checks, plus scope limits.
 
-The architecture foundation protects incremental refactoring through committed expectations, preserved save fixtures, an override-debt guard and automated PR checks. Monthly operations, project completion, remaining policy validators and most AI layers still remain; this is not completion of the engine cleanup.
+The architecture foundation protects incremental refactoring through committed expectations, preserved save fixtures, an override-debt guard and automated PR checks. The current candidate completes the selected monthly/project/AI/validation cleanup, not every engine feature adapter or shared context.
 
 ## GitHub delivery
 
