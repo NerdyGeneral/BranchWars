@@ -75,3 +75,42 @@ for (const [index, setting] of options.entries()) {
   }
 }
 console.log(`Explicit runtime stages passed: ${operations} operations, ${projects} completions, ${faults} fault/recovery pairs against the frozen implementation.`);
+
+let intents = 0, policies = 0, saves = 0;
+for (const [index, setting] of options.entries()) {
+  const game = old.E.createGame({seed: 900 + index, created: 1, mode: 'hotseat', ...setting});
+  for (const seat of [0, 1]) for (const stress of [false, true]) {
+    const g = copy(game);
+    if (stress) {g.players[seat].stats.lastProfit = -250000; g.players[seat].stats.emergencyDebt = 2000000;}
+    compare(g, ({E}, state) => E.chooseBot(state, seat), 'AI preparation ' + index + '/' + seat + '/' + stress);
+    intents++;
+  }
+  const plan = copy(old.E.chooseBot(copy(game), 0));
+  for (const mutate of [
+    p => {}, p => {delete p.products;}, p => {p.products = {retail: 'invalid'};},
+    p => {p.retailMix = {essential: -1};}, p => {p.termPolicy = {offer: 'invalid'};},
+    p => {p.servicePolicy = {staff: -1};}, p => {p.management = {research: {budget: -1}};},
+    p => {p.products = null; p.specializations = null;},
+    p => {delete p.retailMix; delete p.termPolicy; delete p.servicePolicy; delete p.management;},
+    p => {p.retailMix = {}; p.termPolicy = {}; p.servicePolicy = {}; p.management = {};}
+  ]) {
+    const p = copy(plan); mutate(p);
+    compare(game, ({hooks}, g) => {
+      const input = copy(p), result = outcome(() => hooks.validatePortfolioPlan(g.players[0], input));
+      return {result, input};
+    }, 'Policy normalization ' + index);
+    policies++;
+  }
+  // Independent feature validators must all run even when a preceding optional
+  // feature is absent. Error precedence and partial normalization are contractual.
+  const flags = ['campaignRulesVersion', 'regionalEconomyVersion', 'marketEconomyVersion',
+    'creditLifecycleVersion', 'fundingCovenantVersion', 'depositProductsVersion',
+    'termFundingVersion', 'retailLifecycleVersion', 'productDeploymentVersion',
+    'contractRulesVersion', 'serviceExpansionVersion', 'managementVersion', 'customerDemandVersion'];
+  for (const key of flags) for (const bad of [undefined, 99]) {
+    const g = copy(game); if (bad === undefined) delete g[key]; else g[key] = bad;
+    compare(g, ({hooks}, state) => hooks.validatePilot(state), 'Save validation ' + index + '/' + key + '/' + bad);
+    saves++;
+  }
+}
+console.log(`Policy/AI stages passed: ${intents} AI preparations, ${policies} policy normalizations and ${saves} save-validation comparisons; error order and state/RNG effects preserved.`);
