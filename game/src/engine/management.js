@@ -14,7 +14,7 @@ function clientBidAdjustment(p,c){
  if(f.priority==='price')return SERVICE_PRICING[p.serviceDesk.policy.pricing[c.kind]].power;
  if(f.priority==='controls')return Math.min(2,strategyLevel(p,'operations'));
  const load=serviceLoad(p),demand=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0)+SERVICE_TYPES[c.kind].load;
- return load.staff*2>=demand?2:0;
+ return (load.staff+specialistBusinessBonus(p,true))*2>=demand?2:0;
 }
 function initializeManagement(g,o){
  if(![1,2].includes(o.managementVersion))return g;

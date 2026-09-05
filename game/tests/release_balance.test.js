@@ -4,23 +4,34 @@ const file=path.join(__dirname,'../BRANCH_WARS.html'),source=fs.readFileSync(fil
 vm.runInNewContext(source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
 const E=ctx.BWEngine,hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const serviceExpansionVersion=process.argv.includes('--previous-services')?0:1;
-const customerDemandVersion=process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
+const workforceVersion=process.argv.includes('--workforce')?1:0;
+const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
 const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
 const numberArg=(key,fallback)=>{const i=process.argv.indexOf(key),n=i<0?fallback:Number(process.argv[i+1]);assert(Number.isSafeInteger(n)&&n>=0,'Invalid '+key);return n};
 const seedStart=numberArg('--seed-start',0),seedCount=numberArg('--seeds',4),turnLimit=numberArg('--turns',120);
 const scenarios=Object.keys(E.SCENARIOS),results=[],activity=[],skipped=[],cancelled=[];let turns=0,maxViewBytes=0;
 for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;seed++){
- const g=E.createGame({customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
+ const g=E.createGame({workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
  const actions={scenario,seed,providerChanges:0,lateProviderChanges:0,initiatives:0,competitiveActions:0};
+ if(workforceVersion)Object.assign(actions,{stagedSpecialists:0,trainingSpend:0,trainingPaused:0,maxSpecialists:0,maxSkill:0,maxPremiumPayroll:0});
  for(let month=0;month<turnLimit&&!g.gameOver;month++){
   const plans=[E.chooseBot(g,0),E.chooseBot(g,1)],cycle=g.cycle;
   const owners=g.serviceAgreements.map(c=>c.owner);
+  if(workforceVersion)actions.stagedSpecialists+=plans.reduce((n,p)=>n+E.specialistHireCount(p),0);
   actions.initiatives+=plans.reduce((n,p)=>n+E.planInitiatives(p).length,0);actions.competitiveActions+=plans.filter(p=>p.competitiveAction!=='none').length;
   E.submit(g,0,plans[0]);E.submit(g,1,plans[1]);turns++;
   const changes=g.serviceAgreements.filter((c,i)=>c.owner!==owners[i]).length;actions.providerChanges+=changes;if(month>=60)actions.lateProviderChanges+=changes;
   E.validatePilot(g);E.validateLedger(g);
   for(let i=0;i<2;i++){
    const p=g.players[i],a=p.accounting.accounts;E.AccountingPrototype.check(p.accounting);
+   if(workforceVersion){
+    const rows=Object.values(p.workforce.departments);
+    actions.trainingSpend+=p.operatingReport.workforceTraining;
+    actions.trainingPaused+=p.operatingReport.workforceTrainingPaused;
+    actions.maxSpecialists=Math.max(actions.maxSpecialists,rows.reduce((n,r)=>n+r.count,0));
+    actions.maxSkill=Math.max(actions.maxSkill,...rows.map(r=>r.skill));
+    actions.maxPremiumPayroll=Math.max(actions.maxPremiumPayroll,p.operatingReport.specialistPayroll);
+   }
    for(const key of ['cash','deposits','loans','capital','emergencyDebt'])assert.equal(p.stats[key],a[key==='capital'?'equity':key]);
    assert.equal(p.depositBook.cohorts.reduce((n,c)=>n+c.principal,0),a.deposits);
    assert.equal(p.creditBook.cohorts.reduce((n,c)=>n+c.principal,0),a.loans);
@@ -38,7 +49,7 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
  activity.push(actions);
 }
 assert.equal(hash(source),hash(fs.readFileSync(file,'utf8')));
-const report={passed:skipped.length===0,sourceSha256:hash(source),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
+const report={passed:skipped.length===0,sourceSha256:hash(source),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
 if(process.argv.includes('--report')){
  const dir=path.join(__dirname,'../reports/baselines');fs.mkdirSync(dir,{recursive:true});
  fs.writeFileSync(path.join(dir,'release-balance-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'});

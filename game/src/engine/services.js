@@ -21,7 +21,7 @@ function validateServicePolicy(p,policy,allocation=p.allocation){
 function applyServicePolicy(p,policy){if(p.serviceDesk){const next=policy||{...p.serviceDesk.policy,staff:Math.min(p.serviceDesk.policy.staff,p.allocation.business)};validateServicePolicy(p,next);p.serviceDesk.policy=JSON.parse(JSON.stringify(next))}}
 function serviceLoad(p){
  if(!p.serviceDesk)return null;
- const d=p.serviceDesk,staff=Math.min(p.allocation.business,d.policy.staff),capacity=staff*2+d.policy.outsourcing;
+ const d=p.serviceDesk,staff=Math.min(p.allocation.business,d.policy.staff),capacity=(staff+specialistBusinessBonus(p,true))*2+d.policy.outsourcing;
  let free=capacity,fees=0,direct=0;
  const rows=[...d.contracts].sort((a,b)=>a.due-b.due||a.id.localeCompare(b.id)).map(c=>{
   const type=SERVICE_TYPES[c.kind],served=free>=type.load;if(served)free-=type.load;
@@ -57,7 +57,7 @@ const servicePowerV1=contractPower;
 contractPower=function(g,p,c){
  if(!p.serviceDesk)return servicePowerV1(g,p,c);
  const pricing=SERVICE_PRICING[p.serviceDesk.policy.pricing[c.kind]],load=serviceLoad(p);
- return 5+commercialSalesStaff(p)*1.5+load.staff+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+pricing.power+(c.owner===p.id?(load.served===load.count?2:-3):0)+(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?2:0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
+ return 5+(commercialSalesStaff(p)+specialistBusinessBonus(p))*1.5+load.staff+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+pricing.power+(c.owner===p.id?(load.served===load.count?2:-3):0)+(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?2:0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
 };
 const serviceReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){serviceReport(p,g,r);if(!p.serviceDesk)return;const s=serviceLoad(p);Object.assign(r,{serviceCapacity:s.capacity,serviceUsed:s.used,serviceStaff:s.staff,serviceOutsourcing:s.outsourced,servicePlatform:s.platform,serviceDirect:s.direct,commercialSalesStaff:s.sales})};

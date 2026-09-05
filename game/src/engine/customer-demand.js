@@ -80,7 +80,7 @@ function customerMixPlan(g,p,input){
 
 function validateCustomerSave(g){
  if(g.customerDemandVersion===undefined){if(g.players.some(p=>p.customerDemandVersion!==undefined||p._customerIntake!==undefined))throw Error('Unversioned customer demand');return g}
- if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
+ if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
  for(const p of g.players){
   if(p.customerDemandVersion!==g.customerDemandVersion||p._customerIntake!==undefined)throw Error('Invalid customer demand state');
   const report=p.operatingReport;

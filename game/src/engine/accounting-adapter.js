@@ -54,7 +54,7 @@ function postMonthlyOperations(g,p,preview=false){
   const terms=creditTerms(p,g),oldInterest=r.loanIncome,oldLoss=r.chargeoff,total=p.stats.loans+originations;
   r.loanIncome=p.creditBook.cohorts.reduce((n,c)=>n+c.principal*c.rate/1000000,0)+originations*terms.rate/1000000;
   const weightedRisk=p.creditBook.cohorts.reduce((n,c)=>n+c.principal*c.risk/10000,0)+originations*terms.risk/10000;
-  const ops=strategyLevel(p,'operations'),guard=Math.max(.28,1-(p.allocation.operations+p.upgrades.training+p.upgrades.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1);
+  const ops=strategyLevel(p,'operations'),guard=Math.max(.28,1-(workforceAllocation(p).operations+p.upgrades.training+p.upgrades.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1);
   r.chargeoff=Math.min(total,Math.round(weightedRisk*.0025*g.economy.credit*guard*(p.turnEffects.credit||1)*(productOption(p,'business').risk||1)*(hasSpecialization(p,'commercial','specializedCredit')?1.08:1)));
   const change=(r.loanIncome-oldInterest)*(p.turnEffects.profit||1)+oldLoss-r.chargeoff;
   r.eventAdjustment+=(r.loanIncome-oldInterest)*((p.turnEffects.profit||1)-1);
@@ -64,7 +64,7 @@ function postMonthlyOperations(g,p,preview=false){
  accountingSource='operate';
  try{
   delta(p,'deposits',inflow);const beforeRunoff=p.stats.deposits;delta(p,'deposits',-r.depositRunoff);if(p.termFunding){r.depositRunoff=beforeRunoff-p.stats.deposits;r.depositGrowth=inflow-r.depositRunoff;calculation.stats.depositRunoff=r.depositRunoff}delta(p,'loans',originations);
-  adjustDepositReport(p,g,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
+  adjustDepositReport(p,g,r);settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
   const income=Math.round(r.depositIncome+r.loanIncome+r.commercialIncome+r.otherIncome),expense=Math.round(r.fundingCost+r.expense),event=Math.round(r.eventAdjustment);
   const rounding=r.profit-(income-expense+event-Math.round(r.chargeoff));
   if(Math.abs(rounding)>2)throw Error('Operating report does not reconcile');

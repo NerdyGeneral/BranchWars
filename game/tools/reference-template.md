@@ -69,6 +69,8 @@ staff allocation covering every banker, and an answer to any executive call.
 | `opportunity` | One contested deal to pursue. |
 | `newProjects` | Initiatives to start, limited by execution capacity and cash. |
 | `hires` | Bankers to recruit this cycle. |
+| `specialistHires` | Workforce preview: additional hires by specialty. Generalists and specialists together may not exceed six. |
+| `workforcePolicy` | Workforce preview: persistent department training ceilings and protected cash reserve. |
 | `investments` | Money into capability lanes, capped per lane per cycle. |
 | `specializations` | Operating model per capability lane, permanent once set. |
 | `capitalAction` | Emergency board capital request. |
@@ -99,7 +101,7 @@ exactly as `resolveCycle` runs it.
 13. **Franchise dividends** — income from absorbed franchises.
 14. **Advance initiatives** — work in flight progresses, or stalls if capacity was withdrawn.
 15. **Consequences** — outages, cyber incidents, compliance and morale effects.
-16. **Capability investment** — money lands, tiers unlock, operating models are adopted, character is re-read, then hiring.
+16. **Workforce development, capability investment and hiring** — paid specialist training matures, capability money lands, and new bankers arrive. Their benefits apply next month.
 17. **Milestones and act change**.
 18. **Ending check** — receivership, domination or buyout.
 
@@ -160,6 +162,30 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 **Recruiting** — cost rises with headcount, and hiring several at once dilutes morale.
 
 <!--{{SRC_hireCost}}-->
+
+**Specialist workforce preview (N-05, save v8.5)** — optional for new customer
+relationships campaigns; older campaigns keep their existing workforce rules.
+Specialists are included in total headcount and share the six-recruit monthly
+limit with generalists. Recruitment pays the normal combined-headcount fee plus
+the premiums below. New recruits arrive after operations, at skill 20.
+
+<!--{{SPECIALISTS}}-->
+
+Only qualified staff assigned to their specialty add effective capacity:
+`min(qualified, assigned) × (0.10 + 0.003 × skill)`. Business expertise is split
+between reserved service delivery and sales, never counted twice. Salaries add
+the listed premium to normal base pay; efficiency discounts do not reduce
+specialist premiums.
+
+Each department has a recurring training ceiling. A whole skill point costs
+$1,000 per existing specialist; at most four points per month, up to skill 100.
+Paid training improves skills for the following month, before new recruits
+dilute the department average. A bank-wide cash reserve and capital limit protect
+ordinary operating losses and later recruiting/research commitments: when the
+combined training bill is unaffordable, all departments pause together.
+Training is an operating expense, not a second fee or an event-multiplied benefit.
+The Workforce tab shows forecast spend, capacity and realized costs; events,
+project completions and rival actions can still change the final result.
 
 ---
 

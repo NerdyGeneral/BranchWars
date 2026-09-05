@@ -1253,7 +1253,8 @@ assert(html.includes('function renderProducts'));
 assert(html.includes('data-specialization-branch'));
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
-assert.equal((html.match(/data-workspace-tab=/g) || []).length, 6, 'command center has six bounded workspaces');
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 7, 'command center has six core workspaces plus the optional workforce workspace');
+assert(html.includes('data-workspace-tab="workforce"'), 'the optional workforce workspace has its own navigation target');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');
 

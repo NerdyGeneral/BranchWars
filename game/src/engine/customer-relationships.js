@@ -1,6 +1,6 @@
 function customerRelationshipReview(p,key,allocation=p.allocation){
  const book=p.depositBook.cohorts.filter(c=>c.market===key),total=book.reduce((n,c)=>n+c.principal,0);
- const coverage=(allocation.service+(p.upgrades.training||0)*.3)/Math.max(1,p.stats.customers/700);
+ const coverage=(allocation.service+specialistBonus(p,'service',allocation)+(p.upgrades.training||0)*.3)/Math.max(1,p.stats.customers/700);
  const upgrade=p.regionalOperations.markets[key].service;
  return Object.entries(CUSTOMER_SEGMENTS).map(([segment,def])=>{
   const current=p.customerRelationships.markets[key][segment];
@@ -33,9 +33,9 @@ function serviceWorkforceOptions(p,input,economy){
   const forecast=reasons.length?null:operatingPreview({...p,focus:base.focus},plan,economy);
   return {...c,blocked:reasons.length>0,reasons,budget,forecast,bankProfit:forecast?forecast.profit-(forecast.fundingLoss||0):null};
  });
- const hirePlan={...base,hires:planHires(base)+1},budget=planBudget(p,base),hireBudget=planBudget(p,hirePlan);
+ const hirePlan={...base,hires:(base.hires||0)+1},budget=planBudget(p,base),hireBudget=planBudget(p,hirePlan);
  const hireBlocked=planHires(hirePlan)>hireLimit(p)||hireBudget.remaining<0;
- return {options,customers:p.stats.customers,requiredService:Math.max(0,Math.ceil(Math.max(1,p.stats.customers/700)-(p.upgrades.training||0)*.3)),
+ return {options,customers:p.stats.customers,requiredService:Math.max(0,Math.ceil(Math.max(1,p.stats.customers/700)-(p.upgrades.training||0)*.3-specialistBonus(p,'service',base.allocation))),
   hiring:{blocked:hireBlocked,total:planHires(hirePlan),incrementalCost:hireBudget.recruiting-budget.recruiting,basePayrollAdded:hireBudget.basePayrollAdded-budget.basePayrollAdded,
    reason:hireBlocked?'Hiring limit or current cash/capital commitments prevent another recruit.':'Recruit reports next cycle; allocate them then. No extra service capacity this turn.'}};
 }
@@ -60,7 +60,7 @@ function updateCustomerRelationships(g,p,preview=false){
   for(const key of Object.keys(p.customerRelationships.markets))for(const row of customerRelationshipReview(p,key))p.customerRelationships.markets[key][row.segment]=row.next;
   p.customerRelationships.lastCycle=cycle;
  }
- p.operatingReport.relationshipCoverage=(p.allocation.service+(p.upgrades.training||0)*.3)/Math.max(1,p.stats.customers/700);
+ p.operatingReport.relationshipCoverage=(p.allocation.service+specialistBonus(p,'service')+(p.upgrades.training||0)*.3)/Math.max(1,p.stats.customers/700);
  p.operatingReport.relationshipPressure=customerRelationshipPressure(p,p.focus);
 
 }
@@ -74,4 +74,3 @@ function validateGoodwillSave(g){
  }
  return g;
 }
-

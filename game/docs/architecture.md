@@ -65,13 +65,21 @@ The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.js
 | `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
 | `src/page.html` | Page markup with build slots, not a second executable implementation |
 
-There are 73 listed inputs including shells, manifest and markup. These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+There are 77 listed inputs including shells, manifest and markup (four were added for specialist content, engine rules, UI and styles). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
 
 The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
 
 Both fast/full gates check source freshness before testing. The builder rejects missing, duplicate, unwired, escaping or syntactically invalid inputs; check mode never overwrites the artifact. Build tests cover repeated assembly, all-input CRLF parity, output/source drift, malformed slots, external code/style dependencies and DOM-free execution. Full-run fingerprints now include every source input and the builder.
 
 ## Remaining architecture debt
+
+The specialist gameplay slice uses explicit creation, monthly, AI and validation
+calls in the existing coordinators, not new runtime replacements. Role content,
+workforce rules, presentation and styles have separate source files.
+Premium payroll is settled once, and elective training affordability is rechecked
+after bank production before expense posting. Sealed plans, migrations and
+owner-only views carry the versioned workforce state; all three lobby transports
+require workforce support from the peer before a v8.5 game starts.
 
 The approved four-step batch is implemented, not the end of all architecture work. Remaining priorities are explicit transaction context (replacing the shared market/credit/deposit context variables), flattening other feature and ledger adapters, typed plan/state contracts, a cleaner client session/transport interface, and renderer/CSS consolidation during the separate UI batch. The current guard permits 76 remaining textual assignments across other functions; this is a conservative debt count, not 76 independently verified defects. Do not turn this into a mutable plugin-registration system.
 

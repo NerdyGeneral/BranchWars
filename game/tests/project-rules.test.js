@@ -121,7 +121,7 @@ const node = selector => {
   return sinks.get(selector);
 };
 const c = {E, draft: copy(base), esc: String, money: String, toast() {}, capacityLine: () => '',
-  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {},
+  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {}, renderWorkforce() {},
   renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {},
   unassigned: () => 0, planReady: () => true,
   $: node, $$: selector => selector === '[data-project]' ? [{dataset: {project: 'branch'}, addEventListener: (_, f) => callbacks.push(f)}] : []};
