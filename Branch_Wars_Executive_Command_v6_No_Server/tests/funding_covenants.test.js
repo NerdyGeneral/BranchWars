@@ -26,7 +26,7 @@ const dual=create('dual');dual.players.forEach(stress);for(let i=0;i<3;i++){E.ev
 for(const mutate of [x=>{delete x.fundingCovenantVersion},x=>{x.fundingCovenantVersion=4},x=>{x.players[0].fundingCovenant.streak=-1},x=>{x.players[0].fundingCovenant.lastCycle=x.cycle+1}]){const x=create('bad');mutate(x);assert.throws(()=>client.migrate(x),/covenant/)}
 const old=E.createGame({campaignRulesVersion:1,fundingCovenantVersion:0,seed:1});assert.equal(client.migrate(copy(old)).fundingCovenantVersion,undefined);old.gameOver=true;E.rematch(old,0);E.rematch(old,1);assert.equal(old.fundingCovenantVersion,undefined);
 const fresh=create('rematch');fresh.gameOver=true;E.rematch(fresh,0);E.rematch(fresh,1);assert.equal(fresh.fundingCovenantVersion,1);
-assert(source.includes('pilotSupported:10'));assert(source.includes('m.pilotSupported!==10'));
+assert(source.includes('pilotSupported:11'));assert(source.includes('m.pilotSupported!==11'));
 const turn=x=>{E.submit(x,0,E.chooseBot(x,0));E.submit(x,1,E.chooseBot(x,1))},normalized=x=>{const y=copy(x);delete y.ledgerVersion;y.players.forEach(p=>delete p.strategy);return y};
 let turns=0,maxBytes=0;const results=[];
 for(let seed=0;seed<2;seed++)for(const stressedSeat of [-1,0,1]){

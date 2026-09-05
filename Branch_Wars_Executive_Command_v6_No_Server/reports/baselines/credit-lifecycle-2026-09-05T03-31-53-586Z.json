@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "sourceSha256": "132308e110b7e014a1d4b3bd81d70593b60936857c280d4e3d9b883219e9d694",
+  "turns": 484,
+  "maxBytes": 447633,
+  "maxCohorts": 727,
+  "results": [
+    {
+      "seed": 0,
+      "cycle": 122,
+      "ended": false,
+      "repayments": 59465241,
+      "loans": [
+        29971885,
+        30062840
+      ],
+      "deposits": [
+        90306025,
+        77564970
+      ]
+    },
+    {
+      "seed": 1,
+      "cycle": 122,
+      "ended": false,
+      "repayments": 62596446,
+      "loans": [
+        15415989,
+        24097182
+      ],
+      "deposits": [
+        159509887,
+        8304383
+      ]
+    },
+    {
+      "seed": 2,
+      "cycle": 122,
+      "ended": false,
+      "repayments": 45134148,
+      "loans": [
+        14857316,
+        16261214
+      ],
+      "deposits": [
+        25471678,
+        142497092
+      ]
+    },
+    {
+      "seed": 3,
+      "cycle": 122,
+      "ended": false,
+      "repayments": 43849531,
+      "loans": [
+        21211180,
+        20302097
+      ],
+      "deposits": [
+        157863521,
+        9921776
+      ]
+    }
+  ]
+}

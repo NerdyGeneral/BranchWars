@@ -3,7 +3,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const file=path.join(__dirname,'../BRANCH_WARS.html'),source=fs.readFileSync(file,'utf8'),ctx={console,Math,Date};
 for(const m of source.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);
 vm.runInNewContext(source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.BWEngine={resolveOpportunities:(g,plans)=>withRandom(g,\'state\',()=>resolveOpportunities(g,plans)),'),ctx);
-const E=ctx.BWEngine,copy=x=>JSON.parse(JSON.stringify(x)),create=seed=>E.createGame({campaignRulesVersion:1,mode:'hotseat',seed,created:1});
+// Preserve the prior contract-v1 rules; service_expansion.test.js covers new pilots.
+const E=ctx.BWEngine,copy=x=>JSON.parse(JSON.stringify(x)),create=seed=>E.createGame({campaignRulesVersion:1,serviceExpansionVersion:0,mode:'hotseat',seed,created:1});
 const client={E,console};vm.runInNewContext(source.slice(source.indexOf('function repairGame'),source.indexOf('function saveLocal'))+';globalThis.migrate=migrateGame;',client);
 const clean=(g,i)=>({...E.chooseBot(g,i),contractBid:null,newProjects:[],newProject:null,investments:{},hires:0,competitiveAction:'none',capitalAction:false,opportunity:null,decision:'b'});
 const g=create('contracts'),p=g.players[0],q=g.players[1],c=g.serviceAgreements[0];

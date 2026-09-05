@@ -152,7 +152,7 @@ sections.PRODUCTS = Object.entries(E.PRODUCT_PORTFOLIOS)
    campaign, so it is listed separately rather than mixed in with what a standard
    game can actually build. */
 const PILOT_KINDS = ['branchUpgrade', 'branchClosure', 'productDeployment', 'contractAdvertising'];
-const isPilot = (d) => d.regionalOnly || d.contractOnly || PILOT_KINDS.includes(d.kind);
+const isPilot = (d) => d.regionalOnly || d.contractOnly || d.serviceOnly || PILOT_KINDS.includes(d.kind);
 const liveProjects = Object.entries(E.PROJECTS).filter(([, d]) => !d.legacy && !isPilot(d));
 const pilotProjects = Object.entries(E.PROJECTS).filter(([, d]) => !d.legacy && isPilot(d));
 const retiredProjects = Object.entries(E.PROJECTS).filter(([, d]) => d.legacy);
@@ -162,6 +162,13 @@ const projectCols = ['Key', 'Name', 'Cost', 'Cycles', 'Capacity', 'Kind', 'Facil
 
 sections.PROJECTS = table(projectCols, liveProjects.map(projectRow));
 sections.PILOT_PROJECTS = table(projectCols, pilotProjects.map(projectRow));
+sections.SERVICE_DESK = table(
+  ['Mandate', 'Standard fee / turn', 'Direct cost / turn', 'Capacity points'],
+  Object.values(E.SERVICE_TYPES).map(d => [d.name, money(d.fee), money(d.cost), d.load])
+) + '\n\n' + table(
+  ['Application / route', 'Tier-one prerequisites', 'Base deployment', 'Base work cycles', 'Execution load', 'Active upkeep / turn'],
+  Object.values(E.SERVICE_APPLICATIONS).map(d => [d.name, d.requires.map(k => E.STRATEGY_BRANCHES[k].name).join(' + '), money(d.cost), d.cycles, d.capacity, money(d.upkeep)])
+);
 
 sections.RETIRED = table(
   ['Key', 'Name', 'Status'],

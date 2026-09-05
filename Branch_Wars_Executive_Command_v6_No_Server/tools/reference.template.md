@@ -328,6 +328,67 @@ is a limitation of the opponent, not of the character model.
 
 ## 13. Regional Rivalry pilot
 
+### Expanded commercial services (separate preview option)
+
+The next service slice connects dedicated commercial delivery capacity,
+cross-capability deployments, and differentiated renewable mandates.
+
+<!--{{SERVICE_DESK}}-->
+
+Research applications appear in Strategy. Activation, staffing and renewal
+prices are managed in Markets > Commercial Service Desk, rather than adding
+another set of controls to Operations. Setup prices/work above are base values;
+the existing project efficiency and shared execution rules still apply.
+
+Each reserved Business banker supplies two service points but leaves ordinary
+commercial production and opportunity acquisition; payroll remains payable.
+Outsourcing supplies up to four additional points at $6K each per turn, used or
+not. Contracts are serviced by earliest renewal, then stable ID. An unsupported
+contract earns no fee but retains direct service expense. Two missed service
+turns bring its next contest forward to the following cycle.
+
+Payroll Automation requires Network + Operations tier one. While active, it
+adds two payroll bid-strength points and reduces each payroll mandate's direct
+servicing cost by $1.5K. Built treasury requires Commercial + Digital tier one;
+the partner route needs only Commercial tier one and trades lower setup cost
+for higher upkeep. Both unlock treasury bids only when active and adequately
+staffed. A later build replaces a partner; an inactive application has no
+platform subscription expense.
+
+Standing price choices apply only at award/renewal: relationship pricing cuts
+fees 20% for +2 bid strength; standard has no adjustment; premium adds 25% for
+−2 strength. Signed fees remain fixed for the term. Incumbents defend
+automatically unless declined at renewal. Challengers spend their relationship
+pursuit instead of selecting an ordinary opportunity. Outside providers still
+compete. Awards earn from the next turn and never create deposit/loan balances.
+
+Select **Expanded commercial services preview** at setup to enable the new-game
+flag `serviceExpansionVersion:1`. It is unchecked by default because campaign
+pacing has not passed acceptance. The normal Regional Rivalry option retains
+the prior service rules. Previous campaigns and rematches retain their old
+rules. Multiplayer requires updated clients (pilot protocol 11).
+Open **Delivery Comparison & Plan Resilience** in Markets to compare fully
+staffed delivery mixes for the signed book or a hypothetical new mandate.
+Estimates use the actual operating preview, include banker opportunity cost
+in the current cycle, and leave signed fees and ownership untouched. Applying
+a mix stages only staffing/outsourcing; it does not place a bid or activate a
+platform. Bid capacity is paid now; an awarded mandate earns next turn.
+
+The resilience readout subtracts funding-sale losses and all discretionary
+commitments from projected operating profit, then compares equity with a 10% current-exposure reserve plus
+$200K. This is advisory, not a new player restriction or a guaranteed forecast.
+The preview AI now reevaluates reversible policies under stress and reapplies
+that cautious reserve after all department plans. Existing fees, principal,
+regulatory thresholds and failure timing are unchanged.
+
+If an event or rival action invalidates a queued initiative before it starts,
+the expanded preview reports the cancellation in the turn results. A cancelled
+start charges no project cost; it must be selected again in a later plan.
+
+See [service planning status](SERVICE_PLANNING_STATUS.md) for the latest tests
+and limits; [the earlier expansion report](SERVICE_EXPANSION_STATUS.md) records
+the previous batch and remaining blueprint work.
+
 A second, opt-in ruleset that layers over the base game. It is enabled by the
 **"Try Regional Rivalry pilot"** checkbox, available for Solo AI, Pass & Play,
 and hosting linked games. Over LAN or a direct link both
@@ -364,3 +425,99 @@ combination. See RELEASE_VERIFICATION.md for current evidence and limits.
 Generated source excerpts elsewhere in this reference show base function
 definitions. Versioned pilot overrides can change their behavior; the pilot
 status documents and tests describe those additional rules.
+# Living institution preview (opt-in)
+
+## Relationship operations extension
+
+New Living institution campaigns use management rules v2. Each client keeps
+12 public monthly service records. An incumbent earns +0.25 bid strength per
+consecutive serviced month, capped at +2; a missed month or provider change
+resets it. This adds to existing bid drivers, not a guaranteed renewal.
+Outside-provider service quality is unknown, not automatically recorded as failure.
+
+AI renewal quotes compare discounted, standard and premium fees using a bounded
+strength-based heuristic. It sees its own bank and public contract information,
+not sealed rival plans. The heuristic is not a calibrated win probability.
+Quotes affect renewal only; fees on signed terms remain unchanged.
+
+Markets includes client dossiers and Department Workload & Delivery Economics.
+The scorecard distinguishes operational service capacity from executive project
+capacity and shows desk net before shared payroll. Bank profit already includes
+desk economics. Realized and draft values cover different periods, not forecast
+error. No invented department-level profit allocation is made.
+
+Living institution saves now use format 8.2, which older importers reject.
+Loading an earlier v1 Living institution save preserves its mechanics and stamps
+the safer format when saved again; it does not add relationship histories.
+New relationship games require an additional relationship-capability handshake.
+
+New campaigns can additionally enable Living institution. Six named anchor
+clients attach price, internal-service or controls preferences to the existing
+renewable mandates. They are not yet simulated corporate balance sheets or
+separate deposit/loan customers. No ownership stake grants a contract.
+
+Strategy > Recurring Research & Service Manager holds persistent draft mandates.
+Research uses a total monthly cap, ordered priorities, per-capability tier
+targets, a minimum cash reserve and the planning advisory capital reserve.
+Amounts round down to $1K; completed targets receive no further automatic funds.
+Unused budget remains cash. Manual draft commitments are never removed.
+
+The service manager compares fully supported delivery of the signed book,
+bounded by reserved staff, vendor points and a sales-staff floor. It can prefer
+current bank profit or fewer vendors. It does not hire, activate applications,
+reprice or bid. If constraints are infeasible, it reports an exception and keeps
+the current mix. Explicit bids pause delivery automation. All suggestions are
+visible and editable before turn lock; no manager runs on sealed human plans.
+
+Mandates remain private and save with the campaign. Older games do not acquire
+this new rules flag. Linked hosts require the management capability handshake
+from both builds; protocol 11 remains unchanged for older pilot campaigns.
+
+## Customer needs preview
+
+An additional opt-in preview adds local prospect-flow composition: everyday
+households, digitally active customers and reserve savers. It requires Living
+institution relationship rules. Existing saves keep their original behavior.
+
+Markets > Customer Needs & Product Fit compares all six districts. The shares
+describe monthly prospect demand, not an additional population or segment
+ownership ledger. Composition responds to the macro demand/rate regime.
+Essential Banking, Rewards Checking and High-Yield Savings have different fit;
+retail/digital offices improve their matching channel. Fit is not win probability.
+
+Reach-weighted fit changes organic acquisition and poor fit reduces local
+approachable quotas. Finite outside supply and branch capacity still constrain
+growth. New account balances split by sales emphasis times local suitability;
+closed offers get no new allocation. Signed/locked existing terms are unchanged.
+
+Organic inflows actually acquired incur onboarding expense of $1.50/$2.50/$1.00
+per $1,000 for everyday/digital/reserve demand, weighted by attracted mix.
+This is included once in bank operating profit, separately from recurring
+servicing and platform costs. Draft and latest actual totals are displayed.
+The AI compares eligible offer mixes using operating profit and a bounded
+franchise-growth preference; this is not a guarantee of optimal decisions.
+
+New saves use format 8.3; older builds reject them. Linked peers must advertise
+customer-demand support. Segment-owned books, explicit income/employment,
+cross-selling and specialist department staffing remain later work.
+
+## Persistent customer relationships
+
+New Customer needs campaigns use demand rules 2 and save format 8.4. Existing
+demand-rules-1 saves keep their mechanics. The new layer tracks service goodwill
+by need and market on a 0–100 scale, starting at neutral 50. This is not a new
+customer-count or ownership ledger.
+
+Retail staffing and legacy training support the customer workload. The local
+existing deposit-product book determines fit for each need; changing sales mix
+does not instantly change existing-book goodwill. Local service upgrades help.
+Understaffing erodes quality, sustained service can rebuild it, and empty books
+drift toward neutral. Demand-weighted goodwill adds at most +/-1.5 local deposit
+pull through existing funded/capped competition and outside-bank defenses.
+
+Markets > Customer Relationships shows current quality, a draft trend holding
+the existing book fixed, the formula, and current competitive effect. Actual
+growth or portfolio changes may differ from that trend. Rival internal quality
+is private. New linked games require customer-demand capability 2; older clients
+refuse the 8.4 save format. Department specialization and segment-owned books are
+still future work.

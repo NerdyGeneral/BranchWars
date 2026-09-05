@@ -12,6 +12,29 @@ QUICK START
 5. To use the new banking systems, check Try Regional Rivalry pilot before
    starting or hosting. This currently uses two regions and six markets.
    Existing saves retain their rules. Both multiplayer clients need this build.
+   For dedicated service staffing, priced mandates and cross-research
+   applications, also select Expanded commercial services preview.
+   This separate preview is OFF by default: long-campaign pacing is not
+   accepted yet. The host chooses it for both players; pilot protocol is 11.
+   Research deployments are in Strategy; service policies are in Markets.
+   Markets > Delivery Comparison & Plan Resilience compares staffing/vendor
+   mixes and estimates earnings after planned spending. It never submits a
+   bid for you. The preview AI now reviews whole-bank recovery and reserves.
+   Living institution preview adds recurring research, service delegation,
+   client histories and a capped earned retention advantage. Markets has
+   collapsible client dossiers and a department workload/cost scorecard.
+   New campaigns use relationship rules; existing saves keep their mechanics.
+   These saves use format 8.2 and require the updated build on both computers.
+   See RELATIONSHIP_OPERATIONS_STATUS.md for scope and verification limits.
+   Customer needs preview adds local prospect composition, product fit and
+   organic onboarding costs. Its checkbox enables the prerequisite previews.
+   Markets > Customer Needs & Product Fit explains effects and shows costs.
+   Customer Relationships > Service Goodwill tracks persistent quality by
+   market and need. Staffing, existing products and service upgrades affect
+   future deposit competition; changing sales emphasis is not instant repair.
+   These new campaigns use save format 8.4; older saves retain their rules.
+   Both friends must update before starting a new preview campaign.
+   See CUSTOMER_RELATIONSHIPS_STATUS.md for scope and current test evidence.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
@@ -434,3 +457,12 @@ PRIVACY / WORKPLACE USE
 The game is fictional. Do not enter customer information, account numbers,
 credentials, confidential company information, or other protected data.
 Use workplace network features only when permitted by company policy.
+LIVING INSTITUTION PREVIEW (NEW CAMPAIGNS ONLY)
+Enable Living institution preview on the opening screen. It also checks the
+Regional Rivalry and expanded-service prerequisites. In Strategy, open
+Recurring Research & Service Manager to set monthly funding, tier targets,
+cash reserves and bounded service-department mandates. Use Prepare draft to
+apply new limits to this turn; settings otherwise prepare future drafts.
+Markets displays six named service clients with distinct bid preferences.
+Both friends need this build for the preview. Older saves are not converted.
+See LIVING_INSTITUTION_STATUS.md for verification and remaining blueprint work.

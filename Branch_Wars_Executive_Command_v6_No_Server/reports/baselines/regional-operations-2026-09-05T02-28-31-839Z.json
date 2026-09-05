@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "sourceSha256": "95734e91ae5ed63899529920e066179afbc4a66cb7c6f066b11d24743423b8ce",
+  "sourceUnchanged": true,
+  "mainLoopTurns": 800,
+  "additionalResumeTurns": 8,
+  "withdrawals": 66,
+  "results": [
+    {
+      "seed": 0,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 1,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 2,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 3,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 4,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 5,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 6,
+      "cycle": 102,
+      "ended": false
+    },
+    {
+      "seed": 7,
+      "cycle": 102,
+      "ended": false
+    }
+  ]
+}

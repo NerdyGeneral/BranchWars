@@ -1,0 +1,118 @@
+{
+  "passed": true,
+  "sourceSha256": "ddbd4aac19dc76244fd2fca94c0e296a42a62180d01c29cad3666bf07b910617",
+  "turns": 595,
+  "maxBytes": 411106,
+  "results": [
+    {
+      "seed": 0,
+      "serviceSeat": -1,
+      "cycle": 66,
+      "ended": true,
+      "reason": "receivership",
+      "deposits": [
+        85799567,
+        67350236
+      ],
+      "equity": [
+        86848,
+        2402223
+      ],
+      "profits": [
+        62202,
+        172407
+      ]
+    },
+    {
+      "seed": 0,
+      "serviceSeat": 0,
+      "cycle": 122,
+      "ended": false,
+      "deposits": [
+        124908002,
+        41771287
+      ],
+      "equity": [
+        895162,
+        2692756
+      ],
+      "profits": [
+        284885,
+        395547
+      ]
+    },
+    {
+      "seed": 0,
+      "serviceSeat": 1,
+      "cycle": 45,
+      "ended": true,
+      "reason": "receivership",
+      "deposits": [
+        39678305,
+        97051431
+      ],
+      "equity": [
+        1149689,
+        -106050
+      ],
+      "profits": [
+        83647,
+        23075
+      ]
+    },
+    {
+      "seed": 1,
+      "serviceSeat": -1,
+      "cycle": 122,
+      "ended": false,
+      "deposits": [
+        32894333,
+        134634275
+      ],
+      "equity": [
+        2925598,
+        2599791
+      ],
+      "profits": [
+        368565,
+        366196
+      ]
+    },
+    {
+      "seed": 1,
+      "serviceSeat": 0,
+      "cycle": 122,
+      "ended": false,
+      "deposits": [
+        131319814,
+        36612390
+      ],
+      "equity": [
+        856649,
+        5837434
+      ],
+      "profits": [
+        258049,
+        526500
+      ]
+    },
+    {
+      "seed": 1,
+      "serviceSeat": 1,
+      "cycle": 122,
+      "ended": false,
+      "deposits": [
+        18237581,
+        149303329
+      ],
+      "equity": [
+        7713352,
+        538811
+      ],
+      "profits": [
+        328861,
+        160811
+      ]
+    }
+  ]
+}

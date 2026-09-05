@@ -32,7 +32,8 @@ E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersi
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.deploymentProduct).length, 2);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.regionalOnly).length, 3);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
@@ -1212,7 +1213,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.1/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.4/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1427,9 +1428,20 @@ for (const fn of ['createOffer', 'createAnswer']) {
 
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
-const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
+// Execute the dynamic renderer with DOM sinks, rather than exempting its IDs.
+let managementMarkup='';
+const managementContext={E,managementNotes:[],draft:{management:E.defaultManagement(),investments:{}},
+ esc:String,money:n=>String(n),renderProjects:()=>{},renderReady:()=>{},
+ $:selector=>selector==='#institutionControls'?null:selector==='#strategyTree'?{insertAdjacentHTML:(_where,markup)=>{managementMarkup=markup}}:{addEventListener:()=>{}},
+ $$:()=>[]};
+vm.runInNewContext(clientFn('renderManagement')+';renderManagement({me:{management:E.defaultManagement(),submitted:false}})',managementContext);
+const renderedIds=[...managementMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(new Set(renderedIds).size,renderedIds.length,'rendered management IDs must be unique');
+assert(renderedIds.includes('research-enabled')&&renderedIds.includes('manager-mode')&&renderedIds.includes('prepareManagement'));
+// Check the leading ID of descendant selectors too; it is not itself an ID.
+const missingIds = [...html.matchAll(/\$\('#([\w-]+)(?:[^']*)'\)/g)]
   .map((item) => item[1])
-  .filter((id) => !ids.includes(id));
+  .filter((id) => !ids.includes(id)&&!renderedIds.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
 assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
 assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');

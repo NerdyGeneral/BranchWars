@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "sourceSha256": "d7f6614ce028e9d62f15e6b2095bbf5b2de249d4b40539c094c3815626d8a035",
+  "sourceUnchanged": true,
+  "turns": 968,
+  "maxViewBytes": 357799,
+  "results": [
+    {
+      "seed": 0,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 5,
+      "playerDeposits": [
+        158119682,
+        9596448
+      ],
+      "outsideDeposits": 283870
+    },
+    {
+      "seed": 1,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 7,
+      "playerDeposits": [
+        20927475,
+        146615463
+      ],
+      "outsideDeposits": 457062
+    },
+    {
+      "seed": 2,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 5,
+      "playerDeposits": [
+        145246617,
+        22579790
+      ],
+      "outsideDeposits": 173593
+    },
+    {
+      "seed": 3,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 4,
+      "playerDeposits": [
+        157145185,
+        10346729
+      ],
+      "outsideDeposits": 508086
+    },
+    {
+      "seed": 4,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 5,
+      "playerDeposits": [
+        8784848,
+        159017469
+      ],
+      "outsideDeposits": 197683
+    },
+    {
+      "seed": 5,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 4,
+      "playerDeposits": [
+        8009010,
+        159855182
+      ],
+      "outsideDeposits": 135808
+    },
+    {
+      "seed": 6,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 9,
+      "playerDeposits": [
+        27098962,
+        140882596
+      ],
+      "outsideDeposits": 18442
+    },
+    {
+      "seed": 7,
+      "cycle": 122,
+      "ended": false,
+      "withdrawn": 3,
+      "playerDeposits": [
+        19423583,
+        148390905
+      ],
+      "outsideDeposits": 185512
+    }
+  ]
+}

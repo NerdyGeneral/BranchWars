@@ -12,7 +12,7 @@ function harness(side='host'){
   setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms});return id},clearTimeout:id=>timers.delete(id),clearInterval:()=>{},
   localStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null},
   sessionStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null,removeItem:k=>storage.delete(k)},
-  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
+  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',checked:false,listeners:{},addEventListener(event,listener){this.listeners[event]=listener},classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
  };
  vm.createContext(c);vm.runInContext(engine,c);c.window={BWEngine:c.BWEngine};
  vm.runInContext(client,c);
@@ -20,8 +20,30 @@ function harness(side='host'){
  return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit})',c)};
 }
 async function main(){
+ const customerDemandVersion=process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
+ const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
+ const incompatible=harness();incompatible.run("game=null;p2pConfig.managementVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+ await incompatible.run("handleMessage({type:'hello',pilotSupported:11,name:'Older guest'})");
+ assert.equal(incompatible.state().game,null);assert(incompatible.run("sent.some(m=>m.type==='error'&&m.message.includes('Living institution'))"));
+ const oldRelationshipPeer=harness();oldRelationshipPeer.run("game=null;p2pConfig.managementVersion=2;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+ await oldRelationshipPeer.run("handleMessage({type:'hello',pilotSupported:11,managementSupported:1,name:'Previous institution guest'})");
+ assert.equal(oldRelationshipPeer.state().game,null);assert(oldRelationshipPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Relationship operations'))"));
+ const oldCustomerPeer=harness();oldCustomerPeer.run("game=null;p2pConfig.managementVersion=2;p2pConfig.customerDemandVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+ await oldCustomerPeer.run("handleMessage({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,name:'Previous relationship guest'})");
+ assert.equal(oldCustomerPeer.state().game,null);assert(oldCustomerPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Customer needs'))"));
+ const oldGoodwillPeer=harness();oldGoodwillPeer.run("game=null;p2pConfig.managementVersion=2;p2pConfig.customerDemandVersion=2;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+ await oldGoodwillPeer.run("handleMessage({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:1,name:'Previous demand guest'})");
+ assert.equal(oldGoodwillPeer.state().game,null);assert(oldGoodwillPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Customer needs'))"));
  // Compact a long host trail: old framing exceeds inline Contents limit.
  const h=harness(),frames=Array.from({length:20},(_,i)=>({seq:i+1,msg:{type:'state',state:{cycle:i+1,padding:'x'.repeat(100000)}}}));
+ // The new service preview requires, and explicitly enables, the regional pilot.
+ const preview=h.elements.get('#serviceExpansion');
+ assert(preview.listeners.change, 'service preview registers its change handler');
+ assert.equal(h.c.document.querySelector('#rivalryPilot').checked,false);
+ preview.checked=true;preview.listeners.change();
+ assert.equal(h.elements.get('#rivalryPilot').checked,true);
+ preview.checked=false;preview.listeners.change();
+ assert.equal(h.elements.get('#rivalryPilot').checked,true,'disabling preview does not disable the existing pilot');
  h.c.frames=frames;
  assert(Buffer.byteLength(JSON.stringify(frames))>1000000);
  assert(h.run('ghCompact(frames)').length===1);
@@ -111,7 +133,7 @@ async function main(){
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
  const [ph,pg]=pair;
- ph.run("game=E.createGame({campaignRulesVersion:1,mode:'lan',seed:77});syncPeers()");
+ ph.run("game=E.createGame({customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",campaignRulesVersion:1,mode:'lan',seed:77});syncPeers()");
  await deliver(ph,pg);
  let rounds=0;
  for(;rounds<12&&!ph.state().game.gameOver;rounds++){
@@ -120,6 +142,10 @@ async function main(){
   ph.run('E.submit(game,0,E.chooseBot(game,0));syncPeers()');
   await deliver(ph,pg);await deliver(pg,ph);await deliver(ph,pg);
   assert.equal(pg.state().view.cycle,ph.state().game.cycle);assert.equal(pg.state().ghPendingPlan,null);
+  if(managementVersion){assert.equal(pg.state().view.managementVersion,managementVersion);assert.deepEqual(copy(pg.state().view.me.management),copy(ph.state().game.players[1].management));assert(!pg.state().view.rival.management)}
+  if(managementVersion===2)assert.deepEqual(copy(pg.state().view.relationshipRecords),copy(ph.state().game.relationshipRecords));
+  if(customerDemandVersion){assert.equal(pg.state().view.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.operatingReport.customerAcquisitionCost,ph.state().game.players[1].operatingReport.customerAcquisitionCost)}
+  if(customerDemandVersion===2){assert.deepEqual(copy(pg.state().view.me.customerRelationships),copy(ph.state().game.players[1].customerRelationships));assert.equal(pg.state().view.rival.customerRelationships,undefined)}
   ph.run('E.validatePilot(game);E.validateLedger(game)');
  }
  assert.equal(rounds,12);assert(lost>0);

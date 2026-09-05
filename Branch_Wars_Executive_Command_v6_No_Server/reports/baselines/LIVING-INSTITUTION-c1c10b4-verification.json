@@ -1,0 +1,166 @@
+{
+  "passed": true,
+  "kind": "composite test-only correction",
+  "createdAt": "2026-09-05T08:27:27.693Z",
+  "baseReport": "N-00-2026-09-05T08-14-46-988Z.json",
+  "sourceSha256": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+  "sourceUnchanged": true,
+  "balanceOutputReproduced": true,
+  "explanation": "Full frozen-source run passed 28/29 invocations. The static selector scan failed on generated controls. Only engine.test.js changed: it now executes renderManagement into DOM sinks and validates rendered IDs. The entire corrected engine.test.js then passed standalone with exit 0; all other fingerprinted files match the full run.",
+  "retainedPassingTests": [
+    {
+      "label": "accounting.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "accounting_activities.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "accounting_persistence.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "bank_identity.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "regional_pilot.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "regional_operations.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "market_economy.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "credit_lifecycle.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "funding_covenants.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "deposit_products.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "term_funding.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "retail_lifecycle.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "product_deployment.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "service_contracts.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "service_expansion.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "service_planning.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "institution_management.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "funding.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "determinism.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "ledger.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "save_integrity.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "transport.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "github_resilience.test.js",
+      "exitCode": 0
+    },
+    {
+      "label": "balance_audit.js",
+      "exitCode": 0
+    },
+    {
+      "label": "balance_audit.js",
+      "exitCode": 0
+    },
+    {
+      "label": "Living institution GitHub relay",
+      "exitCode": 0
+    },
+    {
+      "label": "legacy funding balance audit",
+      "exitCode": 0
+    },
+    {
+      "label": "Windows LAN",
+      "exitCode": 0
+    }
+  ],
+  "rerun": {
+    "command": "node tests/engine.test.js",
+    "exitCode": 0,
+    "stdout": "Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.\n"
+  },
+  "verifiedInvocations": 29,
+  "currentHashes": {
+    "BRANCH_WARS.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "387e87225f5a24243897ffa6d9b35c2fcbd77348073287767329ef8f00d927e9",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "01beadd4a855f76d32148a733b2741b9d822b7321a9c1399294eeca67ae5c46b",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "a7983fd26308ddc2e2a6ff1aef54f8e05e55aa782f94947a1e1e3522bf7bc642",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "c3dcebbbbb27fe1adb3c302c5fb85299cc47de516dfd4cf6425e3425c4cc218c",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "3fdf66534125f07c2d87db8753392d5bcdb4375965ddc231070ebbdb84ea3fe8",
+    "tests/github_resilience.test.js": "d98d109a3d5b895cc4289656232e3b4f64363d3b50667f93b18860d9eae8056c",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "a798321f0cf988ee573d3d770d2fadc07a4a3ee55d9ca26e67e27d2d5e38b1f3"
+  },
+  "limitations": [
+    "Composite evidence, not a second full-suite execution.",
+    "Human fun, paired-seat balance and physical two-computer/GitHub acceptance remain unverified."
+  ]
+}
