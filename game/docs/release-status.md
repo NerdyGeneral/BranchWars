@@ -2,17 +2,29 @@
 
 Updated: 2026-09-05.
 
-## Implemented build
+## Multiplayer patch — separate delivery branch
+
+Patch source SHA-256: `245a1ee3c527c7718072eaaf8301f98382238065be04325c0cd5b498c8e3bced`; LF-normalized: `0155cf7b9610bc0b4000c272b798d8cd783096fdd849a23f62642f9edecacb10`.
+
+New linked campaigns now stop in a shared pre-game lobby on Repository Link, LAN and Direct P2P. Each player edits their own bank name/color; the host may revise campaign size and economy. Preview rule choices remain visible but are selected before opening the room. Similar opening colors are separated automatically, subsequent clashes are refused, and identity/settings changes reset both confirmations. Only the host can start after both players confirm the current revision.
+
+Successful GitHub polls with no new messages no longer turn the connection yellow. The status says **repository reachable**, not that the friend's browser is live. Missing peer files remain pending; access/transport failures and cooldowns retain their warning/error paths. Lobby checkpoints and pending confirmations survive same-tab Repository Resume without storing tokens in the checkpoint. New rooms require the lobby-capable build on both computers; running campaigns retain the existing reconnect path and saved identities.
+
+Local validation: the fast gate, bank identity suite, 48-campaign engine suite, Windows LAN suite, and five GitHub relay configurations passed. The relay tests now enter through the lobby before playing 12 turns per configuration, including lost accepted-write responses. Targeted lobby tests cover all three message transports, seat authority, readiness revisions, duplicate starts/hellos, color clashes, version mismatches, reload and repeated idle polls. The simulation engine remains byte-equivalent after line-ending normalization to the lifecycle commit; no mechanics or balance fixtures were changed.
+
+Browser acceptance used two isolated local LAN tabs: lobby arrival, custom guest color, both confirmations, host start and seat-relative identities were verified visually with no captured browser warnings/errors. This is not a fresh real-GitHub/two-physical-computer acceptance or a full release/balance run. The patch is isolated on `fix/multiplayer-lobby`, based on the pending lifecycle refactor; publication and hosted checks are separate from local acceptance. Existing campaigns with matching colors are not silently recolored.
+
+## Prior lifecycle build
 
 The current game is the two-region Living Bank preview with accounting/funding, persistent rivalry, product/credit books, commercial service contracts, capability deployments, customer goodwill and the Service Workforce Planner. See [roadmap](roadmap.md) for incomplete packages. Specialist training budgets, financial-group subsidiaries, company shares and full national management remain ahead.
 
-Checked workspace game SHA-256: `dfebd6409b783dcd8d3284da130375d7de478cc5c2e7756a71b2c3bfc0a68232`. LF-normalized source SHA-256: `9567c23532f8e5abcb71c50fef91ef87b3c07f924907dc490ea577fc12f07dca`; checkout line endings can change raw bytes.
+Prior lifecycle game SHA-256: `dfebd6409b783dcd8d3284da130375d7de478cc5c2e7756a71b2c3bfc0a68232`. LF-normalized source SHA-256: `9567c23532f8e5abcb71c50fef91ef87b3c07f924907dc490ea577fc12f07dca`; these fingerprints predate the local lobby patch. Checkout line endings can change raw bytes.
 
 The lifecycle batch removes sixteen creation overrides and one browser repair override, following the prior twelve project/validation layers. Save migration is now engine-owned. See [architecture](architecture.md) for exact boundaries. Fixed campaign and save expectations have not been regenerated; no balance or save-rule change is intended.
 
 The package path is `game/`; use the repository-root launchers and retarget old filesystem shortcuts. This batch does not add national/group gameplay or complete the blueprint.
 
-## Current-source evidence and limits
+## Lifecycle evidence and limits
 
 - The lifecycle suite passes 1,387 independent creation comparisons and 41 migration comparisons with the preserved implementation, including all optional-stage combinations, random consumption, both seats' sealed plans, legacy repairs and non-mutating rejection.
 - [Lifecycle full regression](../reports/baselines/N-00-2026-09-05T18-42-11-641Z.json): 44/44 invocations passed, including fixed campaigns/save continuations, lifecycle comparisons, accounting, Windows LAN and simulated GitHub recovery. Source/runtime fingerprints stayed unchanged and repeated balance output matched.

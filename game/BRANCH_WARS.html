@@ -73,6 +73,9 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .chart-me{stroke:var(--bank-me);paint-order:stroke;filter:drop-shadow(0 1px 1px #52657a)}.chart-rival{stroke:var(--bank-rival);stroke-dasharray:7 4;filter:drop-shadow(0 1px 1px #52657a)}.chart-dot-me{fill:var(--bank-me);stroke:#24364d}.chart-dot-rival{fill:var(--bank-rival);stroke:#24364d}.versus-bar .me{background:var(--bank-me)}.versus-bar .rival{background:repeating-linear-gradient(135deg,transparent 0 5px,#ffffff70 5px 7px),var(--bank-rival)}
 </style>
 <style>.region-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}.region-summary>div{padding:12px;background:#f1f6fc;border:1px solid #c5d4e3;border-radius:10px}@media(max-width:600px){.region-summary{grid-template-columns:1fr}}</style>
+<style id="lobby-ui">
+#lobbyScreen{max-width:1120px;margin:0 auto 18px}#lobbyScreen h3{margin:0 0 14px}#lobbyScreen .connection{max-width:390px;overflow-wrap:anywhere}.lobby-banks,.lobby-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}.lobby-bank{border:1px solid #ccd7e4;border-top:5px solid var(--identity-color);border-radius:12px;padding:20px;background:#f7f9fc;overflow-wrap:anywhere}.lobby-bank h3{font-size:1.18rem;margin:12px 0!important}.lobby-bank .bank-swatch{background:var(--identity-color)}.lobby-editor{border:1px solid #d5dfe9;border-radius:12px;padding:20px}.lobby-editor label{margin-top:12px}.lobby-editor .bank-color-fields{margin:12px 0;align-items:center;flex-wrap:nowrap}.lobby-editor .bank-color-fields p{max-width:300px}.lobby-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #d5dfe9;padding-top:14px}.lobby-footer .row{flex-wrap:wrap}#lobbyError:empty{display:none}@media(max-width:740px){.lobby-banks,.lobby-layout{grid-template-columns:1fr;gap:12px}.lobby-footer{display:block}.lobby-editor,.lobby-bank{padding:15px}}
+</style>
 </head>
 <body>
 <div class="shell">
@@ -81,7 +84,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
   <section id="startScreen" class="panel">
     <div class="kicker">OPEN A CAMPAIGN</div><div class="rule"></div>
     <div class="notice"><label><input id="rivalryPilot" type="checkbox"> Try Regional Rivalry pilot · finite local franchises, competing institutions, branch upgrades</label><div class="micro">Opt-in test campaign. No automatic score buyouts or permanent exclusions. Rebuild offices to re-enter; institutional failure still ends play. Host selects rules for linked games. Existing saves keep their original rules. Overrides the campaign-size selector.</div><label><input id="serviceExpansion" type="checkbox"> Expanded commercial services preview · dedicated staff, cross-research deployments, priced renewals</label><div class="micro">Requires Regional Rivalry. Mechanics are regression-tested; long-campaign balance is not accepted yet and early failure remains possible. Leave unchecked for the previous pilot rules. The host chooses this for both players.</div><label><input id="institutionManagement" type="checkbox"> Living institution preview · client histories, recurring research, service manager</label><div class="micro">Requires both previews above. New campaigns add relationship operations. Existing saves keep their mechanics. Both players need this build for new rules; new v8.2 saves are refused by older builds.</div><label><input id="customerNeeds" type="checkbox"> Customer needs preview · product fit and persistent service relationships</label><div class="micro">Requires all previews above. Changes new-account acquisition and onboarding costs, not existing ownership counts. Adds persistent service goodwill. New v8.4 saves require this build. Experimental balance.</div></div>
-    <div class="bank-colors"><div class="bank-color-fields"><div><label for="bankColor1">YOUR BANK COLOR / LOCAL PLAYER 1</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">AI RIVAL / LOCAL PLAYER 2 COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><p id="bankColorHelp" class="micro muted">In linked games, each friend chooses their own first color before hosting or joining. Colors are saved with the campaign. Names and solid/dashed markers distinguish matching colors.</p></div>
+    <div class="bank-colors"><div class="bank-color-fields"><div><label for="bankColor1">YOUR BANK COLOR / LOCAL PLAYER 1</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">AI RIVAL / LOCAL PLAYER 2 COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><p id="bankColorHelp" class="micro muted">Linked games open a shared lobby before play. Review both banks there, change your own name/color and confirm readiness. Colors stay attached to the bank on both computers and in saves.</p></div>
     <div class="mode-grid"><button class="mode active" data-mode="ai"><strong>Solo vs Corporate AI</strong><span>Deep campaign against one of three executive teams.</span></button><button class="mode" data-mode="hotseat"><strong>Pass &amp; Play</strong><span>Sealed simultaneous plans on one computer.</span></button><button class="mode" data-mode="lan"><strong>Intranet Room</strong><span>Join a reliable room-code game hosted on your local network.</span></button><button class="mode" data-mode="p2p"><strong>Direct P2P</strong><span>Fallback two-browser link with manually exchanged codes.</span></button><button class="mode" data-mode="gh"><strong>Repository Link</strong><span>Play across sites through a private GitHub repository.</span></button></div>
     <div id="ghGuide" class="setup hidden">
       <div class="notice"><b>PLAY BETWEEN BRANCHES — NO NETWORK SETUP.</b><br><span class="small">GitHub carries the game updates over normal web traffic. You do not need an IP address, an open port, or a connection between the two office networks.</span></div>
@@ -108,6 +111,18 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
   </section>
 
   <section id="connectScreen" class="panel hidden"><div class="kicker">CONNECTION DESK</div><div class="rule"></div><div id="connectInstructions"></div><label id="outCodeLabel" for="outCode" style="margin-top:9px">CONNECTION CODE</label><textarea id="outCode" class="field codebox" readonly></textarea><div class="row" style="margin-top:8px"><button id="copyCode" class="btn primary">[ COPY CODE ]</button><span id="copyStatus" class="small muted"></span></div><div id="answerArea" class="hidden"><label for="answerInput" style="margin-top:12px">RIVAL RESPONSE</label><textarea id="answerInput" class="field codebox" placeholder="BW7-ANSWER-..."></textarea><button id="applyAnswer" class="btn primary" style="margin-top:8px">[ COMPLETE DIRECT LINK ]</button></div><div id="connectionStatus" class="notice">Preparing connection...</div><div id="connectHint" class="small muted"></div><div class="row" style="margin-top:8px"><button id="rejoinBtn" class="btn hidden">[ PASTE A NEW HOST CODE ]</button><button id="cancelConnect" class="btn danger">[ CANCEL ]</button></div></section>
+
+  <section id="lobbyScreen" class="panel hidden" aria-labelledby="lobbyTitle">
+    <div class="section-head"><div><h2 id="lobbyTitle">CAMPAIGN LOBBY</h2><p class="small muted">Two institutions. One shared setup. The first cycle stays closed until both players confirm.</p></div><span id="lobbyConnection" class="connection" role="status"></span></div>
+    <div id="lobbyBanks" class="lobby-banks" aria-label="Lobby bank identities"></div>
+    <div class="lobby-layout">
+      <div class="lobby-editor"><h3>Your institution</h3><label for="lobbyName">BANK NAME</label><input id="lobbyName" class="field" maxlength="36"><div class="bank-color-fields"><div><label for="lobbyColor">BANK COLOR</label><input id="lobbyColor" type="color" value="#2878e0"></div><p class="small muted">Your bank keeps the same color on both computers. Host and guest labels remain visible too.</p></div><button id="lobbySave" class="btn">Save identity</button></div>
+      <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><button id="lobbySettings" class="btn">Apply settings</button></div>
+    </div>
+    <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
+    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
+    <p class="micro muted">Changes to either identity or the campaign settings clear both confirmations. Repository health describes access to GitHub, not proof that your friend's browser is still open.</p>
+  </section>
 
   <main id="gameScreen" class="hidden">
     <div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div>
@@ -2783,14 +2798,146 @@ function emptyGh(){return{active:false,api:'',repo:'',branch:'',private:true,roo
 
 let mode='ai',game=null,view=null,seat=0,draft=null,draftOwner='',lastCycle=0,lastResolutionId=0,privacyNext=null,pc=null,dc=null,p2pRole='',p2pConfig=null,storageWarned=false,lan=emptyLan(),handshakeTimer=null,handshakeTries=0,linkWatch=null,planAckTimer=null,linkText='',linkCls='warn',linkSession='',dropGrace=null,relinking=false,linkReady=false,lanIp='',gh=emptyGh(),ghPendingPlan=null,ghIncomingCommit=null;
 let workspaceTab='overview';
+// Lobby state belongs to the connection, never to simulation state or its RNG.
+let lobby=null,lobbyPending=null,lobbyDirty=false,lobbySettingsDirty=false;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
-function show(id){['#startScreen','#connectScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function show(id){['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
 function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('')}
 function validName(id){const n=$(id).value.trim();if(!n)throw Error('Enter an institution name.');return n}
+function lobbyIdentity(player,index){
+ const name=String(player&&player.name||'').trim().slice(0,36);
+ if(!name)throw Error('Enter an institution name.');
+ if(!/^#[0-9a-f]{6}$/i.test(String(player.color)))throw Error('Choose a valid bank color.');
+ return {name,color:E.bankColor(player.color,index),ready:false};
+}
+function lobbyColorsClash(a,b){
+ const rgb=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+ const x=rgb(a),y=rgb(b);return Math.hypot(...x.map((n,i)=>n-y[i]))<100;
+}
+function lobbyAlternative(color){
+ return ['#e1505c','#2878e0','#16835f','#8642bc','#a65d08','#163044'].find(c=>!lobbyColorsClash(color,c));
+}
+function lobbyOptions(){
+ const c=p2pConfig;
+ return {scope:['town','regional','state','national'].includes(c.scope)?c.scope:'national',
+  scenario:['balanced','rate','regulatory','growth'].includes(c.scenario)?c.scenario:'balanced',
+  campaignRulesVersion:c.campaignRulesVersion||0,serviceExpansionVersion:c.serviceExpansionVersion||0,
+  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0};
+}
+function publishLobby(){
+ if(!lobby||game)return;
+ ghCheckpoint();renderLobby();send({type:'lobby',lobby:JSON.parse(JSON.stringify(lobby))});
+}
+function openLobby(peer){
+ if(peer.lobbySupported!==1){$('#connectHint').textContent='Update the game file on both computers to use the campaign lobby.';send({type:'error',code:'lobby_required',message:'The campaign lobby requires this updated game on both computers.'});setConnection('LOBBY REFUSED // Update both game files.','bad');return}
+ if(!lobby){
+  const host=lobbyIdentity({name:p2pConfig.name,color:E.bankColor(p2pConfig.color)},0);
+  const guest=lobbyIdentity({name:peer.name,color:E.bankColor(peer.color,1)},1);
+  const adjusted=lobbyColorsClash(host.color,guest.color);if(adjusted)guest.color=lobbyAlternative(host.color);
+  lobby={version:1,revision:1,players:[host,guest],settings:lobbyOptions(),guestAck:'',
+   note:adjusted?'The joining bank received a distinct starting color. Both players can change their own color before confirming.':''};
+ }
+ linkReady=true;stopHandshake();publishLobby();
+}
+function applyLobbyUpdate(index,message){
+ if(!lobby||game)return;
+ // Only the host invokes this for its own seat; remote messages always target seat 1.
+ const reject=text=>{if(index===1){lobby.guestAck=String(message.id||'');lobby.error=text;publishLobby()}else throw Error(text)};
+ if(message.revision!==lobby.revision)return reject('Setup changed. Review the current lobby and confirm again.');
+ let player;try{player=lobbyIdentity(message.player,index)}catch(e){return reject(e.message)}
+ if(lobbyColorsClash(player.color,lobby.players[1-index].color))return reject('Those colors are too similar. Choose a more distinct bank color.');
+ const before=lobby.players[index],changed=player.name!==before.name||player.color!==before.color;
+ if(changed){lobby.players[index]=player;lobby.revision++;lobby.players.forEach(p=>p.ready=false)}
+ else lobby.players[index].ready=message.ready===true;
+ if(index===1)lobby.guestAck=String(message.id||'');
+ lobby.error='';if(index===0)lobbyDirty=false;
+ lobby.note=changed?'Identity updated. Both players must confirm this setup.':lobby.note;
+ publishLobby();
+}
+function editLobbyIdentity(ready=false){
+ try{
+  if(!lobby||game||view||lobbyPending)return;
+  const i=p2pRole==='host'?0:1;
+  const player=lobbyIdentity({name:$('#lobbyName').value,color:$('#lobbyColor').value},i);
+  if(lobbyColorsClash(player.color,lobby.players[1-i].color))throw Error('Those colors are too similar. Choose a more distinct bank color.');
+  const message={type:'lobby_update',id:messageId(),revision:lobby.revision,player,ready};
+  $('#lobbyError').textContent='';
+  if(i===0)applyLobbyUpdate(0,message);
+  else{lobbyPending=message;lobbyDirty=false;send(message);ghCheckpoint();renderLobby()}
+ }catch(e){lobbyPending=null;$('#lobbyError').textContent=e.message;renderLobbyControls()}
+}
+function applyLobbySettings(){
+ try{
+  if(!lobby||game||p2pRole!=='host')return;
+  const scope=$('#lobbyScope').value,scenario=$('#lobbyScenario').value;
+  if(!['town','regional','state','national'].includes(scope)||!['balanced','rate','regulatory','growth'].includes(scenario))throw Error('Choose valid campaign settings.');
+  if(scope===lobby.settings.scope&&scenario===lobby.settings.scenario){lobbySettingsDirty=false;renderLobbyControls();return}
+  lobbySettingsDirty=false;
+  lobby.settings.scope=scope;lobby.settings.scenario=scenario;lobby.revision++;lobby.players.forEach(p=>p.ready=false);
+  lobby.note='Campaign settings updated. Both players must confirm again.';lobby.error='';publishLobby();
+ }catch(e){$('#lobbyError').textContent=e.message}
+}
+function receiveLobby(message){
+ if(game||view)return; // Delayed lobby frames cannot rewind an active campaign.
+ const next=message.lobby;
+ if(!next||next.version!==1||!Number.isSafeInteger(next.revision)||next.revision<1||!Array.isArray(next.players)||next.players.length!==2)throw Error('Invalid lobby snapshot.');
+ next.players.forEach(lobbyIdentity);
+ if(!next.settings||!['town','regional','state','national'].includes(next.settings.scope)||!['balanced','rate','regulatory','growth'].includes(next.settings.scenario))throw Error('Invalid lobby settings.');
+ if(lobby&&next.revision<lobby.revision)return;
+ if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
+ lobby=JSON.parse(JSON.stringify(next));linkReady=true;stopHandshake();ghCheckpoint();renderLobby();
+}
+function renderLobbyControls(){
+ if(!lobby)return;
+ const i=p2pRole==='host'?0:1,blocked=Boolean(lobbyPending),me=lobby.players[i];
+ $('#lobbyReady').disabled=blocked||lobbyDirty||lobbySettingsDirty;$('#lobbySave').disabled=blocked||me.ready;
+ $('#lobbyName').disabled=blocked||me.ready;$('#lobbyColor').disabled=blocked||me.ready;
+ $('#lobbyScope').disabled=i!==0||me.ready||lobby.settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=i!==0||me.ready;
+ $('#lobbySettings').disabled=me.ready;
+ $('#lobbyReady').textContent=me.ready?'Not ready':'Confirm ready';
+ $('#lobbyStart').disabled=blocked||lobbyDirty||lobbySettingsDirty||!lobby.players.every(p=>p.ready);
+}
+function renderLobby(){
+ if(!lobby||game||view)return;
+ show('#lobbyScreen');const host=p2pRole==='host',i=host?0:1,settings=lobby.settings;
+ $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3><span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
+ if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color}
+ if(!lobbySettingsDirty){$('#lobbyScope').value=settings.scope;$('#lobbyScenario').value=settings.scenario}
+ $('#lobbyScope').disabled=!host||settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=!host;
+ $('#lobbySettings').classList.toggle('hidden',!host);$('#lobbyStart').classList.toggle('hidden',!host);
+ $('#lobbyRetry').classList.toggle('hidden',!gh.active);
+ $('#lobbyRules').textContent=(settings.campaignRulesVersion===1?'Regional Rivalry pilot · 2 regions / 6 markets (overrides size).':'Legacy campaign rules · open-ended.')+
+  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+' Preview choices were set by the host when opening the room.';
+ $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
+ $('#lobbyError').textContent=lobby.error||'';
+ $('#lobbyProgress').textContent=lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(host?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';
+ renderLobbyControls();paintLink();
+}
+function startLobbyCampaign(){
+ try{
+  if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty)return;
+  if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
+  const [host,guest]=lobby.players,s=lobby.settings;
+  const created=E.createGame({...s,campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
+  game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
+ }catch(e){$('#lobbyError').textContent=e.message}
+}
+function markLobbyDirty(){lobbyDirty=true;renderLobbyControls()}
+$('#lobbyName').addEventListener('input',markLobbyDirty);
+$('#lobbyColor').addEventListener('input',markLobbyDirty);
+$('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
+$('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
+$('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
+$('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
+$('#lobbySettings').addEventListener('click',applyLobbySettings);
+$('#lobbyStart').addEventListener('click',startLobbyCampaign);
+$('#lobbyRetry').addEventListener('click',ghRetry);
+$('#lobbyLeave').addEventListener('click',leaveGame);
 function currentView(){return game?E.publicState(game,seat):view}
 function newDraft(v){draft={contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
@@ -2813,8 +2960,8 @@ function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.ac
 
 async function lanRequest(path,options={}){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),8000);try{const response=await fetch(path,{headers:{'Content-Type':'application/json'},...options,signal:ctrl.signal});let data={};try{data=await response.json()}catch{}if(!response.ok)throw Error(data.error||`LAN server returned ${response.status}.`);return data}catch(e){if(e&&e.name==='AbortError')throw Error('LAN server did not respond within 8 seconds.');throw e}finally{clearTimeout(timer)}}
 function messageId(){return globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}
-async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
-async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
+async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
+async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
 async function pollLan(){while(lan.active){let delay=700;try{const data=await lanRequest(`/api/poll?room=${encodeURIComponent(lan.room)}&token=${encodeURIComponent(lan.token)}&after=${lan.after}`);lan.failures=0;for(const item of data.messages||[]){lan.after=Math.max(lan.after,Number(item.seq)||0);handleMessage(item.message)}if(data.connected)setConnection(`ROOM ${lan.room} // CONNECTED`,'good')}catch(e){if(lan.active){lan.failures++;delay=Math.min(8000,700*(2**Math.min(lan.failures,4)));setConnection(`LAN LINK INTERRUPTED // retrying // ${e.message}`,'bad')}}await new Promise(resolve=>setTimeout(resolve,delay))}}
 async function lanFlush(){if(lan.busy||!lan.active||!lan.outbox.length)return;lan.busy=true;try{while(lan.active&&lan.outbox.length){const item=lan.outbox[0];const data=await lanRequest('/api/send',{method:'POST',body:JSON.stringify({room:lan.room,token:lan.token,clientId:item.id,message:item.msg})});if(!data.ok)throw Error('The LAN server did not acknowledge the message.');lan.outbox.shift();lan.failures=0}}catch(e){if(lan.active){lan.failures++;setConnection(`LAN SEND INTERRUPTED // queued for retry // ${e.message}`,'bad');clearTimeout(lan.retryTimer);lan.retryTimer=setTimeout(()=>{lan.retryTimer=null;lanFlush()},Math.min(8000,800*(2**Math.min(lan.failures,4))))}}finally{lan.busy=false;if(lan.active&&lan.outbox.length&&!lan.retryTimer)queueMicrotask(lanFlush)}}
 function lanSend(msg){lan.outbox.push({id:messageId(),msg});lanFlush()}
@@ -2899,9 +3046,9 @@ async function ghWrite(side,payload,sha){
  const next=body&&body.content&&body.content.sha;if(!next)throw Error('GitHub accepted the update but did not return its version.');return next;
 }
 function ghCompact(messages){
- // A state is a replacement snapshot, not a command. Keep only the newest one.
- const latest=messages.filter(e=>e.msg.type==='state').at(-1);
- return messages.filter(e=>e.msg.type!=='state'||e===latest);
+ // Lobby and game states are replacement snapshots, not commands.
+ const latest=new Map();for(const e of messages)if(['state','lobby'].includes(e.msg.type))latest.set(e.msg.type,e);
+ return messages.filter(e=>!latest.has(e.msg.type)||e===latest.get(e.msg.type));
 }
 function ghAccepted(current){
  const n=Number(current.data&&current.data.seq)||0;
@@ -2927,7 +3074,7 @@ async function ghFlush(){
    if(!sha&&session.published<target)throw Error('The room changed repeatedly. Close duplicate game tabs and retry.');
    if(sha){session.sha=sha;session.published=target}session.inflight=null;session.sendFailures=0;ghCheckpoint();
   }
-  setConnection('REPOSITORY '+session.room+' // UPDATE STORED; WAITING FOR PEER','warn');
+  if(gh===session&&session.active)ghPaintHealth('UPDATE STORED · waiting for friend');
  }catch(e){if(gh===session&&session.active){
   session.sendFailures++;setConnection('REPOSITORY SEND INTERRUPTED // queued for retry // '+e.message,'bad');
   clearTimeout(session.retryTimer);if(!session.paused)session.retryTimer=setTimeout(()=>{session.retryTimer=null;if(gh===session)ghFlush()},ghDelay(Math.min(30000,1200*2**Math.min(session.sendFailures,5))));
@@ -2936,7 +3083,16 @@ async function ghFlush(){
 function ghSend(msg){
  const next=ghCompact([...gh.outbox,{seq:gh.mine+1,msg}]);
  if(next.length>100)throw Error('Repository command queue is full. Keep this tab open and reconnect before sending more commands.');
- gh.mine++;gh.outbox=next;ghCheckpoint();setConnection('REPOSITORY ROOM '+gh.room+' // SENDING','warn');ghFlush();
+ gh.mine++;gh.outbox=next;ghCheckpoint();ghPaintHealth('SENDING UPDATE');ghFlush();
+}
+function ghPaintHealth(activity){
+ // A quiet peer file is not a broken link; it also does not prove a live peer.
+ if(gh.paused){setConnection('REPOSITORY ACCESS PAUSED // Check access and retry.','bad');return}
+ if(gh.sendFailures||gh.pollFailures){setConnection('REPOSITORY LINK INTERRUPTED // queued updates retained; retrying','bad');return}
+ if(gh.cooldownUntil>Date.now()){setConnection('REPOSITORY COOLDOWN // retry after '+new Date(gh.cooldownUntil).toLocaleTimeString(),'warn');return}
+ const known=gh.peerFileSeen===true;
+ const label=known?'REPOSITORY REACHABLE':'WAITING FOR PEER FILE';
+ setConnection('REPOSITORY ROOM '+gh.room+' // '+label+' · '+activity+(gh.lastContact?' · last peer update '+new Date(gh.lastContact).toLocaleTimeString():''),known?'good':'warn');
 }
 async function ghPoll(){
  const session=gh;if(session.polling)return;session.polling=true;
@@ -2957,11 +3113,10 @@ async function ghPoll(){
     session.etag=result.etag;session.lastContact=Date.now();
     const ack=Number(result.data.ack)||0;
     session.outbox=session.outbox.filter(e=>e.msg.type==='state'||e.seq>Math.min(ack,session.published));
-    if(!session.sendFailures)setConnection('REPOSITORY ROOM '+session.room+' // SYNCED · last message '+new Date(session.lastContact).toLocaleTimeString(),'good');
-   }else if(!session.sendFailures){
-    setConnection('REPOSITORY ROOM '+session.room+' // '+(result.missing?'WAITING FOR PEER FILE':'WAITING FOR PEER · no new message'),'warn');
    }
-   session.pollFailures=0;ghCheckpoint();
+   session.peerFileSeen=!result.missing;session.lastPoll=Date.now();session.pollFailures=0;
+   ghPaintHealth(result.missing?'waiting for friend to join':result.unchanged?'no new messages':'peer update received');
+   ghCheckpoint();
   }catch(e){if(gh===session&&session.active){session.pollFailures++;delay=ghDelay(Math.min(30000,5000*2**Math.min(session.pollFailures,3)));setConnection('REPOSITORY LINK INTERRUPTED // retrying // '+e.message,'bad')}}
   await new Promise(resolve=>setTimeout(resolve,delay));
  }}finally{session.polling=false}
@@ -2970,7 +3125,7 @@ function ghCheckpoint(){
  if(!gh.active)return;
  try{
   const {token,busy,retryTimer,polling,...connection}=gh;
-  sessionStorage.setItem('branchWarsGhResume',JSON.stringify({version:1,connection,game:p2pRole==='host'?game:null,view:p2pRole==='guest'?view:null,p2pConfig,ghPendingPlan,ghIncomingCommit}));
+  sessionStorage.setItem('branchWarsGhResume',JSON.stringify({version:1,connection,game:p2pRole==='host'?game:null,view:p2pRole==='guest'?view:null,p2pConfig,ghPendingPlan,ghIncomingCommit,lobby:game||view?null:lobby,lobbyPending}));
  }catch{if(!gh.storageWarned){gh.storageWarned=true;toast('Repository reload recovery could not be saved. Keep this tab open; the host should EXPORT a backup.')}}
 }
 function ghRetry(){
@@ -2989,12 +3144,12 @@ async function ghResume(){
   const repo=ghNormalizeRepo(c.repo),api=ghNormalizeApi(c.api);
   if(!/^[A-Z2-9]{8}$/.test(c.room))throw Error('Invalid saved room.');
   const restored=saved.game?migrateGame(saved.game):null;
-  resetLink();gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:1};
+  resetLink();gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:c.published<c.mine?1:0};
   mode='gh';p2pRole=c.side;seat=c.side==='host'?0:1;p2pConfig=saved.p2pConfig;game=restored;view=saved.view;
-  ghPendingPlan=saved.ghPendingPlan;ghIncomingCommit=saved.ghIncomingCommit;draft=null;if(view&&ghPendingPlan)view.me.submitted=true;
+  ghPendingPlan=saved.ghPendingPlan;ghIncomingCommit=saved.ghIncomingCommit;lobby=saved.lobby||null;lobbyPending=saved.lobbyPending||null;draft=null;if(view&&ghPendingPlan)view.me.submitted=true;
   await ghCheckRepo();gh.branch=c.branch||gh.branch;const own=await ghRead(c.side,'');
   if(!own.missing)ghAccepted(own);
-  ghRemember();if(game||view)enterGame(true);else show('#connectScreen');
+  ghRemember();if(game||view)enterGame(true);else if(lobby)renderLobby();else show('#connectScreen');
   ghPoll();ghFlush();setConnection('REPOSITORY '+gh.room+' // RESUMING SAVED SESSION','warn');
  }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message)}
 }
@@ -3015,7 +3170,7 @@ function ghRoomCode(){const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=ne
 async function ghCreateRoom(){
  try{setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
   resetLink();game=null;view=null;mode='gh';p2pRole='host';
-  p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
+  p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
   gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();ghRemember();
   for(let attempt=0;attempt<5&&!gh.sha;attempt++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){const accepted=await ghRead('host','');if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
   if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
@@ -3031,13 +3186,13 @@ async function ghJoinRoom(){
   if(!token)throw Error('Enter your own access token. Never use your rival\u2019s.');
   const repo=ghNormalizeRepo(invite.repo),room=String(invite.room||'').trim().toUpperCase(),api=ghNormalizeApi($('#ghGuestApi').value);if(!/^[A-Z2-9]{8}$/.test(room))throw Error('That repository-room code is invalid or incomplete. Ask the host for a fresh code.');
   resetLink();game=null;view=null;mode='gh';p2pRole='guest';
-  p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
+  p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
   gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();const occupied=await ghRead('guest','');if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM JOINED.</b> Waiting for the host to open the campaign.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;
   $('#outCodeLabel').textContent='ROOM';$('#outCode').classList.add('room-code');$('#outCode').value=gh.room;
   setConnection(`REPOSITORY ROOM ${gh.room} // CONNECTING`,'warn');ghPoll();
-  ghSend({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name,doctrine:'commercial'});
+  ghSend({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name,doctrine:'commercial'});
  }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
 function pack(prefix,obj){return prefix+btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.
@@ -3076,12 +3231,12 @@ function withLocalAddress(desc){
  return{type:desc.type,sdp:merged.join('\r\n')+'\r\n'};
 }
 function linkDetail(){if(gh.active)return `${gh.repo}`;if(lan.active)return '';if(!pc)return '';return `PEER ${String(pc.connectionState||'new').toUpperCase()} / CHANNEL ${dc?String(dc.readyState).toUpperCase():'NONE'}`}
-function paintLink(){const detail=linkDetail(),full=linkText+(detail?` // ${detail}`:'');if($('#connectionStatus')){$('#connectionStatus').textContent=full;$('#connectionStatus').className='notice '+linkCls}if($('#linkState')){$('#linkState').textContent=full;$('#linkState').className='connection '+linkCls}}
+function paintLink(){const detail=linkDetail(),full=linkText+(detail?` // ${detail}`:'');if($('#connectionStatus')){$('#connectionStatus').textContent=full;$('#connectionStatus').className='notice '+linkCls}if($('#lobbyConnection')){$('#lobbyConnection').textContent=full;$('#lobbyConnection').className='connection '+linkCls}if($('#linkState')){$('#linkState').textContent=full;$('#linkState').className='connection '+linkCls}}
 function setConnection(text,cls='warn'){linkText=text;linkCls=cls;paintLink()}
-function resetLink(){ghCheckpoint();linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
+function resetLink(){ghCheckpoint();$('#connectHint').textContent='';lobby=null;lobbyPending=null;lobbyDirty=false;lobbySettingsDirty=false;linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
 function handshakeDone(){return linkReady}
 function stopHandshake(){if(handshakeTimer){clearInterval(handshakeTimer);handshakeTimer=null}}
-function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
+function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
 function armLinkWatch(){clearTimeout(linkWatch);linkWatch=setTimeout(()=>{if(!dc||dc.readyState!=='open'){setConnection('DIRECT LINK STALLED // The network connected but the game data channel never opened. This network is blocking direct browser traffic; try Intranet Room mode.','bad');offerRelink()}else if(!handshakeDone()){setConnection('DIRECT LINK STALLED // The channel is open but the rival has not answered. Exchange fresh codes.','bad');offerRelink()}},9000)}
 function newPeer(){if(!window.RTCPeerConnection)throw Error('This browser has disabled direct WebRTC connections. Use AI or Pass & Play.');const p=new RTCPeerConnection({iceServers:[]});p.onconnectionstatechange=()=>{if(p!==pc)return;const s=p.connectionState||'connecting',open=!!dc&&dc.readyState==='open';
  if(s==='disconnected'){if(!dropGrace)dropGrace=setTimeout(()=>{dropGrace=null;if(pc===p&&(p.connectionState==='disconnected'||p.connectionState==='failed'))linkLost('The direct link dropped and did not recover.')},12000);setConnection('DIRECT LINK UNSTEADY // waiting for it to recover','warn');return}
@@ -3096,7 +3251,7 @@ function startRejoin(){relinking=true;show('#startScreen');setMode('p2p');setSta
 function wireChannel(ch){dc=ch;const opened=()=>{clearTimeout(dropGrace);dropGrace=null;linkReady=false;setConnection('DIRECT LINK CONNECTED','good');if($('#rejoinBtn'))$('#rejoinBtn').classList.add('hidden');startHandshake()};dc.onopen=opened;dc.onclose=()=>{stopHandshake();setConnection('DIRECT LINK CLOSED','bad')};dc.onerror=e=>{const detail=e&&e.error&&e.error.message?` // ${e.error.message}`:'';setConnection(`DIRECT LINK ERROR${detail}`,'bad')};dc.onmessage=e=>{try{handleMessage(JSON.parse(e.data))}catch(err){console.error('Branch Wars could not process a direct-link message',err);setConnection(`DIRECT LINK MESSAGE REJECTED // ${err.message||err}`,'bad');toast(`Direct-link message could not be processed: ${err.message||err}`)}};if(dc.readyState==='open')opened()}
 function send(msg){if(gh.active){ghSend(msg);return}if(lan.active){lanSend(msg);return}if(!dc||dc.readyState!=='open')throw Error(`The direct link is not connected (channel ${dc?dc.readyState:'missing'}).`);dc.send(JSON.stringify(msg))}
 async function createOffer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='host'&&!!game&&game.mode==='p2p');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='host';
- if(!rejoin||!p2pConfig)p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
+ if(!rejoin||!p2pConfig)p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
  linkSession=(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)).slice(0,12);
  pc=newPeer();wireChannel(pc.createDataChannel('branch-wars',{ordered:true}));await pc.setLocalDescription(await pc.createOffer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
@@ -3106,7 +3261,7 @@ async function createOffer(reconnect=false){try{setStartMessage('');rememberLanI
  $('#outCodeLabel').textContent='HOST INVITATION';$('#outCode').classList.remove('room-code');$('#outCode').value=pack('BW7-OFFER-',{sdp:withLocalAddress(pc.localDescription),config:p2pConfig,session:linkSession});
  $('#answerArea').classList.remove('hidden');setConnection('WAITING FOR RIVAL RESPONSE','warn')}catch(e){setStartMessage(e.message);show(game?'#gameScreen':'#startScreen')}}
 async function createAnswer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='guest'&&!!view&&view.mode==='p2p');const invite=unpack($('#offerInput').value,'BW7-OFFER-');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='guest';
- p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
+ p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
  pc=newPeer();pc.ondatachannel=e=>wireChannel(e.channel);await pc.setRemoteDescription(invite.sdp);await pc.setLocalDescription(await pc.createAnswer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
  await waitIce(pc,n=>setConnection(`MAPPING NETWORK ROUTES // ${n} found`,'warn'));
@@ -3129,9 +3284,10 @@ function handleMessage(m){
    if(((game&&game.managementVersion===2)||(!game&&p2pConfig.managementVersion===2))&&m.relationshipSupported!==1){send({type:'error',message:'Relationship operations requires the updated game on both computers.'});setConnection('RELATIONSHIP LINK REFUSED','bad');return}
    if(((game&&game.managementVersion>=1)||(!game&&p2pConfig.managementVersion>=1))&&m.managementSupported!==1){send({type:'error',message:'Living institution requires the updated game on both computers.'});setConnection('LIVING INSTITUTION LINK REFUSED','bad');return}
    if(((game&&game.campaignRulesVersion===1)||(!game&&p2pConfig.campaignRulesVersion===1))&&m.pilotSupported!==11){send({type:'error',message:'Regional Rivalry requires the updated game on both computers.'});setConnection('PILOT LINK REFUSED // Update the rival game file.','bad');return}
-   if(!game){try{if(p2pConfig.campaignRulesVersion===1&&m.pilotSupported!==11)throw Error('Regional Rivalry requires the updated game on both computers.');game=E.createGame({customerDemandVersion:p2pConfig.customerDemandVersion||0,managementVersion:p2pConfig.managementVersion||0,serviceExpansionVersion:p2pConfig.serviceExpansionVersion||0,campaignRulesVersion:p2pConfig.campaignRulesVersion,color1:p2pConfig.color,color2:m.color,mode:(lan.active||gh.active)?'lan':'p2p',name1:p2pConfig.name,name2:m.name,scope:p2pConfig.scope,scenario:p2pConfig.scenario,difficulty:'vp',doctrine1:p2pConfig.doctrine,doctrine2:m.doctrine});seat=0;draft=null;lastResolutionId=0;enterGame(true)}catch(e){game=null;console.error('Branch Wars could not open the direct campaign',e);setConnection(`DIRECT LINK REFUSED // ${e.message}`,'bad');try{send({type:'error',message:`The host could not open the campaign: ${e.message}`})}catch{}return}}
+   if(!game){try{openLobby(m)}catch(e){setConnection('LOBBY REFUSED // '+e.message,'bad');send({type:'error',code:'lobby_required',message:e.message})}return}
    linkReady=true;stopHandshake();syncPeers();return
   }
+  if(m.type==='lobby_update'&&!game){applyLobbyUpdate(1,m);return}
   if(!game){try{send({type:'hello_request'})}catch{}return}
   if(m.type==='plan_commit'&&gh.active){try{if(m.cycle<game.cycle||game.players[1].submitted){syncPeers();return}if(!/^[0-9a-f]{64}$/.test(String(m.hash||''))||m.cycle!==game.cycle)throw Error('The rival sent an invalid plan commitment.');if(ghIncomingCommit&&ghIncomingCommit.hash!==m.hash)throw Error('The rival tried to replace a locked plan commitment.');ghIncomingCommit={hash:m.hash,cycle:m.cycle};syncPeers()}catch(e){try{send({type:'error',message:e.message})}catch{}toast(`The rival commitment was rejected: ${e.message}`)}return}
   if(m.type==='plan_reveal'&&gh.active)return acceptGhReveal(m);
@@ -3140,9 +3296,10 @@ function handleMessage(m){
   if(m.type==='rematch'){try{E.rematch(game,1);syncPeers()}catch(e){try{send({type:'error',message:e.message})}catch{}}return}
   return
  }
- if(m.type==='hello_request'){try{send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
- if(m.type==='state'){linkReady=true;stopHandshake();clearTimeout(planAckTimer);planAckTimer=null;view=m.state;if(ghPendingPlan&&(view.gameOver||view.cycle!==ghPendingPlan.cycle))ghPendingPlan=null;if(ghPendingPlan&&ghPendingPlan.recallRequested&&!view.me.submitted&&!view.rival.submitted)ghPendingPlan=null;if(gh.active&&ghPendingPlan&&view.rival.submitted)ghRevealPlan();if(ghPendingPlan)view.me.submitted=true;if(!lan.active&&!gh.active)mode='p2p';setConnection(gh.active?`REPOSITORY ROOM ${gh.room} // LINKED`:lan.active?`ROOM ${lan.room} // CONNECTED`:'DIRECT LINK CONNECTED','good');if($('#gameScreen').classList.contains('hidden')&&$('#gameOver').classList.contains('hidden'))enterGame(true);else render();return}
- if(m.type==='error'){if(gh.active&&m.code==='plan_rejected')ghPendingPlan=null;clearTimeout(planAckTimer);planAckTimer=null;if(view&&view.me&&view.me.submitted){view.me.submitted=false;render()}if($('#submitMsg'))$('#submitMsg').textContent=`THE HOST REJECTED THAT PLAN // ${m.message}`;toast(m.message);return}
+ if(m.type==='hello_request'){try{send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
+ if(m.type==='lobby'){receiveLobby(m);return}
+ if(m.type==='state'){if(!view&&p2pConfig&&p2pConfig.lobbyRequired&&!lobby){$('#connectHint').textContent='The host skipped the lobby. Both players need this updated game file.';setConnection('LOBBY REQUIRED // Update the host game before starting.','bad');toast('The host skipped the lobby. Both players need this updated build.');return}linkReady=true;stopHandshake();clearTimeout(planAckTimer);planAckTimer=null;view=m.state;if(ghPendingPlan&&(view.gameOver||view.cycle!==ghPendingPlan.cycle))ghPendingPlan=null;if(ghPendingPlan&&ghPendingPlan.recallRequested&&!view.me.submitted&&!view.rival.submitted)ghPendingPlan=null;if(gh.active&&ghPendingPlan&&view.rival.submitted)ghRevealPlan();if(ghPendingPlan)view.me.submitted=true;if(!lan.active&&!gh.active)mode='p2p';setConnection(gh.active?`REPOSITORY ROOM ${gh.room} // LINKED`:lan.active?`ROOM ${lan.room} // CONNECTED`:'DIRECT LINK CONNECTED','good');if($('#gameScreen').classList.contains('hidden')&&$('#gameOver').classList.contains('hidden'))enterGame(true);else render();return}
+ if(m.type==='error'){if(!game&&!view){$('#connectHint').textContent=m.message;setConnection(m.message,'bad');if($('#lobbyError'))$('#lobbyError').textContent=m.message;toast(m.message);return}if(gh.active&&m.code==='plan_rejected')ghPendingPlan=null;clearTimeout(planAckTimer);planAckTimer=null;if(view&&view.me&&view.me.submitted){view.me.submitted=false;render()}if($('#submitMsg'))$('#submitMsg').textContent=`THE HOST REJECTED THAT PLAN // ${m.message}`;toast(m.message);return}
 }
 
 function syncPeers(){if(game&&game.mode==='lan')saveLocal();const mine=E.publicState(game,0),theirs=E.publicState(game,1);if(gh.active&&ghIncomingCommit){mine.rival.submitted=true;theirs.me.submitted=true}let sendErr=null;try{send({type:'state',state:theirs})}catch(e){sendErr=e}view=mine;try{render()}catch(e){console.error('Branch Wars failed to redraw the host view',e);toast(`Display error: ${e.message}`)}if(sendErr){setConnection(`LINK SEND FAILED // ${sendErr.message}`,'bad');toast(`The rival did not receive the update: ${sendErr.message}`)}}

@@ -18,7 +18,7 @@ g.gameOver=true;E.rematch(g,0);E.rematch(g,1);assert.equal(g.players[0].color,'#
 const a=E.createGame({seed:'neutral',created:1,mode:'hotseat',scope:'town',color1:'#000000',color2:'#ffffff'}),b=E.createGame({seed:'neutral',created:1,mode:'hotseat',scope:'town'});
 const normalized=x=>{const out=JSON.parse(JSON.stringify(x));out.players.forEach(p=>delete p.color);return out};
 for(let i=0;i<8&&!a.gameOver;i++){for(const seat of [0,1]){E.submit(a,seat,E.chooseBot(a,seat));E.submit(b,seat,E.chooseBot(b,seat))}assert.deepEqual(normalized(a),normalized(b))}
-assert(html.includes("color1:p2pConfig.color,color2:m.color"),'host adopts guest color');
+assert(html.includes("color1:host.color,color2:guest.color"),'campaign adopts both confirmed lobby colors');
 assert(html.match(/type:'hello',[^}\n]*color:p2pConfig.color/g).length>=4,'all handshake paths carry selected color');
 assert(html.includes('stroke-dasharray:7 4'));assert(html.includes('aria-label="Bank identities"'));
 console.log('Bank identity tests passed: picker wiring, seat perspectives, save migration, rematches, legacy defaults, unsafe values, matching colors, handshake contracts and simulation neutrality.');
