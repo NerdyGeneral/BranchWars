@@ -18,6 +18,7 @@ files.push('tests/reference-eol.test.js');
 files.push('tests/project-rules.test.js');
 files.push('tests/campaign-lifecycle.test.js');
 files.push('tests/multiplayer_lobby.test.js');
+files.push('tests/runtime-stages.test.js');
 function run(label, command, args) {
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
@@ -40,6 +41,7 @@ report.tests.push(run('reference-eol.test.js', process.execPath, ['tests/referen
 report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project-rules.test.js']));
 report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/campaign-lifecycle.test.js']));
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
+report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
 report.tests.push(run('architecture.test.js', process.execPath, ['tests/architecture.test.js']));
 report.tests.push(run('behavior-golden.test.js', process.execPath, ['tests/behavior-golden.test.js']));
 report.tests.push(run('save-baseline.test.js', process.execPath, ['tests/save-baseline.test.js']));
