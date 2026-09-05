@@ -43,6 +43,7 @@ function compare(game, action, label) {
   same(a, b, label + ' state/RNG/accounting');
   same(current.hooks.contexts(), old.hooks.contexts(), label + ' scope cleanup');
   assert.equal(a.players.some(p => p._customerIntake), false, 'Transient intake escaped');
+  return first;
 }
 for (const [index, setting] of options.entries()) {
   const game = old.E.createGame({seed: 700 + index, created: 1, mode: 'hotseat', ...setting});
@@ -54,7 +55,8 @@ for (const [index, setting] of options.entries()) {
       const cohort = p.depositBook.cohorts[0];
       Object.assign(cohort, {locked: true, remaining: 1, quotedCycle: 0});
     }
-    compare(g, ({E}, state) => E.operate(state, state.players[seat], preview), 'Operations ' + index + '/' + seat + '/' + preview + '/' + deposit);
+    const result = compare(g, ({E}, state) => E.operate(state, state.players[seat], preview), 'Operations ' + index + '/' + seat + '/' + preview + '/' + deposit);
+    assert(!result.error, 'Operation scenario must execute, not merely match two failures: ' + result.error);
     operations++;
   }
   for (const key of Object.keys(old.E.PROJECTS)) for (const seat of [0, 1]) {

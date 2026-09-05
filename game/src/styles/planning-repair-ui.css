@@ -1,0 +1,11 @@
+
+.plan-budget{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:9px;font-size:.75rem}.plan-budget>span{white-space:nowrap}.plan-budget details{flex-basis:100%;color:#63738a}.plan-budget details>div{max-width:900px;margin-top:5px}
+.operating-preview{margin-top:14px;border-top:1px solid #d4deea;padding-top:10px}.operating-preview h3{font-size:.8rem;margin:0 0 8px}.forecast-table{width:100%;border-collapse:collapse;font-size:.74rem}.forecast-table th,.forecast-table td{padding:7px 4px;text-align:right;border-bottom:1px solid #e5eaf0}.forecast-table th:first-child,.forecast-table td:first-child{text-align:left}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.report-grid>div{background:#f3f7fb;padding:8px;border-radius:7px}.report-grid span{display:block;font-size:.66rem;color:#60738b}.report-grid b{font-size:.87rem}
+.fund-next{padding:6px 9px;border:1px solid #b7cde4;border-radius:7px;background:#fff;font-size:.72rem}
+.workspace-view,.game-layout{scroll-margin-top:100px}
+#gameScreen[data-tab="strategy"] .desk{display:none}
+#gameScreen[data-tab="strategy"] .game-layout>div{width:100%;min-width:0}
+#gameScreen[data-tab="strategy"] .strategy-tree{max-width:100%;overscroll-behavior-x:contain}
+#gameScreen[data-tab="operations"] .projects{max-height:none}
+@media(max-width:1050px){.workspace-view,.game-layout{scroll-margin-top:160px}}
+@media(max-width:900px){.workspace-view,.game-layout{scroll-margin-top:12px}}

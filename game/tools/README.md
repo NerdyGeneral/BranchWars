@@ -19,6 +19,19 @@ full release gate or physical two-computer testing. `RUN_TESTS.bat` still runs t
 complete suite. Golden updates are deliberate: see [contributing](../../CONTRIBUTING.md).
 The original save fixtures must not be overwritten.
 
+## `build_game.js`
+
+Edit `src/` modules, then run these commands from the repository root:
+
+```text
+node game/tools/build_game.js
+node game/tools/build_game.js --check
+```
+
+`src/manifest.json` lists ordered engine/content, UI, network, persistence and style inputs. The builder produces the existing portable `BRANCH_WARS.html`; playing still requires no Node, bundler, package installation or external assets. Check mode is read-only. Missing/duplicate/unlisted modules, invalid script syntax and stale output fail validation. CRLF and LF inputs produce identical LF output.
+
+The engine and browser shell have separate private scopes connected by `BWEngine`. Within each scope these are ordered source modules, **not isolated ES modules**; legacy feature adapters and browser session state still share bindings. This is documented debt, not a claim that file extraction removed all coupling. See [architecture](../docs/architecture.md).
+
 ## `build_reference.js`
 
 Builds `../docs/game-reference.md` from the live engine.

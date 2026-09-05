@@ -22,9 +22,9 @@ The v6 crosswalk in the screenshot maps old packages into the newer plan; it is 
 
 ## Next implementation order
 
-Multiplayer acceptance interrupted the architecture sequence for a focused repair: a shared pre-game identity/readiness lobby and truthful idle Repository Link status. This local patch is not a new blueprint phase or proof of two-computer acceptance. See [release status](release-status.md) for checks and remaining limits.
+Multiplayer acceptance interrupted the architecture sequence for a focused repair: a shared pre-game identity/readiness lobby and truthful idle Repository Link status. That patch is separately published in PR #10, not automatically merged. It is not a new blueprint phase or proof of physical two-computer acceptance. See [release status](release-status.md) for checks and remaining limits.
 
-First complete the [architecture stabilization sequence](architecture.md). Behavior/save guards and repository cleanup are in place. Shared project rules replaced twelve override layers; creation now has one explicit coordinator instead of sixteen wrappers, and save migration is engine-owned. Broader policy normalization, monthly operations, project completion and the remaining AI stack still need incremental cleanup. These stabilization batches do not advance a gameplay package or complete N-00–N-14.
+The approved [four-step architecture batch](architecture.md) is implemented: separate multiplayer delivery, explicit monthly/project settlement, consolidated AI/policy validation, and modular source with a reproducible portable build. This batch removes 53 runtime replacement layers plus one redundant API assignment; it follows the earlier shared-project and creation/import work. Other shared contexts and feature/UI adapters remain documented debt. These stabilization batches do not advance a gameplay package or complete N-00–N-14.
 
 1. N-05: versioned specialist roles and recurring training budgets. Skills must take time, cost real operating funds and affect a specific workload—not every business at once. Preserve existing saves and sealed plans.
 2. N-04/N-06: conserved segment-owned books and delayed servicing/credit problems, so retention and cross-selling have real owners and costs.
