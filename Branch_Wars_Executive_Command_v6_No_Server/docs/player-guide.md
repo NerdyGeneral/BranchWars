@@ -1,19 +1,49 @@
-BRANCH WARS: EXECUTIVE COMMAND v8.1
-LONG-FORM / MULTIPLAYER EDITION
-=================================
+# Branch Wars — Player Guide
 
-QUICK START
------------
+Executive Command v8.1 · Long-form / multiplayer edition
+
+## QUICK START
+
 1. Extract the ZIP.
 2. For Solo AI, Pass & Play, or Direct P2P, double-click OPEN_BRANCH_WARS.bat.
 3. For an intranet room, the host double-clicks OPEN_LAN_GAME.bat.
 4. Friends on the same local network open the yellow address shown in the host's
    server window. Both players select INTRANET ROOM and use the room code.
-5. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
+5. To use the new banking systems, check Try Regional Rivalry pilot before
+   starting or hosting. This currently uses two regions and six markets.
+   Existing saves retain their rules. Both multiplayer clients need this build.
+   For dedicated service staffing, priced mandates and cross-research
+   applications, also select Expanded commercial services preview.
+   This separate preview is OFF by default: long-campaign pacing is not
+   accepted yet. The host chooses it for both players; pilot protocol is 11.
+   Research deployments are in Strategy; service policies are in Markets.
+   Markets > Delivery Comparison & Plan Resilience compares staffing/vendor
+   mixes and estimates earnings after planned spending. It never submits a
+   bid for you. The preview AI now reviews whole-bank recovery and reserves.
+   Living institution preview adds recurring research, service delegation,
+   client histories and a capped earned retention advantage. Markets has
+   collapsible client dossiers and a department workload/cost scorecard.
+   New campaigns use relationship rules; existing saves keep their mechanics.
+   These saves use format 8.2 and require the updated build on both computers.
+   See archive/relationship-operations-status.md for scope and verification limits.
+   Customer needs preview adds local prospect composition, product fit and
+   organic onboarding costs. Its checkbox enables the prerequisite previews.
+   Markets > Customer Needs & Product Fit explains effects and shows costs.
+   Customer Relationships > Service Goodwill tracks persistent quality by
+   market and need. Staffing, existing products and service upgrades affect
+   future deposit competition; changing sales emphasis is not instant repair.
+   These new campaigns use save format 8.4; older saves retain their rules.
+   Both friends must update before starting a new preview campaign.
+   See archive/customer-relationships-status.md for scope and current test evidence.
+   Markets > Service Workforce Planner compares reallocations with actual
+   operating forecasts and can stage an allocation or a next-cycle recruit.
+   Existing goodwill campaigns gain this tool without changing save rules.
+   See archive/service-workforce-status.md and roadmap.md for current scope.
+6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
-HOW A PLANNING CYCLE WORKS
---------------------------
+## HOW A PLANNING CYCLE WORKS
+
 The market is paused while both institutions prepare. You may:
 
 - Reassign staff among Retail & Service, Business Banking, Lending, and
@@ -21,9 +51,11 @@ The market is paused while both institutions prepare. You may:
 - Change persistent deposit pricing, lending standards, and capital strategy
 - Set the retail, business-banking, and credit products the bank will sell
 - Select one focus market
-- Prioritize one optional live opportunity
+- Prioritize one optional live opportunity (or a renewable service agreement
+  in new pilots; these share one pursuit slot)
 - Choose one concealed competitive attack, countermeasure, or Hold Position
-- Begin one optional multi-cycle roadmap investment or operating initiative
+- Fund capabilities incrementally and run multiple operating initiatives within
+  available cash, capital, and Operations execution capacity
 - Request emergency board capital when the institution is in genuine distress
 - Answer the current executive call
 
@@ -32,23 +64,23 @@ simulates the month: customer activity, deposit and loan production, credit
 losses, earnings, opportunity contests, project progress, branch influence,
 career milestones, and market-share movement all resolve simultaneously.
 
-COMMAND CENTER WORKSPACES
--------------------------
+## COMMAND CENTER WORKSPACES
+
 The campaign is divided into six persistent workspaces instead of one continuous
 planning page:
 
   OVERVIEW      enterprise trend, balance sheet, character, and capital signals
-  MARKETS       isometric city, district focus, and opportunity pipeline
-  OPERATIONS    executive call, staffing, policies, and product portfolios
+  MARKETS       isometric city, district focus, opportunities, renewal contracts
+  OPERATIONS    executive call, staffing, policies, products, operating initiatives
   COMPETITION   concealed attacks, counters, focus, and committed spend
-  STRATEGY      research tree, active initiatives, and emergency board capital
+  STRATEGY      capability funding and operating specializations
   INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire
 
 The Ready bar remains available above every workspace. A player can build the
 plan in any order and move between workspaces without losing selections.
 
-COMPETITIVE ACTIONS AND COUNTERS
---------------------------------
+## COMPETITIVE ACTIONS AND COUNTERS
+
 Each institution may secretly select one action per cycle. Actions spend cash
 when both plans resolve, attacks create Corporate Attention, and the rival sees
 the action only after resolution. Project and action costs are checked together,
@@ -74,8 +106,8 @@ build order.
 Nothing requires frantic clicking. Policies and staffing remain in place until
 you change them. Projects continue automatically until completed.
 
-HOW A CAMPAIGN IS WON
----------------------
+## HOW A CAMPAIGN IS WON
+
 There is no cycle limit and no score comparison at an arbitrary deadline.
 Cycles measure elapsed operating periods only. A campaign continues until one
 institution actually defeats the other through one of three strategic outcomes.
@@ -134,8 +166,8 @@ In Act III, aggressive pricing against a weak or illiquid rival can trigger a
 genuine deposit run. The transfer ceiling rises sharply and the loser may have to
 sell loans at a haircut or draw directly from capital.
 
-CAMPAIGN ACTS
--------------
+## CAMPAIGN ACTS
+
 The game clock never ends the campaign. Instead, competition advances when the
 institutions themselves change the strategic position:
 
@@ -149,8 +181,8 @@ after that, capstones, multiple market exits, or serious regulatory stress can
 trigger Act III. Total domination likewise requires the full map to be in play.
 The acts are not tied to a final-cycle countdown.
 
-ENTERPRISE STRATEGY TREE
-------------------------
+## ENTERPRISE STRATEGY TREE
+
 Long-term development is divided into five four-tier lanes: Branch Network,
 Digital Platform, Commercial Bank, Operational Excellence, and Acquisition
 Strategy. Each node is a multi-cycle investment with its own cost and operating
@@ -170,8 +202,8 @@ times, and lower costs. Those benefits apply to operating initiatives; they do n
 accelerate the strategy tree itself. It is therefore a distinct operating model,
 not a compulsory opening upgrade for every bank.
 
-CAMPAIGN MAPS
--------------
+## CAMPAIGN MAPS
+
 TOWN      4 markets // open-ended
 REGION    6 markets // open-ended
 STATE     8 markets // open-ended
@@ -189,8 +221,8 @@ change with the campaign. Select a district directly on the city to set focus.
 An Executive Overview above the city charts enterprise value over time and
 compares deposits, loans, liquidity, operating risk, and profit.
 
-FACILITY AND PRODUCT MODELS
----------------------------
+## FACILITY AND PRODUCT MODELS
+
 Expansion is not a single branch button. A Full-Service Financial Center builds
 households and local loyalty, a Commercial Banking Office adds business and
 merchant capacity, and a Digital Advisory Studio grows scalable service and
@@ -203,8 +235,8 @@ choices rather than one-time upgrades. Their exact tradeoffs are shown in the
 Operations workspace and combine with pricing, underwriting, staffing, facility
 mix, research specialization, and the economic regime each cycle.
 
-PLAY MODES
-----------
+## PLAY MODES
+
 SOLO VS CORPORATE AI
 Runs entirely inside the browser. The market stays paused until you are ready.
 No network, server, Python, PowerShell, installation, or firewall permission.
@@ -269,8 +301,8 @@ If DIRECT LINK STALLED says the data channel never opened, the network is
 blocking direct browser traffic between the two computers. No amount of waiting
 will change that. Use INTRANET ROOM instead.
 
-CONNECTING ACROSS TWO DIFFERENT NETWORKS
------------------------------------------
+## CONNECTING ACROSS TWO DIFFERENT NETWORKS
+
 Browsers hide your computer's network address from web pages, replacing it with
 a name that can only be looked up on your own network segment. Two computers on
 the same segment resolve it and connect. Two on different segments cannot, and
@@ -289,8 +321,8 @@ If the link still will not form with both addresses filled in, the two networks
 do not permit direct traffic between workstations, and no setting in the game
 changes that.
 
-WHEN THE INTRANET ROOM ADDRESS DOES NOT WORK
---------------------------------------------
+## WHEN THE INTRANET ROOM ADDRESS DOES NOT WORK
+
 The server window prints the address it believes friends should use, plus any
 other addresses on the machine. Test it from the OTHER computer first by opening
 the /api/health address shown in the window: it should return {"ok":true}.
@@ -311,8 +343,8 @@ computers are usually on separate networks with no direct route between them.
 Neither local-network mode can create one. Use Repository Link between offices.
 Pass & Play and Solo AI need no network at all.
 
-REPOSITORY LINK (PLAY BETWEEN OFFICES)
----------------------------------------
+## REPOSITORY LINK (PLAY BETWEEN OFFICES)
+
 The two computers never connect to each other. Each one reads and writes a
 GitHub repository over ordinary outbound HTTPS, so no inbound port, no firewall
 rule and no route between the two sites is required. A private repository is
@@ -363,8 +395,8 @@ For GitHub Enterprise, both players type the internal HTTPS API address in their
 own API ADDRESS field. The join code intentionally never supplies an API address,
 so pasting a room code cannot redirect a player's token to another server.
 
-IMPORTANT NETWORK LIMITATION
-----------------------------
+## IMPORTANT NETWORK LIMITATION
+
 The game does not bypass company network or browser security policy. Intranet
 rooms require both computers to be on a network that allows direct local traffic.
 Repository Link requires outbound HTTPS access to the selected GitHub API. AI and
@@ -415,17 +447,26 @@ FOUNDATION FROM v7.0
 - Backward import support for earlier local save files
 - Solo AI, Pass & Play, Direct P2P, export/import, and sealed WEGO play retained
 
-FILES
------
+## FILES
+
 BRANCH_WARS.html       Complete game; all rules and assets are inside this file
 OPEN_BRANCH_WARS.bat   Convenience launcher for offline/local modes
 OPEN_LAN_GAME.bat      Starts the room server and opens the host browser
 BRANCH_WARS_LAN_SERVER.ps1  Dependency-free local room relay
 RUN_TESTS.bat          Optional developer simulation checks (requires Node.js)
-README.txt             Instructions and limitations
+player-guide.md             Instructions and limitations
 
-PRIVACY / WORKPLACE USE
------------------------
+## PRIVACY / WORKPLACE USE
+
 The game is fictional. Do not enter customer information, account numbers,
 credentials, confidential company information, or other protected data.
 Use workplace network features only when permitted by company policy.
+LIVING INSTITUTION PREVIEW (NEW CAMPAIGNS ONLY)
+Enable Living institution preview on the opening screen. It also checks the
+Regional Rivalry and expanded-service prerequisites. In Strategy, open
+Recurring Research & Service Manager to set monthly funding, tier targets,
+cash reserves and bounded service-department mandates. Use Prepare draft to
+apply new limits to this turn; settings otherwise prepare future drafts.
+Markets displays six named service clients with distinct bid preferences.
+Both friends need this build for the preview. Older saves are not converted.
+See archive/living-institution-status.md for verification and remaining blueprint work.

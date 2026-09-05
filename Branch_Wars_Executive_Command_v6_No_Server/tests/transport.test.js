@@ -61,6 +61,8 @@ async function testRepositoryQueue() {
   const statuses = [];
   const context = vm.createContext({
     URL,
+    AbortController,
+    ghCheckpoint() {},
     TextEncoder,
     console,
     crypto: webcrypto,
@@ -111,8 +113,8 @@ async function testRepositoryQueue() {
 
   const functions = [
     'ghPath', 'ghUrl', 'ghHeaders', 'ghEncode', 'ghDecode', 'ghNonce', 'ghPlanHash', 'ghFail',
-    'ghNormalizeRepo', 'ghNormalizeApi', 'ghCheckRepo', 'ghRead', 'ghWrite',
-    'ghFlush', 'ghSend',
+    'ghNormalizeRepo', 'ghNormalizeApi', 'ghDelay', 'ghRequest', 'ghCheckRepo', 'ghRead', 'ghWrite',
+    'ghCompact', 'ghAccepted', 'ghFlush', 'ghSend',
   ];
   vm.runInContext(`const GH_MAX_TRAIL=20; var gh; ${functions.map(clientFunction).join('\n')}`, context);
   context.gh = { active: true, api: 'https://api.github.com', repo: 'test/branchwars', branch: '', private: true, room: 'ABCDEFGH', token: 'token', side: 'guest', mine: 0, published: 0, seen: 0, sha: '', etag: '', outbox: [], busy: false, sendFailures: 0, pollFailures: 0, retryTimer: null };
@@ -131,7 +133,7 @@ async function testRepositoryQueue() {
   assert.equal(payload.seq, 2);
   assert.deepEqual(payload.messages.map(item => item.seq), [1, 2]);
   assert(statuses.some(item => item.text.includes('queued for retry')), 'lost response exercised the retry path');
-  assert(statuses.at(-1).text.includes('LINKED'));
+  assert(statuses.at(-1).text.includes('UPDATE STORED'), 'publishing does not falsely certify a live peer');
   context.gh.active = false;
   timers.close();
 }

@@ -1,0 +1,474 @@
+{
+  "passed": true,
+  "sourceSha256": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "seedStart": 4,
+  "seedCount": 4,
+  "turnLimit": 180,
+  "turns": 2880,
+  "maxViewBytes": 599320,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [
+    {
+      "scenario": "balanced",
+      "seed": 7,
+      "cycle": 135,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    }
+  ],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2408198,
+        2922874
+      ],
+      "deposits": [
+        114881688,
+        52633458
+      ],
+      "profit": [
+        514822,
+        529319
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 5,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1877905,
+        2738431
+      ],
+      "deposits": [
+        67418135,
+        92755660
+      ],
+      "profit": [
+        489714,
+        460334
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 6,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2341777,
+        2900445
+      ],
+      "deposits": [
+        84980742,
+        78827760
+      ],
+      "profit": [
+        577431,
+        490070
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 7,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        11852886,
+        2549255
+      ],
+      "deposits": [
+        16702817,
+        146775744
+      ],
+      "profit": [
+        548512,
+        507924
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2211152,
+        4161444
+      ],
+      "deposits": [
+        37139195,
+        132303657
+      ],
+      "profit": [
+        448414,
+        643269
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 5,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1735892,
+        2389961
+      ],
+      "deposits": [
+        112891501,
+        55553787
+      ],
+      "profit": [
+        161910,
+        429601
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 6,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3554288,
+        2220218
+      ],
+      "deposits": [
+        101179376,
+        69742939
+      ],
+      "profit": [
+        562010,
+        506940
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 7,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3125065,
+        2704344
+      ],
+      "deposits": [
+        31863908,
+        139255700
+      ],
+      "profit": [
+        547212,
+        352668
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1786057,
+        2610815
+      ],
+      "deposits": [
+        108052568,
+        59631559
+      ],
+      "profit": [
+        328307,
+        500047
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 5,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1590320,
+        1878198
+      ],
+      "deposits": [
+        57537467,
+        101906206
+      ],
+      "profit": [
+        312187,
+        224733
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 6,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3051509,
+        3193493
+      ],
+      "deposits": [
+        123859776,
+        43573897
+      ],
+      "profit": [
+        444369,
+        668969
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 7,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        5099485,
+        2602149
+      ],
+      "deposits": [
+        97609658,
+        69949469
+      ],
+      "profit": [
+        664883,
+        377863
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3289792,
+        765779
+      ],
+      "deposits": [
+        70061226,
+        88078608
+      ],
+      "profit": [
+        371410,
+        73079
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 5,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2955046,
+        1642810
+      ],
+      "deposits": [
+        80500248,
+        86954508
+      ],
+      "profit": [
+        579846,
+        538130
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 6,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3897353,
+        3315586
+      ],
+      "deposits": [
+        106542189,
+        52834810
+      ],
+      "profit": [
+        525115,
+        516467
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 7,
+      "cycle": 181,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2274585,
+        2833433
+      ],
+      "deposits": [
+        42855182,
+        122869600
+      ],
+      "profit": [
+        110600,
+        481980
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "providerChanges": 23,
+      "lateProviderChanges": 14,
+      "initiatives": 182,
+      "competitiveActions": 127
+    },
+    {
+      "scenario": "balanced",
+      "seed": 5,
+      "providerChanges": 17,
+      "lateProviderChanges": 8,
+      "initiatives": 140,
+      "competitiveActions": 149
+    },
+    {
+      "scenario": "balanced",
+      "seed": 6,
+      "providerChanges": 26,
+      "lateProviderChanges": 13,
+      "initiatives": 128,
+      "competitiveActions": 146
+    },
+    {
+      "scenario": "balanced",
+      "seed": 7,
+      "providerChanges": 23,
+      "lateProviderChanges": 12,
+      "initiatives": 145,
+      "competitiveActions": 117
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "providerChanges": 13,
+      "lateProviderChanges": 6,
+      "initiatives": 124,
+      "competitiveActions": 155
+    },
+    {
+      "scenario": "rate",
+      "seed": 5,
+      "providerChanges": 25,
+      "lateProviderChanges": 16,
+      "initiatives": 74,
+      "competitiveActions": 92
+    },
+    {
+      "scenario": "rate",
+      "seed": 6,
+      "providerChanges": 28,
+      "lateProviderChanges": 18,
+      "initiatives": 126,
+      "competitiveActions": 117
+    },
+    {
+      "scenario": "rate",
+      "seed": 7,
+      "providerChanges": 24,
+      "lateProviderChanges": 14,
+      "initiatives": 139,
+      "competitiveActions": 86
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "providerChanges": 29,
+      "lateProviderChanges": 21,
+      "initiatives": 161,
+      "competitiveActions": 139
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 5,
+      "providerChanges": 19,
+      "lateProviderChanges": 9,
+      "initiatives": 97,
+      "competitiveActions": 137
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 6,
+      "providerChanges": 14,
+      "lateProviderChanges": 4,
+      "initiatives": 216,
+      "competitiveActions": 166
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 7,
+      "providerChanges": 24,
+      "lateProviderChanges": 13,
+      "initiatives": 142,
+      "competitiveActions": 126
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "providerChanges": 18,
+      "lateProviderChanges": 10,
+      "initiatives": 89,
+      "competitiveActions": 81
+    },
+    {
+      "scenario": "growth",
+      "seed": 5,
+      "providerChanges": 32,
+      "lateProviderChanges": 19,
+      "initiatives": 174,
+      "competitiveActions": 161
+    },
+    {
+      "scenario": "growth",
+      "seed": 6,
+      "providerChanges": 23,
+      "lateProviderChanges": 10,
+      "initiatives": 137,
+      "competitiveActions": 109
+    },
+    {
+      "scenario": "growth",
+      "seed": 7,
+      "providerChanges": 19,
+      "lateProviderChanges": 6,
+      "initiatives": 116,
+      "competitiveActions": 108
+    }
+  ]
+}

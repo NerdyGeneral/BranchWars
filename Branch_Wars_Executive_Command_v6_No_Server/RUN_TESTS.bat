@@ -7,16 +7,23 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-node tests\engine.test.js
+node tools\build_reference.js --check
+if errorlevel 1 goto :stale
+node tests\capture_baseline.js
 if errorlevel 1 goto :failed
-node tests\transport.test.js
-if errorlevel 1 goto :failed
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0tests\lan_server.test.ps1"
+node tests\release_balance.test.js --report
 if errorlevel 1 goto :failed
 echo.
 echo All Branch Wars tests passed.
 pause
 exit /b 0
+
+:stale
+echo.
+echo docs/game-reference.md is out of date with the engine.
+echo Rebuild it with:  node tools\build_reference.js
+pause
+exit /b 1
 
 :failed
 echo.

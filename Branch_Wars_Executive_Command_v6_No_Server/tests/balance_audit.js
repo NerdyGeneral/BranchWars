@@ -40,6 +40,7 @@ for (const left of doctrines) {
     if (left === right) continue;
     for (let sample = 0; sample < 40; sample++, run++) {
       const g = E.createGame({
+        fundingRulesVersion: process.argv.includes('--legacy-funding') ? 1 : 2,
         mode: 'ai',
         name1: left,
         name2: right,

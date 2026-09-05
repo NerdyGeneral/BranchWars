@@ -24,11 +24,18 @@ context.globalThis = context;
 vm.runInNewContext(match[1], context, { filename: 'embedded-engine.js' });
 const E = context.BWEngine;
 assert(E, 'BWEngine must be exported');
+// Preserve the established v1 regression contract explicitly. New default-v2
+// funding behavior and full modern campaigns are covered by funding.test.js.
+const createWithFundingRules = E.createGame;
+E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersion: options.fundingRulesVersion ?? 1 });
 
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.keys(E.PROJECTS).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
+assert.equal(Object.values(E.PROJECTS).filter(p=>p.deploymentProduct).length, 2);
+assert.equal(Object.values(E.PROJECTS).filter(p=>p.regionalOnly).length, 3);
 assert.equal(Object.keys(E.STRATEGY_BRANCHES).length, 5);
 assert.equal(Object.keys(E.STRATEGY_SPECIALIZATIONS).length, 5);
 assert.equal(Object.keys(E.PRODUCT_PORTFOLIOS).length, 3);
@@ -250,6 +257,47 @@ function basePlan(g, p) {
   q.capability.digital = E.CAPABILITY_TIERS.digital.at(-1);
   assert.equal(E.strategyLevel(q, 'digital'), 4, 'full funding reaches the capstone');
   assert.throws(() => E.submit(full, 0, { ...basePlan(full, q), investments: { digital: 100000 } }), /fully developed/);
+}
+
+// Shared budgeting and previews must match the authoritative engine without changing it.
+{
+  const g = E.createGame({ mode: 'hotseat', scope: 'town' });
+  const p = g.players[0];
+  const plan = { ...basePlan(g, p), newProjects: ['branch', 'remediation'], newProject: 'branch', investments: { network: 50000 }, hires: 2, competitiveAction: 'depositRaid' };
+  const quote = E.planBudget(p, plan);
+  assert.equal(quote.total, E.projectCost(p, E.PROJECTS.branch) + E.projectCost(p, E.PROJECTS.remediation) + E.hireCost(p, 2) + 50000 + 180000);
+  assert.equal(quote.remaining, p.stats.cash - quote.total);
+  assert.equal(quote.basePayrollAdded, 36000);
+  assert.equal(quote.load, 2.5);
+  const view = E.publicState(g, 0);
+  assert.equal(E.planBudget(view.me, plan).total, quote.total, 'public and authoritative bank states quote the same budget');
+  const funded = { ...basePlan(g, p), investments: { acquisition: 200000 } };
+  assert.equal(E.fundingStep(p, funded, 'acquisition', 50000), 240000, 'the last step lands exactly on the displayed milestone');
+  funded.investments.acquisition = 240000;
+  assert.equal(E.fundingStep(p, funded, 'acquisition', 50000), 240000);
+  p.stats.cash = 225000;
+  funded.investments.acquisition = 200000;
+  assert.equal(E.fundingStep(p, funded, 'acquisition', 50000), 225000, 'funding uses only the incremental uncommitted cash');
+  p.stats.cash = 2400000;
+  const before = JSON.stringify(g), seedBefore = testSeed;
+  const baseline = E.operatingPreview(view.me, basePlan(g, p), g.economy);
+  const aggressive = E.operatingPreview(view.me, { ...basePlan(g, p), depositPolicy: 'aggressive' }, g.economy);
+  assert.equal(JSON.stringify(g), before, 'preview does not mutate the campaign');
+  assert.equal(testSeed, seedBefore, 'preview does not consume game randomness');
+  assert(aggressive.fundingCost > baseline.fundingCost);
+  assert(aggressive.depositGrowth > baseline.depositGrowth);
+  for (const amount of [NaN, Infinity, -Infinity, 1.5, 500]) {
+    assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { network: amount } }), /whole dollar|at least/);
+    assert.equal(p.submitted, null);
+  }
+  p.capability.network = E.CAPABILITY_TIERS.network.at(-1) - 10000;
+  assert.throws(() => E.submit(g, 0, { ...basePlan(g, p), investments: { network: 50000 } }), /remaining capability cost/);
+  E.submit(g, 0, basePlan(g, p));
+  E.submit(g, 1, basePlan(g, g.players[1]));
+  const report = p.operatingReport;
+  const profit = report.depositIncome + report.loanIncome + report.commercialIncome + report.otherIncome - report.fundingCost - report.expense - report.chargeoff + report.eventAdjustment;
+  assert.equal(Math.round(profit), report.profit, 'operating report reconciles to actual operating profit');
+  assert.equal(E.publicState(g, 1).rival.operatingReport, undefined, 'private operating breakdown is not shared with the rival');
 }
 
 // --- Competitive actions are paid, countered, and resolved simultaneously --
@@ -1119,6 +1167,13 @@ function opsCycle(g, newProject) {
   assert.equal(repaired.players[1].projects.length, 0, 'a project pointing at an unknown key is dropped');
   assert.equal(repaired.players[1].project, undefined, 'the old single slot is removed');
 
+  const busy = JSON.parse(JSON.stringify(fresh));
+  busy.players[0].projects = ['branch', 'branchCommercial', 'branchDigital', 'remediation'].map((key, i) => ({ key, target: key === 'remediation' ? null : 'downtown', progress: i / 10, total: 3 }));
+  const expectedWork = JSON.stringify(busy.players[0].projects);
+  const restoredBusy = migrateGame(busy);
+  assert.equal(JSON.stringify(restoredBusy.players[0].projects), expectedWork, 'all capacity-backed work survives save migration, even when staffing currently cannot progress it');
+  E.publicState(restoredBusy, 0);
+
   // A save written before the operations rework carries one in-flight project object.
   const preRework = JSON.parse(JSON.stringify(fresh));
   delete preRework.players[0].projects;
@@ -1158,7 +1213,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.1/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.4/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1271,12 +1326,12 @@ assert(messageBody.includes('lan.active?'), 'the host must open the campaign on 
 // writers never touch one file and no merge can occur.
 assert(clientFn('ghPath').includes('${side}'), 'each side must own a separate file');
 const flushBody = clientFn('ghFlush');
-assert(flushBody.includes('gh.side'), 'a player may only write their own side');
-assert(flushBody.includes('gh.sha'), 'writes must carry the expected version');
+assert(flushBody.includes('session.side') && clientFn('ghWrite').includes('side!==gh.side'), 'a player may only write their own side');
+assert(flushBody.includes('session.sha'), 'writes must carry the expected version');
 assert(clientFn('ghRead').includes('If-None-Match'), 'polling must be conditional to stay inside the rate limit');
 assert(clientFn('ghRead').includes('gh.branch'), 'repository reads must use the discovered default branch');
 assert(!clientFn('ghRead').includes('ref=HEAD'), 'HEAD is not a reliable Contents API ref');
-assert(clientFn('ghPoll').includes("gh.side==='host'?'guest':'host'"), 'each side reads only the other');
+assert(clientFn('ghPoll').includes("session.side==='host'?'guest':'host'"), 'each side reads only the other');
 // A token is a credential: it is never handed to the rival, and it is forgettable.
 assert(!clientFn('ghCreateRoom').match(/pack\('BW7-ROOM-',\{[^}]*token/), 'the join code must never carry a token');
 assert(!clientFn('ghCreateRoom').match(/pack\('BW7-ROOM-',\{[^}]*api/), 'a join code must never choose where the rival sends a token');
@@ -1291,9 +1346,9 @@ assert(clientFn('ghCheckRepo').includes('default_branch'), 'the repository defau
 assert(clientFn('ghCheckRepo').includes('permissions.push'), 'write permission must be checked before opening a room');
 assert(clientFn('ghNormalizeApi').includes("parsed.protocol!=='https:'"), 'repository credentials may only be sent to an HTTPS API address');
 assert(clientFn('ghHeaders').includes("2026-03-10"), 'GitHub requests must pin the current REST API version');
-assert(flushBody.includes('while(gh.active&&gh.published<gh.mine)'), 'messages arriving during a write must be flushed before the sender goes idle');
+assert(flushBody.includes('while(gh===session&&session.active&&session.published<session.mine)'), 'messages arriving during a write must be flushed before the sender goes idle');
 assert(flushBody.includes('queued for retry'), 'a failed write must remain queued for retry');
-assert(flushBody.includes('if(gh.sendFailures)'), 'a retry must reconcile the room file in case GitHub accepted a write whose response was lost');
+assert(flushBody.includes('if(session.sendFailures)'), 'a retry must reconcile the room file in case GitHub accepted a write whose response was lost');
 assert(clientFn('ghWrite').includes("response.status===409"), 'write conflicts must be retried');
 assert(!clientFn('ghWrite').includes("response.status===409||response.status===422"), 'validation errors must not be mistaken for write conflicts');
 for (const [status, why] of [['401','a rejected token'],['404','a missing repository'],['403','a refused request']])
@@ -1373,9 +1428,20 @@ for (const fn of ['createOffer', 'createAnswer']) {
 
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
-const missingIds = [...html.matchAll(/\$\('#([^']+)'\)/g)]
+// Execute the dynamic renderer with DOM sinks, rather than exempting its IDs.
+let managementMarkup='';
+const managementContext={E,managementNotes:[],draft:{management:E.defaultManagement(),investments:{}},
+ esc:String,money:n=>String(n),renderProjects:()=>{},renderReady:()=>{},
+ $:selector=>selector==='#institutionControls'?null:selector==='#strategyTree'?{insertAdjacentHTML:(_where,markup)=>{managementMarkup=markup}}:{addEventListener:()=>{}},
+ $$:()=>[]};
+vm.runInNewContext(clientFn('renderManagement')+';renderManagement({me:{management:E.defaultManagement(),submitted:false}})',managementContext);
+const renderedIds=[...managementMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(new Set(renderedIds).size,renderedIds.length,'rendered management IDs must be unique');
+assert(renderedIds.includes('research-enabled')&&renderedIds.includes('manager-mode')&&renderedIds.includes('prepareManagement'));
+// Check the leading ID of descendant selectors too; it is not itself an ID.
+const missingIds = [...html.matchAll(/\$\('#([\w-]+)(?:[^']*)'\)/g)]
   .map((item) => item[1])
-  .filter((id) => !ids.includes(id));
+  .filter((id) => !ids.includes(id)&&!renderedIds.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
 assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
 assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');
@@ -1402,4 +1468,14 @@ for (const cls of ['signal watch', 'signal hot', 'signal safe']) {
   assert(html.includes(`.${cls.split(' ').join('.')}`), `stylesheet must define .${cls.split(' ').join('.')}`);
 }
 
-console.log('Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session and UI contract checks.');
+// The generated reference must match the engine it was built from.
+{
+  const { execFileSync } = require('child_process');
+  try {
+    execFileSync(process.execPath, [path.join(__dirname, '..', 'tools', 'build_reference.js'), '--check'], { stdio: 'pipe' });
+  } catch (e) {
+    assert.fail('docs/game-reference.md is stale. Run: node tools/build_reference.js');
+  }
+}
+
+console.log('Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.');

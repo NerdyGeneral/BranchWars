@@ -1,0 +1,331 @@
+{
+  "passed": true,
+  "sourceSha256": "8919743bf146b915c08447af7df74221cbe87ba6ceb9f08156b1f51889291084",
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 0,
+  "turns": 1735,
+  "maxViewBytes": 508465,
+  "skippedInitiatives": [],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2501801,
+        2470065
+      ],
+      "deposits": [
+        109927091,
+        57657802
+      ],
+      "profit": [
+        405340,
+        445909
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2674286,
+        2196243
+      ],
+      "deposits": [
+        51548996,
+        106563463
+      ],
+      "profit": [
+        464222,
+        295597
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2281377,
+        2885375
+      ],
+      "deposits": [
+        120548688,
+        40886509
+      ],
+      "profit": [
+        259899,
+        470976
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1880378,
+        2663661
+      ],
+      "deposits": [
+        107032195,
+        56479455
+      ],
+      "profit": [
+        262788,
+        467487
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2412669,
+        2788863
+      ],
+      "deposits": [
+        122137669,
+        44081721
+      ],
+      "profit": [
+        249976,
+        419487
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1561637,
+        2527717
+      ],
+      "deposits": [
+        129707960,
+        41234396
+      ],
+      "profit": [
+        -33408,
+        332539
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1831808,
+        2525109
+      ],
+      "deposits": [
+        83713966,
+        82305213
+      ],
+      "profit": [
+        276040,
+        164570
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2319572,
+        1776892
+      ],
+      "deposits": [
+        70255569,
+        84088992
+      ],
+      "profit": [
+        233471,
+        387999
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2060684,
+        1518366
+      ],
+      "deposits": [
+        44993114,
+        122715657
+      ],
+      "profit": [
+        285500,
+        8585
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2775335,
+        1956836
+      ],
+      "deposits": [
+        37780678,
+        129309524
+      ],
+      "profit": [
+        465573,
+        244216
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2687207,
+        2712833
+      ],
+      "deposits": [
+        62912469,
+        100399537
+      ],
+      "profit": [
+        451399,
+        345721
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3339677,
+        1966823
+      ],
+      "deposits": [
+        38232307,
+        125882066
+      ],
+      "profit": [
+        295086,
+        216145
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3718002,
+        2466458
+      ],
+      "deposits": [
+        45437274,
+        121515507
+      ],
+      "profit": [
+        227346,
+        253172
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "cycle": 56,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 0,
+      "equity": [
+        1765413,
+        129196
+      ],
+      "deposits": [
+        51305934,
+        93717432
+      ],
+      "profit": [
+        88113,
+        -7808
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "cycle": 56,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 0,
+      "equity": [
+        2793807,
+        -8399
+      ],
+      "deposits": [
+        41118682,
+        89233724
+      ],
+      "profit": [
+        134448,
+        25612
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "cycle": 63,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 1,
+      "equity": [
+        158379,
+        2038795
+      ],
+      "deposits": [
+        81085002,
+        59154431
+      ],
+      "profit": [
+        25499,
+        112753
+      ]
+    }
+  ]
+}

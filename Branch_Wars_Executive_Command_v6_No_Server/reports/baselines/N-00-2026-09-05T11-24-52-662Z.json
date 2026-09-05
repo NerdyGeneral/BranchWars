@@ -1,0 +1,536 @@
+{
+  "package": "N-00",
+  "createdAt": "2026-09-05T11:24:52.662Z",
+  "node": "v24.19.0",
+  "platform": "win32",
+  "filesBefore": {
+    "BRANCH_WARS.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "9585936671dd82f8b084e11ea7832c7d767fae28cfa4860d6b50b427b218c6cd",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "01beadd4a855f76d32148a733b2741b9d822b7321a9c1399294eeca67ae5c46b",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "a7983fd26308ddc2e2a6ff1aef54f8e05e55aa782f94947a1e1e3522bf7bc642",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "3fdf66534125f07c2d87db8753392d5bcdb4375965ddc231070ebbdb84ea3fe8",
+    "tests/github_resilience.test.js": "3159cc0a04cca5448c787f978141752109ba723fd4b7cce05a65a06b4f5aa4cc",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "9471467319d5945277ed9c1a0a2409740ec14afcb3fd131441a593a450f8d9c1"
+  },
+  "head": {
+    "label": "git HEAD",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 56,
+    "stdout": "8181c2ab0af8f4982329723caee353f593528f5a\n",
+    "stderr": ""
+  },
+  "statusBefore": {
+    "label": "git status",
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 47,
+    "stdout": " M BRANCH_WARS.html\n M GAME_REFERENCE.md\n M README.txt\n M tests/capture_baseline.js\n M tests/engine.test.js\n M tests/funding_covenants.test.js\n M tests/github_resilience.test.js\n M tests/release_balance.test.js\n M tests/service_contracts.test.js\n M tools/build_reference.js\n M tools/reference.template.md\n?? ARCHITECTURE_PLAN.md\n?? LIVING_INSTITUTION_STATUS.md\n?? SERVICE_EXPANSION_STATUS.md\n?? SERVICE_PLANNING_STATUS.md\n?? reports/baselines/LIVING-INSTITUTION-c1c10b4-verification.json\n?? reports/baselines/N-00-2026-09-05T00-21-40-118Z.json\n?? reports/baselines/N-00-2026-09-05T00-25-57-754Z.json\n?? reports/baselines/N-00-2026-09-05T00-26-41-328Z.json\n?? reports/baselines/N-00-2026-09-05T00-41-42-359Z.json\n?? reports/baselines/N-00-2026-09-05T00-49-57-321Z.json\n?? reports/baselines/N-00-2026-09-05T00-59-22-328Z.json\n?? reports/baselines/N-00-2026-09-05T06-29-47-245Z.json\n?? reports/baselines/N-00-2026-09-05T06-43-08-027Z.json\n?? reports/baselines/N-00-2026-09-05T07-50-03-509Z.json\n?? reports/baselines/N-00-2026-09-05T08-14-46-988Z.json\n?? reports/baselines/credit-lifecycle-2026-09-05T03-28-22-017Z.json\n?? reports/baselines/credit-lifecycle-2026-09-05T03-31-53-586Z.json\n?? reports/baselines/deposit-products-2026-09-05T03-54-20-660Z.json\n?? reports/baselines/deposit-products-2026-09-05T03-55-43-591Z.json\n?? reports/baselines/deposit-products-2026-09-05T03-57-57-873Z.json\n?? reports/baselines/deposit-products-2026-09-05T03-58-59-712Z.json\n?? reports/baselines/deposit-products-2026-09-05T04-03-06-809Z.json\n?? reports/baselines/funding-covenants-2026-09-05T03-39-38-307Z.json\n?? reports/baselines/funding-covenants-2026-09-05T03-41-11-271Z.json\n?? reports/baselines/funding-covenants-2026-09-05T03-45-23-271Z.json\n?? reports/baselines/funding-covenants-2026-09-05T03-47-56-108Z.json\n?? reports/baselines/market-economy-2026-09-05T02-47-38-261Z.json\n?? reports/baselines/market-economy-2026-09-05T02-52-30-105Z.json\n?? reports/baselines/market-economy-2026-09-05T02-54-19-036Z.json\n?? reports/baselines/market-economy-2026-09-05T03-30-16-127Z.json\n?? reports/baselines/regional-operations-2026-09-05T02-28-31-839Z.json\n?? reports/baselines/regional-pilot-2026-09-05T01-59-00-195Z.json\n?? reports/baselines/release-balance-2026-09-05T06-15-03-290Z.json\n?? reports/baselines/release-balance-2026-09-05T06-20-41-028Z.json\n?? reports/baselines/release-balance-2026-09-05T06-24-56-205Z.json\n?? reports/baselines/release-balance-2026-09-05T06-30-54-734Z.json\n?? reports/baselines/release-balance-2026-09-05T06-45-40-822Z.json\n?? reports/baselines/release-balance-2026-09-05T07-29-38-916Z.json\n?? reports/baselines/release-balance-2026-09-05T07-37-23-912Z.json\n?? reports/baselines/release-balance-2026-09-05T07-47-10-010Z.json\n?? reports/baselines/release-balance-2026-09-05T07-47-45-497Z.json\n?? reports/baselines/release-balance-2026-09-05T07-49-11-220Z.json\n?? reports/baselines/release-balance-2026-09-05T07-51-29-181Z.json\n?? reports/baselines/release-balance-2026-09-05T07-52-03-832Z.json\n?? reports/baselines/release-balance-2026-09-05T07-53-20-488Z.json\n?? reports/baselines/release-balance-2026-09-05T08-19-56-506Z.json\n?? reports/baselines/service-diagnostic-2026-09-05T07-24-43-885Z.json\n?? reports/baselines/service-diagnostic-2026-09-05T07-25-19-534Z.json\n?? reports/baselines/service-diagnostic-2026-09-05T07-27-29-503Z.json\n?? reports/reference-builds/\n?? tests/institution_management.test.js\n?? tests/relationship_operations.test.js\n?? tests/service_expansion.test.js\n?? tests/service_planning.test.js\n?? tools/service_balance_lab.js\n",
+    "stderr": "warning: unable to access 'C:\\Users\\xande/.config/git/ignore': Permission denied\nwarning: unable to access 'C:\\Users\\xande/.config/git/ignore': Permission denied\n"
+  },
+  "diffStat": {
+    "label": "git diff stat",
+    "command": [
+      "git",
+      "diff",
+      "--stat"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 76,
+    "stdout": " .../BRANCH_WARS.html                               | 549 ++++++++++++++++++++-\n .../GAME_REFERENCE.md                              | 121 +++++\n .../README.txt                                     |  17 +\n .../tests/capture_baseline.js                      |   6 +-\n .../tests/engine.test.js                           |  20 +-\n .../tests/funding_covenants.test.js                |   2 +-\n .../tests/github_resilience.test.js                |  21 +-\n .../tests/release_balance.test.js                  |  27 +-\n .../tests/service_contracts.test.js                |   3 +-\n .../tools/build_reference.js                       |   9 +-\n .../tools/reference.template.md                    | 108 ++++\n 11 files changed, 839 insertions(+), 44 deletions(-)\n",
+    "stderr": "warning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/BRANCH_WARS.html', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/GAME_REFERENCE.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/README.txt', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/capture_baseline.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/engine.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/funding_covenants.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/github_resilience.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/release_balance.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tests/service_contracts.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tools/build_reference.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Branch_Wars_Executive_Command_v6_No_Server/tools/reference.template.md', LF will be replaced by CRLF the next time Git touches it\n"
+  },
+  "tests": [
+    {
+      "label": "engine.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\engine.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 19723,
+      "stdout": "Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 744,
+      "stdout": "Accounting prototype tests passed: opening reconciliation, atomic postings, transfers, loan funding, retained profits, noncash losses, debt, securities sales, 27 real previews and 2000 reconciled stress postings. Campaign rules remain unchanged.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_activities.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting_activities.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 105,
+      "stdout": "Accounting activity tests passed: expense/capital classification, 24 live opportunity rewards, 20 live acquisition comparisons, two-sided settlements, debt conservation, penalties, franchise funding and atomic batches. Campaign economy remains v1/v2.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_persistence.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting_persistence.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 347,
+      "stdout": "Accounting persistence tests passed: 256-entry snapshots, checkpoint reconciliation, exact continuation, repeated pruning, 15 corruptions, invalid histories and no campaign migration.\n",
+      "stderr": ""
+    },
+    {
+      "label": "bank_identity.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\bank_identity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 138,
+      "stdout": "Bank identity tests passed: picker wiring, seat perspectives, save migration, rematches, legacy defaults, unsafe values, matching colors, handshake contracts and simulation neutrality.\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_pilot.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\regional_pilot.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 54266,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"sourceUnchanged\": true,\n  \"turns\": 1920,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 37,\n      \"reentries\": 48,\n      \"depositContests\": 149,\n      \"maxViewBytes\": 278976\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 36,\n      \"reentries\": 41,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 268334\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 40,\n      \"reentries\": 39,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 270906\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 35,\n      \"reentries\": 32,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 262431\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 35,\n      \"depositContests\": 141,\n      \"maxViewBytes\": 282420\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 41,\n      \"reentries\": 45,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 282354\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 36,\n      \"depositContests\": 156,\n      \"maxViewBytes\": 266474\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 26,\n      \"reentries\": 31,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 273083\n    },\n    {\n      \"seed\": 8,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 34,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 267610\n    },\n    {\n      \"seed\": 9,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 28,\n      \"reentries\": 35,\n      \"depositContests\": 158,\n      \"maxViewBytes\": 283270\n    },\n    {\n      \"seed\": 10,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 33,\n      \"depositContests\": 152,\n      \"maxViewBytes\": 269798\n    },\n    {\n      \"seed\": 11,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 27,\n      \"reentries\": 30,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 271580\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\regional_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 19796,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"sourceUnchanged\": true,\n  \"mainLoopTurns\": 800,\n  \"additionalResumeTurns\": 8,\n  \"withdrawals\": 66,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 102,\n      \"ended\": false\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "market_economy.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\market_economy.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 32558,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"sourceUnchanged\": true,\n  \"turns\": 968,\n  \"maxViewBytes\": 357799,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        158119682,\n        9596448\n      ],\n      \"outsideDeposits\": 283870\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 7,\n      \"playerDeposits\": [\n        20927475,\n        146615463\n      ],\n      \"outsideDeposits\": 457062\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        145246617,\n        22579790\n      ],\n      \"outsideDeposits\": 173593\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        157145185,\n        10346729\n      ],\n      \"outsideDeposits\": 508086\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        8784848,\n        159017469\n      ],\n      \"outsideDeposits\": 197683\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        8009010,\n        159855182\n      ],\n      \"outsideDeposits\": 135808\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 9,\n      \"playerDeposits\": [\n        27098962,\n        140882596\n      ],\n      \"outsideDeposits\": 18442\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 3,\n      \"playerDeposits\": [\n        19423583,\n        148390905\n      ],\n      \"outsideDeposits\": 185512\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "credit_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\credit_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 24577,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 484,\n  \"maxBytes\": 447633,\n  \"maxCohorts\": 727,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 59465241,\n      \"loans\": [\n        29971885,\n        30062840\n      ],\n      \"deposits\": [\n        90306025,\n        77564970\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 62596446,\n      \"loans\": [\n        15415989,\n        24097182\n      ],\n      \"deposits\": [\n        159509887,\n        8304383\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 45134148,\n      \"loans\": [\n        14857316,\n        16261214\n      ],\n      \"deposits\": [\n        25471678,\n        142497092\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 43849531,\n      \"loans\": [\n        21211180,\n        20302097\n      ],\n      \"deposits\": [\n        157863521,\n        9921776\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding_covenants.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\funding_covenants.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 35290,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 726,\n  \"maxBytes\": 437419,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        24438057,\n        143503421\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161298998,\n        6459102\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        13935143,\n        153990939\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        28356558,\n        139579370\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161834583,\n        5979129\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        11598430,\n        155978939\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "deposit_products.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\deposit_products.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 25968,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 595,\n  \"maxBytes\": 424487,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"serviceSeat\": -1,\n      \"cycle\": 66,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        85799567,\n        67350236\n      ],\n      \"equity\": [\n        86848,\n        2402223\n      ],\n      \"profits\": [\n        62202,\n        172407\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        124908002,\n        41771287\n      ],\n      \"equity\": [\n        895162,\n        2692756\n      ],\n      \"profits\": [\n        284885,\n        395547\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 1,\n      \"cycle\": 45,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        39678305,\n        97051431\n      ],\n      \"equity\": [\n        1149689,\n        -106050\n      ],\n      \"profits\": [\n        83647,\n        23075\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        32894333,\n        134634275\n      ],\n      \"equity\": [\n        2925598,\n        2599791\n      ],\n      \"profits\": [\n        368565,\n        366196\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        131319814,\n        36612390\n      ],\n      \"equity\": [\n        856649,\n        5837434\n      ],\n      \"profits\": [\n        258049,\n        526500\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        18237581,\n        149303329\n      ],\n      \"equity\": [\n        7713352,\n        538811\n      ],\n      \"profits\": [\n        328861,\n        160811\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "term_funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\term_funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 25701,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 484,\n  \"maxBytes\": 461369,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        29082704,\n        0\n      ],\n      \"equity\": [\n        3037363,\n        3425818\n      ],\n      \"profit\": [\n        347363,\n        468903\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        32119825\n      ],\n      \"equity\": [\n        4770427,\n        2712317\n      ],\n      \"profit\": [\n        427084,\n        353792\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        13420995,\n        0\n      ],\n      \"equity\": [\n        3210025,\n        2842340\n      ],\n      \"profit\": [\n        431926,\n        369585\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        37332344\n      ],\n      \"equity\": [\n        4150611,\n        1574527\n      ],\n      \"profit\": [\n        693235,\n        176680\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "retail_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\retail_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 16612,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 323,\n  \"maxBytes\": 472473,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 0,\n      \"cycle\": 40,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        50135924,\n        71120955\n      ],\n      \"equity\": [\n        14772,\n        785058\n      ],\n      \"profit\": [\n        -47904,\n        -9557\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 1,\n      \"cycle\": 41,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        64069676,\n        57267276\n      ],\n      \"equity\": [\n        -189474,\n        426604\n      ],\n      \"profit\": [\n        -5922,\n        22376\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 0,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        121159200,\n        45445189\n      ],\n      \"equity\": [\n        2300820,\n        2756662\n      ],\n      \"profit\": [\n        210254,\n        361643\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 1,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        97725889,\n        67196410\n      ],\n      \"equity\": [\n        3039835,\n        2775869\n      ],\n      \"profit\": [\n        635084,\n        451950\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "product_deployment.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\product_deployment.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 14627,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 320,\n  \"maxBytes\": 445587,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_contracts.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_contracts.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 12743,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 281,\n  \"maxBytes\": 437044,\n  \"changes\": 89,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        1,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        0,\n        1\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        3,\n        0\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 38,\n      \"ended\": true,\n      \"contracts\": [\n        0,\n        0\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_expansion.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_expansion.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 18637,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"turns\": 324,\n  \"maxViewBytes\": 504998,\n  \"changes\": 47,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        4,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": \"build\"\n        }\n      ],\n      \"contracts\": [\n        3,\n        2\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_planning.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_planning.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2003,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 35,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"checks\": [\n    \"pure advisory forecasts\",\n    \"capacity alternatives\",\n    \"hypothetical locked quotes\",\n    \"treasury prerequisites\",\n    \"whole-book capacity\",\n    \"recovery without free capital\",\n    \"final AI reserve\",\n    \"fixed-intent replay\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "institution_management.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\institution_management.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 50186,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"strict versioning\",\n    \"private mandates\",\n    \"bounded recurring funding\",\n    \"milestone stop\",\n    \"cash reserve\",\n    \"editable priorities\",\n    \"client differentiation\",\n    \"bounded service delegation\",\n    \"explicit bid preservation\",\n    \"sealed plans\",\n    \"saved fixed-intent replay\",\n    \"20-turn prior-build compatibility\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "relationship_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\relationship_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 49501,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"old-build save refusal\",\n    \"old-mechanics retention\",\n    \"non-mutating import\",\n    \"earned service streak\",\n    \"miss reset\",\n    \"corrupt histories\",\n    \"reconciled scorecard\",\n    \"adaptive bounded quotes\",\n    \"locked fee preservation\",\n    \"half-sealed import\",\n    \"bounded history\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 11692,
+      "stdout": "Funding rules tests passed: v1 compatibility, v2 transfer/settlement reconciliation, small outflows, signed losses, explicit debt/interest/repayment, dual failure and 24 modern campaigns (1927 turns).\n",
+      "stderr": ""
+    },
+    {
+      "label": "determinism.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\determinism.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 461,
+      "stdout": "Determinism tests passed: explicit creation, independent/interleaved campaigns, save/resume, preview purity, separate AI stream, privacy, legacy initialization and validation.\n",
+      "stderr": ""
+    },
+    {
+      "label": "ledger.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\ledger.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 988,
+      "stdout": "Ledger tests passed: 276 resolved turns; stat reconciliation, phase attribution, sealed-plan silence, owner privacy, deep copies and bounded history. Categories: campaign.ending, competition.actions, competition.deposits, decision, funding.settlement, markets.competition, markets.dividend, markets.exit, milestones, operations, project.advance, project.start, relationships, research.investment, risk.consequences, staff.hiring\n",
+      "stderr": ""
+    },
+    {
+      "label": "save_integrity.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\save_integrity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 269,
+      "stdout": "Save integrity tests passed: real client migration/resume, idempotence, legacy histories, pruning, 13 corruption cases and non-mutating rejection.\n",
+      "stderr": ""
+    },
+    {
+      "label": "transport.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\transport.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 131,
+      "stdout": "Branch Wars transport tests passed: ordered retry, lost-response reconciliation, default-branch discovery, and LAN idempotency.\n",
+      "stderr": ""
+    },
+    {
+      "label": "github_resilience.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\github_resilience.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 906,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 61,\n  \"lostResponses\": 8,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 78652,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 78296,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "Relationship operations GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--relationships"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1111,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 61,\n  \"lostResponses\": 8,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Living institution GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--management"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1094,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 61,\n  \"lostResponses\": 8,\n  \"sourceSha256\": \"c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "legacy funding balance audit",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/balance_audit.js",
+        "--legacy-funding"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 71870,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.5% wins (674/1419); actions depositRaid:11621, liquidityDefense:10440, commercialRaid:3054, retentionDefense:2097, relationshipDefense:674, talentRaid:362, takeoverDefense:66\ncommercial  80.0% wins (16/20); actions depositRaid:201, liquidityDefense:113, retentionDefense:78, commercialRaid:22, talentRaid:6, relationshipDefense:4, takeoverDefense:0\ndigital     75.8% wins (100/132); actions depositRaid:1013, retentionDefense:722, commercialRaid:340, liquidityDefense:285, relationshipDefense:9, talentRaid:4, takeoverDefense:2\nefficiency  34.5% wins (10/29); actions liquidityDefense:114, depositRaid:113, commercialRaid:85, retentionDefense:74, takeoverDefense:4, relationshipDefense:2, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":781,\"receivership\":6,\"domination\":13}\nLength: median 56, p90 81, max 186\ntown        median 60, p90 80, max 146; Act III median 13, combined strategy 5\nregional    median 55, p90 87, max 150; Act III median 13, combined strategy 4\nstate       median 55, p90 79, max 186; Act III median 15, combined strategy 5\nnational    median 55, p90 70, max 158; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "Windows LAN",
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tests/lan_server.test.ps1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1759,
+      "stdout": "Branch Wars PowerShell LAN server tests passed: health, create, join, relay, and retry deduplication.\n",
+      "stderr": ""
+    }
+  ],
+  "filesAfter": {
+    "BRANCH_WARS.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "9585936671dd82f8b084e11ea7832c7d767fae28cfa4860d6b50b427b218c6cd",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "01beadd4a855f76d32148a733b2741b9d822b7321a9c1399294eeca67ae5c46b",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "a7983fd26308ddc2e2a6ff1aef54f8e05e55aa782f94947a1e1e3522bf7bc642",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "3fdf66534125f07c2d87db8753392d5bcdb4375965ddc231070ebbdb84ea3fe8",
+    "tests/github_resilience.test.js": "3159cc0a04cca5448c787f978141752109ba723fd4b7cce05a65a06b4f5aa4cc",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "9471467319d5945277ed9c1a0a2409740ec14afcb3fd131441a593a450f8d9c1"
+  },
+  "sourceUnchanged": true,
+  "balanceOutputReproduced": true,
+  "passed": true,
+  "limitations": [
+    "Passing regression suites does not certify accounting correctness or strategic balance.",
+    "Repeated seeded harness output does not prove saved-game RNG/replay determinism.",
+    "No browser or physical two-computer acceptance was performed by this runner."
+  ]
+}

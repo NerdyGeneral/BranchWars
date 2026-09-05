@@ -1,3 +1,5 @@
+> Historical batch record. Claims and hashes below refer to that batch, not today's build. See [current release status](../release-status.md) and [roadmap](../roadmap.md).
+
 # Branch Wars v8.1 — Current Design Status
 
 ## What already worked
