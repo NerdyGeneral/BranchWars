@@ -27,7 +27,9 @@ jobs:
 
   full-windows:
     runs-on: windows-latest
-    timeout-minutes: 40
+    # Hosted Windows needs ~36 minutes for regression before the campaign audit.
+    # Keep every gate; allow the audit and evidence upload to finish.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
