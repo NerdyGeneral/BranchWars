@@ -295,12 +295,21 @@ capability tiers.
 | acquisition | Competitor Book Acquisition | $1.10M | 4 | 3 | acquisition | -- | yes | Acquire customers, deposits, and share in the focus market. |
 
 ```js
-function projectCost(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
-return node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0}let cost=def.cost;
-if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
-if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
-if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
-return Math.max(0,Math.round(cost))}
+function projectCost(p,def){
+ let cost;
+ if(def.strategy){
+  const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
+  cost=node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0;
+ }else{
+  cost=def.cost;
+  if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
+  if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
+  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  cost=Math.max(0,Math.round(cost));
+ }
+ // Local entry pricing applies after the existing whole-dollar rounding.
+ return regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):cost;
+}
 ```
 
 ```js

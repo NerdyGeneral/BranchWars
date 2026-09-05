@@ -15,6 +15,7 @@ files.push('tests/docs.test.js','tools/build_reference.js','tools/reference-temp
 files.push('tests/behavior-golden.test.js','tests/architecture.test.js','tests/fixtures/behavior-golden.json','tests/fixtures/override-ceilings.json','tests/fixtures/legacy-half-ready.json','tests/fixtures/pilot-half-ready.json','tests/fixtures/goodwill-half-ready.json','tools/check.js');
 files.push('tests/save-baseline.test.js','tests/launcher-path.test.js','tests/fixtures/save-continuation.json');
 files.push('tests/reference-eol.test.js');
+files.push('tests/project-rules.test.js');
 function run(label, command, args) {
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
@@ -34,6 +35,7 @@ for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activiti
 report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/service_workforce.test.js']));
 report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
 report.tests.push(run('reference-eol.test.js', process.execPath, ['tests/reference-eol.test.js']));
+report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project-rules.test.js']));
 report.tests.push(run('architecture.test.js', process.execPath, ['tests/architecture.test.js']));
 report.tests.push(run('behavior-golden.test.js', process.execPath, ['tests/behavior-golden.test.js']));
 report.tests.push(run('save-baseline.test.js', process.execPath, ['tests/save-baseline.test.js']));

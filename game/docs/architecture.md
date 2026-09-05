@@ -9,12 +9,27 @@ Updated: 2026-09-05. This is the current implementation plan; the user's separat
 - Three preserved half-ready saves exercise the real importer and continued play. Existing reference-engine comparisons remain active.
 - A conservative textual override ceiling detects increases in assignments to declared engine function names. It is a smoke check, not a full JavaScript parser or proof that every form of indirection is forbidden.
 - One non-interactive developer command runs fast or full validation. Windows full checks retain the LAN suite. GitHub PR checks use pinned actions, read-only contents access and no relay credentials, following [GitHub's secure-use guidance](https://docs.github.com/en/actions/reference/security/secure-use).
-- Existing runtime debt is not fixed by these checks. The initial counts include 16 `createGame`, 14 `chooseOpenBot`, 9 `operate`, 9 `finishProject` and 4 `validatePlan` reassignments.
+- The foundation recorded existing runtime debt rather than fixing it. Initial counts included 16 `createGame`, 14 `chooseOpenBot`, 9 `operate`, 9 `finishProject` and 4 `validatePlan` reassignments. The project-rule batch below removes the validation layers; the other named stacks remain.
+
+## Shared project rules: implemented
+
+Project prices, restrictions, draft spending and execution eligibility now have shared engine entry points. UI project/service cards, the core AI project selector, peer plan validation and execution use these rules rather than maintaining separate project eligibility formulas.
+
+- `projectTerms` returns intrinsic price, duration, capacity and restrictions for a selected focus market.
+- `projectPlanStatus` checks the combined initiative list, cash/capital reservation, execution capacity, office conflicts and service deployment conflicts. It does not replace every product or service-policy validator.
+- `projectTargetIssue` handles market availability in full-game and seat-relative public views.
+- `projectStartStatus` rechecks mutable cash, capacity and restrictions at execution. The original capital reserve remains a planning constraint; applying it again after executive events would change accepted campaign rules.
+
+Twelve function reassignments are removed: `projectCost` 1→0, `projectBarred` 4→0, `planBudget` 2→0, `validatePlan` 4→0 and `startProject` 3→2. The two remaining start wrappers preserve accounting-source and causal-ledger instrumentation. The override ceilings were lowered accordingly.
+
+Project choices now explain the shared blocking reason, selected initiatives remain removable from an invalid unlocked draft, and recruiting checks the full capital-aware budget. Unknown/inherited project identifiers are rejected without producing non-finite quotes. These are input/UI repairs, not a balance revision.
+
+The targeted rule suite compares 1,296 cases against the preserved pre-refactor engine, including valid-plan acceptance, quotes, restrictions and execution side effects. It also executes real renderer/handler functions in DOM sinks; this is not screenshot or physical multiplayer acceptance. Fixed campaign and half-ready save expectations are unchanged. See [release status](release-status.md) for full-run evidence.
 
 ## Next: staged engine cleanup
 
-1. Trace initiative eligibility, costing, reservation and execution together. Extract a shared rule result consumed by UI, AI and peer validation; recheck mutable resources at execution and preserve explicit, uncharged cancellation notices.
-2. Flatten one override family per behavior-preserving commit. Start with the validation/cost family after the shared-rule tests; then creation/migrations, operations, project completion and AI. Lower the committed override ceiling when a layer is removed.
+1. Extend the shared-rule pattern to remaining policy and plan normalization boundaries. Keep project execution's explicit, uncharged cancellation notices and verify each change against preserved behavior.
+2. Flatten one override family per behavior-preserving commit. The first project validation/cost family is complete; continue with creation/migrations, operations, project completion and the remaining AI stack. Lower the committed override ceiling when a layer is removed.
 3. Extract pure simulation/content modules only after the behavioral baseline remains stable. Separate UI, transport and save adapters at explicit boundaries.
 4. Generate a portable single-file release from source only when a reproducible build and freshness check are in place. Do not create empty `src/` or `dist/` folders or duplicate editable sources in anticipation.
 
@@ -43,7 +58,7 @@ git switch -c recovery/direct-p2p archive/2026-09-05/claude/direct-p2p-turn-bug-
 
 The multiplayer-reliability unmatched commit is patch-equivalent to a commit in main; the other divergent histories were retained rather than assumed redundant. Tags can restore every retired branch.
 
-Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. This batch uses `refactor/stabilization-foundation`; it is not automatically merged. Do not reuse merged branch names for subsequent releases.
+Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. The project-rule batch uses `refactor/shared-project-rules`, stacked on `refactor/stabilization-foundation` while its PR is open. Review and merge the foundation first, then retarget the dependent PR to main; neither is automatically merged. Do not reuse merged branch names for subsequent releases.
 
 ## Local folders and compatibility
 

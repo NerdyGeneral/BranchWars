@@ -362,7 +362,36 @@ function syncDoctrine(p){
  return p.doctrine}
 function syncPrimaryStrategy(p){p.primaryStrategy=leadCapability(p);return p.primaryStrategy}
 function strategyBarred(){return''}
-function projectBarred(p,key){const rank=tierRank(p),def=PROJECTS[key];if(rank>=3)return'All new projects are barred while undercapitalized.';if(rank>=1&&def&&['branch','acquisition'].includes(def.kind))return'Expansion projects are suspended under regulatory supervision.';if((p.capitalRestriction||0)>0&&def&&['branch','acquisition'].includes(def.kind))return`Board assistance suspends expansion for ${p.capitalRestriction} more cycle${p.capitalRestriction===1?'':'s'}.`;return strategyBarred(p,key)}
+function projectBarred(p,key){
+ const def=PROJECTS[key];
+ // Preserve legacy precedence: contract availability, local-office rules,
+ // regulatory restrictions, retail deployment, then service applications.
+ if(def&&def.contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';
+ if(def&&def.regionalOnly){
+  if(!regionalOperations(p))return 'Available only in new Regional Operations pilots.';
+  if(!(p.branches[p.focus]>0))return 'Requires an operating office in the focus market.';
+  const field=key==='branchService'?'service':key==='branchAutomation'?'automation':null;
+  if(field&&p.regionalOperations.markets[p.focus][field]>=2)return 'This market is already fully upgraded.';
+ }
+ const rank=tierRank(p);
+ if(rank>=3)return 'All new projects are barred while undercapitalized.';
+ if(rank>=1&&def&&['branch','acquisition'].includes(def.kind))return 'Expansion projects are suspended under regulatory supervision.';
+ if((p.capitalRestriction||0)>0&&def&&['branch','acquisition'].includes(def.kind))return `Board assistance suspends expansion for ${p.capitalRestriction} more cycle${p.capitalRestriction===1?'':'s'}.`;
+ const strategy=strategyBarred(p,key);if(strategy)return strategy;
+ if(def&&def.deploymentProduct){
+  if(!p.productDeployment)return 'Requires a new product-deployment pilot.';
+  if(p.productDeployment.ready[def.deploymentProduct])return 'Already deployed. Manage sales in Operations.';
+  const d=RETAIL_DEPLOYMENTS[def.deploymentProduct];
+  if(strategyLevel(p,d.branch)<1)return 'Complete '+STRATEGY_BRANCHES[d.branch].name+' tier 1 first. Research benefits apply next cycle.';
+ }
+ const app=SERVICE_APPLICATIONS[key];if(!app)return '';
+ if(!p.serviceDesk)return 'Requires a new expanded-service pilot.';
+ const current=p.serviceDesk.applications[app.app];
+ if(current===app.route||current==='build')return 'Already deployed. Activation is managed in Markets > Service Desk.';
+ if(app.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+app.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
+ if(p.projects.some(x=>SERVICE_APPLICATIONS[x.key]&&SERVICE_APPLICATIONS[x.key].app===app.app))return 'This application already has a deployment in progress.';
+ return '';
+}
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
@@ -375,12 +404,15 @@ function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
 function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return n>0?n:0}
 function planBudget(p,plan){
+ if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
- const projects=initiatives.reduce((sum,key)=>sum+(PROJECTS[key]?projectCost(p,PROJECTS[key]):0),0);
+ const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
  const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
  const hires=planHires(plan),recruiting=hires?hireCost(p,hires):0,total=action+projects+research+recruiting;
- const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(k=>PROJECTS[k]).filter(Boolean));
- return{action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
+ const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
+ return quote;
 }
 function fundingStep(p,plan,key,step){
  const spent=capabilitySpend(p,key),tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;
@@ -392,7 +424,82 @@ function fundingStep(p,plan,key,step){
 }
 function strategyCostMultiplier(){return 1}
 function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
-function projectCost(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0}let cost=def.cost;if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;return Math.max(0,Math.round(cost))}
+function projectCost(p,def){
+ let cost;
+ if(def.strategy){
+  const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
+  cost=node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0;
+ }else{
+  cost=def.cost;
+  if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
+  if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
+  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  cost=Math.max(0,Math.round(cost));
+ }
+ // Local entry pricing applies after the existing whole-dollar rounding.
+ return regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):cost;
+}
+function projectDefinition(key){return Object.prototype.hasOwnProperty.call(PROJECTS,key)?PROJECTS[key]:null}
+function projectTerms(p,key,focus=p.focus){
+ const def=projectDefinition(key);if(!def)return null;
+ const owner=focus===p.focus?p:{...p,focus};
+ return {key,cost:projectCost(owner,def),cycles:projectCycles(owner,def),capacity:projectCapacity(def),
+  barred:projectBarred(owner,key),running:p.projects.some(x=>x.key===key),
+  retired:!!def.legacy,atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
+  branchFull:!!(def.kind==='branch'&&p.branches[focus]>=3)};
+}
+function projectPlanStatus(p,plan){
+ const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan);
+ const fail=(code,reason)=>({eligible:false,code,reason,quote});
+ let load=usedCapacity(owner);
+ for(const key of chosen){
+  const def=PROJECTS[key],terms=projectTerms(owner,key,plan.focus);
+  if(!terms)return fail('unknown','That strategic project does not exist.');
+  if(key==='capital')return fail('capital-action','Capital requests are now an emergency board action.');
+  if(terms.retired)return fail('retired',def.name+' is retired and can no longer be started.');
+  if(terms.running)return fail('running',def.name+' is already under way.');
+  load+=terms.capacity;
+  if(load>quote.capacity+1e-9)return fail('capacity',`This plan needs ${load.toFixed(1)} execution capacity but staffs only ${quote.capacity.toFixed(1)}. Assign more bankers to Operations & Risk or start fewer initiatives.`);
+  if(terms.branchFull)return fail('branch-full','That market already has maximum branch capacity.');
+  if(terms.atMaximum)return fail('maximum','That capability is already at maximum level.');
+  if(terms.barred)return fail('barred',terms.barred);
+ }
+ if(owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
+ if(owner.accounting&&quote.remaining<0)return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
+ if(regionalOperations(owner)){
+  const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
+  const projects=chosen.filter(local),active=owner.projects.filter(x=>x.target===plan.focus&&local(x.key));
+  if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
+ }
+ if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
+ if(p.serviceDesk){
+  const apps=chosen.filter(key=>SERVICE_APPLICATIONS[key]).map(key=>SERVICE_APPLICATIONS[key].app);
+  if(new Set(apps).size!==apps.length)return fail('application-conflict','Choose one deployment route per service application.');
+ }
+ return {eligible:true,code:null,reason:'',quote};
+}
+function projectTargetIssue(g,p,def,focus){
+ if(!def.target)return '';
+ const territory=g.territories[focus],index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
+ if(!territory||!unlocked(g,territory))return 'Choose an open focus market.';
+ if(territory.exited&&territory.exited[index])return 'Your institution permanently exited that market. Choose an operating market.';
+ return '';
+}
+function projectStartStatus(g,p,key){
+ const terms=projectTerms(p,key),def=PROJECTS[key];
+ const fail=code=>({eligible:false,code,terms});
+ if(!terms)return fail('unknown');
+ if(usedCapacity(p,[def])>executionCapacity(p))return fail('capacity');
+ if(terms.running)return fail('running');
+ if(projectTargetIssue(g,p,def,p.focus)||terms.branchFull)return fail('target');
+ if(terms.atMaximum)return fail('maximum');
+ if(terms.barred)return fail('barred');
+ if(key==='capital'&&p.stats.influence<8)return fail('influence');
+ if(p.stats.cash<terms.cost)return fail('cash');
+ // The capital reserve is a planning constraint. Rechecking it here after
+ // executive/rival effects would change already accepted campaign rules.
+ return {eligible:true,code:null,terms};
+}
 function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
@@ -415,7 +522,22 @@ function chooseEconomy(g,initial=false){const pools={balanced:['steady','steady'
 function createGame(o){const scope=SCOPES[o.scope]?o.scope:'national',g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};g.players[0].focus='downtown';g.players[1].focus='northside';for(const p of g.players)for(const k of Object.keys(g.territories))p.branches[k]=0;g.players[0].branches.downtown=1;g.players[1].branches.northside=1;g.players[0].facilityMarkets.downtown=['retail'];g.players[1].facilityMarkets.northside=['retail'];g.territories.downtown.shares=[56,44];g.territories.northside.shares=[44,56];if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);delta(p,'cash',250000)});if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;p.stats.attention=14});if(g.scenario==='growth')g.players.forEach(p=>{p.stats.cash=2850000;p.stats.morale=73;p.stats.momentum=58});g.players.forEach(syncDoctrine);chooseEconomy(g,true);g.event=chooseEvent(g);g.opportunities=makeOpportunities(g);addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');captureTrend(g,0);return g}
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
 function applyDecision(g,p,choice){p.turnEffects={};const a=choice==='a';switch(g.event.key){case'quiet':a?delta(p,'momentum',4):delta(p,'compliance',-4);if(a)delta(p,'compliance',2);break;case'ratewar':a?(delta(p,'cash',-100000),p.turnEffects.deposit=1.28,delta(p,'attention',2)):p.turnEffects.profit=1.15;break;case'staffing':a?(delta(p,'cash',-70000),p.turnEffects.service=1.22,delta(p,'morale',-2)):(delta(p,'reputation',-3),delta(p,'morale',-4));break;case'audit':a?(delta(p,'cash',-130000),delta(p,'compliance',-12),delta(p,'attention',-6)):(p.turnEffects.audit=true);break;case'community':a?(delta(p,'cash',-90000),delta(p,'reputation',6),p.turnEffects.market=1.18):delta(p,'influence',-2);break;case'outage':a?(delta(p,'cash',-160000),p.turnEffects.resilience=3):p.turnEffects.outage=true;break;case'stretch':a?(delta(p,'influence',7),delta(p,'morale',-5),delta(p,'attention',3)):(delta(p,'morale',3),delta(p,'attention',5));break;case'fraud':a?(delta(p,'compliance',-7),delta(p,'cash',-60000),p.turnEffects.production=.9):(delta(p,'cash',90000),delta(p,'compliance',9),delta(p,'attention',5));break;case'downturn':a?(p.turnEffects.lending=.7,delta(p,'compliance',-4)):(p.turnEffects.lending=1.15,delta(p,'compliance',7));break;case'closure':a?(delta(p,'cash',-140000),p.turnEffects.market=1.35,p.turnEffects.deposit=1.2):p.turnEffects.market=1.12;break;case'talent':a?(delta(p,'cash',-120000),delta(p,'morale',8)):delta(p,'morale',-7);break;case'viral':a?(delta(p,'cash',-75000),delta(p,'reputation',7),p.turnEffects.market=1.16):delta(p,'reputation',3);break;case'board':a?(delta(p,'influence',9),delta(p,'attention',6)):(delta(p,'influence',4),delta(p,'attention',1));break;case'cyber':a?(delta(p,'cash',-150000),p.turnEffects.resilience=3):p.turnEffects.cyber=true;break;case'coffee':a?(delta(p,'cash',-18000),delta(p,'morale',8)):delta(p,'morale',-5);break;case'manager':a?(delta(p,'cash',-55000),delta(p,'reputation',4),delta(p,'influence',4)):p.turnEffects.manager=true;break;case'fintech':a?(delta(p,'cash',-140000),p.turnEffects.digital=1.5,p.turnEffects.service=1.1):p.turnEffects.relationship=true;break;case'merger':a?(delta(p,'cash',-170000),p.turnEffects.recruit=true,p.turnEffects.market=1.18):delta(p,'morale',4);break;case'losses':a?(delta(p,'cash',-130000),p.turnEffects.credit=.55,delta(p,'compliance',-3)):p.turnEffects.watchlist=true;break;case'housing':a?(p.turnEffects.lending=1.35,p.turnEffects.credit=1.25,delta(p,'attention',2)):(p.turnEffects.deposit=1.24,delta(p,'cash',-50000));break;case'publicity':a?(delta(p,'influence',7),delta(p,'attention',p.stats.reputation>=70?1:6)):(delta(p,'morale',3),delta(p,'influence',2));break;case'storm':a?(delta(p,'cash',-150000),delta(p,'reputation',8),p.turnEffects.market=1.18):p.turnEffects.storm=true;break;case'activist':a?(p.turnEffects.profit=1.22,delta(p,'morale',-5),delta(p,'attention',2)):(delta(p,'attention',p.stats.influence>=35?-3:7),delta(p,'morale',3));break;case'succession':a?p.turnEffects.succession=true:(delta(p,'cash',-210000),delta(p,'staff',1),delta(p,'morale',-2),normalizeAllocation(p));break;case'vendor':a?(p.turnEffects.profit=1.1,p.turnEffects.vendor=true):(delta(p,'cash',-90000),p.turnEffects.resilience=2);break;case'expansion':a?(delta(p,'cash',350000+p.stats.influence*3500),delta(p,'attention',5),delta(p,'influence',-4)):(delta(p,'morale',4),delta(p,'attention',-2))}}
-function startProject(g,p,key,specializations={}){if(!key)return'';const def=PROJECTS[key];if(!def)return'';if(usedCapacity(p,[def])>executionCapacity(p))return'';if(p.projects.some(x=>x.key===key))return'';const target=def.target?p.focus:null,playerIndex=g.players.indexOf(p);if(def.target&&(!g.territories[target]||!unlocked(g,g.territories[target])||(g.territories[target].exited&&g.territories[target].exited[playerIndex])||(def.kind==='branch'&&p.branches[target]>=3)))return'';if(def.max&&upgradeLevel(p,key)>=def.max)return'';if(projectBarred(p,key))return'';if(key==='capital'&&p.stats.influence<8)return'';const cost=projectCost(p,def);if(p.stats.cash<cost)return'';delta(p,'cash',-cost);p.buildSpend=(p.buildSpend||0)+cost;const total=projectCycles(p,def),specialization=def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]?specializations[def.strategy]||null:null;p.projects.push({key,target,progress:0,total,...(specialization?{specialization}:{})});return`${p.name} began ${def.name}${target?` in ${g.territories[target].name}`:''} over ${total} cycle${total===1?'':'s'}.`}
+function startProject(g,p,key,specializations={}){
+ if(!key)return '';
+ const status=projectStartStatus(g,p,key),def=PROJECTS[key];
+ if(!status.eligible){
+  if(!p.serviceDesk||!status.terms)return '';
+  const reason=p.stats.cash<status.terms.cost?'cash changed before execution':
+   usedCapacity(p,[def])>executionCapacity(p)?'execution capacity changed before work could start':
+   status.terms.barred||'project availability changed before execution';
+  return p.name+' cancelled '+def.name+': '+reason+'. No project cost was charged; select it again in a later plan.';
+ }
+ const cost=status.terms.cost,target=def.target?p.focus:null,total=status.terms.cycles;
+ delta(p,'cash',-cost);p.buildSpend=(p.buildSpend||0)+cost;
+ const specialization=def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]?specializations[def.strategy]||null:null;
+ p.projects.push({key,target,progress:0,total,...(specialization?{specialization}:{})});
+ return `${p.name} began ${def.name}${target?` in ${g.territories[target].name}`:''} over ${total} cycle${total===1?'':'s'}.`;
+}
 function applyHiring(g,p,count){if(count<=0)return'';const cost=hireCost(p,count);if(p.stats.cash<cost)return'';delta(p,'cash',-cost);delta(p,'staff',count);p.hiresTotal=(p.hiresTotal||0)+count;p.payrollSpend=(p.payrollSpend||0)+cost;if(count>1)delta(p,'morale',-(count-1));normalizeAllocation(p);return`${p.name} hired ${count} banker${count===1?'':'s'} for $${cost.toLocaleString()}; they report next cycle.`}
 function applyCapitalRequest(g,p,requested){if(!requested)return'';const status=capitalRequestStatus(p);if(!status.eligible)return'';const tierFactor=[.65,.85,1,1.1,1.15][tierRank(p)],fatigue=1/(1+(p.capitalRequests||0)*.45),award=Math.round((720000+p.stats.influence*7000)*tierFactor*fatigue);p.capitalRequests=(p.capitalRequests||0)+1;p.boardConcessions=(p.boardConcessions||0)+1;p.capitalRestriction=3;delta(p,'cash',award);delta(p,'capital',award);delta(p,'influence',-10);delta(p,'attention',12);return`${p.name} accepted $${award.toLocaleString()} in emergency board capital; expansion is suspended for three cycles and enterprise value takes a permanent concession.`}
 function competitiveActionStatus(p,key){const action=COMPETITIVE_ACTIONS[key];if(!action)return{eligible:false,reason:'Unknown competitive action.'};if(p.stats.cash<action.cost)return{eligible:false,reason:`Requires $${action.cost.toLocaleString()} of available cash.`};if(action.minInfluence&&p.stats.influence<action.minInfluence)return{eligible:false,reason:`Requires ${action.minInfluence} executive influence.`};return{eligible:true,reason:action.desc}}
@@ -525,7 +647,7 @@ function planProject(g,p,focus=p.focus,allocation=p.allocation,taken=[],committe
  const spare=p.stats.cash-committed,room=executionCapacity(p,allocation)-usedCapacity(p,taken.map(k=>PROJECTS[k]));
  if(spare<150000)return null;
  const lean=spare<Math.max(150000,p.stats.deposits*.012);
- const afford=k=>spare>=projectCost(p,PROJECTS[k])&&projectCapacity(PROJECTS[k])<=room+1e-9,open=k=>!p.projects.some(x=>x.key===k)&&!taken.includes(k)&&!PROJECTS[k].legacy&&(!lean||k==='remediation')&&projectCapacity(PROJECTS[k])<=room+1e-9&&!projectBarred(p,k)&&(!PROJECTS[k].max||upgradeLevel(p,k)<PROJECTS[k].max),want=[];
+ const terms=k=>projectTerms(p,k),afford=k=>spare>=terms(k).cost&&terms(k).capacity<=room+1e-9,open=k=>!terms(k).running&&!taken.includes(k)&&!terms(k).retired&&(!lean||k==='remediation')&&terms(k).capacity<=room+1e-9&&!terms(k).barred&&!terms(k).atMaximum,want=[];
  if(p.stats.compliance>42&&afford('remediation'))want.push('remediation');
 
  if(g.territories[focus]&&unlocked(g,g.territories[focus])&&(p.branches[focus]||0)<3&&simulationRandom()<.36){const specialties=g.territories[focus].specialties||[],facilityKey=p.doctrine==='commercial'&&specialties.some(x=>['business','merchant','wealth'].includes(x))?'branchCommercial':p.doctrine==='digital'||hasSpecialization(p,'digital','customerExperience')?'branchDigital':'branch';if(afford(facilityKey))want.push(facilityKey)}if(g.cycle>6&&g.territories[focus]&&unlocked(g,g.territories[focus])&&p.stats.cash>=projectCost(p,PROJECTS.acquisition)*1.3&&g.territories[focus].shares[p===g.players[0]?0:1]<52&&simulationRandom()<.28)want.push('acquisition');const ready=want.filter(open);if(ready.length)return ready[0];const options=['marketing','remediation'].filter(k=>afford(k)&&open(k));return options.length?pick(options):null
@@ -539,8 +661,52 @@ function planHiring(g,p,committed){if(tierRank(p)>=2||p.stats.morale<45||p.stats
 function chooseCompetitiveAction(g,index){const p=g.players[index],r=g.players[1-index],cash=p.stats.cash,liquidity=p.stats.cash/Math.max(1,p.stats.deposits),last=r.lastCompetitiveAction||'none',pressure=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,candidates=[];const add=(key,weight)=>{const status=competitiveActionStatus(p,key);if(status.eligible&&cash-COMPETITIVE_ACTIONS[key].cost>=220000)candidates.push([key,weight])};if(pressure||tierRank(p)>=2)add('takeoverDefense',10+pressure*5);if(liquidity<.025||last==='depositRaid')add('liquidityDefense',8);if(last==='commercialRaid'||r.stats.business>p.stats.business*1.18)add('relationshipDefense',6);if(last==='talentRaid'||p.stats.morale<48)add('retentionDefense',7);if(r.stats.cash/Math.max(1,r.stats.deposits)<.035||tierRank(r)>=1)add('depositRaid',7+strategyLevel(p,'digital'));if(r.stats.business+r.stats.merchant>p.stats.business+p.stats.merchant*.9)add('commercialRaid',5+strategyLevel(p,'commercial'));if(r.stats.staff>6&&p.stats.influence>=20&&p.stats.morale>=45)add('talentRaid',3+strategyLevel(p,'acquisition'));if(!candidates.length)return'none';candidates.sort((a,b)=>b[1]-a[1]);const chance=g.difficulty==='analyst'?.35:g.difficulty==='chairman'?.82:.62;return simulationRandom()<chance?pick(candidates.slice(0,Math.min(2,candidates.length)))[0]:'none'}
 function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);const opportunities=[...g.opportunities].sort((a,b)=>marketOpportunityScore(g,p,b)-marketOpportunityScore(g,p,a)),opp=g.difficulty==='analyst'&&simulationRandom()<.3?null:opportunities[0],open=activeTerritories(g).filter(([,t])=>unlocked(g,t)),focus=opp?opp.market:[...open].sort((a,b)=>a[1].shares[index]-b[1].shares[index]+(b[1].value-a[1].value)/5)[0][0],allocation={...p.allocation};const opsTarget=Math.min(4,1+Math.floor(p.stats.staff/9));let desired=(allocation.operations<opsTarget)?'operations':(operationsLevel(p)>=2&&allocation.operations<2)?'operations':opp?opp.dept:p.stats.compliance>40?'operations':g.economy.key==='downturn'?'lending':'service';if(g.difficulty==='analyst')desired=pick(Object.keys(ROLES));const donor=Object.keys(allocation).filter(k=>k!==desired).sort((a,b)=>allocation[b]-allocation[a])[0];if(allocation[donor]>1){allocation[donor]--;allocation[desired]++}const deposit=g.event.key==='ratewar'||g.economy.key==='tight'?'aggressive':p.stats.cash<500000?'margin':g.scenario==='growth'?'aggressive':'balanced',lending=tierRank(p)>=1||g.economy.credit>1.3||p.stats.compliance>45?'conservative':g.scenario==='growth'?'growth':'balanced',liquidity=p.stats.cash/p.stats.deposits*100,capital=tierRank(p)>=1?'liquid':liquidity<2?'liquid':g.economy.key==='expansion'?'reinvest':'balanced',decision=(p.stats.cash<350000&&['ratewar','community','outage','talent','viral','manager'].includes(g.event.key))?'b':(p.stats.compliance>45&&['audit','fraud','cyber','losses'].includes(g.event.key))?'a':simulationRandom()<.62?'a':'b',capitalAction=capitalRequestStatus(p).eligible&&(tierRank(p)>=2||liquidity<1.25)&&simulationRandom()<.82,competitiveAction=chooseCompetitiveAction(g,index);const actionCost=COMPETITIVE_ACTIONS[competitiveAction].cost;const investments=planInvestments(g,p,actionCost);const investTotal=Object.values(investments).reduce((s,x)=>s+x,0);let newProjects=planPortfolio(g,p,focus,allocation,actionCost+investTotal);if(capitalAction)newProjects=newProjects.filter(k=>!['branch','acquisition'].includes(PROJECTS[k].kind));let running=actionCost+investTotal;newProjects=newProjects.filter(k=>{const c=projectCost(p,PROJECTS[k]);if(running+c>p.stats.cash)return false;running+=c;return true});const hires=planHiring(g,p,running);const newProject=newProjects[0]||null;const products={retail:g.economy.key==='tight'&&liquidity<2.5?'highYield':p.doctrine==='digital'||p.doctrine==='commercial'?'rewards':'essential',business:p.doctrine==='commercial'&&desired==='business'?'treasury':p.doctrine==='digital'?'entrepreneur':'relationship',credit:tierRank(p)>=1||g.economy.credit>1.3?'mortgage':g.economy.key==='expansion'&&['commercial','efficiency'].includes(p.doctrine)?'middleMarket':g.scenario==='growth'&&p.doctrine==='digital'?'consumer':'mortgage'},specializations={...p.specializations};for(const branch of Object.keys(investments)){if(strategyLevel(p,branch)>=1&&!p.specializations[branch]&&!specializations[branch]){const doctrineChoice={community:{network:'retailDensity'},commercial:{commercial:'treasury',acquisition:'dealmaker'},digital:{digital:'customerExperience'},efficiency:{operations:'lean'},people:{network:'regionalHub'}}[p.doctrine]||{};specializations[branch]=doctrineChoice[branch]||Object.keys(STRATEGY_SPECIALIZATIONS[branch])[index%2]}}return{focus,allocation,depositPolicy:deposit,lendingPolicy:lending,capitalPolicy:capital,products,specializations,opportunity:opp?opp.id:null,newProject,newProjects,investments,hires,capitalAction,competitiveAction,decision}}
 function chooseOpenBot(g,index){const plan=chooseBot(g,index),territory=g.territories[plan.focus];if(territory&&territory.exited&&territory.exited[index]){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&!(t.exited&&t.exited[index])).sort((a,b)=>a[1].shares[index]-b[1].shares[index]);if(open.length)plan.focus=open[0][0]}if(plan.opportunity){const opportunity=g.opportunities.find(o=>o.id===plan.opportunity),market=opportunity&&g.territories[opportunity.market];if(market&&market.exited&&market.exited[index])plan.opportunity=null}if(Array.isArray(plan.newProjects)&&(g.players[index].branches[plan.focus]||0)>=3)plan.newProjects=plan.newProjects.filter(k=>PROJECTS[k].kind!=='branch');plan.newProject=(plan.newProjects&&plan.newProjects[0])||null;return plan}
-function validatePlan(g,p,plan){if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');if(!DEPOSIT_POLICIES[plan.depositPolicy]||!LENDING_POLICIES[plan.lendingPolicy]||!CAPITAL_POLICIES[plan.capitalPolicy])throw Error('Choose valid operating policies.');if(!['a','b'].includes(plan.decision))throw Error('Answer the executive call.');plan.competitiveAction=plan.competitiveAction||'none';const actionStatus=competitiveActionStatus(p,plan.competitiveAction);if(!actionStatus.eligible)throw Error(actionStatus.reason);const alloc=plan.allocation;if(!alloc||Object.keys(ROLES).some(k=>!Number.isInteger(alloc[k])||alloc[k]<0)||Object.keys(ROLES).reduce((sum,k)=>sum+alloc[k],0)!==p.stats.staff)throw Error(`Allocate all ${p.stats.staff} staff members.`);if(plan.opportunity&&!g.opportunities.some(o=>o.id===plan.opportunity))throw Error('That opportunity has expired.');if(plan.capitalAction){const status=capitalRequestStatus(p);if(!status.eligible)throw Error(status.reason);if(planInitiatives(plan).some(key=>['branch','acquisition'].includes(PROJECTS[key]&&PROJECTS[key].kind)))throw Error('Board assistance cannot be combined with an expansion initiative.')}const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};let investTotal=0;for(const key of Object.keys(investments)){if(!STRATEGY_BRANCHES[key])throw Error('That capability does not exist.');const amount=Number(investments[key]);if(!Number.isFinite(amount)||!Number.isInteger(amount))throw Error('Capability investment must be a whole dollar amount.');if(amount>0&&amount<1000)throw Error('Capability investment must be at least $1,000.');if(amount<0)throw Error('Capability investment cannot be negative.');if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(STRATEGY_BRANCHES[key].name+' is already fully developed.');if(amount>CAPABILITY_CAP_PER_CYCLE)throw Error(`An institution can absorb at most $${CAPABILITY_CAP_PER_CYCLE.toLocaleString()} of investment per capability each cycle.`);if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');investTotal+=amount}
- const hires=planHires(plan);if(hires>hireLimit(p))throw Error(`You may hire at most ${hireLimit(p)} bankers in one cycle.`);const initiatives=planInitiatives(plan);let spend=COMPETITIVE_ACTIONS[plan.competitiveAction].cost+(hires?hireCost(p,hires):0)+investTotal;const budget=executionCapacity(p,alloc);let load=usedCapacity(p);for(const key of initiatives){ const def=PROJECTS[key]; if(!def)throw Error('That strategic project does not exist.'); if(key==='capital')throw Error('Capital requests are now an emergency board action.'); if(def.legacy)throw Error(`${def.name} is retired and can no longer be started.`); if(p.projects.some(x=>x.key===key))throw Error(`${def.name} is already under way.`); load+=projectCapacity(def); if(load>budget+1e-9)throw Error(`This plan needs ${load.toFixed(1)} execution capacity but staffs only ${budget.toFixed(1)}. Assign more bankers to Operations & Risk or start fewer initiatives.`); spend+=projectCost(p,def); if(def.kind==='branch'&&p.branches[plan.focus]>=3)throw Error('That market already has maximum branch capacity.'); if(def.max&&upgradeLevel(p,key)>=def.max)throw Error('That capability is already at maximum level.'); const barred=projectBarred(p,key);if(barred)throw Error(barred);}if(p.stats.cash<spend)throw Error(`This plan commits $${spend.toLocaleString()} but only $${Math.round(p.stats.cash).toLocaleString()} is available.`);}
+function validatePlan(g,p,plan){
+ if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');
+ if(regionalOperations(p))p={...p,focus:plan.focus};
+ if(!DEPOSIT_POLICIES[plan.depositPolicy]||!LENDING_POLICIES[plan.lendingPolicy]||!CAPITAL_POLICIES[plan.capitalPolicy])throw Error('Choose valid operating policies.');
+ if(!['a','b'].includes(plan.decision))throw Error('Answer the executive call.');
+ plan.competitiveAction=plan.competitiveAction||'none';
+ const actionStatus=competitiveActionStatus(p,plan.competitiveAction);if(!actionStatus.eligible)throw Error(actionStatus.reason);
+ const alloc=plan.allocation;
+ if(!alloc||Object.keys(ROLES).some(k=>!Number.isInteger(alloc[k])||alloc[k]<0)||Object.keys(ROLES).reduce((sum,k)=>sum+alloc[k],0)!==p.stats.staff)throw Error(`Allocate all ${p.stats.staff} staff members.`);
+ if(plan.opportunity&&!g.opportunities.some(o=>o.id===plan.opportunity))throw Error('That opportunity has expired.');
+ if(plan.capitalAction){
+  const status=capitalRequestStatus(p);if(!status.eligible)throw Error(status.reason);
+  if(planInitiatives(plan).some(key=>['branch','acquisition'].includes(PROJECTS[key]&&PROJECTS[key].kind)))throw Error('Board assistance cannot be combined with an expansion initiative.');
+ }
+ const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};
+ for(const key of Object.keys(investments)){
+  if(!STRATEGY_BRANCHES[key])throw Error('That capability does not exist.');
+  const amount=Number(investments[key]);
+  if(!Number.isFinite(amount)||!Number.isInteger(amount))throw Error('Capability investment must be a whole dollar amount.');
+  if(amount>0&&amount<1000)throw Error('Capability investment must be at least $1,000.');
+  if(amount<0)throw Error('Capability investment cannot be negative.');
+  if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(STRATEGY_BRANCHES[key].name+' is already fully developed.');
+  if(amount>CAPABILITY_CAP_PER_CYCLE)throw Error(`An institution can absorb at most $${CAPABILITY_CAP_PER_CYCLE.toLocaleString()} of investment per capability each cycle.`);
+  if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');
+ }
+ const hires=planHires(plan);if(hires>hireLimit(p))throw Error(`You may hire at most ${hireLimit(p)} bankers in one cycle.`);
+ const projects=projectPlanStatus(p,plan);if(!projects.eligible)throw Error(projects.reason);
+ if(plan.contractBid!=null){
+  if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');
+  const c=(g.serviceAgreements||[]).find(c=>c.id===plan.contractBid);
+  if(g.contractRulesVersion!==1||!c||c.due!==g.cycle)throw Error('Choose a service agreement due this cycle.');
+  if(plan.allocation.business<1)throw Error('Assign at least one Business banker to bid for a service agreement.');
+ }
+ if(!p.serviceDesk)return;
+ const planned={...p,allocation:plan.allocation,serviceDesk:{...p.serviceDesk,policy:plan.servicePolicy}};
+ if(plan.contractBid){
+  const c=g.serviceAgreements.find(c=>c.id===plan.contractBid),status=serviceBidStatus(planned,c);
+  if(!status.eligible)throw Error(status.reason);
+  if(c.owner===p.id)throw Error('An incumbent renews automatically; do not select a second bid.');
+ }
+ if(plan.contractExit){
+  const c=g.serviceAgreements.find(c=>c.id===plan.contractExit);
+  if(!c||c.owner!==p.id||c.due!==g.cycle)throw Error('Only decline your own agreement at its renewal.');
+  if(plan.contractBid===plan.contractExit)throw Error('Cannot bid and decline the same agreement.');
+ }
+}
 function resolveCycle(g){
  const plans=g.players.map(p=>({...p.submitted,allocation:{...p.submitted.allocation}})),before=[baseScore(g,0),baseScore(g,1)],L=[];
  g.players.forEach((p,i)=>{p.allocation=Object.fromEntries(Object.keys(ROLES).map(k=>[k,plans[i].allocation[k]]));p.policies={deposit:plans[i].depositPolicy,lending:plans[i].lendingPolicy,capital:plans[i].capitalPolicy};p.products={...p.products,...plans[i].products};if(p.termFunding&&plans[i].termPolicy)p.termFunding.policy={...plans[i].termPolicy};if(p.retailLifecycle)applyRetailMix(p,plans[i].retailMix||p.retailLifecycle.mix);applyServicePolicy(p,plans[i].servicePolicy);applyManagementPolicy(p,plans[i].management);p.focus=plans[i].focus;applyDecision(g,p,plans[i].decision);const aid=applyCapitalRequest(g,p,!!plans[i].capitalAction);if(aid)L.push(aid)});L.push(...resolveCompetitiveActions(g,plans));g.players.forEach((p,i)=>{for(const key of planInitiatives(plans[i])){const msg=startProject(g,p,key,plans[i].specializations);if(msg)L.push(msg)}});
@@ -727,10 +893,7 @@ resolveCycle=function(g){
  return result;
 };
 function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
-const pilotBudget=planBudget;
-planBudget=function(p,plan){const q=pilotBudget(p,plan);if(p.accounting){q.capitalBudget=pilotSpendingLimit(p);q.remaining=Math.min(q.remaining,q.capitalBudget-q.total)}return q};
-const pilotValidate=validatePlan;
-validatePlan=function(g,p,plan){pilotValidate(g,p,plan);if(p.accounting&&planBudget(p,plan).remaining<0)throw Error('This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.')};
+
 const pilotBot=chooseOpenBot;
 chooseOpenBot=function(g,index){
  const plan=pilotBot(g,index);if(!pilot(g))return plan;
@@ -800,28 +963,7 @@ function regionalProjectPreview(p,key,target){
  else if(key==='branchAutomation')state.automation=Math.min(2,state.automation+1);
  const after=regionalBranchMetrics(q);return {expense:after.expense-before.expense,depositCapacity:after.depositCapacity-before.depositCapacity,loanCapacity:after.loanCapacity-before.loanCapacity};
 }
-const regionalCost=projectCost;
-projectCost=function(p,def){const base=regionalCost(p,def);return regionalOperations(p)&&def.kind==='branch'?Math.round(base*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):base};
-const regionalBarred=projectBarred;
-projectBarred=function(p,key){
- const def=PROJECTS[key];if(def&&def.regionalOnly){
-  if(!regionalOperations(p))return 'Available only in new Regional Operations pilots.';
-  if(!(p.branches[p.focus]>0))return 'Requires an operating office in the focus market.';
-  const field=key==='branchService'?'service':key==='branchAutomation'?'automation':null;
-  if(field&&p.regionalOperations.markets[p.focus][field]>=2)return 'This market is already fully upgraded.';
- }
- return regionalBarred(p,key);
-};
-const regionalBudget=planBudget;
-planBudget=function(p,plan){return regionalBudget(regionalOperations(p)?{...p,focus:plan.focus||p.focus}:p,plan)};
-const regionalValidate=validatePlan;
-validatePlan=function(g,p,plan){
- regionalValidate(g,regionalOperations(p)?{...p,focus:plan.focus}:p,plan);
- if(!regionalOperations(p))return;
- const chosen=planInitiatives(plan),local=chosen.filter(k=>PROJECTS[k]&&(PROJECTS[k].kind==='branch'||PROJECTS[k].regionalOnly));
- const active=p.projects.filter(x=>x.target===plan.focus&&(PROJECTS[x.key].kind==='branch'||PROJECTS[x.key].regionalOnly));
- if(local.length>1||(local.length&&active.length))throw Error('Choose one office construction, upgrade or closure per market at a time.');
-};
+
 function closeRegionalOffice(p,key){
  const models=p.facilityMarkets[key]||[],model=models.pop();if(!model)return false;
  p.facilities[model]=Math.max(0,p.facilities[model]-1);p.branches[key]=models.length;
@@ -1492,16 +1634,6 @@ createGame=function(o){
  g.productDeploymentVersion=1;for(const p of g.players)p.productDeployment={version:1,ready:{rewards:false,highYield:false}};
  return g;
 };
-const deploymentBarred=projectBarred;
-projectBarred=function(p,key){
- const base=deploymentBarred(p,key);if(base)return base;
- const def=PROJECTS[key];if(!def||!def.deploymentProduct)return '';
- if(!p.productDeployment)return 'Requires a new product-deployment pilot.';
- if(p.productDeployment.ready[def.deploymentProduct])return 'Already deployed. Manage sales in Operations.';
- const d=RETAIL_DEPLOYMENTS[def.deploymentProduct];
- if(strategyLevel(p,d.branch)<1)return 'Complete '+STRATEGY_BRANCHES[d.branch].name+' tier 1 first. Research benefits apply next cycle.';
- return '';
-};
 const deploymentCatalog=projectCatalog;
 projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
 const deploymentFinish=finishProject;
@@ -1571,8 +1703,6 @@ adjustDepositReport=function(p,g,r){
  const c=contractIncome(p);r.contractFees=c.fees;r.contractServicing=c.cost;r.contractsServed=c.served;
  r.otherIncome+=c.fees;r.expense+=c.cost;r.profit+=c.fees-c.cost;
 };
-const contractBarred=projectBarred;
-projectBarred=function(p,key){if(PROJECTS[key]&&PROJECTS[key].contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';return contractBarred(p,key)};
 const contractCatalog=projectCatalog;
 projectCatalog=function(p){const out=contractCatalog(p);if(!p.serviceContracts)delete out.contractAdvertising;return out};
 const contractFinish=finishProject;
@@ -1583,16 +1713,7 @@ finishProject=function(g,p,project){
   return p.name+' launched targeted relationship advertising in '+g.territories[project.target].name+' through cycle '+p.contractAds.expires+'. Replaces any earlier targeted campaign.';
  }return contractFinish(g,p,project);
 };
-const contractValidatePlan=validatePlan;
-validatePlan=function(g,p,plan){
- contractValidatePlan(g,p,plan);
- if(plan.contractBid!=null){
-  if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');
-  const c=(g.serviceAgreements||[]).find(c=>c.id===plan.contractBid);
-  if(g.contractRulesVersion!==1||!c||c.due!==g.cycle)throw Error('Choose a service agreement due this cycle.');
-  if(plan.allocation.business<1)throw Error('Assign at least one Business banker to bid for a service agreement.');
- }
-};
+
 const contractResolve=resolveOpportunities;
 resolveOpportunities=function(g,plans){
  const L=contractResolve(g,plans);if(g.contractRulesVersion!==1)return L;
@@ -1706,17 +1827,6 @@ contractPower=function(g,p,c){
 };
 const serviceReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){serviceReport(p,g,r);if(!p.serviceDesk)return;const s=serviceLoad(p);Object.assign(r,{serviceCapacity:s.capacity,serviceUsed:s.used,serviceStaff:s.staff,serviceOutsourcing:s.outsourced,servicePlatform:s.platform,serviceDirect:s.direct,commercialSalesStaff:s.sales})};
-const serviceBarred=projectBarred;
-projectBarred=function(p,key){
- const base=serviceBarred(p,key);if(base)return base;
- const d=SERVICE_APPLICATIONS[key];if(!d)return '';
- if(!p.serviceDesk)return 'Requires a new expanded-service pilot.';
- const current=p.serviceDesk.applications[d.app];
- if(current===d.route||current==='build')return 'Already deployed. Activation is managed in Markets > Service Desk.';
- if(d.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+d.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
- if(p.projects.some(x=>SERVICE_APPLICATIONS[x.key]&&SERVICE_APPLICATIONS[x.key].app===d.app))return 'This application already has a deployment in progress.';
- return '';
-};
 const serviceCatalog=projectCatalog;
 projectCatalog=function(p){const out=serviceCatalog(p);if(!p.serviceDesk)for(const k of Object.keys(SERVICE_APPLICATIONS))delete out[k];return out};
 const serviceFinish=finishProject;
@@ -1732,15 +1842,7 @@ validatePortfolioPlan=function(p,plan){
  if(p.serviceDesk){plan.servicePolicy=plan.servicePolicy||JSON.parse(JSON.stringify(p.serviceDesk.policy));validateServicePolicy(p,plan.servicePolicy,plan.allocation)}
  else if(plan.servicePolicy||plan.contractExit)throw Error('Service desk policies require a new expanded-service pilot.');
 };
-const serviceValidatePlan=validatePlan;
-validatePlan=function(g,p,plan){
- serviceValidatePlan(g,p,plan);if(!p.serviceDesk)return;
- const planned={...p,allocation:plan.allocation,serviceDesk:{...p.serviceDesk,policy:plan.servicePolicy}};
- if(plan.contractBid){const c=g.serviceAgreements.find(c=>c.id===plan.contractBid),status=serviceBidStatus(planned,c);if(!status.eligible)throw Error(status.reason);if(c.owner===p.id)throw Error('An incumbent renews automatically; do not select a second bid.')}
- if(plan.contractExit){const c=g.serviceAgreements.find(c=>c.id===plan.contractExit);if(!c||c.owner!==p.id||c.due!==g.cycle)throw Error('Only decline your own agreement at its renewal.');if(plan.contractBid===plan.contractExit)throw Error('Cannot bid and decline the same agreement.')}
- const apps=planInitiatives(plan).filter(k=>SERVICE_APPLICATIONS[k]).map(k=>SERVICE_APPLICATIONS[k].app);
- if(new Set(apps).size!==apps.length)throw Error('Choose one deployment route per service application.');
-};
+
 const serviceResolveV1=resolveOpportunities;
 resolveOpportunities=function(g,plans){
  if(g.serviceExpansionVersion!==1)return serviceResolveV1(g,plans);
@@ -1847,14 +1949,7 @@ chooseOpenBot=function(g,index){
 };
 // An accepted initiative can lose cash/capacity between planning and execution.
 // Preserve the cancellation rule, but never silently drop the player's order.
-const serviceStartProject=startProject;
-startProject=function(g,p,key,specializations){
- const result=serviceStartProject(g,p,key,specializations);if(result||!p.serviceDesk||!PROJECTS[key])return result;
- const def=PROJECTS[key],cost=projectCost(p,def);
- // Resolution text is public: explain the failure without exposing private cash.
- const reason=p.stats.cash<cost?'cash changed before execution':usedCapacity(p,[def])>executionCapacity(p)?'execution capacity changed before work could start':projectBarred(p,key)||'project availability changed before execution';
- return p.name+' cancelled '+def.name+': '+reason+'. No project cost was charged; select it again in a later plan.';
-};
+
 const serviceValidation=validatePilot;
 validatePilot=function(g){
  serviceValidation(g);
@@ -2482,7 +2577,7 @@ const AccountingPrototype=(()=>{
  }
  return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore});
 })();
-root.BWEngine={serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
+root.BWEngine={projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
 root.BWEngine.operate=operate;
 const publicStateCore=root.BWEngine.publicState;
 root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;return out};
@@ -2950,12 +3045,12 @@ renderProjects=function(v){
  if(!v.me.serviceDesk)return;
  const quote=E.planBudget(v.me,draft);
  const cards=Object.entries(E.SERVICE_APPLICATIONS).map(([key,d])=>{
-  const def=v.projects[key],picked=draft.newProjects.includes(key),running=v.me.projects.some(x=>E.SERVICE_APPLICATIONS[x.key]&&E.SERVICE_APPLICATIONS[x.key].app===d.app),conflict=draft.newProjects.some(x=>x!==key&&E.SERVICE_APPLICATIONS[x]&&E.SERVICE_APPLICATIONS[x].app===d.app);
-  const reason=def.barred||(running?'Deployment in progress':conflict?'Another route is selected':!picked&&quote.freeCapacity<d.capacity?'Insufficient execution capacity':!picked&&quote.remaining<def.cost?'Insufficient cash / capital':'');
+  const def=v.projects[key],picked=draft.newProjects.includes(key),status=projectChoiceStatus(v,key);
+  const reason=status.reason;
   return '<article class="opportunity"><b>'+esc(d.name)+'</b><p class="micro">'+esc(d.desc)+'</p><p class="micro">'+money(def.cost)+' setup · '+def.cycles+' work cycles · '+d.capacity+' execution capacity</p><p class="micro">'+esc(reason||'Prerequisites complete. Deployment competes with branch and product work.')+'</p><button type="button" class="btn '+(picked?'active':'')+'" data-service-project="'+key+'" '+(v.me.submitted||reason?'disabled':'')+'>'+(picked?'Remove deployment':'Plan deployment')+'</button></article>';
  }).join('');
  $('#strategyTree').insertAdjacentHTML('afterend','<section id="serviceApplications"><h3>RESEARCH APPLICATIONS · COMMERCIAL SERVICES</h3><p class="micro muted">Combine capabilities to unlock a new business or delivery model. Deployment is separate from activation; completed platforms can remain inactive without recurring charges. Controls for staffing, activation and renewal prices are in Markets > Commercial Service Desk.</p><div class="pipeline">'+cards+'</div></section>');
- $$('[data-service-project]').forEach(el=>el.addEventListener('click',()=>{toggleInitiative(el.dataset.serviceProject);renderProjects(v);renderReady(v)}));
+ $$('[data-service-project]').forEach(el=>el.addEventListener('click',()=>{toggleInitiative(el.dataset.serviceProject,v);renderProjects(v);renderReady(v)}));
 };
 function serviceDraftPlayer(v){
  if(!draft.servicePolicy)draft.servicePolicy=JSON.parse(JSON.stringify(v.me.serviceDesk.policy));
@@ -3112,7 +3207,26 @@ renderPipeline=function(v){const open=$('#serviceWorkforce')?.open;workforcePipe
 
 function renderProducts(v){$('#productPortfolio').innerHTML=Object.entries(v.productPortfolios).map(([line,group])=>line==='retail'&&v.me.retailLifecycle?renderRetailOffers(v):`<div class="portfolio-line"><div class="portfolio-head"><b>${esc(group.name)}</b><span class="micro muted">Persistent until changed</span></div><div class="portfolio-options">${Object.entries(group.options).map(([key,option])=>`<button type="button" class="product-option ${draft.products[line]===key?'selected':''}" data-product-line="${line}" data-product-key="${key}" ${v.me.submitted?'disabled':''}><b>${esc(option.name)}</b><div class="micro muted">${esc(option.desc)}</div><div class="impact-tags">${productImpactTags(option)}</div></button>`).join('')}</div></div>`).join('');if(v.me.termFunding){const ts=E.termSummary(v.me);$('#productPortfolio').insertAdjacentHTML('beforeend',`<div class="portfolio-line"><h3>SIX-MONTH TERM FUNDING</h3><p class="micro muted">Lock customer funding against ordinary withdrawals and rival deposit raids. Each month, up to 10% of eligible demand balances converts, capped at 30% of total deposits. Existing promotional savings are not converted. Pays 25% above the current high-yield quote, fixed for six monthly payments. No cash or equity is created.</p><div class="portfolio-options"><label>New subscriptions <select id="termOffer" ${v.me.submitted?'disabled':''}><option value="off" ${draft.termPolicy.offer==='off'?'selected':''}>Closed</option><option value="six" ${draft.termPolicy.offer==='six'?'selected':''}>Offer six-month deposits</option></select></label><label>At maturity <select id="termMaturity" ${v.me.submitted?'disabled':''}><option value="release" ${draft.termPolicy.maturity==='release'?'selected':''}>Release to current savings</option><option value="renew" ${draft.termPolicy.maturity==='renew'?'selected':''}>Renew at then-current quote</option></select></label></div><p class="micro">Locked: ${money(ts.locked)} · Maturing next operations: ${money(ts.maturing)} · Current monthly interest: ${money(ts.interest)}. Closing subscriptions does not cancel existing terms or renewal instructions. Acquisition transfers preserve obligations; released balances become contestable.</p></div>`);$('#termOffer').addEventListener('change',e=>{draft.termPolicy.offer=e.target.value;renderReady(v)});$('#termMaturity').addEventListener('change',e=>{draft.termPolicy.maturity=e.target.value;renderReady(v)})}$$('[data-retail-emphasis]').forEach(input=>input.addEventListener('change',()=>{const proposed={...draft.retailMix,[input.dataset.retailEmphasis]:Number(input.value)};if(Object.values(proposed).every(n=>n===0)){toast('Keep at least one retail offer open.');renderProducts(v);return}draft.retailMix=proposed;renderProducts(v);renderReady(v)}));const chosen=Object.entries(v.productPortfolios).map(([line,group])=>line==='retail'&&v.me.retailLifecycle?Object.entries(draft.retailMix).filter(([,weight])=>weight>0).map(([key])=>group.options[key].name).join(' + '):group.options[draft.products[line]].name);$('#portfolioBridge').innerHTML=`<b>CURRENT BANK MODEL</b> // ${chosen.map(esc).join(' · ')}<br><span class="muted">These choices combine with pricing, underwriting, staff, facilities, and the economy in the next cycle—not as isolated score bonuses.</span>`;$$('[data-product-line]').forEach(b=>b.addEventListener('click',()=>{draft.products[b.dataset.productLine]=b.dataset.productKey;renderProducts(v);renderReady(v)}))}
 function renderCampaignBuff(v){const turns=v.me.marketingTurns||0;if(turns>0)$('#activeProject').insertAdjacentHTML('beforeend',`<div class="micro blue" style="margin-top:6px">ADVERTISING CAMPAIGN ACTIVE // ${turns} more cycle${turns===1?'':'s'} of added market influence</div>`)}
-function toggleInitiative(key){if(!draft)return;if(!Array.isArray(draft.newProjects))draft.newProjects=[];const i=draft.newProjects.indexOf(key);if(i>=0)draft.newProjects.splice(i,1);else draft.newProjects.push(key);draft.newProject=draft.newProjects[0]||null}
+function projectChoiceStatus(v,key){
+ if(v.me.submitted)return {eligible:false,reason:'Your plan is already locked.'};
+ // Removal is always available, including after a focus or staffing change.
+ const chosen=E.planInitiatives(draft);if(chosen.includes(key))return {eligible:true,reason:''};
+ const terms=E.projectTerms(v.me,key,draft.focus);
+ if(!terms)return {eligible:false,reason:'That strategic project does not exist.'};
+ const def=E.PROJECTS[key],target=E.projectTargetIssue(v,v.me,def,draft.focus);
+ if(target)return {eligible:false,reason:target};
+ const newProjects=[...chosen,key],candidate={...draft,newProjects,newProject:newProjects[0]};
+ // Choosing expansion cancels a staged board request, as the click handler does.
+ if(['branch','acquisition'].includes(def.kind))candidate.capitalAction=false;
+ return E.projectPlanStatus(v.me,candidate);
+}
+function toggleInitiative(key,v){
+ if(!draft)return;
+ if(v){const status=projectChoiceStatus(v,key);if(!status.eligible){toast(status.reason);return}}
+ if(!Array.isArray(draft.newProjects))draft.newProjects=[];
+ const i=draft.newProjects.indexOf(key);if(i>=0)draft.newProjects.splice(i,1);else draft.newProjects.push(key);
+ draft.newProject=draft.newProjects[0]||null;
+}
 function capacityLine(budget,load,free){const pct=budget>0?Math.min(100,Math.round(load/budget*100)):0;const cls=free<0?'hot':free<1?'watch':'';return`<div class="capacity-readout ${cls}"><div class="micro"><b>EXECUTION CAPACITY</b> ${load.toFixed(1)} / ${budget.toFixed(1)} committed · <b>${free.toFixed(1)} free</b></div><div class="capacity-bar"><span style="width:${pct}%"></span></div><div class="micro muted">Your executive team carries 1.5 on its own; each Operations &amp; Risk banker adds 2.0 and operations infrastructure adds more. Move bankers into Operations to run more at once.</div></div>`}
 function renderProjectEffect(p,key,target){
  const effect=E.regionalProjectPreview(p,key,target);if(!effect)return '';
@@ -3131,21 +3245,21 @@ function renderProjects(v){
  const pledgedTotal=Object.keys(v.strategyBranches).reduce((s,k)=>s+Math.max(0,Math.round(draft.investments[k]||0)),0);$('#strategySummary').innerHTML=`${primary?`READS AS // <b>${esc(primary.name)}</b>`:'NO CLEAR IDENTITY YET'} · Fund any capability, in any order, any cycle — nothing is locked${capstone?` · CAPSTONE: <b>${esc(v.strategyBranches[capstone].name)}</b>`:''}${pledgedTotal?` · <b>${money(pledgedTotal)}</b> committed this cycle`:''}`;
   $('#strategyTree').innerHTML=Object.entries(v.strategyBranches).map(([branch,info])=>{const spent=v.me.capability[branch]||0,tiers=v.capabilityTiers[branch],level=v.me.strategyLevels[branch]||0,pledged=Math.max(0,Math.min(v.capabilityCap,Math.round(draft.investments[branch]||0))),done=level>=tiers.length,nextIdx=Math.min(level,tiers.length-1),floor=level>0?tiers[level-1]:0,ceiling=tiers[nextIdx],span=Math.max(1,ceiling-floor),pct=done?100:Math.min(100,Math.round((spent-floor)/span*100)),pledgePct=done?0:Math.min(100-pct,Math.round(pledged/span*100)),toNext=Math.max(0,ceiling-spent-pledged),lockedSpec=v.me.specializations[branch],chosenSpec=lockedSpec||draft.specializations[branch],specs=v.strategySpecializations[branch],specFork=level>=1?`<div class="specialization-fork"><span class="strategy-tier">${lockedSpec?'OPERATING MODEL LOCKED':'CHOOSE AN OPERATING MODEL'}</span><div class="specialization-options">${Object.entries(specs).map(([sk,sp])=>`<button type="button" class="specialization-option ${chosenSpec===sk?'selected':''}" data-specialization-branch="${branch}" data-specialization-key="${sk}" ${lockedSpec||v.me.submitted?'disabled':''}><b>${esc(sp.name)}</b><div>${esc(sp.desc)}</div></button>`).join('')}</div></div>`:'',milestones=info.nodes.map((node,i)=>`<div class="capability-milestone ${i<level?'reached':i===level?'next':''}"><b>${esc(node.name)}</b><span>${i<level?'REACHED':`$${Math.round(tiers[i]/1000)}K total`}</span><div class="micro muted">${esc(node.desc)}</div></div>`).join(''),cardCap=Math.min(v.capabilityCap,ceiling-spent);return`<div class="strategy-lane ${level>=tiers.length?'primary':''}"><h3>${esc(info.name)} // TIER ${level}/${tiers.length}</h3><div class="micro muted">${esc(info.promise)}</div><div class="capability-bar"><span class="filled" style="width:${pct}%"></span><span class="pledged" style="width:${pledgePct}%"></span></div><div class="micro">${done?'<b>FULLY DEVELOPED</b>':`$${Math.round(spent/1000)}K invested · $${Math.round(toNext/1000)}K to ${esc(info.nodes[nextIdx].name)}`}</div><div class="capability-fund">${done?'<span class="micro muted">No further investment is possible.</span>':`<button type="button" class="stepper" aria-label="Reduce ${esc(info.name)} funding" data-fund="${branch}" data-fund-step="-50000" ${v.me.submitted||!pledged?'disabled':''}>−</button><span class="fund-amount">${pledged?money(pledged):'—'}</span><button type="button" class="stepper" aria-label="Increase ${esc(info.name)} funding" data-fund="${branch}" data-fund-step="50000" ${v.me.submitted||pledged>=cardCap||E.fundingStep(v.me,draft,branch,50000)<=pledged?'disabled':''}>+</button><span class="micro muted">this cycle · max ${money(Math.max(0,cardCap))}</span><button type="button" class="fund-next" aria-label="Fund ${esc(info.name)} to the next milestone" data-fund="${branch}" data-fund-step="${v.capabilityCap}" ${v.me.submitted||E.fundingStep(v.me,draft,branch,v.capabilityCap)<=pledged?'disabled':''}>Fund to milestone</button>`}</div>${milestones}${v.me.productDeployment&&['network','digital'].includes(branch)?`<p class="micro"><b>PRODUCT UNLOCK · TIER 1</b><br>${branch==='network'?'Rewards Checking':'High-Yield Savings'} rollout becomes available under Operations initiatives. Research alone does not deploy or open the offer.</p>`:''}${specFork}</div>`}).join('');
  const cap=v.me.capitalRequest,capDisabled=v.me.submitted||!cap.eligible;$('#capitalAction').classList.toggle('hidden',!cap.eligible&&!draft.capitalAction);$('#capitalAction').classList.toggle('selected',!!draft.capitalAction);$('#capitalAction').innerHTML=`<b>EMERGENCY BOARD CAPITAL</b><div class="micro">${esc(cap.reason)}</div><div class="micro muted">Permanent concessions: ${cap.concessions} · Current oversight: ${cap.restriction} cycles</div><button type="button" id="capitalActionBtn" class="btn ${draft.capitalAction?'active':''}" ${capDisabled?'disabled':''}>${draft.capitalAction?'[ BOARD REQUEST ADDED ]':'[ REQUEST EMERGENCY CAPITAL ]'}</button>`;
-  const tactical=Object.entries(v.projects).filter(([,p])=>!p.strategy&&!p.legacy&&!p.serviceOnly&&(!p.contractOnly||v.me.serviceContracts)&&(!p.deploymentProduct||v.me.productDeployment)&&(!p.regionalOnly||v.me.regionalOperations));$('#projectGrid').innerHTML=tactical.map(([k,p])=>{const running=active.some(x=>x.key===k),picked=draft.newProjects.includes(k),targetBad=(p.kind==='branch'&&v.me.branches[draft.focus]>=3)||(v.me.regionalOperations&&(p.kind==='branch'||p.regionalOnly)&&(active.some(x=>x.target===draft.focus&&(v.projects[x.key].kind==='branch'||v.projects[x.key].regionalOnly))||draft.newProjects.some(x=>x!==k&&(v.projects[x].kind==='branch'||v.projects[x].regionalOnly)))),poor=!picked&&quote.remaining<p.cost,tooBig=!picked&&(p.capacity||1.5)>free+1e-9,blocked=p.barred,facilityLabel=p.facility?` · ${p.facility.toUpperCase()} MODEL`:'';return`<button type="button" class="project ${picked?'selected':''}" data-project="${k}" ${v.me.submitted||targetBad||running||(!picked&&(poor||tooBig))||blocked?'disabled':''}><span class="project-title">${esc(p.name)}</span><div class="micro">${money(p.cost)} // ${p.cycles} cycle${p.cycles===1?'':'s'} // ${(p.capacity||1.5).toFixed(1)} cap${p.target?` // ${esc(v.territories[draft.focus].name)}`:''}${facilityLabel}${running?' // UNDER WAY':tooBig?' // NEEDS CAPACITY':poor?' // INSUFFICIENT CASH / CAPITAL':''}</div><div class="micro muted">${esc(blocked||p.desc)}</div>${renderProjectEffect(v.me,k,draft.focus)}</button>`}).join('');
-  $$('[data-strategy-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.strategyProject);renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
+  const tactical=Object.entries(v.projects).filter(([,p])=>!p.strategy&&!p.legacy&&!p.serviceOnly&&(!p.contractOnly||v.me.serviceContracts)&&(!p.deploymentProduct||v.me.productDeployment)&&(!p.regionalOnly||v.me.regionalOperations));$('#projectGrid').innerHTML=tactical.map(([k,p])=>{const running=active.some(x=>x.key===k),picked=draft.newProjects.includes(k),status=projectChoiceStatus(v,k),poor=!picked&&['cash','capital-reserve'].includes(status.code),tooBig=!picked&&status.code==='capacity',blocked=status.reason,facilityLabel=p.facility?` · ${p.facility.toUpperCase()} MODEL`:'';return`<button type="button" class="project ${picked?'selected':''}" data-project="${k}" ${!status.eligible?'disabled':''}><span class="project-title">${esc(p.name)}</span><div class="micro">${money(p.cost)} // ${p.cycles} cycle${p.cycles===1?'':'s'} // ${(p.capacity||1.5).toFixed(1)} cap${p.target?` // ${esc(v.territories[draft.focus].name)}`:''}${facilityLabel}${running?' // UNDER WAY':tooBig?' // NEEDS CAPACITY':poor?' // INSUFFICIENT CASH / CAPITAL':''}</div><div class="micro muted">${esc(blocked||p.desc)}</div>${renderProjectEffect(v.me,k,draft.focus)}</button>`}).join('');
+  $$('[data-strategy-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.strategyProject,v);renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
   $$('[data-specialization-branch]').forEach(b=>b.addEventListener('click',()=>{draft.specializations[b.dataset.specializationBranch]=b.dataset.specializationKey;draft.newProjects=draft.newProjects.filter(k=>k!==roadmapKeys[b.dataset.specializationBranch]);renderProjects(v);renderReady(v)}));
-  $$('[data-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.project);if(draft.newProjects.some(k=>['branch','acquisition'].includes(v.projects[k].kind)))draft.capitalAction=false;renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
+  $$('[data-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.project,v);if(draft.newProjects.some(k=>['branch','acquisition'].includes(v.projects[k].kind)))draft.capitalAction=false;renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
  $('#capitalActionBtn').addEventListener('click',()=>{draft.capitalAction=!draft.capitalAction;if(draft.capitalAction)draft.newProjects=draft.newProjects.filter(k=>!['branch','acquisition'].includes(v.projects[k].kind));renderProjects(v);renderReady(v)});
  const initiativeSpend=draft.newProjects.reduce((s,k)=>s+(v.projects[k]?v.projects[k].cost:0),0);
  const committedSpend=E.planBudget(v.me,draft).total;
 
- const nextHireUnaffordable=v.me.stats.cash < committedSpend - hireBill + E.hireCost(v.me,(draft.hires||0)+1);
+ const nextHireUnaffordable=E.planBudget(v.me,{...draft,hires:(draft.hires||0)+1}).remaining<0;
  $('#hiringPanel').innerHTML=`<b>RECRUITING</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||draft.hires>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} signing cost · payroll +${money(draft.hires*18000)}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
  $$('[data-fund]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.fund,step=Number(b.dataset.fundStep);draft.investments[key]=E.fundingStep(v.me,draft,key,step);if(!draft.investments[key])delete draft.investments[key];renderProjects(v);renderReady(v)}));
  $$('[data-hire]').forEach(b=>b.addEventListener('click',()=>{const step=Number(b.dataset.hire);draft.hires=Math.max(0,Math.min(hireMax,(draft.hires||0)+step));renderProjects(v);renderReady(v)}));
  renderCampaignBuff(v)
 }
-function renderReady(v){if(draft.contractBid&&draft.allocation.business<1){draft.contractBid=null}if(v.serviceAgreements)renderPipeline(v);const pool=unassigned(v),action=v.competitiveActions[draft.competitiveAction],items=[...(v.serviceAgreements?[draft.contractBid?'✓ Service agreement bid':'— Service bid (automatic incumbent defense)']:[]),`${draft.focus?'✓':'○'} Focus market`,`${draft.decision?'✓':'○'} Executive decision`,`${pool===0?'✓':'○'} Staff allocated`,`⚔ ${action.name}`,`${draft.opportunity?'✓':'—'} Priority opportunity (optional)`,`${draft.newProjects&&draft.newProjects.length?`✓ ${draft.newProjects.length} initiative${draft.newProjects.length===1?'':'s'}`:'— Initiatives (optional)'}`,`${draft.hires?`✓ Hiring ${draft.hires}`:'— Hiring (optional)'}`,`${Object.keys(draft.investments||{}).length?`✓ Funding ${Object.keys(draft.investments).length} capabilit${Object.keys(draft.investments).length===1?'y':'ies'}`:'— Capability funding (optional)'}`];$('#planChecklist').innerHTML=items.join(' &nbsp; ');const quote=E.planBudget(v.me,draft),overBudget=quote.remaining<0;renderPlanBudget(v);renderOperatingPreview(v);renderCompetitiveActions(v);$('#readyBtn').disabled=v.me.submitted||!planReady(v)||overBudget;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'PLAN LOCKED // WAITING FOR RIVAL':overBudget?`This plan commits ${money(quote.total)} but ${v.campaignRulesVersion===1?money(quote.capitalBudget)+' is available within capital limits':'only '+money(quote.cash)+' is available'}. Reduce funding, initiatives, hiring or the competitive action.`:'The market remains paused until both institutions are ready.';$('#submitMsg').className='small '+(overBudget?'bad':'muted')}
+function renderReady(v){if(draft.contractBid&&draft.allocation.business<1){draft.contractBid=null}if(v.serviceAgreements)renderPipeline(v);const pool=unassigned(v),action=v.competitiveActions[draft.competitiveAction],items=[...(v.serviceAgreements?[draft.contractBid?'✓ Service agreement bid':'— Service bid (automatic incumbent defense)']:[]),`${draft.focus?'✓':'○'} Focus market`,`${draft.decision?'✓':'○'} Executive decision`,`${pool===0?'✓':'○'} Staff allocated`,`⚔ ${action.name}`,`${draft.opportunity?'✓':'—'} Priority opportunity (optional)`,`${draft.newProjects&&draft.newProjects.length?`✓ ${draft.newProjects.length} initiative${draft.newProjects.length===1?'':'s'}`:'— Initiatives (optional)'}`,`${draft.hires?`✓ Hiring ${draft.hires}`:'— Hiring (optional)'}`,`${Object.keys(draft.investments||{}).length?`✓ Funding ${Object.keys(draft.investments).length} capabilit${Object.keys(draft.investments).length===1?'y':'ies'}`:'— Capability funding (optional)'}`];$('#planChecklist').innerHTML=items.join(' &nbsp; ');const projectStatus=E.projectPlanStatus(v.me,draft),quote=projectStatus.quote,overBudget=quote.remaining<0;renderPlanBudget(v);renderOperatingPreview(v);renderCompetitiveActions(v);$('#readyBtn').disabled=v.me.submitted||!planReady(v)||overBudget||!projectStatus.eligible;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'PLAN LOCKED // WAITING FOR RIVAL':overBudget?`This plan commits ${money(quote.total)} but ${v.campaignRulesVersion===1?money(quote.capitalBudget)+' is available within capital limits':'only '+money(quote.cash)+' is available'}. Reduce funding, initiatives, hiring or the competitive action.`:!projectStatus.eligible?projectStatus.reason:'The market remains paused until both institutions are ready.';$('#submitMsg').className='small '+(overBudget||!projectStatus.eligible?'bad':'muted')}
 function renderDetails(v){$('#myName').textContent=v.me.name;$('#rivalName').textContent=v.rival.name;const rows=[['Enterprise Value','score'],['Capital Ratio','capitalRatio'],['Regulatory Standing','capitalTier'],['Markets Controlled','controlled'],['Regulatory Capital','capital'],['Deposits','deposits'],['Loans','loans'],['Customers','customers'],['Business Relationships','business'],['Merchant Clients','merchant'],['Wealth Relationships','wealth'],['Digital Adoption','digital'],['Reputation','reputation'],['Staff','staff'],['Cumulative Earnings','earnings'],['Credit Losses','chargeoffs']];$('#scoreRows').innerHTML=rows.map(([label,k])=>{const pick=(side)=>k==='score'?side.score:k==='controlled'?side.controlled:k==='capitalRatio'?side.capitalRatio:k==='capitalTier'?side.capitalTier.short:side.stats[k],a=pick(v.me),b=pick(v.rival),fmt=['deposits','loans','earnings','chargeoffs','capital'].includes(k)?money:k==='score'?x=>Number(x).toFixed(1):k==='capitalRatio'?x=>`${Number(x).toFixed(1)}%`:k==='capitalTier'?x=>String(x):integer;return`<tr><td>${esc(label)}</td><td><b>${esc(fmt(a))}</b></td><td><b>${esc(fmt(b))}</b></td></tr>`}).join('');const s=v.me.stats,u=v.me.upgrades,primary=v.me.primaryStrategy?v.strategyBranches[v.me.primaryStrategy].name:'UNCOMMITTED';$('#internalStats').innerHTML=`Reads as <b>${esc(v.me.doctrine.name)}</b> // Primary Strategy <b>${esc(primary)}</b> // Morale <b>${s.morale}</b> // Risk <b>${s.compliance}</b> // Attention <b>${s.attention}</b> // Influence <b>${s.influence}</b> // Momentum <b>${s.momentum}</b> // Legacy Tech <b>${u.technology}</b> // Legacy Training <b>${u.training}</b> // Legacy Analytics <b>${u.analytics}</b> // Legacy Wealth <b>${u.wealth}</b> // Legacy Ops <b>${u.operations}</b> // Board Concessions <b>${v.me.boardConcessions}</b> // Status <b>${esc(v.me.corporateStatus)}</b>`;const m=v.me.mandate;$('#mandateName').textContent=`${m.name} // +${m.bonus} POINTS`;$('#mandateDesc').textContent=m.desc;$('#mandateProgress').textContent=(m.achieved?'ACHIEVED // ':'PROGRESS // ')+m.progress;$('#mandateProgress').className='small '+(m.achieved?'good':'');$('#milestones').innerHTML=Object.entries(v.milestoneDefinitions).map(([k,d])=>`<div class="milestone ${v.me.milestones[k]?'done':''}"><b>${v.me.milestones[k]?'✓':'○'} ${esc(d.name)}</b><div class="micro">${esc(d.desc)}</div></div>`).join('');$('#log').innerHTML=v.log.map(x=>`<div class="history-item"><span class="history-kind">CYCLE ${x.cycle} / ${esc(x.kind)}</span>${esc(x.text)}</div>`).join('')}
 const renderDetailsCore=renderDetails;renderDetails=function(v){renderDetailsCore(v);const productNames=Object.entries(v.me.products).map(([line,key])=>v.productPortfolios[line].options[key].name),specialties=Object.entries(v.me.specializations).map(([branch,key])=>v.strategySpecializations[branch][key].name);$('#internalStats').insertAdjacentHTML('beforeend',`<br>Products <b>${productNames.map(esc).join(' · ')}</b> // Facilities <b>${v.me.facilities.retail} full-service · ${v.me.facilities.commercial} commercial · ${v.me.facilities.digital} digital advisory</b>${specialties.length?` // Specializations <b>${specialties.map(esc).join(' · ')}</b>`:''}`)};
 function renderHistory(v){$('#lastResolution').innerHTML=v.resolution.length?v.resolution.map(x=>`<div class="history-item">${esc(x)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}
