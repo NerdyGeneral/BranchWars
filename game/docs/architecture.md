@@ -38,6 +38,14 @@ The targeted rule suite compares 1,296 cases against the preserved pre-refactor 
 
 Moving player repair into the engine exposed a textual guard false positive: `player.stats = ...` is not an override of the accounting `stats` function. The guard now excludes data-member assignments while retaining exported engine API replacements; sensitivity tests cover both. Corresponding false-positive ceilings were lowered, not counted as additional removed wrappers.
 
+## Monthly resolution and project completion: implemented
+
+`operate` now explicitly sequences term maturities, promotion repricing, scheduled principal, production/accounting, local settlement and reports. Customer intake and world contexts have explicit cleanup; only the legacy demand calculation consumes world randomness. `resolveCycle` owns ledger context and symmetric frozen market quotas, executes the monthly steps, retains account snapshots and cleans up. No captured chain of previous implementations remains for these entry points.
+
+`finishProject` dispatches service/product deployment directly, then owns deposit/credit cohort transfers, market context and accounting settlement. Regional office work and re-entry rules are explicit settlement steps; facility effects remain separate from financial settlement. These are not new game rules: sequencing, cancellation messages, rounding and retained journals are preserved.
+
+The three ceilings are zero. This removes ten operating wrappers, nine completion wrappers and three resolution wrappers; the separate operation API assignment was also folded into the original export object. The new runtime comparison suite exercises 192 operations, 864 completions and 64 fault/recovery pairs against the frozen implementation. Fixed campaigns and save continuations pass unchanged. Full release evidence is recorded separately after the remaining architecture work.
+
 ## Next: staged engine cleanup
 
 1. Extend the shared-rule pattern to remaining policy and plan normalization boundaries. Keep project execution's explicit, uncharged cancellation notices and verify each change against preserved behavior.
