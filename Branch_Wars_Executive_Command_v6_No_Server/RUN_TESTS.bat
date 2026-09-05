@@ -20,7 +20,7 @@ exit /b 0
 
 :stale
 echo.
-echo GAME_REFERENCE.md is out of date with the engine.
+echo docs/game-reference.md is out of date with the engine.
 echo Rebuild it with:  node tools\build_reference.js
 pause
 exit /b 1

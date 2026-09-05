@@ -11,6 +11,7 @@ const hash = file => crypto.createHash('sha256').update(fs.readFileSync(path.joi
 const files = ['BRANCH_WARS.html', 'BRANCH_WARS_LAN_SERVER.ps1', 'tests/engine.test.js', 'tests/accounting.test.js', 'tests/accounting_activities.test.js', 'tests/accounting_persistence.test.js', 'tests/bank_identity.test.js', 'tests/regional_pilot.test.js', 'tests/regional_operations.test.js', 'tests/market_economy.test.js', 'tests/credit_lifecycle.test.js', 'tests/funding_covenants.test.js', 'tests/deposit_products.test.js', 'tests/term_funding.test.js', 'tests/retail_lifecycle.test.js', 'tests/product_deployment.test.js', 'tests/service_contracts.test.js', 'tests/service_expansion.test.js', 'tests/service_planning.test.js', 'tests/institution_management.test.js', 'tests/relationship_operations.test.js', 'reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html', 'reports/reference-builds/BRANCH_WARS_planning_0704591.html', 'tests/funding.test.js', 'tests/determinism.test.js', 'tests/ledger.test.js', 'tests/save_integrity.test.js', 'tests/transport.test.js', 'tests/github_resilience.test.js', 'tests/balance_audit.js', 'tests/lan_server.test.ps1', 'tests/capture_baseline.js'];
 files.push('tests/customer_needs.test.js','reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html','tests/customer_relationships.test.js','reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html');
 files.push('tests/service_workforce.test.js','reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html');
+files.push('tests/docs.test.js','tools/build_reference.js','tools/reference-template.md','docs/game-reference.md');
 function run(label, command, args) {
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
@@ -28,6 +29,7 @@ for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activiti
   report.tests.push(run(file, process.execPath, [path.join('tests', file)]));
 }
 report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/service_workforce.test.js']));
+report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
 report.tests.push(run('customer_needs.test.js', process.execPath, ['tests/customer_needs.test.js']));
 report.tests.push(run('Customer needs GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--customer-needs']));
 report.tests.push(run('customer_relationships.test.js', process.execPath, ['tests/customer_relationships.test.js']));

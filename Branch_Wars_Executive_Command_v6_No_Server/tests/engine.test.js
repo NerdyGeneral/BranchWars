@@ -1474,7 +1474,7 @@ for (const cls of ['signal watch', 'signal hot', 'signal safe']) {
   try {
     execFileSync(process.execPath, [path.join(__dirname, '..', 'tools', 'build_reference.js'), '--check'], { stdio: 'pipe' });
   } catch (e) {
-    assert.fail('GAME_REFERENCE.md is stale. Run: node tools/build_reference.js');
+    assert.fail('docs/game-reference.md is stale. Run: node tools/build_reference.js');
   }
 }
 

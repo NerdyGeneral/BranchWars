@@ -1,8 +1,12 @@
 # tools
 
+The [documentation index](../docs/README.md) is the starting point. Run
+`node tests/docs.test.js` from the game folder to verify document naming and
+local links; this gate also runs in `tests/capture_baseline.js`.
+
 ## `build_reference.js`
 
-Builds `GAME_REFERENCE.md` from the live engine.
+Builds `../docs/game-reference.md` from the live engine.
 
 ```
 node tools/build_reference.js           rebuild
@@ -12,7 +16,7 @@ node tools/build_reference.js --check   fail if the committed file is stale
 Every number, name and description in the generated sections is read out of
 `BRANCH_WARS.html` at build time, and several sections embed the actual function
 source, so the reference cannot describe rules the game no longer has. Prose
-lives in `reference.template.md`; that is the only part written by hand.
+lives in `reference-template.md`; that is the only part written by hand.
 
 `--check` runs inside `tests/engine.test.js` and at the top of `RUN_TESTS.bat`,
 so changing a cost without rebuilding is a test failure rather than something to
@@ -58,4 +62,4 @@ a locally built array fails on identical contents.
 
 ## Reference points
 
-Current expected values are in `GAME_REFERENCE.md` §12.
+Current expected values are in `../docs/game-reference.md` §12.
