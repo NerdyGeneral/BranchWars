@@ -39,6 +39,7 @@
       "engine/customer-relationships.js",
       "engine/workforce.js",
       "engine/households.js",
+      "engine/collections.js",
       "engine/ledger.js",
       "engine/accounting.js",
       "engine/migration.js",
@@ -67,6 +68,7 @@
       "ui/management.js",
       "ui/workforce.js",
       "ui/households.js",
+      "ui/collections.js",
       "ui/products.js",
       "ui/projects.js",
       "ui/results.js",
@@ -87,6 +89,7 @@
     "styles/region-summary.css",
     "styles/lobby-ui.css",
     "styles/workforce.css",
-    "styles/households.css"
+    "styles/households.css",
+    "styles/collections.css"
   ]
 }

@@ -74,6 +74,10 @@ function sourceOf(name) {
 // ------------------------------------------------------------------- sections
 
 const sections = {};
+sections.COLLECTION_APPROACHES = table(
+  ['Approach', '30-day cure', '60-day cure', '90+ resolution/month', 'Loss on resolution', 'Cost per $1M handled'],
+  Object.values(E.COLLECTION_APPROACHES).map(d => [d.name, d.early*100+'%', d.late*100+'%', d.resolve*100+'%', d.severity*100+'%', '$'+d.cost.toLocaleString('en-US')])
+);
 sections.HOUSEHOLD_WORKLOAD = table(
   ['Household segment', 'Workload per 900 relationships'],
   Object.entries(E.HOUSEHOLD_SERVICE).map(([key, workload]) => [E.CUSTOMER_SEGMENTS[key].name, workload])

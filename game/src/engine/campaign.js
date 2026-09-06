@@ -35,6 +35,7 @@ function createBaseCampaign(o){
 function validateCreationOptions(o){
  // Match the former outer-to-inner checks, including errors on disabled features.
  if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.creditPerformanceVersion!==undefined&&![0,1].includes(o.creditPerformanceVersion))throw Error('Unsupported credit performance version');
  if(o.customerOwnershipVersion!==undefined&&![0,1].includes(o.customerOwnershipVersion))throw Error('Unsupported household ownership version');
  if(o.workforceVersion!==undefined&&![0,1].includes(o.workforceVersion))throw Error('Unsupported specialist workforce version');
  if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
@@ -73,6 +74,7 @@ function createGame(o){
  initializeCustomerGoodwill(g,o);
  initializeWorkforce(g,o);
  initializeHouseholds(g,o);
+ initializeCreditPerformance(g,o);
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}

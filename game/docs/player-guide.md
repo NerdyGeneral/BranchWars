@@ -68,6 +68,18 @@ Executive Command v8.1 · Long-form / multiplayer edition
    estimate capped to unlocked balances. Term funding cannot be broken early.
    This is not individual household finance, cross-selling or delinquent loans.
    Both friends must update; old campaigns are not silently converted.
+   Credit performance preview adds delayed arrears and collections in v8.7.
+   Credit has owned loan balances by product, market and aging group. Reserve
+   Lending time for collections and compare workout, balanced and accelerated
+   recovery policies. Reserved staff cannot also originate new loans.
+   New loans retain their underwriting risk and season before entering arrears;
+   bad balances age before recovery or writeoff. Delinquent balances stop paying
+   principal/interest, but maturity does not make them disappear. Workouts cure
+   more early arrears; faster recovery sacrifices more value to clear defaults.
+   Recovery returns principal to cash, not income. Loss reduces loans/equity;
+   case costs are real operating expenses. Review actual results after resolution.
+   This is not individual borrower negotiation, collateral or allowance accounting.
+   Both friends need the new build; enabling this option checks its prerequisites.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
