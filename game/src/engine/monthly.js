@@ -15,6 +15,7 @@ function resolveMonthlySteps(g) {
     applyServicePolicy(p, plans[i].servicePolicy);
     applyManagementPolicy(p, plans[i].management);
     applyWorkforcePolicy(p, plans[i].workforcePolicy);
+    applyHouseholdPolicy(p, plans[i].householdPolicy);
     if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
     applyDecision(g, p, plans[i].decision);

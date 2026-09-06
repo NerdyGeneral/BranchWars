@@ -65,7 +65,7 @@ The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.js
 | `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
 | `src/page.html` | Page markup with build slots, not a second executable implementation |
 
-There are 77 listed inputs including shells, manifest and markup (four were added for specialist content, engine rules, UI and styles). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+There are 80 listed inputs including shells, manifest and markup (four were added for specialists, then three for household engine rules, UI and styles). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
 
 The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
 
@@ -80,6 +80,17 @@ Premium payroll is settled once, and elective training affordability is rechecke
 after bank production before expense posting. Sealed plans, migrations and
 owner-only views carry the versioned workforce state; all three lobby transports
 require workforce support from the peer before a v8.5 game starts.
+
+The household ownership slice follows the same explicit coordinator pattern.
+Customer movement calls the segment-book transfer functions directly; monthly
+retention settles before maturities and production, with the same settlement
+routine used on private preview clones. Household counts are conserved across
+both banks and outside institutions; no monthly reconciliation recreates them.
+The v8.6 owner book and sealed service mandate have dedicated validators and
+private-view filtering. All three lobby transports require household support.
+Deposits remain market-level pools, not segment-owned accounts. This adds no new
+runtime replacement assignments and does not solve the shared transaction-context
+debt described below.
 
 The approved four-step batch is implemented, not the end of all architecture work. Remaining priorities are explicit transaction context (replacing the shared market/credit/deposit context variables), flattening other feature and ledger adapters, typed plan/state contracts, a cleaner client session/transport interface, and renderer/CSS consolidation during the separate UI batch. The current guard permits 76 remaining textual assignments across other functions; this is a conservative debt count, not 76 independently verified defects. Do not turn this into a mutable plugin-registration system.
 
@@ -108,7 +119,7 @@ git switch -c recovery/direct-p2p archive/2026-09-05/claude/direct-p2p-turn-bug-
 
 The multiplayer-reliability unmatched commit is patch-equivalent to a commit in main; the other divergent histories were retained rather than assumed redundant. Tags can restore every retired branch.
 
-Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. Pending review, the stack is `refactor/stabilization-foundation` → `refactor/shared-project-rules` → `refactor/campaign-lifecycle` → `fix/multiplayer-lobby` → `refactor/explicit-runtime`. Review the foundation first, then retarget each dependent PR to main after its prerequisite merges. No PR is automatically merged. Do not reuse merged branch names for subsequent releases.
+Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. Pending review, the stack is `refactor/stabilization-foundation` → `refactor/shared-project-rules` → `refactor/campaign-lifecycle` → `fix/multiplayer-lobby` → `refactor/explicit-runtime` → `feat/specialist-workforce` → `feat/household-retention`. Review the foundation first, then retarget each dependent PR to main after its prerequisite merges. No PR is automatically merged. Do not reuse merged branch names for subsequent releases.
 
 ## Local folders and compatibility
 

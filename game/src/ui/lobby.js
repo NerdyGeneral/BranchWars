@@ -17,7 +17,7 @@ function lobbyOptions(){
  return {scope:['town','regional','state','national'].includes(c.scope)?c.scope:'national',
   scenario:['balanced','rate','regulatory','growth'].includes(c.scenario)?c.scenario:'balanced',
   campaignRulesVersion:c.campaignRulesVersion||0,serviceExpansionVersion:c.serviceExpansionVersion||0,
-  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0,...(c.workforceVersion?{workforceVersion:c.workforceVersion}:{})};
+  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0,...(c.customerOwnershipVersion?{customerOwnershipVersion:c.customerOwnershipVersion}:{}),...(c.workforceVersion?{workforceVersion:c.workforceVersion}:{})};
 }
 function publishLobby(){
  if(!lobby||game)return;
@@ -102,7 +102,7 @@ function renderLobby(){
  $('#lobbySettings').classList.toggle('hidden',!host);$('#lobbyStart').classList.toggle('hidden',!host);
  $('#lobbyRetry').classList.toggle('hidden',!gh.active);
  $('#lobbyRules').textContent=(settings.campaignRulesVersion===1?'Regional Rivalry pilot · 2 regions / 6 markets (overrides size).':'Legacy campaign rules · open-ended.')+
-  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+(settings.workforceVersion?' Specialist workforce preview.':'')+' Preview choices were set by the host when opening the room.';
+  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+(settings.workforceVersion?' Specialist workforce preview.':'')+(settings.customerOwnershipVersion?' Household ownership preview.':'')+' Preview choices were set by the host when opening the room.';
  $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
  $('#lobbyError').textContent=lobby.error||'';
  $('#lobbyProgress').textContent=lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(host?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';

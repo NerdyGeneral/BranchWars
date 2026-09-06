@@ -2,6 +2,109 @@
 
 Updated: 2026-09-05.
 
+## Household ownership and retention — validated N-04 / N-06 preview
+
+This batch is on `feat/household-retention`, stacked on the pending specialist
+workforce [PR #12](https://github.com/NerdyGeneral/BranchWars/pull/12), not merged
+into `main`. Enable **Household ownership preview** before starting a new game;
+it creates v8.6 campaigns and enables the specialist/customer prerequisites.
+Both linked clients need this build. Existing saves keep their original rules.
+
+- Everyday, Connected and Reserve household counts persist by market and owner.
+  Sales, raids and acquisitions move existing people between both players,
+  community banks and credit unions. Each segment is conserved; changing the
+  offer mix changes future intake, not the customers already owned.
+- A recurring mandate splits effective Retail staffing between retention and
+  acquisition, with separate segment priorities. Retail/digital offices and
+  local service upgrades relieve differentiated workload. Specialist capacity
+  is split once, not granted in full to both activities.
+- Persistent neglect reduces goodwill before causing gradual departures.
+  Restoring adequate service cuts the departure rate while trust rebuilds.
+  Departing households return to outside institutions with a local-average
+  deposit estimate, capped to withdrawable balances. Term locks are respected;
+  outflow moves cash and deposits together, not operating profit. Funding asset
+  sales can realize equity losses and are included in forecasts and actuals.
+- A dedicated Customers workspace shows ownership, workload, service coverage,
+  goodwill, forecast departures and realized outflow. Market inspection does not
+  retarget the plan. It replaces the legacy goodwill panel for these campaigns,
+  without adding more controls to Operations. Service mandates remain private.
+- Engine/UI/style modules bring the ordered build to 80 inputs, with explicit
+  movement and coordinator calls and no added runtime replacement assignments.
+
+Candidate SHA-256 (canonical LF output):
+`cc4e8366fc74ecbcbc85600b261c05acbceaaefeaffbaf0107e5794380033f3a`.
+
+The [initial full Windows run](../reports/baselines/N-00-2026-09-06T00-12-53-528Z.json)
+passed 52/53 invocations, with unchanged source/test fingerprints and reproduced
+seeded balance output. The only failure expected the importer's error to say
+"through v8.4" rather than the newly supported v8.6. That assertion was corrected
+and the targeted engine suite then passed all 48 long-run campaigns and its
+validation/migration/UI cases. No game code changed for this correction.
+[Complete Windows rerun](../reports/baselines/N-00-2026-09-06T00-27-20-903Z.json):
+**53/53 invocations passed**, all fingerprinted source/test files unchanged,
+and repeated seeded balance output reproduced. This includes Windows LAN and
+seven simulated GitHub relay configurations. Final fast checks, reference/build
+freshness, private views and all three lobby transports also passed. The full
+gate's regression runner and separate previous-rules campaign audit were run
+independently rather than serially; all required components passed on the same
+game artifact. Hosted PR checks remain separate. Fixed campaign/save expectations and frozen engines are
+unchanged. The frozen importer comparison maps only its obsolete version-range
+error to v8.6; the static markup contract now expects six core tabs plus two
+optional workspaces.
+
+[Household audit](../reports/baselines/release-balance-2026-09-06T00-13-59-452Z.json):
+16 campaigns / 1,920 turns, all reaching month 120 with no skipped or cancelled
+initiatives. Across both banks: 37,423 service-related departures and $459.335M
+cumulative deposit outflow, 413 competitive actions, and 167 commercial-provider
+changes (40 after month 60). Maximum player-view size was 833,779 bytes, below
+the 1 MiB gate. The AI chose retention shares of 25/50/75/100 percent in
+83/1,202/907/1,648 bank-months respectively; it uses an aggregate workload rule,
+not sophisticated segment targeting or optimal recovery management.
+
+[Long-session extension](../reports/baselines/release-balance-2026-09-06T00-35-18-102Z.json):
+four additional seeded campaigns / 1,445 turns. Balanced and Rate reached month
+480; Regulatory and Growth ended in receivership at months 215 and 270.
+Accounting, segment conservation and view-size checks passed, with no silently
+skipped initiatives. Twenty-nine initiatives were explicitly cancelled after
+cash changed, without charging project cost; recurring cancellation still marks
+AI reserve/retry behavior as unfinished. Maximum player-view size stayed at
+938,726 bytes, below 1 MiB. The earlier [240-month run](../reports/baselines/release-balance-2026-09-06T00-30-21-416Z.json)
+uses the same seeds and is not counted as four more independent campaigns.
+The Balanced sample reversed the deposit lead between months 240 and 480; that
+demonstrates a reachable comeback, not generally satisfactory competitive pacing.
+
+[Previous-rules audit](../reports/baselines/release-balance-2026-09-06T00-14-55-726Z.json):
+16 campaigns / 1,920 turns with management/customer previews OFF. Every field
+except the source fingerprint exactly matches the prior specialist-batch audit.
+An additional comparison with the previous v8.5 engine at `0aff94d` passed exact
+AI-plan and full-state equality for four campaigns / 160 turns with household
+ownership OFF. Old campaigns have not been silently rebalanced.
+
+An auxiliary retention comparison ran four fixed settings in both player seats
+for 60 months each (one shared seed; eight campaigns / 480 turns). Higher
+retention reduced cumulative departures in that sample but did not consistently
+maximize customers or equity. This is a small responsive-AI comparison, not
+evidence of a universally optimal setting or equal strategies. The long-run
+sample still contains large bank disparities and one bank near capital failure.
+The Regulatory extension's failed bank had positive operating profit in its
+last eight months but thin cash, rival deposit losses and regulatory loan sales;
+retention was not its only source of pressure. No single-cause explanation or
+human recovery acceptance is inferred from this replay.
+
+Isolated browser QA verified setup, service/priority changes, market inspection,
+one resolved month, and reload/Continue persistence. Default, 950px and 500px
+layouts were inspected; the narrow table scrolls internally without page-wide
+horizontal overflow. No browser warnings/errors were captured. No existing user
+campaign or live repository room was touched. Physical two-PC and human pacing
+acceptance remain outstanding; hosted CI is separate from local evidence.
+
+N-04 and N-06 remain partial. Counts have ownership, but deposit accounts are
+still pooled by market; goodwill product fit also uses that pooled deposit mix.
+This is not individual household finance or cross-selling. Next: delayed loan
+delinquency and collections, then actual segment-owned deposit accounts.
+Leaders, full product lifecycle, subsidiaries, shares and national management
+remain unfinished; this batch does not complete the blueprint.
+
 ## Specialist workforce — validated N-05 preview
 
 This gameplay slice is on `feat/specialist-workforce`, based on the pending

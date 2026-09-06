@@ -4,15 +4,17 @@ const file=path.join(__dirname,'../BRANCH_WARS.html'),source=fs.readFileSync(fil
 vm.runInNewContext(source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
 const E=ctx.BWEngine,hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const serviceExpansionVersion=process.argv.includes('--previous-services')?0:1;
-const workforceVersion=process.argv.includes('--workforce')?1:0;
+const customerOwnershipVersion=process.argv.includes('--households')?1:0;
+const workforceVersion=customerOwnershipVersion||process.argv.includes('--workforce')?1:0;
 const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
 const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
 const numberArg=(key,fallback)=>{const i=process.argv.indexOf(key),n=i<0?fallback:Number(process.argv[i+1]);assert(Number.isSafeInteger(n)&&n>=0,'Invalid '+key);return n};
 const seedStart=numberArg('--seed-start',0),seedCount=numberArg('--seeds',4),turnLimit=numberArg('--turns',120);
 const scenarios=Object.keys(E.SCENARIOS),results=[],activity=[],skipped=[],cancelled=[];let turns=0,maxViewBytes=0;
 for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;seed++){
- const g=E.createGame({workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
+ const g=E.createGame({customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
  const actions={scenario,seed,providerChanges:0,lateProviderChanges:0,initiatives:0,competitiveActions:0};
+ if(customerOwnershipVersion)Object.assign(actions,{householdDepartures:0,householdDepositOutflow:0,retentionShares:{25:0,50:0,75:0,100:0}});
  if(workforceVersion)Object.assign(actions,{stagedSpecialists:0,trainingSpend:0,trainingPaused:0,maxSpecialists:0,maxSkill:0,maxPremiumPayroll:0});
  for(let month=0;month<turnLimit&&!g.gameOver;month++){
   const plans=[E.chooseBot(g,0),E.chooseBot(g,1)],cycle=g.cycle;
@@ -24,6 +26,7 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
   E.validatePilot(g);E.validateLedger(g);
   for(let i=0;i<2;i++){
    const p=g.players[i],a=p.accounting.accounts;E.AccountingPrototype.check(p.accounting);
+   if(customerOwnershipVersion){actions.householdDepartures+=p.householdBook.report.departed;actions.householdDepositOutflow+=p.householdBook.report.depositOutflow;actions.retentionShares[p.householdBook.policy.retention]++}
    if(workforceVersion){
     const rows=Object.values(p.workforce.departments);
     actions.trainingSpend+=p.operatingReport.workforceTraining;
@@ -49,7 +52,7 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
  activity.push(actions);
 }
 assert.equal(hash(source),hash(fs.readFileSync(file,'utf8')));
-const report={passed:skipped.length===0,sourceSha256:hash(source),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
+const report={passed:skipped.length===0,sourceSha256:hash(source),...(customerOwnershipVersion?{customerOwnershipVersion}:{}),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
 if(process.argv.includes('--report')){
  const dir=path.join(__dirname,'../reports/baselines');fs.mkdirSync(dir,{recursive:true});
  fs.writeFileSync(path.join(dir,'release-balance-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'});

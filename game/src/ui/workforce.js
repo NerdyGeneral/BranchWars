@@ -26,6 +26,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
+  renderHouseholds(v);
   $('#workforceNav').classList.toggle('hidden', !v.me.workforce);
   if (!v.me.workforce) {
     $('#workforcePanel').innerHTML = '';

@@ -2,6 +2,7 @@
 const assert = require('node:assert/strict');
 const { harness } = require('./github_resilience.test.js');
 const copy = x => JSON.parse(JSON.stringify(x));
+const households = process.argv.includes('--households');
 async function main() {
   for (const transport of ['gh', 'lan', 'p2p']) {
     const host = harness('host'), guest = harness('guest'), queue = [];
@@ -11,19 +12,21 @@ async function main() {
       if (transport !== 'gh') peer.run("gh.active=false;lan={...emptyLan(),active:" + (transport === 'lan') + "}");
     }
     host.run('Object.assign(p2pConfig,{workforceVersion:1,campaignRulesVersion:1,serviceExpansionVersion:1,managementVersion:2,customerDemandVersion:2})');
+    if(households)host.run('p2pConfig.customerOwnershipVersion=1');
     const drain = async () => {
       for (let n = 0; queue.length; n++) { assert(n < 60); const [i, frame] = queue.shift(), receiver = i ? host : guest; receiver.c.frame = frame; await receiver.run('handleMessage(frame)'); }
     };
     await host.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,name:'Old guest',color:'#8642bc'})");
     assert.equal(host.state().game, null); assert.equal(host.state().lobby, null);
-    assert(queue.some(([, m]) => m.type === 'error' && /Specialist workforce/.test(m.message))); queue.length = 0;
+    assert(queue.some(([, m]) => m.type === 'error' && (households?/Household ownership/:/Specialist workforce/).test(m.message))); queue.length = 0;
     await guest.run("handleMessage({type:'hello_request'})"); await drain();
     assert.equal(guest.state().lobby.settings.workforceVersion, 1);
     assert(guest.elements.get('#lobbyRules').textContent.includes('Specialist workforce'));
     host.run('editLobbyIdentity(true)'); await drain(); guest.run('editLobbyIdentity(true)'); await drain();
     host.run('startLobbyCampaign()'); await drain();
-    assert.equal(host.state().game.version, '8.5'); assert.equal(guest.state().view.workforceVersion, 1);
+    assert.equal(host.state().game.version, households?'8.6':'8.5'); assert.equal(guest.state().view.workforceVersion, 1);
     assert.deepEqual(copy(host.state().game.players[1].workforce), copy(guest.state().view.me.workforce));
+    if(households){assert.equal(guest.state().lobby.settings.customerOwnershipVersion,1);assert.equal(guest.state().view.customerOwnershipVersion,1)}
     if (transport === 'gh') {
       // The separate --workforce resilience run exercises actual sealed GitHub
       // commits/reveals, lost-write recovery and paid multi-turn workforce state.
@@ -35,6 +38,7 @@ async function main() {
       for (const seat of [0, 1]) {
         host.c.nextSeat = seat;
         const plan = host.run("(()=>{const p=game.players[nextSeat];return {focus:p.focus,allocation:{...p.allocation},depositPolicy:'balanced',lendingPolicy:'balanced',capitalPolicy:'balanced',products:{...p.products},newProjects:[],investments:{},hires:0,specialistHires:{service:game.cycle===1?1:0},workforcePolicy:{reserve:500000,training:{service:5000,business:0,lending:0,operations:0}},competitiveAction:'none',decision:'b'}})()");
+        if(households)plan.householdPolicy={retention:50,priority:{everyday:2,connected:1,reserve:1}};
         if (seat === 0) { host.c.plan = plan; host.run('E.submit(game,0,plan);syncPeers()'); }
         else { guest.c.plan = plan; guest.run("send({type:'plan',plan})"); }
         await drain();
@@ -42,6 +46,7 @@ async function main() {
       host.run('E.validatePilot(game);E.validateLedger(game)');
       assert.deepEqual(copy(guest.state().view.me.workforce), copy(host.state().game.players[1].workforce));
       assert.equal(guest.state().view.rival.workforce, undefined);
+      if(households){assert.deepEqual(copy(guest.state().view.me.householdBook),copy(host.state().game.players[1].householdBook));assert.equal(guest.state().view.rival.householdBook,undefined);assert.equal(guest.state().view.lastPlans[host.state().game.players[0].id].householdPolicy,undefined)}
       assert.equal(guest.state().view.lastPlans[host.state().game.players[0].id].specialistHires, undefined);
     }
     assert.equal(guest.state().view.me.workforce.departments.service.count, 1);

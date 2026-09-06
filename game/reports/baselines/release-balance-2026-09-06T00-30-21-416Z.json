@@ -1,0 +1,230 @@
+{
+  "passed": true,
+  "sourceSha256": "cc4e8366fc74ecbcbc85600b261c05acbceaaefeaffbaf0107e5794380033f3a",
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 4,
+  "seedCount": 1,
+  "turnLimit": 240,
+  "turns": 935,
+  "maxViewBytes": 938726,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 184,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 230,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 188,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 204,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 208,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    }
+  ],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 241,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3394427,
+        2292521
+      ],
+      "deposits": [
+        12416583,
+        142490083
+      ],
+      "profit": [
+        388583,
+        400658
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 241,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1885569,
+        1673762
+      ],
+      "deposits": [
+        62229467,
+        101992731
+      ],
+      "profit": [
+        291640,
+        191337
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "cycle": 215,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 0,
+      "equity": [
+        2040246,
+        -124791
+      ],
+      "deposits": [
+        155696230,
+        8108708
+      ],
+      "profit": [
+        126012,
+        34525
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "cycle": 241,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2581260,
+        1967054
+      ],
+      "deposits": [
+        35647852,
+        103939051
+      ],
+      "profit": [
+        44146,
+        91384
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "providerChanges": 12,
+      "lateProviderChanges": 4,
+      "initiatives": 153,
+      "competitiveActions": 100,
+      "householdDepartures": 15951,
+      "householdDepositOutflow": 180152499,
+      "retentionShares": {
+        "25": 4,
+        "50": 38,
+        "75": 101,
+        "100": 337
+      },
+      "stagedSpecialists": 92,
+      "trainingSpend": 1195000,
+      "trainingPaused": 68,
+      "maxSpecialists": 79,
+      "maxSkill": 62,
+      "maxPremiumPayroll": 384000
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "providerChanges": 11,
+      "lateProviderChanges": 1,
+      "initiatives": 273,
+      "competitiveActions": 182,
+      "householdDepartures": 18579,
+      "householdDepositOutflow": 163812078,
+      "retentionShares": {
+        "25": 0,
+        "50": 57,
+        "75": 148,
+        "100": 275
+      },
+      "stagedSpecialists": 102,
+      "trainingSpend": 1025000,
+      "trainingPaused": 55,
+      "maxSpecialists": 86,
+      "maxSkill": 63,
+      "maxPremiumPayroll": 399500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "providerChanges": 18,
+      "lateProviderChanges": 12,
+      "initiatives": 30,
+      "competitiveActions": 20,
+      "householdDepartures": 5332,
+      "householdDepositOutflow": 52610566,
+      "retentionShares": {
+        "25": 0,
+        "50": 303,
+        "75": 56,
+        "100": 71
+      },
+      "stagedSpecialists": 47,
+      "trainingSpend": 612000,
+      "trainingPaused": 1,
+      "maxSpecialists": 37,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 155500
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "providerChanges": 14,
+      "lateProviderChanges": 8,
+      "initiatives": 32,
+      "competitiveActions": 37,
+      "householdDepartures": 6200,
+      "householdDepositOutflow": 104745784,
+      "retentionShares": {
+        "25": 0,
+        "50": 15,
+        "75": 51,
+        "100": 414
+      },
+      "stagedSpecialists": 71,
+      "trainingSpend": 1054000,
+      "trainingPaused": 9,
+      "maxSpecialists": 44,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 222000
+    }
+  ]
+}
