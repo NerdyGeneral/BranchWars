@@ -2,6 +2,101 @@
 
 Updated: 2026-09-05.
 
+## Segment-owned deposit accounts — N-04/N-06 preview
+
+This batch is on `feat/segment-deposits`, based on the pending credit
+[PR #14](https://github.com/NerdyGeneral/BranchWars/pull/14). It is not merged
+into `main`. Enable **Segment deposits preview** for a new v8.8 campaign;
+the setup enables all prerequisite previews. Both computers must update.
+Existing saves retain their rules.
+
+- Deposit cohorts retain Everyday, Connected or Reserve ownership. Opening
+  relative balances are fictional 1 / 1.5 / 4 weights per relationship.
+  Finite outside intake, withdrawals, rival transfers and book acquisitions
+  conserve each segment's money, not just the bank-wide total.
+- Service neglect withdraws the departing segment's unlocked average balance.
+  Its locked share stays until contractual maturity, then pays out before any
+  renewal. Pending exits cannot be counted twice; an acquisition carries them.
+  Payouts change cash and deposit liabilities, not profit. Funding-sale losses
+  remain separate expenses.
+- Existing product terms and segment-specific product fit survive sales-mix
+  changes. Monthly interest, primary-account fees and service/platform costs
+  reconcile across products and segments. Zero-balance platforms still cost
+  money; segment rows do not pretend to be full allocated bank profit.
+- Customers has **Service & retention** and **Deposit accounts** views.
+  Inspect local balances, locked funding, exact monthly costs, product ownership
+  and pending maturity exits without changing plan targets.
+- New rules have explicit creation/import validation, rematch propagation,
+  owner-private books and capability checks on all three transports. The owner
+  snapshot omits total segment deposit pools to avoid revealing the rival's
+  detailed balances by subtraction. Compact causal history records ownership.
+- One new engine module: 84 ordered build inputs, no added runtime replacements.
+
+### Candidate verification
+
+The [full Windows run](../reports/baselines/N-00-2026-09-06T02-36-28-570Z.json)
+passed 57 of 59 suites, with unchanged source fingerprints and reproduced
+seeded balance output. Its only failures were two test expectations still
+naming v8.7 in the unsupported-save error. Both were corrected to v8.8 and
+[passed on rerun](../reports/baselines/N-00-followup-2026-09-06T02-57-26-620Z.json).
+The follow-up verifies every original fingerprint: only those two test files
+changed, and restoring their version text reproduces their original hashes.
+All 59 suites are covered across the run and its two reruns, including Windows
+LAN and nine GitHub relay configurations. This is **not** a new clean
+`check.js --full` invocation; its original failed result is preserved.
+No runtime repair or golden-fixture regeneration was needed for these failures.
+
+The separately completed [default-rules audit](../reports/baselines/release-balance-2026-09-06T02-56-57-574Z.json)
+passed 16 campaigns / 1,920 turns, with zero cancellations/skips and a maximum
+view of 559,901 bytes. Results exactly match the preceding default audit except
+the artifact hash. Automated checks do not establish human balance acceptance.
+
+Candidate SHA-256:
+`adfe98aadf3823dfb80336608522fc25c1188b5dadf9a496c5bb5b6b0dda1e15`.
+
+- [120-month audit](../reports/baselines/release-balance-2026-09-06T02-44-14-356Z.json):
+  16 campaigns / 1,909 turns. Fifteen reach month 120; Balanced seed 0 ends
+  in receivership at month 109. Both seats checked; maximum view 694,180 bytes.
+  Zero silent initiative skips; two explicit, uncharged cancellations.
+  533 competitive actions, 185 provider changes, 48 after month 60.
+- [480-month extension](../reports/baselines/release-balance-2026-09-06T02-44-38-580Z.json):
+  four additional campaigns / 1,494 turns. Rate and Regulatory seed 20 reach
+  month 480; Balanced ends at 293 and Growth at 241, both in receivership.
+  Both seats stay below 1 MiB; maximum view 794,099 bytes. Zero silent skips;
+  35 explicit uncharged cancellations. 406 competitive actions and 105 provider
+  changes, 82 after month 60. The stressed Growth run reaches 7.40% delinquency;
+  across the extended sample the AI chooses workout 13, balanced 2,890 and
+  recovery 85 times. This demonstrates reachability, not equal policy strength.
+- An auxiliary comparison against credit commit `5bf6265` matches AI plans
+  and complete campaign states exactly across 160 turns with the new rules OFF.
+  Preserved fixtures and frozen reference engines were not regenerated.
+
+The preliminary long diagnostic was stopped before completion to finish the
+UI/causal-history changes; it is not counted as passing. Both linked audits
+above ran against the final candidate and verified its unchanged source hash.
+
+Browser QA on the isolated local candidate verified creation, reload/Continue,
+service/account switching, market inspection and a monthly term-funding plan.
+Desktop and 950px layouts fit; 500px financial tables scroll inside their panel
+without widening the page. No captured warnings/errors. Temporary viewport,
+tab and server were reset/closed. No real room or save was modified.
+
+### Limits and next step
+
+This is segment-owned pooled funding, not individual households or separate
+commercial/retail balance sheets. Customer counts and financial balances can
+still move independently; per-customer cross-selling and complete profitability
+attribution remain future work. Broader operating navigation still needs a
+decluttering pass, especially the tall sticky navigation at tablet widths.
+The 37 uncharged AI cancellations across the two audits remain a cash-reserve/
+retry limitation. Several long campaigns concentrate deposits heavily; ongoing
+activity alone does not establish enjoyable recovery or endgame pacing.
+
+Next: product development/retirement and segment-targeted deployment, then
+advertising attribution. Group subsidiaries, company shares, national content
+and physical two-computer/multi-session acceptance remain ahead. N-04/N-06
+are deeper, not complete.
+
 ## Delayed delinquency and collections — N-06 credit preview
 
 This batch is on `feat/credit-collections`, stacked on the pending household

@@ -21,6 +21,7 @@ function prepareTermFunding(g,p,preview=false){
  const cycle=g.cycle||p.depositBook.asOfCycle+1,policy=p.termFunding.policy;
  validateTermPolicy(policy);
  const rate=Math.round(depositRate(p,g,'highYield')*1.25);
+ const departed=settleDepartedTermDeposits(g,p,preview);
  let released=0,renewed=0,opened=0;
  for(const c of p.depositBook.cohorts){
   if(!c.locked)continue;
@@ -39,7 +40,7 @@ function prepareTermFunding(g,p,preview=false){
   for(const [i,n]of Object.entries(parts))if(n){const c=eligible[i];c.principal-=n;p.depositBook.cohorts.push({...c,principal:n,product:'highYield',locked:true,remaining:6,quotedCycle:cycle,rate});opened+=n}
  }
  compactDeposits(p);
- return {opened,renewed,released};
+ return {opened,renewed,released,...(p.segmentDeposits?{departed}:{})};
 }
 
 function planTermFunding(g,index,plan){

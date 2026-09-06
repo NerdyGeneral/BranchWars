@@ -690,3 +690,51 @@ exposure, otherwise balanced handling. This is a bounded workload rule, not
 optimal borrower triage, recovery management or proven strategic balance.
 Individual borrowers, negotiated restructurings, collateral-specific recovery,
 allowance/provision accounting and broader underwriting remain future scope.
+
+## Segment-owned deposit accounts — v8.8 opt-in
+
+Enable Segment deposits preview for a new campaign. It requires the v8.7 credit
+and earlier previews. Existing saves do not adopt the new accounting rules.
+Customer counts remain segmented; each deposit cohort now also retains its
+Everyday, Connected or Reserve owner through intake, competitive transfers,
+acquisitions, promotion expiry and term maturity. Whole-dollar balances are
+conserved separately for each segment across both players and outside banks.
+Opening balances use fictional relative weights of 1 / 1.5 / 4 per relationship,
+then deterministic rounding. These are scenario assumptions, not banking data.
+
+Outside deposit intake selects from finite segment balances using owned supply
+and product preference. New accounts choose offered products using that segment's
+product fit and sales emphasis. Existing accounts are never relabeled by a new
+sales mix. Local servicing goodwill uses the segment's own existing product mix.
+Counts and balances remain separate aggregate resources: deposits can top up or
+move without a one-to-one customer transfer. This is not an individual-account
+or separate commercial/household balance-sheet model.
+
+Service-related departures withdraw floor(unlocked segment balance × departing
+relationships / current segment relationships). Locked balances instead mark
+floor(still-active locked principal × departing / current) for future exit.
+Marked balances cannot be marked twice. At contractual maturity, they return to
+outside institutions before optional renewal; the remaining active principal
+obeys the ordinary renewal policy. Competitive book purchases carry these exit
+obligations and promised rates. Principal payouts reduce cash and deposit
+liabilities equally, not profit. Funding-sale losses are recognized separately.
+
+Interest uses retained promotional/term rates or the current variable rate.
+One primary-account billing equivalent per active relationship is split across
+that segment's products by active principal, rather than charging a full fee for
+every product. Fees and service costs use the existing product tables; servicing
+also costs 0.006% of principal. A departed locked balance earns its promised
+interest but generates no active-relationship fee. Active product platform costs
+are charged once and allocated by product balances. A platform with no balances
+remains a central expense, not a fabricated segment.
+
+Customers now has separate Service & retention and Deposit accounts views. The
+financial table is a current-book monthly run rate, not full segment profit:
+it excludes loan income, shared staff/office costs, onboarding and event effects.
+It shows owned/locked principal, costs, product mix, projected unlocked departure
+exposure and pending maturity exits. Market inspection never retargets a plan.
+Detailed books stay owner-only; the public snapshot omits total segment deposit
+pools so it cannot reconstruct the rival's segment balances by subtraction.
+The causal ledger records compact segment principal, locked and pending totals.
+Individual household finance, cross-selling, full product development/retirement
+and subsidiary/group accounting remain future scope.

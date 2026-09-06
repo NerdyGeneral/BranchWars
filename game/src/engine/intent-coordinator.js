@@ -39,6 +39,7 @@ function validatePilot(g) {
   validateWorkforceSave(g);
   validateHouseholdSave(g);
   validateCreditPerformanceSave(g);
+  validateSegmentDepositSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {

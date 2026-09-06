@@ -23,7 +23,8 @@ function moveOutside(p,r,requested,target=null,limited=false){
  const amount=Math.min(Math.abs(Math.round(requested)),Object.values(weights).reduce((a,b)=>a+b,0)),parts=marketSplit(amount,weights);
  for(const [k,n]of Object.entries(parts)){if(!n)continue;const m=g.marketEconomy.markets[k],outside=positive?marketSplit(n,{community:m.community[r],union:m.union[r]}):marketSplit(n,{community:3,union:2});
   if(r==='customers')moveOutsideHouseholds(p,k,outside,positive,limited);
-  for(const institution of ['community','union'])m[institution][r]+=positive?-outside[institution]:outside[institution];
+  if(r==='deposits'&&p.segmentDeposits)moveOutsideSegmentDeposits(p,k,outside,positive,limited);
+  else for(const institution of ['community','union'])m[institution][r]+=positive?-outside[institution]:outside[institution];
   p.marketBook.markets[k][r]+=positive?n:-n;
   if(positive&&limited&&p.marketQuota&&p.marketQuota[r])p.marketQuota[r][k]=Math.max(0,p.marketQuota[r][k]-n);
  }
