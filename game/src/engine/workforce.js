@@ -87,7 +87,7 @@ function workforceTrainingQuote(p, policy = p.workforce?.policy, reserved = 0) {
   return { total: paused ? 0 : requested, requested, rows, paused };
 }
 function workforceOperatingCosts(p) {
-  const training = workforceTrainingQuote(p, p.workforce.policy, p._workforceReserved || 0);
+  const training = workforceTrainingQuote(p, p.workforce.policy, (p._workforceReserved || 0) + (p._advertisingCycle?.spent || 0));
   return { payroll: specialistPayroll(p), training };
 }
 function workforceLateReserve(p, plan) {
@@ -114,7 +114,7 @@ function settleWorkforceOperatingExpense(p, report) {
   // Protect ordinary operating losses as well as later hiring/research. Training
   // never expands beyond the initial quote and is not multiplied by event profit.
   if (!before.paused) {
-    const after = workforceTrainingQuote(p, p.workforce.policy, (p._workforceReserved || 0) + Math.max(0, -report.profit));
+    const after = workforceTrainingQuote(p, p.workforce.policy, (p._workforceReserved || 0) + (p._advertisingCycle?.spent || 0) + Math.max(0, -report.profit - (p._advertisingCycle?.spent || 0)));
     if (after.paused) p._workforceCosts.training = after;
   }
   addWorkforceReport(p, report);
@@ -221,7 +221,7 @@ function validateWorkforceSave(g) {
     if (g.players.some(p => p.workforce !== undefined || p.submitted?.workforcePolicy !== undefined || p.submitted?.specialistHires !== undefined)) throw Error('Unversioned specialist workforce');
     return g;
   }
-  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
+  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
   for (const p of g.players) {
     const w = p.workforce;
     if (!w || Object.keys(w).sort().join() !== 'departments,lastCycle,policy,version' || w.version !== 1 ||

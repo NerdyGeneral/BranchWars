@@ -32,7 +32,8 @@ E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersi
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly).length, 18);
+assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.programOnly).map(([k])=>k)).sort(), ['licenseHighYield','licenseRewards']);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.deploymentProduct).length, 2);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.regionalOnly).length, 3);
@@ -1213,7 +1214,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.8/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.10/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1253,7 +1254,8 @@ assert(html.includes('function renderProducts'));
 assert(html.includes('data-specialization-branch'));
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
-assert.equal((html.match(/data-workspace-tab=/g) || []).length, 9, 'command center has six core workspaces plus optional Workforce, Customers and Credit workspaces');
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 10, 'command center has six core workspaces plus optional Workforce, Customers, Credit and Products workspaces');
+assert(html.includes('id="productProgramsNav"') && html.includes('id="productProgramsPanel"'), 'product development and targeting have a dedicated workspace');
 assert(html.includes('data-workspace-tab="workforce"'), 'the optional workforce workspace has its own navigation target');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');

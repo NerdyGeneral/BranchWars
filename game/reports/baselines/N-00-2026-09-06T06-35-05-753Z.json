@@ -1,0 +1,1320 @@
+{
+  "package": "N-00",
+  "createdAt": "2026-09-06T06:35:05.753Z",
+  "node": "v24.19.0",
+  "platform": "win32",
+  "filesBefore": {
+    "BRANCH_WARS.html": "a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "7e175ad630e1d97395cdcaf6e6136314d5112aec7daadcb0253dded564633e83",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "e121444d90a8e62b4020c399f5c4ef755f9a9bb06f2f7f3bb95fc4be39d29359",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "f08ca37943dae7496a7cf01569f3e2760c6d1a0b0acb380777541fd3cdfd5727",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "a3e40427d0ad73867b0a33f7934e0a9245da59f76d83c79560562155a8d8340c",
+    "tests/github_resilience.test.js": "e47bd36ac4e81f880117f698a3aeeaf3e804f03bfe2af3801f02a9080c3d44c6",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "b1aa872cf1cef9627b9cd0aab170da2c8998bc8e07d4d5f0ea736c17ddd738cb",
+    "tests/customer_needs.test.js": "a34c605d1b6f019ffa67d07d16ecb57345db3cf88e7c467f12546adf169fe0e0",
+    "reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "tests/customer_relationships.test.js": "e7462b5d85e6ca7dcde3b947898d8df0ce54ceced78ac05b238ee680a0b28cad",
+    "reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html": "2d7bbca84b30100cb710c7a44d36dc5ab9f3f13a2e21c9f624f60fd63fe972b3",
+    "tests/service_workforce.test.js": "45d4e7d79fca121f9320eb8a234dc1bc8a886ec196593c3aaa5079bc852ff944",
+    "reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html": "0ae290ef37cc65951396abadb04e175cd3e975dcd49ac48ca30c239643491f53",
+    "tests/docs.test.js": "e9986a259ec8c002835dc4a13069863c6f9c38428c8ac0afb7e20b076418d018",
+    "tools/build_reference.js": "96765cec825706e79fbdd9e458321b86711c8060d5e5d9ab26931d8cf455d6cc",
+    "tools/reference-template.md": "2c4659a7190dcb008ab5a634177fa4b5f3514a700f26061ce408bcf0b1b0416d",
+    "docs/game-reference.md": "a47e3b8912f0b7f7daa5dd1327612850e4c9aa2104e110a0fd7121e4fd343137",
+    "tests/behavior-golden.test.js": "5d793d00cea0ed3f0a1f3d07252d5945055e827c659693dffa870126a706a13a",
+    "tests/architecture.test.js": "64387dfcdaa0e961b8d90656a4d756c467ed5fbeea7302d64228aa52fe83b0fc",
+    "tests/fixtures/behavior-golden.json": "dad8fa7bc079a3915cf8aa110576ac68c4349763ba1bbe09d5c2f43ef262c1f4",
+    "tests/fixtures/override-ceilings.json": "c732dea6fe47406d1fa5e27adab335c50bebe342780c9c684d2d26a200ab625b",
+    "tests/fixtures/legacy-half-ready.json": "6498fd868a5e10f32b8a6b9754a631b1fd9769583eb670cf008c91e282c2e0ae",
+    "tests/fixtures/pilot-half-ready.json": "41eee660124dfce310acafcf11418423e8a4bdf2a6e6041229c1deb7dcf869a0",
+    "tests/fixtures/goodwill-half-ready.json": "3f393b35ede3c1452dab06b8070c2e7b3ac6f46c0fc5e4bd961169ca60cd59d2",
+    "tools/check.js": "c8882bbe3bec9959a0f966ac4d2658261cc8f9bfd452eb974758a5c0f406f034",
+    "tests/save-baseline.test.js": "44e31120289c25f104637defbd2c995b9be4e746368d3edfb99883be59454769",
+    "tests/launcher-path.test.js": "090d780e84d51a65a4913a75a4d12198058afb2a6bc53b25f0b0968b53eb0f61",
+    "tests/fixtures/save-continuation.json": "7b9f2c71b2f9e339cc88d1726ffd1c1bb41ee77ee1f37845dba16177cf57699b",
+    "tests/reference-eol.test.js": "85f9eff579ec371b3a98346501473ac6344ca0eba43bb421400fb32cda5b12f5",
+    "tests/project-rules.test.js": "cdfa9b45ec0efea8ae4814ce4fe9472059a9da9a9367eab08e27896903e088f2",
+    "tests/campaign-lifecycle.test.js": "cd6c77eae0956b5255a001422b432e138f60f6a7d6cf95f3b4416960d1290028",
+    "tests/multiplayer_lobby.test.js": "b18a8af48069842d3e4baebd404268671fbcb12ee229ea00a7c153c3ee28cd57",
+    "tests/runtime-stages.test.js": "13d6563a35ac63cc0999a12ca89df56b3a93e93f7964bcb5c36712f06c670b95",
+    "tests/recovery_planning.test.js": "22ea5abbd5c56d6b6c41731cb5fbe402a862f2a25dd539440d82fb669ba8b46b",
+    "tests/recovery_ui.test.js": "004e7952bad036bc5ff4500ba95bb44cf822a292afa59a9009e984308e3331b8",
+    "tests/github_recovery_acceptance.test.js": "5549789fd2f01e1ab43e9b9dafad2713e81bb6a794826143a7e01cfd931db271",
+    "tests/households.test.js": "6fba07e059dd636fffb8b3883f84f85458490314c09b2b5f78ea72e38e1afa7c",
+    "tests/advertising.test.js": "da6743ea0f6c7eec80f6e06a20057645aae03d22d9839092eee143ec41625f15",
+    "tests/ai_cash_planning.test.js": "72c95f2f0ea4bb44a6394751d0f0cfe0d2b471e98f5a45f8dc8ac9f547496850",
+    "tests/product_draft.test.js": "c94df660fc112b8b9d1a84f622d4dfdc9607a429762222994daf8a48a6fa3e48",
+    "tests/collections.test.js": "5bc1db15d9d0adbedcc4d696a5d1f6084450a5b4b8760ef5d769d1b7608bcb9b",
+    "tests/segment_deposits.test.js": "b704c74da6a76dfabd1dfa1e8b448f7f239ede0cc32911dc6ca8c8c83b7f5ca3",
+    "tests/product_programs.test.js": "e1e8d09c8eec129c698e9498d66aafd154608d80852f0cd52d3dee5f762df54e",
+    "tests/specialist_workforce.test.js": "1b13c12e36905bd097b7b6c53438dbbd63088906b0cf341b0ab4f9c91785395b",
+    "tests/workforce_network.test.js": "c872142e4e743cb45feb48a41c9c8795a9dc165616202496f45680da786d38a4",
+    "tests/release_balance.test.js": "9f0f7e325e61bd29ed8b281bd7fbc18001db26a959c068a183daa8a74b5ac4a3",
+    "tools/build_game.js": "9cada8b1bb5b67e7af63e3323a5518e5fc3e840062e3f709c2579700a2a193ef",
+    "tests/build.test.js": "795dddbd1486e940eab9aad59d9a08c95eb321bffca704099a8e4068ac3b464b",
+    "src/manifest.json": "f476b0a4ce2a356b34d6f0602b23a78fe583aec8e86e1f95761abf663f99b6b6",
+    "src/page.html": "ce38d66ea3f3b7a891c5195ca568791fbfdbd331953b4b171633f68eeea310b8",
+    "src/engine/primitives.js": "d4832bc87c768afe0754b22087e898331bc606716f50a589a9b439e1015c239f",
+    "src/content/catalog.js": "956416d9bf48222a167fc3705723e570e8993ab1690f7bdd2c549dbfac2f66dd",
+    "src/content/workforce.js": "f1cf7b523ee04bda41054b11a3e3a70eefa53ac9470442a4732d8a70391cc419",
+    "src/engine/institution.js": "fe61514caa508002122d600acecfab1d5506615b4c5e416f042c2b5b9bca3a92",
+    "src/engine/territories.js": "98793a2ffc6258ec1591b0cc5e9256aeeb5b408b9c29fcb080b390c156491e28",
+    "src/engine/campaign.js": "cac5b634b72ac50633c5dc358f8d6ba8c3521c16cfbfb8a564e176ade1d988c7",
+    "src/engine/actions.js": "38b01ec67559ed23b2feb6a832f6f8aa0690687ae0419a24ed8a21ba346e042a",
+    "src/engine/operations.js": "990ef380248dd73f40e764efc7b94b9a4e8029aae10b2e27319eb257be0c1a18",
+    "src/engine/competition.js": "9632c2de8b08c288cd0834fa776d9861bb00ce507cf59ad6bcbd49514f37a88d",
+    "src/engine/projects.js": "98e0e217d9bb9771c0a4a7b5feddd906932290647ca320fc9fd1492edc3fd5be",
+    "src/engine/ai.js": "4f1741a38edb62e6a732601ad2a3ac3cafe493f1de4dab985da9466a6568009a",
+    "src/engine/plans.js": "c660b539e9990f56f9e1486ee1fa95d1f47a44a25112e84e0391e7f82868384f",
+    "src/engine/monthly.js": "34e3efb36e7be5521e36c3ff87cf4eec57315157912fe12e45e7ffae0b5a8f0a",
+    "src/engine/portfolio.js": "cd2ce4b1876f3d84730ad279c0df440dd4fa727350f260b95edbe1e42b397350",
+    "src/engine/session.js": "c885e5ee13e8ab8b984e9a19fd33d7a7d37a8c3e8e150b66dda1e0091da0dbd6",
+    "src/engine/accounting-adapter.js": "638dc032f3cb36db2910a38f1de117eb81d6757adc2eed3845588a8b711454d7",
+    "src/content/regional-markets.js": "b069d3b61fc09a16e9f1b1875a64550364f1d2c697c270cce740fff829c29317",
+    "src/engine/regional.js": "e97ac3b4914fb5e3482df7cac8bb31074f83051fb537b99b10dae898f3dac07d",
+    "src/engine/market-economy.js": "3d2035a6231a5243ccad27e7014e70d08f7eb60a3af2baf091b730a69aba3009",
+    "src/engine/credit.js": "7af70f6d3b2f876a362761fbc8d3a95969fba2ab597b1751b075ad96fd6c816b",
+    "src/engine/funding.js": "a76e1be1e7d21096b72579a44127463a09c113bea91a403fd8bfbc5e3c20252d",
+    "src/engine/deposits.js": "98b4677991148675e6cfad2b449c9b56bcfe06d8b0b8793eef74eebe00d66613",
+    "src/engine/term-funding.js": "e1afd8c645322ca1ee49846ee87175220b8e527d4f49c6bf4f781a0fee761350",
+    "src/engine/retail.js": "ee3cf290d6452e1e2ae3aaaa36a167f4232723e120941053c75cb005be98d118",
+    "src/engine/deployment.js": "91f94d5b15b44914fdb6de5a73c333a69648a4785e1bce29854731f47c0618c9",
+    "src/engine/contracts.js": "396be5efa539d77b95e62d39426ede25aeb6520eef937fae2d10c0dfa751e733",
+    "src/engine/services.js": "cdc89fbfb9f239828ed16d8471292b5b8d98b21ffab0b7683551c82e47db95b5",
+    "src/content/anchor-clients.js": "70e4d3f37facdfdcfc5da910833a3957c53022ca6b8712eade6c1160baf9934a",
+    "src/engine/management.js": "8d95e5c334a0986be1393be3599639ad07466948cd35739ec5e91421805a8ff5",
+    "src/engine/relationships.js": "e33999f4612cb34baef5f5147f7fce0357738226e28d6686c4869ea2a453cfeb",
+    "src/content/customer-markets.js": "65d50314084195ad0bc3e1defd09a1e97cd63d11b6944a9e807b71bb092d9762",
+    "src/engine/customer-demand.js": "0a5ea84acfc99c320e786094371a1d04e5c627ddb02c06bf7935d3cfef6eb5a0",
+    "src/engine/customer-relationships.js": "b303fe00d8b4ddd6753ef5bc5fe0234a1799419814d99e3090de690f48d97032",
+    "src/engine/workforce.js": "2d5f94bf2715520faa21723239ce0187bad2b690d6551f9446abf764b040d1b8",
+    "src/engine/households.js": "a1d351e21a3c3602184fa7bf86b47efbfabd43c68d5255a0d589dc85e37ccb83",
+    "src/engine/collections.js": "9f668775e87b6b6dabc9bcd8f069bae982d1c12ec93fdce8e69f2281a8bdcbb3",
+    "src/engine/segment-deposits.js": "6502ad0835135c0e6d07acca39b8db258961a45853b70ada300c6baad78c8131",
+    "src/engine/product-programs.js": "1752ab0430fab11f1240ec09feda59a8952de05a1284cb6e6665b11400e58167",
+    "src/engine/advertising.js": "798be6a4e712855e6894439154589a5bea40f0ac2579c1414cf5461c11df74d0",
+    "src/engine/recovery.js": "5499f016b9a5f3896fe1809c18295cdb3884c73223545c37b40414d56281ad06",
+    "src/engine/ledger.js": "45dabeab7f35e1026edd779ddaef3dcfa49331d9d8739cfd3b58999f407a44ca",
+    "src/engine/accounting.js": "c943316a2f7ba85b911fd190c744d3c62869c334aa9e702702f348d93e3fb43b",
+    "src/engine/migration.js": "70c20db0b0da6ab2e2c6494d79635b7e73f4e904b43eaa5dd05310e01e068460",
+    "src/engine/operation-coordinator.js": "12e7a3204fda32123af879a004677d380cc7fa8afe234e80411142c52427ffff",
+    "src/engine/project-coordinator.js": "fa83d3e910ceac38f2931c84a3aaf3760a91a39402c73aee69cb26c446a29625",
+    "src/engine/cycle-coordinator.js": "786fc78ffb34e9e4a3c63ba35bff950d862161ee20185007eb08c70ee8a2ecb4",
+    "src/engine/intent-coordinator.js": "2017fbcc4b0674dc0bfa8122653a4bc9e44d709bfe5628d8b1fae4e5c8a3b5b3",
+    "src/engine/api.js": "bacdb72c64986977f5085f2943ae23b9647ba39929492f71fef00a959b6ce7be",
+    "src/engine/shell.js": "6bc991d1c2d29e2b8966f0f635f595f55c854896ee5b620eddff95cf9556d39d",
+    "src/ui/state.js": "a61210a9159ff85f530fd190981a33679e50b83355c6414af051afd45b991745",
+    "src/ui/lobby.js": "b948bc6a00f967d5d2ce31c64449d79c9cabeea3d286065d2cef86d8964ce327",
+    "src/ui/draft.js": "645e259f5c436aa716829b88a53baaf9b21be1ea5d2a64dabbf3a03157e0fe41",
+    "src/persistence/saves.js": "bea91ca07a9885d1c2dc3087a0a2aeecf48ac1c7d19d7f04889079165ea38ccd",
+    "src/ui/local-game.js": "6ec5ebffd22f575ba25f5550536d7e91421e564b755c5353260cfbd23c559218",
+    "src/network/lan.js": "96d56ad577f9d78f13644ab5b299c8d2a555f7fbc897ccd368927898c638b386",
+    "src/network/repository.js": "31ced65c746ac960ced3fede7604e3b1fd9b407251fba456f39b615edf8f4732",
+    "src/network/peer-codecs.js": "ca61fe9bd8396e5919be74a44eb97521d5766a1e5fa060930097dbf3b94e0016",
+    "src/network/direct.js": "93c0439a082e186553b807755134f7cde293284e8d390981efa81b743356f84e",
+    "src/network/protocol.js": "7949807ba093f5e75aaefe33def703941a0a1b01b3db0642a6cc11a2937fe752",
+    "src/ui/dashboard.js": "ae48a04007a8d3ac088bb70da978e0f81aee537e113a9d8cf088c18b80aea15d",
+    "src/ui/services.js": "08d470e00aa842a94cd856f3eb451a6200bf3504ac535b82ca439ed1cde0757c",
+    "src/ui/management.js": "d85cde525dc6ba64f5cf03f8f8694c2eb5554abf9e977b38d04bbac99bd6b6c0",
+    "src/ui/workforce.js": "c93cec73bd543f359650fd8f774fa6e85a96a62a87aa9ca117db8f5ac6152cb1",
+    "src/ui/households.js": "4c35b209fca3aead73fec9a7be6083c45c2c3e7e633f5c2ff3004664287e6eaf",
+    "src/ui/collections.js": "6b27b37ad530ad72bab4f21dd28daa8601ec97a05df2448aa7eb94003086218a",
+    "src/ui/products.js": "37a272b02fadb02e5f8f35afc66a540b220f416b445278e5626e7fcb580e019e",
+    "src/ui/product-programs.js": "f6b1bf26f4a770a2262625740bcef09cbdbdf1f96871382ea1b93fa7d971d156",
+    "src/ui/advertising.js": "0c7eb6ba3b5e86836397dd86cdb285ee6c5959a895f85b2afb2ac40745bfa011",
+    "src/ui/recovery.js": "3dea3b82fb901dfec766fa1110cfe24cdbde04506f302cf83f7e48cbf6172198",
+    "src/ui/projects.js": "f412b22a0154459be6683ea7382b876b40476b764850c54cac68ab76df59bc5a",
+    "src/ui/results.js": "5adac280f59329d980edd21701fd53cf72e4e3b059c863c852119d5ae989f4b8",
+    "src/ui/bootstrap.js": "ea6ee446522e3b178d9be7685ff762042de18a7b3af0479812924fbaaf270d1f",
+    "src/ui/shell.js": "bf3651cb1de19735ff57bb02b1eb49a121799ae78578dd4c67acd0e7a26530ea",
+    "src/styles/base.css": "f9f1ca602a89af06df8bf7a0edac04c2ec4e92296e103cf17e4a5682b471f74b",
+    "src/styles/visual-overhaul.css": "612ba55a9ec97152e44abeedbc45c220aac1f109ce04fa1f10a0f8602469c74c",
+    "src/styles/isometric-city-overhaul.css": "f9cdb3f25b175feebf21c055d4e7e6c5e11e187605cd54376709862b37ff379c",
+    "src/styles/isometric-city-polish.css": "7c1eeb266a3482916c47ae5b699f28c422c5083d44bcc1bb01610196563c776a",
+    "src/styles/funding-strategy-ui.css": "fae699afb1abfa87c7e873793447e3b0d94370397d5ebc6ef822d168e5f525c6",
+    "src/styles/portfolio-depth-ui.css": "3683cfc621841e7fcb45be6fcb6b6c08ed92522d56cc2bbfa85113168a431f55",
+    "src/styles/workspace-ui.css": "5813307af9225b4175cecb884d9807a1316390551894fce91682bba6fd34fb40",
+    "src/styles/workspace-polish.css": "5e7a5acbc522a9094384b128f5088a8216568dcb9a63fb98b9aec370fb8908e8",
+    "src/styles/planning-repair-ui.css": "4ceeb347447168ee1fe47768e050a5eff5518f09cd97a351acd2141612b3eb3b",
+    "src/styles/bank-identity-ui.css": "1521b6cfd7f68e9a01f40edd7eda371abd7dd3c7d7891b4c64ee0a958c7511ed",
+    "src/styles/region-summary.css": "67f3e32757c392646dcb754a6e08fc8248dcf2df86b6ebba140581d82a6b4a4f",
+    "src/styles/lobby-ui.css": "5a3059db9eccc6531dc914fc7fb4a6e0557069f0be085ce6a2e85c71b8cc6a72",
+    "src/styles/workforce.css": "d02d31a3154d111a770ae4f70cce005874da84dd64cbe8b30ea67f3ee95c5e02",
+    "src/styles/households.css": "1af7abaa194c4899daef98289443c14a1567a50ff67973ae2ac9210a7f9cd62e",
+    "src/styles/collections.css": "12ff3bd452a0ce0646e78af7de940c576feda5a8fe02af4d2558da758b7721c3",
+    "src/styles/product-programs.css": "2f610f162dfba61b8731e93098993dccf1d993e4dae48a3b961b662c12df5cee"
+  },
+  "head": {
+    "label": "git HEAD",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 56,
+    "stdout": "8999aa0180ab709ff43f2e64c9d37fd12cb80cf5\n",
+    "stderr": ""
+  },
+  "statusBefore": {
+    "label": "git status",
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 44,
+    "stdout": " M BRANCH_WARS.html\n M docs/architecture.md\n M docs/game-reference.md\n M docs/player-guide.md\n M docs/release-status.md\n M docs/roadmap.md\n M src/engine/accounting-adapter.js\n M src/engine/api.js\n M src/engine/campaign.js\n M src/engine/collections.js\n M src/engine/customer-demand.js\n M src/engine/deployment.js\n M src/engine/deposits.js\n M src/engine/households.js\n M src/engine/institution.js\n M src/engine/intent-coordinator.js\n M src/engine/ledger.js\n M src/engine/market-economy.js\n M src/engine/migration.js\n M src/engine/monthly.js\n M src/engine/operation-coordinator.js\n M src/engine/operations.js\n M src/engine/project-coordinator.js\n M src/engine/relationships.js\n M src/engine/retail.js\n M src/engine/segment-deposits.js\n M src/engine/services.js\n M src/engine/session.js\n M src/engine/term-funding.js\n M src/engine/workforce.js\n M src/manifest.json\n M src/network/direct.js\n M src/network/lan.js\n M src/network/protocol.js\n M src/network/repository.js\n M src/page.html\n M src/persistence/saves.js\n M src/ui/dashboard.js\n M src/ui/draft.js\n M src/ui/lobby.js\n M src/ui/local-game.js\n M src/ui/products.js\n M src/ui/projects.js\n M src/ui/services.js\n M tests/campaign-lifecycle.test.js\n M tests/capture_baseline.js\n M tests/engine.test.js\n M tests/github_resilience.test.js\n M tests/project-rules.test.js\n M tests/release_balance.test.js\n M tests/workforce_network.test.js\n M tools/check.js\n M tools/reference-template.md\n?? ARCHITECTURE_PLAN.md\n?? reports/baselines/product-programmes-followup.cjs\n?? src/engine/advertising.js\n?? src/engine/product-programs.js\n?? src/engine/recovery.js\n?? src/styles/product-programs.css\n?? src/ui/advertising.js\n?? src/ui/product-programs.js\n?? src/ui/recovery.js\n?? tests/advertising.test.js\n?? tests/ai_cash_planning.test.js\n?? tests/github_recovery_acceptance.test.js\n?? tests/product_draft.test.js\n?? tests/product_programs.test.js\n?? tests/recovery_planning.test.js\n?? tests/recovery_ui.test.js\n",
+    "stderr": "warning: unable to access 'C:\\Users\\xande/.config/git/ignore': Permission denied\nwarning: unable to access 'C:\\Users\\xande/.config/git/ignore': Permission denied\n"
+  },
+  "diffStat": {
+    "label": "git diff stat",
+    "command": [
+      "git",
+      "diff",
+      "--stat"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 111,
+    "stdout": " game/BRANCH_WARS.html                    | 989 ++++++++++++++++++++++++++++---\n game/docs/architecture.md                |  59 +-\n game/docs/game-reference.md              | 142 +++++\n game/docs/player-guide.md                |  67 ++-\n game/docs/release-status.md              | 347 ++++++++++-\n game/docs/roadmap.md                     |  16 +-\n game/src/engine/accounting-adapter.js    |   1 +\n game/src/engine/api.js                   |   2 +-\n game/src/engine/campaign.js              |   4 +\n game/src/engine/collections.js           |   2 +-\n game/src/engine/customer-demand.js       |  15 +-\n game/src/engine/deployment.js            |   5 +-\n game/src/engine/deposits.js              |   3 +-\n game/src/engine/households.js            |   5 +-\n game/src/engine/institution.js           |   8 +-\n game/src/engine/intent-coordinator.js    |  79 ++-\n game/src/engine/ledger.js                |   6 +-\n game/src/engine/market-economy.js        |   3 +-\n game/src/engine/migration.js             |  14 +-\n game/src/engine/monthly.js               |   3 +\n game/src/engine/operation-coordinator.js |   2 +\n game/src/engine/operations.js            |   6 +-\n game/src/engine/project-coordinator.js   |   2 +\n game/src/engine/relationships.js         |   2 +-\n game/src/engine/retail.js                |   2 +-\n game/src/engine/segment-deposits.js      |  15 +-\n game/src/engine/services.js              |   4 +-\n game/src/engine/session.js               |   4 +-\n game/src/engine/term-funding.js          |   2 +-\n game/src/engine/workforce.js             |   6 +-\n game/src/manifest.json                   |   9 +-\n game/src/network/direct.js               |   6 +-\n game/src/network/lan.js                  |   4 +-\n game/src/network/protocol.js             |   4 +-\n game/src/network/repository.js           |   6 +-\n game/src/page.html                       |   7 +-\n game/src/persistence/saves.js            |   2 +-\n game/src/ui/dashboard.js                 |   5 +-\n game/src/ui/draft.js                     |   4 +-\n game/src/ui/lobby.js                     |   4 +-\n game/src/ui/local-game.js                |   7 +-\n game/src/ui/products.js                  |   5 +-\n game/src/ui/projects.js                  |   6 +-\n game/src/ui/services.js                  |   3 +-\n game/tests/campaign-lifecycle.test.js    |   4 +-\n game/tests/capture_baseline.js           |  14 +-\n game/tests/engine.test.js                |   8 +-\n game/tests/github_resilience.test.js     |  32 +-\n game/tests/project-rules.test.js         |   6 +-\n game/tests/release_balance.test.js       |  57 +-\n game/tests/workforce_network.test.js     |  28 +-\n game/tools/check.js                      |   2 +-\n game/tools/reference-template.md         | 140 +++++\n 53 files changed, 2001 insertions(+), 177 deletions(-)\n",
+    "stderr": "warning: in the working copy of 'game/BRANCH_WARS.html', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/docs/architecture.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/docs/game-reference.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/docs/player-guide.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/docs/release-status.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/docs/roadmap.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/accounting-adapter.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/api.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/campaign.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/collections.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/customer-demand.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/deployment.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/deposits.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/households.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/institution.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/intent-coordinator.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/ledger.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/market-economy.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/migration.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/monthly.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/operation-coordinator.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/operations.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/project-coordinator.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/relationships.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/retail.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/segment-deposits.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/services.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/session.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/term-funding.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/engine/workforce.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/manifest.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/network/direct.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/network/lan.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/network/protocol.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/network/repository.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/page.html', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/persistence/saves.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/dashboard.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/draft.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/lobby.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/local-game.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/products.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/projects.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/src/ui/services.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/campaign-lifecycle.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/capture_baseline.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/engine.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/github_resilience.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/project-rules.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/release_balance.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tests/workforce_network.test.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tools/check.js', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'game/tools/reference-template.md', LF will be replaced by CRLF the next time Git touches it\n"
+  },
+  "tests": [
+    {
+      "label": "engine.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\engine.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 20258,
+      "stdout": "Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 770,
+      "stdout": "Accounting prototype tests passed: opening reconciliation, atomic postings, transfers, loan funding, retained profits, noncash losses, debt, securities sales, 27 real previews and 2000 reconciled stress postings. Campaign rules remain unchanged.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_activities.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting_activities.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 107,
+      "stdout": "Accounting activity tests passed: expense/capital classification, 24 live opportunity rewards, 20 live acquisition comparisons, two-sided settlements, debt conservation, penalties, franchise funding and atomic batches. Campaign economy remains v1/v2.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_persistence.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\accounting_persistence.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 338,
+      "stdout": "Accounting persistence tests passed: 256-entry snapshots, checkpoint reconciliation, exact continuation, repeated pruning, 15 corruptions, invalid histories and no campaign migration.\n",
+      "stderr": ""
+    },
+    {
+      "label": "bank_identity.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\bank_identity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 148,
+      "stdout": "Bank identity tests passed: picker wiring, seat perspectives, save migration, rematches, legacy defaults, unsafe values, matching colors, handshake contracts and simulation neutrality.\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_pilot.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\regional_pilot.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 58118,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"sourceUnchanged\": true,\n  \"turns\": 1920,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 37,\n      \"reentries\": 48,\n      \"depositContests\": 149,\n      \"maxViewBytes\": 278976\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 36,\n      \"reentries\": 41,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 268334\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 40,\n      \"reentries\": 39,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 270906\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 35,\n      \"reentries\": 32,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 262431\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 35,\n      \"depositContests\": 141,\n      \"maxViewBytes\": 282420\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 41,\n      \"reentries\": 45,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 282354\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 36,\n      \"depositContests\": 156,\n      \"maxViewBytes\": 266474\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 26,\n      \"reentries\": 31,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 273083\n    },\n    {\n      \"seed\": 8,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 34,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 267610\n    },\n    {\n      \"seed\": 9,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 28,\n      \"reentries\": 35,\n      \"depositContests\": 158,\n      \"maxViewBytes\": 283270\n    },\n    {\n      \"seed\": 10,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 33,\n      \"depositContests\": 152,\n      \"maxViewBytes\": 269798\n    },\n    {\n      \"seed\": 11,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 27,\n      \"reentries\": 30,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 271580\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\regional_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 19637,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"sourceUnchanged\": true,\n  \"mainLoopTurns\": 800,\n  \"additionalResumeTurns\": 8,\n  \"withdrawals\": 66,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 102,\n      \"ended\": false\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "market_economy.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\market_economy.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 38488,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"sourceUnchanged\": true,\n  \"turns\": 968,\n  \"maxViewBytes\": 357799,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        158119682,\n        9596448\n      ],\n      \"outsideDeposits\": 283870\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 7,\n      \"playerDeposits\": [\n        20927475,\n        146615463\n      ],\n      \"outsideDeposits\": 457062\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        145246617,\n        22579790\n      ],\n      \"outsideDeposits\": 173593\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        157145185,\n        10346729\n      ],\n      \"outsideDeposits\": 508086\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        8784848,\n        159017469\n      ],\n      \"outsideDeposits\": 197683\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        8009010,\n        159855182\n      ],\n      \"outsideDeposits\": 135808\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 9,\n      \"playerDeposits\": [\n        27098962,\n        140882596\n      ],\n      \"outsideDeposits\": 18442\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 3,\n      \"playerDeposits\": [\n        19423583,\n        148390905\n      ],\n      \"outsideDeposits\": 185512\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "credit_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\credit_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 28064,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 484,\n  \"maxBytes\": 447633,\n  \"maxCohorts\": 727,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 59465241,\n      \"loans\": [\n        29971885,\n        30062840\n      ],\n      \"deposits\": [\n        90306025,\n        77564970\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 62596446,\n      \"loans\": [\n        15415989,\n        24097182\n      ],\n      \"deposits\": [\n        159509887,\n        8304383\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 45134148,\n      \"loans\": [\n        14857316,\n        16261214\n      ],\n      \"deposits\": [\n        25471678,\n        142497092\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 43849531,\n      \"loans\": [\n        21211180,\n        20302097\n      ],\n      \"deposits\": [\n        157863521,\n        9921776\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding_covenants.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\funding_covenants.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 40927,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 726,\n  \"maxBytes\": 437419,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        24438057,\n        143503421\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161298998,\n        6459102\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        13935143,\n        153990939\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        28356558,\n        139579370\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161834583,\n        5979129\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        11598430,\n        155978939\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "deposit_products.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\deposit_products.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 26718,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 595,\n  \"maxBytes\": 424487,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"serviceSeat\": -1,\n      \"cycle\": 66,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        85799567,\n        67350236\n      ],\n      \"equity\": [\n        86848,\n        2402223\n      ],\n      \"profits\": [\n        62202,\n        172407\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        124908002,\n        41771287\n      ],\n      \"equity\": [\n        895162,\n        2692756\n      ],\n      \"profits\": [\n        284885,\n        395547\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 1,\n      \"cycle\": 45,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        39678305,\n        97051431\n      ],\n      \"equity\": [\n        1149689,\n        -106050\n      ],\n      \"profits\": [\n        83647,\n        23075\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        32894333,\n        134634275\n      ],\n      \"equity\": [\n        2925598,\n        2599791\n      ],\n      \"profits\": [\n        368565,\n        366196\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        131319814,\n        36612390\n      ],\n      \"equity\": [\n        856649,\n        5837434\n      ],\n      \"profits\": [\n        258049,\n        526500\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        18237581,\n        149303329\n      ],\n      \"equity\": [\n        7713352,\n        538811\n      ],\n      \"profits\": [\n        328861,\n        160811\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "term_funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\term_funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 23967,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 484,\n  \"maxBytes\": 461369,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        29082704,\n        0\n      ],\n      \"equity\": [\n        3037363,\n        3425818\n      ],\n      \"profit\": [\n        347363,\n        468903\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        32119825\n      ],\n      \"equity\": [\n        4770427,\n        2712317\n      ],\n      \"profit\": [\n        427084,\n        353792\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        13420995,\n        0\n      ],\n      \"equity\": [\n        3210025,\n        2842340\n      ],\n      \"profit\": [\n        431926,\n        369585\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        37332344\n      ],\n      \"equity\": [\n        4150611,\n        1574527\n      ],\n      \"profit\": [\n        693235,\n        176680\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "retail_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\retail_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 15780,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 323,\n  \"maxBytes\": 472473,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 0,\n      \"cycle\": 40,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        50135924,\n        71120955\n      ],\n      \"equity\": [\n        14772,\n        785058\n      ],\n      \"profit\": [\n        -47904,\n        -9557\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 1,\n      \"cycle\": 41,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        64069676,\n        57267276\n      ],\n      \"equity\": [\n        -189474,\n        426604\n      ],\n      \"profit\": [\n        -5922,\n        22376\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 0,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        121159200,\n        45445189\n      ],\n      \"equity\": [\n        2300820,\n        2756662\n      ],\n      \"profit\": [\n        210254,\n        361643\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 1,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        97725889,\n        67196410\n      ],\n      \"equity\": [\n        3039835,\n        2775869\n      ],\n      \"profit\": [\n        635084,\n        451950\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "product_deployment.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\product_deployment.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 14271,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 320,\n  \"maxBytes\": 445587,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_contracts.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_contracts.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 12335,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 281,\n  \"maxBytes\": 437044,\n  \"changes\": 89,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        1,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        0,\n        1\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        3,\n        0\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 38,\n      \"ended\": true,\n      \"contracts\": [\n        0,\n        0\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_expansion.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_expansion.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 19848,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"turns\": 324,\n  \"maxViewBytes\": 504998,\n  \"changes\": 47,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        4,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": \"build\"\n        }\n      ],\n      \"contracts\": [\n        3,\n        2\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_planning.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\service_planning.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1979,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 35,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"pure advisory forecasts\",\n    \"capacity alternatives\",\n    \"hypothetical locked quotes\",\n    \"treasury prerequisites\",\n    \"whole-book capacity\",\n    \"recovery without free capital\",\n    \"final AI reserve\",\n    \"fixed-intent replay\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "institution_management.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\institution_management.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 52285,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"strict versioning\",\n    \"private mandates\",\n    \"bounded recurring funding\",\n    \"milestone stop\",\n    \"cash reserve\",\n    \"editable priorities\",\n    \"client differentiation\",\n    \"bounded service delegation\",\n    \"explicit bid preservation\",\n    \"sealed plans\",\n    \"saved fixed-intent replay\",\n    \"20-turn prior-build compatibility\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "relationship_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\relationship_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 55594,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"old-build save refusal\",\n    \"old-mechanics retention\",\n    \"non-mutating import\",\n    \"earned service streak\",\n    \"miss reset\",\n    \"corrupt histories\",\n    \"reconciled scorecard\",\n    \"adaptive bounded quotes\",\n    \"locked fee preservation\",\n    \"half-sealed import\",\n    \"bounded history\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 13552,
+      "stdout": "Funding rules tests passed: v1 compatibility, v2 transfer/settlement reconciliation, small outflows, signed losses, explicit debt/interest/repayment, dual failure and 24 modern campaigns (1927 turns).\n",
+      "stderr": ""
+    },
+    {
+      "label": "determinism.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\determinism.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 472,
+      "stdout": "Determinism tests passed: explicit creation, independent/interleaved campaigns, save/resume, preview purity, separate AI stream, privacy, legacy initialization and validation.\n",
+      "stderr": ""
+    },
+    {
+      "label": "ledger.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\ledger.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1066,
+      "stdout": "Ledger tests passed: 276 resolved turns; stat reconciliation, phase attribution, sealed-plan silence, owner privacy, deep copies and bounded history. Categories: campaign.ending, competition.actions, competition.deposits, decision, funding.settlement, markets.competition, markets.dividend, markets.exit, milestones, operations, project.advance, project.start, relationships, research.investment, risk.consequences, staff.hiring\n",
+      "stderr": ""
+    },
+    {
+      "label": "save_integrity.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\save_integrity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 269,
+      "stdout": "Save integrity tests passed: real client migration/resume, idempotence, legacy histories, pruning, 13 corruption cases and non-mutating rejection.\n",
+      "stderr": ""
+    },
+    {
+      "label": "transport.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\transport.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 116,
+      "stdout": "Branch Wars transport tests passed: ordered retry, lost-response reconciliation, default-branch discovery, and LAN idempotency.\n",
+      "stderr": ""
+    },
+    {
+      "label": "github_resilience.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\github_resilience.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 764,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 96720,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 97328,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_workforce.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/service_workforce.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 12346,
+      "stdout": "{\"passed\":true,\"sourceSha256\":\"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\"checks\":[\"pure engine forecasts\",\"staff conservation\",\"commercial reservations\",\"explicit bid protection\",\"project capacity\",\"hiring timing cost and limit\",\"invalid allocation\",\"draft-only UI handlers\",\"locked plan guard\",\"four scenarios 20-turn full-state compatibility\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "docs.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/docs.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 79,
+      "stdout": "Documentation checks passed: 40 Markdown files, 217 local links, canonical names and generated-reference destination.\n",
+      "stderr": ""
+    },
+    {
+      "label": "reference-eol.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/reference-eol.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 102,
+      "stdout": "Reference checks passed for all eight LF/CRLF source, template and output combinations.\n",
+      "stderr": ""
+    },
+    {
+      "label": "project-rules.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/project-rules.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 279,
+      "stdout": "Shared project rules passed: 1296 independent legacy comparisons, regional quotes, forged IDs, conflicts, timing, execution accounting, seat privacy and real UI handlers.\n",
+      "stderr": ""
+    },
+    {
+      "label": "campaign-lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/campaign-lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 479,
+      "stdout": "Campaign lifecycle passed: 1387 independent creation comparisons, 41 migration comparisons, optional-stage matrix, random consumption, sealed plans, corruption rejection and browser adapters.\n",
+      "stderr": ""
+    },
+    {
+      "label": "multiplayer_lobby.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/multiplayer_lobby.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 113,
+      "stdout": "Multiplayer lobby/status checks passed: all three transports, identities, readiness, authority, revisions, reconnects, preview rules, reload, idle polling and failure states.\n",
+      "stderr": ""
+    },
+    {
+      "label": "runtime-stages.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/runtime-stages.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1178,
+      "stdout": "Explicit runtime stages passed: 192 operations, 864 completions, 64 fault/recovery pairs against the frozen implementation.\nPolicy/AI stages passed: 64 AI preparations, 160 policy normalizations and 416 save-validation comparisons; error order and state/RNG effects preserved.\n",
+      "stderr": ""
+    },
+    {
+      "label": "households.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/households.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 10433,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"checks\": [\n    \"exact segment conservation\",\n    \"outside movement and acquisitions\",\n    \"capped weighted intake\",\n    \"service/sales tradeoff\",\n    \"specialist time conservation\",\n    \"delayed churn\",\n    \"locked deposits\",\n    \"accounting\",\n    \"pure preview\",\n    \"sealed save\",\n    \"invalid imports\",\n    \"owner privacy\",\n    \"UI staging\",\n    \"AI reachability\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "segment_deposits.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/segment_deposits.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 14646,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"checks\": [\n    \"segment balance conservation\",\n    \"finite outside intake\",\n    \"owned retention outflows\",\n    \"promised terms transfer\",\n    \"maturity exits despite renewal\",\n    \"cost reconciliation\",\n    \"funding stress\",\n    \"pure preview\",\n    \"sealed save\",\n    \"corrupt imports\",\n    \"owner privacy\",\n    \"UI inspection\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Advertising rules",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/advertising.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 19160,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"paidCycles\": 0,\n  \"attributed\": 0,\n  \"staffedAiCampaigns\": 1,\n  \"checks\": [\n    \"strict plans\",\n    \"pure preview\",\n    \"auto-pause closed offers\",\n    \"staff and fit\",\n    \"fixed finite quotas\",\n    \"expense exactly once\",\n    \"observed assisted intake\",\n    \"no grant attribution\",\n    \"sealed deterministic replay\",\n    \"owner privacy\",\n    \"corrupt saves\",\n    \"staffed AI reachability\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "AI cash planning",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/ai_cash_planning.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 20133,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"initiatives\": 31,\n  \"competitiveActions\": 18,\n  \"checks\": [\n    \"known-call cost regression\",\n    \"pure reserve review\",\n    \"late commitments\",\n    \"funded retry\",\n    \"legacy no-op\",\n    \"seeded settlement\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Bank recovery planning",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/recovery_planning.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 503,
+      "stdout": "{\n  \"passed\": true,\n  \"checks\": [\n    \"cash versus equity\",\n    \"known executive costs\",\n    \"safe alternatives\",\n    \"pure owner projections\",\n    \"commitment pause\",\n    \"no operating double count\",\n    \"hidden intent isolation\",\n    \"healthy and legacy unchanged\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Bank recovery UI",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/recovery_ui.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 87,
+      "stdout": "Recovery UI passed: draft-only staging, exact undo, stale quote protection, budget validation and sealed-turn locks.\n",
+      "stderr": ""
+    },
+    {
+      "label": "GitHub checkpoint recovery acceptance",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_recovery_acceptance.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 616,
+      "stdout": "{\n  \"passed\": true,\n  \"simulatedOnly\": true,\n  \"resolvedTurns\": 3,\n  \"reloads\": 3,\n  \"acceptedWrites\": 17,\n  \"lostResponses\": 1,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"both seats reload before reveal\",\n    \"host resumes unacknowledged accepted resolution\",\n    \"same nonce and commitment\",\n    \"no duplicate month or expense\",\n    \"identity preserved\",\n    \"private advertising report\",\n    \"continued sealed play\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Product draft repair",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/product_draft.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 90,
+      "stdout": "Product draft checks passed: incremental capacity decommit, budget-safe retirement cancellation, addition/target validation, Ready gating and sealed-plan locks.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Advertising network",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js",
+        "--advertising"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 407,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state. Advertising adds three paid cycles per seat with exact private reports alongside product launch, targets and retirement.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Advertising GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--advertising"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2677,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"paidAdvertisingPlans\": 24,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\",\n    \"advertising old-peer refusal\",\n    \"paid advertising\",\n    \"exact private advertising report\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "product_programs.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/product_programs.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 16972,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"launches\": 12,\n  \"targetedAudienceTurns\": 1188,\n  \"checks\": [\n    \"paid rollout\",\n    \"shared capacity stalls\",\n    \"research gate\",\n    \"local fit and allocations\",\n    \"vendor cost reconciliation\",\n    \"retirement and guarantees\",\n    \"pure preview\",\n    \"sealed migration\",\n    \"corrupt saves\",\n    \"owner privacy\",\n    \"UI draft staging\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Product programmes network",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js",
+        "--product-programs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 419,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Product programmes GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--product-programs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2541,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Segment deposits network",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js",
+        "--segment-deposits"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 344,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Segment deposits GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--segment-deposits"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2151,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "collections.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/collections.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 9511,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"checks\": [\n    \"seasoning and aging\",\n    \"retained origination risk\",\n    \"nonaccrual\",\n    \"maturity persistence\",\n    \"exact resolution accounting\",\n    \"transfer conservation\",\n    \"collections tradeoffs\",\n    \"pure previews\",\n    \"save/privacy/invalid imports\",\n    \"real UI staging\",\n    \"AI reachability\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Collections network",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js",
+        "--collections"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 234,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Collections GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--collections"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1687,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Household network",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js",
+        "--households"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 216,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Household GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--households"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1606,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "specialist_workforce.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/specialist_workforce.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 9539,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 120,\n  \"retainedSpecialists\": 16,\n  \"trainingSpend\": 332000,\n  \"checks\": [\n    \"hiring timing and costs\",\n    \"paid next-month training\",\n    \"role isolation and caps\",\n    \"no duplicated business capacity\",\n    \"cash/capital pauses\",\n    \"shared hiring limit\",\n    \"attrition and poaching\",\n    \"save and sealed-plan continuation\",\n    \"owner privacy\",\n    \"UI staging and locks\",\n    \"AI reachability\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "workforce_network.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/workforce_network.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 211,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "label": "Specialist workforce GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--workforce"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1348,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "build.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/build.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1371,
+      "stdout": "Portable build passed: deterministic assembly, source/output freshness, EOL parity, module inventory, invalid-source rejection and DOM-free engine execution.\n",
+      "stderr": ""
+    },
+    {
+      "label": "architecture.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/architecture.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 387,
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": ""
+    },
+    {
+      "label": "behavior-golden.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/behavior-golden.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 59663,
+      "stdout": "Behavior gates passed: 20 fixed campaigns / 790 turns, resumed campaigns, both submit orders and three preserved half-ready saves.\n",
+      "stderr": ""
+    },
+    {
+      "label": "save-baseline.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/save-baseline.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1270,
+      "stdout": "Published-save baselines passed: three real imports match fixed pre-refactor continuation outcomes.\n",
+      "stderr": ""
+    },
+    {
+      "label": "launcher-path.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/launcher-path.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 163,
+      "stdout": "Windows root launchers passed: spaced paths, unrelated working directory, target forwarding and exit codes.\n",
+      "stderr": ""
+    },
+    {
+      "label": "customer_needs.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/customer_needs.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 53415,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false\n    }\n  ],\n  \"checks\": [\n    \"authored prospect differences\",\n    \"macro sensitivity\",\n    \"closed offers\",\n    \"non-mutating preview\",\n    \"exact acquisition cost reconciliation\",\n    \"finite empty supply\",\n    \"old campaign exact continuation\",\n    \"half-sealed import\",\n    \"old importer rejection\",\n    \"Continue version\",\n    \"corrupt state rejection\",\n    \"rematch\",\n    \"120-turn accounting and payload gates\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Customer needs GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--customer-needs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1216,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "customer_relationships.test.js",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/customer_relationships.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 55596,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false\n    }\n  ],\n  \"checks\": [\n    \"service improvement and neglect\",\n    \"existing book not sales mix\",\n    \"bounded competition effect\",\n    \"non-mutating preview\",\n    \"rival privacy\",\n    \"old campaign exact continuation\",\n    \"half-sealed save\",\n    \"version refusal\",\n    \"Continue\",\n    \"corrupt relationship rejection\",\n    \"rematch\",\n    \"120-turn accounting and payload\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Customer relationships GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--customer-relationships"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1270,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Relationship operations GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--relationships"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1155,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Living institution GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/github_resilience.test.js",
+        "--management"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1152,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "legacy funding balance audit",
+      "command": [
+        "C:\\Users\\xande\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "tests/balance_audit.js",
+        "--legacy-funding"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 76338,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.5% wins (674/1419); actions depositRaid:11621, liquidityDefense:10440, commercialRaid:3054, retentionDefense:2097, relationshipDefense:674, talentRaid:362, takeoverDefense:66\ncommercial  80.0% wins (16/20); actions depositRaid:201, liquidityDefense:113, retentionDefense:78, commercialRaid:22, talentRaid:6, relationshipDefense:4, takeoverDefense:0\ndigital     75.8% wins (100/132); actions depositRaid:1013, retentionDefense:722, commercialRaid:340, liquidityDefense:285, relationshipDefense:9, talentRaid:4, takeoverDefense:2\nefficiency  34.5% wins (10/29); actions liquidityDefense:114, depositRaid:113, commercialRaid:85, retentionDefense:74, takeoverDefense:4, relationshipDefense:2, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":781,\"receivership\":6,\"domination\":13}\nLength: median 56, p90 81, max 186\ntown        median 60, p90 80, max 146; Act III median 13, combined strategy 5\nregional    median 55, p90 87, max 150; Act III median 13, combined strategy 4\nstate       median 55, p90 79, max 186; Act III median 15, combined strategy 5\nnational    median 55, p90 70, max 158; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "Windows LAN",
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tests/lan_server.test.ps1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 2272,
+      "stdout": "Branch Wars PowerShell LAN server tests passed: health, create, join, relay, and retry deduplication.\n",
+      "stderr": ""
+    }
+  ],
+  "filesAfter": {
+    "BRANCH_WARS.html": "a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "7e175ad630e1d97395cdcaf6e6136314d5112aec7daadcb0253dded564633e83",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "e121444d90a8e62b4020c399f5c4ef755f9a9bb06f2f7f3bb95fc4be39d29359",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "f08ca37943dae7496a7cf01569f3e2760c6d1a0b0acb380777541fd3cdfd5727",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "a3e40427d0ad73867b0a33f7934e0a9245da59f76d83c79560562155a8d8340c",
+    "tests/github_resilience.test.js": "e47bd36ac4e81f880117f698a3aeeaf3e804f03bfe2af3801f02a9080c3d44c6",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "b1aa872cf1cef9627b9cd0aab170da2c8998bc8e07d4d5f0ea736c17ddd738cb",
+    "tests/customer_needs.test.js": "a34c605d1b6f019ffa67d07d16ecb57345db3cf88e7c467f12546adf169fe0e0",
+    "reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "tests/customer_relationships.test.js": "e7462b5d85e6ca7dcde3b947898d8df0ce54ceced78ac05b238ee680a0b28cad",
+    "reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html": "2d7bbca84b30100cb710c7a44d36dc5ab9f3f13a2e21c9f624f60fd63fe972b3",
+    "tests/service_workforce.test.js": "45d4e7d79fca121f9320eb8a234dc1bc8a886ec196593c3aaa5079bc852ff944",
+    "reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html": "0ae290ef37cc65951396abadb04e175cd3e975dcd49ac48ca30c239643491f53",
+    "tests/docs.test.js": "e9986a259ec8c002835dc4a13069863c6f9c38428c8ac0afb7e20b076418d018",
+    "tools/build_reference.js": "96765cec825706e79fbdd9e458321b86711c8060d5e5d9ab26931d8cf455d6cc",
+    "tools/reference-template.md": "2c4659a7190dcb008ab5a634177fa4b5f3514a700f26061ce408bcf0b1b0416d",
+    "docs/game-reference.md": "a47e3b8912f0b7f7daa5dd1327612850e4c9aa2104e110a0fd7121e4fd343137",
+    "tests/behavior-golden.test.js": "5d793d00cea0ed3f0a1f3d07252d5945055e827c659693dffa870126a706a13a",
+    "tests/architecture.test.js": "64387dfcdaa0e961b8d90656a4d756c467ed5fbeea7302d64228aa52fe83b0fc",
+    "tests/fixtures/behavior-golden.json": "dad8fa7bc079a3915cf8aa110576ac68c4349763ba1bbe09d5c2f43ef262c1f4",
+    "tests/fixtures/override-ceilings.json": "c732dea6fe47406d1fa5e27adab335c50bebe342780c9c684d2d26a200ab625b",
+    "tests/fixtures/legacy-half-ready.json": "6498fd868a5e10f32b8a6b9754a631b1fd9769583eb670cf008c91e282c2e0ae",
+    "tests/fixtures/pilot-half-ready.json": "41eee660124dfce310acafcf11418423e8a4bdf2a6e6041229c1deb7dcf869a0",
+    "tests/fixtures/goodwill-half-ready.json": "3f393b35ede3c1452dab06b8070c2e7b3ac6f46c0fc5e4bd961169ca60cd59d2",
+    "tools/check.js": "c8882bbe3bec9959a0f966ac4d2658261cc8f9bfd452eb974758a5c0f406f034",
+    "tests/save-baseline.test.js": "44e31120289c25f104637defbd2c995b9be4e746368d3edfb99883be59454769",
+    "tests/launcher-path.test.js": "090d780e84d51a65a4913a75a4d12198058afb2a6bc53b25f0b0968b53eb0f61",
+    "tests/fixtures/save-continuation.json": "7b9f2c71b2f9e339cc88d1726ffd1c1bb41ee77ee1f37845dba16177cf57699b",
+    "tests/reference-eol.test.js": "85f9eff579ec371b3a98346501473ac6344ca0eba43bb421400fb32cda5b12f5",
+    "tests/project-rules.test.js": "cdfa9b45ec0efea8ae4814ce4fe9472059a9da9a9367eab08e27896903e088f2",
+    "tests/campaign-lifecycle.test.js": "cd6c77eae0956b5255a001422b432e138f60f6a7d6cf95f3b4416960d1290028",
+    "tests/multiplayer_lobby.test.js": "b18a8af48069842d3e4baebd404268671fbcb12ee229ea00a7c153c3ee28cd57",
+    "tests/runtime-stages.test.js": "13d6563a35ac63cc0999a12ca89df56b3a93e93f7964bcb5c36712f06c670b95",
+    "tests/recovery_planning.test.js": "22ea5abbd5c56d6b6c41731cb5fbe402a862f2a25dd539440d82fb669ba8b46b",
+    "tests/recovery_ui.test.js": "004e7952bad036bc5ff4500ba95bb44cf822a292afa59a9009e984308e3331b8",
+    "tests/github_recovery_acceptance.test.js": "5549789fd2f01e1ab43e9b9dafad2713e81bb6a794826143a7e01cfd931db271",
+    "tests/households.test.js": "6fba07e059dd636fffb8b3883f84f85458490314c09b2b5f78ea72e38e1afa7c",
+    "tests/advertising.test.js": "da6743ea0f6c7eec80f6e06a20057645aae03d22d9839092eee143ec41625f15",
+    "tests/ai_cash_planning.test.js": "72c95f2f0ea4bb44a6394751d0f0cfe0d2b471e98f5a45f8dc8ac9f547496850",
+    "tests/product_draft.test.js": "c94df660fc112b8b9d1a84f622d4dfdc9607a429762222994daf8a48a6fa3e48",
+    "tests/collections.test.js": "5bc1db15d9d0adbedcc4d696a5d1f6084450a5b4b8760ef5d769d1b7608bcb9b",
+    "tests/segment_deposits.test.js": "b704c74da6a76dfabd1dfa1e8b448f7f239ede0cc32911dc6ca8c8c83b7f5ca3",
+    "tests/product_programs.test.js": "e1e8d09c8eec129c698e9498d66aafd154608d80852f0cd52d3dee5f762df54e",
+    "tests/specialist_workforce.test.js": "1b13c12e36905bd097b7b6c53438dbbd63088906b0cf341b0ab4f9c91785395b",
+    "tests/workforce_network.test.js": "c872142e4e743cb45feb48a41c9c8795a9dc165616202496f45680da786d38a4",
+    "tests/release_balance.test.js": "9f0f7e325e61bd29ed8b281bd7fbc18001db26a959c068a183daa8a74b5ac4a3",
+    "tools/build_game.js": "9cada8b1bb5b67e7af63e3323a5518e5fc3e840062e3f709c2579700a2a193ef",
+    "tests/build.test.js": "795dddbd1486e940eab9aad59d9a08c95eb321bffca704099a8e4068ac3b464b",
+    "src/manifest.json": "f476b0a4ce2a356b34d6f0602b23a78fe583aec8e86e1f95761abf663f99b6b6",
+    "src/page.html": "ce38d66ea3f3b7a891c5195ca568791fbfdbd331953b4b171633f68eeea310b8",
+    "src/engine/primitives.js": "d4832bc87c768afe0754b22087e898331bc606716f50a589a9b439e1015c239f",
+    "src/content/catalog.js": "956416d9bf48222a167fc3705723e570e8993ab1690f7bdd2c549dbfac2f66dd",
+    "src/content/workforce.js": "f1cf7b523ee04bda41054b11a3e3a70eefa53ac9470442a4732d8a70391cc419",
+    "src/engine/institution.js": "fe61514caa508002122d600acecfab1d5506615b4c5e416f042c2b5b9bca3a92",
+    "src/engine/territories.js": "98793a2ffc6258ec1591b0cc5e9256aeeb5b408b9c29fcb080b390c156491e28",
+    "src/engine/campaign.js": "cac5b634b72ac50633c5dc358f8d6ba8c3521c16cfbfb8a564e176ade1d988c7",
+    "src/engine/actions.js": "38b01ec67559ed23b2feb6a832f6f8aa0690687ae0419a24ed8a21ba346e042a",
+    "src/engine/operations.js": "990ef380248dd73f40e764efc7b94b9a4e8029aae10b2e27319eb257be0c1a18",
+    "src/engine/competition.js": "9632c2de8b08c288cd0834fa776d9861bb00ce507cf59ad6bcbd49514f37a88d",
+    "src/engine/projects.js": "98e0e217d9bb9771c0a4a7b5feddd906932290647ca320fc9fd1492edc3fd5be",
+    "src/engine/ai.js": "4f1741a38edb62e6a732601ad2a3ac3cafe493f1de4dab985da9466a6568009a",
+    "src/engine/plans.js": "c660b539e9990f56f9e1486ee1fa95d1f47a44a25112e84e0391e7f82868384f",
+    "src/engine/monthly.js": "34e3efb36e7be5521e36c3ff87cf4eec57315157912fe12e45e7ffae0b5a8f0a",
+    "src/engine/portfolio.js": "cd2ce4b1876f3d84730ad279c0df440dd4fa727350f260b95edbe1e42b397350",
+    "src/engine/session.js": "c885e5ee13e8ab8b984e9a19fd33d7a7d37a8c3e8e150b66dda1e0091da0dbd6",
+    "src/engine/accounting-adapter.js": "638dc032f3cb36db2910a38f1de117eb81d6757adc2eed3845588a8b711454d7",
+    "src/content/regional-markets.js": "b069d3b61fc09a16e9f1b1875a64550364f1d2c697c270cce740fff829c29317",
+    "src/engine/regional.js": "e97ac3b4914fb5e3482df7cac8bb31074f83051fb537b99b10dae898f3dac07d",
+    "src/engine/market-economy.js": "3d2035a6231a5243ccad27e7014e70d08f7eb60a3af2baf091b730a69aba3009",
+    "src/engine/credit.js": "7af70f6d3b2f876a362761fbc8d3a95969fba2ab597b1751b075ad96fd6c816b",
+    "src/engine/funding.js": "a76e1be1e7d21096b72579a44127463a09c113bea91a403fd8bfbc5e3c20252d",
+    "src/engine/deposits.js": "98b4677991148675e6cfad2b449c9b56bcfe06d8b0b8793eef74eebe00d66613",
+    "src/engine/term-funding.js": "e1afd8c645322ca1ee49846ee87175220b8e527d4f49c6bf4f781a0fee761350",
+    "src/engine/retail.js": "ee3cf290d6452e1e2ae3aaaa36a167f4232723e120941053c75cb005be98d118",
+    "src/engine/deployment.js": "91f94d5b15b44914fdb6de5a73c333a69648a4785e1bce29854731f47c0618c9",
+    "src/engine/contracts.js": "396be5efa539d77b95e62d39426ede25aeb6520eef937fae2d10c0dfa751e733",
+    "src/engine/services.js": "cdc89fbfb9f239828ed16d8471292b5b8d98b21ffab0b7683551c82e47db95b5",
+    "src/content/anchor-clients.js": "70e4d3f37facdfdcfc5da910833a3957c53022ca6b8712eade6c1160baf9934a",
+    "src/engine/management.js": "8d95e5c334a0986be1393be3599639ad07466948cd35739ec5e91421805a8ff5",
+    "src/engine/relationships.js": "e33999f4612cb34baef5f5147f7fce0357738226e28d6686c4869ea2a453cfeb",
+    "src/content/customer-markets.js": "65d50314084195ad0bc3e1defd09a1e97cd63d11b6944a9e807b71bb092d9762",
+    "src/engine/customer-demand.js": "0a5ea84acfc99c320e786094371a1d04e5c627ddb02c06bf7935d3cfef6eb5a0",
+    "src/engine/customer-relationships.js": "b303fe00d8b4ddd6753ef5bc5fe0234a1799419814d99e3090de690f48d97032",
+    "src/engine/workforce.js": "2d5f94bf2715520faa21723239ce0187bad2b690d6551f9446abf764b040d1b8",
+    "src/engine/households.js": "a1d351e21a3c3602184fa7bf86b47efbfabd43c68d5255a0d589dc85e37ccb83",
+    "src/engine/collections.js": "9f668775e87b6b6dabc9bcd8f069bae982d1c12ec93fdce8e69f2281a8bdcbb3",
+    "src/engine/segment-deposits.js": "6502ad0835135c0e6d07acca39b8db258961a45853b70ada300c6baad78c8131",
+    "src/engine/product-programs.js": "1752ab0430fab11f1240ec09feda59a8952de05a1284cb6e6665b11400e58167",
+    "src/engine/advertising.js": "798be6a4e712855e6894439154589a5bea40f0ac2579c1414cf5461c11df74d0",
+    "src/engine/recovery.js": "5499f016b9a5f3896fe1809c18295cdb3884c73223545c37b40414d56281ad06",
+    "src/engine/ledger.js": "45dabeab7f35e1026edd779ddaef3dcfa49331d9d8739cfd3b58999f407a44ca",
+    "src/engine/accounting.js": "c943316a2f7ba85b911fd190c744d3c62869c334aa9e702702f348d93e3fb43b",
+    "src/engine/migration.js": "70c20db0b0da6ab2e2c6494d79635b7e73f4e904b43eaa5dd05310e01e068460",
+    "src/engine/operation-coordinator.js": "12e7a3204fda32123af879a004677d380cc7fa8afe234e80411142c52427ffff",
+    "src/engine/project-coordinator.js": "fa83d3e910ceac38f2931c84a3aaf3760a91a39402c73aee69cb26c446a29625",
+    "src/engine/cycle-coordinator.js": "786fc78ffb34e9e4a3c63ba35bff950d862161ee20185007eb08c70ee8a2ecb4",
+    "src/engine/intent-coordinator.js": "2017fbcc4b0674dc0bfa8122653a4bc9e44d709bfe5628d8b1fae4e5c8a3b5b3",
+    "src/engine/api.js": "bacdb72c64986977f5085f2943ae23b9647ba39929492f71fef00a959b6ce7be",
+    "src/engine/shell.js": "6bc991d1c2d29e2b8966f0f635f595f55c854896ee5b620eddff95cf9556d39d",
+    "src/ui/state.js": "a61210a9159ff85f530fd190981a33679e50b83355c6414af051afd45b991745",
+    "src/ui/lobby.js": "b948bc6a00f967d5d2ce31c64449d79c9cabeea3d286065d2cef86d8964ce327",
+    "src/ui/draft.js": "645e259f5c436aa716829b88a53baaf9b21be1ea5d2a64dabbf3a03157e0fe41",
+    "src/persistence/saves.js": "bea91ca07a9885d1c2dc3087a0a2aeecf48ac1c7d19d7f04889079165ea38ccd",
+    "src/ui/local-game.js": "6ec5ebffd22f575ba25f5550536d7e91421e564b755c5353260cfbd23c559218",
+    "src/network/lan.js": "96d56ad577f9d78f13644ab5b299c8d2a555f7fbc897ccd368927898c638b386",
+    "src/network/repository.js": "31ced65c746ac960ced3fede7604e3b1fd9b407251fba456f39b615edf8f4732",
+    "src/network/peer-codecs.js": "ca61fe9bd8396e5919be74a44eb97521d5766a1e5fa060930097dbf3b94e0016",
+    "src/network/direct.js": "93c0439a082e186553b807755134f7cde293284e8d390981efa81b743356f84e",
+    "src/network/protocol.js": "7949807ba093f5e75aaefe33def703941a0a1b01b3db0642a6cc11a2937fe752",
+    "src/ui/dashboard.js": "ae48a04007a8d3ac088bb70da978e0f81aee537e113a9d8cf088c18b80aea15d",
+    "src/ui/services.js": "08d470e00aa842a94cd856f3eb451a6200bf3504ac535b82ca439ed1cde0757c",
+    "src/ui/management.js": "d85cde525dc6ba64f5cf03f8f8694c2eb5554abf9e977b38d04bbac99bd6b6c0",
+    "src/ui/workforce.js": "c93cec73bd543f359650fd8f774fa6e85a96a62a87aa9ca117db8f5ac6152cb1",
+    "src/ui/households.js": "4c35b209fca3aead73fec9a7be6083c45c2c3e7e633f5c2ff3004664287e6eaf",
+    "src/ui/collections.js": "6b27b37ad530ad72bab4f21dd28daa8601ec97a05df2448aa7eb94003086218a",
+    "src/ui/products.js": "37a272b02fadb02e5f8f35afc66a540b220f416b445278e5626e7fcb580e019e",
+    "src/ui/product-programs.js": "f6b1bf26f4a770a2262625740bcef09cbdbdf1f96871382ea1b93fa7d971d156",
+    "src/ui/advertising.js": "0c7eb6ba3b5e86836397dd86cdb285ee6c5959a895f85b2afb2ac40745bfa011",
+    "src/ui/recovery.js": "3dea3b82fb901dfec766fa1110cfe24cdbde04506f302cf83f7e48cbf6172198",
+    "src/ui/projects.js": "f412b22a0154459be6683ea7382b876b40476b764850c54cac68ab76df59bc5a",
+    "src/ui/results.js": "5adac280f59329d980edd21701fd53cf72e4e3b059c863c852119d5ae989f4b8",
+    "src/ui/bootstrap.js": "ea6ee446522e3b178d9be7685ff762042de18a7b3af0479812924fbaaf270d1f",
+    "src/ui/shell.js": "bf3651cb1de19735ff57bb02b1eb49a121799ae78578dd4c67acd0e7a26530ea",
+    "src/styles/base.css": "f9f1ca602a89af06df8bf7a0edac04c2ec4e92296e103cf17e4a5682b471f74b",
+    "src/styles/visual-overhaul.css": "612ba55a9ec97152e44abeedbc45c220aac1f109ce04fa1f10a0f8602469c74c",
+    "src/styles/isometric-city-overhaul.css": "f9cdb3f25b175feebf21c055d4e7e6c5e11e187605cd54376709862b37ff379c",
+    "src/styles/isometric-city-polish.css": "7c1eeb266a3482916c47ae5b699f28c422c5083d44bcc1bb01610196563c776a",
+    "src/styles/funding-strategy-ui.css": "fae699afb1abfa87c7e873793447e3b0d94370397d5ebc6ef822d168e5f525c6",
+    "src/styles/portfolio-depth-ui.css": "3683cfc621841e7fcb45be6fcb6b6c08ed92522d56cc2bbfa85113168a431f55",
+    "src/styles/workspace-ui.css": "5813307af9225b4175cecb884d9807a1316390551894fce91682bba6fd34fb40",
+    "src/styles/workspace-polish.css": "5e7a5acbc522a9094384b128f5088a8216568dcb9a63fb98b9aec370fb8908e8",
+    "src/styles/planning-repair-ui.css": "4ceeb347447168ee1fe47768e050a5eff5518f09cd97a351acd2141612b3eb3b",
+    "src/styles/bank-identity-ui.css": "1521b6cfd7f68e9a01f40edd7eda371abd7dd3c7d7891b4c64ee0a958c7511ed",
+    "src/styles/region-summary.css": "67f3e32757c392646dcb754a6e08fc8248dcf2df86b6ebba140581d82a6b4a4f",
+    "src/styles/lobby-ui.css": "5a3059db9eccc6531dc914fc7fb4a6e0557069f0be085ce6a2e85c71b8cc6a72",
+    "src/styles/workforce.css": "d02d31a3154d111a770ae4f70cce005874da84dd64cbe8b30ea67f3ee95c5e02",
+    "src/styles/households.css": "1af7abaa194c4899daef98289443c14a1567a50ff67973ae2ac9210a7f9cd62e",
+    "src/styles/collections.css": "12ff3bd452a0ce0646e78af7de940c576feda5a8fe02af4d2558da758b7721c3",
+    "src/styles/product-programs.css": "2f610f162dfba61b8731e93098993dccf1d993e4dae48a3b961b662c12df5cee"
+  },
+  "sourceUnchanged": true,
+  "balanceOutputReproduced": true,
+  "passed": true,
+  "limitations": [
+    "Passing regression suites does not certify accounting correctness or strategic balance.",
+    "Repeated seeded harness output does not prove saved-game RNG/replay determinism.",
+    "No browser or physical two-computer acceptance was performed by this runner."
+  ]
+}

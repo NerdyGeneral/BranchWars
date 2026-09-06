@@ -8,7 +8,7 @@ A turn-based banking strategy game with Solo AI, Pass & Play, LAN and Repository
 - **Local-network host:** run [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat). Friends use the address and room code shown by the host.
 - **GitHub multiplayer:** follow the [player guide](docs/player-guide.md). Update both computers and export saves before switching builds.
 
-The deeper two-region banking systems are opt-in campaign previews. Existing saves retain their rules. The visible v8.1 title and save format 8.4 are different version identifiers; neither means the national blueprint is complete.
+The deeper two-region banking systems are opt-in campaign previews. Existing saves retain their rules. The visible edition label and the version stored in a campaign save are different identifiers; neither means the national blueprint is complete. See the current release status for the latest preview and its acceptance limits.
 
 ## Read
 

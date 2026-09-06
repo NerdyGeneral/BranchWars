@@ -12,6 +12,7 @@ function operate(g, p, preview = false) {
       );
     let text;
     try {
+      beginAdvertisingCycle(g,p,preview);
       if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
       const retention = settleHouseholdRetention(g, p, preview);
       // Locked maturities precede promotion repricing; repayment precedes new lending.
@@ -70,6 +71,7 @@ function operate(g, p, preview = false) {
             '.';
       }
     } finally {
+      cleanupAdvertisingCycle(p);
       if (intake) delete p._customerIntake;
       if (p.workforce) { delete p._workforceCosts; delete p._workforceReserved; }
     }

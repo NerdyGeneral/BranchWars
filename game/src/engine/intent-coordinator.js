@@ -16,9 +16,82 @@ function chooseOpenBot(g, index) {
   plan = planInstitutionManagement(g, index, plan);
   if (g.managementVersion === 2) plan = renewalPricingPlan(g, g.players[index], plan).plan;
   plan = customerMixPlan(g, g.players[index], plan);
+  plan = planProductPrograms(g, index, plan);
   plan = planSpecialistWorkforce(g, index, plan);
   plan = planHouseholdService(g, index, plan);
-  return collectionsPlan(g, index, plan);
+  plan = planAdvertising(g, index, plan);
+  plan = collectionsPlan(g, index, plan);
+  plan = planBankRecovery(g, index, plan);
+  return planFinalCashReserve(g, index, plan);
+}
+function aiCashPlanningReview(g, index, plan) {
+  if (g.productProgramsVersion !== 1) return null;
+  const p = g.players[index], decisionOwner = JSON.parse(JSON.stringify(p));
+  // The announced executive call is public. Dry-run its existing settlement on
+  // a private copy so this reserve cannot drift from a second table of prices.
+  // Do not count event windfalls, board aid, or hidden rival plans as funding.
+  applyDecision({ event: g.event }, decisionOwner, plan.decision);
+  const decisionExpense = Math.max(0, p.stats.capital - decisionOwner.stats.capital);
+  const forecastPlan = JSON.parse(JSON.stringify(plan));
+  if (forecastPlan.advertisingPolicy) forecastPlan.advertisingPolicy.budget = 0;
+  if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
+  const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy);
+  const operatingLoss = Math.max(0, -forecast.profit + (forecast.fundingLoss || 0));
+  const cashReserve = 250000, capitalReserve = 200000 + 2 * operatingLoss;
+  const limit = Math.max(0, Math.min(p.stats.cash - decisionExpense - cashReserve,
+    pilotSpendingLimit(p, .10, capitalReserve + decisionExpense)));
+  return { decisionExpense, cashReserve, capitalReserve, operatingLoss, limit };
+}
+function planFinalCashReserve(g, index, input) {
+  // Earlier versions keep their exact planner order and decisions. This final
+  // pass closes the reserve gap left when later product/staff planners add spend.
+  if (g.productProgramsVersion !== 1) return input;
+  const p = g.players[index], plan = JSON.parse(JSON.stringify(input));
+  if (plan.contractBid && p.serviceDesk) {
+    const bid = g.serviceAgreements.find(c => c.id === plan.contractBid);
+    const proposed = policy => ({ ...p, allocation: plan.allocation, serviceDesk: { ...p.serviceDesk, policy } });
+    if (!bid || bid.due !== g.cycle || bid.owner === p.id) plan.contractBid = null;
+    else if (!serviceBidStatus(proposed(plan.servicePolicy), bid).eligible) {
+      // Recovery may add Business generalists after a bid was selected. That
+      // can dilute the specialist bonus assigned to its reserved delivery staff.
+      // Reconcile the FINAL mix through shared capacity rules; no future hire or
+      // unfinished platform is treated as already available. Prefer reserving an
+      // existing banker before adding paid vendor capacity, or leave the bid out.
+      const demand = p.serviceDesk.contracts.filter(c => c.id !== bid.id).reduce((n, c) => n + SERVICE_TYPES[c.kind].load, 0) + SERVICE_TYPES[bid.kind].load;
+      let repaired = null;
+      for (let outsourcing = plan.servicePolicy.outsourcing; outsourcing <= 4 && !repaired; outsourcing++) {
+        for (let staff = plan.servicePolicy.staff; staff <= Math.min(plan.allocation.business, Math.ceil(demand / 2)); staff++) {
+          const policy = { ...plan.servicePolicy, staff, outsourcing };
+          if (serviceBidStatus(proposed(policy), bid).eligible) { repaired = policy; break; }
+        }
+      }
+      if (repaired) plan.servicePolicy = repaired;
+      else plan.contractBid = null;
+    }
+  }
+  const review = aiCashPlanningReview(g, index, plan);
+  const excess = () => Math.max(0, planBudget(p, plan).total - review.limit);
+  for (const key of Object.keys(plan.investments || {})) {
+    plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
+    if (plan.investments[key] < 1000) delete plan.investments[key];
+  }
+  if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
+  if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
+  if (excess()) { plan.hires = 0; if (plan.specialistHires) for (const role of Object.keys(plan.specialistHires)) plan.specialistHires[role] = 0; }
+  plan.newProjects = [...planInitiatives(plan)];
+  while (plan.newProjects.length && excess()) plan.newProjects.pop();
+  plan.newProject = plan.newProjects[0] || null;
+  if (excess()) plan.competitiveAction = 'none';
+  if (excess() && plan.productProgramPolicy) plan.productProgramPolicy.retire = [];
+  if (input.advertisingPolicy?.budget && !plan.advertisingPolicy.budget) {
+    // A cancelled campaign must not leave its temporary sales-time release in
+    // place. Reprice the reserve once with the ordinary retention mandate; the
+    // zero ad budget makes this retry bounded to one additional pass.
+    return planFinalCashReserve(g, index, planHouseholdService(g, index, plan));
+  }
+  // No persistent retry queue: an unfunded initiative stays unstaged until a
+  // later plan can fund it. Execution checks still handle unpredictable shocks.
+  return plan;
 }
 function validatePilot(g) {
   validateAccountingSave(g);
@@ -40,9 +113,13 @@ function validatePilot(g) {
   validateHouseholdSave(g);
   validateCreditPerformanceSave(g);
   validateSegmentDepositSave(g);
+  validateProductProgramSave(g);
+  validateAdvertisingSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
+  normalizeProductProgramPlan(p, plan);
+  normalizeAdvertisingPlan(p, plan);
   normalizePortfolioProducts(p, plan);
   validateDeploymentPolicy(p, plan);
   normalizeServicePolicy(p, plan);

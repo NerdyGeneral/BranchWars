@@ -1,6 +1,21 @@
 # Architecture and repository maintenance
 
-Updated: 2026-09-05. This is the current implementation plan; the user's separate, untracked architecture proposal is preserved, not silently adopted as current evidence.
+Updated: 2026-09-06. This is the current implementation plan; the user's separate, untracked architecture proposal is preserved, not silently adopted as current evidence.
+
+## Recovery advisory and final planner follow-up
+
+`engine/recovery.js` exposes pure owner-book `bankRecoveryReview` and
+`bankRecoveryOptions` helpers. It reuses operating/accounting and staffing rules;
+there are no saved recovery grants, changed failure thresholds or runtime
+replacement wrappers. `chooseOpenBot` applies `planBankRecovery` only to
+product-programme campaigns, after the last domain planner and before final
+cash/bid validation. UI comparisons in `ui/recovery.js` stage a reviewed draft
+with owner/cycle/exact-draft guards and non-destructive Undo. Signed obligations
+and active initiatives are not cancelled. Existing service-plan equity estimates
+now exclude the advertising/training budget already represented in operations.
+The portable manifest contains 91 ordered inputs. New engine, UI and simulated
+GitHub checkpoint acceptance suites join the full gate; unchanged legacy golden
+and saved-game fixtures remain the compatibility authority.
 
 ## Stabilization foundation
 
@@ -65,7 +80,7 @@ The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.js
 | `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
 | `src/page.html` | Page markup with build slots, not a second executable implementation |
 
-There are 83 listed inputs including shells, manifest and markup (four were added for specialists, three for household rules/UI/styles, then three for collections). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+The current manifest has 91 ordered inputs including shells, manifest and markup, with separate domains for specialists, households, collections, segment deposits, product programmes, advertising and recovery. These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
 
 The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
 
@@ -95,11 +110,22 @@ routine used on private preview clones. Household counts are conserved across
 both banks and outside institutions; no monthly reconciliation recreates them.
 The v8.6 owner book and sealed service mandate have dedicated validators and
 private-view filtering. All three lobby transports require household support.
-Deposits remain market-level pools, not segment-owned accounts. This adds no new
+In the original v8.6 rules, deposits remain market-level pools; v8.8 subsequently adds segment-owned accounts. This adds no new
 runtime replacement assignments and does not solve the shared transaction-context
 debt described below.
 
 The v8.7 credit slice also uses explicit initializer, operation, AI and validator calls. Aging settles after deposit repricing and before scheduled principal/new lending. One `credit.resolution` journal entry separates recovered cash from realized loan/equity losses; production does not post those losses again. External case expense is posted once outside event multipliers. Cohort splits/compaction preserve the three delinquency buckets and origination terms through acquisitions and funding sales. Funding and regulatory sales call the same aging-based haircut quote; liquidity needs use its net proceeds. Forecasts use private clones; only the owner sees the book and mandate. Transport capability checks reject unsupported peers. No runtime replacement assignments were added.
+
+The v8.9 product slice uses explicit creation, policy, project completion, AI and
+save-validation calls. Local market/segment targets are the single authority;
+the legacy global mix is derived for platform activation and compatibility,
+while aggregate acquisition effects are weighted by reachable outside supply.
+Development consumes the shared project budget/capacity. Retirement settles
+before events and competition, records its own owner-only ledger stage, and
+does not rewrite existing account promises. Vendor charges flow through the
+existing deposit cost reconciliation once. A dedicated Products renderer/CSS
+keeps local targeting separate from Operations and the transport layer. Existing
+campaigns do not adopt this rule set, and no runtime replacement was added.
 
 The approved four-step batch is implemented, not the end of all architecture work. Remaining priorities are explicit transaction context (replacing the shared market/credit/deposit context variables), flattening other feature and ledger adapters, typed plan/state contracts, a cleaner client session/transport interface, and renderer/CSS consolidation during the separate UI batch. The current guard permits 76 remaining textual assignments across other functions; this is a conservative debt count, not 76 independently verified defects. Do not turn this into a mutable plugin-registration system.
 
@@ -137,3 +163,30 @@ The outer dated download folders, ZIP backups and user notes have not been delet
 Use root launchers after updating. Old filesystem shortcuts into the versioned package need retargeting. Export saves before changing browser origins/URLs; this batch does not copy or erase browser storage or modify running multiplayer rooms.
 
 Do not rename frozen report/reference files just for style. Generated local reports are ignored until deliberately selected for publication. See [contributing](../../CONTRIBUTING.md) for commands and working rules.
+## Advertising integration and final AI reserve
+
+The v8.10 opt-in `engine/advertising.js` is an explicit domain module, not a new
+runtime wrapper. Creation, plan validation, policy settlement, production and
+save validation call it directly. Current acquisition adapters pass quota-limited
+intake into the attribution recorder; term/competitive transfers are excluded.
+Advertising expense joins the existing reconciled operating settlement once.
+Its temporary cycle state is removed in the operations coordinator's finally
+block; previews operate on private copies without consuming campaign randomness.
+
+Detailed awareness and current attribution remain owner-only. The causal ledger
+stores compact policy/spend/intake changes rather than duplicating the entire
+awareness matrix and detailed attribution table at every stage. Transport
+capability negotiation and exact v8.10 migration guards prevent older peers from
+silently accepting these rules. The build now has 89 explicitly ordered inputs.
+
+The final AI pass also rechecks explicit service bids against the completed
+Business staffing mix. Adding generalists can dilute specialists' delivery
+capacity, so it reserves sufficient existing staff/vendor capacity or withdraws
+an impossible bid before submission. It does not relax service eligibility.
+
+The final AI cash pass in `intent-coordinator.js` applies only to the product
+programme generation and newer. It dry-runs the announced executive call on a
+copy, then bounds commitments after the existing planners; it never reads the
+opponent's sealed plan. It changes AI decisions, not the execution rules or old
+fixtures. Separate tests cover purity, cash stress, retry reachability and legacy
+no-op behavior. These improvements do not finish the national architecture.

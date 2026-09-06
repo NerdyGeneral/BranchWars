@@ -20,12 +20,19 @@ function harness(side='host'){
  return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
 }
 async function main(){
- const segmentDepositsVersion=process.argv.includes('--segment-deposits')?1:0;
+ const advertisingVersion=process.argv.includes('--advertising')?1:0;
+ const productProgramsVersion=advertisingVersion||process.argv.includes('--product-programs')?1:0;
+ const segmentDepositsVersion=productProgramsVersion||process.argv.includes('--segment-deposits')?1:0;
  const creditPerformanceVersion=segmentDepositsVersion||process.argv.includes('--collections')?1:0;
  const customerOwnershipVersion=creditPerformanceVersion||process.argv.includes('--households')?1:0;
  const workforceVersion=customerOwnershipVersion||process.argv.includes('--workforce')?1:0;
  const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
  const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
+ if(advertisingVersion){
+  const oldAdvertisingPeer=harness();oldAdvertisingPeer.run("game=null;p2pConfig.advertisingVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+  await oldAdvertisingPeer.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,name:'Pre-advertising guest'})");
+  assert.equal(oldAdvertisingPeer.state().game,null);assert(oldAdvertisingPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Advertising'))"));
+ }
  const incompatible=harness();incompatible.run("game=null;p2pConfig.managementVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
  await incompatible.run("handleMessage({type:'hello',pilotSupported:11,name:'Older guest'})");
  assert.equal(incompatible.state().game,null);assert(incompatible.run("sent.some(m=>m.type==='error'&&m.message.includes('Living institution'))"));
@@ -137,7 +144,7 @@ async function main(){
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
  const [ph,pg]=pair;
- ph.run("p2pConfig={segmentDepositsVersion:"+segmentDepositsVersion+",creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
+ ph.run("p2pConfig={advertisingVersion:"+advertisingVersion+",productProgramsVersion:"+productProgramsVersion+",segmentDepositsVersion:"+segmentDepositsVersion+",creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
  pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
  await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
  assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
@@ -145,11 +152,17 @@ async function main(){
  ph.run('editLobbyIdentity(true)');await deliver(ph,pg);
  ph.run('startLobbyCampaign()');
  await deliver(ph,pg);
- let rounds=0;
+ if(advertisingVersion){assert.equal(ph.state().game.version,'8.10');assert.equal(pg.state().lobby.settings.advertisingVersion,1);assert.equal(pg.state().view.advertisingVersion,1);}
+ const relayPlan=seat=>{
+  const plan=ph.run('E.chooseBot(game,'+seat+')');
+  if(advertisingVersion)plan.advertisingPolicy={market:ph.state().game.players[seat].focus,segment:'everyday',product:'essential',budget:15000};
+  return plan;
+ };
+ let rounds=0,paidAdvertisingPlans=0;
  for(;rounds<12&&!ph.state().game.gameOver;rounds++){
-  pg.c.plan=ph.run('E.chooseBot(game,1)');await pg.run('ghCommitPlan(plan)');
+  pg.c.plan=relayPlan(1);await pg.run('ghCommitPlan(plan)');
   await deliver(pg,ph);
-  ph.run('E.submit(game,0,E.chooseBot(game,0));syncPeers()');
+  ph.c.plan=relayPlan(0);ph.run('E.submit(game,0,plan);syncPeers()');
   await deliver(ph,pg);await deliver(pg,ph);await deliver(ph,pg);
   assert.equal(pg.state().view.cycle,ph.state().game.cycle);assert.equal(pg.state().ghPendingPlan,null);
   if(managementVersion){assert.equal(pg.state().view.managementVersion,managementVersion);assert.deepEqual(copy(pg.state().view.me.management),copy(ph.state().game.players[1].management));assert(!pg.state().view.rival.management)}
@@ -157,13 +170,20 @@ async function main(){
   if(customerDemandVersion){assert.equal(pg.state().view.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.operatingReport.customerAcquisitionCost,ph.state().game.players[1].operatingReport.customerAcquisitionCost)}
   if(customerDemandVersion===2){assert.deepEqual(copy(pg.state().view.me.customerRelationships),copy(ph.state().game.players[1].customerRelationships));assert.equal(pg.state().view.rival.customerRelationships,undefined)}
   if(customerOwnershipVersion){assert.equal(pg.state().view.customerOwnershipVersion,1);assert.deepEqual(copy(pg.state().view.me.householdBook),copy(ph.state().game.players[1].householdBook));assert.equal(pg.state().view.rival.householdBook,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].householdPolicy,undefined)}
+  if(productProgramsVersion){assert.equal(pg.state().view.productProgramsVersion,1);assert.deepEqual(copy(pg.state().view.me.productPrograms),copy(ph.state().game.players[1].productPrograms));assert.equal(pg.state().view.rival.productPrograms,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].productProgramPolicy,undefined)}
+  if(advertisingVersion){
+   assert.equal(pg.state().view.advertisingVersion,1);assert.deepEqual(copy(pg.state().view.me.advertising),copy(ph.state().game.players[1].advertising));
+   assert.equal(pg.state().view.rival.advertising,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].advertisingPolicy,undefined);
+   for(const p of ph.state().game.players){assert.equal(p.advertising.report.requested,15000);assert([0,15000].includes(p.advertising.report.spent));if(p.advertising.report.spent===15000)paidAdvertisingPlans++;}
+  }
   if(segmentDepositsVersion){assert.equal(pg.state().view.segmentDepositsVersion,1);assert.deepEqual(copy(pg.state().view.me.depositBook),copy(ph.state().game.players[1].depositBook));assert.equal(pg.state().view.rival.depositBook,undefined)}
   if(creditPerformanceVersion){assert.equal(pg.state().view.creditPerformanceVersion,1);assert.deepEqual(copy(pg.state().view.me.creditPerformance),copy(ph.state().game.players[1].creditPerformance));assert.equal(pg.state().view.rival.creditPerformance,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].collectionsPolicy,undefined)}
   if(workforceVersion){assert.equal(pg.state().view.workforceVersion,1);assert.deepEqual(copy(pg.state().view.me.workforce),copy(ph.state().game.players[1].workforce));assert.equal(pg.state().view.rival.workforce,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].workforcePolicy,undefined)}
   ph.run('E.validatePilot(game);E.validateLedger(game)');
  }
  assert.equal(rounds,12);assert(lost>0);
- console.log(JSON.stringify({passed:true,relayTurns:rounds,acceptedWrites:writes,lostResponses:lost,sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['oversized rooms','snapshot compaction','rate cooldown','authentication pause','request timeout','stale sessions','conflicting writers','seat ownership','sealed timeout','live engine commit/reveal','duplicate reveal','reload checkpoint','ordered async polling']},null,2));
+ if(advertisingVersion)assert(paidAdvertisingPlans>0,'sealed relay tests must include actually paid advertising, not only paused requests');
+ console.log(JSON.stringify({passed:true,relayTurns:rounds,acceptedWrites:writes,lostResponses:lost,...(advertisingVersion?{paidAdvertisingPlans}:{}),sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['oversized rooms','snapshot compaction','rate cooldown','authentication pause','request timeout','stale sessions','conflicting writers','seat ownership','sealed timeout','live engine commit/reveal','duplicate reveal','reload checkpoint','ordered async polling',...(advertisingVersion?['advertising old-peer refusal','paid advertising','exact private advertising report']:[])]},null,2));
 }
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});
 module.exports={harness,response};

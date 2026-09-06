@@ -10,7 +10,7 @@ function applyRetailMix(p,mix){
 const retailOption=productOption;
 productOption=function(p,line){
  if(line!=='retail'||!p.retailLifecycle)return retailOption(p,line);
- const mix=p.retailLifecycle.mix,total=Object.values(mix).reduce((n,v)=>n+v,0),out={name:'Retail offer mix'};
+ const mix=p.productPrograms?productProgramAcquisitionMix(p,depositWorld||marketContext):p.retailLifecycle.mix,total=Object.values(mix).reduce((n,v)=>n+v,0),out={name:'Retail offer mix'};
  for(const field of ['deposits','customers','funding','digital','sensitive','reputation']){
   out[field]=0;
   for(const [key,weight]of Object.entries(mix)){

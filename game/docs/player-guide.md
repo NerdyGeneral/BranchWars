@@ -419,8 +419,10 @@ Setting it up once:
 The API Address fields stay blank when using regular GitHub.com; the game uses
 https://api.github.com automatically. They are only for GitHub Enterprise Server.
 
-The game writes only two files per room, one per player, so the two of you never
-write the same file and no edit can be lost. Turns appear within a few seconds.
+The game writes two files per room, one per player. With one active tab per seat,
+players do not write the same file. Retries reconcile accepted updates; duplicate
+seat tabs are refused rather than allowed to overwrite one another. Delivery
+normally takes a few seconds but can be delayed by access failures or cooldowns.
 Repository plans use a commit/reveal seal: the guest first publishes only a
 SHA-256 commitment, and the actual plan is revealed only after the host has also
 locked a plan. A changed reveal is rejected. Both players must use the same
@@ -436,6 +438,67 @@ The game checks the default branch and write permission before opening or joinin
 For GitHub Enterprise, both players type the internal HTTPS API address in their
 own API ADDRESS field. The join code intentionally never supplies an API address,
 so pasting a room code cannot redirect a player's token to another server.
+
+### Status and safe recovery
+
+- Green **REPOSITORY REACHABLE** means a successful repository poll and a peer
+  file exists. It does not prove your friend's browser is currently awake.
+  Quiet successful polls should remain green; the last peer update can be old.
+- Yellow can mean waiting for the first peer file, resuming, or a rate-limit
+  cooldown. Read the status text instead of treating every yellow state as the
+  same failure. Repeated Retry does not bypass GitHub's cooldown.
+- For an interruption, keep the original tab open and use **Retry Repository
+  Link**. A pending sealed plan is retained; do not create another room or join
+  the occupied seat from a second tab.
+- After reloading, select Repository Link and **Resume Repository Session** in
+  the same tab at the same address. If access was refused, reload first, enter
+  your own replacement token on setup, then Resume. Do not share the token.
+- Recovery is a browser-session checkpoint, not cloud backup. Closing the tab,
+  clearing storage or changing the file/URL can lose it. The host should EXPORT
+  regularly. Importing that campaign provides pass-and-play recovery; it does
+  not recreate the old repository room or a missing guest seal.
+
+### Two-computer acceptance checklist
+
+This is a human test to run on the actual two computers and network. Offline
+relay simulations do not complete it. Use a disposable new campaign; export any
+important host campaign first. Never post tokens, exported saves or room-file
+contents with a bug report.
+
+1. Use identical `BRANCH_WARS.html` files, one tab per player and each player's
+   own token. Compare the SHA-256 with PowerShell `Get-FileHash` if uncertain.
+   Record both browser versions and enabled preview rules.
+2. Host and join a fresh Repository Link room. Both computers must show the
+   lobby before play. Choose distinct names and colors; verify both see the
+   same two identities, with **YOU** attached to their own bank. Changing an
+   identity must clear both confirmations. Confirm again, then let the host
+   start. The names/colors must persist in the match.
+3. Leave both tabs idle for two minutes. Healthy quiet polls should remain
+   green, with no unsolicited turn advancement. Remember that green indicates
+   repository reachability, not a peer heartbeat.
+4. Resolve three ordinary months, including one paid advertising campaign if
+   that preview is enabled. Check the same month on both screens and compare
+   public figures by bank name, not by the seat-relative word **YOU**. The
+   guest's private advertising report should show their own bank's results.
+5. In the next month, let the guest mark ready while the host remains planning.
+   Briefly disconnect only the guest's network for 30–60 seconds, then restore
+   it. Keep the tab open. No month should resolve before the host also locks a
+   plan; Retry must not create a second charge or replace the guest's seal.
+6. With only the guest ready in a later month, reload each original tab once
+   and use **Resume Repository Session**. Both must retain the same room,
+   identities and month; the guest must still be ready. Submit the host plan
+   and verify exactly one month resolves, then play two more months.
+7. Test a short sleep/wake on one computer while both are planning. Resume in
+   the original tab and complete another month. Export a host backup and record
+   whether every step passed. Do not deliberately expire tokens or corrupt
+   room files to test recovery.
+
+If a step fails, stop submitting new plans. Record the step, time, month on each
+screen, exact connection text, host/guest role and whether either tab reloaded
+or slept. A cropped screenshot is useful; hide credentials and access codes.
+Keep the tabs open and have the host export. A cooldown is not a failure until
+its displayed retry time passes; persistent disagreement afterward is a failed
+acceptance test, even if local automated checks pass.
 
 ## IMPORTANT NETWORK LIMITATION
 

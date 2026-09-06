@@ -13,8 +13,10 @@ function operatingPreview(p,plan,economy){
  copy.allocation={...plan.allocation};copy.policies={deposit:plan.depositPolicy,lending:plan.lendingPolicy,capital:plan.capitalPolicy};
  applyHouseholdPolicy(copy,plan.householdPolicy);
  applyCollectionsPolicy(copy,plan.collectionsPolicy);
- copy.products={...copy.products,...plan.products};if(copy.termFunding&&plan.termPolicy)copy.termFunding.policy={...plan.termPolicy};if(copy.retailLifecycle&&plan.retailMix)applyRetailMix(copy,plan.retailMix);applyServicePolicy(copy,plan.servicePolicy);copy.turnEffects={};copy.fundingGap=0;
- if(copy.workforce){applyWorkforcePolicy(copy,plan.workforcePolicy);const q=planBudget(copy,plan);copy._workforceReserved=q.total-(q.training||0)}
+ applyProductProgramPolicy(copy,plan.productProgramPolicy);
+ applyAdvertisingPolicy(copy,plan.advertisingPolicy);
+ copy.products={...copy.products,...plan.products};if(copy.termFunding&&plan.termPolicy)copy.termFunding.policy={...plan.termPolicy};if(copy.retailLifecycle&&plan.retailMix&&!copy.productPrograms)applyRetailMix(copy,plan.retailMix);applyServicePolicy(copy,plan.servicePolicy);copy.turnEffects={};copy.fundingGap=0;
+ if(copy.workforce){applyWorkforcePolicy(copy,plan.workforcePolicy);const q=planBudget(copy,plan);copy._workforceReserved=q.total-(q.training||0)-(q.advertising||0)}
  operate({economy,cycle:0},copy,true);
  return {...copy.operatingReport,capitalRatio:capitalRatio(copy),rateSensitiveDeposits:copy.stats.rateSensitiveDeposits};
 }
