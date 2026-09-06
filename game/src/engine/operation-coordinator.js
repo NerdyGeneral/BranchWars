@@ -22,6 +22,7 @@ function operate(g, p, preview = false) {
       const termFundingLoss = p.segmentDeposits ? p.accounting.journal.filter(e=>e.id>termSequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0) : 0;
       if (p.depositBook) depositWorld = g;
       try {
+        const offers = settleRelationshipOffers(g, p);
         if (p.depositBook) repriceWithdrawableDeposits(g, p);
         const oldCreditWorld = creditWorld;
         if (p.creditBook) creditWorld = g;
@@ -72,6 +73,7 @@ function operate(g, p, preview = false) {
       }
     } finally {
       cleanupAdvertisingCycle(p);
+      if(p.relationshipOffers)delete p._relationshipOfferBudget;
       if (intake) delete p._customerIntake;
       if (p.workforce) { delete p._workforceCosts; delete p._workforceReserved; }
     }

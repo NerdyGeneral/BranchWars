@@ -2,6 +2,108 @@
 
 Updated: 2026-09-06.
 
+## Existing-customer offers — v8.12 tested preview
+
+Release branch: `feat/relationship-offers`, stacked on regional-demand
+[PR #17](https://github.com/NerdyGeneral/BranchWars/pull/17), whose hosted fast
+and full Windows workflow has now passed. This opt-in
+N-06/N-08 slice enables voluntary **product switching within existing owned
+deposit books**, not multiple-product cross-selling or a completed onboarding
+funnel. Old saves keep their rules; new campaigns require Regional demand and
+its prerequisites, and both multiplayer seats must support v8.12.
+
+- Products now has an **Existing customers** subview: select an independent
+  market, customer segment, available product and 0%/25%/50% of non-retention
+  Retail sales time. Quotes show eligible account equivalents, capacity, switched
+  principal, one-time conversion expense and ongoing bank-cost change. Actuals
+  remain visible after settlement and reload.
+- Only better-fit, withdrawable, unpromised balances are eligible. Switching
+  conserves deposits and household ownership; locked/promotional promises cannot
+  be broken. New promotional terms start when a switch settles. Better product
+  fit feeds the existing service-goodwill calculation; no free loyalty, revenue
+  or fictional customer balances are created.
+- Conversions cost $40 each and consume the selected sales time, reducing new
+  acquisition capacity. The opening-plan cost is a hard spending ceiling; later
+  maturity releases cannot silently increase the bill. Protected cash, other
+  commitments, training and advertising are respected. The ordinary operating
+  report charges the expense once.
+- Product closure/retirement auto-pauses the offer. Shared rules cover preview,
+  validation, monthly settlement, AI candidates, saves and all three transports.
+  Private policy and exact offer reports are owner-only, including resolved-plan
+  redaction and GitHub checkpoint recovery.
+
+Candidate artifact SHA-256:
+`9e633281a41efe67827e69894e959222caa736a391b5ca8bd0037e54783f6176`.
+The portable build has 96 ordered inputs. Frozen legacy fixtures are unchanged.
+Focused engine/UI tests, lifecycle tests and relationship-offer, regional-demand
+and advertising transport/relay checks pass. The active-offer relay test covers
+12 months, accepted-write response loss, reloads and 176 actual conversions.
+
+[Browser acceptance](../reports/baselines/relationship-offers-browser-2026-09-06.json)
+uses a paid Rewards launch, local deployment and a real saved Solo campaign.
+Its offer quote and actual both show 15 conversions, $137,114 switched,
+$600 one-time expense and $68 additional recurring direct cost. Policy and
+report survive reload. The offer desk was visually inspected at desktop and
+500px widths; the latter has 485px document/client widths, with no horizontal
+overflow. No game console warnings/errors appeared in this path. A later
+cross-tab audit found stale residual-sales previews in Advertising and Customers:
+both now apply the staged offer policy. Regression tests and a repeat browser
+check confirm 50% offers shows 0.38 available bankers in both tabs, versus 0.75
+when paused; the same $15,000 advertisement shows 10.6% versus 21.3% targeting
+bonus. The initial layout run predates that UI-only repair; the report separately
+identifies the rebuilt artifact used for the cross-tab follow-up. This is not
+whole-game UI acceptance; setup and Operations still need broader decluttering.
+
+The [eight-campaign 120-month audit](../reports/baselines/release-balance-2026-09-06T08-08-09-128Z.json)
+passes 960 months with all banks surviving, zero skipped/cancelled initiatives
+and a 730,675-byte maximum owner view. **It records zero AI offer activations**:
+the conservative staffing/economic planner leaves this new option off. Thus
+this sample validates compatibility with the enabled rules, not meaningful
+AI use or a balanced return on product switching. Household concentration still
+reaches 82.15%; enduring competition, offer value and human two-PC acceptance
+remain open work. Do not interpret passing technical gates as balanced gameplay.
+
+The [four-scenario 480-month audit](../reports/baselines/release-balance-2026-09-06T08-17-20-048Z.json)
+adds 1,920 resolved months, all banks surviving, no skipped/cancelled initiatives
+and an 845,444-byte maximum owner view. AI offer use appears later: 203 active
+bank-months, 1,212 conversion equivalents and $48,480 expense. That corrects any
+interpretation that the tool is completely unused. **Late concentration remains
+a release limitation:** Regulatory seed 20 peaks at 89.54% player-deposit share,
+ends at 86.98%, and has a 72-month spell above 80%. Survival alone is not healthy
+competition; this is not an accepted balance baseline.
+
+A separate [controlled-policy stress comparison](../reports/baselines/relationship-offers-controlled-2026-09-06.json)
+compares two 120-month campaigns from identical openings. A paid Rewards rollout
+and 25% offer policy switches $4,361,239 / 383 equivalents for $15,320 across
+42 active months. All 480 conversion-boundary conservation checks and 240 monthly
+book, ledger and save checks pass. Both banks survive both arms; no emergency
+borrowing or funding-sale loss occurs. Subsequent decisions/economic paths differ,
+so ending balances are not causal ROI or evidence that this policy is optimal.
+
+These extended simulations used pre-repair artifact `56bfb0c3…36ee45d`.
+Its engine body and the current artifact's engine body are byte-identical:
+SHA-256 `b1ddc1ef53f38ac8057ce105d6fbea3c17fc70f380c6f8ef6b4862a086af82f5`.
+Only the two UI capacity previews changed afterward. The full Windows gate was
+restarted on the rebuilt artifact; the interrupted earlier run is not a pass.
+
+The completed [78-suite Windows regression](../reports/baselines/N-00-2026-09-06T08-20-43-301Z.json)
+passes on the rebuilt artifact, including LAN. All 173 monitored fingerprints
+remain unchanged during the run and the legacy balance output reproduces.
+The subsequent [standard-rule release audit](../reports/baselines/release-balance-2026-09-06T08-39-43-940Z.json)
+also passes: 16 campaigns / 1,920 months, all banks survive, zero skipped or
+cancelled initiatives, 559,901-byte maximum owner view. `node tools/check.js --full`
+finishes with exit code zero. Together with the separate new-rule and controlled
+samples above, this is technical regression evidence, not national-game or
+human balance acceptance. Publication verifies staged source/build identity and
+documentation link targets against the Git index; local saves and unrelated
+user proposals are excluded.
+
+Next design work should expose when better fit actually changes the modeled
+service/retention outcome, and address early staffing constraints and late-game
+concentration. Do not force AI adoption with an inflated utility reward or label
+switching as profitable cross-selling. Group/subsidiary accounting and authored
+national progression remain later blueprint work.
+
 ## Regional demand — v8.11 verified batch
 
 Release branch: `feat/regional-demand`, following product/recovery
@@ -9,7 +111,7 @@ Release branch: `feat/regional-demand`, following product/recovery
 `4bea538`, followed by documentation-only `344bc53`: clean-checkout GitHub CI
 found a link to an intentionally unpublished diagnostic helper. The link is now
 an explicit local-only note; both the clean-checkout fast gate and GitHub's
-rerun fast job pass. Its hosted Windows run remains pending. No game
+rerun fast job pass. Its hosted Windows rerun has also passed. No game
 bytes changed in that repair; publication does not merge the dependency stack.
 
 This is an N-04 external-demand slice, **not completion of the regional or

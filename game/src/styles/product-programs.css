@@ -16,3 +16,14 @@
 .recovery-option h4{margin:0 0 8px}.recovery-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;margin:12px 0}
 .recovery-metrics span{font-size:12px}.recovery-metrics b{display:block;font-size:16px;margin-top:3px}
 .recovery-panel .btn{min-height:40px;white-space:normal}.recovery-panel details{margin-top:12px}
+.relationship-offer-desk{min-width:0;max-width:100%}
+.relationship-offer-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
+.relationship-offer-controls label{display:flex;flex-direction:column;gap:6px;font-size:13px;min-width:0}
+.relationship-offer-controls select{width:100%;min-width:0;padding:9px;border:1px solid #b4c9dd;border-radius:6px;background:#fff;color:#18324b}
+.relationship-offer-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.relationship-offer-summary>div{min-width:0;padding:12px;border:1px solid #d1deed;border-radius:9px;background:#f3f7fb}
+.relationship-offer-summary small,.relationship-offer-summary b,.relationship-offer-summary span{display:block;overflow-wrap:anywhere}
+.relationship-offer-summary b{color:#163752;margin-top:6px}.relationship-offer-summary span{color:#526580;font-size:12px;margin-top:5px}
+.relationship-offer-desk details{margin:18px 0}.relationship-offer-desk summary{cursor:pointer;font-weight:700}
+@media(max-width:900px){.relationship-offer-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.relationship-offer-controls,.relationship-offer-summary{grid-template-columns:1fr}}

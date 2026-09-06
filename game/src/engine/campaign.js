@@ -35,6 +35,7 @@ function createBaseCampaign(o){
 function validateCreationOptions(o){
  // Match the former outer-to-inner checks, including errors on disabled features.
  if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.relationshipOffersVersion!==undefined&&![0,1].includes(o.relationshipOffersVersion))throw Error('Unsupported relationship offers version');
  if(o.regionalGrowthVersion!==undefined&&![0,1].includes(o.regionalGrowthVersion))throw Error('Unsupported regional growth version');
  if(o.advertisingVersion!==undefined&&![0,1].includes(o.advertisingVersion))throw Error('Unsupported advertising version');
  if(o.productProgramsVersion!==undefined&&![0,1].includes(o.productProgramsVersion))throw Error('Unsupported product programmes version');
@@ -83,6 +84,7 @@ function createGame(o){
  initializeProductPrograms(g,o);
  initializeAdvertising(g,o);
  initializeRegionalGrowth(g,o);
+ initializeRelationshipOffers(g,o);
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}

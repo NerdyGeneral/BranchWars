@@ -9,7 +9,7 @@ function bankRecoveryReview(p, plan, economy, event) {
   if (event && ['a','b'].includes(plan.decision)) applyDecision({ event }, owner, plan.decision);
   const decisionExpense = Math.max(0, p.stats.capital - owner.stats.capital);
   const forecast = operatingPreview({ ...p, focus:plan.focus || p.focus }, plan, economy);
-  const budget = planBudget(p, plan), operatingSpend = (budget.advertising || 0) + (budget.training || 0);
+  const budget = planBudget(p, plan), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0);
   // Campaign/training expense is already inside operating profit. It must not
   // be subtracted for a second time alongside projects, hiring and research.
   const nonOperatingSpend = budget.total - operatingSpend;
@@ -85,6 +85,7 @@ function bankRecoveryOptions(p, input, economy, event) {
   if (planHires(paused)) {paused.hires=0;if(paused.specialistHires)for(const role of Object.keys(paused.specialistHires))paused.specialistHires[role]=0;pausedChanges.push('New hires → none');}
   if (paused.competitiveAction && paused.competitiveAction!=='none') {paused.competitiveAction='none';pausedChanges.push('Competitive action → Hold position');}
   if (paused.advertisingPolicy?.budget) {paused.advertisingPolicy.budget=0;pausedChanges.push('Paid advertising → paused');}
+  if (paused.relationshipOfferPolicy?.share) {paused.relationshipOfferPolicy.share=0;pausedChanges.push('Existing-customer offers → paused');}
   if (Object.values(paused.workforcePolicy?.training||{}).some(Boolean)) {for(const role of Object.keys(paused.workforcePolicy.training))paused.workforcePolicy.training[role]=0;pausedChanges.push('Training spend → paused');}
   if (paused.productProgramPolicy?.retire.length) {paused.productProgramPolicy.retire=[];pausedChanges.push('Product retirement → postponed');}
   if (pausedChanges.length) add('commitments','Pause discretionary commitments','Existing projects and signed business continue. This postpones unstarted spending; it does not refund earlier costs.',pausedChanges,paused);

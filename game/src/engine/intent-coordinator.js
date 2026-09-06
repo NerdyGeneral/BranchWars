@@ -20,6 +20,7 @@ function chooseOpenBot(g, index) {
   plan = planSpecialistWorkforce(g, index, plan);
   plan = planHouseholdService(g, index, plan);
   plan = planAdvertising(g, index, plan);
+  plan = planRelationshipOffers(g, index, plan);
   plan = collectionsPlan(g, index, plan);
   plan = planBankRecovery(g, index, plan);
   return planFinalCashReserve(g, index, plan);
@@ -34,6 +35,7 @@ function aiCashPlanningReview(g, index, plan) {
   const decisionExpense = Math.max(0, p.stats.capital - decisionOwner.stats.capital);
   const forecastPlan = JSON.parse(JSON.stringify(plan));
   if (forecastPlan.advertisingPolicy) forecastPlan.advertisingPolicy.budget = 0;
+  if (forecastPlan.relationshipOfferPolicy) forecastPlan.relationshipOfferPolicy.share = 0;
   if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
   const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy);
   const operatingLoss = Math.max(0, -forecast.profit + (forecast.fundingLoss || 0));
@@ -77,6 +79,7 @@ function planFinalCashReserve(g, index, input) {
   }
   if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
+  if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
   if (excess()) { plan.hires = 0; if (plan.specialistHires) for (const role of Object.keys(plan.specialistHires)) plan.specialistHires[role] = 0; }
   plan.newProjects = [...planInitiatives(plan)];
   while (plan.newProjects.length && excess()) plan.newProjects.pop();
@@ -116,11 +119,13 @@ function validatePilot(g) {
   validateProductProgramSave(g);
   validateAdvertisingSave(g);
   validateRegionalGrowthSave(g);
+  validateRelationshipOfferSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
   normalizeProductProgramPlan(p, plan);
   normalizeAdvertisingPlan(p, plan);
+  normalizeRelationshipOfferPlan(p, plan);
   normalizePortfolioProducts(p, plan);
   validateDeploymentPolicy(p, plan);
   normalizeServicePolicy(p, plan);

@@ -22,6 +22,13 @@ The v6 crosswalk in the screenshot maps old packages into the newer plan; it is 
 
 ## Next implementation order
 
+The v8.12 follow-up adds a bounded N-06/N-08 **existing-customer product switching**
+slice: better-fit offers consume non-retention Retail time, move eligible owned
+balances, preserve guarantees and expose one-time/ongoing cost tradeoffs in
+Products. It is not the complete cross-sell or onboarding funnel. Configurable
+terms, multiple-product ownership, application queues and reconciled subsidiaries
+remain ahead. The six-market pilot and human validation limits are unchanged.
+
 Multiplayer acceptance interrupted the architecture sequence for a focused repair: a shared pre-game identity/readiness lobby and truthful idle Repository Link status. That patch is separately published in PR #10, not automatically merged. It is not a new blueprint phase or proof of physical two-computer acceptance. See [release status](release-status.md) for checks and remaining limits.
 
 The approved [four-step architecture batch](architecture.md) is implemented: separate multiplayer delivery, explicit monthly/project settlement, consolidated AI/policy validation, and modular source with a reproducible portable build. This batch removes 53 runtime replacement layers plus one redundant API assignment; it follows the earlier shared-project and creation/import work. Other shared contexts and feature/UI adapters remain documented debt. These stabilization batches do not advance a gameplay package or complete N-00–N-14.
@@ -34,12 +41,25 @@ The approved [four-step architecture batch](architecture.md) is implemented: sep
 
 No trustworthy completion percentage is assigned: the later group/nation packages are substantially larger than a single UI or mechanics slice. Current simulation activity does not prove enjoyable endgame pacing.
 
-The next N-04 slice is v8.11 Regional demand preview, on a separate
-`feat/regional-demand` branch after published product/recovery PR #16. External
+The preceding N-04 slice is v8.11 Regional demand preview, published separately
+in PR #17 on `feat/regional-demand` after product/recovery PR #16. External
 arrivals and departures settle once at month-end through outside institutions;
 current bank quotes and acquisition quotas remain unchanged. It directly addresses
 exhausted late-game outside pools, but does not repair concentration by fiat or
 complete N-04. Review the current release entry for verification; keep old rules,
 the new pilot's calibration and eventual national expansion distinct.
+
+The current v8.12 slice is on `feat/relationship-offers`, following that branch.
+Before expanding the offer system, validate actual retention value against its
+conversion cost, recurring product cost and diverted sales capacity. Early AI
+use is weak; later AI use is observed but is not proof of profitable switching.
+The next bounded improvement belongs in the existing offer panel: shared
+comparisons of the selected offer, a safe Retail reassignment and their combined
+effect on closing fit/goodwill and the conditional next retention check. Current
+departures occur before switching; forecasts must preserve that timing and
+distinguish retained principal from profit. Balance reports also need stronger
+flow attribution before changing the rules behind long dominance spells.
+Further product families should build on measured customer needs, not just add
+more buttons.
 
 See [current release status](release-status.md), [earlier staffing planner](archive/service-workforce-status.md) and [prior goodwill batch](archive/customer-relationships-status.md) for exact scope and evidence.

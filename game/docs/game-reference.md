@@ -1310,3 +1310,53 @@ Private conservation anchors and fractional counters remain out of player views.
 Shared actual totals appear in the causal ledger. This is an external population
 and savings boundary, not cross-selling, a national GDP model, employment/income
 simulation or newly created bank money. Rates still require human calibration.
+
+## Existing-customer product offers — v8.12 opt-in
+
+Relationship offers preview requires Regional demand and its prerequisites in a
+new campaign. Both players must use a supporting build. Existing saves keep their
+original rules. Products → Existing customers holds the standing instruction:
+choose a market, an existing household segment, an open target product, and the
+share of non-retention Retail time to use. This selection does not change focus.
+
+| Constraint | Current rule |
+|---|---|
+| Share of non-retention Retail sales time | 0% / 25% / 50% |
+| Capacity per effective assigned banker/month | 80 conversion equivalents |
+| Conversion cost | $40 per completed equivalent |
+| Monthly uptake | 10% of eligible equivalents, rounded down |
+
+Only owned, unlocked balances without outstanding rate guarantees can switch,
+and only to a strictly better-fitting product for the selected segment. Product
+development and local sales instructions therefore matter to the existing book,
+not just new intake. Closing or retiring the target pauses its standing offer.
+An active instruction reserves its sales time even if no customers can switch;
+retention time itself is untouched. Revised product fit feeds the existing
+goodwill and retention rules, not an immediate loyalty grant.
+
+The model allocates account equivalents from the segment's household count and
+its eligible share of deposit principal. These are not identified people or
+additional account owners. Switching moves existing principal between product
+cohorts, never cash between institutions or money into equity. There is no new
+deposit growth, household award or acquisition commission. High-yield switches
+start the normal six-month guarantee; term deposits and active guarantees cannot
+be broken by an offer.
+
+Offers settle after household retention and term preparation, but before ordinary
+repricing and production. Conversion expense cannot exceed the opening draft
+ceiling or remaining cash/capital capacity after protected commitments,
+advertising and training. A later maturity cannot silently increase the bill.
+The actual cost is included once in operating profit; capital-recovery and
+delivery comparisons do not subtract it again as investment spending.
+
+The Products view compares same-book direct costs (interest plus servicing minus
+fees, including applicable vendor costs), not lifetime value or total bank profit.
+A better fit may cost more to provide. Operations includes the reduced new-sales
+time and full current operating forecast. Actuals may differ because executive
+effects, rival actions, retention and maturities occur before settlement.
+Owner reports, standing instructions and submitted policies remain private.
+
+This is voluntary **product switching**, not multiple-product ownership,
+individual customer finance, delayed onboarding or full cross-selling. The AI
+uses bounded affordability and retention preferences, not an optimal lifetime
+value model. Calibration and human acceptance remain necessary.

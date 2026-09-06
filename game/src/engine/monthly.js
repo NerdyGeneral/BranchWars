@@ -20,6 +20,8 @@ function resolveMonthlySteps(g) {
     applyWorkforcePolicy(p, plans[i].workforcePolicy);
     applyHouseholdPolicy(p, plans[i].householdPolicy);
     applyCollectionsPolicy(p, plans[i].collectionsPolicy);
+    if(p.relationshipOffers)recordLedgerStage(g,'applyRelationshipOfferPolicy','customers.offers',()=>applyRelationshipOfferPolicy(p,plans[i].relationshipOfferPolicy));
+    if(p.relationshipOffers)p._relationshipOfferBudget=relationshipOfferBudget(p,plans[i]);
     if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
     applyDecision(g, p, plans[i].decision);
