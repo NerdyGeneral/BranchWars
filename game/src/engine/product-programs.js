@@ -103,7 +103,7 @@ function productProgramFallback(p,market,segment) {
 function validateProductProgramSave(g) {
  const has=p=>p.productPrograms!==undefined||p.submitted?.productProgramPolicy!==undefined||(Array.isArray(p.projects)&&p.projects.some(x=>PROJECTS[x.key]?.programOnly));
  if(g.productProgramsVersion===undefined){if(g.players.some(has))throw Error('Unversioned product programmes');return g;}
- if(g.productProgramsVersion!==1||g.segmentDepositsVersion!==1||g.version!==(g.advertisingVersion===1?'8.10':'8.9'))throw Error('Unsupported product programmes save');
+ if(g.productProgramsVersion!==1||g.segmentDepositsVersion!==1||g.version!==(g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':'8.9'))throw Error('Unsupported product programmes save');
  for(const p of g.players) {
   const state=p.productPrograms;
   if(!state||Object.keys(state).sort().join()!=='markets,products,version'||state.version!==1||!state.products||Object.keys(state.products).sort().join()!=='highYield,rewards')throw Error('Invalid product programme state');

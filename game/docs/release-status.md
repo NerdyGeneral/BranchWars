@@ -2,6 +2,90 @@
 
 Updated: 2026-09-06.
 
+## Regional demand — v8.11 verified batch
+
+Release branch: `feat/regional-demand`, following product/recovery
+[PR #16](https://github.com/NerdyGeneral/BranchWars/pull/16). PR #16 was pushed as
+`4bea538`, followed by documentation-only `344bc53`: clean-checkout GitHub CI
+found a link to an intentionally unpublished diagnostic helper. The link is now
+an explicit local-only note; both the clean-checkout fast gate and GitHub's
+rerun fast job pass. Its hosted Windows run remains pending. No game
+bytes changed in that repair; publication does not merge the dependency stack.
+
+This is an N-04 external-demand slice, **not completion of the regional or
+national blueprint**:
+
+- Opt-in monthly household/savings arrivals and departures through outside
+  community banks and credit unions. Opening outside books anchor the fictional
+  rates, so exhausted pools can replenish; downturns can contract available
+  outside demand. Departures are capped to actual outside holdings.
+- Settlement occurs after all bank activity and before ending/regime transition.
+  Arrivals become available next month. Bank accounts, locked term promises,
+  equity and current acquisition quotas are untouched.
+- Versioned conservation anchors, integer remainders, strict import validation,
+  atomic candidate settlement and duplicate-cycle protection. Public reports
+  and owner ledger summaries omit private conservation records.
+- A read-only Markets panel distinguishes current supply, previous actuals and
+  conditional next-closing flows. Region/market detail is collapsed by default.
+  Browser QA caught and fixed a narrow-screen grid overflow: at a 500px viewport,
+  the document stays within 485px and the 880px table scrolls inside 393px.
+- Setup prerequisites, lobby settings, rematches, Direct/LAN/GitHub capabilities
+  and checkpoint recovery preserve the flag. Old saves keep their previous rules;
+  old peers cannot join a v8.11 game.
+
+Verified artifact SHA-256:
+`706a5853883bb6039f7b34cbfa39449ebe7a7f257916d489aca61a1fa8a3d670`.
+The manifest has 94 ordered inputs; no frozen legacy fixture was regenerated.
+Focused engine/UI, transport and legacy lifecycle tests pass. The lifecycle
+gate caught and prevented a changed error order for invalid old creation input.
+
+Completed evidence on this artifact:
+
+- [Full Windows regression](../reports/baselines/N-00-2026-09-06T07-15-25-913Z.json):
+  all 74 suites pass, including LAN; all 169 monitored fingerprints remain
+  unchanged and the old balance output reproduces.
+- [Default-rule release audit](../reports/baselines/release-balance-2026-09-06T07-35-07-502Z.json):
+  16 campaigns / 1,920 months, all survive, no skipped/cancelled initiatives,
+  559,901-byte maximum owner view. `node tools/check.js --full` finishes with
+  exit code zero.
+
+- [Browser acceptance](../reports/baselines/regional-demand-browser-2026-09-06.json):
+  setup, desktop/narrow Markets report, visible month settlement and reload.
+- [Eight campaigns x 120 months](../reports/baselines/release-balance-2026-09-06T07-20-54-516Z.json):
+  960 months, all survive, no skipped/cancelled initiatives, maximum owner view
+  718,773 bytes.
+- [Balanced seed 20 x 480 months](../reports/baselines/release-balance-2026-09-06T07-18-58-175Z.json):
+  both survive, no skipped/cancelled initiatives, 811,536-byte maximum view.
+  Twelve deposit-leader changes; 31 mandate changes after month 60. Closing
+  outside supply remains 365 households and $711,060; replenishment is working,
+  not a guarantee that outside institutions retain substantial market share.
+- [Previously vulnerable Growth seed 2 x 120](../reports/baselines/release-balance-2026-09-06T07-23-05-331Z.json):
+  both survive, no skipped/cancelled initiatives; closing capital ratios
+  13.25%/12.43%, and deposit shares 42.85%/57.15%.
+- [All four seed-20 scenarios x 480](../reports/baselines/release-balance-2026-09-06T07-36-25-301Z.json):
+  1,920 months, all survive, no skipped/cancelled initiatives, 828,145-byte
+  maximum owner view. Closing deposit leaders range from 53.38% to 72.72%;
+  the highest sampled deposit share is 76.06%. Every scenario retains outside
+  supply at its final closing. The earlier Balanced probe is repeated here and
+  is not counted twice.
+
+Together the new-rule samples cover 13 distinct campaign configurations and
+3,000 resolved months, plus 1,920 default-rule regression months. These are
+bounded AI samples, not human balance certification. The prior 70-suite
+publication pass below is historical, not the current artifact's gate.
+Sampled 120-month household leaders still reach 82.15%, despite no 80% deposit
+dominance spell. Households and deposit balances remain separate aggregates;
+substantial late-game cash accumulation, richer product/customer linkage and
+competitive use of capital still need design work. No forced equalization,
+cross-selling, firm-income simulation, subsidiaries or national content was added.
+Real two-computer GitHub play and human balance acceptance remain outstanding.
+
+Publication checks additionally compare all 94 staged source inputs and the
+portable artifact with the assembled build, and resolve documentation targets
+against the Git index rather than local disk. Selected test reports are included;
+raw diagnostic helpers and the user's separate architecture proposal remain
+unpublished.
+
 ## Product programmes, advertising and recovery — verified release batch
 
 Release branch: `feat/product-lifecycle`, stacked on `feat/segment-deposits`

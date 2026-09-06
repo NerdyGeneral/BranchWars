@@ -4,7 +4,8 @@ const file=path.join(__dirname,'../BRANCH_WARS.html'),source=fs.readFileSync(fil
 vm.runInNewContext(source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
 const E=ctx.BWEngine,hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const serviceExpansionVersion=process.argv.includes('--previous-services')?0:1;
-const advertisingVersion=process.argv.includes('--advertising')?1:0;
+const regionalGrowthVersion=process.argv.includes('--regional-growth')?1:0;
+const advertisingVersion=regionalGrowthVersion||process.argv.includes('--advertising')?1:0;
 const productProgramsVersion=advertisingVersion||process.argv.includes('--product-programs')?1:0;
 const segmentDepositsVersion=productProgramsVersion||process.argv.includes('--segment-deposits')?1:0;
 const creditPerformanceVersion=segmentDepositsVersion||process.argv.includes('--collections')?1:0;
@@ -43,9 +44,10 @@ function reportedCompetition(metrics){const{_leader,_dominance,_below10,...repor
  const empty=competitionMetrics();observeCompetition(empty,[0,0],[10,10],[0,0]);assert.deepEqual(empty.longestDepositDominanceMonths,[0,0]);assert.equal(empty.depositLeadChanges,0);
 }
 for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;seed++){
- const g=E.createGame({advertisingVersion,productProgramsVersion,segmentDepositsVersion,creditPerformanceVersion,customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
+ const g=E.createGame({regionalGrowthVersion,advertisingVersion,productProgramsVersion,segmentDepositsVersion,creditPerformanceVersion,customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
  const actions={scenario,seed,providerChanges:0,lateProviderChanges:0,initiatives:0,competitiveActions:0};
  const competition=competitionMetrics();
+ if(regionalGrowthVersion)actions.regionalFlows={arrivals:{customers:0,deposits:0},departures:{customers:0,deposits:0},clippedDepartures:{customers:0,deposits:0}};
  if(advertisingVersion)Object.assign(actions,{advertisingSpend:0,assistedDeposits:0,assistedHouseholds:0,advertisingMonths:0,advertisingPaused:0});
  if(productProgramsVersion)Object.assign(actions,{plannedProductLaunches:{build:0,partner:0},plannedProductRetirements:0,vendorCost:0,targetedAudiences:0});
  if(customerOwnershipVersion)Object.assign(actions,{householdDepartures:0,householdDepositOutflow:0,retentionShares:{25:0,50:0,75:0,100:0}});
@@ -61,6 +63,10 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
   if(workforceVersion)actions.stagedSpecialists+=plans.reduce((n,p)=>n+E.specialistHireCount(p),0);
   actions.initiatives+=plans.reduce((n,p)=>n+E.planInitiatives(p).length,0);actions.competitiveActions+=plans.filter(p=>p.competitiveAction!=='none').length;
   E.submit(g,0,plans[0]);E.submit(g,1,plans[1]);turns++;
+  if(regionalGrowthVersion){
+   const flow=E.regionalGrowthReview(g);assert.equal(flow.lastCycle,cycle);
+   for(const kind of Object.keys(actions.regionalFlows))for(const resource of ['customers','deposits'])actions.regionalFlows[kind][resource]+=flow.report.totals[kind][resource];
+  }
   observeCompetition(competition,g.players.map(p=>p.stats.deposits),g.players.map(p=>E.capitalRatio(p)),g.players.map(p=>p.stats.lastProfit));
   const changes=g.serviceAgreements.filter((c,i)=>c.owner!==owners[i]).length;actions.providerChanges+=changes;if(month>=60)actions.lateProviderChanges+=changes;
   E.validatePilot(g);E.validateLedger(g);
@@ -97,11 +103,11 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
  const households=customerOwnershipVersion?g.players.map(p=>Object.values(p.householdBook.markets).reduce((n,row)=>n+Object.values(row).reduce((a,v)=>a+v,0),0)):null;
  results.push({scenario,seed,cycle:g.cycle,ended:g.gameOver,reason:g.endReason||null,winner:g.players.findIndex(p=>p.id===g.winnerId),equity:g.players.map(p=>p.stats.capital),deposits:g.players.map(p=>p.stats.deposits),profit:g.players.map(p=>p.stats.lastProfit),
   capitalRatioPercent:g.players.map(p=>E.capitalRatio(p)),capitalTier:g.players.map(p=>E.capitalTier(p).key),cash:g.players.map(p=>p.stats.cash),emergencyDebt:g.players.map(p=>p.stats.emergencyDebt),depositSharePercent:sharePercent(g.players.map(p=>p.stats.deposits)),
-  ...(households?{households,householdSharePercent:sharePercent(households)}:{}),competition:reportedCompetition(competition)});
+  ...(households?{households,householdSharePercent:sharePercent(households)}:{}),...(regionalGrowthVersion?{outsideSupply:E.regionalGrowthReview(g).report.totals.after}:{}),competition:reportedCompetition(competition)});
  activity.push(actions);
 }
 assert.equal(hash(source),hash(fs.readFileSync(file,'utf8')));
-const report={passed:skipped.length===0,sourceSha256:hash(source),...(advertisingVersion?{advertisingVersion}:{}),...(productProgramsVersion?{productProgramsVersion}:{}),...(segmentDepositsVersion?{segmentDepositsVersion}:{}),...(creditPerformanceVersion?{creditPerformanceVersion}:{}),...(customerOwnershipVersion?{customerOwnershipVersion}:{}),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,
+const report={passed:skipped.length===0,sourceSha256:hash(source),...(regionalGrowthVersion?{regionalGrowthVersion}:{}),...(advertisingVersion?{advertisingVersion}:{}),...(productProgramsVersion?{productProgramsVersion}:{}),...(segmentDepositsVersion?{segmentDepositsVersion}:{}),...(creditPerformanceVersion?{creditPerformanceVersion}:{}),...(customerOwnershipVersion?{customerOwnershipVersion}:{}),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,
  metricDefinitions:{version:1,samples:'After each resolved month, including terminal settlement; final balances are also after settlement.',shares:'Percent of the two player banks combined, excluding outside institutions; zero total produces zero shares.',dominance:'Consecutive sampled months at or above 80% of combined-player deposits, counted separately per seat.',depositLeadChanges:'Changes between non-tied deposit leaders; intervening ties are ignored.',capitalReturnsTo10:'A below-10% capital spell followed by one sampled month at or above 10%; not necessarily sustained recovery.',households:'Exact owned household counts, available only with the household ownership preview.'},
  ...(scenarioName?{scenario:scenarioName}:{}),skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
 if(process.argv.includes('--report')){

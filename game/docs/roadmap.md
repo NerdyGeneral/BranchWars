@@ -8,7 +8,7 @@ The v6 crosswalk in the screenshot maps old packages into the newer plan; it is 
 |---|---|---|
 | N-00–N-02 Foundations | Regression runner, versioned simulation/replay, causal ledger, reconciled bank accounting and funding mechanisms | Keep acceptance gates active; broader group accounting comes later |
 | N-03 Persistent rivalry | Opt-in removal of permanent exclusion and score buyouts; priced office re-entry; outside competitors; owner recovery comparisons and cost-aware v8.9+ AI | Human recovery/competition acceptance and a satisfying campaign/endgame contract |
-| N-04 Regional customers | Two regions, six markets, finite outside books, local demand mixes, product fit, persistent service goodwill; opt-in conserved household counts and segment-owned deposit balances with service-related departures | Cross-selling, richer firm/household economy, adjacency and fuller entry economics |
+| N-04 Regional customers | Two regions, six markets, finite outside books, local demand mixes, product fit, persistent service goodwill; opt-in conserved household counts and segment-owned deposit balances; v8.11 regional arrivals/departures replenish or contract outside household/savings supply at month-end | Human calibration of external-flow rates; cross-selling, richer firm/household economy, adjacency and fuller entry economics |
 | N-05 Branches/departments | Office models, local upgrades/closure, capacity/contribution; commercial service reservations/vendors; basic service delegation; retail staffing planner; opt-in specialists with persistent skill, paid training and premium payroll | Leaders, facility conversion/condition, fuller department ownership and broader operating budgets; human acceptance of specialist tradeoffs |
 | N-06 Products/cohorts | Simultaneous retail offers, deployments, account books, promotional/term funding, amortizing loan cohorts and funding covenants; segment-owned deposit accounts and term-maturity exits; household retention; opt-in delayed delinquency, non-accrual and capacity-constrained collections; v8.9 in-house/licensed retail development, local segment sales and paid retirement preserving account promises | Authored product families and configurable terms, full lifecycle/cross-selling, treasury stress tooling, borrower/collateral detail and allowance accounting; human credit-policy acceptance |
 | N-07 Research/deployment | Open capabilities, recurring capped research, milestone limits, cross-capability service applications with build/partner routes; retail in-house versus vendor delivery with research gates and recurring costs | Wider capability web, more business/region deployments and validated competing development paths |
@@ -33,5 +33,13 @@ The approved [four-step architecture batch](architecture.md) is implemented: sep
 5. N-11–N-13: national content, delegated regional management, integrated UI and human release acceptance. N-14 follows separately.
 
 No trustworthy completion percentage is assigned: the later group/nation packages are substantially larger than a single UI or mechanics slice. Current simulation activity does not prove enjoyable endgame pacing.
+
+The next N-04 slice is v8.11 Regional demand preview, on a separate
+`feat/regional-demand` branch after published product/recovery PR #16. External
+arrivals and departures settle once at month-end through outside institutions;
+current bank quotes and acquisition quotas remain unchanged. It directly addresses
+exhausted late-game outside pools, but does not repair concentration by fiat or
+complete N-04. Review the current release entry for verification; keep old rules,
+the new pilot's calibration and eventual national expansion distinct.
 
 See [current release status](release-status.md), [earlier staffing planner](archive/service-workforce-status.md) and [prior goodwill batch](archive/customer-relationships-status.md) for exact scope and evidence.

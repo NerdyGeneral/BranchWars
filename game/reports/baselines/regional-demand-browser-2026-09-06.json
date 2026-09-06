@@ -1,0 +1,25 @@
+{
+  "sourceSha256": "706a5853883bb6039f7b34cbfa39449ebe7a7f257916d489aca61a1fa8a3d670",
+  "date": "2026-09-06",
+  "passed": true,
+  "environment": "Chrome, isolated loopback origin on port 8931; disposable local AI campaign",
+  "checks": [
+    "Regional preview checkbox enables all ten prerequisite checkboxes",
+    "Launch produces a two-region, six-market campaign",
+    "Markets separates initial supply, absent first actual, and conditional month-one closing forecast",
+    "Expanded desktop table has six market rows and two regional subtotal rows",
+    "At 500px viewport, document clientWidth and scrollWidth both equal 485px; report scroll container is 393px wide with 880px internal table",
+    "Corrected the Markets grid child's automatic minimum width so the table does not widen the page",
+    "Displayed counts use household units, consistent with conserved household books",
+    "Played one month through visible executive decision and Mark Ready controls",
+    "Resolution lists both regions' external flows; month two shows month-one actual separately from month-two forecast",
+    "Reload and Continue retain month-one actuals and month-two supply/forecast without settling again",
+    "No warning or error console entries observed during the checked interaction",
+    "Temporary viewport override reset"
+  ],
+  "limitations": [
+    "Not physical two-computer or live GitHub room acceptance",
+    "Not exhaustive visual or accessibility coverage of every workspace",
+    "Terminal rendering, escaped labels, old-rule hiding and state non-mutation are additionally covered by the focused UI harness, not by this browser session"
+  ]
+}

@@ -154,7 +154,7 @@ function segmentDepositSummary(p,g) {
 function validateSegmentDepositSave(g) {
   const has = p => p.segmentDeposits !== undefined || p.depositBook?.cohorts.some(c => c.segment!==undefined || c.exiting!==undefined);
   if(g.segmentDepositsVersion===undefined){if(g.players.some(has)||Object.values(g.marketEconomy?.markets||{}).some(m=>m.segmentDeposits!==undefined))throw Error('Unversioned segment deposits');return g;}
-  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':'8.8'))throw Error('Unsupported segment deposit save');
+  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!==(g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':'8.8'))throw Error('Unsupported segment deposit save');
   const uint=n=>Number.isSafeInteger(n)&&n>=0, valid=r=>r&&Object.keys(r).sort().join()==='connected,everyday,reserve'&&Object.values(r).every(uint);
   for(const p of g.players) {
     if(!p.segmentDeposits||Object.keys(p.segmentDeposits).join()!=='version'||p.segmentDeposits.version!==1)throw Error('Invalid segment deposit state');

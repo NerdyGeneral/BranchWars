@@ -1,0 +1,23 @@
+#regionalGrowthWorkspace,#regionalGrowthMount{min-width:0;max-width:100%}
+#gameScreen[data-tab="markets"] .game-layout>div{min-width:0}
+#regionalGrowthWorkspace[hidden]{display:none!important}
+.regional-growth-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:9px;margin:12px 0}
+.regional-growth-summary>div{min-width:0;padding:11px;border:1px solid #c5d4e3;border-radius:9px;background:#f1f6fc}
+.regional-growth-summary small,.regional-growth-summary b,.regional-growth-summary span{display:block;overflow-wrap:anywhere}
+.regional-growth-summary small{font-size:.66rem;color:#52657b;margin-bottom:5px}
+.regional-growth-summary b{font-size:.92rem;color:#233d58}
+.regional-growth-summary span{font-size:.75rem;margin-top:3px;color:#52657b}
+.regional-growth-forecast{border-top:1px solid #d4deea;margin-top:14px;padding-top:10px}
+.regional-growth-details{margin-top:12px}
+.regional-growth-details summary{cursor:pointer;padding:8px 0;font-weight:700}
+.regional-growth-details h3{margin-top:16px;overflow-wrap:anywhere}
+.regional-growth-scroll{max-width:100%;min-width:0;overflow-x:auto;border:1px solid #d4deea;border-radius:8px;overscroll-behavior-x:contain}
+.regional-growth-scroll:focus-visible{outline:2px solid #1d5fa7;outline-offset:3px}
+.regional-growth-table{border-collapse:collapse;min-width:880px;width:100%;font-size:.73rem}
+.regional-growth-table th,.regional-growth-table td{padding:9px 10px;text-align:right;vertical-align:top;border-bottom:1px solid #e0e8f0}
+.regional-growth-table th:first-child{text-align:left;max-width:185px;overflow-wrap:anywhere}
+.regional-growth-table thead{background:#eaf1f8;color:#314c66}
+.regional-growth-table td b,.regional-growth-table td span{display:block;white-space:nowrap}
+.regional-growth-table td span{font-size:.68rem;color:#52657b;margin-top:4px}
+.regional-growth-region{background:#f1f6fc}
+@media(max-width:600px){.regional-growth-summary{grid-template-columns:1fr}.regional-growth-summary>div{padding:9px}.regional-growth-table{font-size:.7rem}}

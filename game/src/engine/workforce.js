@@ -221,7 +221,7 @@ function validateWorkforceSave(g) {
     if (g.players.some(p => p.workforce !== undefined || p.submitted?.workforcePolicy !== undefined || p.submitted?.specialistHires !== undefined)) throw Error('Unversioned specialist workforce');
     return g;
   }
-  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
+  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.regionalGrowthVersion === 1 ? '8.11' : g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
   for (const p of g.players) {
     const w = p.workforce;
     if (!w || Object.keys(w).sort().join() !== 'departments,lastCycle,policy,version' || w.version !== 1 ||

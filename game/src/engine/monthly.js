@@ -82,6 +82,7 @@ function resolveMonthlySteps(g) {
     [g.players[0].id]: Math.round((baseScore(g, 0) - before[0]) * 10) / 10,
     [g.players[1].id]: Math.round((baseScore(g, 1) - before[1]) * 10) / 10
   };
+  L.push(...settleRegionalGrowthWithLedger(g));
   const ending = evaluateStrategicEnd(g);
   if (ending) L.push(ending);
   g.resolution = L;

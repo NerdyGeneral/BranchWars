@@ -115,6 +115,7 @@ function validatePilot(g) {
   validateSegmentDepositSave(g);
   validateProductProgramSave(g);
   validateAdvertisingSave(g);
+  validateRegionalGrowthSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
