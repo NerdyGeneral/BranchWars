@@ -2,12 +2,22 @@
 const assert = require('node:assert/strict');
 const { harness } = require('./github_resilience.test.js');
 const copy = x => JSON.parse(JSON.stringify(x));
-const advertising = process.argv.includes('--advertising');
+const regionalGrowth = process.argv.includes('--regional-growth');
+const advertising = regionalGrowth || process.argv.includes('--advertising');
 const programmes = advertising || process.argv.includes('--product-programs');
 const segments = programmes || process.argv.includes('--segment-deposits');
 const collections = segments || process.argv.includes('--collections');
 const households = collections || process.argv.includes('--households');
 async function main() {
+  if (regionalGrowth) {
+    const setup = harness(), growth = setup.elements.get('#regionalGrowthPreview');
+    for (const id of ['#advertisingPreview','#productPrograms','#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot']) {
+      growth.checked = true; growth.listeners.change();
+      assert(setup.elements.get(id).checked, 'Regional growth enables prerequisite ' + id);
+      const dependency = setup.elements.get(id); dependency.checked = false; dependency.listeners.change();
+      assert.equal(growth.checked, false, 'Disabling prerequisite disables regional growth: ' + id);
+    }
+  }
   for (const transport of ['gh', 'lan', 'p2p']) {
     const host = harness('host'), guest = harness('guest'), queue = [];
     for (const [i, peer] of [host, guest].entries()) {
@@ -17,6 +27,7 @@ async function main() {
     }
     host.run('Object.assign(p2pConfig,{workforceVersion:1,campaignRulesVersion:1,serviceExpansionVersion:1,managementVersion:2,customerDemandVersion:2})');
     if(households)host.run('p2pConfig.customerOwnershipVersion=1');
+    if(regionalGrowth)host.run('p2pConfig.regionalGrowthVersion=1');
     if(advertising)host.run('p2pConfig.advertisingVersion=1');
     if(programmes)host.run('p2pConfig.productProgramsVersion=1');
     if(segments)host.run('p2pConfig.segmentDepositsVersion=1');
@@ -26,14 +37,20 @@ async function main() {
     };
     await host.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,name:'Old guest',color:'#8642bc'})");
     assert.equal(host.state().game, null); assert.equal(host.state().lobby, null);
-    assert(queue.some(([, m]) => m.type === 'error' && (advertising?/Advertising/:programmes?/Product programmes/:segments?/Segment deposits/:collections?/Credit performance/:households?/Household ownership/:/Specialist workforce/).test(m.message))); queue.length = 0;
+    assert(queue.some(([, m]) => m.type === 'error' && (regionalGrowth?/Regional growth/:advertising?/Advertising/:programmes?/Product programmes/:segments?/Segment deposits/:collections?/Credit performance/:households?/Household ownership/:/Specialist workforce/).test(m.message))); queue.length = 0;
+    if (regionalGrowth) {
+      await host.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,advertisingSupported:1,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,name:'Version 8.10 guest',color:'#8642bc'})");
+      assert.equal(host.state().lobby, null);
+      assert(queue.some(([, m]) => m.type === 'error' && /Regional growth/.test(m.message))); queue.length = 0;
+    }
     await guest.run("handleMessage({type:'hello_request'})"); await drain();
     assert.equal(guest.state().lobby.settings.workforceVersion, 1);
     assert(guest.elements.get('#lobbyRules').textContent.includes('Specialist workforce'));
     host.run('editLobbyIdentity(true)'); await drain(); guest.run('editLobbyIdentity(true)'); await drain();
     host.run('startLobbyCampaign()'); await drain();
-    assert.equal(host.state().game.version, advertising?'8.10':programmes?'8.9':segments?'8.8':collections?'8.7':households?'8.6':'8.5'); assert.equal(guest.state().view.workforceVersion, 1);
+    assert.equal(host.state().game.version, regionalGrowth?'8.11':advertising?'8.10':programmes?'8.9':segments?'8.8':collections?'8.7':households?'8.6':'8.5'); assert.equal(guest.state().view.workforceVersion, 1);
     assert.deepEqual(copy(host.state().game.players[1].workforce), copy(guest.state().view.me.workforce));
+    if(regionalGrowth){assert.equal(guest.state().lobby.settings.regionalGrowthVersion,1);assert(guest.elements.get('#lobbyRules').textContent.includes('Regional growth'));assert.equal(guest.state().view.regionalGrowthVersion,1);assert.equal(host.state().game.regionalGrowth.lastCycle,0);}
     if(households){assert.equal(guest.state().lobby.settings.customerOwnershipVersion,1);assert.equal(guest.state().view.customerOwnershipVersion,1)}
     if(advertising){assert.equal(guest.state().lobby.settings.advertisingVersion,1);assert(guest.elements.get('#lobbyRules').textContent.includes('Advertising'));assert.equal(guest.state().view.advertisingVersion,1);assert(guest.state().view.me.advertising);assert.equal(guest.state().view.rival.advertising,undefined);}
     if(programmes){assert.equal(guest.state().view.productProgramsVersion,1);assert(guest.state().view.me.productPrograms);assert.equal(guest.state().view.rival.productPrograms,undefined);}
@@ -64,6 +81,11 @@ async function main() {
         await drain();
       }
       host.run('E.validatePilot(game);E.validateLedger(game)');
+      if (regionalGrowth) {
+        assert.equal(host.state().game.regionalGrowth.lastCycle, month + 1);
+        assert.deepEqual(copy(guest.state().view.regionalGrowth), copy(host.run('E.publicState(game,1).regionalGrowth')));
+        assert.equal(Object.keys(guest.state().view.regionalGrowth).sort().join(','), 'forecast,lastCycle,report,version', 'public regional flow omits opening books, cumulative segment totals and private carry');
+      }
       assert.deepEqual(copy(guest.state().view.me.workforce), copy(host.state().game.players[1].workforce));
       assert.equal(guest.state().view.rival.workforce, undefined);
       if(households){assert.deepEqual(copy(guest.state().view.me.householdBook),copy(host.state().game.players[1].householdBook));assert.equal(guest.state().view.rival.householdBook,undefined);assert.equal(guest.state().view.lastPlans[host.state().game.players[0].id].householdPolicy,undefined)}
@@ -80,6 +102,6 @@ async function main() {
     assert.equal(guest.state().view.me.workforce.departments.service.count, 1);
     assert(guest.state().view.me.workforce.departments.service.skill > 20);
   }
-  console.log('Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.'+(advertising?' Advertising adds three paid cycles per seat with exact private reports alongside product launch, targets and retirement.':''));
+  console.log('Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.'+(advertising?' Advertising adds three paid cycles per seat with exact private reports alongside product launch, targets and retirement.':'')+(regionalGrowth?' Regional growth preserves all prerequisite modes, rejects v8.10 guests, and publishes exact month-end public flow across transports.':''));
 }
 main().catch(e => { console.error(e); process.exitCode = 1; });

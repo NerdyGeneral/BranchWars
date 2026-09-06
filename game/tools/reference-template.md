@@ -878,3 +878,45 @@ sealed and linked games. No new runtime wrapper or external service is required.
 This is an attribution-first slice. Named channels, delayed application queues,
 creative testing, cross-selling, tracked lifetime value and richer product designs
 remain future work; it does not complete N-08.
+
+## Regional arrivals and departures — v8.11 opt-in
+
+Regional demand preview is a new-campaign option requiring Advertising attribution
+and its prerequisites. Both peers must support v8.11; old campaigns retain their
+existing rules. This is still the six-market, two-region pilot, not a national map.
+
+After both banks finish a month, outside community banks and credit unions receive
+households and savings arriving from outside the modeled area, and lose available
+households and savings that leave it. Banks do not receive free accounts, income or
+equity. Arrivals become available for ordinary competition next month; current
+operating previews and frozen acquisition quotas do not count them early.
+
+Fictional monthly rates below use the immutable opening outside books as their
+scale, so a depleted pool can replenish. Rates are basis points (100 bp = 1%),
+with a 1.2x arrival multiplier in Growth Coast. Departures are applied first and
+capped to each closing outside institution/segment balance. Unfilled departures
+do not become future debt. Fractional household/dollar remainders carry forward.
+
+| Regime just resolved | Arrivals, bp/month | Requested departures, bp/month |
+|---|---:|---:|
+| Expansion | 70 | 15 |
+| Steady growth | 50 | 20 |
+| Tight money | 30 | 35 |
+| Downturn | 20 | 60 |
+| Recovery | 60 | 20 |
+
+Customers and savings remain separate aggregate resources. Both segment and
+market totals reconcile to their opening world plus actual external arrivals
+minus actual departures. Player books, account cohorts, locked term promises,
+businesses, merchants and wealth are not changed by this boundary.
+
+Markets shows current outside supply, the last completed closing and a conditional
+quote for the active month's closing. The quote uses today's outside balances;
+acquisition, customer exits and maturing accounts can change departures before
+closing. The report labels the regime that actually settled, even when a new
+regime starts next month. There is no future quote after a campaign ends.
+
+Private conservation anchors and fractional counters remain out of player views.
+Shared actual totals appear in the causal ledger. This is an external population
+and savings boundary, not cross-selling, a national GDP model, employment/income
+simulation or newly created bank money. Rates still require human calibration.

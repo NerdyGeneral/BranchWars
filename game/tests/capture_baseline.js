@@ -21,6 +21,7 @@ files.push('tests/multiplayer_lobby.test.js');
 files.push('tests/runtime-stages.test.js');
 files.push('tests/recovery_planning.test.js','tests/recovery_ui.test.js','tests/github_recovery_acceptance.test.js');
 files.push('tests/households.test.js');
+files.push('tests/regional_growth.test.js','tests/regional_growth_ui.test.js');
 files.push('tests/advertising.test.js','tests/ai_cash_planning.test.js','tests/product_draft.test.js','tests/collections.test.js','tests/segment_deposits.test.js','tests/product_programs.test.js');
 files.push('tests/specialist_workforce.test.js','tests/workforce_network.test.js','tests/release_balance.test.js');
 files.push('tools/build_game.js','tests/build.test.js');
@@ -49,6 +50,10 @@ report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/ca
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
 report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
 report.tests.push(run('households.test.js', process.execPath, ['tests/households.test.js']));
+report.tests.push(run('Regional demand rules', process.execPath, ['tests/regional_growth.test.js']));
+report.tests.push(run('Regional demand UI', process.execPath, ['tests/regional_growth_ui.test.js']));
+report.tests.push(run('Regional demand network', process.execPath, ['tests/workforce_network.test.js','--regional-growth']));
+report.tests.push(run('Regional demand GitHub relay', process.execPath, ['tests/github_resilience.test.js','--regional-growth']));
 report.tests.push(run('segment_deposits.test.js', process.execPath, ['tests/segment_deposits.test.js']));
 report.tests.push(run('Advertising rules', process.execPath, ['tests/advertising.test.js']));
 report.tests.push(run('AI cash planning', process.execPath, ['tests/ai_cash_planning.test.js']));

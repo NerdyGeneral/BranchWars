@@ -151,7 +151,7 @@ function validateHouseholdSave(g) {
         Object.values(g.marketEconomy?.markets || {}).some(m => m.households !== undefined)) throw Error('Unversioned household ownership');
     return g;
   }
-  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
+  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.regionalGrowthVersion === 1 ? '8.11' : g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
   const keys = Object.keys(g.territories).sort().join(), uint = n => Number.isSafeInteger(n) && n >= 0;
   const counts = row => row && Object.keys(row).sort().join() === 'connected,everyday,reserve' && Object.values(row).every(uint);
   for (const p of g.players) {

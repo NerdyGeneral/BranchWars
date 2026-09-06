@@ -552,6 +552,24 @@ FOUNDATION FROM v7.0
 - Backward import support for earlier local save files
 - Solo AI, Pass & Play, Direct P2P, export/import, and sealed WEGO play retained
 
+## REGIONAL DEMAND PREVIEW (NEW CAMPAIGNS ONLY)
+
+Enable Regional growth preview in setup. It enables Advertising attribution and
+the prerequisite Living Bank rules; both friends need the updated build.
+The game remains the two-region/six-market pilot. Existing saves are unchanged.
+
+In Markets, Regional arrivals & departures separates current outside supply
+from the previous closing's actual flows and the upcoming closing's conditional
+quote. People and savings arrive through outside banks/credit unions at month
+end. You compete for them from the following month; nothing is automatically
+credited to your bank. Departures can remove only available outside balances,
+not your customers' accounts or locked savings.
+
+The quote is not a promise: this month's bank activity can change outside
+availability before settlement. Expand the report for regional/market detail.
+These flows keep depleted markets supplied but do not guarantee a comeback,
+equalize bank sizes, or complete the national economy.
+
 ## FILES
 
 BRANCH_WARS.html       Complete game; all rules and assets are inside this file
