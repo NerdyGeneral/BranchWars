@@ -282,8 +282,9 @@ fingerprints and exact reverse patches: only the guard, its generated HTML,
 and the two inventory assertions differ. Source stayed unchanged during reruns.
 All 62 suites are covered across the full run and targeted follow-up; this is
 **not** a fresh all-green `check.js --full` invocation. The original failed
-report is preserved. The [follow-up runner](../reports/baselines/product-programmes-followup.cjs)
-records how the fingerprint proof and reruns were produced.
+report is preserved. The fingerprint proof and reruns used the local diagnostic
+runner `product-programmes-followup.cjs`, which is not included in this published
+checkout.
 
 Current artifact SHA-256:
 `011b21486a3fb5e2c725eda947734742e842803303fd5338ef24805fdab8bbdb`.
