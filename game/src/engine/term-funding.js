@@ -29,7 +29,7 @@ function prepareTermFunding(g,p,preview=false){
   if(c.remaining===0){
    c.quotedCycle=cycle;
    if(policy.maturity==='renew'){c.remaining=6;c.rate=rate;renewed+=c.principal}
-   else{delete c.locked;c.product=p.products.retail;c.remaining=c.product==='highYield'?6:0;c.rate=depositRate(p,g,c.product);released+=c.principal}
+   else{delete c.locked;c.product=p.productPrograms?productProgramFallback(p,c.market,c.segment):p.products.retail;c.remaining=c.product==='highYield'?6:0;c.rate=depositRate(p,g,c.product);released+=c.principal}
   }
  }
  if(policy.offer==='six'){

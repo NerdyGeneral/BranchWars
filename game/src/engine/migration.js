@@ -97,7 +97,7 @@ function repairSavedCampaign(g){
 }
 function repairSavedRivalry(g){
  repairSavedCampaign(g);
- g.version=g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
+ g.version=g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
  g.maxCycles=null;
  g.act=Math.max(0,Math.min(2,Number(g.act)||0));
  g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];
@@ -115,11 +115,13 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.segmentDepositsVersion!==undefined&&g.version!=='8.8')throw Error('Segment deposits requires a v8.8 save.');
- if(g.creditPerformanceVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':'8.7'))throw Error('Credit performance requires a v8.7 save.');
- if(g.customerOwnershipVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':'8.6'))throw Error('Household ownership requires a v8.6 save.');
- if(g.workforceVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
- if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7','8.8'].includes(g.version))throw Error('Only v6.0 through v8.8 saves are supported.');
+ if(g.advertisingVersion!==undefined&&g.version!=='8.10')throw Error('Advertising requires a v8.10 save.');
+ if(g.productProgramsVersion!==undefined&&g.version!==(g.advertisingVersion===1?'8.10':'8.9'))throw Error('Product programmes requires a v8.9 save.');
+ if(g.segmentDepositsVersion!==undefined&&g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':'8.8'))throw Error('Segment deposits requires a v8.8 save.');
+ if(g.creditPerformanceVersion!==undefined&&g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':'8.7'))throw Error('Credit performance requires a v8.7 save.');
+ if(g.customerOwnershipVersion!==undefined&&g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':'8.6'))throw Error('Household ownership requires a v8.6 save.');
+ if(g.workforceVersion!==undefined&&g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
+ if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10'].includes(g.version))throw Error('Only v6.0 through v8.10 saves are supported.');
  g=JSON.parse(JSON.stringify(g));
  // Never repair over invalid accounting, ledger or funding versions.
  validateLedger(g);

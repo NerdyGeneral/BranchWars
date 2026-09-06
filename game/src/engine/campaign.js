@@ -35,6 +35,8 @@ function createBaseCampaign(o){
 function validateCreationOptions(o){
  // Match the former outer-to-inner checks, including errors on disabled features.
  if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.advertisingVersion!==undefined&&![0,1].includes(o.advertisingVersion))throw Error('Unsupported advertising version');
+ if(o.productProgramsVersion!==undefined&&![0,1].includes(o.productProgramsVersion))throw Error('Unsupported product programmes version');
  if(o.segmentDepositsVersion!==undefined&&![0,1].includes(o.segmentDepositsVersion))throw Error('Unsupported segment deposit version');
  if(o.creditPerformanceVersion!==undefined&&![0,1].includes(o.creditPerformanceVersion))throw Error('Unsupported credit performance version');
  if(o.customerOwnershipVersion!==undefined&&![0,1].includes(o.customerOwnershipVersion))throw Error('Unsupported household ownership version');
@@ -77,6 +79,8 @@ function createGame(o){
  initializeHouseholds(g,o);
  initializeCreditPerformance(g,o);
  initializeSegmentDeposits(g,o);
+ initializeProductPrograms(g,o);
+ initializeAdvertising(g,o);
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}

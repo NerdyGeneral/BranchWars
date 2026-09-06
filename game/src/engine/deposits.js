@@ -40,6 +40,7 @@ function adjustDepositReport(p,g,r){
  if(!p.depositBook)return;
  const d=depositSummary(p,g),oldIncome=r.depositIncome,oldFunding=r.fundingCost;
  r.depositIncome=d.fees;r.fundingCost=d.interest+p.stats.emergencyDebt*.01;r.depositServiceCost=d.service;r.depositInterest=d.interest;r.retailPlatformCost=Object.values(d.rows).reduce((n,row)=>n+(row.platform||0),0);
+ if(p.productPrograms)r.productProgramCost=productProgramCosts(p).total;
  r.expense+=d.service;
  const change=r.depositIncome-oldIncome-(r.fundingCost-oldFunding)-d.service;
  r.eventAdjustment+=change*((p.turnEffects.profit||1)-1);r.profit=Math.round(r.profit+change*(p.turnEffects.profit||1));
@@ -55,7 +56,7 @@ function repriceWithdrawableDeposits(g,p){
   for(const c of p.depositBook.cohorts){
    if(c.locked)continue;
    if(c.remaining>0&&c.quotedCycle<(g.cycle||p.depositBook.asOfCycle+1))c.remaining--;
-   if(c.remaining===0){if(!p.retailLifecycle||(c.product==='highYield'&&!p.retailLifecycle.mix.highYield))c.product=p.products.retail;c.remaining=c.product==='highYield'?6:0;c.quotedCycle=g.cycle||p.depositBook.asOfCycle+1;c.rate=depositRate(p,g,c.product)}
+   if(c.remaining===0){if(p.productPrograms&&c.product==='highYield'&&!productTargetMix(p,c.market,c.segment).highYield)c.product=productProgramFallback(p,c.market,c.segment);else if(!p.productPrograms&&(!p.retailLifecycle||(c.product==='highYield'&&!p.retailLifecycle.mix.highYield)))c.product=p.products.retail;c.remaining=c.product==='highYield'?6:0;c.quotedCycle=g.cycle||p.depositBook.asOfCycle+1;c.rate=depositRate(p,g,c.product)}
   }
   compactDeposits(p);
 }

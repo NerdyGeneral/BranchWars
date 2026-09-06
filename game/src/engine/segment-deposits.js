@@ -23,11 +23,14 @@ function depositSegmentAmounts(cohorts) {
   for (const c of cohorts) out[c.segment] += c.principal;
   return out;
 }
-function openSegmentDeposits(p, g, market, amounts) {
+function openSegmentDeposits(p, g, market, amounts, limited=false) {
   for (const [segment, amount] of Object.entries(amounts)) {
-    const weights = Object.fromEntries(Object.entries(p.retailLifecycle.mix).map(([product, emphasis]) => [product, emphasis * CUSTOMER_SEGMENTS[segment].fit[product]]));
-    for (const [product, principal] of Object.entries(marketSplit(amount, weights))) if (principal)
+    const baseWeights = Object.fromEntries(Object.entries(productTargetMix(p,market,segment)).map(([product, emphasis]) => [product, emphasis * CUSTOMER_SEGMENTS[segment].fit[product]]));
+    const weights = limited?advertisingProductWeights(p,market,segment,baseWeights):baseWeights;
+    for (const [product, principal] of Object.entries(marketSplit(amount, weights))) if (principal) {
+      if(limited)captureAdvertisingIntake(p,market,segment,product,'deposits',principal);
       p.depositBook.cohorts.push({ market, segment, principal, product, exiting: 0, remaining: product === 'highYield' ? 6 : 0, quotedCycle: g.cycle || p.depositBook.asOfCycle + 1, rate: depositRate(p,g,product) });
+    }
   }
   compactDeposits(p);
 }
@@ -43,7 +46,7 @@ function moveOutsideSegmentDeposits(p, key, outside, positive, limited) {
     const amounts = emptyDepositSegments();
     for (const owner of ['community','union'])
       moveHouseholdCounts(m.segmentDeposits[owner], amounts, outside[owner], limited ? householdAcquisitionWeights(p,key) : null);
-    openSegmentDeposits(p,g,key,amounts);
+    openSegmentDeposits(p,g,key,amounts,limited);
     for (const owner of ['community','union']) m[owner].deposits -= outside[owner];
   } else {
     const taken = takeDeposits(p,key,outside.community + outside.union);
@@ -139,7 +142,7 @@ function segmentDepositSummary(p,g) {
   }
   let centralPlatform=0;
   for(const product of products) {
-    const selected=cells.filter(c=>c.product===product),platform=product==='term'||!p.retailLifecycle.mix[product]?0:RETAIL_PLATFORM[product];
+    const selected=cells.filter(c=>c.product===product),platform=(product==='term'||!p.retailLifecycle.mix[product]?0:RETAIL_PLATFORM[product])+(p.productPrograms?(productProgramCosts(p).rows[product]?.total||0):0);
     const allocations=marketSplit(platform,Object.fromEntries(selected.map((c,i)=>[i,c.row.principal])));
     for(const [i,n]of Object.entries(allocations)){const c=selected[i],r=markets[c.key][c.segment];c.row.platform+=n;c.row.service+=n;r.platform+=n;r.service+=n;r.directCost+=n;}
     for(const c of selected)for(const f of Object.keys(rows[product]))rows[product][f]+=c.row[f];
@@ -151,7 +154,7 @@ function segmentDepositSummary(p,g) {
 function validateSegmentDepositSave(g) {
   const has = p => p.segmentDeposits !== undefined || p.depositBook?.cohorts.some(c => c.segment!==undefined || c.exiting!==undefined);
   if(g.segmentDepositsVersion===undefined){if(g.players.some(has)||Object.values(g.marketEconomy?.markets||{}).some(m=>m.segmentDeposits!==undefined))throw Error('Unversioned segment deposits');return g;}
-  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!=='8.8')throw Error('Unsupported segment deposit save');
+  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':'8.8'))throw Error('Unsupported segment deposit save');
   const uint=n=>Number.isSafeInteger(n)&&n>=0, valid=r=>r&&Object.keys(r).sort().join()==='connected,everyday,reserve'&&Object.values(r).every(uint);
   for(const p of g.players) {
     if(!p.segmentDeposits||Object.keys(p.segmentDeposits).join()!=='version'||p.segmentDeposits.version!==1)throw Error('Invalid segment deposit state');

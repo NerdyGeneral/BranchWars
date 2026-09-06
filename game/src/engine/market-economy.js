@@ -73,7 +73,7 @@ function marketContribution(p){
  allocate(r.depositIncome,weights('deposits'),'income');allocate(r.loanIncome,weights('loans'),'income');
  allocate(r.commercialIncome,Object.fromEntries(Object.entries(books).map(([k,b])=>[k,b.business*760+b.merchant*650])),'income');
  allocate(r.fundingCost,weights('deposits'),'funding');if(p.creditPerformance){for(const [k,loss]of Object.entries(p.creditPerformance.report.rows))rows[k].credit=loss.loss}else allocate(r.chargeoff,weights('loans'),'credit');
- const efficiency=(r.expense-(r.depositServiceCost||0))/Math.max(1,p.stats.staff*18000+metrics.expense);
+ const efficiency=(r.expense-(r.depositServiceCost||0)-(r.advertisingCost||0))/Math.max(1,p.stats.staff*18000+metrics.expense);
  for(const m of metrics.rows)rows[m.key].facility=Math.round(m.expense*efficiency);
  for(const row of Object.values(rows))row.contribution=row.income-row.funding-row.credit-row.facility;
  const total=Object.values(rows).reduce((n,row)=>n+row.contribution,0);
@@ -97,6 +97,7 @@ function settleMonthlyProduction(g,p,preview=false){
   // The accounting adapter copies nonfinancial calculation results; settle those against real franchises.
   const old=accountingSource;accountingSource='operate';
   try{for(const r of Object.keys(before)){const change=p.stats[r]-before[r];p.stats[r]=before[r];delta(p,r,change)}}finally{accountingSource=old}
+  finishAdvertisingCycle(g,p);
   p.marketReport=marketContribution(p);
   return result;
  });

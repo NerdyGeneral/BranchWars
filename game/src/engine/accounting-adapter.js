@@ -66,6 +66,7 @@ function postMonthlyOperations(g,p,preview=false){
  try{
   delta(p,'deposits',inflow);const beforeRunoff=p.stats.deposits;delta(p,'deposits',-r.depositRunoff);if(p.termFunding){r.depositRunoff=beforeRunoff-p.stats.deposits;r.depositGrowth=inflow-r.depositRunoff;calculation.stats.depositRunoff=r.depositRunoff}delta(p,'loans',originations);
   adjustDepositReport(p,g,r);
+  adjustAdvertisingReport(p,r);
   if(p.creditPerformance){const credit=p.creditPerformance.report;r.collectionsCost=credit.cost;r.creditRecovery=credit.recovered;r.creditEntered=credit.entered;r.creditCured=credit.cured;r.interestForgone=p.creditBook.cohorts.reduce((n,c)=>n+(c.principal-performingCredit(c))*c.rate/1000000,0);r.expense+=credit.cost;r.profit-=credit.cost}
   settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
   const income=Math.round(r.depositIncome+r.loanIncome+r.commercialIncome+r.otherIncome),expense=Math.round(r.fundingCost+r.expense),event=Math.round(r.eventAdjustment);
