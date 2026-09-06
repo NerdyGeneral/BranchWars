@@ -13,6 +13,7 @@ function operate(g, p, preview = false) {
     let text;
     try {
       if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
+      const retention = settleHouseholdRetention(g, p, preview);
       // Locked maturities precede promotion repricing; repayment precedes new lending.
       const term = prepareTermFunding(g, p),
         oldDepositWorld = depositWorld;
@@ -40,6 +41,11 @@ function operate(g, p, preview = false) {
         if (p.depositBook) p.depositBook.asOfCycle = g.cycle || p.depositBook.asOfCycle + 1;
       } finally {
         if (p.depositBook) depositWorld = oldDepositWorld;
+      }
+      if (retention) {
+        Object.assign(p.operatingReport, { householdDepartures: retention.departed, householdDepositOutflow: retention.depositOutflow, householdFundingLoss: retention.fundingLoss });
+        p.operatingReport.fundingLoss += retention.fundingLoss;
+        text += ' Household retention: ' + retention.departed + ' relationships left with $' + retention.depositOutflow.toLocaleString() + ' in withdrawable deposits; funding-sale losses $' + retention.fundingLoss.toLocaleString() + '.';
       }
       if (term) {
         const { opened, renewed, released } = term;

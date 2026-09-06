@@ -97,7 +97,7 @@ function repairSavedCampaign(g){
 }
 function repairSavedRivalry(g){
  repairSavedCampaign(g);
- g.version=g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
+ g.version=g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
  g.maxCycles=null;
  g.act=Math.max(0,Math.min(2,Number(g.act)||0));
  g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];
@@ -115,8 +115,9 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.workforceVersion!==undefined&&g.version!=='8.5')throw Error('Specialist workforce requires a v8.5 save.');
- if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5'].includes(g.version))throw Error('Only v6.0 through v8.4 saves are supported.');
+ if(g.customerOwnershipVersion!==undefined&&g.version!=='8.6')throw Error('Household ownership requires a v8.6 save.');
+ if(g.workforceVersion!==undefined&&g.version!==(g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
+ if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6'].includes(g.version))throw Error('Only v6.0 through v8.6 saves are supported.');
  g=JSON.parse(JSON.stringify(g));
  // Never repair over invalid accounting, ledger or funding versions.
  validateLedger(g);

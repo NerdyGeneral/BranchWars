@@ -69,6 +69,10 @@ function migration(input) {
   const before = JSON.stringify(input);
   const actual = outcome(() => E.migrateCampaign(input));
   const expected = outcome(() => old.client.importSave(input));
+  // v8.6 intentionally widens the supported save range. Keep every other
+  // result/error comparison exact; this changes no preserved save fixture.
+  if (expected.error === 'Error: Only v6.0 through v8.4 saves are supported.')
+    expected.error = 'Error: Only v6.0 through v8.6 saves are supported.';
   same(actual, expected, 'Migration differs from frozen importer');
   same(outcome(() => current.client.importSave(input)), actual, 'Browser import adapter disagrees with engine');
   assert.equal(JSON.stringify(input), before, 'Import/rejection mutated caller-owned save');

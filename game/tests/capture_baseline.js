@@ -19,6 +19,7 @@ files.push('tests/project-rules.test.js');
 files.push('tests/campaign-lifecycle.test.js');
 files.push('tests/multiplayer_lobby.test.js');
 files.push('tests/runtime-stages.test.js');
+files.push('tests/households.test.js');
 files.push('tests/specialist_workforce.test.js','tests/workforce_network.test.js','tests/release_balance.test.js');
 files.push('tools/build_game.js','tests/build.test.js');
 files.push(...require('../tools/build_game').assemble().files.map(file => path.relative(root, file).replace(/\\/g, '/')));
@@ -45,6 +46,9 @@ report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project
 report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/campaign-lifecycle.test.js']));
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
 report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
+report.tests.push(run('households.test.js', process.execPath, ['tests/households.test.js']));
+report.tests.push(run('Household network', process.execPath, ['tests/workforce_network.test.js', '--households']));
+report.tests.push(run('Household GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--households']));
 report.tests.push(run('specialist_workforce.test.js', process.execPath, ['tests/specialist_workforce.test.js']));
 report.tests.push(run('workforce_network.test.js', process.execPath, ['tests/workforce_network.test.js']));
 report.tests.push(run('Specialist workforce GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--workforce']));

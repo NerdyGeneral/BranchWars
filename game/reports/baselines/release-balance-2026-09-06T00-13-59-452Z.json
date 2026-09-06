@@ -1,0 +1,693 @@
+{
+  "passed": true,
+  "sourceSha256": "cc4e8366fc74ecbcbc85600b261c05acbceaaefeaffbaf0107e5794380033f3a",
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 0,
+  "seedCount": 4,
+  "turnLimit": 120,
+  "turns": 1920,
+  "maxViewBytes": 833779,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1261714,
+        1723250
+      ],
+      "deposits": [
+        97785636,
+        29664395
+      ],
+      "profit": [
+        69421,
+        146057
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1245516,
+        2432882
+      ],
+      "deposits": [
+        81413910,
+        56318845
+      ],
+      "profit": [
+        64549,
+        785609
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2298304,
+        1252903
+      ],
+      "deposits": [
+        41897697,
+        101054622
+      ],
+      "profit": [
+        740505,
+        36830
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1915279,
+        1222008
+      ],
+      "deposits": [
+        80508677,
+        65881278
+      ],
+      "profit": [
+        414620,
+        125093
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1271501,
+        1135263
+      ],
+      "deposits": [
+        22511917,
+        118127555
+      ],
+      "profit": [
+        65467,
+        126053
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1079921,
+        1775011
+      ],
+      "deposits": [
+        88393461,
+        63986830
+      ],
+      "profit": [
+        88256,
+        342037
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1790940,
+        1058919
+      ],
+      "deposits": [
+        30003082,
+        102756547
+      ],
+      "profit": [
+        53837,
+        29058
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1185596,
+        1648069
+      ],
+      "deposits": [
+        42691773,
+        101191321
+      ],
+      "profit": [
+        29510,
+        145177
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1188857,
+        1416247
+      ],
+      "deposits": [
+        51504602,
+        84837254
+      ],
+      "profit": [
+        55415,
+        84732
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1607379,
+        1561450
+      ],
+      "deposits": [
+        31603998,
+        113283343
+      ],
+      "profit": [
+        79682,
+        84076
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1360474,
+        1823065
+      ],
+      "deposits": [
+        72854189,
+        62587425
+      ],
+      "profit": [
+        66355,
+        264415
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2957067,
+        124306
+      ],
+      "deposits": [
+        69565496,
+        84623366
+      ],
+      "profit": [
+        996047,
+        21385
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1735188,
+        3557010
+      ],
+      "deposits": [
+        15101262,
+        125008190
+      ],
+      "profit": [
+        51908,
+        170078
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1821415,
+        1544362
+      ],
+      "deposits": [
+        30510265,
+        102310197
+      ],
+      "profit": [
+        86037,
+        45263
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1235838,
+        2522664
+      ],
+      "deposits": [
+        33719978,
+        106761650
+      ],
+      "profit": [
+        49821,
+        151451
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        7873576,
+        1288622
+      ],
+      "deposits": [
+        9419401,
+        133196018
+      ],
+      "profit": [
+        279648,
+        90598
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "providerChanges": 13,
+      "lateProviderChanges": 2,
+      "initiatives": 20,
+      "competitiveActions": 23,
+      "householdDepartures": 1925,
+      "householdDepositOutflow": 25395151,
+      "retentionShares": {
+        "25": 35,
+        "50": 54,
+        "75": 42,
+        "100": 109
+      },
+      "stagedSpecialists": 33,
+      "trainingSpend": 540000,
+      "trainingPaused": 0,
+      "maxSpecialists": 20,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 101500
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "providerChanges": 10,
+      "lateProviderChanges": 2,
+      "initiatives": 61,
+      "competitiveActions": 49,
+      "householdDepartures": 2561,
+      "householdDepositOutflow": 35119977,
+      "retentionShares": {
+        "25": 0,
+        "50": 10,
+        "75": 74,
+        "100": 156
+      },
+      "stagedSpecialists": 30,
+      "trainingSpend": 470000,
+      "trainingPaused": 18,
+      "maxSpecialists": 26,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 131500
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "providerChanges": 8,
+      "lateProviderChanges": 3,
+      "initiatives": 46,
+      "competitiveActions": 41,
+      "householdDepartures": 1938,
+      "householdDepositOutflow": 26229299,
+      "retentionShares": {
+        "25": 0,
+        "50": 61,
+        "75": 71,
+        "100": 108
+      },
+      "stagedSpecialists": 28,
+      "trainingSpend": 420000,
+      "trainingPaused": 10,
+      "maxSpecialists": 20,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 99500
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "providerChanges": 15,
+      "lateProviderChanges": 2,
+      "initiatives": 38,
+      "competitiveActions": 44,
+      "householdDepartures": 2122,
+      "householdDepositOutflow": 24513542,
+      "retentionShares": {
+        "25": 0,
+        "50": 51,
+        "75": 70,
+        "100": 119
+      },
+      "stagedSpecialists": 31,
+      "trainingSpend": 664000,
+      "trainingPaused": 3,
+      "maxSpecialists": 24,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 120500
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "providerChanges": 8,
+      "lateProviderChanges": 1,
+      "initiatives": 10,
+      "competitiveActions": 5,
+      "householdDepartures": 2102,
+      "householdDepositOutflow": 22361882,
+      "retentionShares": {
+        "25": 0,
+        "50": 119,
+        "75": 77,
+        "100": 44
+      },
+      "stagedSpecialists": 18,
+      "trainingSpend": 504000,
+      "trainingPaused": 0,
+      "maxSpecialists": 11,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 47500
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "providerChanges": 8,
+      "lateProviderChanges": 2,
+      "initiatives": 54,
+      "competitiveActions": 55,
+      "householdDepartures": 2507,
+      "householdDepositOutflow": 33615656,
+      "retentionShares": {
+        "25": 0,
+        "50": 38,
+        "75": 61,
+        "100": 141
+      },
+      "stagedSpecialists": 32,
+      "trainingSpend": 547000,
+      "trainingPaused": 1,
+      "maxSpecialists": 21,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 104500
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "providerChanges": 7,
+      "lateProviderChanges": 1,
+      "initiatives": 11,
+      "competitiveActions": 16,
+      "householdDepartures": 2083,
+      "householdDepositOutflow": 28001339,
+      "retentionShares": {
+        "25": 26,
+        "50": 55,
+        "75": 50,
+        "100": 109
+      },
+      "stagedSpecialists": 21,
+      "trainingSpend": 648000,
+      "trainingPaused": 1,
+      "maxSpecialists": 11,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 62500
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "providerChanges": 10,
+      "lateProviderChanges": 4,
+      "initiatives": 9,
+      "competitiveActions": 4,
+      "householdDepartures": 2173,
+      "householdDepositOutflow": 25622435,
+      "retentionShares": {
+        "25": 1,
+        "50": 121,
+        "75": 37,
+        "100": 81
+      },
+      "stagedSpecialists": 30,
+      "trainingSpend": 646000,
+      "trainingPaused": 5,
+      "maxSpecialists": 17,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 74500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "providerChanges": 20,
+      "lateProviderChanges": 7,
+      "initiatives": 16,
+      "competitiveActions": 18,
+      "householdDepartures": 2430,
+      "householdDepositOutflow": 28483537,
+      "retentionShares": {
+        "25": 17,
+        "50": 87,
+        "75": 41,
+        "100": 95
+      },
+      "stagedSpecialists": 32,
+      "trainingSpend": 618000,
+      "trainingPaused": 0,
+      "maxSpecialists": 17,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 79500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "providerChanges": 4,
+      "lateProviderChanges": 0,
+      "initiatives": 10,
+      "competitiveActions": 11,
+      "householdDepartures": 1980,
+      "householdDepositOutflow": 24033347,
+      "retentionShares": {
+        "25": 1,
+        "50": 120,
+        "75": 29,
+        "100": 90
+      },
+      "stagedSpecialists": 33,
+      "trainingSpend": 540000,
+      "trainingPaused": 7,
+      "maxSpecialists": 17,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 74000
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "providerChanges": 10,
+      "lateProviderChanges": 2,
+      "initiatives": 33,
+      "competitiveActions": 54,
+      "householdDepartures": 2945,
+      "householdDepositOutflow": 44129043,
+      "retentionShares": {
+        "25": 0,
+        "50": 39,
+        "75": 49,
+        "100": 152
+      },
+      "stagedSpecialists": 33,
+      "trainingSpend": 444000,
+      "trainingPaused": 2,
+      "maxSpecialists": 21,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 104500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "providerChanges": 9,
+      "lateProviderChanges": 3,
+      "initiatives": 61,
+      "competitiveActions": 51,
+      "householdDepartures": 2453,
+      "householdDepositOutflow": 32117742,
+      "retentionShares": {
+        "25": 1,
+        "50": 52,
+        "75": 52,
+        "100": 135
+      },
+      "stagedSpecialists": 28,
+      "trainingSpend": 600000,
+      "trainingPaused": 1,
+      "maxSpecialists": 20,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 100000
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "providerChanges": 9,
+      "lateProviderChanges": 1,
+      "initiatives": 19,
+      "competitiveActions": 13,
+      "householdDepartures": 2609,
+      "householdDepositOutflow": 25815117,
+      "retentionShares": {
+        "25": 0,
+        "50": 107,
+        "75": 67,
+        "100": 66
+      },
+      "stagedSpecialists": 32,
+      "trainingSpend": 526000,
+      "trainingPaused": 21,
+      "maxSpecialists": 25,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 105500
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "providerChanges": 15,
+      "lateProviderChanges": 3,
+      "initiatives": 11,
+      "competitiveActions": 9,
+      "householdDepartures": 3405,
+      "householdDepositOutflow": 37084631,
+      "retentionShares": {
+        "25": 0,
+        "50": 108,
+        "75": 44,
+        "100": 88
+      },
+      "stagedSpecialists": 37,
+      "trainingSpend": 572000,
+      "trainingPaused": 1,
+      "maxSpecialists": 22,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 92000
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "providerChanges": 11,
+      "lateProviderChanges": 2,
+      "initiatives": 9,
+      "competitiveActions": 4,
+      "householdDepartures": 2366,
+      "householdDepositOutflow": 24845411,
+      "retentionShares": {
+        "25": 0,
+        "50": 129,
+        "75": 48,
+        "100": 63
+      },
+      "stagedSpecialists": 30,
+      "trainingSpend": 424000,
+      "trainingPaused": 0,
+      "maxSpecialists": 21,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 91000
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "providerChanges": 10,
+      "lateProviderChanges": 5,
+      "initiatives": 17,
+      "competitiveActions": 16,
+      "householdDepartures": 1824,
+      "householdDepositOutflow": 21966992,
+      "retentionShares": {
+        "25": 2,
+        "50": 51,
+        "75": 95,
+        "100": 92
+      },
+      "stagedSpecialists": 26,
+      "trainingSpend": 304000,
+      "trainingPaused": 3,
+      "maxSpecialists": 23,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 97500
+    }
+  ]
+}

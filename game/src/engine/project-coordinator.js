@@ -73,6 +73,7 @@ function finishProject(g, p, project) {
             if (marketTransfer) marketBypass = oldBypass;
           }
           if (marketTransfer) {
+            transferHouseholds(seller, p, project.target, terms.customerTake);
             for (const [resource, amount] of Object.entries({
               deposits: terms.depositTake,
               loans: terms.loanTake,

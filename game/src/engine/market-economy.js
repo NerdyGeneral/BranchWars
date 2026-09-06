@@ -22,6 +22,7 @@ function moveOutside(p,r,requested,target=null,limited=false){
   weights[k]=positive&&limited?Math.min(available,(p.marketSupply&&p.marketSupply[r][k])||0):available}
  const amount=Math.min(Math.abs(Math.round(requested)),Object.values(weights).reduce((a,b)=>a+b,0)),parts=marketSplit(amount,weights);
  for(const [k,n]of Object.entries(parts)){if(!n)continue;const m=g.marketEconomy.markets[k],outside=positive?marketSplit(n,{community:m.community[r],union:m.union[r]}):marketSplit(n,{community:3,union:2});
+  if(r==='customers')moveOutsideHouseholds(p,k,outside,positive,limited);
   for(const institution of ['community','union'])m[institution][r]+=positive?-outside[institution]:outside[institution];
   p.marketBook.markets[k][r]+=positive?n:-n;
   if(positive&&limited&&p.marketQuota&&p.marketQuota[r])p.marketQuota[r][k]=Math.max(0,p.marketQuota[r][k]-n);
@@ -47,6 +48,7 @@ function transferMarket(g,from,to,key,resource,requested){
  const n=Math.min(Math.max(0,Math.round(requested)),(resource==='deposits'?withdrawableDeposits(from,key):from.marketBook.markets[key][resource]));if(!n)return 0;
  const sensitive=resource==='deposits'?Math.min(from.stats.rateSensitiveDeposits||0,Math.round(n*(from.stats.rateSensitiveDeposits||0)/Math.max(1,from.stats.deposits))):0;
  const old=marketBypass;marketBypass=true;try{marketDelta(from,resource,-n);marketDelta(to,resource,n);if(sensitive){marketDelta(from,'rateSensitiveDeposits',-sensitive);marketDelta(to,'rateSensitiveDeposits',sensitive)}}finally{marketBypass=old}
+ if(resource==='customers')transferHouseholds(from,to,key,n);
  from.marketBook.markets[key][resource]-=n;to.marketBook.markets[key][resource]+=n;return n;
 }
 function initializeMarketBooks(g,o){

@@ -1213,7 +1213,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.4/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.6/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1253,7 +1253,7 @@ assert(html.includes('function renderProducts'));
 assert(html.includes('data-specialization-branch'));
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
-assert.equal((html.match(/data-workspace-tab=/g) || []).length, 7, 'command center has six core workspaces plus the optional workforce workspace');
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 8, 'command center has six core workspaces plus optional Workforce and Customers workspaces');
 assert(html.includes('data-workspace-tab="workforce"'), 'the optional workforce workspace has its own navigation target');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
 assert(html.includes('function renderCampaignBuff'), 'the advertising buff must be shown to the player');

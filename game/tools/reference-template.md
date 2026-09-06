@@ -70,6 +70,7 @@ staff allocation covering every banker, and an answer to any executive call.
 | `newProjects` | Initiatives to start, limited by execution capacity and cash. |
 | `hires` | Bankers to recruit this cycle. |
 | `specialistHires` | Workforce preview: additional hires by specialty. Generalists and specialists together may not exceed six. |
+| `householdPolicy` | Household ownership preview: recurring retention time share and relative service priorities for Everyday, Connected and Reserve households. |
 | `workforcePolicy` | Workforce preview: persistent department training ceilings and protected cash reserve. |
 | `investments` | Money into capability lanes, capped per lane per cycle. |
 | `specializations` | Operating model per capability lane, permanent once set. |
@@ -563,6 +564,51 @@ limits, and grants no current-turn staff. Review the next turn's allocation afte
 recruits arrive. Previews exclude events, rival actions, opportunities and project
 completions. The comparison is calculated only while the panel is open.
 
-This is decision support for existing workforce rules, not specialist careers,
-new training budgets, or a new simulation/save version. See roadmap.md
+This original staffing planner does not itself change saved rules. Specialist
+workforce and household ownership are separate opt-in previews. See roadmap.md
 for the remaining package-level work.
+
+### Household ownership and retention — v8.6 preview
+
+Requires Specialist workforce and its prerequisites. Existing campaigns keep
+their saved rules. The public market pools and the two private bank books track
+exact household counts for Everyday, Connected and Reserve segments; each
+segment is conserved across all four owners in every market. Ordinary intake,
+departures, raids and book acquisitions transfer actual existing households.
+Organic intake favors the bank's open-product suitability, capped to available
+segment counts. Changing an offer never relabels the existing customer book.
+
+Customers has the recurring mandate, local ownership and a workload drilldown.
+Retention reserves 25/50/75/100% of effective Retail staff; the remainder supports
+banker-led acquisition. Existing office sales reach remains. Legacy training
+adds 0.3 retention capacity per level. Priorities 0–3 weight that finite capacity
+by segment workload; at least one priority must be positive. A specialist's
+effective time is split once, not credited in full to both retention and sales.
+
+<!--{{HOUSEHOLD_WORKLOAD}}-->
+
+Workload is count / 900 times the segment factor. A retail office reduces local
+Everyday demand by 10%; a digital office reduces Connected demand by 20%. Each
+local service upgrade reduces demand by 10% (two-level existing cap). Priorities
+allocate proportionally to weighted demand; over-service is not auto-reassigned.
+Goodwill uses the same coverage bands and existing-local-product fit thresholds
+as the prior rules, but owned segment counts now weight the bank's deposit pull.
+The separate flat goodwill bonus from local upgrades is replaced by workload
+relief; an empty segment drifts toward neutral 50.
+
+Before monthly maturities and production, goodwill below 45 produces a departure
+rate of min(1.5%, (45 - goodwill) / 2000), floored to whole households. Coverage
+at least 100% cuts that rate by 60%, not instantly to zero. Departures go to
+community banks and credit unions in a 3:2 split and reopen finite prospects.
+The bank's local-average deposit estimate leaves with them, capped to unlocked
+funding. Deposits remain **pooled by market**, not genuinely segment-owned or
+person-owned financial accounts. Locked term balances remain in place.
+
+Cash and deposit liabilities fall together: outflows are not operating expense.
+Necessary funding sales can realize losses; those appear separately and are
+included in forecast funding-loss totals. Reports and the causal ledger record
+actual departures/outflows. Private priorities and goodwill are not exposed in
+rival views or rival last plans. The AI selects the lowest retention share that
+covers 105% of current aggregate workload, or 100% if none can; it does not yet
+optimize segment priorities or fully solve staffing recovery. Delayed loan
+delinquency, collections, household incomes and cross-selling remain ahead.

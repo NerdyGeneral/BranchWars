@@ -54,6 +54,20 @@ Executive Command v8.1 · Long-form / multiplayer edition
    All training pauses together when cash/capital protection cannot fund the
    combined bill; unused ceilings are not charged. Compare the forecast and
    last month's actual costs before expanding a team.
+   Household ownership preview builds on those rules in save format 8.6.
+   Customers has exact household counts by segment and market, not influence
+   scores. Sales, raids and acquisitions move people from an existing owner.
+   Reserve 25/50/75/100% of Retail time for retention, then choose relative
+   segment priorities. More retention means less banker-led acquisition.
+   Everyday, Connected and Reserve households have different workloads;
+   office models, local service upgrades and Retail expertise help capacity.
+   Neglect first lowers goodwill. Below 45, households gradually leave for
+   outside institutions. Restoring service reduces departures while trust
+   rebuilds. Review actual departures and deposit outflows after each month.
+   Deposits are still pooled by market: departures withdraw a local-average
+   estimate capped to unlocked balances. Term funding cannot be broken early.
+   This is not individual household finance, cross-selling or delinquent loans.
+   Both friends must update; old campaigns are not silently converted.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
