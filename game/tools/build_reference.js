@@ -74,6 +74,15 @@ function sourceOf(name) {
 // ------------------------------------------------------------------- sections
 
 const sections = {};
+sections.RELATIONSHIP_OFFERS = table(
+  ['Constraint', 'Current rule'],
+  [
+    ['Share of non-retention Retail sales time', E.RELATIONSHIP_OFFER_SHARES.map(n => n + '%').join(' / ')],
+    ['Capacity per effective assigned banker/month', E.RELATIONSHIP_OFFER_CAPACITY + ' conversion equivalents'],
+    ['Conversion cost', '$' + E.RELATIONSHIP_OFFER_COST + ' per completed equivalent'],
+    ['Monthly uptake', '10% of eligible equivalents, rounded down']
+  ]
+);
 sections.COLLECTION_APPROACHES = table(
   ['Approach', '30-day cure', '60-day cure', '90+ resolution/month', 'Loss on resolution', 'Cost per $1M handled'],
   Object.values(E.COLLECTION_APPROACHES).map(d => [d.name, d.early*100+'%', d.late*100+'%', d.resolve*100+'%', d.severity*100+'%', '$'+d.cost.toLocaleString('en-US')])

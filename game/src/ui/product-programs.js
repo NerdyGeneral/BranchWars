@@ -3,9 +3,9 @@ function stageProductProgramme(v,change,{allowDecommit=false}={}) {
  if(v.me.submitted||!v.me.productPrograms)return false;
  const next=JSON.parse(JSON.stringify(draft));
  try {
-  change(next);E.normalizeProductProgramPlan(v.me,next);E.normalizeAdvertisingPlan(v.me,next);
+  change(next);E.normalizeProductProgramPlan(v.me,next);E.normalizeAdvertisingPlan(v.me,next);if(v.me.relationshipOffers)E.normalizeRelationshipOfferPlan(v.me,next);
   const status=E.projectPlanStatus(v.me,next);
-  if(!status.eligible&&!allowDecommit)throw Error(status.reason);
+  if(!status.eligible&&!(typeof allowDecommit==='function'?allowDecommit(next):allowDecommit))throw Error(status.reason);
   draft=next;renderProducts(v);renderProjects(v);renderReady(v);return true;
  }catch(e){toast(e.message);renderProductPrograms(v);return false;}
 }
@@ -25,11 +25,12 @@ function renderProductPrograms(v) {
  $('#productProgramsNav').classList.toggle('hidden',!v.me.productPrograms);
  if(!v.me.productPrograms){$('#productProgramsPanel').innerHTML='';if(workspaceTab==='products')setWorkspaceTab('overview');return;}
  if(workspaceTab!=='products')return;
+ if(productDeskView==='relationships'&&!v.me.relationshipOffers)productDeskView='development';
  const p=v.me,policy=draft.productProgramPolicy,disabled=p.submitted?'disabled':'',cash=n=>'$'+Math.round(n).toLocaleString();
  const preview=JSON.parse(JSON.stringify(p));E.applyProductProgramPolicy(preview,policy);
  const vendor=E.productProgramCosts(preview),book=E.segmentDepositSummary(preview,v);
  const head='<div class="section-head"><div><h2>PRODUCT MANAGEMENT</h2><p class="small muted">Build a delivery platform. Choose who you sell to. Keep the promises already on your books.</p></div><span class="micro">Draft changes settle with both plans</span></div>'+
- '<div class="product-desk-tabs" role="group" aria-label="Product views">'+[['development','Development & retirement'],['targets','Local sales targets'],...(p.advertising?[['advertising','Advertising & attribution']]:[])].map(([k,name])=>'<button type="button" class="btn '+(productDeskView===k?'primary':'')+'" data-product-view="'+k+'" aria-pressed="'+(productDeskView===k)+'">'+name+'</button>').join('')+'</div>'+
+ '<div class="product-desk-tabs" role="group" aria-label="Product views">'+[['development','Development & retirement'],['targets','Local sales targets'],...(p.advertising?[['advertising','Advertising & attribution']]:[]),...(p.relationshipOffers?[['relationships','Existing customers']]:[])].map(([k,name])=>'<button type="button" class="btn '+(productDeskView===k?'primary':'')+'" data-product-view="'+k+'" aria-pressed="'+(productDeskView===k)+'">'+name+'</button>').join('')+'</div>'+
  '<div class="product-desk-summary"><div><small>Current-book vendor run rate · draft</small><b>'+cash(vendor.total)+'/month</b></div><div><small>All deposit interest + service − fees · draft</small><b>'+cash(book.interest+book.service-book.fees)+'/month</b></div><div><small>One-time retirements staged</small><b>'+cash(policy.retire.length*E.PRODUCT_RETIRE_COST)+'</b></div></div>';
  let content='';
  if(productDeskView==='development'){
@@ -60,8 +61,10 @@ function renderProductPrograms(v) {
    '<details class="product-target-overview"><summary>All market sales instructions</summary><div class="table-scroll"><table class="regional-table"><thead><tr><th>Market</th><th>Everyday</th><th>Connected</th><th>Reserve</th></tr></thead><tbody>'+Object.entries(policy.markets).map(([k,row])=>'<tr><th>'+esc(v.territories[k].name)+'</th>'+Object.values(row).map(mix=>'<td>'+Object.entries(mix).filter(([,w])=>w).map(([k,w])=>esc(v.productPortfolios.retail.options[k].name)+' '+w).join('<br>')+'</td>').join('')+'</tr>').join('')+'</tbody></table></div></details>';
  }
  if(productDeskView==='advertising'&&p.advertising)content=advertisingDeskContent(v,preview);
+ if(productDeskView==='relationships'&&p.relationshipOffers)content=relationshipOfferContent(v,preview);
  $('#productProgramsPanel').innerHTML=head+content+'<p class="micro muted">Run rates hold today’s account balances fixed; they exclude new intake, shared payroll, loan income and one-time development/retirement spend. Use Operations for the complete operating forecast and term-deposit policy. No order is submitted from this page.</p>';
  if(productDeskView==='advertising'&&p.advertising)bindAdvertisingDesk(v);
+ if(productDeskView==='relationships'&&p.relationshipOffers)bindRelationshipOfferDesk(v);
  $$('[data-product-view]').forEach(b=>b.addEventListener('click',()=>{productDeskView=b.dataset.productView;renderProductPrograms(v);}));
  $$('[data-product-development]').forEach(b=>b.addEventListener('click',()=>toggleProductDevelopment(v,b.dataset.productDevelopment)));
  $$('[data-product-retire]').forEach(b=>b.addEventListener('click',()=>toggleProductRetirement(v,b.dataset.productRetire)));

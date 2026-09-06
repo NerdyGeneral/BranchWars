@@ -15,9 +15,12 @@ function operatingPreview(p,plan,economy){
  applyCollectionsPolicy(copy,plan.collectionsPolicy);
  applyProductProgramPolicy(copy,plan.productProgramPolicy);
  applyAdvertisingPolicy(copy,plan.advertisingPolicy);
+ applyRelationshipOfferPolicy(copy,plan.relationshipOfferPolicy);
  copy.products={...copy.products,...plan.products};if(copy.termFunding&&plan.termPolicy)copy.termFunding.policy={...plan.termPolicy};if(copy.retailLifecycle&&plan.retailMix&&!copy.productPrograms)applyRetailMix(copy,plan.retailMix);applyServicePolicy(copy,plan.servicePolicy);copy.turnEffects={};copy.fundingGap=0;
- if(copy.workforce){applyWorkforcePolicy(copy,plan.workforcePolicy);const q=planBudget(copy,plan);copy._workforceReserved=q.total-(q.training||0)-(q.advertising||0)}
+ if(copy.workforce){applyWorkforcePolicy(copy,plan.workforcePolicy);const q=planBudget(copy,plan);copy._workforceReserved=q.total-(q.training||0)-(q.advertising||0)-(q.relationshipOffers||0)}
+ if(copy.relationshipOffers)copy._relationshipOfferBudget=relationshipOfferBudget(copy,plan);
  operate({economy,cycle:0},copy,true);
+ // Offer reports are part of the same operating estimate, not additive growth.
  return {...copy.operatingReport,capitalRatio:capitalRatio(copy),rateSensitiveDeposits:copy.stats.rateSensitiveDeposits};
 }
 function deleverage(g,p){if(tierRank(p)<2||p.stats.loans<250000)return'';const sold=Math.round(p.stats.loans*.03),haircut=Math.round(sold*.07);delta(p,'loans',-sold);delta(p,'cash',sold-haircut);delta(p,'capital',-haircut);return`${p.name} sold $${sold.toLocaleString()} of loans under its consent order at a $${haircut.toLocaleString()} loss.`}

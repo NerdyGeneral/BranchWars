@@ -94,7 +94,7 @@ function regionalGrowthValidGrid(g, grid) {
 function validateRegionalGrowthState(g, settling = false) {
   const fail = message => { throw Error('Invalid regional growth ' + message); };
   const b = g.regionalGrowth;
-  if (g.regionalGrowthVersion !== 1 || g.advertisingVersion !== 1 || g.version !== '8.11') fail('version or prerequisites.');
+  if (g.regionalGrowthVersion !== 1 || g.advertisingVersion !== 1 || g.version !== (g.relationshipOffersVersion === 1 ? '8.12' : '8.11')) fail('version or prerequisites.');
   if (!regionalGrowthShape(b, ['version', 'lastCycle', 'openingOutside', 'openingWorld', 'cumulativeIn', 'cumulativeOut', 'carry', 'regimeCycles', 'report']) ||
       b.version !== 1 || !regionalGrowthUint(b.lastCycle) || !Number.isSafeInteger(g.cycle) || g.cycle < 1 ||
       (settling ? ![g.cycle - 1, g.cycle].includes(b.lastCycle) : b.lastCycle !== g.cycle - (g.gameOver ? 0 : 1))) fail('lifecycle.');

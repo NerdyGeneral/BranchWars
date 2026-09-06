@@ -4,6 +4,13 @@ Updated: 2026-09-06. This is the current implementation plan; the user's separat
 
 ## Regional demand boundary — v8.11
 
+The following v8.12 relationship-offer slice adds `engine/relationship-offers.js`
+and `ui/relationship-offers.js`. Explicit campaign, policy, budget, operations and
+validation calls replace no runtime functions. The rule changes existing product
+cohorts only; its expense is part of the normal accounting settlement. A temporary
+opening-plan budget bounds execution and is removed before save/public boundaries.
+Offer reports and policies use owner-only projection. Tests retain legacy outcomes.
+
 `engine/regional-growth.js` owns deterministic external household/savings flows,
 immutable opening scales, fractional carries and conservation validation.
 Campaign initialization, the month-end coordinator, save validation and public
@@ -13,7 +20,7 @@ ending/regime transition; it cannot enlarge that month's frozen intake quotas.
 The public view omits private anchors/counters; `ui/regional-growth.js` is a
 read-only Markets report, not another Operations control panel.
 
-The portable manifest now contains 94 ordered inputs. New rules require explicit
+The portable manifest now contains 96 ordered inputs. New rules require explicit
 new-campaign opt-in and peer capability negotiation. Older save versions retain
 their outcomes; no frozen reference or golden fixture is regenerated.
 
@@ -95,7 +102,7 @@ The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.js
 | `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
 | `src/page.html` | Page markup with build slots, not a second executable implementation |
 
-The current manifest has 94 ordered inputs including shells, manifest and markup, with separate domains for specialists, households, collections, segment deposits, product programmes, advertising, recovery and regional demand. These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+The current manifest has 96 ordered inputs including shells, manifest and markup, with separate domains for specialists, households, collections, segment deposits, product programmes, advertising, recovery, regional demand and existing-customer offers. These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
 
 The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
 

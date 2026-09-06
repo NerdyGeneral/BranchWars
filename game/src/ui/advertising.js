@@ -4,7 +4,8 @@ function advertisingDeskContent(v, productPreview) {
  const p=JSON.parse(JSON.stringify(productPreview)),q=draft.advertisingPolicy,cash=n=>'$'+Math.round(n).toLocaleString();
  p.doctrine=typeof p.doctrine==='object'?p.doctrine.key:p.doctrine;p.allocation={...draft.allocation};
  p.householdBook.policy=JSON.parse(JSON.stringify(draft.householdPolicy));p.workforce.policy=JSON.parse(JSON.stringify(draft.workforcePolicy));
- const budget=E.planBudget(v.me,draft);p._workforceReserved=budget.total-(budget.training||0)-(budget.advertising||0);
+ if(p.relationshipOffers)E.applyRelationshipOfferPolicy(p,draft.relationshipOfferPolicy);
+ const budget=E.planBudget(v.me,draft);p._workforceReserved=budget.total-(budget.training||0)-(budget.advertising||0)-(budget.relationshipOffers||0);
  const quote=E.advertisingPreview(p,v,q),last=v.me.advertising.report,disabled=v.me.submitted?'disabled':'';
  const select=(key,label,options)=>'<label>'+label+'<select data-advertising-field="'+key+'" '+disabled+'>'+options.map(([value,text,unavailable])=>'<option value="'+value+'" '+(String(q[key])===String(value)?'selected':'')+' '+(unavailable?'disabled':'')+'>'+esc(text)+'</option>').join('')+'</select></label>';
  const controls=select('market','Campaign market',Object.entries(v.territories).map(([k,t])=>[k,t.name]))+

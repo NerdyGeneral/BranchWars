@@ -570,6 +570,27 @@ availability before settlement. Expand the report for regional/market detail.
 These flows keep depleted markets supplied but do not guarantee a comeback,
 equalize bank sizes, or complete the national economy.
 
+## EXISTING-CUSTOMER OFFERS PREVIEW (NEW CAMPAIGNS ONLY)
+
+Enable Relationship offers preview in setup; its prerequisites are selected
+automatically. Both friends need the v8.12-capable build. Existing saves retain
+their previous rules.
+
+In Products > Existing customers, choose a local segment and an open, deployed
+product. Reserve 25% or 50% of Retail sales time after the Customers retention
+reserve, or select Paused. The offer target does not change your focus market.
+This switches eligible existing balances to a better-fitting product; it does
+not create customers, deposits or extra product ownership. Promised/locked
+balances are excluded. Closing or retiring the target pauses the instruction.
+
+Read the conversion expense, recurring direct-cost change and remaining sales
+capacity together. A positive recurring-cost change costs the bank more, even
+if the customer fit improves. Advertising and Customers reflect the same draft
+capacity. Actual conversions may differ from the current-book quote after
+retention, maturities and other monthly activity. Offers cannot reverse the
+departures already processed earlier that month. Early return on these offers
+and late-game competition still need balance work; see the release notes.
+
 ## FILES
 
 BRANCH_WARS.html       Complete game; all rules and assets are inside this file

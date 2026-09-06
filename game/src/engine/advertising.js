@@ -191,7 +191,7 @@ function planAdvertising(g, index, input) {
 function validateAdvertisingSave(g) {
   const has = p => p.advertising !== undefined || p._advertisingCycle !== undefined || p.submitted?.advertisingPolicy !== undefined;
   if (g.advertisingVersion === undefined) { if (g.players.some(has)) throw Error('Unversioned advertising'); return g; }
-  if (g.advertisingVersion !== 1 || g.productProgramsVersion !== 1 || g.version !== (g.regionalGrowthVersion === 1 ? '8.11' : '8.10')) throw Error('Unsupported advertising save');
+  if (g.advertisingVersion !== 1 || g.productProgramsVersion !== 1 || g.version !== (g.relationshipOffersVersion === 1 ? '8.12' : g.regionalGrowthVersion === 1 ? '8.11' : '8.10')) throw Error('Unsupported advertising save');
   const uint = n => Number.isSafeInteger(n) && n >= 0, bps = n => uint(n) && n <= 10000;
   for (const p of g.players) {
     const state = p.advertising;
