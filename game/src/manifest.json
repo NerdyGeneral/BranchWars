@@ -40,6 +40,7 @@
       "engine/workforce.js",
       "engine/households.js",
       "engine/collections.js",
+      "engine/segment-deposits.js",
       "engine/ledger.js",
       "engine/accounting.js",
       "engine/migration.js",

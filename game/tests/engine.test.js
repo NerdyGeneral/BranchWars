@@ -1213,7 +1213,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.7/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.8/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 

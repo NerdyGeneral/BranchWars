@@ -20,7 +20,7 @@ files.push('tests/campaign-lifecycle.test.js');
 files.push('tests/multiplayer_lobby.test.js');
 files.push('tests/runtime-stages.test.js');
 files.push('tests/households.test.js');
-files.push('tests/collections.test.js');
+files.push('tests/collections.test.js','tests/segment_deposits.test.js');
 files.push('tests/specialist_workforce.test.js','tests/workforce_network.test.js','tests/release_balance.test.js');
 files.push('tools/build_game.js','tests/build.test.js');
 files.push(...require('../tools/build_game').assemble().files.map(file => path.relative(root, file).replace(/\\/g, '/')));
@@ -48,6 +48,9 @@ report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/ca
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
 report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
 report.tests.push(run('households.test.js', process.execPath, ['tests/households.test.js']));
+report.tests.push(run('segment_deposits.test.js', process.execPath, ['tests/segment_deposits.test.js']));
+report.tests.push(run('Segment deposits network', process.execPath, ['tests/workforce_network.test.js','--segment-deposits']));
+report.tests.push(run('Segment deposits GitHub relay', process.execPath, ['tests/github_resilience.test.js','--segment-deposits']));
 report.tests.push(run('collections.test.js', process.execPath, ['tests/collections.test.js']));
 report.tests.push(run('Collections network', process.execPath, ['tests/workforce_network.test.js', '--collections']));
 report.tests.push(run('Collections GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--collections']));
