@@ -71,7 +71,7 @@ function marketContribution(p){
  const weights=r=>Object.fromEntries(Object.entries(books).map(([k,b])=>[k,b[r]]));
  allocate(r.depositIncome,weights('deposits'),'income');allocate(r.loanIncome,weights('loans'),'income');
  allocate(r.commercialIncome,Object.fromEntries(Object.entries(books).map(([k,b])=>[k,b.business*760+b.merchant*650])),'income');
- allocate(r.fundingCost,weights('deposits'),'funding');allocate(r.chargeoff,weights('loans'),'credit');
+ allocate(r.fundingCost,weights('deposits'),'funding');if(p.creditPerformance){for(const [k,loss]of Object.entries(p.creditPerformance.report.rows))rows[k].credit=loss.loss}else allocate(r.chargeoff,weights('loans'),'credit');
  const efficiency=(r.expense-(r.depositServiceCost||0))/Math.max(1,p.stats.staff*18000+metrics.expense);
  for(const m of metrics.rows)rows[m.key].facility=Math.round(m.expense*efficiency);
  for(const row of Object.values(rows))row.contribution=row.income-row.funding-row.credit-row.facility;

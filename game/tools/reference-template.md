@@ -71,6 +71,7 @@ staff allocation covering every banker, and an answer to any executive call.
 | `hires` | Bankers to recruit this cycle. |
 | `specialistHires` | Workforce preview: additional hires by specialty. Generalists and specialists together may not exceed six. |
 | `householdPolicy` | Household ownership preview: recurring retention time share and relative service priorities for Everyday, Connected and Reserve households. |
+| `collectionsPolicy` | Credit performance preview: recurring Lending time share and workout/balanced/recovery approach. |
 | `workforcePolicy` | Workforce preview: persistent department training ceilings and protected cash reserve. |
 | `investments` | Money into capability lanes, capped per lane per cycle. |
 | `specializations` | Operating model per capability lane, permanent once set. |
@@ -611,4 +612,81 @@ actual departures/outflows. Private priorities and goodwill are not exposed in
 rival views or rival last plans. The AI selects the lowest retention share that
 covers 105% of current aggregate workload, or 100% if none can; it does not yet
 optimize segment priorities or fully solve staffing recovery. Delayed loan
-delinquency, collections, household incomes and cross-selling remain ahead.
+delinquency and collections require the separate preview below; household
+incomes and cross-selling remain ahead.
+
+## Credit performance preview (v8.7)
+
+Opt-in for new campaigns only, requiring Household ownership and its earlier
+prerequisites. Both linked clients must support credit performance. Old saves
+retain their credit-loss rules; they are never automatically upgraded.
+
+Each loan cohort retains product, monthly rate, risk and remaining term, plus
+three principal-at-risk aging buckets: 30, 60 and 90+ days. These are fictional
+whole-balance groups, not individual invoices or overdue installments. New
+loans have two monthly seasoning reviews before entering arrears. Opening loans
+are already seasoned. Product and lending standards, Operations expertise and
+risk-control research determine new origination risk; switching them later does
+not rewrite existing loans. The economy and executive credit shocks affect new
+missed payments from the performing book.
+
+Monthly entry = floor(performing principal × min(4%, 0.6% × retained risk / 10000
+× economic credit pressure × executive credit multiplier)), after seasoning.
+Uncured early balances advance exactly one bucket per review. Existing 90+ day
+balances may resolve; new arrivals cannot resolve in that same review.
+
+Reserve 0/25/50/75/100% of effective Lending staff for collections. Generalists
+and assigned Credit analyst expertise share the split once; the remainder drives
+new-loan production. One effective collections banker covers $1M of delinquent
+principal. Coverage caps at 100%; extra allocation is not a free bonus. No
+additional salary is charged solely for changing the split.
+
+<!--{{COLLECTION_APPROACHES}}-->
+
+Early cure rates scale with coverage. Resolved 90+ principal = ceil(opening 90+
+principal × approach resolution rate × (25% + 75% × coverage)), capped to the
+owned balance. Writeoff is rounded resolved principal × severity; the remainder
+returns to cash as principal recovery, not income. Cures resume performing
+status without inventing accrued/back-interest. All delinquent balances cease
+interest and scheduled principal; maturity never silently deletes unpaid loans.
+
+Case costs are ceil((cured + resolved principal) × approach cost / $1M), computed
+by market and posted once as operating expense, outside event profit multipliers.
+Case costs are payable, not an optional training ceiling, and cash shortages can
+force asset sales. Automatic recovery still has external handling costs at zero
+staff allocation. Repayment/recovery changes cash and loan assets; writeoffs
+reduce loan assets and equity, not cash. Foregone interest is not a second expense.
+Monthly production no longer applies the legacy immediate proportional chargeoff
+in these campaigns; reported aging losses were already posted at resolution.
+Explicit exceptional watchlist events may still cause direct losses later.
+
+Acquisitions preserve aging and seasoning. Funding sales and other partial book
+removals reduce performing and delinquent principal proportionally. Forced loan
+sale discounts are no longer flat for these campaigns: the base 6% funding / 7%
+regulatory discount adds the whole-book weighted 10 / 30 / 70 percentage-point
+penalties on 30 / 60 / 90+ day principal, rounded to basis points. Performing
+principal adds no distress penalty. Thus a fully 90+ book sells at a 76% funding
+discount, not near par. Pricing is independent of the chosen collections policy;
+changing the mandate cannot reprice an existing default. The funding waterfall
+sells enough face value at this quote or borrows for the remaining cash gap.
+These are fictional simplified sale quotes, not market valuation or collateral
+models. Previous rules retain their flat discounts. The causal
+credit summary includes aging totals; owner reports retain actual market cures,
+recoveries, losses and costs. Credit mandates and detailed books remain private.
+The Credit workspace compares policies without retargeting initiatives or
+submitting a plan. Forecasts use the opening book and current economy; executive
+events, rival moves and funding sales can change actual results.
+
+For v8.7 live views, the newest owner-only causal events have a 256 KiB UTF-8
+budget within the existing 200-entry limit. `causalView` reports omitted entries
+from that window and the first included ID. This changes only the history
+projection: current loan books, the complete trend and the host's retained
+journal in saves/exports are untouched. It prevents historical detail from
+crowding out the current bank on long-session multiplayer updates.
+
+The AI reserves the smallest offered share that covers its opening delinquent
+book. It prefers recovery above 2.5% 90+ exposure, workouts above 1% early/late
+exposure, otherwise balanced handling. This is a bounded workload rule, not
+optimal borrower triage, recovery management or proven strategic balance.
+Individual borrowers, negotiated restructurings, collateral-specific recovery,
+allowance/provision accounting and broader underwriting remain future scope.

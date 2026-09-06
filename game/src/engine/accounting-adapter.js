@@ -7,8 +7,9 @@ function syncAccounts(p){const a=p.accounting.accounts;Object.assign(p.stats,{ca
 function bookPost(p,type,amount){p.accounting=AccountingPrototype.transact(p.accounting,type,amount);syncAccounts(p)}
 function provideCash(p,amount,reservedLoans=0){
  let gap=Math.max(0,amount-p.stats.cash);
- for(const [asset,bps] of [['securities',200],['loans',600]]){
+ for(const [asset,baseBps] of [['securities',200],['loans',600]]){
   if(!gap)break;
+  const bps=asset==='loans'?creditSaleHaircut(p,baseBps):baseBps;
   const face=Math.min(Math.max(0,p.accounting.accounts[asset]-(asset==='loans'?reservedLoans:0)),Math.ceil(gap/(1-bps/10000)));
   if(face){p.accounting=AccountingPrototype.sell(p.accounting,asset,face,bps);syncAccounts(p);gap=Math.max(0,amount-p.stats.cash)}
  }
@@ -52,10 +53,10 @@ function postMonthlyOperations(g,p,preview=false){
  const inflow=Math.round(r.depositGrowth+r.depositRunoff),originations=Math.round(r.loanGrowth+r.chargeoff);
  if(p.creditBook){
   const terms=creditTerms(p,g),oldInterest=r.loanIncome,oldLoss=r.chargeoff,total=p.stats.loans+originations;
-  r.loanIncome=p.creditBook.cohorts.reduce((n,c)=>n+c.principal*c.rate/1000000,0)+originations*terms.rate/1000000;
+  r.loanIncome=p.creditBook.cohorts.reduce((n,c)=>n+performingCredit(c)*c.rate/1000000,0)+originations*terms.rate/1000000;
   const weightedRisk=p.creditBook.cohorts.reduce((n,c)=>n+c.principal*c.risk/10000,0)+originations*terms.risk/10000;
   const ops=strategyLevel(p,'operations'),guard=Math.max(.28,1-(workforceAllocation(p).operations+p.upgrades.training+p.upgrades.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1);
-  r.chargeoff=Math.min(total,Math.round(weightedRisk*.0025*g.economy.credit*guard*(p.turnEffects.credit||1)*(productOption(p,'business').risk||1)*(hasSpecialization(p,'commercial','specializedCredit')?1.08:1)));
+  r.chargeoff=p.creditPerformance?p.creditPerformance.report.loss:Math.min(total,Math.round(weightedRisk*.0025*g.economy.credit*guard*(p.turnEffects.credit||1)*(productOption(p,'business').risk||1)*(hasSpecialization(p,'commercial','specializedCredit')?1.08:1)));
   const change=(r.loanIncome-oldInterest)*(p.turnEffects.profit||1)+oldLoss-r.chargeoff;
   r.eventAdjustment+=(r.loanIncome-oldInterest)*((p.turnEffects.profit||1)-1);
   r.profit=Math.round(r.profit+change);r.loanGrowth=originations-r.chargeoff;
@@ -64,11 +65,13 @@ function postMonthlyOperations(g,p,preview=false){
  accountingSource='operate';
  try{
   delta(p,'deposits',inflow);const beforeRunoff=p.stats.deposits;delta(p,'deposits',-r.depositRunoff);if(p.termFunding){r.depositRunoff=beforeRunoff-p.stats.deposits;r.depositGrowth=inflow-r.depositRunoff;calculation.stats.depositRunoff=r.depositRunoff}delta(p,'loans',originations);
-  adjustDepositReport(p,g,r);settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
+  adjustDepositReport(p,g,r);
+  if(p.creditPerformance){const credit=p.creditPerformance.report;r.collectionsCost=credit.cost;r.creditRecovery=credit.recovered;r.creditEntered=credit.entered;r.creditCured=credit.cured;r.interestForgone=p.creditBook.cohorts.reduce((n,c)=>n+(c.principal-performingCredit(c))*c.rate/1000000,0);r.expense+=credit.cost;r.profit-=credit.cost}
+  settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
   const income=Math.round(r.depositIncome+r.loanIncome+r.commercialIncome+r.otherIncome),expense=Math.round(r.fundingCost+r.expense),event=Math.round(r.eventAdjustment);
   const rounding=r.profit-(income-expense+event-Math.round(r.chargeoff));
   if(Math.abs(rounding)>2)throw Error('Operating report does not reconcile');
-  delta(p,'cash',income+Math.max(0,event+rounding));delta(p,'cash',-(expense+Math.max(0,-event-rounding)));delta(p,'loans',-Math.round(r.chargeoff));
+  delta(p,'cash',income+Math.max(0,event+rounding));delta(p,'cash',-(expense+Math.max(0,-event-rounding)));if(!p.creditPerformance)delta(p,'loans',-Math.round(r.chargeoff));
   for(const k of Object.keys(p.stats))if(!['cash','loans','deposits','capital','earnings','emergencyDebt'].includes(k))p.stats[k]=calculation.stats[k];
   r.closingCash=p.stats.cash;r.closingEquity=p.stats.capital;r.fundingLoss=p.accounting.journal.filter(e=>e.id>before.sequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0);p.operatingReport=r;p.stats.lastProfit=r.profit;p.fundingGap=0;
  }finally{accountingSuppressed=prev;accountingSource='transaction'}
@@ -78,8 +81,8 @@ const pilotDeleverage=deleverage;
 deleverage=function(g,p){
  if(!p.accounting)return pilotDeleverage(g,p);
  if(tierRank(p)<2||p.stats.loans<250000)return '';
- const sold=Math.round(p.stats.loans*.03);p.accounting=AccountingPrototype.sell(p.accounting,'loans',sold,700);syncAccounts(p);
- return p.name+' sold $'+sold.toLocaleString()+' of loans at a 7% regulatory haircut.';
+ const sold=Math.round(p.stats.loans*.03),bps=creditSaleHaircut(p,700);p.accounting=AccountingPrototype.sell(p.accounting,'loans',sold,bps);syncAccounts(p);
+ return p.name+' sold $'+sold.toLocaleString()+' of loans at a '+(bps/100)+'% regulatory haircut.';
 };
 const pilotSettle=settleFunding;
 settleFunding=function(g,p,outflow){
