@@ -18,9 +18,11 @@ function relationshipOfferContent(v, productPreview) {
  p.workforce.policy = JSON.parse(JSON.stringify(draft.workforcePolicy || p.workforce.policy));
  E.applyAdvertisingPolicy(p, draft.advertisingPolicy);
  E.applyRelationshipOfferPolicy(p, policy);
+ if (p.onboarding) E.applyOnboardingPolicy(p, draft.onboardingPolicy);
  const budget = E.planBudget(p, draft);
- p._workforceReserved = budget.total - (budget.training || 0) - (budget.advertising || 0) - (budget.relationshipOffers || 0);
+ p._workforceReserved = budget.total - (budget.training || 0) - (budget.advertising || 0) - (budget.relationshipOffers || 0) - (budget.onboarding || 0);
  p._relationshipOfferBudget = E.relationshipOfferBudget(p, draft);
+ if (p.onboarding) p._onboardingBudget = budget.onboarding || 0;
  const quote = v.gameOver ? null : E.relationshipOfferReview(p, v, policy), last = v.me.relationshipOffers.report;
  const dollars = n => (n < 0 ? '−' : '') + '$' + Math.abs(n).toLocaleString();
  const signedDollars = n => (n > 0 ? '+' : '') + dollars(n);
@@ -39,12 +41,12 @@ function relationshipOfferContent(v, productPreview) {
    stat('Actual conversion expense', dollars(last.cost)) +
    stat('Monthly direct-cost change', signedDollars(last.runRateDelta), 'Same book immediately before / after switching') + '</div>';
  }
- if (v.gameOver) return '<section class="relationship-offer-desk"><h3>EXISTING CUSTOMER OFFERS</h3><p class="notice">Campaign complete. No further offers can be staged.</p>' + actual + '</section>';
+ if (v.gameOver) return '<section class="relationship-offer-desk"><h3>EXISTING CUSTOMER OFFERS</h3><p class="notice">Campaign complete. No further offers can be staged.</p>' + customerEffectsContent(v) + actual + '</section>';
  return '<section class="relationship-offer-desk"><h3>EXISTING CUSTOMER OFFERS</h3><p class="small muted">Offer an existing customer segment a better-fitting product. This switches eligible balances between products; it does not add multiple-product ownership, households or deposit funds.</p>' +
   '<div class="relationship-offer-controls">' + controls + '</div><p class="micro">Offer-market selection changes only this instruction, not your plan’s focus market. The instruction recurs until revised. Closing or retiring its target pauses it.</p>' +
   '<div class="relationship-offer-summary">' + stat('Eligible existing balances', dollars(quote.eligiblePrincipal), integer(quote.eligibleEquivalents) + ' conversion equivalents') +
   stat('Locked / guaranteed balances excluded', dollars(quote.excludedPrincipal)) +
-  stat('Assigned Retail time', quote.assignedStaff.toFixed(2) + ' effective bankers', integer(quote.capacity) + ' conversion capacity · ' + quote.salesStaff.toFixed(2) + ' bankers left for new customers') + '</div>' +
+  stat('Assigned Retail time', quote.assignedStaff.toFixed(2) + ' effective bankers', integer(quote.capacity) + ' conversion capacity · ' + E.onboardingSalesStaff(p, quote.salesStaff).toFixed(2) + ' bankers left for new customers') + '</div>' +
   '<h3>CURRENT-BOOK QUOTE · MONTH ' + esc(quote.cycle) + '</h3><p class="micro ' + (quote.paused || quote.budgetLimited ? 'warn' : '') + '">' + esc(relationshipOfferReason(quote.reason)) + '</p>' +
   '<div class="relationship-offer-summary">' + stat('Projected conversions', integer(quote.converted), dollars(quote.principal) + ' existing balances switched') +
   stat('Projected conversion expense', dollars(quote.cost), dollars(E.RELATIONSHIP_OFFER_COST) + ' per equivalent · ' + dollars(quote.budget) + ' draft ceiling') +
@@ -53,7 +55,7 @@ function relationshipOfferContent(v, productPreview) {
   '<details><summary>Capacity, costs and account promises</summary><div class="relationship-offer-summary">' +
   stat('Monthly uptake ceiling', integer(quote.uptakeLimit)) + stat('Requested before funding limits', integer(quote.requested)) + stat('Direct monthly cost · before / after', dollars(quote.directCostBefore) + ' / ' + dollars(quote.directCostAfter)) + '</div>' +
   '<p class="micro">A conversion equivalent is an aggregate balance measure, not an identified individual household. Locked deposits and outstanding rate guarantees are excluded. Target terms begin when conversion settles; existing deposit totals stay unchanged.</p>' +
-  '<p class="micro muted">Direct cost is deposit interest plus servicing minus fees across the same bank book. It excludes shared payroll, loan income and the one-time conversion expense. A better customer fit can cost the bank more to provide. The quote uses today’s balances and draft policies before retention, maturities, repricing and other monthly events; actual results may differ.</p></details>' + actual + '</section>';
+  '<p class="micro muted">Direct cost is deposit interest plus servicing minus fees across the same bank book. It excludes shared payroll, loan income and the one-time conversion expense. A better customer fit can cost the bank more to provide. The quote uses today’s balances and draft policies before retention, maturities, repricing and other monthly events; actual results may differ.</p></details>' + customerEffectsContent(v) + actual + '</section>';
 }
 function stageRelationshipOffer(v, field, value) {
  if (!draft || v.me.submitted || v.gameOver || !v.me.relationshipOffers || !['market', 'segment', 'product', 'share'].includes(field)) return false;
@@ -62,6 +64,7 @@ function stageRelationshipOffer(v, field, value) {
  }, { allowDecommit: next => E.relationshipOfferBudget(v.me, next) <= E.relationshipOfferBudget(v.me, draft) });
 }
 function bindRelationshipOfferDesk(v) {
+ bindCustomerEffects(v);
  for (const field of ['market', 'segment', 'product', 'share']) $('#relationshipOffer-' + field)?.addEventListener('change', event => {
   stageRelationshipOffer(v, field, event.target.value);
  });

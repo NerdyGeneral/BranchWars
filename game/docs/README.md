@@ -11,6 +11,7 @@ Start with one of these current documents; individual implementation batches are
 | Run or maintain developer tools | [Tools](../tools/README.md) |
 | Refactor safely or restore archived branches | [Architecture and maintenance](architecture.md) |
 | Investigate prior decisions and checks | [Historical archive](archive/README.md) |
+| Review release changes | [Changelog](changelog.md) |
 
 ## Naming and maintenance
 

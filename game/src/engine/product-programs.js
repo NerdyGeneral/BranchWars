@@ -11,10 +11,10 @@ for (const [key,d] of Object.entries(PRODUCT_PROGRAM_PROJECTS)) if(d.route==='pa
  PROJECTS[key]={name:'License '+RETAIL_DEPLOYMENTS[d.product].name,desc:'One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month.',cost:90000,cycles:1,capacity:1,kind:'productProgram',programOnly:true};
 const productDefaultMix = () => ({essential:4,rewards:0,highYield:0});
 function initializeProductPrograms(g,o) {
- if(o.productProgramsVersion!==1)return g;
+ if(![1,2].includes(o.productProgramsVersion))return g;
  if(g.segmentDepositsVersion!==1)throw Error('Product programmes requires the segment deposits preview and its prerequisites.');
- g.productProgramsVersion=1;g.version='8.9';
- for(const p of g.players)p.productPrograms={version:1,products:{rewards:{route:'none',retired:false},highYield:{route:'none',retired:false}},
+ g.productProgramsVersion=o.productProgramsVersion;g.version='8.9';
+ for(const p of g.players)p.productPrograms={version:o.productProgramsVersion,...(o.productProgramsVersion===2?{pricingBp:{essential:0,rewards:0},review:null,quotes:null}:{}),products:{rewards:{route:'none',retired:false},highYield:{route:'none',retired:false}},
   markets:Object.fromEntries(Object.keys(p.marketBook.markets).map(k=>[k,Object.fromEntries(Object.keys(CUSTOMER_SEGMENTS).map(s=>[s,productDefaultMix()]))]))};
  return g;
 }
@@ -39,7 +39,39 @@ function productProgramAcquisitionMix(p,g) {
  }
  return Object.values(out).some(n=>n>0)?out:productDefaultMix();
 }
-function productProgramPolicy(p) { return {markets:JSON.parse(JSON.stringify(p.productPrograms.markets)),retire:[]}; }
+function productProgramPolicy(p) { return {markets:JSON.parse(JSON.stringify(p.productPrograms.markets)),retire:[],...(p.productPrograms.version===2?{pricingBp:{...p.productPrograms.pricingBp}}:{})}; }
+// Versioned persistent tariffs, never a second product authority or an account promise.
+function validateProductPricing(p,pricingBp,editing=false) {
+ if(!pricingBp||typeof pricingBp!=='object'||Array.isArray(pricingBp)||Object.keys(pricingBp).sort().join()!=='essential,rewards'||
+  !Object.values(pricingBp).every(n=>Number.isInteger(n)&&[-25,0,25].includes(n)))throw Error('Choose -25, 0 or 25 basis points for Essential and Rewards.');
+ const rewards=p.productPrograms.products.rewards;
+ if(rewards.route==='none'&&pricingBp.rewards!==0)throw Error('Develop Rewards before setting its price.');
+ if(editing&&rewards.retired&&pricingBp.rewards!==p.productPrograms.pricingBp.rewards)throw Error('Retired Rewards retains its existing variable-account price.');
+}
+function productPricingAvailable(p,market,segment,product) {
+ return !!productTargetMix(p,market,segment)[product]&&(product==='essential'||
+  !!p.productDeployment.ready[product]&&!p.productPrograms.products[product].retired);
+}
+function productPricingEdges(g) {
+ if(g.productProgramsVersion!==2)return null;
+ // One frozen, all-market snapshot precedes every transfer. No book is changed.
+ const coverage=g.players.map(p=>clamp(householdServiceReview(p).coverage,0,1));
+ const rows={};
+ for(const [market]of activeTerritories(g)) {
+  const cohorts=g.players.flatMap(p=>p.depositBook.cohorts.filter(c=>c.market===market&&!c.locked));
+  const withdrawable=cohorts.reduce((n,c)=>n+c.principal,0),weighted=[0,0];
+  for(const c of cohorts) {
+   if(c.remaining!==0||!g.players.every(p=>productPricingAvailable(p,market,c.segment,c.product)))continue;
+   for(const [index,p]of g.players.entries()) {
+    const bp=(depositRate(p,g,c.product)-baseDepositRate(p,g,c.product))*120000/1000000;
+    weighted[index]+=c.principal*bp*(bp>0?coverage[index]:1);
+   }
+  }
+  const signal=weighted.map(n=>withdrawable?clamp(.75*n/withdrawable/25,-.75,.75):0);
+  rows[market]=Object.freeze({withdrawable,signal:Object.freeze(signal),edge:signal[0]-signal[1]});
+ }
+ return Object.freeze(rows);
+}
 function validateProductTargets(p,markets,retire=[]) {
  if(!markets||Object.keys(markets).sort().join()!==Object.keys(p.marketBook.markets).sort().join())throw Error('Choose product targets for every known market.');
  for(const row of Object.values(markets)) {
@@ -53,7 +85,8 @@ function validateProductTargets(p,markets,retire=[]) {
 function normalizeProductProgramPlan(p,plan) {
  if(!p.productPrograms){if(plan.productProgramPolicy!==undefined)throw Error('Product programmes requires a new preview campaign.');return;}
  const policy=plan.productProgramPolicy||productProgramPolicy(p);
- if(Object.keys(policy).sort().join()!=='markets,retire'||!Array.isArray(policy.retire)||policy.retire.length>2||new Set(policy.retire).size!==policy.retire.length)throw Error('Invalid product retirement orders.');
+ if(Object.keys(policy).sort().join()!==(p.productPrograms.version===2?'markets,pricingBp,retire':'markets,retire')||!Array.isArray(policy.retire)||policy.retire.length>2||new Set(policy.retire).size!==policy.retire.length)throw Error('Invalid product retirement orders.');
+ if(p.productPrograms.version===2)validateProductPricing(p,policy.pricingBp,true);
  for(const key of policy.retire)if(!Object.hasOwn(RETAIL_DEPLOYMENTS,key)||!p.productDeployment.ready[key]||p.projects.some(x=>PRODUCT_PROGRAM_PROJECTS[x.key]?.product===key))throw Error('Retire only an available product without a rollout in progress.');
  validateProductTargets(p,policy.markets,policy.retire);
  const chosen=planInitiatives(plan).map(k=>PRODUCT_PROGRAM_PROJECTS[k]).filter(Boolean);
@@ -68,6 +101,7 @@ function applyProductProgramPolicy(p,policy,settle=false) {
  if(settle&&policy.retire.length)delta(p,'cash',-PRODUCT_RETIRE_COST*policy.retire.length);
  for(const k of policy.retire){p.productPrograms.products[k].retired=true;p.productDeployment.ready[k]=false;}
  p.productPrograms.markets=JSON.parse(JSON.stringify(policy.markets));
+ if(p.productPrograms.version===2)p.productPrograms.pricingBp={...policy.pricingBp};
  p.retailLifecycle.mix=productAggregateMix(policy.markets);
  p.products.retail=Object.keys(p.retailLifecycle.mix).sort((a,b)=>p.retailLifecycle.mix[b]-p.retailLifecycle.mix[a])[0];
 }
@@ -100,14 +134,20 @@ function productProgramFallback(p,market,segment) {
  const mix=productTargetMix(p,market,segment);
  return Object.keys(mix).sort((a,b)=>mix[b]-mix[a])[0];
 }
+function validateProductDeliveryState(p,state){
+ if(!state.products||Object.keys(state.products).sort().join()!=='highYield,rewards')throw Error('Invalid product programme state');
+ for(const [k,row]of Object.entries(state.products))if(!row||Object.keys(row).sort().join()!=='retired,route'||!['none','build','partner'].includes(row.route)||typeof row.retired!=='boolean'||(row.route==='none'&&row.retired)||p.productDeployment.ready[k]!==(!row.retired&&row.route!=='none'))throw Error('Invalid product delivery state');
+}
 function validateProductProgramSave(g) {
  const has=p=>p.productPrograms!==undefined||p.submitted?.productProgramPolicy!==undefined||(Array.isArray(p.projects)&&p.projects.some(x=>PROJECTS[x.key]?.programOnly));
  if(g.productProgramsVersion===undefined){if(g.players.some(has))throw Error('Unversioned product programmes');return g;}
- if(g.productProgramsVersion!==1||g.segmentDepositsVersion!==1||g.version!==(g.relationshipOffersVersion===1?'8.12':g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':'8.9'))throw Error('Unsupported product programmes save');
+ if(![1,2].includes(g.productProgramsVersion)||g.segmentDepositsVersion!==1||g.version !== campaignVersion(g))throw Error('Unsupported product programmes save');
+ const priceQuotes=new Map();
  for(const p of g.players) {
   const state=p.productPrograms;
-  if(!state||Object.keys(state).sort().join()!=='markets,products,version'||state.version!==1||!state.products||Object.keys(state.products).sort().join()!=='highYield,rewards')throw Error('Invalid product programme state');
-  for(const [k,row]of Object.entries(state.products))if(!row||Object.keys(row).sort().join()!=='retired,route'||!['none','build','partner'].includes(row.route)||typeof row.retired!=='boolean'||(row.route==='none'&&row.retired)||p.productDeployment.ready[k]!==(!row.retired&&row.route!=='none'))throw Error('Invalid product delivery state');
+  if(!state||Object.keys(state).sort().join()!==(g.productProgramsVersion===2?'markets,pricingBp,products,quotes,review,version':'markets,products,version')||state.version!==g.productProgramsVersion||!state.products||Object.keys(state.products).sort().join()!=='highYield,rewards')throw Error('Invalid product programme state');
+  validateProductDeliveryState(p,state);
+  if(state.version===2){validatePricedDepositShape(p,priceQuotes);validateProductPricing(p,state.pricingBp);validateProductPricingReview(g,p);}
   if(p.operatingReport&&(!Number.isSafeInteger(p.operatingReport.productProgramCost)||p.operatingReport.productProgramCost<0))throw Error('Invalid product programme cost report');
   validateProductTargets(p,state.markets);
   if(JSON.stringify(productAggregateMix(state.markets))!==JSON.stringify(p.retailLifecycle.mix))throw Error('Global and local product mix disagree');

@@ -22,6 +22,7 @@ function renderHouseholds(v) {
     const offerPlan = { ...draft };
     E.normalizeRelationshipOfferPlan(p, offerPlan);
     p.relationshipOffers.policy = offerPlan.relationshipOfferPolicy;
+    if (p.onboarding) { E.normalizeOnboardingPlan(p, offerPlan); p.onboarding.policy = offerPlan.onboardingPolicy; }
   }
   const review = E.householdServiceReview(p, draft.allocation, policy), report = p.householdBook.report;
   const key = v.territories[selectedHouseholdMarket] ? selectedHouseholdMarket : draft.focus;

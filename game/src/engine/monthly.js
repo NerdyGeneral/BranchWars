@@ -10,6 +10,7 @@ function resolveMonthlySteps(g) {
       capital: plans[i].capitalPolicy
     };
     p.products = { ...p.products, ...plans[i].products };
+    if(p.financialGroup)recordLedgerStage(g,'applyGroupPortfolio','group.portfolio',()=>applyGroupPortfolio(p,plans[i]));
     if (p.termFunding && plans[i].termPolicy) p.termFunding.policy = { ...plans[i].termPolicy };
     if(p.productPrograms)recordLedgerStage(g,'applyProductProgramPolicy','products.policy',()=>applyProductProgramPolicy(p, plans[i].productProgramPolicy, true));
     if(p.productPrograms&&plans[i].productProgramPolicy?.retire.length)L.push(p.name+' retired '+plans[i].productProgramPolicy.retire.map(k=>RETAIL_DEPLOYMENTS[k].name).join(' and ')+' for $'+(plans[i].productProgramPolicy.retire.length*PRODUCT_RETIRE_COST).toLocaleString()+'. Existing accounts remain serviced.');
@@ -22,6 +23,8 @@ function resolveMonthlySteps(g) {
     applyCollectionsPolicy(p, plans[i].collectionsPolicy);
     if(p.relationshipOffers)recordLedgerStage(g,'applyRelationshipOfferPolicy','customers.offers',()=>applyRelationshipOfferPolicy(p,plans[i].relationshipOfferPolicy));
     if(p.relationshipOffers)p._relationshipOfferBudget=relationshipOfferBudget(p,plans[i]);
+    if(p.onboarding)recordLedgerStage(g,'applyOnboardingPolicy','customers.onboarding',()=>applyOnboardingPolicy(p,plans[i].onboardingPolicy));
+    if(p.onboarding)p._onboardingBudget=onboardingBudget(p,plans[i]);
     if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
     applyDecision(g, p, plans[i].decision);
@@ -35,7 +38,9 @@ function resolveMonthlySteps(g) {
       if (msg) L.push(msg);
     }
   });
+  L.push(...recordLedgerStage(g,'settleCorporateEconomy','companies.settlement',()=>settleCorporateEconomy(g)));
   g.players.forEach((p) => L.push(operate(g, p)));
+  L.push(...recordLedgerStage(g,'finishCorporateEconomy','companies.contracts',()=>finishCorporateEconomy(g)));
   g.players.forEach((p) => {
     const msg = deleverage(g, p);
     if (msg) L.push(msg);
@@ -85,6 +90,8 @@ function resolveMonthlySteps(g) {
     [g.players[1].id]: Math.round((baseScore(g, 1) - before[1]) * 10) / 10
   };
   L.push(...settleRegionalGrowthWithLedger(g));
+  L.push(...recordLedgerStage(g,'settleGroupCapital','group.capital',()=>settleGroupCapital(g,plans)));
+  for(const p of g.players)finishProductPricingReview(g,p);
   const ending = evaluateStrategicEnd(g);
   if (ending) L.push(ending);
   g.resolution = L;

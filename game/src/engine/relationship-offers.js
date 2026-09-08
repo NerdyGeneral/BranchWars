@@ -66,6 +66,7 @@ function relationshipOfferDraft(p, plan) {
     productPrograms: { ...p.productPrograms, markets: plan.productProgramPolicy?.markets || p.productPrograms.markets },
     relationshipOffers: { ...p.relationshipOffers } };
   const input = { relationshipOfferPolicy: plan.relationshipOfferPolicy || p.relationshipOffers.policy, productProgramPolicy: plan.productProgramPolicy };
+  if(p.productPrograms.version===2)shadow.productPrograms.pricingBp={...(plan.productProgramPolicy?.pricingBp||p.productPrograms.pricingBp)};
   normalizeRelationshipOfferPlan(shadow, input); shadow.relationshipOffers.policy = input.relationshipOfferPolicy;
   return shadow;
 }
@@ -89,7 +90,7 @@ function relationshipOfferReview(p, g, policy = p.relationshipOffers?.policy) {
   const eligible = relationshipOfferEligibility(p, policy), { eligible: ignored, ...counts } = eligible;
   const reserved = p._workforceReserved || 0, advertising = p._advertisingCycle?.spent ?? p.advertising?.policy?.budget ?? 0;
   const training = p._workforceCosts?.training?.total ?? workforceTrainingQuote(p, p.workforce.policy, reserved + advertising).total;
-  const spendable = Math.max(0, Math.min(p.stats.cash - p.workforce.policy.reserve, pilotSpendingLimit(p)) - reserved - advertising - training);
+  const spendable = Math.max(0, Math.min(p.stats.cash - p.workforce.policy.reserve, pilotSpendingLimit(p)) - reserved - advertising - training - (p.onboarding ? p._onboardingBudget || 0 : 0));
   const available = Math.floor(spendable), budget = p._relationshipOfferBudget ?? counts.requested * RELATIONSHIP_OFFER_COST;
   if (!relationshipOfferUint(budget)) throw Error('Invalid relationship offer budget ceiling.');
   const converted = Math.min(counts.requested, Math.floor(Math.min(available, budget) / RELATIONSHIP_OFFER_COST));
@@ -138,7 +139,7 @@ function validateRelationshipOfferSave(g) {
     if (g.players.some(p => p.relationshipOffers !== undefined || p.submitted?.relationshipOfferPolicy !== undefined || transient(p))) throw Error('Unversioned relationship offers.');
     return g;
   }
-  if (g.relationshipOffersVersion !== 1 || g.regionalGrowthVersion !== 1 || g.version !== '8.12') throw Error('Unsupported relationship offer save.');
+  if (g.relationshipOffersVersion !== 1 || g.regionalGrowthVersion !== 1 || g.version !== campaignVersion(g)) throw Error('Unsupported relationship offer save.');
   const fail = message => { throw Error('Invalid relationship offer ' + message); };
   for (const p of g.players) {
     const state = p.relationshipOffers;

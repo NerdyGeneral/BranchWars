@@ -14,18 +14,18 @@ async function main() {
   if (relationshipOffers) {
     const setup = harness(), offers = setup.elements.get('#relationshipOffersPreview');
     for (const id of ['#regionalGrowthPreview','#advertisingPreview','#productPrograms','#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot']) {
-      offers.checked = true; offers.listeners.change();
+      setup.changeFeature('#relationshipOffersPreview',true);assert(setup.confirmFeatures());
       assert(setup.elements.get(id).checked, 'Relationship offers enables prerequisite ' + id);
-      const dependency = setup.elements.get(id); dependency.checked = false; dependency.listeners.change();
+      setup.changeFeature(id,false);assert(setup.confirmFeatures());
       assert.equal(offers.checked, false, 'Disabling prerequisite disables relationship offers: ' + id);
     }
   }
   if (regionalGrowth) {
     const setup = harness(), growth = setup.elements.get('#regionalGrowthPreview');
     for (const id of ['#advertisingPreview','#productPrograms','#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot']) {
-      growth.checked = true; growth.listeners.change();
+      setup.changeFeature('#regionalGrowthPreview',true);assert(setup.confirmFeatures());
       assert(setup.elements.get(id).checked, 'Regional growth enables prerequisite ' + id);
-      const dependency = setup.elements.get(id); dependency.checked = false; dependency.listeners.change();
+      setup.changeFeature(id,false);assert(setup.confirmFeatures());
       assert.equal(growth.checked, false, 'Disabling prerequisite disables regional growth: ' + id);
     }
   }

@@ -2,6 +2,8 @@
 # Existing committed reports remain tracked. Publish chosen new evidence with git add -f.
 /game/reports/baselines/*.json
 /game/reports/local/
+/game/reports/pricing-lab-*.json
+/game/reports/baselines/*.cjs
 # Local diagnostics and editor files, never source or save fixtures.
 *.log
 .DS_Store

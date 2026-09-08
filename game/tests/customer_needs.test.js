@@ -10,7 +10,7 @@ const fresh=()=>E.createGame(options),g=fresh(),p=g.players[0];
 assert.equal(g.version,'8.3');assert.throws(()=>OC.migrate(copy(g)),/supported/);
 assert.throws(()=>E.createGame({...options,managementVersion:1}),/requires/);
 assert.throws(()=>E.createGame({...options,customerDemandVersion:3}),/Unsupported/);
-let hidden=true;vm.runInNewContext(source.match(/^function updateContinue\(\).*$/m)[0]+';updateContinue()',{savedGame:()=>g,$:()=>({classList:{toggle:(_,v)=>hidden=v}})});assert.equal(hidden,false);
+let hidden=true;vm.runInNewContext(source.match(/^function updateContinue\(\).*$/m)[0]+';updateContinue()',{E,savedGame:()=>g,$:()=>({classList:{toggle:(_,v)=>hidden=v}})});assert.equal(hidden,false);
 const one=k=>({essential:0,rewards:0,highYield:0,[k]:4}),north=E.customerDemand(p,g,'northside'),uni=E.customerDemand(p,g,'university');
 assert(north.segments[0].share>uni.segments[0].share);
 assert(E.customerDemand(p,g,'university',one('rewards')).fit>E.customerDemand(p,g,'university',one('essential')).fit);

@@ -81,11 +81,11 @@ function customerMixPlan(g,p,input){
 
 function validateCustomerSave(g){
  if(g.customerDemandVersion===undefined){if(g.players.some(p=>p.customerDemandVersion!==undefined||p._customerIntake!==undefined))throw Error('Unversioned customer demand');return g}
- if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.relationshipOffersVersion===1?'8.12':g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
+ if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version !== campaignVersion(g))throw Error('Unsupported customer demand rules');
  for(const p of g.players){
   if(p.customerDemandVersion!==g.customerDemandVersion||p._customerIntake!==undefined)throw Error('Invalid customer demand state');
   const report=p.operatingReport;
-if(report&&(!['customerAcquisitionCost','customerAcquiredDeposits'].every(k=>Number.isSafeInteger(report[k])&&report[k]>=0)||report.customerAcquiredDeposits!==report.depositGrowth+report.depositRunoff))throw Error('Invalid customer acquisition report');
+if(report&&(!['customerAcquisitionCost','customerAcquiredDeposits'].every(k=>Number.isSafeInteger(report[k])&&report[k]>=0)||report.customerAcquiredDeposits!==report.depositGrowth+report.depositRunoff-(p.onboarding?report.onboardingDeposits:0)))throw Error('Invalid customer acquisition report');
  }
  return g;
 }

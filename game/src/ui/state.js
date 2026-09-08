@@ -1,13 +1,15 @@
 
 'use strict';
 const E=window.BWEngine,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-function emptyLan(){return{active:false,room:'',token:'',after:0,outbox:[],busy:false,failures:0,retryTimer:null}}
+function emptyLan(){return{active:false,room:'',token:'',after:0,outbox:[],busy:false,polling:false,failures:0,retryTimer:null}}
 function emptyGh(){return{active:false,api:'',repo:'',branch:'',private:true,room:'',token:'',side:'',mine:0,published:0,seen:0,sha:'',etag:'',outbox:[],busy:false,sendFailures:0,pollFailures:0,retryTimer:null,cooldownUntil:0,lastWrite:0,lastContact:0,paused:false,polling:false}}
 
 let mode='ai',game=null,view=null,seat=0,draft=null,draftOwner='',lastCycle=0,lastResolutionId=0,privacyNext=null,pc=null,dc=null,p2pRole='',p2pConfig=null,storageWarned=false,lan=emptyLan(),handshakeTimer=null,handshakeTries=0,linkWatch=null,planAckTimer=null,linkText='',linkCls='warn',linkSession='',dropGrace=null,relinking=false,linkReady=false,lanIp='',gh=emptyGh(),ghPendingPlan=null,ghIncomingCommit=null;
 let workspaceTab='overview';
 // Lobby state belongs to the connection, never to simulation state or its RNG.
 let lobby=null,lobbyPending=null,lobbyDirty=false,lobbySettingsDirty=false;
+// Capability acknowledgements are connection-local, never saved campaign rules.
+let featureConnectionGeneration=0,featurePeerCapabilities=null,featurePeerGeneration=-1,featurePeerFresh=false,featureChallenge='';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();

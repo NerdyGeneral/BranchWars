@@ -1,10 +1,12 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto');
 const file=path.join(__dirname,'../BRANCH_WARS.html'),source=fs.readFileSync(file,'utf8'),ctx={console,Math,Date};
-vm.runInNewContext(source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
+const attribution=process.argv.includes('--attribution')?require('./balance-attribution.js'):null,engine=source.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
+vm.runInNewContext(attribution?attribution.instrument(engine):engine,ctx);
 const E=ctx.BWEngine,hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const serviceExpansionVersion=process.argv.includes('--previous-services')?0:1;
-const relationshipOffersVersion=process.argv.includes('--relationship-offers')?1:0; const regionalGrowthVersion=relationshipOffersVersion||process.argv.includes('--regional-growth')?1:0;
+const onboardingVersion=process.argv.includes('--onboarding')?1:0;
+const relationshipOffersVersion=onboardingVersion||process.argv.includes('--relationship-offers')?1:0; const regionalGrowthVersion=relationshipOffersVersion||process.argv.includes('--regional-growth')?1:0;
 const advertisingVersion=regionalGrowthVersion||process.argv.includes('--advertising')?1:0;
 const productProgramsVersion=advertisingVersion||process.argv.includes('--product-programs')?1:0;
 const segmentDepositsVersion=productProgramsVersion||process.argv.includes('--segment-deposits')?1:0;
@@ -19,6 +21,7 @@ const scenarioIndex=process.argv.indexOf('--scenario'),scenarioName=scenarioInde
 assert(scenarioIndex<0||typeof scenarioName==='string'&&Object.hasOwn(E.SCENARIOS,scenarioName),'Invalid --scenario; choose '+Object.keys(E.SCENARIOS).join(', '));
 assert(process.argv.filter(x=>x==='--scenario').length<=1,'Specify --scenario only once.');
 const scenarios=scenarioName?[scenarioName]:Object.keys(E.SCENARIOS),results=[],activity=[],skipped=[],cancelled=[];let turns=0,maxViewBytes=0;
+const attributionReports=[];let attributionSelfTest=null;
 const sharePercent=values=>{const total=values.reduce((n,v)=>n+v,0);return values.map(v=>total?v/total*100:0)};
 function competitionMetrics(){return{samples:0,depositLeadChanges:0,maxDepositSharePercent:[0,0],longestDepositDominanceMonths:[0,0],below10CapitalMonths:[0,0],longestBelow10CapitalMonths:[0,0],capitalReturnsTo10:[0,0],lossMonths:[0,0],_leader:null,_dominance:[0,0],_below10:[0,0]}}
 function observeCompetition(metrics,deposits,ratios,profits){
@@ -44,9 +47,12 @@ function reportedCompetition(metrics){const{_leader,_dominance,_below10,...repor
  const empty=competitionMetrics();observeCompetition(empty,[0,0],[10,10],[0,0]);assert.deepEqual(empty.longestDepositDominanceMonths,[0,0]);assert.equal(empty.depositLeadChanges,0);
 }
 for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;seed++){
- const g=E.createGame({relationshipOffersVersion,regionalGrowthVersion,advertisingVersion,productProgramsVersion,segmentDepositsVersion,creditPerformanceVersion,customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
+ const g=E.createGame({onboardingVersion,relationshipOffersVersion,regionalGrowthVersion,advertisingVersion,productProgramsVersion,segmentDepositsVersion,creditPerformanceVersion,customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
+ const tracker=attribution?attribution.createTracker(E,ctx.balanceAuditTrace,g):null;
+ if(attribution&&!attributionSelfTest)attributionSelfTest=attribution.verifyNoninterference(engine,{onboardingVersion,relationshipOffersVersion,regionalGrowthVersion,advertisingVersion,productProgramsVersion,segmentDepositsVersion,creditPerformanceVersion,customerOwnershipVersion,workforceVersion,customerDemandVersion,campaignRulesVersion:1,serviceExpansionVersion,managementVersion,mode:'hotseat',scenario,seed:'release-'+scenario+'-'+seed,created:1});
  const actions={scenario,seed,providerChanges:0,lateProviderChanges:0,initiatives:0,competitiveActions:0};
  const competition=competitionMetrics();
+ if(onboardingVersion)actions.onboarding={activeMonths:0,generated:0,activated:0,expired:0,cancelled:0,deposits:0,cost:0,budgetLimited:0,stockLimited:0};
  if(relationshipOffersVersion)actions.relationshipOffers={months:0,converted:0,principal:0,cost:0,budgetLimited:0}; if(regionalGrowthVersion)actions.regionalFlows={arrivals:{customers:0,deposits:0},departures:{customers:0,deposits:0},clippedDepartures:{customers:0,deposits:0}};
  if(advertisingVersion)Object.assign(actions,{advertisingSpend:0,assistedDeposits:0,assistedHouseholds:0,advertisingMonths:0,advertisingPaused:0});
  if(productProgramsVersion)Object.assign(actions,{plannedProductLaunches:{build:0,partner:0},plannedProductRetirements:0,vendorCost:0,targetedAudiences:0});
@@ -62,7 +68,9 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
   }
   if(workforceVersion)actions.stagedSpecialists+=plans.reduce((n,p)=>n+E.specialistHireCount(p),0);
   actions.initiatives+=plans.reduce((n,p)=>n+E.planInitiatives(p).length,0);actions.competitiveActions+=plans.filter(p=>p.competitiveAction!=='none').length;
+  if(tracker)tracker.begin(plans);
   E.submit(g,0,plans[0]);E.submit(g,1,plans[1]);turns++;
+  if(tracker)tracker.observe();
   if(regionalGrowthVersion){
    const flow=E.regionalGrowthReview(g);assert.equal(flow.lastCycle,cycle);
    for(const kind of Object.keys(actions.regionalFlows))for(const resource of ['customers','deposits'])actions.regionalFlows[kind][resource]+=flow.report.totals[kind][resource];
@@ -72,6 +80,7 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
   E.validatePilot(g);E.validateLedger(g);
   for(let i=0;i<2;i++){
    const p=g.players[i],a=p.accounting.accounts;E.AccountingPrototype.check(p.accounting);
+   if(onboardingVersion){const r=p.onboarding.report;if(r.policy.share)actions.onboarding.activeMonths++;for(const k of ['generated','activated','expired','cancelled'])actions.onboarding[k]+=r.totals[k].count;actions.onboarding.deposits+=r.totals.activated.principal;actions.onboarding.cost+=r.cost;if(r.budgetLimited)actions.onboarding.budgetLimited++;if(r.stockLimited)actions.onboarding.stockLimited++;}
    if(relationshipOffersVersion){const r=p.relationshipOffers.report;if(r.converted)actions.relationshipOffers.months++;for(const k of ['converted','principal','cost'])actions.relationshipOffers[k]+=r[k];if(r.budgetLimited)actions.relationshipOffers.budgetLimited++;} if(advertisingVersion){const r=p.advertising.report;actions.advertisingSpend+=r.spent;actions.assistedDeposits+=r.assistedDeposits;actions.assistedHouseholds+=r.assistedHouseholds;if(r.spent)actions.advertisingMonths++;if(r.paused)actions.advertisingPaused++;}
    if(productProgramsVersion){
     actions.vendorCost+=p.operatingReport.productProgramCost;
@@ -105,11 +114,12 @@ for(const scenario of scenarios)for(let seed=seedStart;seed<seedStart+seedCount;
   capitalRatioPercent:g.players.map(p=>E.capitalRatio(p)),capitalTier:g.players.map(p=>E.capitalTier(p).key),cash:g.players.map(p=>p.stats.cash),emergencyDebt:g.players.map(p=>p.stats.emergencyDebt),depositSharePercent:sharePercent(g.players.map(p=>p.stats.deposits)),
   ...(households?{households,householdSharePercent:sharePercent(households)}:{}),...(regionalGrowthVersion?{outsideSupply:E.regionalGrowthReview(g).report.totals.after}:{}),competition:reportedCompetition(competition)});
  activity.push(actions);
+ if(tracker)attributionReports.push({scenario,seed,...tracker.report()});
 }
 assert.equal(hash(source),hash(fs.readFileSync(file,'utf8')));
-const report={passed:skipped.length===0,sourceSha256:hash(source),...(relationshipOffersVersion?{relationshipOffersVersion}:{}),...(regionalGrowthVersion?{regionalGrowthVersion}:{}),...(advertisingVersion?{advertisingVersion}:{}),...(productProgramsVersion?{productProgramsVersion}:{}),...(segmentDepositsVersion?{segmentDepositsVersion}:{}),...(creditPerformanceVersion?{creditPerformanceVersion}:{}),...(customerOwnershipVersion?{customerOwnershipVersion}:{}),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,
+const report={passed:skipped.length===0,sourceSha256:hash(source),...(onboardingVersion?{onboardingVersion}:{}),...(relationshipOffersVersion?{relationshipOffersVersion}:{}),...(regionalGrowthVersion?{regionalGrowthVersion}:{}),...(advertisingVersion?{advertisingVersion}:{}),...(productProgramsVersion?{productProgramsVersion}:{}),...(segmentDepositsVersion?{segmentDepositsVersion}:{}),...(creditPerformanceVersion?{creditPerformanceVersion}:{}),...(customerOwnershipVersion?{customerOwnershipVersion}:{}),...(workforceVersion?{workforceVersion}:{}),campaignRulesVersion:1,serviceExpansionVersion,managementVersion,customerDemandVersion,seedStart,seedCount,turnLimit,turns,maxViewBytes,
  metricDefinitions:{version:1,samples:'After each resolved month, including terminal settlement; final balances are also after settlement.',shares:'Percent of the two player banks combined, excluding outside institutions; zero total produces zero shares.',dominance:'Consecutive sampled months at or above 80% of combined-player deposits, counted separately per seat.',depositLeadChanges:'Changes between non-tied deposit leaders; intervening ties are ignored.',capitalReturnsTo10:'A below-10% capital spell followed by one sampled month at or above 10%; not necessarily sustained recovery.',households:'Exact owned household counts, available only with the household ownership preview.'},
- ...(scenarioName?{scenario:scenarioName}:{}),skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
+ ...(scenarioName?{scenario:scenarioName}:{}),...(attribution?{attributionSelfTest,attribution:attributionReports}:{}),skippedInitiatives:skipped,cancelledInitiatives:cancelled,results,activity};
 if(process.argv.includes('--report')){
  const dir=path.join(__dirname,'../reports/baselines');fs.mkdirSync(dir,{recursive:true});
  fs.writeFileSync(path.join(dir,'release-balance-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx'});

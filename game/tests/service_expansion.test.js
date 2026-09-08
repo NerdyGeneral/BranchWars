@@ -88,16 +88,21 @@ const old=E.createGame({campaignRulesVersion:1,serviceExpansionVersion:0,mode:'h
 assert.equal(client.migrate(copy(old)).serviceExpansionVersion,undefined);assert.equal(E.projectCatalog(old.players[0]).buildTreasuryDesk,undefined);
 old.gameOver=true;E.rematch(old,0);E.rematch(old,1);assert.equal(old.serviceExpansionVersion,undefined);
 const fresh=create('fresh');fresh.gameOver=true;E.rematch(fresh,0);E.rematch(fresh,1);assert.equal(fresh.serviceExpansionVersion,1);
-assert.match(source,/pilotSupported:11/);assert.match(source,/m\.pilotSupported!==11/);assert.match(source,/COMMERCIAL SERVICE DESK/);assert.match(source,/RESEARCH APPLICATIONS/);
-assert.match(source,/<input id="serviceExpansion" type="checkbox">/,'the experimental feature is not selected by default');
+const peerCaps=E.campaignCapabilities(),peerRules=E.validateCampaignRules(fresh,'game');
+assert.equal(peerCaps.pilotSupported,11);assert.equal(E.peerRulesIssue(peerRules,peerCaps),null);
+for(const pilotSupported of [undefined,0,10,12])assert.equal(E.peerRulesIssue(peerRules,{...peerCaps,pilotSupported}).field,'campaignRulesVersion');
+assert.match(source,/COMMERCIAL SERVICE DESK/);assert.match(source,/RESEARCH APPLICATIONS/);
 // Exercise the real lobby/engine boundary instead of prescribing the old
 // pre-lobby source spelling. Omitted and disabled previews must stay disabled.
 const {harness}=require('./github_resilience.test.js');
+const defaultSetup=harness();
+assert.equal(defaultSetup.elements.get('#serviceExpansion').checked,false,'the rendered experimental feature is not selected by default');
+assert.equal(defaultSetup.run('readSetupFeatureOptions().serviceExpansionVersion'),0,'new local and linked campaigns read the unchecked service default');
 for(const transport of ['gh','lan','p2p'])for(const selected of [undefined,0,1]){
  const host=harness('host');
  host.c.settings={campaignRulesVersion:1,name:'Host',color:'#2878e0',scope:'national',scenario:'rate',...(selected===undefined?{}:{serviceExpansionVersion:selected})};
  host.run("p2pConfig=settings;sent=[];send=m=>sent.push(m);game=null;view=null;gh.active="+(transport==='gh')+";lan.active="+(transport==='lan'));
- host.run("openLobby({lobbySupported:1,name:'Guest',color:'#e1505c'})");
+ host.run("handleMessage({type:'hello',...E.campaignCapabilities(),name:'Guest',color:'#e1505c'})");
  assert.equal(host.state().game,null,'the greeting must not bypass the lobby');
  assert.equal(host.state().lobby.settings.serviceExpansionVersion,selected||0);
  host.run('applyLobbyUpdate(0,{revision:lobby.revision,player:lobby.players[0],ready:true});applyLobbyUpdate(1,{id:"confirm",revision:lobby.revision,player:lobby.players[1],ready:true});startLobbyCampaign()');
