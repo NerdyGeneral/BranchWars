@@ -2,6 +2,132 @@
 
 Updated: 2026-09-05.
 
+## Delayed delinquency and collections — N-06 credit preview
+
+This batch is on `feat/credit-collections`, stacked on the pending household
+[PR #13](https://github.com/NerdyGeneral/BranchWars/pull/13), not merged into
+`main`. Enable **Credit performance preview** before opening a new campaign.
+It creates v8.7 rules and enables the required household/workforce previews.
+Both linked clients must update; existing saves keep their original rules.
+
+- New loan cohorts retain product, yield and underwriting risk. Operations
+  expertise improves new origination risk, not previously written loans.
+  Two seasoning reviews precede eligibility for new arrears. Opening loans
+  are already seasoned. Uncured principal ages through 30/60/90+ day groups;
+  a newly arrived 90+ balance cannot resolve in that same review.
+- Delinquent principal stops interest and scheduled payments. Cures resume
+  normal amortization without invented back-interest. Maturity never deletes
+  unpaid principal. Acquisitions preserve aging; funding sales remove it
+  proportionally alongside the loan asset. Funding and regulatory sales add
+  portfolio-weighted aging discounts, closing the near-par default-sale loophole.
+- A recurring mandate allocates Lending time to collections versus new loans.
+  Credit specialists strengthen that finite team. Workouts cure more early
+  arrears and preserve more value; accelerated recovery resolves old defaults
+  faster with larger losses. Understaffing impairs both. External case costs
+  remain real expenses even for automatic recovery with no staff assigned.
+- Recovered principal increases cash, not profit. The written-off part reduces
+  loans and equity once. Case handling is posted once outside event profit
+  multipliers. Market reports assign those losses to their actual loan market.
+- A separate Credit workspace shows quality by product/market, retained risk,
+  staff coverage, policy parameters, opening-book forecasts and realized totals.
+  Inspecting a market does not retarget the plan. The mandate and detailed
+  loan book are owner-only. Nine optional/core tabs now wrap into readable rows.
+- Three modules bring the ordered build to 83 inputs. Explicit coordinator
+  calls preserve the architecture ceiling; no new runtime replacements.
+
+### Validation evidence
+
+Candidate SHA-256 (canonical LF output):
+`491873af3e31748455463557b8d0e35d8ed9243303e0c373d747fb84cbe9cd4f`.
+
+[Final Windows regression](../reports/baselines/N-00-2026-09-06T01-41-01-994Z.json):
+**56/56 invocations passed**, including Windows LAN and eight simulated GitHub
+relay configurations. Source/test fingerprints are unchanged and all match
+the final candidate; repeated seeded balance output reproduces exactly.
+`node tools/check.js --full` completed successfully, including its final
+[compatibility campaign audit](../reports/baselines/release-balance-2026-09-06T01-59-05-889Z.json):
+16 campaigns / 1,920 turns, no skipped/cancelled initiatives. Every report field
+except the source SHA matches the prior default-rules audit. Build/reference
+freshness, documentation links and architecture guards also pass. Hosted checks
+for the predecessor PR #13 have succeeded; this new PR's hosted result is separate.
+Targeted credit tests cover seasoning/aging, non-accrual, maturity persistence,
+exact resolution accounting, actual acquisition/funding-sale paths, staff
+tradeoffs, preview purity, sealed-save continuation, invalid imports, privacy,
+real renderer/handler staging and 96 AI turns. Early fast checks and the final
+targeted credit suite pass. Fixed fixtures and reference engines are unchanged.
+
+[Credit campaign audit](../reports/baselines/release-balance-2026-09-06T01-47-15-536Z.json):
+16 campaigns / 1,920 turns, all reaching month 120. Accounting, cohort totals,
+market contribution and private-view size checks pass; maximum player view
+671,738 bytes across both seats, below 1 MiB. There were no silent initiative skips and three
+explicit, uncharged cancellations after cash changed. Totals across both banks:
+$102.428M entered arrears, $46.424M cured, $25.599M recovered, $26.090M realized
+credit losses and $188,978 external case expenses. There were 468 competitive
+actions and 188 commercial-provider changes, including 53 after month 60.
+The AI chose balanced/workout/recovery in 3,804/36/0 bank-months; maximum total
+delinquency was 2.38% of loans. Therefore this natural-play audit does **not**
+prove varied recovery strategies. Targeted stressed books exercise all policies;
+adversarial human strategy tuning remains ahead.
+
+[Household compatibility audit](../reports/baselines/release-balance-2026-09-06T01-47-09-417Z.json):
+16 campaigns / 1,920 turns with credit performance OFF. Every report field
+except the artifact SHA exactly matches the previous household batch; no skipped
+or cancelled initiatives, maximum player view 833,779 bytes.
+
+[Long-session extension](../reports/baselines/release-balance-2026-09-06T01-49-58-278Z.json):
+four additional seeded campaigns / 1,920 turns, all reaching month 480. Both
+seats remain under 1 MiB, with maximum view size 757,269 bytes after the history
+repair. There are no silently skipped initiatives; 36 explicit uncharged
+cancellations (35 remediation, one marketing) still expose imperfect AI
+reserves/retries. The run contains 424 competitive actions and 118 provider
+changes, 96 after month 60. Collections remains overwhelmingly balanced:
+3,826 balanced / 14 workout / zero recovery bank-months. Longevity, accounting
+checks and reachable interaction pass; engaging human pacing and strategy
+diversity are not established by these results. The final credit audits cover
+20 distinct campaigns / 3,840 turns, not including diagnostic replays.
+
+An initial campaign audit was invalidated by an intervening UI rebuild: its
+final artifact-hash check failed. It is not counted as passing evidence; the
+frozen-build rerun is authoritative. The next validation attempt was deliberately
+stopped to repair the flat forced-sale discount on delinquent loans; completed
+intermediate audits do not stand in for the final candidate. Targeted tests now
+verify a fully 90+ book quotes a 76% funding / 77% regulatory haircut, mixed aging
+quotes 21% in the seeded case, and real sale losses use that quote. An auxiliary
+comparison against the previous v8.6 engine at `46f2fbc` passes exact AI-plan and
+full-state equality over four campaigns / 160 turns with credit performance OFF.
+Browser-first QA, following the
+computer-use guidance, used a separate loopback campaign: setup, policy edits,
+target-preserving inspection, first-month aging, reload/Continue and desktop,
+950px and 500px layouts passed. Tables scroll internally without page overflow.
+No warnings/errors were captured. The test tab/server were closed and viewport
+override reset. No real save or live multiplayer room was modified.
+
+The extended 480-month audit then caught a real size failure. An isolated replay
+of Growth seed 20 reproduced a 1,053,286-byte player view after month 360; causal
+history alone occupied 585,186 bytes. The fix budgets only the already-limited
+owner causal-history projection to 256 KiB of UTF-8, preserving its newest
+contiguous entries and exposing the omitted count/first included ID. All current
+loans, the trend and the host's retained journal remain unchanged. A synthetic
+Unicode-heavy case verifies the byte budget, owner privacy, newest-entry
+retention and non-mutation. Long campaign audits now check **both seats**.
+The interrupted regression attempts and earlier 120-month passes are not
+substitutes for the final post-repair validation.
+
+### Limits and next batch
+
+This is principal-at-risk aging, not an individual borrower, collateral,
+allowance/reserve, legal recovery or negotiated workout model. Exceptional
+existing watchlist events can still create direct losses outside the monthly
+aging report. Collections forecasts exclude rival actions and prior funding
+sales; the integrated operating preview handles its own funding effects.
+The AI uses aggregate workload and delinquency thresholds, not an optimal
+credit strategy. Human competition/recovery acceptance and physical two-PC
+tests remain required. Hosted PR checks are separate from local results.
+
+N-04/N-06 are still partial. Next: **segment-owned deposit accounts**, replacing
+the interim local-average withdrawal estimate. Group subsidiaries, company
+shares, national content and delegated regional management remain ahead.
+
 ## Household ownership and retention — validated N-04 / N-06 preview
 
 This batch is on `feat/household-retention`, stacked on the pending specialist

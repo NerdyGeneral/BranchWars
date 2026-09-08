@@ -65,13 +65,20 @@ The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.js
 | `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
 | `src/page.html` | Page markup with build slots, not a second executable implementation |
 
-There are 80 listed inputs including shells, manifest and markup (four were added for specialists, then three for household engine rules, UI and styles). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+There are 83 listed inputs including shells, manifest and markup (four were added for specialists, three for household rules/UI/styles, then three for collections). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
 
 The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
 
 Both fast/full gates check source freshness before testing. The builder rejects missing, duplicate, unwired, escaping or syntactically invalid inputs; check mode never overwrites the artifact. Build tests cover repeated assembly, all-input CRLF parity, output/source drift, malformed slots, external code/style dependencies and DOM-free execution. Full-run fingerprints now include every source input and the builder.
 
 ## Remaining architecture debt
+
+Credit-preview public views now apply a 256 KiB UTF-8 budget within the existing
+200-entry owner causal-history window. The projection reports omitted entries;
+it does not prune the authoritative retained journal, current books or trend.
+This addresses a reproduced late-session payload overflow without increasing
+the transport limit. Broader history pagination, browser-storage acceptance and
+national-scale transport sizing remain future integration work.
 
 The specialist gameplay slice uses explicit creation, monthly, AI and validation
 calls in the existing coordinators, not new runtime replacements. Role content,
@@ -91,6 +98,8 @@ private-view filtering. All three lobby transports require household support.
 Deposits remain market-level pools, not segment-owned accounts. This adds no new
 runtime replacement assignments and does not solve the shared transaction-context
 debt described below.
+
+The v8.7 credit slice also uses explicit initializer, operation, AI and validator calls. Aging settles after deposit repricing and before scheduled principal/new lending. One `credit.resolution` journal entry separates recovered cash from realized loan/equity losses; production does not post those losses again. External case expense is posted once outside event multipliers. Cohort splits/compaction preserve the three delinquency buckets and origination terms through acquisitions and funding sales. Funding and regulatory sales call the same aging-based haircut quote; liquidity needs use its net proceeds. Forecasts use private clones; only the owner sees the book and mandate. Transport capability checks reject unsupported peers. No runtime replacement assignments were added.
 
 The approved four-step batch is implemented, not the end of all architecture work. Remaining priorities are explicit transaction context (replacing the shared market/credit/deposit context variables), flattening other feature and ledger adapters, typed plan/state contracts, a cleaner client session/transport interface, and renderer/CSS consolidation during the separate UI batch. The current guard permits 76 remaining textual assignments across other functions; this is a conservative debt count, not 76 independently verified defects. Do not turn this into a mutable plugin-registration system.
 

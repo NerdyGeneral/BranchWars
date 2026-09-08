@@ -20,7 +20,8 @@ function harness(side='host'){
  return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
 }
 async function main(){
- const customerOwnershipVersion=process.argv.includes('--households')?1:0;
+ const creditPerformanceVersion=process.argv.includes('--collections')?1:0;
+ const customerOwnershipVersion=creditPerformanceVersion||process.argv.includes('--households')?1:0;
  const workforceVersion=customerOwnershipVersion||process.argv.includes('--workforce')?1:0;
  const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
  const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
@@ -135,7 +136,7 @@ async function main(){
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
  const [ph,pg]=pair;
- ph.run("p2pConfig={customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
+ ph.run("p2pConfig={creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
  pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
  await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
  assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
@@ -155,6 +156,7 @@ async function main(){
   if(customerDemandVersion){assert.equal(pg.state().view.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.operatingReport.customerAcquisitionCost,ph.state().game.players[1].operatingReport.customerAcquisitionCost)}
   if(customerDemandVersion===2){assert.deepEqual(copy(pg.state().view.me.customerRelationships),copy(ph.state().game.players[1].customerRelationships));assert.equal(pg.state().view.rival.customerRelationships,undefined)}
   if(customerOwnershipVersion){assert.equal(pg.state().view.customerOwnershipVersion,1);assert.deepEqual(copy(pg.state().view.me.householdBook),copy(ph.state().game.players[1].householdBook));assert.equal(pg.state().view.rival.householdBook,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].householdPolicy,undefined)}
+  if(creditPerformanceVersion){assert.equal(pg.state().view.creditPerformanceVersion,1);assert.deepEqual(copy(pg.state().view.me.creditPerformance),copy(ph.state().game.players[1].creditPerformance));assert.equal(pg.state().view.rival.creditPerformance,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].collectionsPolicy,undefined)}
   if(workforceVersion){assert.equal(pg.state().view.workforceVersion,1);assert.deepEqual(copy(pg.state().view.me.workforce),copy(ph.state().game.players[1].workforce));assert.equal(pg.state().view.rival.workforce,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].workforcePolicy,undefined)}
   ph.run('E.validatePilot(game);E.validateLedger(game)');
  }

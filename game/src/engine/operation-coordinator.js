@@ -23,11 +23,13 @@ function operate(g, p, preview = false) {
         const oldCreditWorld = creditWorld;
         if (p.creditBook) creditWorld = g;
         try {
+          const credit = settleCreditPerformance(g,p);
           const repaid = p.creditBook ? repayCredit(p) : null;
           text = settleMonthlyProduction(g, p, preview);
           if (p.creditBook) {
             p.operatingReport.principalRepaid = repaid;
-            p.operatingReport.loanGrowth -= repaid;
+            p.operatingReport.loanGrowth -= repaid + (credit ? credit.recovered : 0);
+            if(credit)text += ' Collections recovered $' + credit.recovered.toLocaleString() + ' principal (not income).';
             text += ' Scheduled principal returned $' + repaid.toLocaleString() + ' to cash (not profit).';
           }
         } finally {
