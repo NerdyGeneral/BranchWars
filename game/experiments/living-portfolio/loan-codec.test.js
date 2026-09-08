@@ -5,7 +5,7 @@ function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function contract(product='installment',n=0,bankId='a'){
  const p=Loan.catalog[product],applicationId='app:'+n,originalTerms=Loan.terms(product,{annualRateBps:1200,feeBps:100,termMonths:p.terms[0],underwriting:'growth'}),originalCommitment=70000,
   pledge=p.maxLtvBps?Math.ceil(originalCommitment*10000/p.maxLtvBps):0;
- return{id:'loan:1:'+applicationId.length+':'+applicationId+':'+bankId.length+':'+bankId,applicationId,bankId,borrowerId:'borrower:'+n,market:'downtown',sector:'general',product:p.family,offerProduct:product,
+ return{id:'loan:1:'+applicationId.length+':'+applicationId+':'+bankId.length+':'+bankId,applicationId,originatorBankId:bankId,bankId,basisAdjustment:0,borrowerId:'borrower:'+n,market:'downtown',sector:'general',product:p.family,offerProduct:product,
   principal:70000,undrawn:0,commitment:70000,remainingMonths:p.terms[0]-1,originatedMonth:1,originalPrincipal:70000,originalCommitment,originalTerms,
   collateral:pledge?{id:'property:'+n,originalValue:200000,pledgedValue:pledge,originationLtvBps:Math.ceil(originalCommitment*10000/pledge),releasedMonth:null}:null,
   servicing:{lastMonth:2,activityMonth:1,principalDue:0,interestDue:0,suspendedInterest:0,missedMonths:0,interestCarry:1200}};
@@ -25,8 +25,20 @@ test('fresh decoded borrower transactions produce identical economic results',()
  const c=contract('businessLine'),input={version:1,month:2,contracts:[c],banks:[{id:'a',cash:1000000,protectedCash:100000,creditWork:10}],borrowers:[{id:c.borrowerId,cash:10000,protectedCash:1000}],collateral:[],instructions:[{contractId:c.id,borrowerId:c.borrowerId,kind:'repay',amount:20000}]};
  assert.deepEqual(Loan.transactContracts({...input,contracts:Codec.decode(Codec.encode(input.contracts))}),Loan.transactContracts(input));
 });
+
+test('ownership and signed purchase basis survive without rewriting origination identity',()=>{
+ for(const basis of [-70000,-123,0,456]){
+  const c=contract();c.bankId='buyer';c.basisAdjustment=basis;
+  assert.deepEqual(Codec.decode(Codec.encode([c])),[c]);assert(c.id.endsWith(':1:a'));
+ }
+ for(const mutate of [c=>delete c.originatorBankId,c=>c.originatorBankId='buyer',c=>delete c.basisAdjustment,c=>c.basisAdjustment=-70001,
+  c=>c.basisAdjustment=Number.MAX_SAFE_INTEGER,c=>{c.principal=0;c.commitment=0;c.basisAdjustment=1;}]){
+  const c=contract();mutate(c);assert.throws(()=>Codec.encode([c]));
+ }
+ const old=Codec.encode([contract()]);old.version=1;old.rows[0].splice(21);assert.throws(()=>Codec.decode(old),/Unsupported loan codec/,'no implicit experiment-format upgrade');
+});
 test('duplicate, missing, out-of-bounds, forged and unknown encoded data reject',()=>{
- for(const mutate of [s=>s.version=2,s=>s.rows[0].pop(),s=>s.rows[0][0]=999999,s=>s.rows[0][6]=-1,s=>s.rows[0][12]=99999,s=>s.rows.push(copy(s.rows[0])),
+ for(const mutate of [s=>s.version=1,s=>s.rows[0].pop(),s=>s.rows[0][0]=999999,s=>s.rows[0][6]=-1,s=>s.rows[0][12]=99999,s=>s.rows.push(copy(s.rows[0])),
   s=>s.terms[0][0]=5001,s=>s.terms[0][3]='unlimited',s=>s.terms.push(copy(s.terms[0])),s=>s.dictionary.push('unused'),s=>s.rows[0][13]=[],s=>s.extra=true,s=>s.rows[0][15]=99]){
   const s=Codec.encode([contract()]);mutate(s);assert.throws(()=>Codec.decode(s));
  }

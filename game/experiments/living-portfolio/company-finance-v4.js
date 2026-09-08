@@ -109,9 +109,11 @@ function createCompanyFinanceV4({GroupAccounting:G, AccountingPrototype:A, legac
     const ids=new Set();
     for(const b of banks){
       shape(b,['id','book','legacyPrincipal','otherReceivables'],'attributed bank');A.check(b.book);check(b.legacyPrincipal,'legacy principal');check(b.otherReceivables,'other receivables');
-      const i=world.lending.bankIds.indexOf(b.id);if(i<0||ids.has(b.id)||![2,3].includes(b.book.version))throw Error('Unknown lending bank book');ids.add(b.id);
+      const i=world.lending.bankIds.indexOf(b.id);if(i<0||ids.has(b.id)||![2,3,4].includes(b.book.version))throw Error('Unknown lending bank book');ids.add(b.id);
       const held=contracts.filter(c=>c.bankId===b.id),fees=sum(world.companies.map(c=>c.bankArrears[i]));
       if(b.book.accounts.loans!==b.legacyPrincipal+sum(held.map(c=>c.principal))||b.book.accounts.receivables!==b.otherReceivables+fees+sum(held.map(c=>c.servicing.interestDue)))throw Error('Actual bank and attributed claims disagree');
+      const basis=sum(held.map(c=>c.basisAdjustment||0));
+      if(b.book.version===4?b.book.accounts.loanBasisAdjustment!==basis:held.some(c=>(c.basisAdjustment||0)!==0))throw Error('Actual bank and canonical purchase basis disagree');
     }
     return copy(banks);
   }
@@ -217,14 +219,16 @@ function createCompanyFinanceV4({GroupAccounting:G, AccountingPrototype:A, legac
     const loanRecovery=[0,0],loanWriteoff=[0,0];
     for(const x of held){
       const i=w.lending.bankIds.indexOf(x.bankId),cash=recoveries.get(x.id),interestPaid=Math.min(cash,x.servicing.interestDue),suspendedPaid=Math.min(cash-interestPaid,x.servicing.suspendedInterest),principalPaid=cash-interestPaid-suspendedPaid;
-      const principalLoss=x.principal-principalPaid,interestLoss=x.servicing.interestDue-interestPaid,loss=principalLoss+interestLoss;
+      const principalLoss=x.principal-principalPaid,interestLoss=x.servicing.interestDue-interestPaid,loss=principalLoss+interestLoss,basis=x.basisAdjustment||0;
       c.book=G.post(c.book,'resolution.bankLoan',x.bankId,{cash:-cash,debt:-x.principal,payables:-x.servicing.interestDue,equity:loss-suspendedPaid},loss-suspendedPaid);
-      const entry={cash,loans:-x.principal,receivables:-x.servicing.interestDue,equity:suspendedPaid-loss,earnings:suspendedPaid-loss};postBank(banks,x.bankId,'resolution.companyLoan',entry);
-      postings.push({contractId:x.id,bankId:x.bankId,borrowerId:c.id,bank:entry,principalPaid,recognizedInterestPaid:interestPaid,suspendedInterestPaid:suspendedPaid,principalWrittenOff:principalLoss,interestWrittenOff:interestLoss,unrecognizedInterestWaived:x.servicing.suspendedInterest-suspendedPaid});
+      // The borrower still owes face principal. The purchasing bank carries the
+      // claim at face plus remaining basis, so only that carrying loss is P&L.
+      const entry={cash,loans:-x.principal,receivables:-x.servicing.interestDue,...(basis?{loanBasisAdjustment:-basis}:{}),equity:suspendedPaid-loss-basis,earnings:suspendedPaid-loss-basis};postBank(banks,x.bankId,'resolution.companyLoan',entry);
+      postings.push({contractId:x.id,bankId:x.bankId,borrowerId:c.id,bank:entry,principalPaid,recognizedInterestPaid:interestPaid,suspendedInterestPaid:suspendedPaid,principalWrittenOff:principalLoss,interestWrittenOff:interestLoss,...(basis?{basisReleased:basis}:{}),unrecognizedInterestWaived:x.servicing.suspendedInterest-suspendedPaid});
       w.lending.cashNet[i]+=cash;loanRecovery[i]+=cash;loanWriteoff[i]+=loss;
       const f=w.lending.flows[i];f.principalPaid+=principalPaid;f.recognizedInterestPaid+=interestPaid;f.suspendedInterestPaid+=suspendedPaid;f.principalWrittenOff+=principalLoss;f.interestWrittenOff+=interestLoss;
       c.report.loanPrincipalPaid+=principalPaid;c.report.loanInterestPaid+=interestPaid+suspendedPaid;c.report.loanInterest+=suspendedPaid;c.report.profit-=suspendedPaid;
-      x.principal=0;x.undrawn=0;x.commitment=0;Object.assign(x.servicing,{principalDue:0,interestDue:0,suspendedInterest:0,missedMonths:0});
+      x.principal=0;x.undrawn=0;x.commitment=0;if(Object.hasOwn(x,'basisAdjustment'))x.basisAdjustment=0;Object.assign(x.servicing,{principalDue:0,interestDue:0,suspendedInterest:0,missedMonths:0});
       if(x.collateral&&x.collateral.releasedMonth===null){x.collateral.releasedMonth=w.month;collateral.find(p=>p.id===x.collateral.id).pledgedValue-=x.collateral.pledgedValue;}
       L.validateContract(x);
     }

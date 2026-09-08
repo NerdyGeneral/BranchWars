@@ -19,6 +19,30 @@ function service(cs,month,cash,protectedCash=0){
   const rev=copy(input);rev.contracts.reverse();rev.borrowers.reverse();assert.deepEqual(Loan.serviceContracts(rev),r,'servicing order independent');
   return r;
 }
+test('purchase basis follows actual principal payments without changing borrower obligations',()=>{
+ for(const basis of [-60000,-1001,0,1001,60000]){
+  let cs=contracts(),original=copy(cs);cs[0].basisAdjustment=basis;let released=0;
+  for(let month=2;month<=13;month++){
+   const snapshot={version:1,month,contracts:cs,borrowers:[{id:'borrower',cash:1000000,protectedCash:0}],collateral:[]},
+    par=Loan.serviceContracts({...snapshot,contracts:original}),r=Loan.serviceContracts(snapshot);months++;
+   for(let i=0;i<cs.length;i++){
+    const p=r.postings[i],q=par.postings[i],movement=p.bank.loanBasisAdjustment||0;
+    assert.deepEqual(p.borrower,q.borrower);assert.equal(p.bank.cash,q.bank.cash);
+    assert.equal(p.bank.cash+p.bank.loans+movement+p.bank.receivables,p.bank.equity);
+    assert.equal(p.bank.earnings,q.bank.earnings+movement);
+    const expected=-Number(BigInt(cs[i].basisAdjustment)*BigInt(p.principalPaid)/BigInt(cs[i].principal))||0;assert.equal(movement,expected);
+    if(!cs[i].basisAdjustment)assert(!Object.hasOwn(p.bank,'loanBasisAdjustment'));
+    released+=movement;
+   }
+   cs=r.contracts;original=par.contracts;
+  }
+  assert.equal(released,-basis||0);assert(cs.every(c=>c.basisAdjustment===0&&c.principal===0));
+ }
+ const cs=contracts();cs[0].basisAdjustment=-1001;
+ const r=Loan.serviceContracts({version:1,month:2,contracts:cs,borrowers:[{id:'borrower',cash:0,protectedCash:0}],collateral:[]});months++;
+ assert.equal(r.contracts[0].basisAdjustment,-1001);assert(!Object.hasOwn(r.postings[0].bank,'loanBasisAdjustment'));
+});
+
 test('fully funded installment amortizes and never calls repayment earnings',()=>{
   let cs=contracts(),principal=0,interest=0;
   for(let month=2;month<=13;month++){const r=service(cs,month,1000000);cs=r.contracts;principal+=r.postings.reduce((n,p)=>n+p.principalPaid,0);interest+=r.postings.reduce((n,p)=>n+p.interestPaid,0);}

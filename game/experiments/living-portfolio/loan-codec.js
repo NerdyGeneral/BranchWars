@@ -12,7 +12,7 @@ function createLivingLoanCodec(Loan){
  }
  function encode(cs){
   validatePortfolio(cs);const strings=new Set(),terms=new Map();
-  for(const c of cs){for(const k of ['applicationId','bankId','borrowerId','market','sector','offerProduct'])strings.add(c[k]);if(c.collateral)strings.add(c.collateral.id);
+  for(const c of cs){for(const k of ['applicationId','originatorBankId','bankId','borrowerId','market','sector','offerProduct'])strings.add(c[k]);if(c.collateral)strings.add(c.collateral.id);
    const t=c.originalTerms,key=JSON.stringify([t.annualRateBps,t.feeBps,t.termMonths,t.underwriting]);terms.set(key,[t.annualRateBps,t.feeBps,t.termMonths,t.underwriting]);}
   const dictionary=[...strings].sort(compare),index=new Map(dictionary.map((s,i)=>[s,i])),termKeys=[...terms.keys()].sort(compare),termIndex=new Map(termKeys.map((s,i)=>[s,i]));
   const rows=cs.slice().sort((a,b)=>compare(a.id,b.id)).map(c=>{
@@ -21,14 +21,14 @@ function createLivingLoanCodec(Loan){
     c.principal,c.undrawn,c.remainingMonths,c.originatedMonth,c.originalPrincipal,c.originalCommitment,
     termIndex.get(JSON.stringify([t.annualRateBps,t.feeBps,t.termMonths,t.underwriting])),
     p?[index.get(p.id),p.originalValue,p.pledgedValue,p.originationLtvBps,p.releasedMonth]:null,
-    s.lastMonth,s.activityMonth,s.principalDue,s.interestDue,s.suspendedInterest,s.missedMonths,s.interestCarry];
+    s.lastMonth,s.activityMonth,s.principalDue,s.interestDue,s.suspendedInterest,s.missedMonths,s.interestCarry,index.get(c.originatorBankId),c.basisAdjustment];
   });
-  return{version:1,dictionary,terms:termKeys.map(k=>terms.get(k)),rows};
+  return{version:2,dictionary,terms:termKeys.map(k=>terms.get(k)),rows};
  }
  function decode(input){
-  if(!shape(input,['version','dictionary','terms','rows'])||input.version!==1)throw Error('Unsupported loan codec');
+  if(!shape(input,['version','dictionary','terms','rows'])||input.version!==2)throw Error('Unsupported loan codec');
   const {dictionary,terms,rows}=input;
-  if(!Array.isArray(dictionary)||dictionary.length>120010||dictionary.some(s=>typeof s!=='string'||!/^[A-Za-z0-9_.:-]{1,100}$/.test(s))||
+  if(!Array.isArray(dictionary)||dictionary.length>140010||dictionary.some(s=>typeof s!=='string'||!/^[A-Za-z0-9_.:-]{1,100}$/.test(s))||
     dictionary.some((s,i)=>i>0&&compare(dictionary[i-1],s)>=0))throw Error('Invalid loan dictionary');
   if(!Array.isArray(terms)||terms.length>20000||!Array.isArray(rows)||rows.length>20000)throw Error('Invalid loan codec bounds');
   let previousTerm=null;for(const t of terms){
@@ -38,13 +38,13 @@ function createLivingLoanCodec(Loan){
   const usedStrings=new Set(),usedTerms=new Set();
   function word(i){if(!Number.isSafeInteger(i)||i<0||i>=dictionary.length)throw Error('Invalid dictionary reference');usedStrings.add(i);return dictionary[i];}
   const contracts=rows.map(row=>{
-   if(!Array.isArray(row)||row.length!==21||row.some((n,i)=>i!==13&&(!Number.isSafeInteger(n)||n<0)))throw Error('Invalid loan row');
-   const [ai,bi,ui,mi,si,pi,principal,undrawn,remainingMonths,originatedMonth,originalPrincipal,originalCommitment,ti,p,lastMonth,activityMonth,principalDue,interestDue,suspendedInterest,missedMonths,interestCarry]=row;
-   const applicationId=word(ai),bankId=word(bi),borrowerId=word(ui),market=word(mi),sector=word(si),offerProduct=word(pi);
+   if(!Array.isArray(row)||row.length!==23||row.some((n,i)=>i!==13&&(!Number.isSafeInteger(n)||(i!==22&&n<0))))throw Error('Invalid loan row');
+   const [ai,bi,ui,mi,si,pi,principal,undrawn,remainingMonths,originatedMonth,originalPrincipal,originalCommitment,ti,p,lastMonth,activityMonth,principalDue,interestDue,suspendedInterest,missedMonths,interestCarry,oi,basisAdjustment]=row;
+   const applicationId=word(ai),originatorBankId=word(oi),bankId=word(bi),borrowerId=word(ui),market=word(mi),sector=word(si),offerProduct=word(pi);
    if(ti>=terms.length)throw Error('Invalid terms reference');usedTerms.add(ti);const t=terms[ti];
    const originalTerms=Loan.terms(offerProduct,{annualRateBps:t[0],feeBps:t[1],termMonths:t[2],underwriting:t[3]});
    if(p!==null&&(!Array.isArray(p)||p.length!==5||p.some((n,i)=>!(i===4&&n===null)&&(!Number.isSafeInteger(n)||n<0))))throw Error('Invalid encoded collateral');
-   return{id:'loan:'+originatedMonth+':'+applicationId.length+':'+applicationId+':'+bankId.length+':'+bankId,applicationId,bankId,borrowerId,market,sector,
+   return{id:'loan:'+originatedMonth+':'+applicationId.length+':'+applicationId+':'+originatorBankId.length+':'+originatorBankId,applicationId,originatorBankId,bankId,basisAdjustment,borrowerId,market,sector,
     product:Loan.catalog[offerProduct].family,offerProduct,principal,undrawn,commitment:principal+undrawn,remainingMonths,originatedMonth,originalPrincipal,originalCommitment,originalTerms,
     collateral:p?{id:word(p[0]),originalValue:p[1],pledgedValue:p[2],originationLtvBps:p[3],releasedMonth:p[4]}:null,
     servicing:{lastMonth,activityMonth,principalDue,interestDue,suspendedInterest,missedMonths,interestCarry}};

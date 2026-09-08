@@ -153,7 +153,7 @@ const LivingLoanContracts = (() => {
           const committed=Math.min(fills.get(o.bankId)||0,collateral?ratio(Math.max(0,collateral.value-collateral.pledgedValue),p.maxLtvBps,10000):Number.MAX_SAFE_INTEGER);if(!committed)continue;
           const bank=banks.get(o.bankId),originalTerms=terms(a.product,o.terms),principal=ratio(committed,a.initialDrawBps,10000),fee=ratio(principal,o.terms.feeBps,10000);
           const pledgedValue=collateral?ratio(committed,10000,p.maxLtvBps,true):0,work=workFor(a.product,committed),rwa=ratio(committed,p.riskWeightBps,10000,true);
-          const contract={id:contractId(snapshot.month,a.id,o.bankId),applicationId:a.id,bankId:o.bankId,borrowerId:a.borrowerId,market:applicant.market,sector:applicant.sector,
+          const contract={id:contractId(snapshot.month,a.id,o.bankId),applicationId:a.id,originatorBankId:o.bankId,bankId:o.bankId,basisAdjustment:0,borrowerId:a.borrowerId,market:applicant.market,sector:applicant.sector,
             product:p.family,offerProduct:a.product,principal,commitment:committed,undrawn:committed-principal,remainingMonths:o.terms.termMonths,
             originatedMonth:snapshot.month,originalPrincipal:principal,originalCommitment:committed,originalTerms,
             servicing:{lastMonth:snapshot.month,activityMonth:snapshot.month,principalDue:0,interestDue:0,suspendedInterest:0,missedMonths:0,interestCarry:0},
@@ -176,15 +176,18 @@ const LivingLoanContracts = (() => {
       cashChange:postings.filter(p=>p.bankId===b.id).reduce((n,p)=>n+p.bank.cash,0)}))};
   }
   function validateContract(c){
-    shape(c,['id','applicationId','bankId','borrowerId','market','sector','product','offerProduct','principal','commitment','undrawn','remainingMonths','originatedMonth','originalPrincipal','originalCommitment','originalTerms','collateral','servicing'],'loan contract');
+    shape(c,['id','applicationId','originatorBankId','bankId','basisAdjustment','borrowerId','market','sector','product','offerProduct','principal','commitment','undrawn','remainingMonths','originatedMonth','originalPrincipal','originalCommitment','originalTerms','collateral','servicing'],'loan contract');
     if(typeof c.id!=='string'||!/^[A-Za-z0-9_.:-]{1,350}$/.test(c.id))throw Error('Invalid contract identity');
-    for(const k of ['applicationId','bankId','borrowerId','market','sector'])id(c[k],k);
-    if(c.id!==contractId(c.originatedMonth,c.applicationId,c.bankId))throw Error('Loan identity does not match origination');
+    for(const k of ['applicationId','originatorBankId','bankId','borrowerId','market','sector'])id(c[k],k);
+    if(c.id!==contractId(c.originatedMonth,c.applicationId,c.originatorBankId))throw Error('Loan identity does not match origination');
     if(!own(catalog,c.offerProduct)||c.product!==catalog[c.offerProduct].family)throw Error('Invalid retained product');
     const selection={annualRateBps:c.originalTerms?.annualRateBps,feeBps:c.originalTerms?.feeBps,termMonths:c.originalTerms?.termMonths,underwriting:c.originalTerms?.underwriting};
     const expected=terms(c.offerProduct,selection);
     shape(c.originalTerms,Object.keys(expected),'original contract terms');for(const k of Object.keys(expected))if(c.originalTerms[k]!==expected[k])throw Error('Inconsistent original terms');
     for(const k of ['principal','commitment','undrawn','remainingMonths','originalPrincipal','originalCommitment'])integer(c[k],k);
+    integer(c.basisAdjustment,'loan purchase basis',-c.principal);
+    integer(c.principal+c.basisAdjustment,'loan principal carrying value');
+    if(!c.principal&&c.basisAdjustment)throw Error('Paid loan retains purchase basis');
     integer(c.originalCommitment,'original commitment',1);
     integer(c.originatedMonth,'vintage',1);if(c.remainingMonths>c.originalTerms.termMonths||c.principal+c.undrawn!==c.commitment||c.commitment>c.originalCommitment||c.originalPrincipal>c.originalCommitment||!c.remainingMonths&&c.undrawn)throw Error('Invalid retained loan balances');
     const p=catalog[c.offerProduct];if(p.repayment!=='revolving'&&(c.undrawn!==0||c.originalPrincipal!==c.originalCommitment))throw Error('Unexpected revolving balance');
@@ -201,6 +204,16 @@ const LivingLoanContracts = (() => {
     if(c.remainingMonths!==Math.max(0,c.originalTerms.termMonths-(c.servicing.lastMonth-c.originatedMonth))||
       !!sum([c.servicing.principalDue,c.servicing.interestDue,c.servicing.suspendedInterest])!==!!c.servicing.missedMonths)throw Error('Loan maturity or delinquency was rewritten');
     return c;
+  }
+  // Purchase premiums/discounts belong to the holder, not the borrower. Release
+  // basis only against real principal payments, with exact residual at payoff.
+  // Draws at par do not realize any existing basis. This explicit provisional
+  // proportional rule is not contractual interest or a borrower fee.
+  function releaseBasis(c,principalPaid){
+    integer(principalPaid,'basis principal payment',0,c.principal);
+    const released=!principalPaid?0:principalPaid===c.principal?c.basisAdjustment:
+      Number(BigInt(c.basisAdjustment)*BigInt(principalPaid)/BigInt(c.principal));
+    c.basisAdjustment-=released;return released;
   }
   function contractBoundary(input,lastMonth){
     if(!Array.isArray(input.contracts)||input.contracts.length>20000)throw Error('Invalid servicing contracts');
@@ -252,13 +265,14 @@ const LivingLoanContracts = (() => {
       for(const c of rows){
         const claim=claimsById.get(c.id),paid=payments.get(c.id),recognizedInterestPaid=Math.min(paid,c.servicing.interestDue),suspendedInterestPaid=Math.min(paid-recognizedInterestPaid,c.servicing.suspendedInterest),
           interestPaid=recognizedInterestPaid+suspendedInterestPaid,principalPaid=paid-interestPaid;
+        const basisReleased=releaseBasis(c,principalPaid);
         c.principal-=principalPaid;c.servicing.principalDue-=principalPaid;c.servicing.interestDue-=recognizedInterestPaid;c.servicing.suspendedInterest-=suspendedInterestPaid;
         c.remainingMonths=Math.max(0,c.remainingMonths-1);if(!c.remainingMonths){c.undrawn=0;c.commitment=c.principal;}else if(c.originalTerms.repayment!=='revolving')c.commitment=c.principal;
         c.servicing.missedMonths=c.servicing.principalDue+c.servicing.interestDue+c.servicing.suspendedInterest?c.servicing.missedMonths+1:0;c.servicing.lastMonth=input.month;
         const collateralReleaseValue=c.collateral&&c.collateral.releasedMonth===null&&!c.principal&&!c.undrawn&&!c.servicing.interestDue&&!c.servicing.suspendedInterest?c.collateral.pledgedValue:0;
         if(collateralReleaseValue){c.collateral.releasedMonth=input.month;propertyById.get(c.collateral.id).pledgedValue-=collateralReleaseValue;}
         postings.push({contractId:c.id,bankId:c.bankId,borrowerId:b.id,
-          bank:{cash:paid,loans:-principalPaid,receivables:claim.accrued-recognizedInterestPaid,equity:claim.accrued+suspendedInterestPaid,earnings:claim.accrued+suspendedInterestPaid},
+          bank:{cash:paid,loans:-principalPaid,...(basisReleased?{loanBasisAdjustment:-basisReleased}:{}),receivables:claim.accrued-recognizedInterestPaid,equity:claim.accrued+suspendedInterestPaid-basisReleased,earnings:claim.accrued+suspendedInterestPaid-basisReleased},
           borrower:{cash:-paid,debt:-principalPaid,interestPayable:claim.accrued-recognizedInterestPaid,interestExpense:claim.accrued+suspendedInterestPaid},
           memorandumInterestChange:claim.suspended-suspendedInterestPaid,principalPaid,interestPaid,recognizedInterestPaid,suspendedInterestPaid,accruedInterest:claim.accrued,collateralReleaseValue});
         reports.push({contractId:c.id,principalDueBeforePayment:claim.amount-(c.servicing.interestDue+c.servicing.suspendedInterest+interestPaid),principalPaid,interestPaid,accruedInterest:claim.accrued,
@@ -311,11 +325,11 @@ const LivingLoanContracts = (() => {
     for(const c of contracts){
       c.servicing.activityMonth=input.month;const action=decisions.get(c.id);if(!action)continue;
       const paid=fills.get(c.id)||0;action.filled=paid;
-      let principalPaid=0,recognizedInterestPaid=0,suspendedInterestPaid=0,draw=0;
+      let principalPaid=0,recognizedInterestPaid=0,suspendedInterestPaid=0,draw=0,basisReleased=0;
       if(action.kind==='draw'){draw=paid;c.principal+=draw;c.undrawn-=draw;}
       else{
         recognizedInterestPaid=Math.min(paid,c.servicing.interestDue);suspendedInterestPaid=Math.min(paid-recognizedInterestPaid,c.servicing.suspendedInterest);
-        principalPaid=paid-recognizedInterestPaid-suspendedInterestPaid;c.principal-=principalPaid;c.servicing.principalDue=Math.max(0,c.servicing.principalDue-principalPaid);
+        principalPaid=paid-recognizedInterestPaid-suspendedInterestPaid;basisReleased=releaseBasis(c,principalPaid);c.principal-=principalPaid;c.servicing.principalDue=Math.max(0,c.servicing.principalDue-principalPaid);
         c.servicing.interestDue-=recognizedInterestPaid;c.servicing.suspendedInterest-=suspendedInterestPaid;
         if(c.originalTerms.repayment==='revolving'&&c.remainingMonths)c.undrawn+=principalPaid;else c.commitment=c.principal;
         if(!sum([c.servicing.principalDue,c.servicing.interestDue,c.servicing.suspendedInterest]))c.servicing.missedMonths=0;
@@ -326,7 +340,7 @@ const LivingLoanContracts = (() => {
       bankCashChanges.set(c.bankId,(bankCashChanges.get(c.bankId)||0)+bankCash);
       borrowerCashChanges.set(c.borrowerId,(borrowerCashChanges.get(c.borrowerId)||0)-bankCash);
       postings.push({contractId:c.id,bankId:c.bankId,borrowerId:c.borrowerId,kind:action.kind,draw,principalPaid,recognizedInterestPaid,suspendedInterestPaid,
-        bank:{cash:bankCash,loans:draw-principalPaid,receivables:-recognizedInterestPaid,equity:suspendedInterestPaid,earnings:suspendedInterestPaid},
+        bank:{cash:bankCash,loans:draw-principalPaid,...(basisReleased?{loanBasisAdjustment:-basisReleased}:{}),receivables:-recognizedInterestPaid,equity:suspendedInterestPaid-basisReleased,earnings:suspendedInterestPaid-basisReleased},
         borrower:{cash:-bankCash,debt:draw-principalPaid,interestPayable:-recognizedInterestPaid,interestExpense:suspendedInterestPaid},
         memorandumInterestChange:-suspendedInterestPaid,creditWork:draw?Math.ceil(draw/250000):0,collateralReleaseValue});
       validateContract(c);
