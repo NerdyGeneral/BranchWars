@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),{webcrypto,createHash}=require('node:crypto');
-const html=fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'),'utf8');
+const html=process.argv.includes('--source')?require('../tools/build_game.js').assemble().html:fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'),'utf8');
 for(const s of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(s[1]);
 const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 const client=html.slice(html.indexOf('const E=window.BWEngine'),html.lastIndexOf("$$('[data-workspace-tab]').forEach"));
@@ -8,19 +8,43 @@ const copy=x=>JSON.parse(JSON.stringify(x));
 function response(status,body,headers={}){return {status,ok:status>=200&&status<300,headers:{get:k=>headers[k.toLowerCase()]??null},json:async()=>body}}
 function harness(side='host'){
  const storage=new Map(),elements=new Map(),timers=new Map();let timerId=0;
+ function elementFor(selector){
+  if(elements.has(selector))return elements.get(selector);
+  const el={id:selector.startsWith('#')?selector.slice(1):'',value:'',textContent:'',checked:false,disabled:false,dataset:{},listeners:{},
+   focus(){},querySelector:s=>elementFor(s),
+   addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},
+   classList:{add(){},remove(){},toggle(){},contains(){return false}}};
+  let markup='';
+  Object.defineProperty(el,'innerHTML',{configurable:true,get:()=>markup,set:html=>{
+   markup=String(html);
+   for(const input of markup.matchAll(/<input\b[^>]*>/g)){
+    const id=input[0].match(/\bid="([^"]+)"/)?.[1];if(!id)continue;
+    const control=elementFor('#'+id),field=input[0].match(/\bdata-feature-field="([^"]+)"/)?.[1];
+    control.checked=/\schecked(?:\s|>)/.test(input[0]);control.disabled=/\sdisabled(?:\s|>)/.test(input[0]);
+    if(field)control.dataset.featureField=field;
+   }
+  }});
+  elements.set(selector,el);return el;
+ }
  const c={console,URL,TextEncoder,AbortController,crypto:webcrypto,queueMicrotask,btoa:x=>Buffer.from(x,'binary').toString('base64'),atob:x=>Buffer.from(x,'base64').toString('binary'),
   setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms});return id},clearTimeout:id=>timers.delete(id),clearInterval:()=>{},
   localStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null},
   sessionStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null,removeItem:k=>storage.delete(k)},
-  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',checked:false,listeners:{},addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
+  document:{querySelector:elementFor,querySelectorAll:()=>[]},
  };
  vm.createContext(c);vm.runInContext(engine,c);c.window={BWEngine:c.BWEngine};
  vm.runInContext(client,c);
  vm.runInContext("render=()=>{};enterGame=()=>{};saveLocal=()=>{};toast=()=>{};setMode=()=>{};gh={...emptyGh(),active:true,side:'"+side+"',api:'https://api.github.com',repo:'test/game',branch:'main',room:'ABCDEFGH',token:'PRIVATE_TEST_TOKEN'};p2pRole='"+side+"';p2pConfig={campaignRulesVersion:1,name:'Host',guestName:'Guest'};",c);
- return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
+ return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),
+  changeFeature(id,checked){const control=elementFor(id);assert(control.dataset.featureField,'Rendered feature control '+id);control.checked=checked;elementFor('#setupFeatureOptions').listeners.change({target:control})},
+  confirmFeatures(){return vm.runInContext('confirmFeatureSelection()',c)},
+  state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
+
 }
 async function main(){
- const advertisingVersion=process.argv.includes('--advertising')?1:0;
+ const relationshipOffersVersion=process.argv.includes('--relationship-offers')?1:0;
+ const regionalGrowthVersion=relationshipOffersVersion||process.argv.includes('--regional-growth')?1:0;
+ const advertisingVersion=regionalGrowthVersion||process.argv.includes('--advertising')?1:0;
  const productProgramsVersion=advertisingVersion||process.argv.includes('--product-programs')?1:0;
  const segmentDepositsVersion=productProgramsVersion||process.argv.includes('--segment-deposits')?1:0;
  const creditPerformanceVersion=segmentDepositsVersion||process.argv.includes('--collections')?1:0;
@@ -28,6 +52,16 @@ async function main(){
  const workforceVersion=customerOwnershipVersion||process.argv.includes('--workforce')?1:0;
  const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
  const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
+ if(relationshipOffersVersion){
+  const oldOffersPeer=harness();oldOffersPeer.run("game=null;p2pConfig.relationshipOffersVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+  await oldOffersPeer.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,regionalGrowthSupported:1,advertisingSupported:1,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,name:'Version 8.11 guest'})");
+  assert.equal(oldOffersPeer.state().game,null);assert.equal(oldOffersPeer.state().lobby,null);assert(oldOffersPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Relationship offers'))"));
+ }
+ if(regionalGrowthVersion){
+  const oldRegionalPeer=harness();oldRegionalPeer.run("game=null;p2pConfig.regionalGrowthVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
+  await oldRegionalPeer.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,advertisingSupported:1,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,name:'Version 8.10 guest'})");
+  assert.equal(oldRegionalPeer.state().game,null);assert.equal(oldRegionalPeer.state().lobby,null);assert(oldRegionalPeer.run("sent.some(m=>m.type==='error'&&m.message.includes('Regional growth'))"));
+ }
  if(advertisingVersion){
   const oldAdvertisingPeer=harness();oldAdvertisingPeer.run("game=null;p2pConfig.advertisingVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
   await oldAdvertisingPeer.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,name:'Pre-advertising guest'})");
@@ -48,12 +82,16 @@ async function main(){
  // Compact a long host trail: old framing exceeds inline Contents limit.
  const h=harness(),frames=Array.from({length:20},(_,i)=>({seq:i+1,msg:{type:'state',state:{cycle:i+1,padding:'x'.repeat(100000)}}}));
  // The new service preview requires, and explicitly enables, the regional pilot.
- const preview=h.elements.get('#serviceExpansion');
- assert(preview.listeners.change, 'service preview registers its change handler');
+ assert(h.elements.get('#setupFeatureOptions').listeners.change,'Feature selector binds delegated changes');
  assert.equal(h.c.document.querySelector('#rivalryPilot').checked,false);
- preview.checked=true;preview.listeners.change();
- assert.equal(h.elements.get('#rivalryPilot').checked,true);
- preview.checked=false;preview.listeners.change();
+ h.changeFeature('#serviceExpansion',true);
+ assert(h.run('featureSelectionPending()'),'Dependent setup changes await explicit confirmation');
+ assert.equal(h.elements.get('#rivalryPilot').checked,false,'Unconfirmed prerequisites are not selected');
+ assert(h.confirmFeatures());assert.equal(h.elements.get('#rivalryPilot').checked,true);
+ assert.equal(h.elements.get('#serviceExpansion').checked,true);
+ h.changeFeature('#serviceExpansion',false);
+ if(h.run('featureSelectionPending()'))assert(h.confirmFeatures());
+ assert.equal(h.elements.get('#serviceExpansion').checked,false);
  assert.equal(h.elements.get('#rivalryPilot').checked,true,'disabling preview does not disable the existing pilot');
  h.c.frames=frames;
  assert(Buffer.byteLength(JSON.stringify(frames))>1000000);
@@ -97,6 +135,9 @@ async function main(){
  // The engine host receives commit and reveal, using actual message handling.
  const host=harness();
  host.run("ghFlush=()=>{};game=E.createGame({campaignRulesVersion:1,mode:'lan',seed:9});game.players[0].submitted=E.chooseBot(game,0)");
+ // This isolated cycle-only packet exercises a known legacy transport peer.
+ // The full two-client relay below performs the modern challenged handshake.
+ host.run('capturePeerFeatures({...E.campaignCapabilities()})');
  host.c.commit={type:'plan_commit',hash:seal.hash,cycle:seal.cycle};await host.run('handleMessage(commit)');
  assert(host.state().ghIncomingCommit);
  const stateFrame=host.state().gh.outbox.at(-1).msg;guest.c.frame=copy(stateFrame);await guest.run('handleMessage(frame)');
@@ -120,9 +161,10 @@ async function main(){
  const poll=order.run('ghPoll()');await new Promise(r=>setImmediate(r));assert.deepEqual(handled,['one']);assert.equal(order.state().gh.seen,0);finish();await poll;assert.deepEqual(handled,['one','two']);
  // Real send/read/flush functions across two engine clients with periodically lost PUT responses.
  const pair=[harness('host'),harness('guest')],files=new Map();let writes=0,lost=0;
- for(const peer of pair){
+ function attachRelay(peer){
   peer.run('const pacedWrite=ghWrite;ghWrite=async(...args)=>{gh.lastWrite=0;return pacedWrite(...args)}');
   peer.c.fetch=async(url,opt={})=>{
+   if(!url.includes('/contents/'))return response(200,{private:true,default_branch:'main',permissions:{push:true}});
    const side=url.includes('/host.json')?'host':'guest',file=files.get(side);
    if(opt.method!=='PUT')return file?response(200,{sha:file.sha,content:Buffer.from(JSON.stringify(file.data)).toString('base64')},{etag:file.sha}):response(404,{});
    const body=JSON.parse(opt.body);if(file&&file.sha!==body.sha)return response(409,{});
@@ -130,7 +172,9 @@ async function main(){
    if(writes%7===0){lost++;throw Error('Lost accepted PUT response')}
    return response(200,{content:{sha}});
   };
+  return peer;
  }
+ pair.forEach(attachRelay);
  async function flush(peer){
   for(let tries=0;tries<20;tries++){
    if(!peer.state().gh.busy)await peer.run('ghFlush()');
@@ -143,28 +187,85 @@ async function main(){
   await flush(from);to.c.packet=await to.run("ghRead('"+from.state().gh.side+"','')");
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
- const [ph,pg]=pair;
- ph.run("p2pConfig={advertisingVersion:"+advertisingVersion+",productProgramsVersion:"+productProgramsVersion+",segmentDepositsVersion:"+segmentDepositsVersion+",creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
+ async function reloadRelay(peer){
+  await flush(peer);peer.run('ghCheckpoint()');
+  const checkpoint=peer.storage.get('branchWarsGhResume'),side=peer.state().gh.side;
+  assert(checkpoint&&!checkpoint.includes('PRIVATE_TEST_TOKEN'));
+  const restored=attachRelay(harness(side));peer.run('gh.active=false');
+  restored.storage.set('branchWarsGhResume',checkpoint);
+  restored.c.document.querySelector('#ghToken').value='PRIVATE_TEST_TOKEN';
+  restored.run('gh.active=false;ghPoll=()=>{}');await restored.run('ghResume()');
+  assert(restored.state().gh.active,'regional checkpoint resumes through save validation');return restored;
+ }
+ let [ph,pg]=pair;
+ ph.run("p2pConfig={relationshipOffersVersion:"+relationshipOffersVersion+",regionalGrowthVersion:"+regionalGrowthVersion+",advertisingVersion:"+advertisingVersion+",productProgramsVersion:"+productProgramsVersion+",segmentDepositsVersion:"+segmentDepositsVersion+",creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
  pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
  await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
+ for(let attempt=0;attempt<4&&(!ph.state().lobby||!pg.state().lobby);attempt++){await deliver(pg,ph);await deliver(ph,pg);}
+ assert(ph.state().lobby&&pg.state().lobby,'The challenged modern relay opens both lobbies');
  assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
  pg.run('editLobbyIdentity(true)');await deliver(pg,ph);await deliver(ph,pg);
  ph.run('editLobbyIdentity(true)');await deliver(ph,pg);
  ph.run('startLobbyCampaign()');
  await deliver(ph,pg);
- if(advertisingVersion){assert.equal(ph.state().game.version,'8.10');assert.equal(pg.state().lobby.settings.advertisingVersion,1);assert.equal(pg.state().view.advertisingVersion,1);}
+ if(advertisingVersion){assert.equal(ph.state().game.version,relationshipOffersVersion?'8.12':regionalGrowthVersion?'8.11':'8.10');assert.equal(pg.state().lobby.settings.advertisingVersion,1);assert.equal(pg.state().view.advertisingVersion,1);}
  const relayPlan=seat=>{
   const plan=ph.run('E.chooseBot(game,'+seat+')');
+  if(relationshipOffersVersion){
+   const owner=ph.state().game.players[seat];
+   if(ph.state().game.cycle===1){
+    plan.newProjects=['licenseRewards'];plan.newProject='licenseRewards';plan.investments={};plan.hires=0;plan.competitiveAction='none';
+    for(const role of Object.keys(plan.specialistHires||{}))plan.specialistHires[role]=0;
+   }
+   if(owner.productDeployment.ready.rewards){
+    plan.productProgramPolicy.retire=plan.productProgramPolicy.retire.filter(k=>k!=='rewards');
+    plan.productProgramPolicy.markets[owner.focus].connected={essential:0,rewards:4,highYield:0};
+    plan.relationshipOfferPolicy={market:owner.focus,segment:'connected',product:'rewards',share:25};
+    plan.householdPolicy.retention=50;
+   }
+  }
   if(advertisingVersion)plan.advertisingPolicy={market:ph.state().game.players[seat].focus,segment:'everyday',product:'essential',budget:15000};
   return plan;
  };
- let rounds=0,paidAdvertisingPlans=0;
+ if(regionalGrowthVersion){assert.equal(pg.state().lobby.settings.regionalGrowthVersion,1);assert.equal(pg.state().view.regionalGrowthVersion,1);}
+ if(relationshipOffersVersion){assert.equal(pg.state().lobby.settings.relationshipOffersVersion,1);assert.equal(pg.state().view.relationshipOffersVersion,1);}
+ let rounds=0,paidAdvertisingPlans=0,regionalReloads=0,activeRelationshipPlans=0,convertedRelationships=0;
  for(;rounds<12&&!ph.state().game.gameOver;rounds++){
   pg.c.plan=relayPlan(1);await pg.run('ghCommitPlan(plan)');
   await deliver(pg,ph);
   ph.c.plan=relayPlan(0);ph.run('E.submit(game,0,plan);syncPeers()');
-  await deliver(ph,pg);await deliver(pg,ph);await deliver(ph,pg);
+  await deliver(ph,pg);
+  const regionalReveal=regionalGrowthVersion&&copy(pg.state().gh.outbox.find(e=>e.msg.type==='plan_reveal').msg);
+  await deliver(pg,ph);await deliver(ph,pg);
+  if(regionalGrowthVersion){
+   assert.equal(ph.state().game.regionalGrowth.lastCycle,rounds+1);
+   assert.equal(pg.state().view.regionalGrowthVersion,1);
+   assert.deepEqual(copy(pg.state().view.regionalGrowth),copy(ph.run('E.publicState(game,1).regionalGrowth')));
+   assert.equal(Object.keys(pg.state().view.regionalGrowth).sort().join(','),'forecast,lastCycle,report,version','regional projection excludes private opening books and carry');
+   if(rounds===0){
+    const growth=copy(ph.state().game.regionalGrowth),outside=copy(ph.state().game.marketEconomy),cycle=ph.state().game.cycle;
+    const offers=relationshipOffersVersion&&copy(ph.state().game.players.map(p=>p.relationshipOffers));
+    ph=await reloadRelay(ph);pg=await reloadRelay(pg);regionalReloads+=2;
+    for(let attempt=0;attempt<4;attempt++){await deliver(pg,ph);await deliver(ph,pg);}
+    assert(ph.run('peerFeatureStatus().compatible'),'Reload obtains fresh peer capabilities');
+    assert.deepEqual(copy(ph.state().game.regionalGrowth),growth,'reload preserves settled external flow');
+    assert.deepEqual(copy(ph.state().game.marketEconomy),outside,'reload does not repeat outside growth');
+    ph.c.duplicate=regionalReveal;await ph.run('handleMessage(duplicate)');await deliver(ph,pg);
+    assert.equal(ph.state().game.cycle,cycle);
+    assert.deepEqual(copy(ph.state().game.regionalGrowth),growth,'duplicate reveal cannot settle external flow twice');
+    assert.deepEqual(copy(ph.state().game.marketEconomy),outside,'duplicate reveal cannot create outside funds');
+    if(relationshipOffersVersion)assert.deepEqual(copy(ph.state().game.players.map(p=>p.relationshipOffers)),offers,'reload and duplicate reveal preserve settled private offers');
+   }
+  }
   assert.equal(pg.state().view.cycle,ph.state().game.cycle);assert.equal(pg.state().ghPendingPlan,null);
+  if(relationshipOffersVersion){
+   assert.equal(pg.state().view.relationshipOffersVersion,1);
+   assert.deepEqual(copy(pg.state().view.me.relationshipOffers),copy(ph.state().game.players[1].relationshipOffers));
+   assert.equal(pg.state().view.rival.relationshipOffers,undefined);
+   assert.doesNotMatch(JSON.stringify([pg.state().view.resolution,pg.state().view.log]),/Existing-customer offers switched|relationshipOffer(?:Cost|Converted|Principal|RunRateDelta|Policy)/i,'public relay resolution and log do not disclose exact private offer results');
+   assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].relationshipOfferPolicy,undefined);
+   for(const p of ph.state().game.players){assert.equal(p.relationshipOffers.lastCycle,rounds+1);assert.equal(p.relationshipOffers.report.cycle,rounds+1);if(p.relationshipOffers.policy.share){activeRelationshipPlans++;convertedRelationships+=p.relationshipOffers.report.converted;}}
+  }
   if(managementVersion){assert.equal(pg.state().view.managementVersion,managementVersion);assert.deepEqual(copy(pg.state().view.me.management),copy(ph.state().game.players[1].management));assert(!pg.state().view.rival.management)}
   if(managementVersion===2)assert.deepEqual(copy(pg.state().view.relationshipRecords),copy(ph.state().game.relationshipRecords));
   if(customerDemandVersion){assert.equal(pg.state().view.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.operatingReport.customerAcquisitionCost,ph.state().game.players[1].operatingReport.customerAcquisitionCost)}
@@ -182,8 +283,9 @@ async function main(){
   ph.run('E.validatePilot(game);E.validateLedger(game)');
  }
  assert.equal(rounds,12);assert(lost>0);
+ if(relationshipOffersVersion){assert(activeRelationshipPlans>0);assert(convertedRelationships>0,'relationship relay includes real local conversions');}
  if(advertisingVersion)assert(paidAdvertisingPlans>0,'sealed relay tests must include actually paid advertising, not only paused requests');
- console.log(JSON.stringify({passed:true,relayTurns:rounds,acceptedWrites:writes,lostResponses:lost,...(advertisingVersion?{paidAdvertisingPlans}:{}),sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['oversized rooms','snapshot compaction','rate cooldown','authentication pause','request timeout','stale sessions','conflicting writers','seat ownership','sealed timeout','live engine commit/reveal','duplicate reveal','reload checkpoint','ordered async polling',...(advertisingVersion?['advertising old-peer refusal','paid advertising','exact private advertising report']:[])]},null,2));
+ console.log(JSON.stringify({passed:true,relayTurns:rounds,acceptedWrites:writes,lostResponses:lost,...(advertisingVersion?{paidAdvertisingPlans}:{}),...(regionalGrowthVersion?{regionalReloads}:{}),...(relationshipOffersVersion?{activeRelationshipPlans,convertedRelationships}:{}),sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['oversized rooms','snapshot compaction','rate cooldown','authentication pause','request timeout','stale sessions','conflicting writers','seat ownership','sealed timeout','live engine commit/reveal','duplicate reveal','reload checkpoint','ordered async polling',...(advertisingVersion?['advertising old-peer refusal','paid advertising','exact private advertising report']:[]),...(regionalGrowthVersion?['regional old-peer refusal','public regional flow','regional checkpoint reload','no duplicate external flow']:[]),...(relationshipOffersVersion?['relationship offers old-peer refusal','active local offers','exact private relationship reports','relationship checkpoint reload']:[])]},null,2));
 }
 if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});
 module.exports={harness,response};

@@ -8,7 +8,7 @@ const fresh=extra=>E.createGame({...options,...extra});
 const plan=p=>({focus:p.focus,allocation:{...p.allocation},decision:'b',depositPolicy:'balanced',lendingPolicy:'balanced',capitalPolicy:'balanced',products:{...p.products},newProjects:[],investments:{},hires:0,competitiveAction:'none'});
 const normalized=(p,q=plan(p))=>{E.normalizeProductProgramPlan(p,q);return q;};
 const g=fresh(),p=g.players[0];assert.equal(g.version,'8.9');E.validatePilot(g);
-assert.throws(()=>fresh({productProgramsVersion:2}),/version/);assert.throws(()=>fresh({segmentDepositsVersion:0}),/requires/);
+assert.throws(()=>fresh({productProgramsVersion:3}),/version/);assert.throws(()=>fresh({segmentDepositsVersion:0}),/requires/);
 const old=fresh({productProgramsVersion:0});assert.equal(old.version,'8.8');assert.equal(old.players[0].productPrograms,undefined);
 assert.equal(E.projectCatalog(old.players[0]).licenseRewards,undefined);
 assert.throws(()=>E.submit(old,0,{...plan(old.players[0]),productProgramPolicy:{}}),/requires/);

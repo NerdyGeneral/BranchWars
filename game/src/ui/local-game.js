@@ -1,22 +1,39 @@
-
-$('#advertisingPreview').addEventListener('change',()=>{if($('#advertisingPreview').checked)for(const id of ['#productPrograms','#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
-for(const id of ['#productPrograms','#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#advertisingPreview').checked=false});
-$('#productPrograms').addEventListener('change',()=>{if($('#productPrograms').checked)for(const id of ['#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
-for(const id of ['#segmentDeposits','#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#productPrograms').checked=false});
-$('#serviceExpansion').addEventListener('change',()=>{if($('#serviceExpansion').checked)$('#rivalryPilot').checked=true;else $('#institutionManagement').checked=false});
-$('#customerNeeds').addEventListener('change',()=>{if($('#customerNeeds').checked){$('#institutionManagement').checked=true;$('#serviceExpansion').checked=true;$('#rivalryPilot').checked=true}});
-$('#institutionManagement').addEventListener('change',()=>{if($('#institutionManagement').checked){$('#serviceExpansion').checked=true;$('#rivalryPilot').checked=true}});
-$('#specialistWorkforce').addEventListener('change',()=>{if($('#specialistWorkforce').checked){$('#customerNeeds').checked=true;$('#institutionManagement').checked=true;$('#serviceExpansion').checked=true;$('#rivalryPilot').checked=true}});
-for(const id of ['#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#specialistWorkforce').checked=false});
-$('#householdOwnership').addEventListener('change',()=>{if($('#householdOwnership').checked)for(const id of ['#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
-for(const id of ['#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#householdOwnership').checked=false});
-$('#creditPerformance').addEventListener('change',()=>{if($('#creditPerformance').checked)for(const id of ['#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
-for(const id of ['#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#creditPerformance').checked=false});
-$('#segmentDeposits').addEventListener('change',()=>{if($('#segmentDeposits').checked)for(const id of ['#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
-for(const id of ['#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#segmentDeposits').checked=false});
-function startLocal(which){try{game=which==='ai'?E.createGame({advertisingVersion:$('#advertisingPreview').checked?1:0,productProgramsVersion:$('#productPrograms').checked?1:0,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'ai',name1:validName('#aiName'),name2:'Synergy Holdings AI',scope:$('#aiScope').value,scenario:$('#aiScenario').value,difficulty:$('#aiDifficulty').value}):E.createGame({advertisingVersion:$('#advertisingPreview').checked?1:0,productProgramsVersion:$('#productPrograms').checked?1:0,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'hotseat',name1:validName('#hotName1'),name2:validName('#hotName2'),scope:$('#hotScope').value,scenario:$('#hotScenario').value,difficulty:'vp'});mode=which;seat=0;draft=null;lastCycle=0;lastResolutionId=0;saveLocal();enterGame(true)}catch(e){setStartMessage(e.message)}}
-function continueSave(){try{game=migrateGame(savedGame());if(['lan','p2p'].includes(game.mode))game.mode='hotseat';mode=game.mode;seat=0;draft=null;lastCycle=0;lastResolutionId=game.resolutionId||0;saveLocal();if(game.mode==='hotseat'&&game.players[0].submitted&&!game.players[1].submitted){show('#gameScreen');showPrivacy(1,`PASS COMPUTER TO ${game.players[1].name}`,`${game.players[0].name}'s saved plan is sealed.`)}else enterGame(true)}catch(e){setStartMessage(e.message)}}
-function importSave(file){const r=new FileReader;r.onload=()=>{try{const g=migrateGame(JSON.parse(r.result));if(['p2p','lan'].includes(g.mode))g.mode='hotseat';game=g;mode=g.mode;seat=0;draft=null;lastCycle=0;lastResolutionId=g.resolutionId||0;saveLocal();enterGame(true);toast('Campaign imported.')}catch(e){setStartMessage(e.message)}};r.readAsText(file)}
+function startLocal(which) {
+  if (featureSelectionPending()) { setStartMessage('Confirm or cancel the optional-system changes before starting.'); return; }
+  try {
+    const options = { ...readSetupFeatureOptions(), color1: $('#bankColor1').value, color2: $('#bankColor2').value };
+    const created = which === 'ai' ? E.createGame({ ...options, mode: 'ai', name1: validName('#aiName'), name2: 'Synergy Holdings AI',
+      scope: $('#aiScope').value, scenario: $('#aiScenario').value, difficulty: $('#aiDifficulty').value }) :
+      E.createGame({ ...options, mode: 'hotseat', name1: validName('#hotName1'), name2: validName('#hotName2'),
+        scope: $('#hotScope').value, scenario: $('#hotScenario').value, difficulty: 'vp' });
+    resetLink(); view = null; p2pRole = ''; game = created;
+    mode = which; seat = 0; draft = null; draftOwner = ''; lastCycle = 0; lastResolutionId = 0; saveLocal(); enterGame(true);
+  } catch (error) { setStartMessage(error.message); }
+}
+function resumeLocalCampaign(restored) {
+  if (['lan', 'p2p'].includes(restored.mode)) restored.mode = 'hotseat';
+  resetLink(); view = null; p2pRole = '';
+  game = restored; mode = game.mode; seat = 0; draft = null; draftOwner = ''; lastCycle = 0; lastResolutionId = game.resolutionId || 0;
+  saveLocal();
+  if (game.mode === 'hotseat' && game.players[0].submitted && !game.players[1].submitted) {
+    show('#gameScreen');
+    showPrivacy(1, `PASS COMPUTER TO ${game.players[1].name}`, `${game.players[0].name}'s saved plan is sealed.`);
+  } else enterGame(true);
+}
+function continueSave(){try{resumeLocalCampaign(migrateGame(savedGame()))}catch(e){setStartMessage(e.message)}}
+let localImportRequest = 0;
+function importSave(file) {
+  const request = ++localImportRequest, generation = connectionAttempt;
+  const reader = new FileReader();
+  const current = () => request === localImportRequest && generation === connectionAttempt;
+  reader.onload = () => {
+    if (!current()) return;
+    try { resumeLocalCampaign(migrateGame(JSON.parse(reader.result))); toast('Campaign imported.'); }
+    catch (error) { setStartMessage(error.message); }
+  };
+  reader.onerror = () => { if (current()) setStartMessage('The save file could not be read. Your current campaign is unchanged.'); };
+  reader.readAsText(file);
+}
 function exportSave(){if(p2pRole==='guest'){toast('Only the multiplayer host can export the authoritative save.');return}if(!game)return;const blob=new Blob([JSON.stringify(game,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Branch_Wars_Cycle_${game.cycle}_Save.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function enterGame(suppressReplay=false){show('#gameScreen');const v=currentView();if(suppressReplay&&v)lastResolutionId=v.resolutionId||0;render()}
 function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();game=null;view=null;p2pRole='';draft=null;draftOwner='';lastCycle=0;lastResolutionId=0;show('#startScreen');updateContinue()}

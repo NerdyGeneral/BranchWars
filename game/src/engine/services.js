@@ -12,7 +12,7 @@ const SERVICE_APPLICATIONS={
 for(const [key,d]of Object.entries(SERVICE_APPLICATIONS))PROJECTS[key]={...d,kind:'serviceApplication',serviceOnly:true};
 function defaultServicePolicy(){return {staff:0,outsourcing:0,payroll:false,treasury:false,pricing:{payroll:'standard',merchant:'standard',treasury:'standard'}}}
 function serviceApplicationActive(p,key){return !!(p.serviceDesk&&p.serviceDesk.applications[key]&&p.serviceDesk.policy[key])}
-function commercialSalesStaff(p){return Math.max(0,p.allocation.business-(p.serviceDesk?Math.min(p.allocation.business,p.serviceDesk.policy.staff):0))}
+function commercialSalesStaff(p){return departmentFunctionResidual(p,'business',p.departmentOffice?departmentDeliveryAllocation(p,p.serviceDesk?.policy.staff||0).sales:Math.max(0,p.allocation.business-(p.serviceDesk?Math.min(p.allocation.business,p.serviceDesk.policy.staff):0)))+departmentFunctionTaskFte(p,'commercialRelationships',0)}
 function validateServicePolicy(p,policy,allocation=p.allocation){
  if(!policy||Array.isArray(policy)||Object.keys(policy).sort().join()!=='outsourcing,payroll,pricing,staff,treasury'||!Number.isInteger(policy.staff)||policy.staff<0||policy.staff>allocation.business||!Number.isInteger(policy.outsourcing)||policy.outsourcing<0||policy.outsourcing>4||typeof policy.payroll!=='boolean'||typeof policy.treasury!=='boolean')throw Error('Service desk: reserve available Business staff and 0–4 outsourced capacity points.');
  if(!policy.pricing||Object.keys(policy.pricing).sort().join()!=='merchant,payroll,treasury'||Object.values(policy.pricing).some(k=>!Object.hasOwn(SERVICE_PRICING,k)))throw Error('Choose a valid renewal price for each service.');
@@ -21,7 +21,7 @@ function validateServicePolicy(p,policy,allocation=p.allocation){
 function applyServicePolicy(p,policy){if(p.serviceDesk){const next=policy||{...p.serviceDesk.policy,staff:Math.min(p.serviceDesk.policy.staff,p.allocation.business)};validateServicePolicy(p,next);p.serviceDesk.policy=JSON.parse(JSON.stringify(next))}}
 function serviceLoad(p){
  if(!p.serviceDesk)return null;
- const d=p.serviceDesk,staff=Math.min(p.allocation.business,d.policy.staff),capacity=(staff+specialistBusinessBonus(p,true))*2+d.policy.outsourcing;
+ const d=p.serviceDesk,staff=departmentFunctionTaskFte(p,'commercialDelivery',p.departmentOffice?departmentDeliveryAllocation(p,d.policy.staff).service:Math.min(p.allocation.business,d.policy.staff)),capacity=((staff+(departmentFunctionExecution(p)?0:specialistBusinessBonus(p,true)))*2+d.policy.outsourcing)*departmentFunctionCoverage(p,'technology');
  let free=capacity,fees=0,direct=0;
  const rows=[...d.contracts].sort((a,b)=>a.due-b.due||a.id.localeCompare(b.id)).map(c=>{
   const type=SERVICE_TYPES[c.kind],served=free>=type.load;if(served)free-=type.load;
@@ -34,6 +34,7 @@ function serviceLoad(p){
  return {count:rows.length,served:rows.filter(c=>c.served).length,fees,cost:direct+outsourced+platform,direct,outsourced,platform,capacity,used:capacity-free,staff,sales:commercialSalesStaff(p),rows};
 }
 function serviceBidStatus(p,c){
+ if(c.companyClosed)return {eligible:false,reason:'This company has closed; its service contract is unavailable.'};
  if(!p.serviceDesk)return {eligible:false,reason:'Requires the expanded service pilot.'};
  if(c.kind==='treasury'&&!serviceApplicationActive(p,'treasury'))return {eligible:false,reason:'Activate a built or partnered Corporate Treasury platform.'};
  const load=serviceLoad(p),other=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0);
@@ -83,7 +84,7 @@ resolveOpportunities=function(g,plans){
  }
  syncServiceBook(g);
  for(const c of g.serviceAgreements){
-  if(c.due!==g.cycle)continue;
+  if(c.due!==g.cycle||c.companyClosed)continue;
   const order=[...g.players].sort((a,b)=>(b.id===c.owner)-(a.id===c.owner)||a.id.localeCompare(b.id));
   const outside=10+simulationRandom()*4;let winner=null,best=outside;
   for(const p of order){const i=g.players.indexOf(p);if(plans[i].contractExit===c.id||(c.owner!==p.id&&plans[i].contractBid!==c.id)||!serviceBidStatus(p,c).eligible)continue;
@@ -104,7 +105,7 @@ function planServiceDesk(g,index,plan){
  policy.payroll=!!p.serviceDesk.applications.payroll&&p.serviceDesk.contracts.some(c=>c.kind==='payroll');
  policy.treasury=!!p.serviceDesk.applications.treasury;
  policy.pricing={payroll:'standard',merchant:'standard',treasury:'standard'};
- const due=g.serviceAgreements.filter(c=>c.due===g.cycle&&c.owner!==p.id&& (c.kind!=='treasury'||policy.treasury));
+ const due=g.serviceAgreements.filter(c=>!c.companyClosed&&c.due===g.cycle&&c.owner!==p.id&& (c.kind!=='treasury'||policy.treasury));
  const demand=p.serviceDesk.contracts.reduce((n,c)=>n+SERVICE_TYPES[c.kind].load,0);
  policy.outsourcing=Math.min(4,demand);
  policy.staff=Math.min(plan.allocation.business,Math.ceil(Math.max(0,demand-4)/2));
@@ -130,7 +131,7 @@ function planServiceDesk(g,index,plan){
 // No saved balances, quoted contract terms or human intents are changed here.
 function servicePlanReview(p,plan,economy){
  const planned={...p,focus:plan.focus||p.focus},forecast=operatingPreview(planned,plan,economy),budget=planBudget(planned,plan),exposure=riskAssets(p);
- const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.training||0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
+ const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.training||0)+(budget.relationshipOffers||0)+(budget.onboarding||0)+(budget.departmentFunctions||0)+(p.departmentFunctions?(forecast.facilityMaintenance||0):0)+(p.departmentOffice?(budget.departmentLeadership||0):0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
  const reserve=exposure*.10+200000,lossBuffer=Math.max(0,-netOperating)*2;
  return {profit:forecast.profit,fundingLoss,netOperating,spend:budget.total,includedOperatingSpend,nonOperatingSpend,netAfterSpend:netOperating-nonOperatingSpend,equityAfterPlan,reserve,
   headroom:equityAfterPlan-reserve,spendingLimit:Math.max(0,Math.min(budget.capitalBudget,p.stats.capital-reserve-lossBuffer)),
@@ -143,7 +144,13 @@ function serviceDeliveryOptions(p,plan,economy,mandate=null){
  const demand=contracts.reduce((n,c)=>n+SERVICE_TYPES[c.kind].load,0),out=[];
  for(let staff=0;staff<=Math.min(plan.allocation.business,Math.ceil(demand/2));staff++){
   const outsourcing=Math.max(0,demand-staff*2);if(outsourcing>4)continue;
-  const delivery={...policy,staff,outsourcing,pricing:{...policy.pricing}},copy={...p,focus:plan.focus||p.focus,allocation:{...plan.allocation},serviceDesk:{...p.serviceDesk,contracts,policy:delivery}},load=serviceLoad(copy);
+  const delivery={...policy,staff,outsourcing,pricing:{...policy.pricing}},copy={...p,focus:plan.focus||p.focus,allocation:{...plan.allocation},serviceDesk:{...p.serviceDesk,contracts,policy:delivery}};
+  if(p.departmentFunctions){
+   const quote=departmentFunctionsQuote({cycle:p.facilityLifecycle.lastActivatedCycle},copy,{...plan,servicePolicy:delivery});
+   if(!quote.status.eligible)continue;
+   copy._departmentFunctionExecution=quote.delivery;
+  }
+  const load=serviceLoad(copy);
   if(load.served!==load.count)continue;
   const forecast=operatingPreview(copy,{...plan,servicePolicy:delivery},economy);
   out.push({staff,outsourcing,capacity:load.capacity,demand,serviceNet:load.fees-load.cost,bankProfit:forecast.profit-(forecast.fundingLoss||0),policy:delivery});

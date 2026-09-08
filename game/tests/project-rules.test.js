@@ -31,11 +31,15 @@ function validation(engine, g, p, intent) {
 const profiles = [{fundingRulesVersion: 1}, {fundingRulesVersion: 2},
   {campaignRulesVersion: 1, serviceExpansionVersion: 0},
   {campaignRulesVersion: 1, managementVersion: 2, customerDemandVersion: 2}];
-assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['licenseHighYield','licenseRewards']);
+assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth','licenseHighYield','licenseRewards']);
 let compared = 0;
 for (const [index, options] of profiles.entries()) {
   const g = E.createGame({...options, seed: 'project-rules-' + index, created: 1, mode: 'hotseat'});
   const intent = plan(g);
+  for(const key of ['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth']){
+    assert.equal(E.projectCatalog(g.players[0])[key],undefined,'New institution routes stay absent from legacy catalogs');
+    assert(E.__projectBarred(g.players[0],key),'New institution routes must remain unavailable to historical campaigns');
+  }
   const focusMarkets = Object.keys(g.territories).filter(k => g.territories[k].unlock <= g.cycle).slice(0, 2);
   for (const focus of focusMarkets) for (const variation of ['normal', 'cash', 'capital', 'board', 'capacity', 'full']) {
     const p = copy(g.players[0]);

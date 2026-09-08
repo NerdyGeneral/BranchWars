@@ -2,6 +2,16 @@ function resolveMonthlySteps(g) {
   const plans = g.players.map((p) => ({ ...p.submitted, allocation: { ...p.submitted.allocation } })),
     before = [baseScore(g, 0), baseScore(g, 1)],
     L = [];
+  // Both local-work instructions were authorized against one opening envelope.
+  // Paying a renovation must not reserve its cost again during conversion.
+  // Retain the owner snapshot too: the metrics provider stages staff lazily,
+  // and must not observe already-created renovation work against this budget.
+  const openingOfficeContexts=[5,6].includes(g.financialGroupVersion)
+    ?g.players.map((p,i)=>facilityContext(g,JSON.parse(JSON.stringify(p)),plans[i])):null;
+  const openingLifecycleContexts=g.financialGroupVersion===6?g.players.map((p,i)=>facilityLifecyclePlanningContext(g,p,plans[i]).context):null;
+  if(g.financialGroupVersion===6)L.push(...recordLedgerStage(g,'prepareDepartmentFunctions','departments.functions',()=>prepareDepartmentFunctions(g,plans)));
+  L.push(...prepareFacilityLifecycle(g,plans,openingLifecycleContexts));
+  L.push(...prepareFacilityInstructions(g,plans,openingOfficeContexts));
   g.players.forEach((p, i) => {
     p.allocation = Object.fromEntries(Object.keys(ROLES).map((k) => [k, plans[i].allocation[k]]));
     p.policies = {
@@ -10,6 +20,7 @@ function resolveMonthlySteps(g) {
       capital: plans[i].capitalPolicy
     };
     p.products = { ...p.products, ...plans[i].products };
+    if(p.financialGroup)recordLedgerStage(g,'applyGroupPortfolio','group.portfolio',()=>applyGroupPortfolio(p,plans[i]));
     if (p.termFunding && plans[i].termPolicy) p.termFunding.policy = { ...plans[i].termPolicy };
     if(p.productPrograms)recordLedgerStage(g,'applyProductProgramPolicy','products.policy',()=>applyProductProgramPolicy(p, plans[i].productProgramPolicy, true));
     if(p.productPrograms&&plans[i].productProgramPolicy?.retire.length)L.push(p.name+' retired '+plans[i].productProgramPolicy.retire.map(k=>RETAIL_DEPLOYMENTS[k].name).join(' and ')+' for $'+(plans[i].productProgramPolicy.retire.length*PRODUCT_RETIRE_COST).toLocaleString()+'. Existing accounts remain serviced.');
@@ -20,6 +31,10 @@ function resolveMonthlySteps(g) {
     applyWorkforcePolicy(p, plans[i].workforcePolicy);
     applyHouseholdPolicy(p, plans[i].householdPolicy);
     applyCollectionsPolicy(p, plans[i].collectionsPolicy);
+    if(p.relationshipOffers)recordLedgerStage(g,'applyRelationshipOfferPolicy','customers.offers',()=>applyRelationshipOfferPolicy(p,plans[i].relationshipOfferPolicy));
+    if(p.relationshipOffers)p._relationshipOfferBudget=relationshipOfferBudget(p,plans[i]);
+    if(p.onboarding)recordLedgerStage(g,'applyOnboardingPolicy','customers.onboarding',()=>applyOnboardingPolicy(p,plans[i].onboardingPolicy));
+    if(p.onboarding)p._onboardingBudget=onboardingBudget(p,plans[i]);
     if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
     applyDecision(g, p, plans[i].decision);
@@ -27,13 +42,23 @@ function resolveMonthlySteps(g) {
     if (aid) L.push(aid);
   });
   L.push(...resolveCompetitiveActions(g, plans));
+  if(g.financialGroupVersion===6){
+    L.push(...recordLedgerStage(g,'settleDepartmentLeadership','departments.leadership',()=>settleDepartmentLeadership(g,plans)));
+    recordLedgerStage(g,'deliverDepartmentFunctions','departments.dispatch',()=>deliverDepartmentFunctions(g));
+  }
   g.players.forEach((p, i) => {
     for (const key of planInitiatives(plans[i])) {
       const msg = startProject(g, p, key, plans[i].specializations);
       if (msg) L.push(msg);
     }
   });
-  g.players.forEach((p) => L.push(operate(g, p)));
+  if([4,5].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'settleDepartmentLeadership','departments.leadership',()=>settleDepartmentLeadership(g,plans)));
+  L.push(...recordLedgerStage(g,'settleCorporateEconomy','companies.settlement',()=>settleCorporateEconomy(g)));
+  g.players.forEach((p) => {
+    const production=operate(g,p);
+    L.push(p.departmentOffice?production+' Production profit excludes separately reported head-office department costs.':production);
+  });
+  L.push(...recordLedgerStage(g,'finishCorporateEconomy','companies.contracts',()=>finishCorporateEconomy(g)));
   g.players.forEach((p) => {
     const msg = deleverage(g, p);
     if (msg) L.push(msg);
@@ -45,11 +70,16 @@ function resolveMonthlySteps(g) {
   L.push(...simulateMarkets(g));
   L.push(...resolveMarketExits(g));
   L.push(...franchiseDividends(g));
-  L.push(...advanceProjects(g));
+  L.push(...advanceInstitutionProjects(g));
+  L.push(...settleFacilityLifecycle(g,plans));
   g.players.forEach((p) => L.push(...consequences(g, p)));
   g.players.forEach((p, i) => {
     const trained = settleWorkforceTraining(g, p);
     if (trained) L.push(trained);
+    if(p.departmentOffice)recordLedgerStage(g,'settleDepartmentExperience','departments.experience',()=>{
+      settleDepartmentExperience(g,p);
+      addDepartmentOperatingReport(p);
+    });
     L.push(...applyInvestments(g, p, plans[i].investments, plans[i].specializations));
     const late = plans[i].specializations || {};
     for (const key of Object.keys(STRATEGY_BRANCHES))
@@ -82,6 +112,11 @@ function resolveMonthlySteps(g) {
     [g.players[0].id]: Math.round((baseScore(g, 0) - before[0]) * 10) / 10,
     [g.players[1].id]: Math.round((baseScore(g, 1) - before[1]) * 10) / 10
   };
+  L.push(...settleRegionalGrowthWithLedger(g));
+  if([3,4,5,6].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'settleAgency','group.agency',()=>settleAgency(g,plans)));
+  L.push(...recordLedgerStage(g,'settleGroupCapital','group.capital',()=>settleGroupCapital(g,plans)));
+  for(const p of g.players)finishProductPricingReview(g,p);
+  if(g.financialGroupVersion===6)L.push(...recordLedgerStage(g,'finishDepartmentFunctions','departments.delivery',()=>finishDepartmentFunctions(g)));
   const ending = evaluateStrategicEnd(g);
   if (ending) L.push(ending);
   g.resolution = L;
@@ -91,6 +126,8 @@ function resolveMonthlySteps(g) {
   if (g.gameOver) addLog(g, ending, 'FINAL');
   else {
     g.cycle++;
+    activateFacilityInstructions(g);
+    activateFacilityLifecycle(g);
     const newly = activeTerritories(g)
       .filter(([, t]) => t.unlock === g.cycle)
       .map(([, t]) => t.name);

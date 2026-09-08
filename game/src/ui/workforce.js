@@ -26,8 +26,10 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
+  if (!v.me.departmentOffice || workspaceTab === 'workforce') renderDepartments(v);
   renderHouseholds(v);
   renderCollections(v);
+  renderFinancialGroup(v);
   $('#workforceNav').classList.toggle('hidden', !v.me.workforce);
   if (!v.me.workforce) {
     $('#workforcePanel').innerHTML = '';
@@ -36,7 +38,17 @@ function renderWorkforce(v) {
   }
   if (workspaceTab !== 'workforce') return;
   let review;
-  try { review = E.workforceReview(v.me, draft, v.economy); }
+  try {
+    review = E.workforceReview(v.me, draft, v.economy);
+    if(v.me.departmentOffice){
+      const departments=E.departmentBudgetQuote(v.me,draft);
+      review.rows=review.rows.map(r=>{
+        const department=departments.rows.find(d=>d.role===r.role);
+        return {...r,productive:departments.productiveAllocation[r.role],teaching:department.teaching,
+          active:department.productiveSpecialists,bonus:department.bonus};
+      });
+    }
+  }
   catch (e) { $('#workforcePanel').innerHTML = '<p class="bad">' + esc(e.message) + '</p>'; return; }
   const row = review.rows.find(r => r.role === selectedWorkforceRole) || review.rows[0];
   const disabled = v.me.submitted ? 'disabled' : '';
@@ -44,7 +56,7 @@ function renderWorkforce(v) {
   candidate.specialistHires[row.role]++;
   const addBlocked = E.planHires(candidate) > E.hireLimit(v.me) || E.planBudget(v.me, candidate).remaining < 0;
   const actual = v.me.operatingReport, forecast = review.forecast;
-  const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + '</td><td>' +
+  const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + (v.me.departmentOffice?' / '+r.productive:'') + '</td><td>' +
     (r.count ? r.skill + '/100' : 'Not hired') + '</td><td>+' + r.bonus.toFixed(2) + '</td><td>' + money(r.payroll) + '</td></tr>').join('');
   $('#workforcePanel').innerHTML = `
     <div class="section-head"><div><h2>WORKFORCE &amp; DEPARTMENT DEVELOPMENT</h2><p class="small muted">Build expertise without losing control of payroll. Changes are staged until both plans lock.</p></div><span class="small">${review.generalists} generalists · ${v.me.stats.staff - review.generalists} specialists</span></div>
@@ -53,12 +65,12 @@ function renderWorkforce(v) {
       <div><span>Forecast training spend</span><b>${money(review.training.total)}/month</b><small>${review.training.paused ? 'All department training paused by cash/capital protection.' : 'Only existing specialists below 100 skill can train.'}</small></div>
       <div><span>Combined recruiting</span><b>${E.planHires(draft)}/6 bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
     </div>
-    <div class="table-scroll"><table class="regional-table"><thead><tr><th>Specialty</th><th>Qualified / assigned staff</th><th>Skill</th><th>Effective staff bonus</th><th>Salary premium/month</th></tr></thead><tbody>${table}</tbody></table></div>
+    <div class="table-scroll"><table class="regional-table"><thead><tr><th>Specialty</th><th>${v.me.departmentOffice?'Qualified / assigned / productive staff':'Qualified / assigned staff'}</th><th>Skill</th><th>Effective staff bonus</th><th>Salary premium/month</th></tr></thead><tbody>${table}</tbody></table></div>
     <p class="micro muted">Qualified specialists are part of total headcount, not additional bankers. A specialist outside their own department works as a generalist: no cross-department skill bonus. Business expertise is split between sales and reserved delivery; it is never counted twice.</p>
     <div class="workforce-grid">
       <section class="workforce-card"><label for="workforceDepartment">DEPARTMENT</label><select id="workforceDepartment">${review.rows.map(r => '<option value="' + r.role + '" ' + (r.role === row.role ? 'selected' : '') + '>' + esc(r.name) + '</option>').join('')}</select>
         <h3>${esc(row.name)}</h3><p class="small">${esc(row.effect)}</p>
-        <p class="small">${row.active} of ${row.count} qualified bankers working in this department. Current effective capacity: <b>${row.assigned} + ${row.bonus.toFixed(2)}</b>.</p>
+        <p class="small">${v.me.departmentOffice?`${row.assigned} assigned · ${row.teaching?'1 reserved for paid teaching':'0 reserved for teaching'} · ${row.productive} productive bankers. ${row.active} of ${row.count} qualified bankers producing. Forecast effective capacity: <b>${row.productive} + ${row.bonus.toFixed(2)}</b>.`:`${row.active} of ${row.count} qualified bankers working in this department. Current effective capacity: <b>${row.assigned} + ${row.bonus.toFixed(2)}</b>.`}</p>
         <div class="workforce-skill" role="meter" aria-label="${esc(row.name)} skill" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${row.skill}"><span style="width:${row.skill}%"></span></div>
         <p class="micro">Skill ${row.skill}/100 → <b>${row.nextSkill}/100</b> after forecast training, before new recruits. Recruits enter at skill 20 and dilute the team average; they do not train or produce this month.</p>
         <div class="hire-row"><button type="button" class="stepper" id="specialistLess" aria-label="Remove one ${esc(row.name)} recruit" ${disabled || (!row.hires ? 'disabled' : '')}>−</button><b>${row.hires} staged</b><button type="button" class="stepper" id="specialistMore" aria-label="Recruit one ${esc(row.name)} specialist" ${disabled || (addBlocked ? 'disabled' : '')}>+</button></div>
@@ -67,7 +79,7 @@ function renderWorkforce(v) {
       <section class="workforce-card"><h3>RECURRING TRAINING MANDATE</h3>
         <label for="workforceBudget">${esc(row.name)} monthly ceiling</label><select id="workforceBudget" ${disabled}>${E.WORKFORCE_TRAINING_BUDGETS.map(n => '<option value="' + n + '" ' + (n === row.budget ? 'selected' : '') + '>' + (n ? money(n) + '/month' : 'Paused · $0') + '</option>').join('')}</select>
         <label for="workforceReserve">Bank-wide cash reserve to protect ($)</label><input id="workforceReserve" type="number" min="0" max="10000000" step="1000" value="${draft.workforcePolicy.reserve}" ${disabled}>
-        <p class="small">${money(row.trainingSpend)} forecast spend in this department. Each skill point costs $1K per specialist; at most four points per month. Training stops at skill 100. Unused ceilings are not spent.</p>
+        <p class="small">${money(row.trainingSpend)} forecast spend in this department. Each skill point costs $1K per specialist; ${v.me.departmentOffice ? 'ordinary classes cap at four points, while paid qualified leaders can raise the cap shown in Departments.' : 'at most four points per month.'} Training stops at skill 100. Unused ceilings are not spent.</p>
         <p class="micro ${review.training.paused ? 'bad' : 'muted'}">Training is reserved alongside the full plan and included in operating expenses—do not count it twice. If the combined training bill breaches the protected cash reserve or capital limit, every department pauses together. Events and rival actions can change actual affordability.</p>
       </section>
     </div>

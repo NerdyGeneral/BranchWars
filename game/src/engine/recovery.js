@@ -1,3 +1,29 @@
+// Immediate announced-call advisory. The real stage runs on the full private
+// owner, including accounting and credit books, never a partial balance sheet.
+// Current calls read no rival/world data and consume no RNG; deferred
+// consequences and operating effects are deliberately not executed here.
+function decisionQuote(p, event, choice) {
+  const announced = EVENTS.find(x => x.key === event?.key);
+  if (!announced || !['a', 'b'].includes(choice)) throw Error('Choose a known executive call and response.');
+  const owner = JSON.parse(JSON.stringify(p));
+  owner.doctrine = typeof owner.doctrine === 'object' ? owner.doctrine.key : owner.doctrine;
+  const before = { ...owner.stats }, accounts = owner.accounting && { ...owner.accounting.accounts }, sequence = owner.accounting?.sequence || 0;
+  // A fresh stage identity cannot append into the active campaign ledger.
+  // Funding sales reconcile cloned books; no outside balances are transferred.
+  applyDecision({ event: announced }, owner, choice);
+  const entries = owner.accounting?.journal.filter(x => x.id > sequence) || [];
+  const changes = Object.fromEntries(Object.keys(OPENING_STATS).map(k => [k, owner.stats[k] - before[k]]).filter(([, n]) => n));
+  const paid = accounts ? Math.max(0, -entries.filter(x => x.source === 'applyDecision' && x.changes.cash < 0).reduce((n, x) => n + x.changes.cash, 0)) : Math.max(0, before.cash - owner.stats.cash);
+  const received = accounts ? entries.filter(x => x.source === 'applyDecision' && x.changes.cash > 0).reduce((n, x) => n + x.changes.cash, 0) : Math.max(0, owner.stats.cash - before.cash);
+  return { choice, paid, received, cashChange: owner.stats.cash - before.cash, equityChange: owner.stats.capital - before.capital,
+    cashAfter: owner.stats.cash, spendingLimitAfter: pilotSpendingLimit(owner), accounting: !!accounts,
+    securitiesSold: accounts ? accounts.securities - owner.accounting.accounts.securities : 0,
+    loansSold: accounts ? accounts.loans - owner.accounting.accounts.loans : 0,
+    borrowed: owner.stats.emergencyDebt - before.emergencyDebt,
+    fundingLoss: Math.max(0, -entries.filter(x => x.source.startsWith('sell.')).reduce((n, x) => n + x.earnings, 0)),
+    changes, deferred: Object.keys(owner.turnEffects).length > 0 };
+}
+
 // Owner-only, reversible recovery choices. These estimates use existing prices
 // and accounting; they neither change failure thresholds nor award catch-up cash.
 function bankRecoveryReview(p, plan, economy, event) {
@@ -9,7 +35,7 @@ function bankRecoveryReview(p, plan, economy, event) {
   if (event && ['a','b'].includes(plan.decision)) applyDecision({ event }, owner, plan.decision);
   const decisionExpense = Math.max(0, p.stats.capital - owner.stats.capital);
   const forecast = operatingPreview({ ...p, focus:plan.focus || p.focus }, plan, economy);
-  const budget = planBudget(p, plan), operatingSpend = (budget.advertising || 0) + (budget.training || 0);
+  const budget = planBudget(p, plan), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
   // Campaign/training expense is already inside operating profit. It must not
   // be subtracted for a second time alongside projects, hiring and research.
   const nonOperatingSpend = budget.total - operatingSpend;
@@ -85,6 +111,8 @@ function bankRecoveryOptions(p, input, economy, event) {
   if (planHires(paused)) {paused.hires=0;if(paused.specialistHires)for(const role of Object.keys(paused.specialistHires))paused.specialistHires[role]=0;pausedChanges.push('New hires → none');}
   if (paused.competitiveAction && paused.competitiveAction!=='none') {paused.competitiveAction='none';pausedChanges.push('Competitive action → Hold position');}
   if (paused.advertisingPolicy?.budget) {paused.advertisingPolicy.budget=0;pausedChanges.push('Paid advertising → paused');}
+  if (paused.relationshipOfferPolicy?.share) {paused.relationshipOfferPolicy.share=0;pausedChanges.push('Existing-customer offers → paused');}
+  if (paused.onboardingPolicy?.share) {paused.onboardingPolicy.share=0;pausedChanges.push('Customer onboarding → paused (applications still expire)');}
   if (Object.values(paused.workforcePolicy?.training||{}).some(Boolean)) {for(const role of Object.keys(paused.workforcePolicy.training))paused.workforcePolicy.training[role]=0;pausedChanges.push('Training spend → paused');}
   if (paused.productProgramPolicy?.retire.length) {paused.productProgramPolicy.retire=[];pausedChanges.push('Product retirement → postponed');}
   if (pausedChanges.length) add('commitments','Pause discretionary commitments','Existing projects and signed business continue. This postpones unstarted spending; it does not refund earlier costs.',pausedChanges,paused);
@@ -105,7 +133,7 @@ function bankRecoveryOptions(p, input, economy, event) {
   return { current, options };
 }
 function planBankRecovery(g, index, input) {
-  if(g.productProgramsVersion!==1)return input;
+  if(![1,2].includes(g.productProgramsVersion))return input;
   const p={...g.players[index],focus:input.focus,marketSnapshot:g.marketEconomy};
   const current=bankRecoveryReview(p,input,g.economy,g.event);if(!current.stressed)return input;
   const choices=bankRecoveryOptions(p,input,g.economy,g.event).options;

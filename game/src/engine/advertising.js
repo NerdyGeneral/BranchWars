@@ -13,7 +13,7 @@ function validateAdvertisingPolicy(p, policy, targets = p.productPrograms?.marke
 }
 function initializeAdvertising(g, o) {
   if (o.advertisingVersion !== 1) return g;
-  if (g.productProgramsVersion !== 1) throw Error('Advertising requires the Product programmes preview and its prerequisites.');
+  if (![1, 2].includes(g.productProgramsVersion)) throw Error('Advertising requires the Product programmes preview and its prerequisites.');
   g.advertisingVersion = 1; g.version = '8.10';
   for (const p of g.players) p.advertising = { version: 1, lastCycle: 0, policy: defaultAdvertisingPolicy(p), report: null,
     awareness: Object.fromEntries(Object.keys(p.marketBook.markets).map(k => [k,
@@ -53,7 +53,7 @@ function advertisingPreview(p, g, policy = p.advertising?.policy) {
   if (!world?.markets?.[policy.market]) throw Error('Advertising needs a local market snapshot.');
   const market = world.markets[policy.market], audience = market.households.community[policy.segment] + market.households.union[policy.segment];
   const before = p.advertising.awareness[policy.market][policy.segment][policy.product], retained = Math.floor(before * ADVERTISING_DECAY);
-  const available = Math.max(0, Math.min(p.stats.cash - (p.workforce?.policy.reserve || 0), pilotSpendingLimit(p)) - (p._workforceReserved || 0));
+  const available = Math.max(0, Math.min(p.stats.cash - (p.workforce?.policy.reserve || 0), pilotSpendingLimit(p)) - (p._workforceReserved || 0) - (p.onboarding ? (p._relationshipOfferBudget || 0) + (p._onboardingBudget || 0) : 0));
   const paused = policy.budget > available, spent = paused ? 0 : policy.budget;
   const reached = Math.min(audience, Math.floor(spent / ADVERTISING_CONTACT_COST[policy.segment]));
   const after = retained + (audience ? Math.floor((10000 - retained) * reached / audience) : 0);
@@ -191,7 +191,7 @@ function planAdvertising(g, index, input) {
 function validateAdvertisingSave(g) {
   const has = p => p.advertising !== undefined || p._advertisingCycle !== undefined || p.submitted?.advertisingPolicy !== undefined;
   if (g.advertisingVersion === undefined) { if (g.players.some(has)) throw Error('Unversioned advertising'); return g; }
-  if (g.advertisingVersion !== 1 || g.productProgramsVersion !== 1 || g.version !== '8.10') throw Error('Unsupported advertising save');
+  if (g.advertisingVersion !== 1 || ![1, 2].includes(g.productProgramsVersion) || g.version !== campaignVersion(g)) throw Error('Unsupported advertising save');
   const uint = n => Number.isSafeInteger(n) && n >= 0, bps = n => uint(n) && n <= 10000;
   for (const p of g.players) {
     const state = p.advertising;

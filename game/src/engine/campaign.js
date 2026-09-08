@@ -33,29 +33,11 @@ function createBaseCampaign(o){
  return g;
 }
 function validateCreationOptions(o){
- // Match the former outer-to-inner checks, including errors on disabled features.
- if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
- if(o.advertisingVersion!==undefined&&![0,1].includes(o.advertisingVersion))throw Error('Unsupported advertising version');
- if(o.productProgramsVersion!==undefined&&![0,1].includes(o.productProgramsVersion))throw Error('Unsupported product programmes version');
- if(o.segmentDepositsVersion!==undefined&&![0,1].includes(o.segmentDepositsVersion))throw Error('Unsupported segment deposit version');
- if(o.creditPerformanceVersion!==undefined&&![0,1].includes(o.creditPerformanceVersion))throw Error('Unsupported credit performance version');
- if(o.customerOwnershipVersion!==undefined&&![0,1].includes(o.customerOwnershipVersion))throw Error('Unsupported household ownership version');
- if(o.workforceVersion!==undefined&&![0,1].includes(o.workforceVersion))throw Error('Unsupported specialist workforce version');
- if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
- if(o.serviceExpansionVersion!==undefined&&![0,1].includes(o.serviceExpansionVersion))throw Error('Unsupported service expansion');
- if(o.contractRulesVersion!==undefined&&![0,1].includes(o.contractRulesVersion))throw Error('Unsupported service contracts');
- if(o.productDeploymentVersion!==undefined&&![0,1].includes(o.productDeploymentVersion))throw Error('Unsupported product deployment');
- if(o.retailLifecycleVersion!==undefined&&![0,1].includes(o.retailLifecycleVersion))throw Error('Unsupported retail lifecycle');
- if(o.termFundingVersion!==undefined&&![0,1].includes(o.termFundingVersion))throw Error('Unsupported term funding');
- if(o.depositProductsVersion!==undefined&&![0,1].includes(o.depositProductsVersion))throw Error('Unsupported deposit products');
- if(o.fundingCovenantVersion!==undefined&&![0,1].includes(o.fundingCovenantVersion))throw Error('Unsupported funding covenant');
- if(o.creditLifecycleVersion!==undefined&&![0,1].includes(o.creditLifecycleVersion))throw Error('Unsupported credit lifecycle');
- if(o.marketEconomyVersion!==undefined&&![0,1].includes(o.marketEconomyVersion))throw Error('Unsupported market economy');
- if(o.regionalEconomyVersion!==undefined&&![0,1].includes(o.regionalEconomyVersion))throw Error('Unsupported regional economy version');
- if(o.campaignRulesVersion!==undefined&&o.campaignRulesVersion!==1)throw Error('Unsupported campaign rules');
+ validateCampaignCreationValues(o);
 }
 function createGame(o){
  validateCreationOptions(o);
+ if(o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
  const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
  const g=createSeededCampaign(baseOptions);
@@ -81,6 +63,20 @@ function createGame(o){
  initializeSegmentDeposits(g,o);
  initializeProductPrograms(g,o);
  initializeAdvertising(g,o);
+ initializeRegionalGrowth(g,o);
+ initializeRelationshipOffers(g,o);
+ initializeOnboarding(g,o);
+ initializeFinancialGroup(g,o);
+ initializeCorporateEconomy(g);
+ initializeAgency(g);
+ initializeFacilityNetwork(g);
+ initializeDepartments(g);
+ initializeFacilityLifecycle(g);
+ if(g.financialGroupVersion===6)initializeDepartmentFunctions(g);
+ // The complete rules marker is stamped only after every required book exists.
+ // Initializers use creation prerequisites, not completed-save validation.
+ if(o.featureRulesVersion===1)g.featureRulesVersion=1;
+ if(o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}

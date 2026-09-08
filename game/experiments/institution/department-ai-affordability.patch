@@ -1,0 +1,12 @@
+*** Begin Patch
+*** Update File: src/engine/departments.js
+@@
+-  normalizeDepartmentPlan(p,plan);return plan;
++  const proposed=departmentLeadershipQuote(p,plan),budget=planBudget(p,plan);
++  const otherCommitments=Math.max(0,budget.total-(budget.departmentLeadership||0));
++  const available=Math.max(0,Math.min(p.stats.cash-plan.departmentPolicy.reserve,pilotSpendingLimit(p)));
++  if(proposed.appointments&&(proposed.total>plan.departmentPolicy.envelopes.leadership||proposed.total+otherCommitments>available))
++    for(const role of departmentRoles())if(plan.leaderOrders[role]!==null&&plan.leaderOrders[role]!=='none'&&
++        plan.leaderOrders[role]!==p.departmentOffice.leaders[role]?.profile)plan.leaderOrders[role]=null;
++  normalizeDepartmentPlan(p,plan);return plan;
+*** End Patch

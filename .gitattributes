@@ -1,0 +1,15 @@
+# Preserve tested portable/package and compatibility-reference bytes on Windows.
+/game/BRANCH_WARS.html -text
+/game/BRANCH_WARS_LAN_SERVER.ps1 -text
+/game/OPEN_BRANCH_WARS.bat -text
+/game/OPEN_LAN_GAME.bat -text
+/game/reports/reference-builds/BRANCH_WARS_group_822b386.html -text
+/game/reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html -text
+/game/reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html -text
+/game/reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html -text
+/game/reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html -text
+/game/tests/fixtures/department-matrix192-second.json.gz -text
+/game/tests/fixtures/department-captured-regressions.json.gz -text
+/game/tests/fixtures/department-regulatory480.json.gz -text
+/releases/** -text
+/releases/*.pdf binary

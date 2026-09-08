@@ -22,6 +22,7 @@ function resolveCycle(g) {
           p.marketQuota = marketSupply(g, p, true);
         }
       try {
+        for(const p of g.players)beginProductPricingReview(g,p);
         const result = resolveMonthlySteps(g);
         if (pilot(g))
           for (const p of g.players) {
@@ -30,6 +31,7 @@ function resolveCycle(g) {
           }
         return result;
       } finally {
+        for(const p of g.players)productPricingTraces.delete(p);
         if (g.marketEconomy)
           for (const p of g.players) {
             p.stats.rateSensitiveDeposits = Math.min(p.stats.rateSensitiveDeposits, p.stats.deposits);

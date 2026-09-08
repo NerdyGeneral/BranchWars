@@ -32,7 +32,7 @@ function initializeHouseholds(g, o) {
   }
   return g;
 }
-function householdSalesStaff(p, staff) { return p.householdBook ? staff * (1 - p.householdBook.policy.retention / 100) : staff; }
+function householdSalesStaff(p, staff) { return departmentFunctionResidualProductivity(p,'service',staff,p.householdBook ? onboardingSalesStaff(p, relationshipOfferSalesStaff(p, staff * (1 - p.householdBook.policy.retention / 100))) : staff); }
 function householdAcquisitionWeights(p, key) {
   if(p.productPrograms)return advertisingHouseholdWeights(p,key,Object.fromEntries(Object.entries(CUSTOMER_SEGMENTS).map(([s,d])=>{const mix=productTargetMix(p,key,s),total=Object.values(mix).reduce((a,n)=>a+n,0);return [s,Object.entries(mix).reduce((n,[k,w])=>n+w*d.fit[k],0)/total]})));
   const mix = p.retailLifecycle.mix, total = Object.values(mix).reduce((n, v) => n + v, 0);
@@ -70,7 +70,7 @@ function transferHouseholds(from, to, key, amount) {
 function householdServiceReview(p, allocation = p.allocation, policy = p.householdBook?.policy) {
   if (!p.householdBook) return null;
   validateHouseholdPolicy(policy);
-  const staff = allocation.service + specialistBonus(p, 'service', allocation), capacity = staff * policy.retention / 100 + (p.upgrades.training || 0) * .3;
+  const staff = allocation.service + specialistBonus(p, 'service', allocation), capacity = departmentFunctionTaskFte(p,'householdSupport',staff * policy.retention / 100) + (p.upgrades.training || 0) * .3;
   const rows = [];
   for (const [market, book] of Object.entries(p.householdBook.markets)) {
     const models = marketFacilities(p, market), upgrade = p.regionalOperations.markets[market].service;
@@ -93,7 +93,7 @@ function householdServiceReview(p, allocation = p.allocation, policy = p.househo
     r.churnRate = Math.min(.015, Math.max(0, (45 - r.current) / 2000)) * (r.coverage < 1 ? 1 : .4);
     r.departures = Math.floor(r.count * r.churnRate);
   }
-  return { rows, demand, capacity, coverage: demand ? capacity / demand : 1, salesStaff: staff * (1 - policy.retention / 100) };
+  return { rows, demand, capacity, coverage: demand ? capacity / demand : 1, salesStaff: onboardingSalesStaff(p, relationshipOfferSalesStaff(p, staff * (1 - policy.retention / 100))) };
 }
 function settleHouseholdRetention(g, p, preview = false) {
   if (!p.householdBook) return null;
@@ -151,7 +151,7 @@ function validateHouseholdSave(g) {
         Object.values(g.marketEconomy?.markets || {}).some(m => m.households !== undefined)) throw Error('Unversioned household ownership');
     return g;
   }
-  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
+  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== campaignVersion(g)) throw Error('Unsupported household ownership save');
   const keys = Object.keys(g.territories).sort().join(), uint = n => Number.isSafeInteger(n) && n >= 0;
   const counts = row => row && Object.keys(row).sort().join() === 'connected,everyday,reserve' && Object.values(row).every(uint);
   for (const p of g.players) {

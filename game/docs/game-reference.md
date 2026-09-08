@@ -222,8 +222,8 @@ It comes from the executive team, from Operations bankers, and from tiers of the
 Operational Excellence lane.
 
 ```js
-function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;
-return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);
+return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 ```
 
 Capacity is judged against **the allocation being submitted**, not last month's,
@@ -235,7 +235,7 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 function advanceProjects(g){const L=[];
 for(const p of g.players){if(p.marketingTurns>0)p.marketingTurns--;
 if(!p.projects.length)continue;
-const rate=1+p.allocation.operations*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p),carry=[];
+const rate=1+departmentFunctionResidual(p,'operations',p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
 let spent=0;
 for(const project of p.projects){const need=projectCapacity(PROJECTS[project.key]);
 if(spent+need>budget+1e-9){L.push(`${p.name}'s ${PROJECTS[project.key].name} stalled: the plan no longer staffs enough execution capacity.`);
@@ -354,6 +354,10 @@ capability tiers.
 | marketing | Market-Wide Advertising | $260K | 2 | 1 | -- | -- | no | Boost reputation and market influence for four cycles. |
 | remediation | Compliance Remediation | $170K | 2 | 1 | -- | -- | no | Aggressively reduce risk and Corporate Attention. |
 | acquisition | Competitor Book Acquisition | $1.10M | 4 | 3 | acquisition | -- | yes | Acquire customers, deposits, and share in the focus market. |
+| branchAtm | ATM / Micro Service Point | $150K | 1 | 0.5 | branch | atm | yes | Small local deposit/service footprint. Requires staffed service and operations support; no lending or free customer book. |
+| branchWealth | Wealth Advisory Office | $800K | 3 | 1.5 | branch | wealth | yes | Specialized advisory location. Requires a licensed operating wealth subsidiary and dedicated qualified staff; unavailable until that business exists. |
+| branchFinancialCenter | Integrated Financial Center | $1.40M | 4 | 2 | branch | financialCenter | yes | Large retail, commercial and lending facility with substantial staffing and upkeep. Advisory throughput remains unavailable without a licensed subsidiary. |
+| branchRegionalHub | Regional Operations Hub | $1.85M | 5 | 2.5 | branch | regionalHub | yes | High-overhead service hub. Staff can transfer finite service throughput to explicitly linked nearby offices in the same region; it does not create customers. |
 | licenseRewards | License Rewards Checking | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 | licenseHighYield | License High-Yield Savings | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 
@@ -1268,3 +1272,207 @@ sealed and linked games. No new runtime wrapper or external service is required.
 This is an attribution-first slice. Named channels, delayed application queues,
 creative testing, cross-selling, tracked lifetime value and richer product designs
 remain future work; it does not complete N-08.
+
+## Regional arrivals and departures — v8.11 opt-in
+
+Regional demand preview is a new-campaign option requiring Advertising attribution
+and its prerequisites. Both peers must support v8.11; old campaigns retain their
+existing rules. This is still the six-market, two-region pilot, not a national map.
+
+After both banks finish a month, outside community banks and credit unions receive
+households and savings arriving from outside the modeled area, and lose available
+households and savings that leave it. Banks do not receive free accounts, income or
+equity. Arrivals become available for ordinary competition next month; current
+operating previews and frozen acquisition quotas do not count them early.
+
+Fictional monthly rates below use the immutable opening outside books as their
+scale, so a depleted pool can replenish. Rates are basis points (100 bp = 1%),
+with a 1.2x arrival multiplier in Growth Coast. Departures are applied first and
+capped to each closing outside institution/segment balance. Unfilled departures
+do not become future debt. Fractional household/dollar remainders carry forward.
+
+| Regime just resolved | Arrivals, bp/month | Requested departures, bp/month |
+|---|---:|---:|
+| Expansion | 70 | 15 |
+| Steady growth | 50 | 20 |
+| Tight money | 30 | 35 |
+| Downturn | 20 | 60 |
+| Recovery | 60 | 20 |
+
+Customers and savings remain separate aggregate resources. Both segment and
+market totals reconcile to their opening world plus actual external arrivals
+minus actual departures. Player books, account cohorts, locked term promises,
+businesses, merchants and wealth are not changed by this boundary.
+
+Markets shows current outside supply, the last completed closing and a conditional
+quote for the active month's closing. The quote uses today's outside balances;
+acquisition, customer exits and maturing accounts can change departures before
+closing. The report labels the regime that actually settled, even when a new
+regime starts next month. There is no future quote after a campaign ends.
+
+Private conservation anchors and fractional counters remain out of player views.
+Shared actual totals appear in the causal ledger. This is an external population
+and savings boundary, not cross-selling, a national GDP model, employment/income
+simulation or newly created bank money. Rates still require human calibration.
+
+## Optional complexity and Modular combinations — v8.14 opt-in
+
+All preview options remain unchecked by default. Preview is a maturity label,
+not a promise that optional complexity later becomes compulsory. Expand
+**Optional systems** during setup to see prerequisites, selection summary and
+the explicit Regional Rivalry override: two regions and six markets, regardless
+of the campaign-size selector.
+
+Selecting a system proposes its missing foundations. Turning a foundation off
+proposes removing its dependants. A confirmation lists the affected systems;
+Cancel leaves the selection unchanged. Changes affecting only the chosen system
+apply directly. A stale confirmation must be reviewed again against current rules.
+
+In LAN, Direct and GitHub rooms, only the host edits the feature draft. Guests
+see committed settings read-only. **Apply settings** publishes all changes
+atomically and clears both readiness confirmations; **Discard changes** restores
+the shared rules. Unapplied drafts and incompatible peers block starting. Resume
+requires fresh peer compatibility, not capabilities remembered in a checkpoint.
+Rules cannot change during a campaign.
+
+**Modular combinations preview** is a small compatibility pilot over Product
+programmes and its current foundations, not unrestricted modularity or a preset.
+Advertising and Regional growth can independently be off/off, on/off, off/on or
+on/on. Advertising uses current finite supply without adding regional arrivals;
+Growth changes outside supply without requiring advertising spend. When both are
+enabled they use the same finite outside books. Costs, growth rates and quotas
+are unchanged. Disabled systems create no empty policies, books or expenses.
+
+Relationship offers and Customer onboarding are unavailable inside this pilot.
+Entering it confirms their removal if selected; leaving a Growth-only pilot
+proposes restoring the legacy Advertising prerequisite. Use the unchanged
+cumulative setup to play with offers and onboarding. Every pilot pair requires
+both peers to support the new rules, including off/off. Pilot saves are v8.14
+with `featureRulesVersion: 1`; existing saves are never upgraded automatically.
+Continue, export/import, reconnect and rematch preserve the chosen rules.
+
+## Existing-customer product offers — v8.12 opt-in
+
+Relationship offers preview requires Regional demand and its prerequisites in a
+new campaign. Both players must use a supporting build. Existing saves keep their
+original rules. Products → Existing customers holds the standing instruction:
+choose a market, an existing household segment, an open target product, and the
+share of non-retention Retail time to use. This selection does not change focus.
+
+| Constraint | Current rule |
+|---|---|
+| Share of non-retention Retail sales time | 0% / 25% / 50% |
+| Capacity per effective assigned banker/month | 80 conversion equivalents |
+| Conversion cost | $40 per completed equivalent |
+| Monthly uptake | 10% of eligible equivalents, rounded down |
+
+Only owned, unlocked balances without outstanding rate guarantees can switch,
+and only to a strictly better-fitting product for the selected segment. Product
+development and local sales instructions therefore matter to the existing book,
+not just new intake. Closing or retiring the target pauses its standing offer.
+An active instruction reserves its sales time even if no customers can switch;
+retention time itself is untouched. Revised product fit feeds the existing
+goodwill and retention rules, not an immediate loyalty grant.
+
+The model allocates account equivalents from the segment's household count and
+its eligible share of deposit principal. These are not identified people or
+additional account owners. Switching moves existing principal between product
+cohorts, never cash between institutions or money into equity. There is no new
+deposit growth, household award or acquisition commission. High-yield switches
+start the normal six-month guarantee; term deposits and active guarantees cannot
+be broken by an offer.
+
+Offers settle after household retention and term preparation, but before ordinary
+repricing and production. Conversion expense cannot exceed the opening draft
+ceiling or remaining cash/capital capacity after protected commitments,
+advertising and training. A later maturity cannot silently increase the bill.
+The actual cost is included once in operating profit; capital-recovery and
+delivery comparisons do not subtract it again as investment spending.
+
+The Products view compares same-book direct costs (interest plus servicing minus
+fees, including applicable vendor costs), not lifetime value or total bank profit.
+A better fit may cost more to provide. Operations includes the reduced new-sales
+time and full current operating forecast. Actuals may differ because executive
+effects, rival actions, retention and maturities occur before settlement.
+Owner reports, standing instructions and submitted policies remain private.
+
+This is voluntary **product switching**, not multiple-product ownership,
+individual customer finance, delayed onboarding or full cross-selling. The AI
+uses bounded affordability and retention preferences, not an optimal lifetime
+value model. Calibration and human acceptance remain necessary.
+
+### Applications and onboarding — v8.13 opt-in
+
+Products → Applications & onboarding reserves 0/25/50% of Retail time remaining
+after retention and existing-customer offers. Twenty work units per effective
+assigned banker cover both generation and activation (one each per request).
+Older eligible requests process first, across previous targets; new work uses the
+current market/segment/open-product instruction. Creating a request transfers
+neither customers nor money. Requested principal is the outside segment average
+capped at $12,500 per request, with at most 1,000 requests per batch/three batches.
+
+Requests made in M activate only in M+1/M+2; unfilled requests expire in M+3.
+Pausing does not suspend expiry. Closed/retired products cancel pending work.
+Actual activation jointly consumes finite outside segment households and deposits
+within the same monthly quotas as ordinary intake, remaining staff work and the
+reserved acquisition-expense ceiling. It opens the requested product at current
+terms after repricing/repayment but before ordinary production. High-yield promises
+start at activation. Expense is the existing segment rate on funded principal,
+not on pending requests; inflow is funding, not earnings.
+
+Application response is bounded by selected product fit and origin-month audience
+awareness. Later activations retain their source month and do not become current
+advertising-attributed ordinary intake. This is an aggregate pilot, not exclusive
+identified applicants, underwriting, multiple-product ownership or a universal
+queue for all acquisitions. New rules require both peers to support v8.13; old
+saves retain their rules. Queues/reports stay private to their bank.
+
+The v8.13 AI follow-through policy is conservative, not a lifetime-value model.
+It requires at least 1.05 service coverage to initiate a channel, then checks
+the private operating forecast's closing customer workload against ordinary
+next-month retention needs. Remaining eligible applications must fit the same
+staffing and a reserved activation-fee budget; current one-time commitments are
+accounted for once, not repeated next month. It credits no future hires, finished
+projects, outside arrivals or guaranteed revenue. Existing pending work must
+actually activate in the current forecast, not merely attract another batch;
+only pending work can justify trying the 50% setting after 25%. Current cash,
+capital, positive-profit and bounded acquisition-cost guards still apply.
+This is conditional capacity/affordability planning: future outside customers,
+deposits, rival actions and service demand can still change. Human choices and
+the underlying activation, fee, expiry and optional-rule contracts are unchanged.
+
+After final AI spending cuts, one pending-only reconsideration can recover
+affordable processing that an earlier planning stage paused. It may change only
+the onboarding instruction: staffing, retention, projects, advertising and every
+other finalized field stay fixed. It must activate accounts without generating
+new requests, preserve the original final cash/capital limit and all other quoted
+spending, and pass the same continuation safeguards. There is no recursive
+re-trimming or revival of cancelled commitments.
+
+### Compare customer effects — advisory, same v8.12 rules
+
+Products → Existing customers can compare the draft with offers paused, the
+selected offer, one available Business banker reassigned to Retail, and their
+combination. The comparison runs only when requested. It changes no accounts,
+orders, random state or saved rules. Stage applies only the shown staffing and
+offer-policy changes; Undo is available until the draft or source books change.
+
+Opening/closing fit, service coverage, goodwill and departure counts describe
+the selected market and customer segment. Operating profit, funding-sale loss,
+loan growth and plan limits describe the whole bank. Retained deposit principal
+is customer funding, not profit. A legal option is not necessarily beneficial;
+moving a banker can protect households while reducing commercial production.
+
+Current-month retention occurs before product switching. Closing estimates
+include ordinary operating intake, which can change the comparison's fit and
+goodwill; a same-book offer quote alone is not a measured retention benefit.
+The next retention probe holds the estimated closing book and staffing fixed.
+It excludes intervening rival actions, opportunities, economic changes and
+other future activity. It is conditional, not a promised result or lifetime value.
+
+Only a spare existing Business banker can be suggested. Existing specialist
+assignments, reserved commercial delivery, served contracts and bid capacity
+must remain supported. Operations, Lending and the retention split do not move;
+new hires are not available early. Unsafe scenarios show a reason rather than
+invented zero-cost or zero-departure results. No AI preference, price, share cap,
+failure threshold or save version changes with this advisory feature.

@@ -15,7 +15,9 @@ concurrency:
 jobs:
   fast:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # V3 adds complete Group6 compatibility/storage checks to the source gate.
+    # Retain every regression and allow hosted execution headroom.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -27,9 +29,11 @@ jobs:
 
   full-windows:
     runs-on: windows-latest
-    # Hosted Windows needs ~36 minutes for regression before the campaign audit.
-    # Keep every gate; allow the audit and evidence upload to finish.
-    timeout-minutes: 60
+    # Run21 took 14.4 minutes for work taking 5.6 locally (~2.6x).
+    # V3's retained local baseline alone took 41 minutes before outer balance.
+    # At the measured hosted multiplier, 90 minutes is insufficient headroom.
+    # Keep every gate and per-test timeout; allow final evidence upload.
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

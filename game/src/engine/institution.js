@@ -2,7 +2,7 @@ function stats(){return{deposits:24000000,emergencyDebt:0,rateSensitiveDeposits:
 const OPENING_STATS=stats();
 function player(name,isBot=false,doctrine='community'){return{id:'bank-'+Math.floor(simulationRandom()*0x100000000).toString(16),name:(String(name||'Unnamed Financial Empire').trim().replace(/\s+/g,' ').slice(0,36)||'Unnamed Financial Empire'),stats:stats(),upgrades:{technology:0,training:0,analytics:0,wealth:0,operations:0},strategy:{network:0,digital:0,commercial:0,operations:0,acquisition:0},specializations:{},facilities:{retail:1,commercial:0,digital:0},facilityMarkets:{},products:{retail:'essential',business:'relationship',credit:'mortgage'},primaryStrategy:null,boardConcessions:0,capitalRestriction:0,allocation:{service:3,business:2,lending:2,operations:1},policies:{deposit:'balanced',lending:'balanced',capital:'balanced'},doctrine:DOCTRINES[doctrine]?doctrine:'community',achievements:[],focus:'downtown',branches:{},projects:[],hiresTotal:0,payrollSpend:0,buildSpend:0,capability:{network:0,digital:0,commercial:0,operations:0,acquisition:0},distress:0,fundingGap:0,capitalRequests:0,marketingTurns:0,lastCompetitiveAction:'none',submitted:null,mandate:pick(Object.keys(MANDATES)),isBot,turnEffects:{}}}
 function delta(p,k,n){if(p.marketSupply&&!p.accounting&&MARKET_RESOURCES.includes(k)&&n>0)n=Math.min(n,marketAvailable(p,k));p.stats[k]=(p.stats[k]||0)+n;if(['reputation','digital','morale','compliance','attention','influence','momentum'].includes(k))p.stats[k]=clamp(Math.round(p.stats[k]),0,100);else p.stats[k]=p.fundingRulesVersion===2&&['capital','earnings'].includes(k)?Math.round(p.stats[k]):Math.max(0,Math.round(p.stats[k]))}
-function riskAssets(p){return Math.max(1,p.stats.loans+(p.accounting?p.accounting.accounts.securities*.2:0)+(p.fundingRulesVersion===2?0:p.stats.deposits*.2))}
+function riskAssets(p){return Math.max(1,p.stats.loans+(p.accounting?p.accounting.accounts.securities*.2+(p.accounting.accounts.receivables||0):0)+(p.fundingRulesVersion===2?0:p.stats.deposits*.2))}
 function capitalRatio(p){return p.stats.capital/riskAssets(p)*100}
 function capitalTier(p){const r=capitalRatio(p);return CAPITAL_TIERS.find(t=>r>=t.min)}
 function tierRank(p){return CAPITAL_TIERS.indexOf(capitalTier(p))}
@@ -15,7 +15,7 @@ function capabilityNextCost(p,key){const tiers=CAPABILITY_TIERS[key],spent=capab
 function capabilityBenefit(p,branch){const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
 function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of Object.keys(STRATEGY_BRANCHES)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=STRATEGY_BRANCHES[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${STRATEGY_BRANCHES[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key];if(pick&&STRATEGY_SPECIALIZATIONS[key]&&STRATEGY_SPECIALIZATIONS[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${STRATEGY_SPECIALIZATIONS[key][pick].name} operating model in ${STRATEGY_BRANCHES[key].name}.`)}}}return L}
 function hasSpecialization(p,branch,key){return p.specializations&&p.specializations[branch]===key}
-function productOption(p,line){const group=PRODUCT_PORTFOLIOS[line],key=p.products&&group.options[p.products[line]]?p.products[line]:Object.keys(group.options)[0],option=group.options[key];if(line==='retail'&&(p.doctrine==='community'||hasSpecialization(p,'network','retailDensity'))){const community=p.doctrine==='community'?1.15:1,density=hasSpecialization(p,'network','retailDensity')?1.06:1;return{...option,customers:option.customers*community*density,deposits:option.deposits*community*density,funding:option.funding*(p.doctrine==='community'?.9:1),reputation:(option.reputation||0)+(density>1?.5:0)}}return option}
+function productOption(p,line){if(line==='credit'&&p.creditPortfolio)return portfolioCreditOption(p);const group=PRODUCT_PORTFOLIOS[line],key=p.products&&group.options[p.products[line]]?p.products[line]:Object.keys(group.options)[0],option=group.options[key];if(line==='retail'&&(p.doctrine==='community'||hasSpecialization(p,'network','retailDensity'))){const community=p.doctrine==='community'?1.15:1,density=hasSpecialization(p,'network','retailDensity')?1.06:1;return{...option,customers:option.customers*community*density,deposits:option.deposits*community*density,funding:option.funding*(p.doctrine==='community'?.9:1),reputation:(option.reputation||0)+(density>1?.5:0)}}return option}
 function strategyTotal(p){return Object.keys(STRATEGY_BRANCHES).reduce((n,k)=>n+strategyLevel(p,k),0)}
 function strategyCapstone(p){return Object.keys(STRATEGY_BRANCHES).find(k=>strategyLevel(p,k)>=4)||null}
 function doctrineProfile(p){
@@ -47,6 +47,7 @@ function syncPrimaryStrategy(p){p.primaryStrategy=leadCapability(p);return p.pri
 function strategyBarred(){return''}
 function projectBarred(p,key){
  const def=PROJECTS[key];
+ const facilityIssue=facilityProjectIssue(p,key);if(facilityIssue)return facilityIssue;
  // Preserve legacy precedence: contract availability, local-office rules,
  // regulatory restrictions, retail deployment, then service applications.
  if(def&&def.contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';
@@ -79,15 +80,16 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
-function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0))*10)/10}
+function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0)+(p.facilityNetwork?FacilityNetwork.committedCapacity(p):0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
 function hireCost(p,count){let total=0;const staff=p.stats.staff;for(let i=0;i<count;i++)total+=Math.round(HIRE_BASE_COST*(1+(staff+i)/45));return total}
 function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
 function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return (n>0?n:0)+specialistHireCount(plan)}
-function planBudget(p,plan){
+function planBudget(p,plan){return p.departmentFunctions&&!p._departmentFunctionsRaw&&!departmentFunctionExecution(p)?departmentFunctionPlanningBudget(p,plan):planBudgetBase(p,plan);}
+function planBudgetBase(p,plan){
  if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
@@ -95,13 +97,34 @@ function planBudget(p,plan){
  const hires=planHires(plan),recruiting=(hires?hireCost(p,hires):0)+(p.workforce?specialistHirePremium(plan):0);
  const productRetirement=p.productPrograms?(plan.productProgramPolicy?.retire?.length||0)*PRODUCT_RETIRE_COST:0;
  const advertising=p.advertising?(plan.advertisingPolicy||p.advertising.policy).budget:0;
- const base=action+projects+research+recruiting+productRetirement+advertising,training=p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
- const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
+ const relationshipOffers=p.relationshipOffers?relationshipOfferBudget(p,plan):0;
+ const onboarding=p.onboarding?onboardingBudget(p,plan):0;
+ const facilityConversion=facilityDraftSpend(p,plan),departmentLeadership=p.departmentOffice?departmentLeadershipQuote(p,plan).total:0;
+ const lifecycle=facilityLifecycleDraftCommitment(p,plan);
+ const departmentFunctions=p.departmentFunctions?departmentFunctionDraftCost(p,plan):0;
+ const unpaidDepartmentFunctions=p.departmentFunctions&&p._departmentFunctionPaidCycle===p.departmentFunctions.lastCycle?0:departmentFunctions;
+ const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
+ const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity;
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
+ if(p.departmentFunctions){quote.departmentFunctions=unpaidDepartmentFunctions;quote.departmentFunctionsCommitted=departmentFunctions;quote.departmentFunctionsPaid=departmentFunctions-unpaidDepartmentFunctions;}
+ if(p.facilityNetwork)quote.facilityConversion=facilityConversion;
+ if(p.departmentOffice)quote.departmentLeadership=departmentLeadership;
  if(p.productPrograms)quote.productRetirement=productRetirement;
  if(p.advertising)quote.advertising=advertising;
+ if(p.relationshipOffers)quote.relationshipOffers=relationshipOffers;
+ if(p.onboarding)quote.onboarding=onboarding;
  if(p.workforce){quote.training=training;quote.specialistPayrollAdded=Object.entries(SPECIALIST_ROLES).reduce((n,[k,d])=>n+(Number(plan.specialistHires?.[k])||0)*d.payroll,0)}
  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
+ if(p.departmentOffice){
+  const leadership=departmentLeadershipQuote(p,plan);
+  quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0);
+  quote.discretionaryCommitments=quote.total-quote.mandatoryObligations;
+  quote.discretionaryCashAvailable=Math.max(0,p.stats.cash-(p.accounting.accounts.payables||0)-quote.mandatoryObligations);
+  quote.discretionaryCapitalAvailable=Math.max(0,quote.capitalBudget-quote.mandatoryObligations);
+  quote.discretionaryRemaining=Math.min(quote.discretionaryCashAvailable,quote.discretionaryCapitalAvailable)-quote.discretionaryCommitments;
+ }
  return quote;
 }
 function fundingStep(p,plan,key,step){
@@ -141,7 +164,7 @@ function projectTerms(p,key,focus=p.focus){
 function projectPlanStatus(p,plan){
  const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan);
  const fail=(code,reason)=>({eligible:false,code,reason,quote});
- let load=usedCapacity(owner);
+ let load=usedCapacity(owner)+facilityDraftCapacity(owner,plan);
  for(const key of chosen){
   const def=PROJECTS[key],terms=projectTerms(owner,key,plan.focus);
   if(!terms)return fail('unknown','That strategic project does not exist.');
@@ -154,11 +177,13 @@ function projectPlanStatus(p,plan){
   if(terms.atMaximum)return fail('maximum','That capability is already at maximum level.');
   if(terms.barred)return fail('barred',terms.barred);
  }
- if(owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
- if(owner.accounting&&quote.remaining<0)return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
+ if(owner.departmentOffice?quote.discretionaryCommitments>quote.discretionaryCashAvailable:owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
+ if(owner.accounting&&(owner.departmentOffice?quote.discretionaryRemaining<0:quote.remaining<0))return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
  if(regionalOperations(owner)){
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
   const projects=chosen.filter(local),active=owner.projects.filter(x=>x.target===plan.focus&&local(x.key));
+  if(owner.facilityNetwork)active.push(...FacilityNetwork.pending(owner).filter(o=>o.market===plan.focus&&o.id!==plan.facilityPolicy?.cancel));
+  if(owner.facilityLifecycle)active.push(...owner.facilityNetwork.offices.filter(o=>o.market===plan.focus&&owner.facilityLifecycle.records[o.id].renovation&&o.id!==plan.facilityLifecyclePolicy?.cancel));
   if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
  }
  if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
@@ -191,7 +216,7 @@ function projectStartStatus(g,p,key){
  // executive/rival effects would change already accepted campaign rules.
  return {eligible:true,code:null,terms};
 }
-function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
+function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
 function branchGoal(g){return{town:4,regional:5,state:6,national:8}[g.scope]||8}

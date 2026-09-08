@@ -17,7 +17,13 @@ function renderHouseholds(v) {
     return;
   }
   if (workspaceTab !== 'customers') return;
-  const p = v.me, policy = draft.householdPolicy || p.householdBook.policy;
+  const p = v.me.relationshipOffers ? JSON.parse(JSON.stringify(v.me)) : v.me, policy = draft.householdPolicy || p.householdBook.policy;
+  if (p.relationshipOffers) {
+    const offerPlan = { ...draft };
+    E.normalizeRelationshipOfferPlan(p, offerPlan);
+    p.relationshipOffers.policy = offerPlan.relationshipOfferPolicy;
+    if (p.onboarding) { E.normalizeOnboardingPlan(p, offerPlan); p.onboarding.policy = offerPlan.onboardingPolicy; }
+  }
   const review = E.householdServiceReview(p, draft.allocation, policy), report = p.householdBook.report;
   const key = v.territories[selectedHouseholdMarket] ? selectedHouseholdMarket : draft.focus;
   const rows = review.rows.filter(r => r.market === key), pool = p.marketSnapshot.markets[key].households;

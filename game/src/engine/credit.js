@@ -1,7 +1,7 @@
 const CREDIT_TERMS={mortgage:120,middleMarket:48,consumer:24};
 let creditWorld=null,creditBypass=false;
-function creditTerms(p,g){
- const product=p.products.credit,option=PRODUCT_PORTFOLIOS.credit.options[product];
+function creditTerms(p,g,product=p.products.credit){
+ const option=PRODUCT_PORTFOLIOS.credit.options[product];
  return {product,remaining:CREDIT_TERMS[product],rate:Math.round(.0047*(.8+(g&&g.economy?g.economy.rate:3.75)/12)*option.spread*1000000),risk:Math.max(1,Math.round(option.credit*{conservative:.55,balanced:1,growth:1.45}[p.policies.lending]*10000*(p.creditPerformance?originationCreditGuard(p):1))),...(p.creditPerformance?{late:[0,0,0],seasoning:2}:{})};
 }
 function compactCredit(p){
@@ -18,7 +18,7 @@ function reconcileCredit(p){
  if(!p.creditBook||creditBypass)return;
  for(const [market,book]of Object.entries(p.marketBook.markets)){
   const held=p.creditBook.cohorts.filter(c=>c.market===market).reduce((n,c)=>n+c.principal,0),difference=book.loans-held;
-  if(difference>0)p.creditBook.cohorts.push({market,principal:difference,...creditTerms(p,creditWorld||marketContext)});
+  if(difference>0){if(p.creditPortfolio)p.creditBook.cohorts.push(...creditProductionParts(p,creditWorld||marketContext,difference).map(c=>({market,...c})));else p.creditBook.cohorts.push({market,principal:difference,...creditTerms(p,creditWorld||marketContext)});}
   else if(difference<0)takeCredit(p,market,-difference);
  }
  compactCredit(p);

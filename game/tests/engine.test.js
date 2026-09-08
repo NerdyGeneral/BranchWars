@@ -32,7 +32,8 @@ E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersi
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly&&!p.institutionOnlyVersion).length, 18);
+assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.institutionOnlyVersion).map(([k])=>k)).sort(), ['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth']);
 assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.programOnly).map(([k])=>k)).sort(), ['licenseHighYield','licenseRewards']);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.deploymentProduct).length, 2);
@@ -1214,7 +1215,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.10/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8\.14/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1247,14 +1248,17 @@ assert(html.includes('id="capitalPolicies"'));
 assert(html.includes('id="isometric-city-overhaul"'));
 assert(html.includes('function districtArt'));
 assert(html.includes('id="trendChart"'));
-assert(html.includes('BRANCH WARS v8.1'));
+assert(html.includes('<title>Branch Wars: Executive Command</title>'), 'portable keeps its product identity');
+assert(html.includes('BRANCH WARS // OPEN-ENDED MARKET WAR'), 'footer describes the current open-ended campaign');
+assert(!html.includes('BRANCH WARS v8.1'), 'do not label modern optional-rule campaigns with a stale release version');
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('id="productPortfolio"'));
 assert(html.includes('function renderProducts'));
 assert(html.includes('data-specialization-branch'));
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
-assert.equal((html.match(/data-workspace-tab=/g) || []).length, 10, 'command center has six core workspaces plus optional Workforce, Customers, Credit and Products workspaces');
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 11, 'command center has six core workspaces plus optional Workforce, Customers, Credit, Products and Group workspaces');
+assert(html.includes('id="financialGroupNav"') && html.includes('id="financialGroupPanel"'), 'optional group capital has a dedicated workspace');
 assert(html.includes('id="productProgramsNav"') && html.includes('id="productProgramsPanel"'), 'product development and targeting have a dedicated workspace');
 assert(html.includes('data-workspace-tab="workforce"'), 'the optional workforce workspace has its own navigation target');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
@@ -1360,7 +1364,11 @@ for (const [status, why] of [['401','a rejected token'],['404','a missing reposi
 // LAN sends have an application-level id so retrying after a lost acknowledgement
 // cannot submit the same plan twice. The queue is drained serially and backed off.
 assert(clientFn('lanSend').includes('messageId()'), 'every LAN message must have an idempotency id');
-assert(clientFn('lanFlush').includes('while(lan.active&&lan.outbox.length)'), 'LAN messages must be sent in order');
+const lanQueueBody=clientFn('lanFlush');
+assert(lanQueueBody.includes('const session=lan')&&lanQueueBody.includes('while(lan===session&&session.active&&lan.outbox.length)'), 'LAN serial flushing must stay bound to its original room');
+assert(lanQueueBody.includes('const item=lan.outbox[0]'), 'LAN flush must send the oldest queued message first');
+assert(lanQueueBody.indexOf('await lanRequest(')<lanQueueBody.indexOf('lan.outbox.shift()')&&lanQueueBody.indexOf('if(!data.ok)')<lanQueueBody.indexOf('lan.outbox.shift()'), 'LAN queue advances only after the oldest message is acknowledged');
+assert(lanQueueBody.indexOf('if(lan!==session||!session.active)return')<lanQueueBody.indexOf('lan.outbox.shift()'), 'A late acknowledgement from an old room cannot remove a new room message');
 assert(clientFn('lanFlush').includes('queued for retry'), 'an interrupted LAN send must remain queued');
 assert(clientFn('lanRequest').includes('AbortController'), 'a dead LAN request must time out instead of hanging forever');
 
@@ -1429,7 +1437,10 @@ for (const fn of ['createOffer', 'createAnswer']) {
   assert(clientFn(fn).includes('withLocalAddress('), `${fn}() must publish the address it was given`);
 }
 
-const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
+// Script bodies contain template-source fragments, not document elements.
+// Keep the actual script elements/IDs, then test emitted UI markup separately.
+const documentMarkup = html.replace(/(<script\b[^>]*>)[\s\S]*?<\/script>/gi, '$1</script>');
+const ids = [...documentMarkup.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 // Execute the dynamic renderer with DOM sinks, rather than exempting its IDs.
 let managementMarkup='';
@@ -1441,10 +1452,20 @@ vm.runInNewContext(clientFn('renderManagement')+';renderManagement({me:{manageme
 const renderedIds=[...managementMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(new Set(renderedIds).size,renderedIds.length,'rendered management IDs must be unique');
 assert(renderedIds.includes('research-enabled')&&renderedIds.includes('manager-mode')&&renderedIds.includes('prepareManagement'));
+const agencyHarness=require('./github_resilience.test.js').harness();
+agencyHarness.run("game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:3}).options,mode:'hotseat',seed:'selector-contract',created:1});seat=0;workspaceTab='group';newDraft(currentView());renderFinancialGroup(currentView());");
+const agencyMarkup=agencyHarness.elements.get('#financialGroupPanel').innerHTML;
+const agencyIds=[...agencyMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(new Set(agencyIds).size,agencyIds.length,'Rendered group/agency IDs must be unique');
+assert(agencyIds.every(id=>!ids.includes(id)),'Rendered group controls must not duplicate document IDs');
+// Literal IDs declared by other dynamic templates remain valid selector targets.
+// Their source occurrences are not simultaneous DOM elements; each workspace
+// renderer has its own emitted-markup checks in the UI suites.
+const declaredIds=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 // Check the leading ID of descendant selectors too; it is not itself an ID.
 const missingIds = [...html.matchAll(/\$\('#([\w-]+)(?:[^']*)'\)/g)]
   .map((item) => item[1])
-  .filter((id) => !ids.includes(id)&&!renderedIds.includes(id));
+  .filter((id) => !declaredIds.includes(id)&&!renderedIds.includes(id)&&!agencyIds.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
 assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
 assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');

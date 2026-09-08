@@ -11,8 +11,33 @@ function ghEncode(text){return btoa(unescape(encodeURIComponent(text)))}
 function ghDecode(b64){return decodeURIComponent(escape(atob(String(b64||'').replace(/\s+/g,''))))}
 function ghNonce(){const bytes=new Uint8Array(24);if(globalThis.crypto&&crypto.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);return[...bytes].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function ghPlanHash(plan,nonce){if(!globalThis.crypto||!crypto.subtle)throw Error('This browser cannot seal repository plans. Use LAN or Direct P2P instead.');const payload=new TextEncoder().encode(`${nonce}\n${JSON.stringify(plan)}`),digest=await crypto.subtle.digest('SHA-256',payload);return[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-async function ghCommitPlan(plan){if(ghPendingPlan)throw Error('A sealed plan is still pending. Retry the connection or wait for recall confirmation.');const nonce=ghNonce(),hash=await ghPlanHash(plan,nonce),cycle=view&&view.cycle;ghPendingPlan={plan,nonce,hash,cycle,revealed:false};send({type:'plan_commit',hash,cycle});if(view&&view.rival&&view.rival.submitted)ghRevealPlan()}
-function ghRevealPlan(){if(!ghPendingPlan||ghPendingPlan.revealed)return;send({type:'plan_reveal',plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle});ghPendingPlan.revealed=true;ghCheckpoint()}
+let ghSealingPlan=null,ghPendingTurnToken=null;
+async function ghCommitPlan(plan){
+ requireDepartmentPeer(view);
+ const session=gh,sourceView=view,cycle=view&&view.cycle;
+ if(ghPendingPlan||ghSealingPlan&&ghSealingPlan.session===session)throw Error('A sealed plan is still pending. Retry the connection or wait for recall confirmation.');
+ const attempt={session},current=()=>gh===session&&session.active&&view===sourceView&&view&&view.cycle===cycle&&p2pRole==='guest';
+ ghSealingPlan=attempt;
+ try{
+  const sealedPlan=JSON.parse(JSON.stringify(plan)),nonce=ghNonce(),hash=await ghPlanHash(sealedPlan,nonce);
+  if(!current())return false;
+  requireDepartmentPeer(view);
+  const pending={plan:sealedPlan,nonce,hash,cycle,revealed:false},sequence=session.mine;ghPendingPlan=pending;
+  try{send(turnMessage('plan_commit',{hash,cycle}));ghPendingTurnToken=incomingTurnContext?.token||null;}catch(error){if(session.mine===sequence&&ghPendingPlan===pending)ghPendingPlan=null;throw error}
+  if(view.rival&&view.rival.submitted)ghRevealPlan();return true;
+ }catch(error){if(!current())return false;throw error}
+ finally{if(ghSealingPlan===attempt)ghSealingPlan=null}
+}
+function ghRefreshPendingTurn(){
+ if(!ghPendingPlan||!incomingTurnContext||ghPendingPlan.cycle!==view.cycle||ghPendingTurnToken===incomingTurnContext.token)return;
+ if(!departmentPeerStatus(view).compatible)return;
+ if(ghPendingPlan.recallRequested){send(turnMessage('recall'));ghPendingTurnToken=incomingTurnContext.token;return;}
+ // Retain the exact sealed plan and nonce across reconnect, but obtain a fresh
+ // transport authorization. Old persisted envelopes remain unusable.
+ send(turnMessage('plan_commit',{hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));
+ ghPendingTurnToken=incomingTurnContext.token;ghPendingPlan.revealed=false;
+}
+function ghRevealPlan(){if(!departmentPeerStatus(view).compatible)return;if(!ghPendingPlan||ghPendingPlan.revealed||ghPendingPlan.recallRequested||ghPendingPlan.cycle!==view?.cycle)return;send(turnMessage('plan_reveal',{plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));ghPendingPlan.revealed=true;ghCheckpoint()}
 function ghFail(response,body){
  const detail=body&&body.message?String(body.message).slice(0,250):'HTTP '+response.status;
  const rateLimited=response.status===429||(response.status===403&&(response.headers.get('x-ratelimit-remaining')==='0'||response.headers.get('retry-after')||/rate limit|abuse/i.test(detail)));
@@ -28,7 +53,7 @@ function ghFail(response,body){
 }
 function ghDelay(base){return Math.max(base,(gh.cooldownUntil||0)-Date.now())}
 async function ghRequest(url,options={}){
- const session=gh;if(session.paused)throw Error('Repository access paused. Check the token and retry.');
+ const session=gh,credential=session.token;if(session.paused)throw Error('Repository access paused. Check the token and retry.');
  if((session.cooldownUntil||0)>Date.now())throw Error('GitHub cooldown until '+new Date(session.cooldownUntil).toLocaleTimeString());
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
  try{
@@ -36,6 +61,7 @@ async function ghRequest(url,options={}){
   // Consume the body under the same timeout; fetch can resolve before a stalled body.
   let body=null;try{body=await response.json()}catch(e){if(controller.signal.aborted)throw e}
   if(gh!==session||!session.active)throw Error('Repository session changed.');
+  if(session.token!==credential)throw Error('Repository credentials changed. Retry with the current token.');
   return {response,body};
  }catch(e){if(controller.signal.aborted)throw Error('GitHub request timed out after 20 seconds; retrying safely.');throw e}
  finally{clearTimeout(timer)}
@@ -113,7 +139,7 @@ async function ghFlush(){
  }}finally{session.busy=false;if(gh===session&&session.active&&!session.paused&&session.published<session.mine&&!session.retryTimer)queueMicrotask(ghFlush)}
 }
 function ghSend(msg){
- const next=ghCompact([...gh.outbox,{seq:gh.mine+1,msg}]);
+ const next=ghCompact([...gh.outbox,{seq:gh.mine+1,msg:JSON.parse(JSON.stringify(msg))}]);
  if(next.length>100)throw Error('Repository command queue is full. Keep this tab open and reconnect before sending more commands.');
  gh.mine++;gh.outbox=next;ghCheckpoint();ghPaintHealth('SENDING UPDATE');ghFlush();
 }
@@ -157,7 +183,9 @@ function ghCheckpoint(){
  if(!gh.active)return;
  try{
   const {token,busy,retryTimer,polling,...connection}=gh;
-  sessionStorage.setItem('branchWarsGhResume',JSON.stringify({version:1,connection,game:p2pRole==='host'?game:null,view:p2pRole==='guest'?view:null,p2pConfig,ghPendingPlan,ghIncomingCommit,lobby:game||view?null:lobby,lobbyPending}));
+  const checkpoint={version:1,connection:packStorageValue(connection,'connection'),game:packStorageValue(p2pRole==='host'?game:null,'game'),view:packStorageValue(p2pRole==='guest'?view:null,'view'),p2pConfig,ghPendingPlan,ghIncomingCommit,lobby:game||view?null:lobby,lobbyPending};
+  if(['connection','game','view'].some(key=>[1,2].includes(checkpoint[key]?.branchWarsStorage)))checkpoint.version=2;
+  sessionStorage.setItem('branchWarsGhResume',JSON.stringify(checkpoint));
  }catch{if(!gh.storageWarned){gh.storageWarned=true;toast('Repository reload recovery could not be saved. Keep this tab open; the host should EXPORT a backup.')}}
 }
 function ghRetry(){
@@ -166,24 +194,43 @@ function ghRetry(){
  gh.sendFailures=gh.published<gh.mine?Math.max(1,gh.sendFailures):0;ghFlush();ghPoll();
  if(gh.cooldownUntil>Date.now())setConnection('REPOSITORY COOLDOWN // retry after '+new Date(gh.cooldownUntil).toLocaleTimeString(),'warn');
 }
+function ghResumeToken(side,fallback='',allowOtherField=false){
+ const selector=side==='guest'?'#ghGuestToken':'#ghToken';
+ const other=side==='guest'?'#ghToken':'#ghGuestToken';
+ const token=String(($(selector)&&$(selector).value)||(allowOtherField&&$(other)&&$(other).value)||sessionStorage.getItem('branchWarsGhToken')||fallback||'').trim();
+ if(!token)throw Error('Enter your own access token, then press Resume.');
+ if(!/^[\x21-\x7e]+$/.test(token))throw Error('The access token contains spaces or invalid characters. Paste only the token, then press Resume.');
+ return token;
+}
 async function ghResume(){
+ let attempt=connectionAttempt;
+ if(gh.active){
+  try{const token=ghResumeToken(gh.side,gh.token);gh.token=token;ghRemember();ghRetry()}
+  catch(error){setStartMessage(error.message);setConnection('REPOSITORY RESUME // '+error.message,'bad')}
+  return;
+ }
  try{
   const saved=JSON.parse(sessionStorage.getItem('branchWarsGhResume')||'null');
-  if(!saved||saved.version!==1||!['host','guest'].includes(saved.connection.side))throw Error('No repository session saved in this tab. The host can still export/import a campaign backup.');
-  if(gh.active){ghRetry();return}
-  const c=saved.connection,token=($('#ghToken').value||$('#ghGuestToken').value||sessionStorage.getItem('branchWarsGhToken')||'').trim();
-  if(!token)throw Error('Enter your own access token, then press Resume.');
+  if(saved){
+   const packed=['connection','game','view'].some(key=>saved[key]?.branchWarsStorage!==undefined);
+   if(![1,2].includes(saved.version)||(saved.version===2)!==packed)throw Error('Unsupported or inconsistent repository checkpoint storage version.');
+   for(const key of ['connection','game','view'])saved[key]=unpackStorageValue(saved[key]);
+  }
+  if(!saved||!saved.connection||!['host','guest'].includes(saved.connection.side))throw Error('No repository session saved in this tab. The host can still export/import a campaign backup.');
+  const c=saved.connection,token=ghResumeToken(c.side,'',true);
   const repo=ghNormalizeRepo(c.repo),api=ghNormalizeApi(c.api);
   if(!/^[A-Z2-9]{8}$/.test(c.room))throw Error('Invalid saved room.');
   const restored=saved.game?migrateGame(saved.game):null;
-  resetLink();gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:c.published<c.mine?1:0};
+  if(saved.view)validateIncomingFeatureRules(saved.view,'view');
+  if(saved.lobby)validateIncomingFeatureRules(saved.lobby.settings,'lobby');
+  resetLink();attempt=connectionAttempt;gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:c.published<c.mine?1:0};
   mode='gh';p2pRole=c.side;seat=c.side==='host'?0:1;p2pConfig=saved.p2pConfig;game=restored;view=saved.view;
   ghPendingPlan=saved.ghPendingPlan;ghIncomingCommit=saved.ghIncomingCommit;lobby=saved.lobby||null;lobbyPending=saved.lobbyPending||null;draft=null;if(view&&ghPendingPlan)view.me.submitted=true;
-  await ghCheckRepo();gh.branch=c.branch||gh.branch;const own=await ghRead(c.side,'');
+  await ghCheckRepo();if(attempt!==connectionAttempt)return;gh.branch=c.branch||gh.branch;const own=await ghRead(c.side,'');if(attempt!==connectionAttempt)return;
   if(!own.missing)ghAccepted(own);
   ghRemember();if(game||view)enterGame(true);else if(lobby)renderLobby();else show('#connectScreen');
-  ghPoll();ghFlush();setConnection('REPOSITORY '+gh.room+' // RESUMING SAVED SESSION','warn');
- }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message)}
+  ghPoll();ghFlush();if(p2pRole==='host')challengePeerFeatures();else send(makeFeatureHello());setConnection('REPOSITORY '+gh.room+' // RESUMING SAVED SESSION','warn');
+ }catch(e){if(attempt!==connectionAttempt)return;gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message)}
 }
 function ghConfig(tokenField){
  const repo=ghNormalizeRepo($('#ghRepo').value);
@@ -200,29 +247,31 @@ function ghRestore(){try{const saved=JSON.parse(localStorage.getItem('branchWars
 function ghForget(){try{sessionStorage.removeItem('branchWarsGhToken')}catch{}['#ghToken','#ghGuestToken'].forEach(id=>{if($(id))$(id).value=''});setStartMessage('Session token removed from this browser.')}
 function ghRoomCode(){const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=new Uint8Array(8);if(globalThis.crypto&&crypto.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);return [...bytes].map(x=>alphabet[x%alphabet.length]).join('')}
 async function ghCreateRoom(){
- try{setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
-  resetLink();game=null;view=null;mode='gh';p2pRole='host';
-  p2pConfig={lobbyRequired:true,advertisingVersion:$('#advertisingPreview').checked?1:0,productProgramsVersion:$('#productPrograms').checked?1:0,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
-  gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();ghRemember();
-  for(let attempt=0;attempt<5&&!gh.sha;attempt++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){const accepted=await ghRead('host','');if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
-  if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
+ let attempt=connectionAttempt;
+ try{if(featureSelectionPending())throw Error('Confirm or cancel the pending feature changes before opening a room.');setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
+  resetLink();attempt=connectionAttempt;game=null;view=null;mode='gh';p2pRole='host';
+  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
+  gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();if(attempt!==connectionAttempt)return;ghRemember();
+  for(let reservationTry=0;reservationTry<5&&!gh.sha;reservationTry++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(attempt!==connectionAttempt)return;if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){if(attempt!==connectionAttempt)return;const accepted=await ghRead('host','');if(attempt!==connectionAttempt)return;if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
+  if(attempt!==connectionAttempt)return;if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM OPEN.</b> Send this join code to your rival. They need their own access token; never send them yours.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;
   $('#outCodeLabel').textContent='JOIN CODE';$('#outCode').classList.remove('room-code');
   $('#outCode').value=pack('BW7-ROOM-',{repo:gh.repo,room:gh.room});
   setConnection(`REPOSITORY ROOM ${gh.room} // WAITING FOR RIVAL`,'warn');ghCheckpoint();ghPoll();
- }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
+ }catch(e){if(attempt!==connectionAttempt)return;gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
 async function ghJoinRoom(){
+ let attempt=connectionAttempt;
  try{setStartMessage('');const invite=unpack($('#ghJoinCode').value,'BW7-ROOM-');const name=validName('#ghGuestName');
   const token=($('#ghGuestToken').value||'').trim();
   if(!token)throw Error('Enter your own access token. Never use your rival\u2019s.');
   const repo=ghNormalizeRepo(invite.repo),room=String(invite.room||'').trim().toUpperCase(),api=ghNormalizeApi($('#ghGuestApi').value);if(!/^[A-Z2-9]{8}$/.test(room))throw Error('That repository-room code is invalid or incomplete. Ask the host for a fresh code.');
-  resetLink();game=null;view=null;mode='gh';p2pRole='guest';
-  p2pConfig={lobbyRequired:true,advertisingVersion:$('#advertisingPreview').checked?1:0,productProgramsVersion:$('#productPrograms').checked?1:0,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
-  gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();const occupied=await ghRead('guest','');if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
+  resetLink();attempt=connectionAttempt;game=null;view=null;mode='gh';p2pRole='guest';
+  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
+  gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();if(attempt!==connectionAttempt)return;const occupied=await ghRead('guest','');if(attempt!==connectionAttempt)return;if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM JOINED.</b> Waiting for the host to open the campaign.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;
   $('#outCodeLabel').textContent='ROOM';$('#outCode').classList.add('room-code');$('#outCode').value=gh.room;
   setConnection(`REPOSITORY ROOM ${gh.room} // CONNECTING`,'warn');ghPoll();
-  ghSend({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,advertisingSupported:1,productProgramsSupported:1,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name,doctrine:'commercial'});
- }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
+  ghSend(makeFeatureHello());
+ }catch(e){if(attempt!==connectionAttempt)return;gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}

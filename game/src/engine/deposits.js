@@ -1,8 +1,13 @@
 let depositWorld=null,depositBypass=false;
 const DEPOSIT_SERVICE={essential:{fee:6,cost:12},rewards:{fee:12,cost:20},highYield:{fee:0,cost:8}};
-function depositRate(p,g,product){
+function baseDepositRate(p,g,product){
  const option=PRODUCT_PORTFOLIOS.retail.options[product];
  return Math.round((g.economy.rate/2400)*{margin:.5,balanced:.8,aggressive:1.2}[p.policies.deposit]*option.funding*((typeof p.doctrine==='object'?p.doctrine.key:p.doctrine)==='community'?.9:1)*1000000);
+}
+function depositRate(p,g,product){
+ const base=baseDepositRate(p,g,product);
+ if(p.productPrograms?.version!==2||!['essential','rewards'].includes(product))return base;
+ return clamp(base+Math.round(p.productPrograms.pricingBp[product]*1000000/120000),0,100000);
 }
 function compactDeposits(p){
  const grouped=new Map();
@@ -39,6 +44,7 @@ function depositSummary(p,g){
 function adjustDepositReport(p,g,r){
  if(!p.depositBook)return;
  const d=depositSummary(p,g),oldIncome=r.depositIncome,oldFunding=r.fundingCost;
+ captureProductPricingBill(p,d);
  r.depositIncome=d.fees;r.fundingCost=d.interest+p.stats.emergencyDebt*.01;r.depositServiceCost=d.service;r.depositInterest=d.interest;r.retailPlatformCost=Object.values(d.rows).reduce((n,row)=>n+(row.platform||0),0);
  if(p.productPrograms)r.productProgramCost=productProgramCosts(p).total;
  r.expense+=d.service;

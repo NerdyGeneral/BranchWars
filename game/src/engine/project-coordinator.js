@@ -121,7 +121,7 @@ function completeProjectSettlement(g, p, project) {
       );
     const state = p.regionalOperations.markets[project.target];
     if (project.key === 'branchClose') {
-      closeRegionalOffice(p, project.target);
+      closeRegionalOffice(p, project.target, g.cycle);
       delta(p, 'reputation', -2);
     } else {
       const key = project.key === 'branchService' ? 'service' : 'automation';
