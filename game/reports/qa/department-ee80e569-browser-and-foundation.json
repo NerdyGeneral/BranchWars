@@ -1,0 +1,115 @@
+{
+  "status": "Development evidence, not release acceptance or completed blueprint",
+  "portableSha256": "ee80e569ade28b6a91a9fb1b8e3626d46da8446817385504ce04c008552adf52",
+  "browser": {
+    "url": "http://127.0.0.1:8927/BRANCH_WARS.html",
+    "campaign": "Department Integration QA",
+    "actions": [
+      "Reload current candidate and Continue existing Group6 campaign",
+      "Expand Overview bank retained-earnings month1 panel",
+      "Choose Defend the franchise in monthly executive decision",
+      "Stage displayed $24000 Targeted Relationship Advertising in Downtown",
+      "Mark Ready, resolve actual solo month2 with current AI, review results",
+      "Expand Overview month2 bridge and inspect rendered screenshot",
+      "Reload, Continue and verify identical month2 bridge"
+    ],
+    "month2Bridge": {
+      "opening": 14788,
+      "operatingProfit": 16592,
+      "otherNet": -24000,
+      "closing": 7380,
+      "netChange": -7408
+    },
+    "warningErrorLogs": [],
+    "scope": "Actual local browser, normal existing-campaign controls, readable inspected viewport. Not physical two-computer play, full usability or fun acceptance."
+  },
+  "isolatedLoanFoundation": {
+    "playable": false,
+    "originationChecks": 17,
+    "originationSeededCombinations": 600,
+    "servicingChecks": 11,
+    "servicingMonths": 217,
+    "transactionChecks": 13,
+    "transactionServicingMonths": 41,
+    "auditRepairs": ["Reject noncanonical reordered terms tables", "Released collateral no longer pins current property ownership; live claims still reject missing or forged owners"],
+    "kernelCeiling": {
+      "applications": 10000,
+      "contracts": 20000,
+      "originationMs": 130,
+      "servicingMs": 227,
+      "transactionMs": 240,
+      "rawBytes": 12873341,
+      "moduleSha256": "7f8fedaa73928b4d4d574581a8545ae13ca49c1e3cb525857d3b3c5b46431252"
+    },
+    "codec": {
+      "checks": 5,
+      "contracts": 20000,
+      "encodingMs": 97,
+      "decodingMs": 104,
+      "rawFixtureBytes": 13373341,
+      "encodedFixtureBytes": 1945681,
+      "reductionPercent": 85,
+      "canonicalFixtureSha256": "de9eae9235ac2202299828dcf830a21ad8041a8ceab10f7d3ad00f1518ca33aa",
+      "portfolioStorageUtf16Bytes": 215588,
+      "existing120MonthCampaignPlusCandidateWrapperStorageUtf16Bytes": 3180576,
+      "wrapperSchemaAccepted": false,
+      "storageNote": "Exact existing storage-codec round trip, not a new accepted game schema or real browser/GitHub payload test"
+    },
+    "corporateCandidate": {
+      "checks": 15,
+      "legacyExactMonths": 96,
+      "corporateLoanFixtureMonths": 82,
+      "candidateSha256": "c7e802c95b160fee0acd274fdbeea50ddc9ace665507320778e1b175b4528d26",
+      "publicStatementChecks": 7,
+      "publicStatementFixtureMonths": 16,
+      "liquidationRepair": "Opening company cash plus funded asset proceeds must equal every recovery/distribution; valid positive-cash insolvency no longer fails public validation",
+      "scope": "Actual paired bank/company loan books in isolated explicit-endowment fixtures, not earned gameplay or integrated Group7. Public projections, authoritative policy, ownership transfers, other funded borrower segments and live integration remain."
+    },
+    "limitations": "Synthetic timings are individual observations. Funded borrower economy, actual ownership transfers/losses, canonical integration, UI/AI, version boundaries and complete save/network payload limits remain required. No Group7 creation or historical save upgrade."
+  },
+  "ongoingChecks": {
+    "regulatory480Session": 6730,
+    "regulatory480Source": "C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-ee80e569-balance-source",
+    "note": "Handles must be polled for current authority. This record is not proof they remain live or that checks passed."
+  },
+  "completedBalanceChecks": {
+    "fullWindows": {
+      "status": "PASS",
+      "suites": 158,
+      "baseline": "reports/baselines/N-00-2026-09-08T10-29-58-995Z.json",
+      "baselineSha256": "1b3460bf3f3935415f69ca5d48f893d464fd5b7425b34faac169df45e7395fcf",
+      "outerBalance": "reports/baselines/release-balance-2026-09-08T11-09-41-295Z.json",
+      "outerBalanceSha256": "b8f0c358372e47ff5861208d454c7e3d43d32a623b91d01812c84a4ba8b7042b",
+      "outerEstablishedProfileMonths": 1920,
+      "limitations": "Frozen current portable; no physical multiplayer acceptance. Subsequent exact-byte fixture packaging changed the harness, not engine or expectations; targeted revalidation is separate."
+    },
+    "matrix": {
+      "status": "PASS",
+      "report": "reports/qa/department-group6-ee80e569-matrix192.json",
+      "sha256": "44717ac1d1d2e472bc72201d71b2f0f210fb177bf36dc3d5c0fc1d7dbe0ee101",
+      "campaigns": 8,
+      "months": 192,
+      "replays": 24,
+      "minimumCapitalRatioPercent": 7.529751104804587,
+      "peakDepositSharePercent": 59.36867330632859,
+      "lossBankMonths": 38,
+      "sourceAndPortableUnchanged": true,
+      "limitations": "Four scenarios by two seeds; no bank endings. No agency/leader/specialist launch in these first24-month samples."
+    },
+    "balanced120": {
+      "status": "PASS",
+      "report": "reports/qa/department-group6-ee80e569-balanced120.json",
+      "sha256": "00e2fbf603b2317f0f932afe7f4a9a9e1291d7172b3f8a014cc28cb9e9d9f9df",
+      "months": 120,
+      "replays": 11,
+      "terminalBankFailure": false,
+      "sourceAndPortableUnchanged": true,
+      "actions": {"construction": 7, "conversions": 8, "renovations": 7, "appointments": 0, "specialistHires": 1, "agencyLaunches": 2},
+      "agencyFailures": 1,
+      "finalLoans": [312371,265375],
+      "finalDepositSharePercent": [53.43515739149992,46.56484260850007],
+      "finalRetainedEarnings": [47402,2542512],
+      "limitations": "Both banks survive and both agencies launch; one agency fails. Loan books still shrink and all6 final offices are ATMs; narrow strategies and remaining origination constraints need investigation. Survival is not gameplay/balance acceptance."
+    }
+  }
+}

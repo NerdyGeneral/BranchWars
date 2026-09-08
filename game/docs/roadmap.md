@@ -82,7 +82,7 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
 | 04e | Bounded supporting competitors/partners without privileged resources | Partial: outside books/defense/company finance and finite carrier premium/commission payments; selectable carrier/platform/distribution relationships and carrier events remain. |
 | 05a | Distinct facilities, upkeep, staff/capacity and attributed contribution | Partial: Group 5 candidate integrates micro/ATM, financial centers/hubs, physical quarter-FTE, finite support and expense attribution. Wealth offices remain blocked pending licensed subsidiary; integrated long-run/UI acceptance remains. |
 | 05b | Identified-office upgrades/conversion/condition/renovation/closure/disruption | Partial: existing paid conversion/history plus Group 5 condition, ramp-up, funded maintenance, shared execution renovation/cancellation and next-month activation. Targeted actual integration and simulated transports pass; final acceptance remains. |
-| 05c | Departments, skills/pay, workload/service/training and specialists | Partial: four roles/workforce; wider credit/collections, technology, treasury, risk, people and subsidiary responsibilities remain. |
+| 05c | Departments, skills/pay, workload/service/training and specialists | Partial: Group 6 candidate wires eight functions, finite paid vendors and shared physical staff, actual consumer/pipeline delivery, budgets, disruption recovery and owner UI. Targeted checks pass; full candidate gate/long balance and wider subsidiary responsibilities remain. |
 | 05d | Department budgets/reserves, outsourcing, leaders and bounded delegation | Partial: Group 4 candidate adds envelopes, three paid leadership profiles, compensation/payables, experience/history and explicit bounded draft proposals; shared-budget/teaching corrections now verified; wider leadership/department catalog remains. |
 | 05e | Separate execution/operating capacity, persistent policies and visible exceptions | Partial: current limits; delegated draft/ledger actions must obey caps and never borrow, close, acquire or submit autonomously. |
 | 06a | Simultaneous products and segment/channel deployment | Partial: three-family lending; broader consumer/deposit/small-business/mortgage/commercial/CRE/treasury catalog with shared funding/capacity remains. |
@@ -128,17 +128,38 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
    Add only required agency dependencies ahead of the first playable slice.
    Group 5 now covers paid lifecycle work and limited actual three-turn UI play;
    the combined renovation/conversion budget repair preserves one opening funding
-   envelope. Eight-function department allocation/vendor work is an isolated
-   candidate only, not an integrated or completed row: finite paired vendors,
-   exact retained task attribution, role-specific dispatch and a guarded UI have
-   isolated tests. Live workload consumers, post-raid fulfillment, new-version
-   boundaries, shared physical-pool settlement and rendered integration remain.
+   envelope. Eight-function allocation/vendor work is now partially integrated
+   in Group 6/save 9.5 development source and portable, not a verified release or completed
+   row. Finite paid vendors, task dispatch, version/privacy boundaries and owner
+   controls have targeted evidence. Shared fee/execution budgets, real pipeline
+   capacity, disruption recovery and 16 live UI checks now have targeted evidence.
+   A 49-month matrix found an AI conversion reservation conflict; its saved case
+   is repaired with the conversion retained. A second matrix passed 192 months;
+   the later exact-build 120-month run exposed AI origination starvation. A guarded
+   capacity reallocation and an owner earnings bridge are integrated in candidate
+   `ee80e569...`. Its frozen Windows baseline passes 158 suites; exact-build
+   192-month/eight-campaign and 120-month characterization also pass. The full
+   gate's outer 1,920 older-profile months pass separately; the frozen Group6
+   480-month run remains pending. The later lossless fixture-packaging harness
+   repair is separately revalidated; no
+   artificial funding or broad project/research suppression is authorized by this fix.
+   Delayed-plan/state/recall and sealed-checkpoint transport fences are also under
+   expanded regression. The first Group 6 full Windows run passed 150/156 suites;
+   all six failures now pass in the fresh 158-suite baseline. The 120-month run
+   still finds shrinking loan books, all-ATM convergence, zero morale and
+   unproductive partial facility staffing. Address these measured constraints,
+   rather than treating survival as strategic-variety acceptance. Both agencies
+   launched; one failed. Final combined expansion acceptance remains required.
    Frozen Group 5 baseline now passes 145 suites and its full outer gate passes;
    the outer 1,920-month older regional-profile test is not a Group 5 campaign.
    Full blueprint acceptance remains separate in release status.
 3. **Living portfolio/relationships:** broader bank products/terms/exposures,
    research implementation/adoption/upkeep and marketing/separable wallets in
    coherent playable slices, not independent minigames.
+   An isolated seven-offer contract/servicing/borrower-transaction kernel has
+   positive and boundary tests. It is not in the manifest or a completed row:
+   actual funded borrower books, canonical transfer/loss handling, attributed
+   interest claims, compact storage and player/AI/transport integration remain.
 4. **Brokerage then wealth:** reuse entity/customer/department/distribution
    foundations; finish custody/AUM, cross-selling, support and wind-down stress.
 5. **Equity then control:** six issuers, finite call auction, diligence/financing,
@@ -153,6 +174,34 @@ passes. Human fun/recovery/multi-session and physical two-computer play remain
 acceptance tasks, never certified by simulations or two local browser clients.
 
 ## Approved content breadth
+
+### Next living-portfolio implementation boundary (not implemented)
+
+After the Group 6 integration gate, use a new historical rules boundary for the
+broader portfolio; do not rewrite Groups 1–6. The proposed next boundary is Group
+7 / save 9.6, not yet registered or selectable. Extend existing credit cohorts,
+repayment, seasoning, arrears, non-accrual and collections rather than replacing
+them. The current implicit `reconcileCredit` path allocates unexplained principal
+to today's mix and its compaction omits borrower/collateral/vintage identity;
+that cannot carry newly contracted terms safely.
+
+The first runnable slice needs explicit funded origination and retained contracts
+for consumer installment/auto, small-business term/revolver, mortgage, commercial
+and CRE lending. One shared origination envelope must reconcile borrower cash/debt,
+bank cash/loan assets, finite demand, department work and collateral pledges.
+Old exposures retain their original terms through sales/acquisitions and retirement.
+Concentration limits constrain new commitments, not erase existing excesses.
+Undrawn lines are commitments, never cash. Allowance/provision/charge-off changes
+require a compatible accounting boundary and no double loss recognition.
+
+Follow with business operating accounts and a 3/6/12-month term ladder using the
+existing deposit/programme and company/service books; deposit cash cannot remain
+simultaneously spendable at the company. Lending, operating accounts, treasury
+mandates and insurance covers remain independently owned. Cross-capability
+processing/underwriting/servicing applications use existing research, deployment,
+execution and paid provider seams, with adoption and upkeep rather than immediate
+permanent bonuses. All rows 06a–06e and 07b/07c remain partial until UI, AI,
+retained obligations, actual conservation, lifecycle and long-run gates pass.
 
 - Facilities: deepen existing offices; then ATM/micro, retail, commercial, wealth,
   digital/advisory, financial centers/hubs. Reconciled costs, staffing, capacity,

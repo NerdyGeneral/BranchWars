@@ -19,3 +19,13 @@
 #facilityLifecyclePanel :focus-visible{outline:3px solid #1c72cd;outline-offset:2px}
 #facilityLifecyclePanel .credit-controls>*,#facilityLifecyclePanel .credit-summary>*{min-width:0;overflow-wrap:anywhere}
 #facilityLifecyclePanel .btn{max-width:100%;white-space:normal;margin:4px 4px 4px 0}
+#departmentFunctionsMount{min-width:0}
+#departmentFunctionsMount>details{border:1px solid #bdcddd;border-radius:10px;padding:12px;background:#f8fbff}
+#departmentFunctionsMount summary{cursor:pointer;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+#departmentFunctionsMount label{display:grid;gap:5px;min-width:0;margin:8px 0}
+#departmentFunctionsMount input,#departmentFunctionsMount select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
+#departmentFunctionsMount .credit-controls>*,#departmentFunctionsMount .credit-summary>*{min-width:0;overflow-wrap:anywhere}
+#departmentFunctionsMount .btn{white-space:normal;max-width:100%;margin:4px 4px 4px 0}
+#departmentFunctionsMount :focus-visible,.department-functions-nav :focus-visible{outline:3px solid #1c72cd;outline-offset:2px}
+.department-functions-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.department-functions-nav [aria-selected="true"]{background:#e6f0ff;border-color:#3280d9;color:#164d88}

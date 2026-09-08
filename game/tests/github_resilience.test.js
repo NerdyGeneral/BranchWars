@@ -135,6 +135,9 @@ async function main(){
  // The engine host receives commit and reveal, using actual message handling.
  const host=harness();
  host.run("ghFlush=()=>{};game=E.createGame({campaignRulesVersion:1,mode:'lan',seed:9});game.players[0].submitted=E.chooseBot(game,0)");
+ // This isolated cycle-only packet exercises a known legacy transport peer.
+ // The full two-client relay below performs the modern challenged handshake.
+ host.run('capturePeerFeatures({...E.campaignCapabilities()})');
  host.c.commit={type:'plan_commit',hash:seal.hash,cycle:seal.cycle};await host.run('handleMessage(commit)');
  assert(host.state().ghIncomingCommit);
  const stateFrame=host.state().gh.outbox.at(-1).msg;guest.c.frame=copy(stateFrame);await guest.run('handleMessage(frame)');
@@ -198,6 +201,8 @@ async function main(){
  ph.run("p2pConfig={relationshipOffersVersion:"+relationshipOffersVersion+",regionalGrowthVersion:"+regionalGrowthVersion+",advertisingVersion:"+advertisingVersion+",productProgramsVersion:"+productProgramsVersion+",segmentDepositsVersion:"+segmentDepositsVersion+",creditPerformanceVersion:"+creditPerformanceVersion+",customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
  pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
  await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
+ for(let attempt=0;attempt<4&&(!ph.state().lobby||!pg.state().lobby);attempt++){await deliver(pg,ph);await deliver(ph,pg);}
+ assert(ph.state().lobby&&pg.state().lobby,'The challenged modern relay opens both lobbies');
  assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
  pg.run('editLobbyIdentity(true)');await deliver(pg,ph);await deliver(ph,pg);
  ph.run('editLobbyIdentity(true)');await deliver(ph,pg);
@@ -241,6 +246,8 @@ async function main(){
     const growth=copy(ph.state().game.regionalGrowth),outside=copy(ph.state().game.marketEconomy),cycle=ph.state().game.cycle;
     const offers=relationshipOffersVersion&&copy(ph.state().game.players.map(p=>p.relationshipOffers));
     ph=await reloadRelay(ph);pg=await reloadRelay(pg);regionalReloads+=2;
+    for(let attempt=0;attempt<4;attempt++){await deliver(pg,ph);await deliver(ph,pg);}
+    assert(ph.run('peerFeatureStatus().compatible'),'Reload obtains fresh peer capabilities');
     assert.deepEqual(copy(ph.state().game.regionalGrowth),growth,'reload preserves settled external flow');
     assert.deepEqual(copy(ph.state().game.marketEconomy),outside,'reload does not repeat outside growth');
     ph.c.duplicate=regionalReveal;await ph.run('handleMessage(duplicate)');await deliver(ph,pg);

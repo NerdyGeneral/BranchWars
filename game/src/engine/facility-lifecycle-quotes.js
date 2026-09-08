@@ -54,6 +54,11 @@ function facilityLifecycleStagedStaff(p,draft,base) {
  const plan=JSON.parse(JSON.stringify(draft));
  const prepared=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null;
  const owner=prepared?.owner||JSON.parse(JSON.stringify(p));
+ if(p.departmentFunctions&&!p._departmentFunctionsRaw&&!p._departmentFunctionExecution){
+  const quote=departmentFunctionsQuote({cycle:p.facilityLifecycle.lastActivatedCycle},p,draft);
+  if(!quote.status.eligible)throw Error(quote.status.reason);
+  owner._departmentFunctionExecution=quote.delivery;
+ }
  owner.allocation={...(plan.allocation||p.allocation)};
  for(const role of Object.keys(ROLES))if(!Number.isInteger(owner.allocation[role])||owner.allocation[role]<0)
   throw Error('Facility staffing requires valid physical department headcount.');
@@ -67,8 +72,8 @@ function facilityLifecycleStagedStaff(p,draft,base) {
  applyServicePolicy(owner,plan.servicePolicy);applyCollectionsPolicy(owner,plan.collectionsPolicy);
  const productive=owner.departmentOffice?departmentProductiveAllocation(owner):owner.allocation;
  // Physical FTE only. Specialist productivity is not another employee.
- const staff={service:householdSalesStaff(owner,productive.service),business:commercialSalesStaff(owner),
-  lending:creditSalesStaff(owner,productive.lending),operations:productive.operations,wealth:0};
+ const staff={service:householdSalesStaff(owner,productive.service),business:departmentFunctionResidual(owner,'business',commercialSalesStaff(owner)),
+  lending:creditSalesStaff(owner,productive.lending),operations:departmentFunctionResidual(owner,'operations',productive.operations),wealth:0};
  if(!owner.serviceDesk)staff.business=Math.max(0,staff.business-(owner.serviceContracts?.length||0));
  // There is currently no licensed wealth/brokerage entity. An agency, a research
  // level, or an invented `wealthLicensed` flag is NOT a license or staffing pool.

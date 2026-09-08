@@ -96,7 +96,7 @@ async function main() {
         if(households)plan.householdPolicy={retention:50,priority:{everyday:2,connected:1,reserve:1}};
         if(collections)plan.collectionsPolicy={share:50,approach:'workout'};
         if (seat === 0) { host.c.plan = plan; host.run('E.submit(game,0,plan);syncPeers()'); }
-        else { guest.c.plan = plan; guest.run("send({type:'plan',plan})"); }
+        else { guest.c.plan = plan; guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan}):{type:'plan',plan})"); }
         await drain();
       }
       host.run('E.validatePilot(game);E.validateLedger(game)');

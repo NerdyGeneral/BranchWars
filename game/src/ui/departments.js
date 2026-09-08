@@ -48,6 +48,10 @@ function departmentUiField(key,label,value,disabled){
   return '<label for="department-'+key+'">'+label+'<input type="number" id="department-'+key+'" min="0" step="1"'+(max===undefined?'':' max="'+max+'"')+' value="'+value+'"'+disabled+'></label>';
 }
 function renderDepartments(v){
+  if(v.me.departmentFunctions)return renderDepartmentFunctionsWorkspace(v);
+  return renderDepartmentLeadership(v);
+}
+function renderDepartmentLeadership(v,navigation=''){
   const mount=$('#departmentPanel'),p=v.me;departmentUiState.revision++;
   if(!p.departmentOffice){mount.innerHTML='';mount.classList.add('hidden');departmentUiState={owner:null,open:false,revision:departmentUiState.revision,proposal:null};return;}
   mount.classList.remove('hidden');
@@ -57,7 +61,7 @@ function renderDepartments(v){
   let quoteContent;
   try{quoteContent=departmentQuoteMarkup(E.departmentBudgetQuote(p,{...draft,departmentPolicy:policy,leaderOrders:orders}));}
   catch(error){quoteContent='<p class="notice">'+esc(error.message)+' Review conflicting instructions before staging.</p>';}
-  mount.innerHTML='<details id="departmentDesk"'+(departmentUiState.open?' open':'')+'><summary>DEPARTMENTS &amp; LEADERSHIP · four operating roles</summary><section class="credit-policy group-credit-policy">'+
+  mount.innerHTML=navigation+'<details id="departmentDesk"'+(departmentUiState.open?' open':'')+'><summary>DEPARTMENTS &amp; LEADERSHIP · four operating roles</summary><section class="credit-policy group-credit-policy">'+
     '<p class="small">Persistent spending ceilings and existing-staff leadership. Envelopes are limits, not prepaid funds or extra money. Appointments and demotions remain explicit monthly orders.</p>'+
     '<details><summary>Spending envelopes, common reserve and delegation limits</summary><div class="credit-controls">'+
     departmentUiField('reserve','Common discretionary cash reserve ($)',policy.reserve,disabled)+

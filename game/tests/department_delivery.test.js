@@ -1,10 +1,9 @@
 'use strict';
-// Actual assembled engine with quarantined adapters injected in memory only.
+// Actual assembled engine and promoted pure adapters; isolated delivery fixtures.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),copy=x=>JSON.parse(JSON.stringify(x)),same=(a,b)=>assert.deepEqual(copy(a),copy(b));
 const html=require('../tools/build_game').assemble().html,ctx={console};
-const code=['department-functions.js','department-function-context.js','department-dispatch.js','department-delivery.js'].map(f=>fs.readFileSync(path.join(root,'experiments/institution',f),'utf8')).join('\n');
-vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={',code+'\nroot.BWEngine={DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,departmentProductiveAllocation,applyDecision,'),ctx);
+vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.BWEngine={departmentProductiveAllocation,applyDecision,'),ctx);
 const E=ctx.BWEngine,D=E.DepartmentFunctions,C=E.DepartmentFunctionContext,T=E.DepartmentDispatch,V=E.DepartmentDelivery;
 const roles=fn=>Object.fromEntries(D.ROLES.map(r=>[r,fn(r)])),vendors=n=>Object.fromEntries(D.IDS.map(id=>[id,n]));let checks=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}

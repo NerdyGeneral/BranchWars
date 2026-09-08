@@ -35,7 +35,7 @@ function prepareTermFunding(g,p,preview=false){
  if(policy.offer==='six'){
   const eligible=p.depositBook.cohorts.filter(c=>!c.locked&&c.remaining===0&&c.quotedCycle<cycle);
   const available=eligible.reduce((n,c)=>n+c.principal,0);
-  const amount=Math.min(Math.floor(available*.1),Math.max(0,Math.floor(p.stats.deposits*.3)-termSummary(p).locked));
+  const amount=Math.min(Math.floor(available*.1),Math.max(0,Math.floor(p.stats.deposits*.3)-termSummary(p).locked),departmentFunctionExecution(p)?Math.floor(departmentFunctionTaskFte(p,'treasury',0)*1000000):Infinity);
   const parts=marketSplit(amount,Object.fromEntries(eligible.map((c,i)=>[i,c.principal])));
   for(const [i,n]of Object.entries(parts))if(n){const c=eligible[i];c.principal-=n;p.depositBook.cohorts.push({...c,principal:n,product:'highYield',locked:true,remaining:6,quotedCycle:cycle,rate});opened+=n}
  }

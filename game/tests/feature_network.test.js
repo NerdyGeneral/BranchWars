@@ -20,7 +20,7 @@ function peers(transport,settings={},legacy=false){
   if(transport!=='gh')p.run('gh.active=false;lan={...emptyLan(),active:'+(transport==='lan')+'}');
  }
  host.c.settings=settings;host.run('Object.assign(p2pConfig,settings)');
- if(legacy)guest.run("const modernHello=makeFeatureHello;makeFeatureHello=()=>{const message=modernHello();delete message.featureRulesSupported;delete message.featureChallenge;return message}");
+ if(legacy)guest.run("const modernHello=makeFeatureHello;makeFeatureHello=()=>{const message=modernHello();delete message.featureRulesSupported;delete message.featureChallenge;delete message.turnEnvelopeSupported;return message}");
  const drain=async()=>{for(let n=0;queue.length;n++){assert(n<150,'Feature handshake did not converge');const[i,m]=queue.shift(),p=i?host:guest;p.c.frame=m;await p.run('handleMessage(frame)')}};
  return {host,guest,queue,frames,drain};
 }
@@ -120,7 +120,12 @@ async function pilotPairs(){
  assert.equal(JSON.stringify(pair.host.state().game),before,'Handshake changed simulation or sealed plans');
  // Editing into a marked profile after a legacy opening must initiate the new
  // challenge, not leave both seats permanently blocked in the lobby.
- const changed=peers('gh',base);changed.guest.run("handleMessage({type:'hello_request'})");await changed.drain();
+ const changed=peers('gh',base);
+ // A released peer supports modular rules but predates turn-envelope negotiation.
+ // Emulate both halves of the released transport. Merely stripping the outgoing
+ // capability while retaining the new incoming nonce requirement manufactures
+ // a peer that can never acknowledge a challenge (no released client did that).
+ changed.guest.run("const legacyTransportHello=makeFeatureHello;makeFeatureHello=request=>{const legacyRequest=request&&{...request};if(legacyRequest){delete legacyRequest.turnEnvelopeSupported;delete legacyRequest.turnGuestChallenge;}const message=legacyTransportHello(legacyRequest);delete message.turnEnvelopeSupported;delete message.turnGuestChallenge;return message};handleMessage({type:'hello_request'})");await changed.drain();
  assert.equal(changed.host.run('featurePeerFresh'),false);
  changeLobbyFeature(changed.host,'featureRulesVersion',true);
  if(changed.host.run('featureSelectionPending()'))assert(changed.host.confirmFeatures());
@@ -252,7 +257,7 @@ async function pricingPairs(){
    assert.equal(JSON.stringify(host.state().game),settled,'Repeated reveal changed prices or billed interest twice');
   }else{
    host.run('E.submit(game,0,pricedPlan);syncPeers()');await pair.drain();
-   guest.run("send({type:'plan',plan:pricedPlan})");await pair.drain();
+   guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan:pricedPlan}):{type:'plan',plan:pricedPlan})");await pair.drain();
   }
   assert.equal(host.state().game.cycle,2);
   assert.deepEqual(copy(host.state().game.players.map(p=>p.productPrograms.pricingBp.essential)),[25,-25]);
@@ -336,7 +341,7 @@ async function activeAgencyPairs(){
    assert.equal(JSON.stringify(host.state().game),settled,'Duplicate reveal repeated launch/cost/commission');
   }else{
    host.run('E.submit(game,0,activeAgencyPlan);syncPeers()');await pair.drain();
-   guest.run("send({type:'plan',plan:activeAgencyPlan})");await pair.drain();
+   guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan:activeAgencyPlan}):{type:'plan',plan:activeAgencyPlan})");await pair.drain();
   }
   assert.equal(host.state().game.cycle,cycle+1);
   for(const [i,p]of host.state().game.players.entries()){
@@ -406,7 +411,7 @@ async function financialGroupPairs(){for(const rules of [1,2,3]){
    await host.run('handleMessage(duplicateGroup)');await pair.drain();assert.equal(JSON.stringify(host.state().game),settled);
   }else{
    host.run('E.submit(game,0,groupPlan);syncPeers()');await pair.drain();
-   guest.run("send({type:'plan',plan:groupPlan})");await pair.drain();
+   guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan:groupPlan}):{type:'plan',plan:groupPlan})");await pair.drain();
   }
   assert.equal(host.state().game.cycle,2);
   assert.deepEqual(copy(guest.state().view.me.creditPortfolio.allocation),copy(plans[1].groupPolicy.creditAllocation));

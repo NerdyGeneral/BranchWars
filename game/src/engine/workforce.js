@@ -56,6 +56,7 @@ function workforceAllocation(p, allocation = p.allocation) {
   return Object.fromEntries(Object.keys(ROLES).map(k => [k, productive[k] + specialistBonus(p, k, allocation)]));
 }
 function specialistBusinessBonus(p, delivery = false) {
+  if(departmentFunctionExecution(p))return delivery?0:departmentFunctionResidualProductivity(p,'business',specialistBonus(p,'business'),0);
   const department = p.departmentOffice ? departmentDeliveryAllocation(p, p.serviceDesk?.policy.staff || 0) : null;
   const total = department ? department.total : p.allocation.business;
   if (!total) return 0;
@@ -111,7 +112,7 @@ function addWorkforceReport(p, report) {
   report.workforceTrainingPaused = costs.training.paused ? 1 : 0;
   for (const row of costs.training.rows) {
     report['trainingSpend_' + row.role] = row.spend;
-    report['trainingGain_' + row.role] = row.gain;
+    report['trainingGain_' + row.role] = Math.floor(row.gain*departmentFunctionCoverage(p,'people'));
     report['specialistBonus_' + row.role] = specialistBonus(p, row.role);
   }
 }
