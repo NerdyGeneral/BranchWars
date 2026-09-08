@@ -33,6 +33,7 @@ files.push('tests/deposit_pricing.test.js','tests/deposit_pricing_ui.test.js','t
 files.push('tests/deposit_pricing_transitions.test.js');
 files.push('tests/group_accounting.test.js','tests/financial_group.test.js','tests/financial_group_ui.test.js');
 files.push('tests/company_finance.test.js');
+files.push('tests/company_agency_boundary.test.js','tests/agency.test.js','tests/agency_ui.test.js','tests/agency_legacy_compat.test.js','tests/agency_peer_compat.test.js');
 files.push('tests/accounting_receivables.test.js');
 files.push('tests/company_bank_funding.test.js','tests/corporate_income.test.js');
 files.push('tests/group_foundation_compat.test.js','reports/reference-builds/BRANCH_WARS_group_822b386.html');
@@ -105,6 +106,11 @@ report.tests.push(run('Pricing contract transitions', process.execPath, ['tests/
 report.tests.push(run('Group entity accounting', process.execPath, ['tests/group_accounting.test.js']));
 report.tests.push(run('Explicit bank receivables', process.execPath, ['tests/accounting_receivables.test.js']));
 report.tests.push(run('Corporate finance kernel', process.execPath, ['tests/company_finance.test.js']));
+report.tests.push(run('Agency corporate payment boundary', process.execPath, ['tests/company_agency_boundary.test.js']));
+report.tests.push(run('Agency operating business', process.execPath, ['tests/agency.test.js']));
+report.tests.push(run('Agency controls and privacy', process.execPath, ['tests/agency_ui.test.js']));
+report.tests.push(run('Agency legacy exact compatibility', process.execPath, ['tests/agency_legacy_compat.test.js']));
+report.tests.push(run('Agency actual V2 peer compatibility', process.execPath, ['tests/agency_peer_compat.test.js']));
 report.tests.push(run('Company bank funding boundary', process.execPath, ['tests/company_bank_funding.test.js']));
 report.tests.push(run('Live corporate banking', process.execPath, ['tests/corporate_income.test.js']));
 report.tests.push(run('Preserved group foundation', process.execPath, ['tests/group_foundation_compat.test.js']));

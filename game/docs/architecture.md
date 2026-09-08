@@ -1,11 +1,11 @@
 # Architecture and development
 
-Current stabilization candidate, September 7, 2026. This describes implemented
+Current regional development checkpoint, September 8, 2026. This describes implemented
 boundaries, not every future blueprint system.
 
 ## Source of truth
 
-Edit `src/`. `src/manifest.json` lists 112 ordered assembly inputs.
+Edit `src/`. `src/manifest.json` lists 114 ordered assembly inputs.
 `tools/build_game.js` produces the standalone `BRANCH_WARS.html`, with no runtime
 package dependencies. Never hand-edit the output, frozen engines or releases.
 
@@ -32,6 +32,10 @@ package dependencies. Never hand-edit the output, frozen engines or releases.
 - `group-accounting.js`, `financial-group.js`, `company-finance.js` and
   `corporate-income.js`: parent capital, lending allocation and finite invoices.
   Receivables are not cash; paired losses reconcile.
+- `agency.js`: Group rules 3 / save 9.2 adds a separately funded commercial
+  insurance distributor, dedicated staff, renewable company-cover relationships,
+  carrier commissions, supplier invoices and ring-fenced wind-down. It does not
+  upgrade Group 1/2 campaigns or implement insurance underwriting.
 - `ledger.js` and `migration.js`: causal reporting/replay and explicit old-save
   validation without upgrading campaign rules.
 
@@ -40,6 +44,45 @@ forecast scope. Internal cash-planner helpers cannot run outside that scope.
 UI callers use exported public APIs. Test-only helper exposure must not change
 function bodies. Forecasts preserve owner/world/RNG state and cannot promise
 concealed rival behavior or future economics.
+
+### Commercial agency boundary — partial N-09
+
+The existing opt-in Group selector creates rules 3 / save 9.2 in this working
+build. Existing rules 1/save 9.0 and rules 2/save 9.1 retain their exact boundaries.
+Initialization creates the versioned company economy before the agency; the
+completed game is stamped afterward. Agency settlement runs once after company
+operations and before final group-capital settlement. It uses existing parent
+cash, never an expected same-month bank dividend, and reserves committed bank
+support before allowing agency investment or standing support.
+
+`agencyEconomy` owns 18 relationships: six stable company identities multiplied
+by property, liability and benefits cover. These are independent of banking
+mandates and company ownership. Companies pay premiums to a finite carrier book;
+the carrier pays the earned commission to the agency. Agency setup, recruitment
+and recurring expenses create supplier invoices and paired cash payments.
+Dedicated agency employees are not counted again in bank staff allocation.
+Parent/agency investments and distributions eliminate in consolidated books;
+wind-down pays creditors, returns actual residual cash and recognizes the
+unrecovered investment. Fully funded relaunch retains the failure count.
+
+`defaultAgencyPlan`, `normalizeAgencyPlan` and `agencyQuote` are shared by UI/AI.
+Policy fields are exactly `launch`, `capital`, `staff`, `target`, `outreach`,
+`supportCap` and `dividend`. Launch/investment/distribution are explicit one-month
+orders; staffing, targeting, outreach and the default-off support cap persist.
+Quotes are pure current-book schedules, not full-company or rival forecasts.
+Public snapshots expose company cover owners/remaining terms; subsidiary books,
+staff, profitability and sealed instructions remain owner-private.
+
+Group 3 uses presentation-only Capital / Insurance agency / Companies desks in
+`ui/financial-group.js` and `ui/agency.js`. Switching desks retains the shared
+draft and unstaged form values; render/preview cannot launch or spend. Atomic
+staging checks competing group commitments and rejects obsolete owner, month,
+campaign, draft or submitted controls. Legacy Group 1/2 layouts are unchanged.
+
+This is a commercial-agency slice, not complete N-09: household distribution,
+broader share-of-wallet, selectable carrier contracts, carrier/claim events,
+brokerage, wealth and their custody/service/failure obligations remain unfinished.
+The carrier book models premium/commission funding, not claims or underwriting.
 
 ## Multiplayer reliability
 
@@ -82,7 +125,8 @@ Export before rolling back to an older executable that cannot read this envelope
 
 Future facilities extend local capacity/projects; products extend cohorts,
 pricing/funding/servicing; subsidiaries extend separately funded group books and
-customer mandates. A parent account does not equal an implemented insurance agency.
+customer mandates. The commercial agency is now an operating entity; its presence
+does not imply that the broader subsidiary, customer-wallet or group scope is done.
 
 ## Commands
 

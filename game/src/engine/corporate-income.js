@@ -13,13 +13,14 @@ function corporateStatement(g){
   return {world,services:g.serviceAgreements.map(c=>({provider:c.owner===null?-1:g.players.findIndex(p=>p.id===c.owner),fee:c.fee,served:!c.companyClosed}))};
 }
 function withCorporateForecast(g,fn){
-  if(g.financialGroupVersion!==2)return fn();
+  if(![2,3].includes(g.financialGroupVersion))return fn();
   const previous=corporateForecastContext;corporateForecastContext=corporateStatement(g);
   try{return fn()}finally{corporateForecastContext=previous;}
 }
 function initializeCorporateEconomy(g){
-  if(g.financialGroupVersion!==2)return;
+  if(![2,3].includes(g.financialGroupVersion))return;
   g.companyEconomy=CompanyFinance.opening(g.serviceAgreements.map(c=>({market:c.market,baseFee:SERVICE_TYPES[c.kind].fee})));
+  if(g.financialGroupVersion===3)g.companyEconomy=CompanyFinance.withAgency(g.companyEconomy);
   g.serviceAgreements.forEach(c=>c.companyClosed=false);
   g.players.forEach((p,index)=>{
     p.accounting=AccountingPrototype.withReceivables(p.accounting);syncAccounts(p);
@@ -34,7 +35,7 @@ function corporateServiceInstructions(g){
   });
 }
 function settleCorporateEconomy(g){
-  if(g.financialGroupVersion!==2)return [];
+  if(![2,3].includes(g.financialGroupVersion))return [];
   if(g.companyEconomy.month!==g.cycle-1||g.players.some(p=>p._corporatePayment))throw Error('Corporate month already reserved.');
   g.companyEconomy=CompanyFinance.step(g.companyEconomy,{demand:g.economy.demand,services:corporateServiceInstructions(g)});
   g.players.forEach((p,i)=>p._corporatePayment={cycle:g.cycle,consumed:false,...g.companyEconomy.bankFlows[i]});
@@ -87,7 +88,7 @@ function postCorporateReceivables(g,p,flow,preview){
   }
 }
 function finishCorporateEconomy(g){
-  if(g.financialGroupVersion!==2)return [];
+  if(![2,3].includes(g.financialGroupVersion))return [];
   const lines=[];
   for(const p of g.players){
     if(!p._corporatePayment?.consumed)throw Error('A bank did not settle its corporate receipts.');
@@ -117,12 +118,13 @@ function validateCorporatePlayer(p,world,month){
   }
 }
 function validateCorporateSave(g){
-  if(g.financialGroupVersion!==2){
+  if(![2,3].includes(g.financialGroupVersion)){
     if(g.companyEconomy!==undefined||g.players.some(p=>p.corporate!==undefined)||
       (g.serviceAgreements||[]).some(c=>c.companyClosed!==undefined))throw Error('Unversioned company economy.');
     return;
   }
   CompanyFinance.validate(g.companyEconomy);
+  if(g.companyEconomy.version!==(g.financialGroupVersion===3?3:2))throw Error('Company rules do not match the campaign.');
   const month=g.gameOver?g.cycle:g.cycle-1;
   if(g.companyEconomy.month!==month)throw Error('Corporate settlement month does not match the campaign.');
   for(const [i,c]of g.serviceAgreements.entries()){
@@ -136,19 +138,20 @@ function validateCorporateSave(g){
   }
 }
 function projectCorporateEconomy(g,out,index){
-  if(g.financialGroupVersion!==2)return;
+  if(![2,3].includes(g.financialGroupVersion))return;
   out.me.corporate=JSON.parse(JSON.stringify(g.players[index].corporate));
   out.me.companySnapshot=corporateStatement(g);
   delete out.rival.corporate;delete out.rival.companySnapshot;
 }
 function validateCorporateView(view){
-  if(view.financialGroupVersion!==2){
+  if(![2,3].includes(view.financialGroupVersion)){
     if(view.me?.corporate!==undefined||view.me?.companySnapshot!==undefined||view.rival?.corporate!==undefined||view.rival?.companySnapshot!==undefined)throw Error('Unversioned corporate view.');return;
   }
   const companyStatement=view.me.companySnapshot;
   if(!companyStatement||Object.keys(companyStatement).sort().join()!=='services,world'||!Array.isArray(companyStatement.services)||companyStatement.services.length!==6)
     throw Error('Missing public company statements.');
   CompanyFinance.validate(companyStatement.world);
+  if(companyStatement.world.version!==(view.financialGroupVersion===3?3:2))throw Error('Company view rules do not match the campaign.');
   if(!Array.isArray(view.serviceAgreements)||view.serviceAgreements.length!==6)throw Error('Missing company service roster.');
   for(const [i,c]of companyStatement.world.companies.entries()){
     const contract=view.serviceAgreements[i];

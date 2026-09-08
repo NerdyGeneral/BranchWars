@@ -2,7 +2,7 @@
 const GROUP_SAFEGUARDS = Object.freeze({ capitalRatio: .10, depositCash: .05, subsidiaryReserveMonths: 3 });
 const CREDIT_ALLOCATION_STEPS = Object.freeze([0,25,50,75,100]);
 function initializeFinancialGroup(g, options) {
-  if (![1,2].includes(options.financialGroupVersion)) return;
+  if (![1,2,3].includes(options.financialGroupVersion)) return;
   g.financialGroupVersion = options.financialGroupVersion;
   for (const p of g.players) {
     const parent = GroupAccounting.post(GroupAccounting.opening(p.id + ':parent'), 'opening.bankOwnership',
@@ -49,12 +49,12 @@ function applyGroupPortfolio(p, plan) {
   if(p.financialGroup&&plan.groupPolicy)p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
 }
 function settleGroupCapital(g, plans) {
-  if(![1,2].includes(g.financialGroupVersion))return [];
+  if(![1,2,3].includes(g.financialGroupVersion))return [];
   const lines=[];
   for(const [index,p] of g.players.entries()) {
     const policy=plans[index].groupPolicy,quote=groupCapitalQuote(p);
     const dividend=Math.min(policy.bankDividend,quote.dividendLimit),support=Math.min(policy.bankSupport,quote.supportLimit);
-    const before=GroupAccounting.consolidate(p.financialGroup.parent,[],p.accounting);
+    const before=GroupAccounting.consolidate(p.financialGroup.parent,groupEntities(p),p.accounting);
     if(dividend) {
       const moved=GroupAccounting.bankDividend(p.accounting,p.financialGroup.parent,dividend,quote);
       p.accounting=moved.bank;p.financialGroup.parent=moved.parent;syncAccounts(p);
@@ -62,6 +62,7 @@ function settleGroupCapital(g, plans) {
     if(support) {
       const moved=GroupAccounting.capitalizeBank(p.accounting,p.financialGroup.parent,support);
       p.accounting=moved.bank;p.financialGroup.parent=moved.parent;syncAccounts(p);
+      if(p.agency)p.financialGroup.investmentBasis.bank+=support;
       // Consequences assessed critical capital earlier in the month. A paid
       // injection that actually cures it must update that same failure streak
       // before the final resolution check. Funding-covenant debt is not forgiven.
@@ -70,7 +71,7 @@ function settleGroupCapital(g, plans) {
         lines.push(p.name+' restored non-critical bank capital with funded parent support before the final resolution check.');
       }
     }
-    const after=GroupAccounting.consolidate(p.financialGroup.parent,[],p.accounting);
+    const after=GroupAccounting.consolidate(p.financialGroup.parent,groupEntities(p),p.accounting);
     if(after.equity!==before.equity||after.retainedEarnings!==before.retainedEarnings)throw Error('Group capital transfer created earnings.');
     p.financialGroup.report={cycle:g.cycle,requestedDividend:policy.bankDividend,dividend,requestedSupport:policy.bankSupport,support};
     if(dividend||support)lines.push(p.name+' moved $'+(dividend||support).toLocaleString()+
@@ -81,7 +82,7 @@ function settleGroupCapital(g, plans) {
 }
 function validateFinancialGroupPlayer(p, cycle, validateIntent = false) {
   const f=p.financialGroup,c=p.creditPortfolio;
-  if(!f||Object.keys(f).sort().join()!=='parent,report,version'||f.version!==1||
+  if(!f||Object.keys(f).sort().join()!==(p.agency?'investmentBasis,parent,report,version':'parent,report,version')||f.version!==(p.agency?2:1)||
       !c||c.version!==1||Object.keys(c).sort().join()!=='allocation,version')throw Error('Invalid Financial Group state.');
   GroupAccounting.validate(f.parent);validateCreditAllocation(c.allocation);
   if(f.parent.entityId!==p.id+':parent')throw Error('Financial Group parent belongs to another institution.');
@@ -101,30 +102,33 @@ function validateFinancialGroupSave(g) {
     if(g.players.some(p=>p.financialGroup!==undefined||p.creditPortfolio!==undefined))throw Error('Unversioned Financial Group state.');
     return;
   }
-  if(![1,2].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
+  if(![1,2,3].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
   for(const p of g.players) {
+    if(p.financialGroup?.version!==(g.financialGroupVersion===3?2:1))throw Error('Group entity rules do not match the campaign.');
     validateFinancialGroupPlayer(p,g.cycle,true);
-    GroupAccounting.consolidate(p.financialGroup.parent,[],p.accounting);
+    GroupAccounting.consolidate(p.financialGroup.parent,groupEntities(p),p.accounting);
   }
 }
 function projectFinancialGroup(g,out,index) {
-  if(![1,2].includes(g.financialGroupVersion))return;
+  if(![1,2,3].includes(g.financialGroupVersion))return;
   out.financialGroupVersion=g.financialGroupVersion;
   const me=g.players[index],rival=g.players[1-index];
   out.me.financialGroup=JSON.parse(JSON.stringify(me.financialGroup));
   out.me.creditPortfolio=JSON.parse(JSON.stringify(me.creditPortfolio));
   out.me.groupCapitalQuote=groupCapitalQuote(me);
-  out.me.groupSummary=GroupAccounting.consolidate(me.financialGroup.parent,[],me.accounting);
-  const publicTotals=GroupAccounting.consolidate(rival.financialGroup.parent,[],rival.accounting);
+  out.me.groupSummary=GroupAccounting.consolidate(me.financialGroup.parent,groupEntities(me),me.accounting);
+  const publicTotals=GroupAccounting.consolidate(rival.financialGroup.parent,groupEntities(rival),rival.accounting);
   out.rival.groupSummary={equity:publicTotals.equity,assets:publicTotals.assets,customerAssets:publicTotals.custodyAssets};
   if(out.lastPlans?.[rival.id])delete out.lastPlans[rival.id].groupPolicy;
   projectCorporateEconomy(g,out,index);
+  projectAgency(g,out,index);
 }
 function validateFinancialGroupView(view) {
   validateCorporateView(view);
-  if(view.me?.accounting&&view.me.accounting.version!==(view.financialGroupVersion===2?2:1))
+  validateAgencyView(view);
+  if(view.me?.accounting&&view.me.accounting.version!==([2,3].includes(view.financialGroupVersion)?2:1))
     throw Error('Unsupported bank accounting view for the current campaign rules.');
-  if(![1,2].includes(view.financialGroupVersion)) {
+  if(![1,2,3].includes(view.financialGroupVersion)) {
     if(view.me?.financialGroup!==undefined||view.me?.creditPortfolio!==undefined||view.rival?.groupSummary!==undefined)
       throw Error('Unversioned Financial Group view.');
     return;
@@ -132,7 +136,7 @@ function validateFinancialGroupView(view) {
   validateFinancialGroupPlayer(view.me,view.cycle);
   if(view.rival.financialGroup!==undefined||view.rival.creditPortfolio!==undefined)throw Error('Private rival group state exposed.');
   if(view.lastPlans?.[view.rival.id]?.groupPolicy!==undefined)throw Error('Private rival capital instructions exposed.');
-  const expected=GroupAccounting.consolidate(view.me.financialGroup.parent,[],view.me.accounting);
+  const expected=GroupAccounting.consolidate(view.me.financialGroup.parent,groupEntities(view.me),view.me.accounting);
   if(!view.me.groupSummary||Object.keys(view.me.groupSummary).sort().join()!==Object.keys(expected).sort().join()||
       Object.keys(expected).some(key=>view.me.groupSummary[key]!==expected[key]))throw Error('Owner group totals do not reconcile.');
   const summary=view.rival.groupSummary;
