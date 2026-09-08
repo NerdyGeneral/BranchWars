@@ -22,6 +22,19 @@ function transact(s){
  for(const b of s.borrowers){const ps=r.postings.filter(p=>p.borrowerId===b.id);assert(ps.reduce((n,p)=>n+p.principalPaid+p.recognizedInterestPaid+p.suspendedInterestPaid,0)<=Math.max(0,b.cash-b.protectedCash));}
  return r;
 }
+test('purchased revolving basis survives par draws and amortizes only on funded repayment',()=>{
+ for(const basis of [-1001,1001]){
+  const cs=opened();cs[0].basisAdjustment=basis;
+  const s=snapshot(cs),drawn=Loan.transactContracts(s);assert.equal(drawn.contracts[0].basisAdjustment,basis);assert.equal(drawn.postings[0].bank.earnings,0);
+  const serviced=settle(drawn.contracts,3,1000000),r=Loan.transactContracts(snapshot(serviced,'repay',10000)),p=r.postings[0];
+  assert.equal(p.bank.loanBasisAdjustment,-Number(BigInt(basis)*10000n/40000n));
+  assert.equal(p.bank.cash+p.bank.loans+(p.bank.loanBasisAdjustment||0)+p.bank.receivables,p.bank.equity);
+  assert.equal(p.borrower.interestExpense,0);assert.equal(p.bank.earnings,p.bank.loanBasisAdjustment);
+  const next=settle(r.contracts,4,1000000),paid=Loan.transactContracts(snapshot(next,'repay',1000000));
+  assert.equal(paid.contracts[0].basisAdjustment,0);assert.equal(paid.contracts[0].principal,0);assert.equal(paid.contracts[0].undrawn,60000);
+ }
+});
+
 test('contracted revolving draw moves actual lender cash and no income',()=>{
  const s=snapshot(opened()),r=transact(s);assert.equal(r.postings.reduce((n,p)=>n+p.draw,0),20000);
  for(let i=0;i<r.contracts.length;i++){const c=r.contracts[i];assert.equal(c.principal,s.contracts[i].principal+10000);assert.equal(c.undrawn,s.contracts[i].undrawn-10000);assert.equal(c.commitment,s.contracts[i].commitment);assert.deepEqual(c.originalTerms,s.contracts[i].originalTerms);}
@@ -71,7 +84,7 @@ test('same-pass draws and repayments cannot finance one another',()=>{
  const r=transact(s);assert.equal(r.decisions[0].filled,20000);assert.equal(r.decisions[1].filled,0);
  // Two contracts at one bank, one paying and one drawing: incoming payment is
  // not a substitute for actual opening bank liquidity.
- const both=copy(s);both.contracts[1].bankId='a';both.contracts[1].applicationId='other';both.contracts[1].id='loan:1:5:other:1:a';both.instructions[1].contractId=both.contracts[1].id;
+ const both=copy(s);both.contracts[1].bankId='a';both.contracts[1].originatorBankId='a';both.contracts[1].applicationId='other';both.contracts[1].id='loan:1:5:other:1:a';both.instructions[1].contractId=both.contracts[1].id;
  both.banks[0].cash=1000;both.borrowers[0].cash=50000;const second=transact(both);
  assert.equal(second.postings.find(p=>p.kind==='draw').draw,0);assert.equal(second.postings.find(p=>p.kind==='repay').principalPaid,20000);
 });

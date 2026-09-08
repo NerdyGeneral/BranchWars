@@ -8,22 +8,26 @@ for(const file of ['accounting','group-accounting','company-finance'])vm.runInCo
 const {A,G,C}=vm.runInContext('({A:AccountingPrototype,G:GroupAccounting,C:CompanyFinance})',context);
 const L=require('./loan-contracts');
 const V=require('./company-finance-v4')({AccountingPrototype:A,GroupAccounting:G,legacy:C,loans:L});
+const B4=require('./bank-accounting-v4')({legacy:A,GroupAccounting:G});
+const V4=require('./company-finance-v4')({AccountingPrototype:B4,GroupAccounting:G,legacy:C,loans:L});
+const Ownership=require('./loan-ownership')({accounting:B4,loans:L});
 const copy=x=>JSON.parse(JSON.stringify(x));
 const equal=(a,b)=>assert.deepEqual(copy(a),copy(b));
 const profiles=Array.from({length:6},(_,i)=>({market:'market'+i,baseFee:10000}));
 let checks=0,months=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function original(version=2){const w=C.opening(profiles);return version===3?C.withAgency(w):w;}
-function fixture(){
+function fixture(basis=false){
   // Explicit existing-rule opening endowments, not an earned campaign or a grant.
-  return {world:V.withLending(original(),['bankA','bankB']),contracts:[],collateral:[],banks:['bankA','bankB'].map(id=>({id,book:A.opening(3),legacyPrincipal:9500000,otherReceivables:0}))};
+  return {world:V.withLending(original(),['bankA','bankB']),contracts:[],collateral:[],banks:['bankA','bankB'].map(id=>({id,book:basis?B4.opening(4):A.opening(3),legacyPrincipal:9500000,otherReceivables:0}))};
 }
+const engine=f=>f.banks.some(b=>b.book.version===4)?V4:V;
 function seal(f){
   if(f.world.lending.activityMonth!==f.world.month)f=transact(f,[]);
-  if(f.world.lending.originatedMonth!==f.world.month){const s=snapshot(f);s.borrowers=[];s.applications=[];f=V.originate(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,snapshot:s,offers:[]});}
-  V.validateSettled(f.world,f.contracts);return f;
+  if(f.world.lending.originatedMonth!==f.world.month){const s=snapshot(f);s.borrowers=[];s.applications=[];f=engine(f).originate(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,snapshot:s,offers:[]});}
+  engine(f).validateSettled(f.world,f.contracts);return f;
 }
-function step(f,demand=1,services){months++;f=seal(f);return V.step(f.world,{demand,...(services?{services}:{})},{contracts:f.contracts,collateral:f.collateral,banks:f.banks});}
+function step(f,demand=1,services){f=seal(f);const result=engine(f).step(f.world,{demand,...(services?{services}:{})},{contracts:f.contracts,collateral:f.collateral,banks:f.banks});months++;return result;}
 function cash(f,extra=[]){return [f.world.outside,f.world.creditor,...f.world.companies.map(c=>c.book),...f.banks.map(b=>b.book),...extra].reduce((n,b)=>n+b.accounts.cash,0);}
 function snapshot(f,product='commercial',amount=120000){
   const c=f.world.companies[0];
@@ -37,9 +41,10 @@ function snapshot(f,product='commercial',amount=120000){
 function originate(f,product='commercial',amount=120000){
   if(f.world.lending.activityMonth!==f.world.month)f=transact(f,[]);
   const s=snapshot(f,product,amount),offers=s.banks.map(b=>({bankId:b.id,applicationId:s.applications[0].id,amount,terms:{annualRateBps:1000,feeBps:100,termMonths:L.catalog[product].terms[0],underwriting:'balanced'}}));
-  return V.originate(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,snapshot:s,offers});
+  return engine(f).originate(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,snapshot:s,offers});
 }
-function transact(f,instructions){return V.transact(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,instructions,protectedCash:Object.fromEntries([...f.banks.map(b=>b.id),...f.world.companies.map(c=>c.id)].map(id=>[id,0])),creditWork:{bankA:10,bankB:10}});}
+function transact(f,instructions){return engine(f).transact(f.world,{contracts:f.contracts,collateral:f.collateral,banks:f.banks,instructions,protectedCash:Object.fromEntries([...f.banks.map(b=>b.id),...f.world.companies.map(c=>c.id)].map(id=>[id,0])),creditWork:{bankA:10,bankB:10}});}
+function purchase(f,ratio=.9){const c=f.contracts.find(c=>c.bankId==='bankA'),result=Ownership.transfer({contracts:f.contracts,institutions:f.banks.map(b=>({...b,protectedCash:0})),trades:[{contractId:c.id,sellerId:'bankA',buyerId:'bankB',price:Math.round(c.principal*ratio)+c.servicing.interestDue}]});return {...f,contracts:result.contracts,banks:result.institutions.map(({protectedCash,...b})=>b)};}
 test('v2/v3 creation and 96 historical monthly settlements remain byte-exact',()=>{
   for(const version of [2,3])for(const demand of [0,.8,1,1.3]){
     let a=original(version),b=copy(a);
@@ -170,5 +175,44 @@ test('cash-rich insolvency distributes existing cash as well as funded asset sal
   assert.equal(r.cashAvailable,r.creditorRecovery+r.supplierRecovery+r.bankRecovery.reduce((a,b)=>a+b,0)+r.loanRecovery.reduce((a,b)=>a+b,0)+r.equityDistribution);
   assert(r.cashAvailable>r.proceeds);assert.equal(cash(f,[carrier]),total);V.validate(f.world,f.contracts);
   for(const field of ['openingCash','cashAvailable']){const bad=copy(f.world);bad.companies[0].resolution[field]++;assert.throws(()=>V.validate(bad,f.contracts),/Liquidation cash/);}
+});
+test('actual purchased corporate claims service and prepay without charging borrower basis',()=>{
+  const original=originate(step(fixture(true))),f=purchase(original),before=cash(f),purchased=f.contracts.find(c=>c.originatorBankId==='bankA'),buyer=f.banks.find(b=>b.id==='bankB');
+  assert.equal(cash(f),cash(original));assert.equal(purchased.basisAdjustment,-6000);assert.equal(buyer.book.accounts.loanBasisAdjustment,-6000);
+  equal(f.world,original.world);let r=step(f);assert.equal(cash(r),before);const held=r.contracts.find(c=>c.id===purchased.id);
+  assert.equal(r.world.companies[0].report.loanInterest,1000);assert(held.basisAdjustment>-6000);
+  assert.equal(r.banks.find(b=>b.id==='bankB').book.retainedEarnings-buyer.book.retainedEarnings,1000+held.basisAdjustment+6000);
+  const interest=r.world.companies[0].report.loanInterest;r=transact(r,[{contractId:held.id,borrowerId:held.borrowerId,kind:'repay',amount:1000}]);
+  assert.equal(r.world.companies[0].report.loanInterest,interest);assert.equal(cash(r),before);assert(r.contracts.find(c=>c.id===held.id).basisAdjustment>held.basisAdjustment);
+  r=step(r);r=transact(r,r.contracts.map(c=>({contractId:c.id,borrowerId:c.borrowerId,kind:'repay',amount:c.principal+c.servicing.interestDue+c.servicing.suspendedInterest})));
+  assert(r.contracts.every(c=>!c.principal&&!c.basisAdjustment));assert(r.banks.every(b=>!b.book.accounts.loanBasisAdjustment));assert.equal(cash(r),before);V4.validate(r.world,r.contracts);
+});
+test('legacy bank accounting cannot conceal offsetting nonzero purchase bases',()=>{
+  const f=originate(step(fixture())),a=f.banks.find(b=>b.id==='bankA'),b=f.banks.find(b=>b.id==='bankB'),claim=f.contracts.find(c=>c.bankId==='bankA');
+  // Funded par sale establishes both face claims at B. The following invented,
+  // offsetting purchase marks intentionally model a malformed imported state.
+  a.book=A.post(a.book,'fixture.parSale',{cash:claim.principal,loans:-claim.principal});b.book=A.post(b.book,'fixture.parPurchase',{cash:-claim.principal,loans:claim.principal});claim.bankId='bankB';
+  f.contracts[0].basisAdjustment=100;f.contracts[1].basisAdjustment=-100;assert.equal(f.contracts.reduce((n,c)=>n+c.basisAdjustment,0),0);
+  assert.throws(()=>step(f),/purchase basis/);
+  const actual=purchase(originate(step(fixture(true)))),buyer=actual.banks.find(b=>b.id==='bankB');
+  buyer.book=B4.post(buyer.book,'fixture.invalidBasisMark',{loanBasisAdjustment:1,equity:1},1);assert.throws(()=>step(actual),/purchase basis/);
+});
+test('purchased CRE retains the same real collateral lien and original borrower ownership',()=>{
+  let f=step(fixture(true));f.collateral=[{id:'property',borrowerId:'company:0',value:400000,pledgedValue:0,externalPledgedValue:0}];f=originate(f,'cre');
+  const property=copy(f.collateral),liens=f.contracts.map(c=>({id:c.id,collateral:copy(c.collateral)})),r=purchase(f);
+  equal(r.collateral,property);for(const c of r.contracts)equal(c.collateral,liens.find(p=>p.id===c.id).collateral);
+  const settled=step(r);assert.equal(settled.collateral[0].pledgedValue,property[0].pledgedValue);assert.equal(settled.collateral[0].borrowerId,'company:0');V4.validate(settled.world,settled.contracts);
+});
+test('discount/premium corporate liquidation writes off bank carrying value, borrower face debt',()=>{
+  let baseline=null;
+  for(const ratio of [.9,1.1]){
+    let f=purchase(originate(step(fixture(true)),'commercial',1000000),ratio),carrier=G.opening('third-party-carrier');
+    const paid=V4.payAgencyPremium(f.world,0,carrier,700000,f.contracts);f.world=paid.world;carrier=paid.carrier;const total=cash(f,[carrier]);f=step(f);
+    const company=f.world.companies[0];assert(company.resolution);assert.equal(cash(f,[carrier]),total);assert(f.banks.every(b=>!b.book.accounts.loanBasisAdjustment));assert(f.contracts.every(c=>!c.basisAdjustment));
+    const entry=f.bankPostings.find(p=>Object.hasOwn(p,'basisReleased'));assert(entry);assert.equal(entry.bank.loanBasisAdjustment,-entry.basisReleased);
+    assert.equal(entry.bank.earnings,entry.suspendedInterestPaid-entry.principalWrittenOff-entry.interestWrittenOff-entry.basisReleased);
+    assert.equal(company.resolution.loanWriteoff.reduce((n,x)=>n+x,0),f.bankPostings.filter(p=>Object.hasOwn(p,'principalWrittenOff')).reduce((n,p)=>n+p.principalWrittenOff+p.interestWrittenOff,0));
+    if(baseline)equal(company,baseline);else baseline=copy(company);V4.validate(f.world,f.contracts);
+  }
 });
 console.log(JSON.stringify({checks,corporateLoanMonths:months,legacyExactMonths:96,scope:'isolated explicit-endowment fixtures, not live/earned gameplay or all-borrower integration'}));
