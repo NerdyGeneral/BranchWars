@@ -21,6 +21,8 @@
 - 72 strategy campaigns / 11,498 months completed, including eight 480-month
   campaigns; no economic tuning. One legitimate capital-driven receivership.
 - Real two-computer acceptance pending; release candidate, not stable certification.
+- Hosted Linux run 21 reached its 15-minute job limit during passing regressions.
+  Increased that allowance to 30 minutes; no test was removed or skipped.
 
 ## V2 Connected Company Banking — September 7, 2026
 

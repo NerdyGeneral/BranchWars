@@ -15,7 +15,9 @@ concurrency:
 jobs:
   fast:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # The completed V2 source gate exceeded 15 minutes on hosted Linux (run21).
+    # Retain every regression; allow the expanded suite to finish.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
