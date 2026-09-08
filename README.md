@@ -2,6 +2,26 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
+## Choose your version
+
+The existing game on `main` is preserved. The root launch buttons below still
+open that game, not V2 or V3. The newer editions are separate, downloadable
+packages; extract a ZIP and use the launcher inside its own folder.
+
+| Edition | Play/download | Matching guide |
+|---|---|---|
+| Current main game (preserved) | Root launchers below / [game](game/BRANCH_WARS.html) | [Main player guide](game/docs/player-guide.md) |
+| V2 — Company Banking, stabilization RC1 | [Download V2 ZIP](releases/branch-wars-v2.zip) / [V2 files](releases/v2/README.txt) | [V2 player guide](releases/v2-player-guide.md) |
+| V3 — Regional Command / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [45-page V3 field manual](releases/branch-wars-v3-manual.pdf) |
+
+See the [version catalog and source links](releases/README.md) and
+[V3 changes, debug and balance review](releases/v3-release-report.md).
+Export your campaign before changing editions or browser addresses. Both friends
+must use the same package. A newer preview is not a guarantee of perfect balance
+or two-computer acceptance, and older executables may refuse newer saves.
+
+## Play the preserved main game
+
 Run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) to play, or [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) to host a local-network game.
 
 - [Player guide](game/docs/player-guide.md)

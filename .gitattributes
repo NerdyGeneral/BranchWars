@@ -1,0 +1,3 @@
+# Versioned player packages and guides retain their verified bytes.
+/releases/** -text
+/releases/*.pdf binary
