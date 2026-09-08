@@ -4,6 +4,21 @@ The [documentation index](../docs/README.md) is the starting point. Run
 `node tests/docs.test.js` from the game folder to verify document naming and
 local links; this gate also runs in `tests/capture_baseline.js`.
 
+## Stabilization gates
+
+From the repository root:
+
+```text
+node game/tools/check.js          fast checks
+node game/tools/check.js --full   complete Windows regression and balance audit
+```
+
+The fast gate includes committed behavioral expectations, saved-game continuation,
+override ceilings, reference freshness, docs and transport. It does not replace the
+full release gate or physical two-computer testing. `RUN_TESTS.bat` still runs the
+complete suite. Golden updates are deliberate: see [contributing](../../CONTRIBUTING.md).
+The original save fixtures must not be overwritten.
+
 ## `build_reference.js`
 
 Builds `../docs/game-reference.md` from the live engine.

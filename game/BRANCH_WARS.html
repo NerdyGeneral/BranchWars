@@ -73,6 +73,9 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .chart-me{stroke:var(--bank-me);paint-order:stroke;filter:drop-shadow(0 1px 1px #52657a)}.chart-rival{stroke:var(--bank-rival);stroke-dasharray:7 4;filter:drop-shadow(0 1px 1px #52657a)}.chart-dot-me{fill:var(--bank-me);stroke:#24364d}.chart-dot-rival{fill:var(--bank-rival);stroke:#24364d}.versus-bar .me{background:var(--bank-me)}.versus-bar .rival{background:repeating-linear-gradient(135deg,transparent 0 5px,#ffffff70 5px 7px),var(--bank-rival)}
 </style>
 <style>.region-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}.region-summary>div{padding:12px;background:#f1f6fc;border:1px solid #c5d4e3;border-radius:10px}@media(max-width:600px){.region-summary{grid-template-columns:1fr}}</style>
+<style id="lobby-ui">
+#lobbyScreen{max-width:1120px;margin:0 auto 18px}#lobbyScreen h3{margin:0 0 14px}#lobbyScreen .connection{max-width:390px;overflow-wrap:anywhere}.lobby-banks,.lobby-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:20px 0}.lobby-bank{border:1px solid #ccd7e4;border-top:5px solid var(--identity-color);border-radius:12px;padding:20px;background:#f7f9fc;overflow-wrap:anywhere}.lobby-bank h3{font-size:1.18rem;margin:12px 0!important}.lobby-bank .bank-swatch{background:var(--identity-color)}.lobby-editor{border:1px solid #d5dfe9;border-radius:12px;padding:20px}.lobby-editor label{margin-top:12px}.lobby-editor .bank-color-fields{margin:12px 0;align-items:center;flex-wrap:nowrap}.lobby-editor .bank-color-fields p{max-width:300px}.lobby-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;border-top:1px solid #d5dfe9;padding-top:14px}.lobby-footer .row{flex-wrap:wrap}#lobbyError:empty{display:none}@media(max-width:740px){.lobby-banks,.lobby-layout{grid-template-columns:1fr;gap:12px}.lobby-footer{display:block}.lobby-editor,.lobby-bank{padding:15px}}
+</style>
 </head>
 <body>
 <div class="shell">
@@ -81,7 +84,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
   <section id="startScreen" class="panel">
     <div class="kicker">OPEN A CAMPAIGN</div><div class="rule"></div>
     <div class="notice"><label><input id="rivalryPilot" type="checkbox"> Try Regional Rivalry pilot · finite local franchises, competing institutions, branch upgrades</label><div class="micro">Opt-in test campaign. No automatic score buyouts or permanent exclusions. Rebuild offices to re-enter; institutional failure still ends play. Host selects rules for linked games. Existing saves keep their original rules. Overrides the campaign-size selector.</div><label><input id="serviceExpansion" type="checkbox"> Expanded commercial services preview · dedicated staff, cross-research deployments, priced renewals</label><div class="micro">Requires Regional Rivalry. Mechanics are regression-tested; long-campaign balance is not accepted yet and early failure remains possible. Leave unchecked for the previous pilot rules. The host chooses this for both players.</div><label><input id="institutionManagement" type="checkbox"> Living institution preview · client histories, recurring research, service manager</label><div class="micro">Requires both previews above. New campaigns add relationship operations. Existing saves keep their mechanics. Both players need this build for new rules; new v8.2 saves are refused by older builds.</div><label><input id="customerNeeds" type="checkbox"> Customer needs preview · product fit and persistent service relationships</label><div class="micro">Requires all previews above. Changes new-account acquisition and onboarding costs, not existing ownership counts. Adds persistent service goodwill. New v8.4 saves require this build. Experimental balance.</div></div>
-    <div class="bank-colors"><div class="bank-color-fields"><div><label for="bankColor1">YOUR BANK COLOR / LOCAL PLAYER 1</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">AI RIVAL / LOCAL PLAYER 2 COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><p id="bankColorHelp" class="micro muted">In linked games, each friend chooses their own first color before hosting or joining. Colors are saved with the campaign. Names and solid/dashed markers distinguish matching colors.</p></div>
+    <div class="bank-colors"><div class="bank-color-fields"><div><label for="bankColor1">YOUR BANK COLOR / LOCAL PLAYER 1</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">AI RIVAL / LOCAL PLAYER 2 COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><p id="bankColorHelp" class="micro muted">Linked games open a shared lobby before play. Review both banks there, change your own name/color and confirm readiness. Colors stay attached to the bank on both computers and in saves.</p></div>
     <div class="mode-grid"><button class="mode active" data-mode="ai"><strong>Solo vs Corporate AI</strong><span>Deep campaign against one of three executive teams.</span></button><button class="mode" data-mode="hotseat"><strong>Pass &amp; Play</strong><span>Sealed simultaneous plans on one computer.</span></button><button class="mode" data-mode="lan"><strong>Intranet Room</strong><span>Join a reliable room-code game hosted on your local network.</span></button><button class="mode" data-mode="p2p"><strong>Direct P2P</strong><span>Fallback two-browser link with manually exchanged codes.</span></button><button class="mode" data-mode="gh"><strong>Repository Link</strong><span>Play across sites through a private GitHub repository.</span></button></div>
     <div id="ghGuide" class="setup hidden">
       <div class="notice"><b>PLAY BETWEEN BRANCHES — NO NETWORK SETUP.</b><br><span class="small">GitHub carries the game updates over normal web traffic. You do not need an IP address, an open port, or a connection between the two office networks.</span></div>
@@ -108,6 +111,18 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
   </section>
 
   <section id="connectScreen" class="panel hidden"><div class="kicker">CONNECTION DESK</div><div class="rule"></div><div id="connectInstructions"></div><label id="outCodeLabel" for="outCode" style="margin-top:9px">CONNECTION CODE</label><textarea id="outCode" class="field codebox" readonly></textarea><div class="row" style="margin-top:8px"><button id="copyCode" class="btn primary">[ COPY CODE ]</button><span id="copyStatus" class="small muted"></span></div><div id="answerArea" class="hidden"><label for="answerInput" style="margin-top:12px">RIVAL RESPONSE</label><textarea id="answerInput" class="field codebox" placeholder="BW7-ANSWER-..."></textarea><button id="applyAnswer" class="btn primary" style="margin-top:8px">[ COMPLETE DIRECT LINK ]</button></div><div id="connectionStatus" class="notice">Preparing connection...</div><div id="connectHint" class="small muted"></div><div class="row" style="margin-top:8px"><button id="rejoinBtn" class="btn hidden">[ PASTE A NEW HOST CODE ]</button><button id="cancelConnect" class="btn danger">[ CANCEL ]</button></div></section>
+
+  <section id="lobbyScreen" class="panel hidden" aria-labelledby="lobbyTitle">
+    <div class="section-head"><div><h2 id="lobbyTitle">CAMPAIGN LOBBY</h2><p class="small muted">Two institutions. One shared setup. The first cycle stays closed until both players confirm.</p></div><span id="lobbyConnection" class="connection" role="status"></span></div>
+    <div id="lobbyBanks" class="lobby-banks" aria-label="Lobby bank identities"></div>
+    <div class="lobby-layout">
+      <div class="lobby-editor"><h3>Your institution</h3><label for="lobbyName">BANK NAME</label><input id="lobbyName" class="field" maxlength="36"><div class="bank-color-fields"><div><label for="lobbyColor">BANK COLOR</label><input id="lobbyColor" type="color" value="#2878e0"></div><p class="small muted">Your bank keeps the same color on both computers. Host and guest labels remain visible too.</p></div><button id="lobbySave" class="btn">Save identity</button></div>
+      <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><button id="lobbySettings" class="btn">Apply settings</button></div>
+    </div>
+    <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
+    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
+    <p class="micro muted">Changes to either identity or the campaign settings clear both confirmations. Repository health describes access to GitHub, not proof that your friend's browser is still open.</p>
+  </section>
 
   <main id="gameScreen" class="hidden">
     <div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div>
@@ -362,7 +377,36 @@ function syncDoctrine(p){
  return p.doctrine}
 function syncPrimaryStrategy(p){p.primaryStrategy=leadCapability(p);return p.primaryStrategy}
 function strategyBarred(){return''}
-function projectBarred(p,key){const rank=tierRank(p),def=PROJECTS[key];if(rank>=3)return'All new projects are barred while undercapitalized.';if(rank>=1&&def&&['branch','acquisition'].includes(def.kind))return'Expansion projects are suspended under regulatory supervision.';if((p.capitalRestriction||0)>0&&def&&['branch','acquisition'].includes(def.kind))return`Board assistance suspends expansion for ${p.capitalRestriction} more cycle${p.capitalRestriction===1?'':'s'}.`;return strategyBarred(p,key)}
+function projectBarred(p,key){
+ const def=PROJECTS[key];
+ // Preserve legacy precedence: contract availability, local-office rules,
+ // regulatory restrictions, retail deployment, then service applications.
+ if(def&&def.contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';
+ if(def&&def.regionalOnly){
+  if(!regionalOperations(p))return 'Available only in new Regional Operations pilots.';
+  if(!(p.branches[p.focus]>0))return 'Requires an operating office in the focus market.';
+  const field=key==='branchService'?'service':key==='branchAutomation'?'automation':null;
+  if(field&&p.regionalOperations.markets[p.focus][field]>=2)return 'This market is already fully upgraded.';
+ }
+ const rank=tierRank(p);
+ if(rank>=3)return 'All new projects are barred while undercapitalized.';
+ if(rank>=1&&def&&['branch','acquisition'].includes(def.kind))return 'Expansion projects are suspended under regulatory supervision.';
+ if((p.capitalRestriction||0)>0&&def&&['branch','acquisition'].includes(def.kind))return `Board assistance suspends expansion for ${p.capitalRestriction} more cycle${p.capitalRestriction===1?'':'s'}.`;
+ const strategy=strategyBarred(p,key);if(strategy)return strategy;
+ if(def&&def.deploymentProduct){
+  if(!p.productDeployment)return 'Requires a new product-deployment pilot.';
+  if(p.productDeployment.ready[def.deploymentProduct])return 'Already deployed. Manage sales in Operations.';
+  const d=RETAIL_DEPLOYMENTS[def.deploymentProduct];
+  if(strategyLevel(p,d.branch)<1)return 'Complete '+STRATEGY_BRANCHES[d.branch].name+' tier 1 first. Research benefits apply next cycle.';
+ }
+ const app=SERVICE_APPLICATIONS[key];if(!app)return '';
+ if(!p.serviceDesk)return 'Requires a new expanded-service pilot.';
+ const current=p.serviceDesk.applications[app.app];
+ if(current===app.route||current==='build')return 'Already deployed. Activation is managed in Markets > Service Desk.';
+ if(app.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+app.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
+ if(p.projects.some(x=>SERVICE_APPLICATIONS[x.key]&&SERVICE_APPLICATIONS[x.key].app===app.app))return 'This application already has a deployment in progress.';
+ return '';
+}
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
@@ -375,12 +419,15 @@ function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
 function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return n>0?n:0}
 function planBudget(p,plan){
+ if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
- const projects=initiatives.reduce((sum,key)=>sum+(PROJECTS[key]?projectCost(p,PROJECTS[key]):0),0);
+ const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
  const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
  const hires=planHires(plan),recruiting=hires?hireCost(p,hires):0,total=action+projects+research+recruiting;
- const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(k=>PROJECTS[k]).filter(Boolean));
- return{action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
+ const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
+ return quote;
 }
 function fundingStep(p,plan,key,step){
  const spent=capabilitySpend(p,key),tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;
@@ -392,7 +439,82 @@ function fundingStep(p,plan,key,step){
 }
 function strategyCostMultiplier(){return 1}
 function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
-function projectCost(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0}let cost=def.cost;if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;return Math.max(0,Math.round(cost))}
+function projectCost(p,def){
+ let cost;
+ if(def.strategy){
+  const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
+  cost=node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0;
+ }else{
+  cost=def.cost;
+  if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
+  if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
+  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  cost=Math.max(0,Math.round(cost));
+ }
+ // Local entry pricing applies after the existing whole-dollar rounding.
+ return regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):cost;
+}
+function projectDefinition(key){return Object.prototype.hasOwnProperty.call(PROJECTS,key)?PROJECTS[key]:null}
+function projectTerms(p,key,focus=p.focus){
+ const def=projectDefinition(key);if(!def)return null;
+ const owner=focus===p.focus?p:{...p,focus};
+ return {key,cost:projectCost(owner,def),cycles:projectCycles(owner,def),capacity:projectCapacity(def),
+  barred:projectBarred(owner,key),running:p.projects.some(x=>x.key===key),
+  retired:!!def.legacy,atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
+  branchFull:!!(def.kind==='branch'&&p.branches[focus]>=3)};
+}
+function projectPlanStatus(p,plan){
+ const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan);
+ const fail=(code,reason)=>({eligible:false,code,reason,quote});
+ let load=usedCapacity(owner);
+ for(const key of chosen){
+  const def=PROJECTS[key],terms=projectTerms(owner,key,plan.focus);
+  if(!terms)return fail('unknown','That strategic project does not exist.');
+  if(key==='capital')return fail('capital-action','Capital requests are now an emergency board action.');
+  if(terms.retired)return fail('retired',def.name+' is retired and can no longer be started.');
+  if(terms.running)return fail('running',def.name+' is already under way.');
+  load+=terms.capacity;
+  if(load>quote.capacity+1e-9)return fail('capacity',`This plan needs ${load.toFixed(1)} execution capacity but staffs only ${quote.capacity.toFixed(1)}. Assign more bankers to Operations & Risk or start fewer initiatives.`);
+  if(terms.branchFull)return fail('branch-full','That market already has maximum branch capacity.');
+  if(terms.atMaximum)return fail('maximum','That capability is already at maximum level.');
+  if(terms.barred)return fail('barred',terms.barred);
+ }
+ if(owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
+ if(owner.accounting&&quote.remaining<0)return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
+ if(regionalOperations(owner)){
+  const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
+  const projects=chosen.filter(local),active=owner.projects.filter(x=>x.target===plan.focus&&local(x.key));
+  if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
+ }
+ if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
+ if(p.serviceDesk){
+  const apps=chosen.filter(key=>SERVICE_APPLICATIONS[key]).map(key=>SERVICE_APPLICATIONS[key].app);
+  if(new Set(apps).size!==apps.length)return fail('application-conflict','Choose one deployment route per service application.');
+ }
+ return {eligible:true,code:null,reason:'',quote};
+}
+function projectTargetIssue(g,p,def,focus){
+ if(!def.target)return '';
+ const territory=g.territories[focus],index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
+ if(!territory||!unlocked(g,territory))return 'Choose an open focus market.';
+ if(territory.exited&&territory.exited[index])return 'Your institution permanently exited that market. Choose an operating market.';
+ return '';
+}
+function projectStartStatus(g,p,key){
+ const terms=projectTerms(p,key),def=PROJECTS[key];
+ const fail=code=>({eligible:false,code,terms});
+ if(!terms)return fail('unknown');
+ if(usedCapacity(p,[def])>executionCapacity(p))return fail('capacity');
+ if(terms.running)return fail('running');
+ if(projectTargetIssue(g,p,def,p.focus)||terms.branchFull)return fail('target');
+ if(terms.atMaximum)return fail('maximum');
+ if(terms.barred)return fail('barred');
+ if(key==='capital'&&p.stats.influence<8)return fail('influence');
+ if(p.stats.cash<terms.cost)return fail('cash');
+ // The capital reserve is a planning constraint. Rechecking it here after
+ // executive/rival effects would change already accepted campaign rules.
+ return {eligible:true,code:null,terms};
+}
 function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
@@ -412,10 +534,97 @@ function normalizeAllocation(p){for(const k of Object.keys(ROLES))p.allocation[k
 function chooseEvent(g){let pool=EVENTS.filter(e=>!g.event||e.key!==g.event.key),fav={rate:['ratewar','downturn'],regulatory:['audit','fraud','cyber'],growth:['closure','viral','board']}[g.scenario]||[];pool=pool.concat(pool.filter(e=>fav.includes(e.key)),pool.filter(e=>fav.includes(e.key)));return pick(pool)}
 function makeOpportunities(g){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)).map(([k])=>k),types=shuffled(Object.keys(OPPORTUNITY_TYPES)).slice(0,3);return types.map((type,i)=>{const t=OPPORTUNITY_TYPES[type],market=pick(open),value=Math.round(t.base*(.78+simulationRandom()*.55)/10000)*10000;return{id:`${g.cycle}-${i}-${rint(100,999)}`,type,market,value,name:t.name,dept:t.dept,desc:t.desc}})}
 function chooseEconomy(g,initial=false){const pools={balanced:['steady','steady','expansion','tight','recovery','downturn'],rate:['tight','tight','tight','steady','downturn'],regulatory:['steady','tight','downturn','recovery'],growth:['expansion','expansion','expansion','steady','recovery']},prior=g.economy&&g.economy.key,next=initial?pick(pools[g.scenario]||pools.balanced):pick((pools[g.scenario]||pools.balanced).filter(x=>x!==prior));g.economy={key:next,...MACRO_REGIMES[next]};return g.economy}
-function createGame(o){const scope=SCOPES[o.scope]?o.scope:'national',g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};g.players[0].focus='downtown';g.players[1].focus='northside';for(const p of g.players)for(const k of Object.keys(g.territories))p.branches[k]=0;g.players[0].branches.downtown=1;g.players[1].branches.northside=1;g.players[0].facilityMarkets.downtown=['retail'];g.players[1].facilityMarkets.northside=['retail'];g.territories.downtown.shares=[56,44];g.territories.northside.shares=[44,56];if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);delta(p,'cash',250000)});if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;p.stats.attention=14});if(g.scenario==='growth')g.players.forEach(p=>{p.stats.cash=2850000;p.stats.morale=73;p.stats.momentum=58});g.players.forEach(syncDoctrine);chooseEconomy(g,true);g.event=chooseEvent(g);g.opportunities=makeOpportunities(g);addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');captureTrend(g,0);return g}
+function createBaseCampaign(o){
+ const scope=SCOPES[o.scope]?o.scope:'national';
+
+ const g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',
+  cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],
+  players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],
+  territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],
+  gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};
+ g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));
+ for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};
+ g.players[0].focus='downtown';
+ g.players[1].focus='northside';
+ for(const p of g.players)for(const k of Object.keys(g.territories))p.branches[k]=0;
+ g.players[0].branches.downtown=1;
+ g.players[1].branches.northside=1;
+ g.players[0].facilityMarkets.downtown=['retail'];
+ g.players[1].facilityMarkets.northside=['retail'];
+ g.territories.downtown.shares=[56,44];
+ g.territories.northside.shares=[44,56];
+ if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);
+ delta(p,'cash',250000)});
+ if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;
+ p.stats.attention=14});
+ if(g.scenario==='growth')g.players.forEach(p=>{p.stats.cash=2850000;
+ p.stats.morale=73;
+ p.stats.momentum=58});
+ g.players.forEach(syncDoctrine);
+ chooseEconomy(g,true);
+ g.event=chooseEvent(g);
+ g.opportunities=makeOpportunities(g);
+ addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');
+ captureTrend(g,0);
+ return g;
+}
+function validateCreationOptions(o){
+ // Match the former outer-to-inner checks, including errors on disabled features.
+ if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
+ if(o.serviceExpansionVersion!==undefined&&![0,1].includes(o.serviceExpansionVersion))throw Error('Unsupported service expansion');
+ if(o.contractRulesVersion!==undefined&&![0,1].includes(o.contractRulesVersion))throw Error('Unsupported service contracts');
+ if(o.productDeploymentVersion!==undefined&&![0,1].includes(o.productDeploymentVersion))throw Error('Unsupported product deployment');
+ if(o.retailLifecycleVersion!==undefined&&![0,1].includes(o.retailLifecycleVersion))throw Error('Unsupported retail lifecycle');
+ if(o.termFundingVersion!==undefined&&![0,1].includes(o.termFundingVersion))throw Error('Unsupported term funding');
+ if(o.depositProductsVersion!==undefined&&![0,1].includes(o.depositProductsVersion))throw Error('Unsupported deposit products');
+ if(o.fundingCovenantVersion!==undefined&&![0,1].includes(o.fundingCovenantVersion))throw Error('Unsupported funding covenant');
+ if(o.creditLifecycleVersion!==undefined&&![0,1].includes(o.creditLifecycleVersion))throw Error('Unsupported credit lifecycle');
+ if(o.marketEconomyVersion!==undefined&&![0,1].includes(o.marketEconomyVersion))throw Error('Unsupported market economy');
+ if(o.regionalEconomyVersion!==undefined&&![0,1].includes(o.regionalEconomyVersion))throw Error('Unsupported regional economy version');
+ if(o.campaignRulesVersion!==undefined&&o.campaignRulesVersion!==1)throw Error('Unsupported campaign rules');
+}
+function createGame(o){
+ validateCreationOptions(o);
+ // A pilot has always forced regional scope and funding v2. Do not mutate options.
+ const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
+ const g=createSeededCampaign(baseOptions);
+ // Order is part of the save/replay contract. Later stages depend on earlier books.
+ initializeRegionalPilot(g,o);
+ initializeRegionalOffices(g,o);
+ initializeMarketBooks(g,o);
+ initializeCreditBooks(g,o);
+ initializeFundingCovenants(g,o);
+ initializeDepositBooks(g,o);
+ initializeTermFunding(g,o);
+ initializeRetailOffers(g,o);
+ initializeProductDeployments(g,o);
+ initializeServiceContracts(g,o);
+ initializeServiceDesk(g,o);
+ initializeManagement(g,o);
+ initializeRelationships(g,o);
+ initializeCustomerDemand(g,o);
+ initializeCustomerGoodwill(g,o);
+ return g;
+}
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
 function applyDecision(g,p,choice){p.turnEffects={};const a=choice==='a';switch(g.event.key){case'quiet':a?delta(p,'momentum',4):delta(p,'compliance',-4);if(a)delta(p,'compliance',2);break;case'ratewar':a?(delta(p,'cash',-100000),p.turnEffects.deposit=1.28,delta(p,'attention',2)):p.turnEffects.profit=1.15;break;case'staffing':a?(delta(p,'cash',-70000),p.turnEffects.service=1.22,delta(p,'morale',-2)):(delta(p,'reputation',-3),delta(p,'morale',-4));break;case'audit':a?(delta(p,'cash',-130000),delta(p,'compliance',-12),delta(p,'attention',-6)):(p.turnEffects.audit=true);break;case'community':a?(delta(p,'cash',-90000),delta(p,'reputation',6),p.turnEffects.market=1.18):delta(p,'influence',-2);break;case'outage':a?(delta(p,'cash',-160000),p.turnEffects.resilience=3):p.turnEffects.outage=true;break;case'stretch':a?(delta(p,'influence',7),delta(p,'morale',-5),delta(p,'attention',3)):(delta(p,'morale',3),delta(p,'attention',5));break;case'fraud':a?(delta(p,'compliance',-7),delta(p,'cash',-60000),p.turnEffects.production=.9):(delta(p,'cash',90000),delta(p,'compliance',9),delta(p,'attention',5));break;case'downturn':a?(p.turnEffects.lending=.7,delta(p,'compliance',-4)):(p.turnEffects.lending=1.15,delta(p,'compliance',7));break;case'closure':a?(delta(p,'cash',-140000),p.turnEffects.market=1.35,p.turnEffects.deposit=1.2):p.turnEffects.market=1.12;break;case'talent':a?(delta(p,'cash',-120000),delta(p,'morale',8)):delta(p,'morale',-7);break;case'viral':a?(delta(p,'cash',-75000),delta(p,'reputation',7),p.turnEffects.market=1.16):delta(p,'reputation',3);break;case'board':a?(delta(p,'influence',9),delta(p,'attention',6)):(delta(p,'influence',4),delta(p,'attention',1));break;case'cyber':a?(delta(p,'cash',-150000),p.turnEffects.resilience=3):p.turnEffects.cyber=true;break;case'coffee':a?(delta(p,'cash',-18000),delta(p,'morale',8)):delta(p,'morale',-5);break;case'manager':a?(delta(p,'cash',-55000),delta(p,'reputation',4),delta(p,'influence',4)):p.turnEffects.manager=true;break;case'fintech':a?(delta(p,'cash',-140000),p.turnEffects.digital=1.5,p.turnEffects.service=1.1):p.turnEffects.relationship=true;break;case'merger':a?(delta(p,'cash',-170000),p.turnEffects.recruit=true,p.turnEffects.market=1.18):delta(p,'morale',4);break;case'losses':a?(delta(p,'cash',-130000),p.turnEffects.credit=.55,delta(p,'compliance',-3)):p.turnEffects.watchlist=true;break;case'housing':a?(p.turnEffects.lending=1.35,p.turnEffects.credit=1.25,delta(p,'attention',2)):(p.turnEffects.deposit=1.24,delta(p,'cash',-50000));break;case'publicity':a?(delta(p,'influence',7),delta(p,'attention',p.stats.reputation>=70?1:6)):(delta(p,'morale',3),delta(p,'influence',2));break;case'storm':a?(delta(p,'cash',-150000),delta(p,'reputation',8),p.turnEffects.market=1.18):p.turnEffects.storm=true;break;case'activist':a?(p.turnEffects.profit=1.22,delta(p,'morale',-5),delta(p,'attention',2)):(delta(p,'attention',p.stats.influence>=35?-3:7),delta(p,'morale',3));break;case'succession':a?p.turnEffects.succession=true:(delta(p,'cash',-210000),delta(p,'staff',1),delta(p,'morale',-2),normalizeAllocation(p));break;case'vendor':a?(p.turnEffects.profit=1.1,p.turnEffects.vendor=true):(delta(p,'cash',-90000),p.turnEffects.resilience=2);break;case'expansion':a?(delta(p,'cash',350000+p.stats.influence*3500),delta(p,'attention',5),delta(p,'influence',-4)):(delta(p,'morale',4),delta(p,'attention',-2))}}
-function startProject(g,p,key,specializations={}){if(!key)return'';const def=PROJECTS[key];if(!def)return'';if(usedCapacity(p,[def])>executionCapacity(p))return'';if(p.projects.some(x=>x.key===key))return'';const target=def.target?p.focus:null,playerIndex=g.players.indexOf(p);if(def.target&&(!g.territories[target]||!unlocked(g,g.territories[target])||(g.territories[target].exited&&g.territories[target].exited[playerIndex])||(def.kind==='branch'&&p.branches[target]>=3)))return'';if(def.max&&upgradeLevel(p,key)>=def.max)return'';if(projectBarred(p,key))return'';if(key==='capital'&&p.stats.influence<8)return'';const cost=projectCost(p,def);if(p.stats.cash<cost)return'';delta(p,'cash',-cost);p.buildSpend=(p.buildSpend||0)+cost;const total=projectCycles(p,def),specialization=def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]?specializations[def.strategy]||null:null;p.projects.push({key,target,progress:0,total,...(specialization?{specialization}:{})});return`${p.name} began ${def.name}${target?` in ${g.territories[target].name}`:''} over ${total} cycle${total===1?'':'s'}.`}
+function startProject(g,p,key,specializations={}){
+ if(!key)return '';
+ const status=projectStartStatus(g,p,key),def=PROJECTS[key];
+ if(!status.eligible){
+  if(!p.serviceDesk||!status.terms)return '';
+  const reason=p.stats.cash<status.terms.cost?'cash changed before execution':
+   usedCapacity(p,[def])>executionCapacity(p)?'execution capacity changed before work could start':
+   status.terms.barred||'project availability changed before execution';
+  return p.name+' cancelled '+def.name+': '+reason+'. No project cost was charged; select it again in a later plan.';
+ }
+ const cost=status.terms.cost,target=def.target?p.focus:null,total=status.terms.cycles;
+ delta(p,'cash',-cost);p.buildSpend=(p.buildSpend||0)+cost;
+ const specialization=def.strategy&&strategyLevel(p,def.strategy)===1&&!p.specializations[def.strategy]?specializations[def.strategy]||null:null;
+ p.projects.push({key,target,progress:0,total,...(specialization?{specialization}:{})});
+ return `${p.name} began ${def.name}${target?` in ${g.territories[target].name}`:''} over ${total} cycle${total===1?'':'s'}.`;
+}
 function applyHiring(g,p,count){if(count<=0)return'';const cost=hireCost(p,count);if(p.stats.cash<cost)return'';delta(p,'cash',-cost);delta(p,'staff',count);p.hiresTotal=(p.hiresTotal||0)+count;p.payrollSpend=(p.payrollSpend||0)+cost;if(count>1)delta(p,'morale',-(count-1));normalizeAllocation(p);return`${p.name} hired ${count} banker${count===1?'':'s'} for $${cost.toLocaleString()}; they report next cycle.`}
 function applyCapitalRequest(g,p,requested){if(!requested)return'';const status=capitalRequestStatus(p);if(!status.eligible)return'';const tierFactor=[.65,.85,1,1.1,1.15][tierRank(p)],fatigue=1/(1+(p.capitalRequests||0)*.45),award=Math.round((720000+p.stats.influence*7000)*tierFactor*fatigue);p.capitalRequests=(p.capitalRequests||0)+1;p.boardConcessions=(p.boardConcessions||0)+1;p.capitalRestriction=3;delta(p,'cash',award);delta(p,'capital',award);delta(p,'influence',-10);delta(p,'attention',12);return`${p.name} accepted $${award.toLocaleString()} in emergency board capital; expansion is suspended for three cycles and enterprise value takes a permanent concession.`}
 function competitiveActionStatus(p,key){const action=COMPETITIVE_ACTIONS[key];if(!action)return{eligible:false,reason:'Unknown competitive action.'};if(p.stats.cash<action.cost)return{eligible:false,reason:`Requires $${action.cost.toLocaleString()} of available cash.`};if(action.minInfluence&&p.stats.influence<action.minInfluence)return{eligible:false,reason:`Requires ${action.minInfluence} executive influence.`};return{eligible:true,reason:action.desc}}
@@ -525,7 +734,7 @@ function planProject(g,p,focus=p.focus,allocation=p.allocation,taken=[],committe
  const spare=p.stats.cash-committed,room=executionCapacity(p,allocation)-usedCapacity(p,taken.map(k=>PROJECTS[k]));
  if(spare<150000)return null;
  const lean=spare<Math.max(150000,p.stats.deposits*.012);
- const afford=k=>spare>=projectCost(p,PROJECTS[k])&&projectCapacity(PROJECTS[k])<=room+1e-9,open=k=>!p.projects.some(x=>x.key===k)&&!taken.includes(k)&&!PROJECTS[k].legacy&&(!lean||k==='remediation')&&projectCapacity(PROJECTS[k])<=room+1e-9&&!projectBarred(p,k)&&(!PROJECTS[k].max||upgradeLevel(p,k)<PROJECTS[k].max),want=[];
+ const terms=k=>projectTerms(p,k),afford=k=>spare>=terms(k).cost&&terms(k).capacity<=room+1e-9,open=k=>!terms(k).running&&!taken.includes(k)&&!terms(k).retired&&(!lean||k==='remediation')&&terms(k).capacity<=room+1e-9&&!terms(k).barred&&!terms(k).atMaximum,want=[];
  if(p.stats.compliance>42&&afford('remediation'))want.push('remediation');
 
  if(g.territories[focus]&&unlocked(g,g.territories[focus])&&(p.branches[focus]||0)<3&&simulationRandom()<.36){const specialties=g.territories[focus].specialties||[],facilityKey=p.doctrine==='commercial'&&specialties.some(x=>['business','merchant','wealth'].includes(x))?'branchCommercial':p.doctrine==='digital'||hasSpecialization(p,'digital','customerExperience')?'branchDigital':'branch';if(afford(facilityKey))want.push(facilityKey)}if(g.cycle>6&&g.territories[focus]&&unlocked(g,g.territories[focus])&&p.stats.cash>=projectCost(p,PROJECTS.acquisition)*1.3&&g.territories[focus].shares[p===g.players[0]?0:1]<52&&simulationRandom()<.28)want.push('acquisition');const ready=want.filter(open);if(ready.length)return ready[0];const options=['marketing','remediation'].filter(k=>afford(k)&&open(k));return options.length?pick(options):null
@@ -539,8 +748,52 @@ function planHiring(g,p,committed){if(tierRank(p)>=2||p.stats.morale<45||p.stats
 function chooseCompetitiveAction(g,index){const p=g.players[index],r=g.players[1-index],cash=p.stats.cash,liquidity=p.stats.cash/Math.max(1,p.stats.deposits),last=r.lastCompetitiveAction||'none',pressure=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,candidates=[];const add=(key,weight)=>{const status=competitiveActionStatus(p,key);if(status.eligible&&cash-COMPETITIVE_ACTIONS[key].cost>=220000)candidates.push([key,weight])};if(pressure||tierRank(p)>=2)add('takeoverDefense',10+pressure*5);if(liquidity<.025||last==='depositRaid')add('liquidityDefense',8);if(last==='commercialRaid'||r.stats.business>p.stats.business*1.18)add('relationshipDefense',6);if(last==='talentRaid'||p.stats.morale<48)add('retentionDefense',7);if(r.stats.cash/Math.max(1,r.stats.deposits)<.035||tierRank(r)>=1)add('depositRaid',7+strategyLevel(p,'digital'));if(r.stats.business+r.stats.merchant>p.stats.business+p.stats.merchant*.9)add('commercialRaid',5+strategyLevel(p,'commercial'));if(r.stats.staff>6&&p.stats.influence>=20&&p.stats.morale>=45)add('talentRaid',3+strategyLevel(p,'acquisition'));if(!candidates.length)return'none';candidates.sort((a,b)=>b[1]-a[1]);const chance=g.difficulty==='analyst'?.35:g.difficulty==='chairman'?.82:.62;return simulationRandom()<chance?pick(candidates.slice(0,Math.min(2,candidates.length)))[0]:'none'}
 function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);const opportunities=[...g.opportunities].sort((a,b)=>marketOpportunityScore(g,p,b)-marketOpportunityScore(g,p,a)),opp=g.difficulty==='analyst'&&simulationRandom()<.3?null:opportunities[0],open=activeTerritories(g).filter(([,t])=>unlocked(g,t)),focus=opp?opp.market:[...open].sort((a,b)=>a[1].shares[index]-b[1].shares[index]+(b[1].value-a[1].value)/5)[0][0],allocation={...p.allocation};const opsTarget=Math.min(4,1+Math.floor(p.stats.staff/9));let desired=(allocation.operations<opsTarget)?'operations':(operationsLevel(p)>=2&&allocation.operations<2)?'operations':opp?opp.dept:p.stats.compliance>40?'operations':g.economy.key==='downturn'?'lending':'service';if(g.difficulty==='analyst')desired=pick(Object.keys(ROLES));const donor=Object.keys(allocation).filter(k=>k!==desired).sort((a,b)=>allocation[b]-allocation[a])[0];if(allocation[donor]>1){allocation[donor]--;allocation[desired]++}const deposit=g.event.key==='ratewar'||g.economy.key==='tight'?'aggressive':p.stats.cash<500000?'margin':g.scenario==='growth'?'aggressive':'balanced',lending=tierRank(p)>=1||g.economy.credit>1.3||p.stats.compliance>45?'conservative':g.scenario==='growth'?'growth':'balanced',liquidity=p.stats.cash/p.stats.deposits*100,capital=tierRank(p)>=1?'liquid':liquidity<2?'liquid':g.economy.key==='expansion'?'reinvest':'balanced',decision=(p.stats.cash<350000&&['ratewar','community','outage','talent','viral','manager'].includes(g.event.key))?'b':(p.stats.compliance>45&&['audit','fraud','cyber','losses'].includes(g.event.key))?'a':simulationRandom()<.62?'a':'b',capitalAction=capitalRequestStatus(p).eligible&&(tierRank(p)>=2||liquidity<1.25)&&simulationRandom()<.82,competitiveAction=chooseCompetitiveAction(g,index);const actionCost=COMPETITIVE_ACTIONS[competitiveAction].cost;const investments=planInvestments(g,p,actionCost);const investTotal=Object.values(investments).reduce((s,x)=>s+x,0);let newProjects=planPortfolio(g,p,focus,allocation,actionCost+investTotal);if(capitalAction)newProjects=newProjects.filter(k=>!['branch','acquisition'].includes(PROJECTS[k].kind));let running=actionCost+investTotal;newProjects=newProjects.filter(k=>{const c=projectCost(p,PROJECTS[k]);if(running+c>p.stats.cash)return false;running+=c;return true});const hires=planHiring(g,p,running);const newProject=newProjects[0]||null;const products={retail:g.economy.key==='tight'&&liquidity<2.5?'highYield':p.doctrine==='digital'||p.doctrine==='commercial'?'rewards':'essential',business:p.doctrine==='commercial'&&desired==='business'?'treasury':p.doctrine==='digital'?'entrepreneur':'relationship',credit:tierRank(p)>=1||g.economy.credit>1.3?'mortgage':g.economy.key==='expansion'&&['commercial','efficiency'].includes(p.doctrine)?'middleMarket':g.scenario==='growth'&&p.doctrine==='digital'?'consumer':'mortgage'},specializations={...p.specializations};for(const branch of Object.keys(investments)){if(strategyLevel(p,branch)>=1&&!p.specializations[branch]&&!specializations[branch]){const doctrineChoice={community:{network:'retailDensity'},commercial:{commercial:'treasury',acquisition:'dealmaker'},digital:{digital:'customerExperience'},efficiency:{operations:'lean'},people:{network:'regionalHub'}}[p.doctrine]||{};specializations[branch]=doctrineChoice[branch]||Object.keys(STRATEGY_SPECIALIZATIONS[branch])[index%2]}}return{focus,allocation,depositPolicy:deposit,lendingPolicy:lending,capitalPolicy:capital,products,specializations,opportunity:opp?opp.id:null,newProject,newProjects,investments,hires,capitalAction,competitiveAction,decision}}
 function chooseOpenBot(g,index){const plan=chooseBot(g,index),territory=g.territories[plan.focus];if(territory&&territory.exited&&territory.exited[index]){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&!(t.exited&&t.exited[index])).sort((a,b)=>a[1].shares[index]-b[1].shares[index]);if(open.length)plan.focus=open[0][0]}if(plan.opportunity){const opportunity=g.opportunities.find(o=>o.id===plan.opportunity),market=opportunity&&g.territories[opportunity.market];if(market&&market.exited&&market.exited[index])plan.opportunity=null}if(Array.isArray(plan.newProjects)&&(g.players[index].branches[plan.focus]||0)>=3)plan.newProjects=plan.newProjects.filter(k=>PROJECTS[k].kind!=='branch');plan.newProject=(plan.newProjects&&plan.newProjects[0])||null;return plan}
-function validatePlan(g,p,plan){if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');if(!DEPOSIT_POLICIES[plan.depositPolicy]||!LENDING_POLICIES[plan.lendingPolicy]||!CAPITAL_POLICIES[plan.capitalPolicy])throw Error('Choose valid operating policies.');if(!['a','b'].includes(plan.decision))throw Error('Answer the executive call.');plan.competitiveAction=plan.competitiveAction||'none';const actionStatus=competitiveActionStatus(p,plan.competitiveAction);if(!actionStatus.eligible)throw Error(actionStatus.reason);const alloc=plan.allocation;if(!alloc||Object.keys(ROLES).some(k=>!Number.isInteger(alloc[k])||alloc[k]<0)||Object.keys(ROLES).reduce((sum,k)=>sum+alloc[k],0)!==p.stats.staff)throw Error(`Allocate all ${p.stats.staff} staff members.`);if(plan.opportunity&&!g.opportunities.some(o=>o.id===plan.opportunity))throw Error('That opportunity has expired.');if(plan.capitalAction){const status=capitalRequestStatus(p);if(!status.eligible)throw Error(status.reason);if(planInitiatives(plan).some(key=>['branch','acquisition'].includes(PROJECTS[key]&&PROJECTS[key].kind)))throw Error('Board assistance cannot be combined with an expansion initiative.')}const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};let investTotal=0;for(const key of Object.keys(investments)){if(!STRATEGY_BRANCHES[key])throw Error('That capability does not exist.');const amount=Number(investments[key]);if(!Number.isFinite(amount)||!Number.isInteger(amount))throw Error('Capability investment must be a whole dollar amount.');if(amount>0&&amount<1000)throw Error('Capability investment must be at least $1,000.');if(amount<0)throw Error('Capability investment cannot be negative.');if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(STRATEGY_BRANCHES[key].name+' is already fully developed.');if(amount>CAPABILITY_CAP_PER_CYCLE)throw Error(`An institution can absorb at most $${CAPABILITY_CAP_PER_CYCLE.toLocaleString()} of investment per capability each cycle.`);if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');investTotal+=amount}
- const hires=planHires(plan);if(hires>hireLimit(p))throw Error(`You may hire at most ${hireLimit(p)} bankers in one cycle.`);const initiatives=planInitiatives(plan);let spend=COMPETITIVE_ACTIONS[plan.competitiveAction].cost+(hires?hireCost(p,hires):0)+investTotal;const budget=executionCapacity(p,alloc);let load=usedCapacity(p);for(const key of initiatives){ const def=PROJECTS[key]; if(!def)throw Error('That strategic project does not exist.'); if(key==='capital')throw Error('Capital requests are now an emergency board action.'); if(def.legacy)throw Error(`${def.name} is retired and can no longer be started.`); if(p.projects.some(x=>x.key===key))throw Error(`${def.name} is already under way.`); load+=projectCapacity(def); if(load>budget+1e-9)throw Error(`This plan needs ${load.toFixed(1)} execution capacity but staffs only ${budget.toFixed(1)}. Assign more bankers to Operations & Risk or start fewer initiatives.`); spend+=projectCost(p,def); if(def.kind==='branch'&&p.branches[plan.focus]>=3)throw Error('That market already has maximum branch capacity.'); if(def.max&&upgradeLevel(p,key)>=def.max)throw Error('That capability is already at maximum level.'); const barred=projectBarred(p,key);if(barred)throw Error(barred);}if(p.stats.cash<spend)throw Error(`This plan commits $${spend.toLocaleString()} but only $${Math.round(p.stats.cash).toLocaleString()} is available.`);}
+function validatePlan(g,p,plan){
+ if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');
+ if(regionalOperations(p))p={...p,focus:plan.focus};
+ if(!DEPOSIT_POLICIES[plan.depositPolicy]||!LENDING_POLICIES[plan.lendingPolicy]||!CAPITAL_POLICIES[plan.capitalPolicy])throw Error('Choose valid operating policies.');
+ if(!['a','b'].includes(plan.decision))throw Error('Answer the executive call.');
+ plan.competitiveAction=plan.competitiveAction||'none';
+ const actionStatus=competitiveActionStatus(p,plan.competitiveAction);if(!actionStatus.eligible)throw Error(actionStatus.reason);
+ const alloc=plan.allocation;
+ if(!alloc||Object.keys(ROLES).some(k=>!Number.isInteger(alloc[k])||alloc[k]<0)||Object.keys(ROLES).reduce((sum,k)=>sum+alloc[k],0)!==p.stats.staff)throw Error(`Allocate all ${p.stats.staff} staff members.`);
+ if(plan.opportunity&&!g.opportunities.some(o=>o.id===plan.opportunity))throw Error('That opportunity has expired.');
+ if(plan.capitalAction){
+  const status=capitalRequestStatus(p);if(!status.eligible)throw Error(status.reason);
+  if(planInitiatives(plan).some(key=>['branch','acquisition'].includes(PROJECTS[key]&&PROJECTS[key].kind)))throw Error('Board assistance cannot be combined with an expansion initiative.');
+ }
+ const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};
+ for(const key of Object.keys(investments)){
+  if(!STRATEGY_BRANCHES[key])throw Error('That capability does not exist.');
+  const amount=Number(investments[key]);
+  if(!Number.isFinite(amount)||!Number.isInteger(amount))throw Error('Capability investment must be a whole dollar amount.');
+  if(amount>0&&amount<1000)throw Error('Capability investment must be at least $1,000.');
+  if(amount<0)throw Error('Capability investment cannot be negative.');
+  if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(STRATEGY_BRANCHES[key].name+' is already fully developed.');
+  if(amount>CAPABILITY_CAP_PER_CYCLE)throw Error(`An institution can absorb at most $${CAPABILITY_CAP_PER_CYCLE.toLocaleString()} of investment per capability each cycle.`);
+  if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');
+ }
+ const hires=planHires(plan);if(hires>hireLimit(p))throw Error(`You may hire at most ${hireLimit(p)} bankers in one cycle.`);
+ const projects=projectPlanStatus(p,plan);if(!projects.eligible)throw Error(projects.reason);
+ if(plan.contractBid!=null){
+  if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');
+  const c=(g.serviceAgreements||[]).find(c=>c.id===plan.contractBid);
+  if(g.contractRulesVersion!==1||!c||c.due!==g.cycle)throw Error('Choose a service agreement due this cycle.');
+  if(plan.allocation.business<1)throw Error('Assign at least one Business banker to bid for a service agreement.');
+ }
+ if(!p.serviceDesk)return;
+ const planned={...p,allocation:plan.allocation,serviceDesk:{...p.serviceDesk,policy:plan.servicePolicy}};
+ if(plan.contractBid){
+  const c=g.serviceAgreements.find(c=>c.id===plan.contractBid),status=serviceBidStatus(planned,c);
+  if(!status.eligible)throw Error(status.reason);
+  if(c.owner===p.id)throw Error('An incumbent renews automatically; do not select a second bid.');
+ }
+ if(plan.contractExit){
+  const c=g.serviceAgreements.find(c=>c.id===plan.contractExit);
+  if(!c||c.owner!==p.id||c.due!==g.cycle)throw Error('Only decline your own agreement at its renewal.');
+  if(plan.contractBid===plan.contractExit)throw Error('Cannot bid and decline the same agreement.');
+ }
+}
 function resolveCycle(g){
  const plans=g.players.map(p=>({...p.submitted,allocation:{...p.submitted.allocation}})),before=[baseScore(g,0),baseScore(g,1)],L=[];
  g.players.forEach((p,i)=>{p.allocation=Object.fromEntries(Object.keys(ROLES).map(k=>[k,plans[i].allocation[k]]));p.policies={deposit:plans[i].depositPolicy,lending:plans[i].lendingPolicy,capital:plans[i].capitalPolicy};p.products={...p.products,...plans[i].products};if(p.termFunding&&plans[i].termPolicy)p.termFunding.policy={...plans[i].termPolicy};if(p.retailLifecycle)applyRetailMix(p,plans[i].retailMix||p.retailLifecycle.mix);applyServicePolicy(p,plans[i].servicePolicy);applyManagementPolicy(p,plans[i].management);p.focus=plans[i].focus;applyDecision(g,p,plans[i].decision);const aid=applyCapitalRequest(g,p,!!plans[i].capitalAction);if(aid)L.push(aid)});L.push(...resolveCompetitiveActions(g,plans));g.players.forEach((p,i)=>{for(const key of planInitiatives(plans[i])){const msg=startProject(g,p,key,plans[i].specializations);if(msg)L.push(msg)}});
@@ -555,8 +808,19 @@ function rematch(g,index){if(!g.gameOver)throw Error('Campaign still active.');i
 
 // Public and internal simulation entry points share the same scoped campaign RNG.
 // AI planning has its own stream, so supplied human intents do not consume world RNG.
-const createGameCore=createGame;
-createGame=function(o){const seed=o.seed===undefined?Math.floor(Math.random()*0x100000000):seedHash(o.seed),shell={simulationVersion:1,rng:{algorithm:'lcg32-v1',seed,state:seed,aiState:(seed^0x9e3779b9)>>>0}};return withRandom(shell,'state',()=>{const g=createGameCore(o);g.fundingRulesVersion=o.fundingRulesVersion===undefined?2:o.fundingRulesVersion;if(![1,2].includes(g.fundingRulesVersion))throw Error('Unsupported funding rules version.');for(const p of g.players)p.fundingRulesVersion=g.fundingRulesVersion;g.created=o.created===undefined?g.created:o.created;g.simulationVersion=1;g.rng=shell.rng;return g})};
+function createSeededCampaign(o){
+ const seed=o.seed===undefined?Math.floor(Math.random()*0x100000000):seedHash(o.seed);
+ const shell={simulationVersion:1,rng:{algorithm:'lcg32-v1',seed,state:seed,aiState:(seed^0x9e3779b9)>>>0}};
+ return withRandom(shell,'state',()=>{
+  const g=createBaseCampaign(o);
+  g.fundingRulesVersion=o.fundingRulesVersion===undefined?2:o.fundingRulesVersion;
+  if(![1,2].includes(g.fundingRulesVersion))throw Error('Unsupported funding rules version.');
+  for(const p of g.players)p.fundingRulesVersion=g.fundingRulesVersion;
+  g.created=o.created===undefined?g.created:o.created;
+  g.simulationVersion=1;g.rng=shell.rng;
+  return g;
+ });
+}
 const chooseOpenBotCore=chooseOpenBot;
 chooseOpenBot=function(g,...args){return withRandom(g,'aiState',()=>chooseOpenBotCore(g,...args))};
 const submitCore=submit;
@@ -701,10 +965,7 @@ resolveMarketExits=function(g){
  }
  return lines;
 };
-const pilotCreate=createGame;
-createGame=function(o){
- if(o.campaignRulesVersion!==undefined&&o.campaignRulesVersion!==1)throw Error('Unsupported campaign rules');
- const g=pilotCreate(o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o);
+function initializeRegionalPilot(g,o){
  if(o.campaignRulesVersion!==1)return g;
  g.campaignRulesVersion=1;
  g.regions={heartland:{name:'Heartland',markets:['downtown','northside','industrial']},growthCoast:{name:'Growth Coast',markets:['suburbs','county','university']}};
@@ -719,7 +980,7 @@ createGame=function(o){
  }
  g.trend=[];captureTrend(g,0);
  return g;
-};
+}
 const pilotCycle=resolveCycle;
 resolveCycle=function(g){
  const result=pilotCycle(g);
@@ -727,10 +988,7 @@ resolveCycle=function(g){
  return result;
 };
 function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
-const pilotBudget=planBudget;
-planBudget=function(p,plan){const q=pilotBudget(p,plan);if(p.accounting){q.capitalBudget=pilotSpendingLimit(p);q.remaining=Math.min(q.remaining,q.capitalBudget-q.total)}return q};
-const pilotValidate=validatePlan;
-validatePlan=function(g,p,plan){pilotValidate(g,p,plan);if(p.accounting&&planBudget(p,plan).remaining<0)throw Error('This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.')};
+
 const pilotBot=chooseOpenBot;
 chooseOpenBot=function(g,index){
  const plan=pilotBot(g,index);if(!pilot(g))return plan;
@@ -800,28 +1058,7 @@ function regionalProjectPreview(p,key,target){
  else if(key==='branchAutomation')state.automation=Math.min(2,state.automation+1);
  const after=regionalBranchMetrics(q);return {expense:after.expense-before.expense,depositCapacity:after.depositCapacity-before.depositCapacity,loanCapacity:after.loanCapacity-before.loanCapacity};
 }
-const regionalCost=projectCost;
-projectCost=function(p,def){const base=regionalCost(p,def);return regionalOperations(p)&&def.kind==='branch'?Math.round(base*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):base};
-const regionalBarred=projectBarred;
-projectBarred=function(p,key){
- const def=PROJECTS[key];if(def&&def.regionalOnly){
-  if(!regionalOperations(p))return 'Available only in new Regional Operations pilots.';
-  if(!(p.branches[p.focus]>0))return 'Requires an operating office in the focus market.';
-  const field=key==='branchService'?'service':key==='branchAutomation'?'automation':null;
-  if(field&&p.regionalOperations.markets[p.focus][field]>=2)return 'This market is already fully upgraded.';
- }
- return regionalBarred(p,key);
-};
-const regionalBudget=planBudget;
-planBudget=function(p,plan){return regionalBudget(regionalOperations(p)?{...p,focus:plan.focus||p.focus}:p,plan)};
-const regionalValidate=validatePlan;
-validatePlan=function(g,p,plan){
- regionalValidate(g,regionalOperations(p)?{...p,focus:plan.focus}:p,plan);
- if(!regionalOperations(p))return;
- const chosen=planInitiatives(plan),local=chosen.filter(k=>PROJECTS[k]&&(PROJECTS[k].kind==='branch'||PROJECTS[k].regionalOnly));
- const active=p.projects.filter(x=>x.target===plan.focus&&(PROJECTS[x.key].kind==='branch'||PROJECTS[x.key].regionalOnly));
- if(local.length>1||(local.length&&active.length))throw Error('Choose one office construction, upgrade or closure per market at a time.');
-};
+
 function closeRegionalOffice(p,key){
  const models=p.facilityMarkets[key]||[],model=models.pop();if(!model)return false;
  p.facilities[model]=Math.max(0,p.facilities[model]-1);p.branches[key]=models.length;
@@ -857,14 +1094,12 @@ resolveMarketExits=function(g){
  }
  return lines;
 };
-const regionalCreate=createGame;
-createGame=function(o){
- if(o.regionalEconomyVersion!==undefined&&![0,1].includes(o.regionalEconomyVersion))throw Error('Unsupported regional economy version');
- const g=regionalCreate(o);if(!pilot(g)||o.regionalEconomyVersion===0)return g;
+function initializeRegionalOffices(g,o){
+ if(!pilot(g)||o.regionalEconomyVersion===0)return g;
  g.regionalEconomyVersion=1;
  for(const p of g.players)p.regionalOperations={version:1,markets:Object.fromEntries(Object.keys(g.territories).map(k=>[k,{service:0,automation:0}]))};
  return g;
-};
+}
 const regionalPilotValidation=validatePilot;
 validatePilot=function(g){
  regionalPilotValidation(g);
@@ -951,10 +1186,8 @@ function transferMarket(g,from,to,key,resource,requested){
  const old=marketBypass;marketBypass=true;try{marketDelta(from,resource,-n);marketDelta(to,resource,n);if(sensitive){marketDelta(from,'rateSensitiveDeposits',-sensitive);marketDelta(to,'rateSensitiveDeposits',sensitive)}}finally{marketBypass=old}
  from.marketBook.markets[key][resource]-=n;to.marketBook.markets[key][resource]+=n;return n;
 }
-const marketCreate=createGame;
-createGame=function(o){
- if(o.marketEconomyVersion!==undefined&&![0,1].includes(o.marketEconomyVersion))throw Error('Unsupported market economy');
- const g=marketCreate(o);if(g.regionalEconomyVersion!==1||o.marketEconomyVersion===0)return g;
+function initializeMarketBooks(g,o){
+ if(g.regionalEconomyVersion!==1||o.marketEconomyVersion===0)return g;
  g.marketEconomyVersion=1;g.marketEconomy={version:1,markets:{}};
  for(const p of g.players){
   const weights=Object.fromEntries(Object.keys(g.territories).map(k=>[k,k===p.focus?5:1]));
@@ -966,7 +1199,7 @@ createGame=function(o){
   g.marketEconomy.markets[key]={community,union,total:Object.fromEntries(MARKET_RESOURCES.map(r=>[r,community[r]+union[r]+g.players.reduce((n,p)=>n+p.marketBook.markets[key][r],0)]))};
  }
  return g;
-};
+}
 function marketContribution(p){
  const r=p.operatingReport,books=p.marketBook.markets,metrics=regionalBranchMetrics(p),rows=Object.fromEntries(Object.keys(books).map(k=>[k,{income:0,funding:0,credit:0,facility:0,contribution:0}]));
  const allocate=(amount,weights,field)=>{for(const [k,n]of Object.entries(marketSplit(Math.round(amount),weights)))rows[k][field]+=n};
@@ -1140,10 +1373,8 @@ function reconcileCredit(p){
 }
 const creditSync=syncAccounts;
 syncAccounts=function(p){creditSync(p);reconcileCredit(p)};
-const creditCreate=createGame;
-createGame=function(o){
- if(o.creditLifecycleVersion!==undefined&&![0,1].includes(o.creditLifecycleVersion))throw Error('Unsupported credit lifecycle');
- const g=creditCreate(o);if(!g.marketEconomy||o.creditLifecycleVersion===0)return g;
+function initializeCreditBooks(g,o){
+ if(!g.marketEconomy||o.creditLifecycleVersion===0)return g;
  g.creditLifecycleVersion=1;
  for(const p of g.players){
   p.creditBook={version:1,cohorts:[]};
@@ -1153,7 +1384,7 @@ createGame=function(o){
   }
  }
  return g;
-};
+}
 function creditSummary(p){
  if(!p.creditBook)return null;
  const c=p.creditBook.cohorts,principal=c.reduce((n,x)=>n+x.principal,0);
@@ -1206,12 +1437,10 @@ function fundingPosition(p){
  const limit=Math.max(250000,Math.floor(p.stats.deposits*.05+Math.max(0,p.stats.capital)*.5)),debt=p.stats.emergencyDebt||0;
  return {limit,debt,excess:Math.max(0,debt-limit),headroom:Math.max(0,limit-debt),streak:p.fundingCovenant.streak};
 }
-const covenantCreate=createGame;
-createGame=function(o){
- if(o.fundingCovenantVersion!==undefined&&![0,1].includes(o.fundingCovenantVersion))throw Error('Unsupported funding covenant');
- const g=covenantCreate(o);if(g.creditLifecycleVersion!==1||o.fundingCovenantVersion===0)return g;
+function initializeFundingCovenants(g,o){
+ if(g.creditLifecycleVersion!==1||o.fundingCovenantVersion===0)return g;
  g.fundingCovenantVersion=1;for(const p of g.players)p.fundingCovenant={version:1,streak:0,lastCycle:0};return g;
-};
+}
 const covenantLimit=pilotSpendingLimit;
 pilotSpendingLimit=function(p,...args){return p.fundingCovenant&&fundingPosition(p).excess>0?0:covenantLimit(p,...args)};
 const covenantPull=depositPull;
@@ -1315,14 +1544,12 @@ function adjustDepositReport(p,g,r){
  const change=r.depositIncome-oldIncome-(r.fundingCost-oldFunding)-d.service;
  r.eventAdjustment+=change*((p.turnEffects.profit||1)-1);r.profit=Math.round(r.profit+change*(p.turnEffects.profit||1));
 }
-const depositCreate=createGame;
-createGame=function(o){
- if(o.depositProductsVersion!==undefined&&![0,1].includes(o.depositProductsVersion))throw Error('Unsupported deposit products');
- const g=depositCreate(o);if(g.fundingCovenantVersion!==1||o.depositProductsVersion===0)return g;
+function initializeDepositBooks(g,o){
+ if(g.fundingCovenantVersion!==1||o.depositProductsVersion===0)return g;
  g.depositProductsVersion=1;
  for(const p of g.players)p.depositBook={version:1,asOfCycle:0,cohorts:Object.entries(p.marketBook.markets).map(([market,m])=>({market,product:p.products.retail,principal:m.deposits,remaining:0,quotedCycle:0,rate:depositRate(p,g,p.products.retail)}))};
  return g;
-};
+}
 const depositOperate=operate;
 operate=function(g,p,preview=false){
  if(!p.depositBook)return depositOperate(g,p,preview);
@@ -1375,13 +1602,11 @@ function termSummary(p){
  const rows=p.depositBook.cohorts.filter(c=>c.locked);
  return {locked:rows.reduce((n,c)=>n+c.principal,0),maturing:rows.filter(c=>c.remaining===1).reduce((n,c)=>n+c.principal,0),interest:Math.round(rows.reduce((n,c)=>n+c.principal*c.rate/1000000,0))};
 }
-const termCreate=createGame;
-createGame=function(o){
- if(o.termFundingVersion!==undefined&&![0,1].includes(o.termFundingVersion))throw Error('Unsupported term funding');
- const g=termCreate(o);if(!g.depositProductsVersion||o.termFundingVersion===0)return g;
+function initializeTermFunding(g,o){
+ if(!g.depositProductsVersion||o.termFundingVersion===0)return g;
  g.termFundingVersion=1;for(const p of g.players)p.termFunding={version:1,policy:{offer:'off',maturity:'release'}};
  return g;
-};
+}
 const termOperate=operate;
 operate=function(g,p,preview=false){
  if(!p.termFunding)return termOperate(g,p,preview);
@@ -1448,13 +1673,11 @@ productOption=function(p,line){
  }
  return out;
 };
-const retailCreate=createGame;
-createGame=function(o){
- if(o.retailLifecycleVersion!==undefined&&![0,1].includes(o.retailLifecycleVersion))throw Error('Unsupported retail lifecycle');
- const g=retailCreate(o);if(g.termFundingVersion!==1||o.retailLifecycleVersion===0)return g;
+function initializeRetailOffers(g,o){
+ if(g.termFundingVersion!==1||o.retailLifecycleVersion===0)return g;
  g.retailLifecycleVersion=1;for(const p of g.players)p.retailLifecycle={version:1,mix:{essential:4,rewards:0,highYield:0}};
  return g;
-};
+}
 const retailBot=chooseOpenBot;
 chooseOpenBot=function(g,index){
  const plan=retailBot(g,index),p=g.players[index];if(!p.retailLifecycle)return plan;
@@ -1485,23 +1708,11 @@ function validateDeployedMix(p,mix){
  validateRetailMix(mix);
  if(p.productDeployment)for(const key of Object.keys(RETAIL_DEPLOYMENTS))if(mix[key]>0&&!p.productDeployment.ready[key])throw Error('Deploy '+RETAIL_DEPLOYMENTS[key].name+' in Operations initiatives before opening sales.');
 }
-const deploymentCreate=createGame;
-createGame=function(o){
- if(o.productDeploymentVersion!==undefined&&![0,1].includes(o.productDeploymentVersion))throw Error('Unsupported product deployment');
- const g=deploymentCreate(o);if(g.retailLifecycleVersion!==1||o.productDeploymentVersion===0)return g;
+function initializeProductDeployments(g,o){
+ if(g.retailLifecycleVersion!==1||o.productDeploymentVersion===0)return g;
  g.productDeploymentVersion=1;for(const p of g.players)p.productDeployment={version:1,ready:{rewards:false,highYield:false}};
  return g;
-};
-const deploymentBarred=projectBarred;
-projectBarred=function(p,key){
- const base=deploymentBarred(p,key);if(base)return base;
- const def=PROJECTS[key];if(!def||!def.deploymentProduct)return '';
- if(!p.productDeployment)return 'Requires a new product-deployment pilot.';
- if(p.productDeployment.ready[def.deploymentProduct])return 'Already deployed. Manage sales in Operations.';
- const d=RETAIL_DEPLOYMENTS[def.deploymentProduct];
- if(strategyLevel(p,d.branch)<1)return 'Complete '+STRATEGY_BRANCHES[d.branch].name+' tier 1 first. Research benefits apply next cycle.';
- return '';
-};
+}
 const deploymentCatalog=projectCatalog;
 projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
 const deploymentFinish=finishProject;
@@ -1558,21 +1769,17 @@ function contractPower(g,p,c){
  const load=contractIncome(p),incumbent=c.owner===p.id;
  return p.allocation.business*2+p.allocation.operations*.5+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+(incumbent?(load.served===load.count?2:-3):0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
 }
-const contractCreate=createGame;
-createGame=function(o){
- if(o.contractRulesVersion!==undefined&&![0,1].includes(o.contractRulesVersion))throw Error('Unsupported service contracts');
- const g=contractCreate(o);if(g.productDeploymentVersion!==1||o.contractRulesVersion===0)return g;
+function initializeServiceContracts(g,o){
+ if(g.productDeploymentVersion!==1||o.contractRulesVersion===0)return g;
  g.contractRulesVersion=1;g.serviceAgreements=Object.keys(g.territories).map((market,i)=>({id:'service-'+market,market,owner:null,due:1+i}));
  for(const p of g.players){p.serviceContracts=[];p.contractAds=null}return g;
-};
+}
 const contractReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){
  contractReport(p,g,r);if(!p.serviceContracts)return;
  const c=contractIncome(p);r.contractFees=c.fees;r.contractServicing=c.cost;r.contractsServed=c.served;
  r.otherIncome+=c.fees;r.expense+=c.cost;r.profit+=c.fees-c.cost;
 };
-const contractBarred=projectBarred;
-projectBarred=function(p,key){if(PROJECTS[key]&&PROJECTS[key].contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';return contractBarred(p,key)};
 const contractCatalog=projectCatalog;
 projectCatalog=function(p){const out=contractCatalog(p);if(!p.serviceContracts)delete out.contractAdvertising;return out};
 const contractFinish=finishProject;
@@ -1583,16 +1790,7 @@ finishProject=function(g,p,project){
   return p.name+' launched targeted relationship advertising in '+g.territories[project.target].name+' through cycle '+p.contractAds.expires+'. Replaces any earlier targeted campaign.';
  }return contractFinish(g,p,project);
 };
-const contractValidatePlan=validatePlan;
-validatePlan=function(g,p,plan){
- contractValidatePlan(g,p,plan);
- if(plan.contractBid!=null){
-  if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');
-  const c=(g.serviceAgreements||[]).find(c=>c.id===plan.contractBid);
-  if(g.contractRulesVersion!==1||!c||c.due!==g.cycle)throw Error('Choose a service agreement due this cycle.');
-  if(plan.allocation.business<1)throw Error('Assign at least one Business banker to bid for a service agreement.');
- }
-};
+
 const contractResolve=resolveOpportunities;
 resolveOpportunities=function(g,plans){
  const L=contractResolve(g,plans);if(g.contractRulesVersion!==1)return L;
@@ -1687,15 +1885,13 @@ function serviceBidStatus(p,c){
 function syncServiceBook(g){
  for(const p of g.players){p.serviceContracts=g.serviceAgreements.filter(c=>c.owner===p.id).map(c=>c.id);p.serviceDesk.contracts=g.serviceAgreements.filter(c=>c.owner===p.id).map(({id,kind,fee,due,misses})=>({id,kind,fee,due,misses}))}
 }
-const serviceCreate=createGame;
-createGame=function(o){
- if(o.serviceExpansionVersion!==undefined&&![0,1].includes(o.serviceExpansionVersion))throw Error('Unsupported service expansion');
- const g=serviceCreate(o);if(g.contractRulesVersion!==1||o.serviceExpansionVersion===0)return g;
+function initializeServiceDesk(g,o){
+ if(g.contractRulesVersion!==1||o.serviceExpansionVersion===0)return g;
  g.serviceExpansionVersion=1;
  g.serviceAgreements.forEach((c,i)=>Object.assign(c,{kind:['payroll','merchant','treasury'][i%3],fee:SERVICE_TYPES[['payroll','merchant','treasury'][i%3]].fee,misses:0}));
  for(const p of g.players)p.serviceDesk={version:1,policy:defaultServicePolicy(),applications:{payroll:false,treasury:null},contracts:[]};
  return g;
-};
+}
 const serviceIncomeV1=contractIncome;
 contractIncome=function(p){return p.serviceDesk?serviceLoad(p):serviceIncomeV1(p)};
 const servicePowerV1=contractPower;
@@ -1706,17 +1902,6 @@ contractPower=function(g,p,c){
 };
 const serviceReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){serviceReport(p,g,r);if(!p.serviceDesk)return;const s=serviceLoad(p);Object.assign(r,{serviceCapacity:s.capacity,serviceUsed:s.used,serviceStaff:s.staff,serviceOutsourcing:s.outsourced,servicePlatform:s.platform,serviceDirect:s.direct,commercialSalesStaff:s.sales})};
-const serviceBarred=projectBarred;
-projectBarred=function(p,key){
- const base=serviceBarred(p,key);if(base)return base;
- const d=SERVICE_APPLICATIONS[key];if(!d)return '';
- if(!p.serviceDesk)return 'Requires a new expanded-service pilot.';
- const current=p.serviceDesk.applications[d.app];
- if(current===d.route||current==='build')return 'Already deployed. Activation is managed in Markets > Service Desk.';
- if(d.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+d.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
- if(p.projects.some(x=>SERVICE_APPLICATIONS[x.key]&&SERVICE_APPLICATIONS[x.key].app===d.app))return 'This application already has a deployment in progress.';
- return '';
-};
 const serviceCatalog=projectCatalog;
 projectCatalog=function(p){const out=serviceCatalog(p);if(!p.serviceDesk)for(const k of Object.keys(SERVICE_APPLICATIONS))delete out[k];return out};
 const serviceFinish=finishProject;
@@ -1732,15 +1917,7 @@ validatePortfolioPlan=function(p,plan){
  if(p.serviceDesk){plan.servicePolicy=plan.servicePolicy||JSON.parse(JSON.stringify(p.serviceDesk.policy));validateServicePolicy(p,plan.servicePolicy,plan.allocation)}
  else if(plan.servicePolicy||plan.contractExit)throw Error('Service desk policies require a new expanded-service pilot.');
 };
-const serviceValidatePlan=validatePlan;
-validatePlan=function(g,p,plan){
- serviceValidatePlan(g,p,plan);if(!p.serviceDesk)return;
- const planned={...p,allocation:plan.allocation,serviceDesk:{...p.serviceDesk,policy:plan.servicePolicy}};
- if(plan.contractBid){const c=g.serviceAgreements.find(c=>c.id===plan.contractBid),status=serviceBidStatus(planned,c);if(!status.eligible)throw Error(status.reason);if(c.owner===p.id)throw Error('An incumbent renews automatically; do not select a second bid.')}
- if(plan.contractExit){const c=g.serviceAgreements.find(c=>c.id===plan.contractExit);if(!c||c.owner!==p.id||c.due!==g.cycle)throw Error('Only decline your own agreement at its renewal.');if(plan.contractBid===plan.contractExit)throw Error('Cannot bid and decline the same agreement.')}
- const apps=planInitiatives(plan).filter(k=>SERVICE_APPLICATIONS[k]).map(k=>SERVICE_APPLICATIONS[k].app);
- if(new Set(apps).size!==apps.length)throw Error('Choose one deployment route per service application.');
-};
+
 const serviceResolveV1=resolveOpportunities;
 resolveOpportunities=function(g,plans){
  if(g.serviceExpansionVersion!==1)return serviceResolveV1(g,plans);
@@ -1847,14 +2024,7 @@ chooseOpenBot=function(g,index){
 };
 // An accepted initiative can lose cash/capacity between planning and execution.
 // Preserve the cancellation rule, but never silently drop the player's order.
-const serviceStartProject=startProject;
-startProject=function(g,p,key,specializations){
- const result=serviceStartProject(g,p,key,specializations);if(result||!p.serviceDesk||!PROJECTS[key])return result;
- const def=PROJECTS[key],cost=projectCost(p,def);
- // Resolution text is public: explain the failure without exposing private cash.
- const reason=p.stats.cash<cost?'cash changed before execution':usedCapacity(p,[def])>executionCapacity(p)?'execution capacity changed before work could start':projectBarred(p,key)||'project availability changed before execution';
- return p.name+' cancelled '+def.name+': '+reason+'. No project cost was charged; select it again in a later plan.';
-};
+
 const serviceValidation=validatePilot;
 validatePilot=function(g){
  serviceValidation(g);
@@ -1901,15 +2071,13 @@ function clientBidAdjustment(p,c){
  const load=serviceLoad(p),demand=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0)+SERVICE_TYPES[c.kind].load;
  return load.staff*2>=demand?2:0;
 }
-const institutionCreate=createGame;
-createGame=function(o){
- if(o.managementVersion!==undefined&&![0,1,2].includes(o.managementVersion))throw Error('Unsupported institution management');
- const g=institutionCreate(o);if(![1,2].includes(o.managementVersion))return g;
+function initializeManagement(g,o){
+ if(![1,2].includes(o.managementVersion))return g;
  if(g.serviceExpansionVersion!==1)throw Error('Living institution requires the expanded commercial services preview.');
  g.managementVersion=o.managementVersion;g.version='8.2';g.serviceAgreements.forEach((c,i)=>c.clientIndex=i);
  for(const p of g.players)p.management=defaultManagement();
  return g;
-};
+}
 const institutionPower=contractPower;
 contractPower=function(g,p,c){return institutionPower(g,p,c)+clientBidAdjustment(p,c)};
 const institutionPortfolio=validatePortfolioPlan;
@@ -1973,12 +2141,11 @@ validatePilot=function(g){
 
 // Relationship operations v1 (management v2): public delivery record, not free assets.
 function relationshipBonus(g,p,c){const r=g.relationshipRecords&&g.relationshipRecords[c.id];return r&&c.owner===p.id&&r.owner===p.id?Math.min(2,r.streak*.25):0}
-const relationshipCreate=createGame;
-createGame=function(o){
- const g=relationshipCreate(o);if(g.managementVersion!==2)return g;
+function initializeRelationships(g,o){
+ if(g.managementVersion!==2)return g;
  g.relationshipRecords=Object.fromEntries(g.serviceAgreements.map(c=>[c.id,{owner:c.owner,streak:0,lastCycle:0,history:[]}]));
  return g;
-};
+}
 const relationshipPower=contractPower;
 contractPower=function(g,p,c){return relationshipPower(g,p,c)+relationshipBonus(g,p,c)};
 const relationshipResolve=resolveOpportunities;
@@ -2085,13 +2252,11 @@ function customerBankFit(p,g,mix=p.retailLifecycle.mix){
  return total?rows.reduce((n,r)=>n+r.weight*r.demand.fit,0)/total:1;
 }
 function retailAcquisitionMix(p,g,market){return p.customerDemandVersion>=1?customerDemand(p,g,market).weights:p.retailLifecycle.mix}
-const customerCreate=createGame;
-createGame=function(o){
- if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
- const g=customerCreate(o);if(![1,2].includes(o.customerDemandVersion))return g;
+function initializeCustomerDemand(g,o){
+ if(![1,2].includes(o.customerDemandVersion))return g;
  if(g.managementVersion!==2)throw Error('Customer needs requires Living institution relationship rules');
  g.customerDemandVersion=o.customerDemandVersion;g.version=o.customerDemandVersion===2?'8.4':'8.3';for(const p of g.players)p.customerDemandVersion=o.customerDemandVersion;return g;
-};
+}
 const customerSupply=marketSupply;
 marketSupply=function(g,p,freeze=false){
  const supply=customerSupply(g,p);if(![1,2].includes(p.customerDemandVersion)||freeze)return supply;
@@ -2208,12 +2373,11 @@ function customerRelationshipPressure(p,key){
  const mix=CUSTOMER_MARKETS[key],values=p.customerRelationships.markets[key];
  return clamp(Object.keys(mix).reduce((n,k)=>n+(values[k]-50)*mix[k]/100,0)*.03,-1.5,1.5);
 }
-const goodwillCreate=createGame;
-createGame=function(o){
- const g=goodwillCreate(o);if(g.customerDemandVersion!==2)return g;
+function initializeCustomerGoodwill(g,o){
+ if(g.customerDemandVersion!==2)return g;
  for(const p of g.players)p.customerRelationships={version:1,lastCycle:0,markets:Object.fromEntries(Object.keys(g.territories).map(k=>[k,{everyday:50,connected:50,reserve:50}]))};
  return g;
-};
+}
 const goodwillPull=depositPull;
 depositPull=function(p,key,t){return goodwillPull(p,key,t)+customerRelationshipPressure(p,key)};
 const goodwillOperate=operate;
@@ -2482,7 +2646,143 @@ const AccountingPrototype=(()=>{
  }
  return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore});
 })();
-root.BWEngine={serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
+// Save repair is engine-owned. Validate the cloned save before legacy defaults.
+// Repair helpers mutate their argument; migrateCampaign gives them a private clone.
+// Browser/storage/transport code stays outside.
+function repairSavedMetadata(g){
+ g.mode=['ai','hotseat','lan','p2p'].includes(g.mode)?g.mode:'hotseat';
+ g.scope=SCOPES[g.scope]?g.scope:'national';
+ g.scenario=SCENARIOS[g.scenario]?g.scenario:'balanced';
+ g.difficulty=['analyst','vp','chairman'].includes(g.difficulty)?g.difficulty:'vp';
+ g.cycle=Number(g.cycle)||1;
+ g.maxCycles=null;
+ g.economy=g.economy&&MACRO_REGIMES[g.economy.key]?g.economy:{key:'steady',...MACRO_REGIMES.steady};
+ g.trend=Array.isArray(g.trend)?g.trend:[];
+ g.opportunities=Array.isArray(g.opportunities)?g.opportunities:[];
+ g.resolution=Array.isArray(g.resolution)?g.resolution:[];
+ g.log=Array.isArray(g.log)?g.log:[];
+ g.rematchVotes=Array.isArray(g.rematchVotes)?g.rematchVotes:[];
+ g.lastPlans=g.lastPlans&&typeof g.lastPlans==='object'?g.lastPlans:{};
+ g.scoreDelta=g.scoreDelta&&typeof g.scoreDelta==='object'?g.scoreDelta:{};
+ g.resolutionId=Number(g.resolutionId)||0;
+ g.gameOver=!!g.gameOver;
+ g.winnerId=g.winnerId||null;
+ if(!g.event||!EVENTS.some(e=>e.key===g.event.key))g.event=EVENTS[0];
+ for(const t of Object.values(g.territories)){if(!Array.isArray(t.shares)||t.shares.length!==2||!t.shares.every(Number.isFinite))t.shares=[50,50]}
+}
+function repairSavedPlayer(g,p,i){
+ p.id=p.id||'legacy-institution-'+i;
+ p.name=String(p.name||(i?'Institution Two':'Institution One'));
+ p.stats={...OPENING_STATS,...p.stats};
+ for(const k of Object.keys(OPENING_STATS))if(!Number.isFinite(p.stats[k]))p.stats[k]=OPENING_STATS[k];
+ p.upgrades={technology:0,training:0,analytics:0,wealth:0,operations:0,...p.upgrades};
+ p.strategy={network:0,digital:0,commercial:0,operations:0,acquisition:0,...(p.strategy||{})};
+ for(const k of Object.keys(STRATEGY_BRANCHES))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));
+ p.boardConcessions=Math.max(0,Math.round(Number(p.boardConcessions)||0));
+ p.capitalRestriction=Math.max(0,Math.round(Number(p.capitalRestriction)||0));
+ p.policies={deposit:'balanced',lending:'balanced',capital:'balanced',...p.policies};
+ if(!DEPOSIT_POLICIES[p.policies.deposit])p.policies.deposit='balanced';
+ if(!LENDING_POLICIES[p.policies.lending])p.policies.lending='balanced';
+ if(!CAPITAL_POLICIES[p.policies.capital])p.policies.capital='balanced';
+ if(!DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';
+ if(!MANDATES[p.mandate])p.mandate=Object.keys(MANDATES)[i];
+ p.achievements=Array.isArray(p.achievements)?p.achievements:[];
+ p.branches=p.branches&&typeof p.branches==='object'?p.branches:{};
+ for(const k of Object.keys(g.territories))p.branches[k]=Number(p.branches[k])||0;
+ p.allocation=p.allocation&&typeof p.allocation==='object'?p.allocation:{service:3,business:2,lending:2,operations:1};
+ p.marketingTurns=Number(p.marketingTurns)||0;
+ p.capability=p.capability&&typeof p.capability==='object'?p.capability:{};
+ for(const key of Object.keys(STRATEGY_BRANCHES)){
+  let spent=Number(p.capability[key]);
+  if(!Number.isFinite(spent)||spent<0){
+   const level=Math.max(0,Math.min(4,Math.round(Number(p.strategy&&p.strategy[key])||0)));
+   spent=level>0?CAPABILITY_TIERS[key][level-1]:0;
+  }
+  p.capability[key]=spent;
+ }
+ delete p.strategy;
+ p.primaryStrategy=leadCapability(p);
+ syncDoctrine(p);
+ p.lastCompetitiveAction=COMPETITIVE_ACTIONS[p.lastCompetitiveAction]?p.lastCompetitiveAction:'none';
+ p.distress=Number(p.distress)||0;
+ p.fundingGap=Number(p.fundingGap)||0;
+ p.capitalRequests=Number(p.capitalRequests)||0;
+ p.payrollSpend=Math.max(0,Number(p.payrollSpend)||0);
+ p.buildSpend=Math.max(0,Number(p.buildSpend)||0);
+ p.hiresTotal=Number(p.hiresTotal)||0;
+ if(!Number.isFinite(p.stats.capital))p.stats.capital=Math.max(200000,Math.round((p.stats.loans+p.stats.deposits*.2)*.11));
+ p.turnEffects=p.turnEffects&&typeof p.turnEffects==='object'?p.turnEffects:{};
+ if(!g.territories[p.focus])p.focus=Object.keys(g.territories)[0];
+ p.projects=Array.isArray(p.projects)?p.projects:(p.project?[p.project]:[]);
+ delete p.project;
+ p.projects=p.projects.filter(x=>x&&PROJECTS[x.key]&&Number.isFinite(x.progress)&&Number.isFinite(x.total)&&x.total>0);
+ normalizeAllocation(p);
+}
+function repairSavedPortfolio(g,p){
+ p.products={retail:'essential',business:'relationship',credit:'mortgage',...(p.products||{})};
+ for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[p.products[line]])p.products[line]=Object.keys(group.options)[0];
+ p.specializations=p.specializations&&typeof p.specializations==='object'?p.specializations:{};
+ for(const[branch,key]of Object.entries(p.specializations))if(!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][key])delete p.specializations[branch];
+ p.facilityMarkets=p.facilityMarkets&&typeof p.facilityMarkets==='object'?p.facilityMarkets:{};
+ for(const market of Object.keys(g.territories)){
+  const expected=Math.max(0,p.branches[market]||0);
+  if(expected===0&&p.facilityMarkets[market]===undefined)continue;
+  p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>['retail','commercial','digital'].includes(x)).slice(0,expected):[];
+  while(p.facilityMarkets[market].length<expected)p.facilityMarkets[market].push('retail');
+ }
+ p.facilities={retail:0,commercial:0,digital:0};
+ for(const models of Object.values(p.facilityMarkets))for(const type of models)p.facilities[type]++;
+ p.projects.forEach(project=>{
+  if(project.specialization){
+   const def=PROJECTS[project.key],branch=def&&def.strategy;
+   if(!branch||!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][project.specialization])delete project.specialization;
+  }
+ });
+}
+function repairSavedCampaign(g){
+ repairSavedMetadata(g);
+ g.players.forEach((p,i)=>repairSavedPlayer(g,p,i));
+ g.version='8.1';
+ g.players.forEach(p=>repairSavedPortfolio(g,p));
+ return g;
+}
+function repairSavedRivalry(g){
+ repairSavedCampaign(g);
+ g.version=g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
+ g.maxCycles=null;
+ g.act=Math.max(0,Math.min(2,Number(g.act)||0));
+ g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];
+ while(g.buyoutPressure.length<2)g.buyoutPressure.push(0);
+ g.consolidationStalemate=Math.max(0,Math.round(Number(g.consolidationStalemate)||0));
+ for(const t of Object.values(g.territories)){
+  t.exitStreak=Array.isArray(t.exitStreak)?t.exitStreak.slice(0,2):[0,0];
+  t.exited=Array.isArray(t.exited)?t.exited.slice(0,2):[false,false];
+  while(t.exitStreak.length<2)t.exitStreak.push(0);
+  while(t.exited.length<2)t.exited.push(false);
+  if(t.exited[0])t.shares=[0,100];
+  else if(t.exited[1])t.shares=[100,0];
+ }
+ return g;
+}
+function migrateCampaign(g){
+ if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
+ if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version))throw Error('Only v6.0 through v8.4 saves are supported.');
+ g=JSON.parse(JSON.stringify(g));
+ // Never repair over invalid accounting, ledger or funding versions.
+ validateLedger(g);
+ const fundingVersion=g.fundingRulesVersion===undefined?1:g.fundingRulesVersion;
+ if(![1,2].includes(fundingVersion)||g.players.some(p=>p.fundingRulesVersion!==undefined&&p.fundingRulesVersion!==fundingVersion))throw Error('Unsupported or inconsistent funding rules version.');
+ if(fundingVersion===2&&g.players.some(p=>!p.stats||!Number.isSafeInteger(p.stats.emergencyDebt)||p.stats.emergencyDebt<0))throw Error('Invalid saved emergency funding debt.');
+ g.fundingRulesVersion=fundingVersion;
+ g.players.forEach(p=>p.fundingRulesVersion=fundingVersion);
+ validatePilot(g);
+ if(g.version==='6.0'){
+  g.trend=[];g.economy={key:'steady',...MACRO_REGIMES.steady};
+  g.players.forEach((p,i)=>{if(!DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';p.achievements=[]});
+ }
+ return ensureSimulation(repairSavedRivalry(g));
+}
+root.BWEngine={migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch};
 root.BWEngine.operate=operate;
 const publicStateCore=root.BWEngine.publicState;
 root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;return out};
@@ -2498,22 +2798,153 @@ function emptyGh(){return{active:false,api:'',repo:'',branch:'',private:true,roo
 
 let mode='ai',game=null,view=null,seat=0,draft=null,draftOwner='',lastCycle=0,lastResolutionId=0,privacyNext=null,pc=null,dc=null,p2pRole='',p2pConfig=null,storageWarned=false,lan=emptyLan(),handshakeTimer=null,handshakeTries=0,linkWatch=null,planAckTimer=null,linkText='',linkCls='warn',linkSession='',dropGrace=null,relinking=false,linkReady=false,lanIp='',gh=emptyGh(),ghPendingPlan=null,ghIncomingCommit=null;
 let workspaceTab='overview';
+// Lobby state belongs to the connection, never to simulation state or its RNG.
+let lobby=null,lobbyPending=null,lobbyDirty=false,lobbySettingsDirty=false;
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
-function show(id){['#startScreen','#connectScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function show(id){['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
 function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('')}
 function validName(id){const n=$(id).value.trim();if(!n)throw Error('Enter an institution name.');return n}
+function lobbyIdentity(player,index){
+ const name=String(player&&player.name||'').trim().slice(0,36);
+ if(!name)throw Error('Enter an institution name.');
+ if(!/^#[0-9a-f]{6}$/i.test(String(player.color)))throw Error('Choose a valid bank color.');
+ return {name,color:E.bankColor(player.color,index),ready:false};
+}
+function lobbyColorsClash(a,b){
+ const rgb=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+ const x=rgb(a),y=rgb(b);return Math.hypot(...x.map((n,i)=>n-y[i]))<100;
+}
+function lobbyAlternative(color){
+ return ['#e1505c','#2878e0','#16835f','#8642bc','#a65d08','#163044'].find(c=>!lobbyColorsClash(color,c));
+}
+function lobbyOptions(){
+ const c=p2pConfig;
+ return {scope:['town','regional','state','national'].includes(c.scope)?c.scope:'national',
+  scenario:['balanced','rate','regulatory','growth'].includes(c.scenario)?c.scenario:'balanced',
+  campaignRulesVersion:c.campaignRulesVersion||0,serviceExpansionVersion:c.serviceExpansionVersion||0,
+  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0};
+}
+function publishLobby(){
+ if(!lobby||game)return;
+ ghCheckpoint();renderLobby();send({type:'lobby',lobby:JSON.parse(JSON.stringify(lobby))});
+}
+function openLobby(peer){
+ if(peer.lobbySupported!==1){$('#connectHint').textContent='Update the game file on both computers to use the campaign lobby.';send({type:'error',code:'lobby_required',message:'The campaign lobby requires this updated game on both computers.'});setConnection('LOBBY REFUSED // Update both game files.','bad');return}
+ if(!lobby){
+  const host=lobbyIdentity({name:p2pConfig.name,color:E.bankColor(p2pConfig.color)},0);
+  const guest=lobbyIdentity({name:peer.name,color:E.bankColor(peer.color,1)},1);
+  const adjusted=lobbyColorsClash(host.color,guest.color);if(adjusted)guest.color=lobbyAlternative(host.color);
+  lobby={version:1,revision:1,players:[host,guest],settings:lobbyOptions(),guestAck:'',
+   note:adjusted?'The joining bank received a distinct starting color. Both players can change their own color before confirming.':''};
+ }
+ linkReady=true;stopHandshake();publishLobby();
+}
+function applyLobbyUpdate(index,message){
+ if(!lobby||game)return;
+ // Only the host invokes this for its own seat; remote messages always target seat 1.
+ const reject=text=>{if(index===1){lobby.guestAck=String(message.id||'');lobby.error=text;publishLobby()}else throw Error(text)};
+ if(message.revision!==lobby.revision)return reject('Setup changed. Review the current lobby and confirm again.');
+ let player;try{player=lobbyIdentity(message.player,index)}catch(e){return reject(e.message)}
+ if(lobbyColorsClash(player.color,lobby.players[1-index].color))return reject('Those colors are too similar. Choose a more distinct bank color.');
+ const before=lobby.players[index],changed=player.name!==before.name||player.color!==before.color;
+ if(changed){lobby.players[index]=player;lobby.revision++;lobby.players.forEach(p=>p.ready=false)}
+ else lobby.players[index].ready=message.ready===true;
+ if(index===1)lobby.guestAck=String(message.id||'');
+ lobby.error='';if(index===0)lobbyDirty=false;
+ lobby.note=changed?'Identity updated. Both players must confirm this setup.':lobby.note;
+ publishLobby();
+}
+function editLobbyIdentity(ready=false){
+ try{
+  if(!lobby||game||view||lobbyPending)return;
+  const i=p2pRole==='host'?0:1;
+  const player=lobbyIdentity({name:$('#lobbyName').value,color:$('#lobbyColor').value},i);
+  if(lobbyColorsClash(player.color,lobby.players[1-i].color))throw Error('Those colors are too similar. Choose a more distinct bank color.');
+  const message={type:'lobby_update',id:messageId(),revision:lobby.revision,player,ready};
+  $('#lobbyError').textContent='';
+  if(i===0)applyLobbyUpdate(0,message);
+  else{lobbyPending=message;lobbyDirty=false;send(message);ghCheckpoint();renderLobby()}
+ }catch(e){lobbyPending=null;$('#lobbyError').textContent=e.message;renderLobbyControls()}
+}
+function applyLobbySettings(){
+ try{
+  if(!lobby||game||p2pRole!=='host')return;
+  const scope=$('#lobbyScope').value,scenario=$('#lobbyScenario').value;
+  if(!['town','regional','state','national'].includes(scope)||!['balanced','rate','regulatory','growth'].includes(scenario))throw Error('Choose valid campaign settings.');
+  if(scope===lobby.settings.scope&&scenario===lobby.settings.scenario){lobbySettingsDirty=false;renderLobbyControls();return}
+  lobbySettingsDirty=false;
+  lobby.settings.scope=scope;lobby.settings.scenario=scenario;lobby.revision++;lobby.players.forEach(p=>p.ready=false);
+  lobby.note='Campaign settings updated. Both players must confirm again.';lobby.error='';publishLobby();
+ }catch(e){$('#lobbyError').textContent=e.message}
+}
+function receiveLobby(message){
+ if(game||view)return; // Delayed lobby frames cannot rewind an active campaign.
+ const next=message.lobby;
+ if(!next||next.version!==1||!Number.isSafeInteger(next.revision)||next.revision<1||!Array.isArray(next.players)||next.players.length!==2)throw Error('Invalid lobby snapshot.');
+ next.players.forEach(lobbyIdentity);
+ if(!next.settings||!['town','regional','state','national'].includes(next.settings.scope)||!['balanced','rate','regulatory','growth'].includes(next.settings.scenario))throw Error('Invalid lobby settings.');
+ if(lobby&&next.revision<lobby.revision)return;
+ if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
+ lobby=JSON.parse(JSON.stringify(next));linkReady=true;stopHandshake();ghCheckpoint();renderLobby();
+}
+function renderLobbyControls(){
+ if(!lobby)return;
+ const i=p2pRole==='host'?0:1,blocked=Boolean(lobbyPending),me=lobby.players[i];
+ $('#lobbyReady').disabled=blocked||lobbyDirty||lobbySettingsDirty;$('#lobbySave').disabled=blocked||me.ready;
+ $('#lobbyName').disabled=blocked||me.ready;$('#lobbyColor').disabled=blocked||me.ready;
+ $('#lobbyScope').disabled=i!==0||me.ready||lobby.settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=i!==0||me.ready;
+ $('#lobbySettings').disabled=me.ready;
+ $('#lobbyReady').textContent=me.ready?'Not ready':'Confirm ready';
+ $('#lobbyStart').disabled=blocked||lobbyDirty||lobbySettingsDirty||!lobby.players.every(p=>p.ready);
+}
+function renderLobby(){
+ if(!lobby||game||view)return;
+ show('#lobbyScreen');const host=p2pRole==='host',i=host?0:1,settings=lobby.settings;
+ $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3><span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
+ if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color}
+ if(!lobbySettingsDirty){$('#lobbyScope').value=settings.scope;$('#lobbyScenario').value=settings.scenario}
+ $('#lobbyScope').disabled=!host||settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=!host;
+ $('#lobbySettings').classList.toggle('hidden',!host);$('#lobbyStart').classList.toggle('hidden',!host);
+ $('#lobbyRetry').classList.toggle('hidden',!gh.active);
+ $('#lobbyRules').textContent=(settings.campaignRulesVersion===1?'Regional Rivalry pilot · 2 regions / 6 markets (overrides size).':'Legacy campaign rules · open-ended.')+
+  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+' Preview choices were set by the host when opening the room.';
+ $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
+ $('#lobbyError').textContent=lobby.error||'';
+ $('#lobbyProgress').textContent=lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(host?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';
+ renderLobbyControls();paintLink();
+}
+function startLobbyCampaign(){
+ try{
+  if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty)return;
+  if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
+  const [host,guest]=lobby.players,s=lobby.settings;
+  const created=E.createGame({...s,campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
+  game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
+ }catch(e){$('#lobbyError').textContent=e.message}
+}
+function markLobbyDirty(){lobbyDirty=true;renderLobbyControls()}
+$('#lobbyName').addEventListener('input',markLobbyDirty);
+$('#lobbyColor').addEventListener('input',markLobbyDirty);
+$('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
+$('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
+$('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
+$('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
+$('#lobbySettings').addEventListener('click',applyLobbySettings);
+$('#lobbyStart').addEventListener('click',startLobbyCampaign);
+$('#lobbyRetry').addEventListener('click',ghRetry);
+$('#lobbyLeave').addEventListener('click',leaveGame);
 function currentView(){return game?E.publicState(game,seat):view}
 function newDraft(v){draft={contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
 function setWorkspaceTab(tab){const valid=['overview','markets','operations','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab))}
-function repairGame(g){g.mode=['ai','hotseat','lan','p2p'].includes(g.mode)?g.mode:'hotseat';g.scope=E.SCOPES[g.scope]?g.scope:'national';g.scenario=E.SCENARIOS[g.scenario]?g.scenario:'balanced';g.difficulty=['analyst','vp','chairman'].includes(g.difficulty)?g.difficulty:'vp';g.cycle=Number(g.cycle)||1;g.maxCycles=null;g.economy=g.economy&&E.MACRO_REGIMES[g.economy.key]?g.economy:{key:'steady',...E.MACRO_REGIMES.steady};g.trend=Array.isArray(g.trend)?g.trend:[];g.opportunities=Array.isArray(g.opportunities)?g.opportunities:[];g.resolution=Array.isArray(g.resolution)?g.resolution:[];g.log=Array.isArray(g.log)?g.log:[];g.rematchVotes=Array.isArray(g.rematchVotes)?g.rematchVotes:[];g.lastPlans=g.lastPlans&&typeof g.lastPlans==='object'?g.lastPlans:{};g.scoreDelta=g.scoreDelta&&typeof g.scoreDelta==='object'?g.scoreDelta:{};g.resolutionId=Number(g.resolutionId)||0;g.gameOver=!!g.gameOver;g.winnerId=g.winnerId||null;if(!g.event||!E.EVENTS.some(e=>e.key===g.event.key))g.event=E.EVENTS[0];for(const t of Object.values(g.territories)){if(!Array.isArray(t.shares)||t.shares.length!==2||!t.shares.every(Number.isFinite))t.shares=[50,50]}g.players.forEach((p,i)=>{p.id=p.id||'legacy-institution-'+i;p.name=String(p.name||(i?'Institution Two':'Institution One'));p.stats={...E.OPENING_STATS,...p.stats};for(const k of Object.keys(E.OPENING_STATS))if(!Number.isFinite(p.stats[k]))p.stats[k]=E.OPENING_STATS[k];p.upgrades={technology:0,training:0,analytics:0,wealth:0,operations:0,...p.upgrades};p.strategy={network:0,digital:0,commercial:0,operations:0,acquisition:0,...(p.strategy||{})};for(const k of Object.keys(E.STRATEGY_BRANCHES))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));p.boardConcessions=Math.max(0,Math.round(Number(p.boardConcessions)||0));p.capitalRestriction=Math.max(0,Math.round(Number(p.capitalRestriction)||0));p.policies={deposit:'balanced',lending:'balanced',capital:'balanced',...p.policies};if(!E.DEPOSIT_POLICIES[p.policies.deposit])p.policies.deposit='balanced';if(!E.LENDING_POLICIES[p.policies.lending])p.policies.lending='balanced';if(!E.CAPITAL_POLICIES[p.policies.capital])p.policies.capital='balanced';if(!E.DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';if(!E.MANDATES[p.mandate])p.mandate=Object.keys(E.MANDATES)[i];p.achievements=Array.isArray(p.achievements)?p.achievements:[];p.branches=p.branches&&typeof p.branches==='object'?p.branches:{};for(const k of Object.keys(g.territories))p.branches[k]=Number(p.branches[k])||0;p.allocation=p.allocation&&typeof p.allocation==='object'?p.allocation:{service:3,business:2,lending:2,operations:1};p.marketingTurns=Number(p.marketingTurns)||0;p.capability=p.capability&&typeof p.capability==='object'?p.capability:{};for(const key of Object.keys(E.STRATEGY_BRANCHES)){let spent=Number(p.capability[key]);if(!Number.isFinite(spent)||spent<0){const level=Math.max(0,Math.min(4,Math.round(Number(p.strategy&&p.strategy[key])||0)));spent=level>0?E.CAPABILITY_TIERS[key][level-1]:0}p.capability[key]=spent}delete p.strategy;p.primaryStrategy=E.leadCapability(p);E.syncDoctrine(p);p.lastCompetitiveAction=E.COMPETITIVE_ACTIONS[p.lastCompetitiveAction]?p.lastCompetitiveAction:'none';p.distress=Number(p.distress)||0;p.fundingGap=Number(p.fundingGap)||0;p.capitalRequests=Number(p.capitalRequests)||0;p.payrollSpend=Math.max(0,Number(p.payrollSpend)||0);p.buildSpend=Math.max(0,Number(p.buildSpend)||0);p.hiresTotal=Number(p.hiresTotal)||0;if(!Number.isFinite(p.stats.capital))p.stats.capital=Math.max(200000,Math.round((p.stats.loans+p.stats.deposits*.2)*.11));p.turnEffects=p.turnEffects&&typeof p.turnEffects==='object'?p.turnEffects:{};if(!g.territories[p.focus])p.focus=Object.keys(g.territories)[0];p.projects=Array.isArray(p.projects)?p.projects:(p.project?[p.project]:[]);delete p.project;p.projects=p.projects.filter(x=>x&&E.PROJECTS[x.key]&&Number.isFinite(x.progress)&&Number.isFinite(x.total)&&x.total>0);E.normalizeAllocation(p)});return g}
-const repairGameCore=repairGame;repairGame=function(g){const out=repairGameCore(g);out.version='8.1';out.players.forEach(p=>{p.products={retail:'essential',business:'relationship',credit:'mortgage',...(p.products||{})};for(const[line,group]of Object.entries(E.PRODUCT_PORTFOLIOS))if(!group.options[p.products[line]])p.products[line]=Object.keys(group.options)[0];p.specializations=p.specializations&&typeof p.specializations==='object'?p.specializations:{};for(const[branch,key]of Object.entries(p.specializations))if(!E.STRATEGY_SPECIALIZATIONS[branch]||!E.STRATEGY_SPECIALIZATIONS[branch][key])delete p.specializations[branch];p.facilityMarkets=p.facilityMarkets&&typeof p.facilityMarkets==='object'?p.facilityMarkets:{};for(const market of Object.keys(out.territories)){const expected=Math.max(0,p.branches[market]||0);if(expected===0&&p.facilityMarkets[market]===undefined)continue;p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>['retail','commercial','digital'].includes(x)).slice(0,expected):[];while(p.facilityMarkets[market].length<expected)p.facilityMarkets[market].push('retail')}p.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(p.facilityMarkets))for(const type of models)p.facilities[type]++;p.projects.forEach(project=>{if(project.specialization){const def=E.PROJECTS[project.key],branch=def&&def.strategy;if(!branch||!E.STRATEGY_SPECIALIZATIONS[branch]||!E.STRATEGY_SPECIALIZATIONS[branch][project.specialization])delete project.specialization}})});return out};
-function repairOpenEnded(g){repairGame(g);g.version=g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';g.maxCycles=null;g.act=Math.max(0,Math.min(2,Number(g.act)||0));g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];while(g.buyoutPressure.length<2)g.buyoutPressure.push(0);g.consolidationStalemate=Math.max(0,Math.round(Number(g.consolidationStalemate)||0));for(const t of Object.values(g.territories)){t.exitStreak=Array.isArray(t.exitStreak)?t.exitStreak.slice(0,2):[0,0];t.exited=Array.isArray(t.exited)?t.exited.slice(0,2):[false,false];while(t.exitStreak.length<2)t.exitStreak.push(0);while(t.exited.length<2)t.exited.push(false);if(t.exited[0])t.shares=[0,100];else if(t.exited[1])t.shares=[100,0]}return g}
-function migrateGame(g){if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version))throw Error('Only v6.0 through v8.4 saves are supported.');g=JSON.parse(JSON.stringify(g));E.validateLedger(g);const fundingVersion=g.fundingRulesVersion===undefined?1:g.fundingRulesVersion;if(![1,2].includes(fundingVersion)||g.players.some(p=>p.fundingRulesVersion!==undefined&&p.fundingRulesVersion!==fundingVersion))throw Error('Unsupported or inconsistent funding rules version.');if(fundingVersion===2&&g.players.some(p=>!p.stats||!Number.isSafeInteger(p.stats.emergencyDebt)||p.stats.emergencyDebt<0))throw Error('Invalid saved emergency funding debt.');g.fundingRulesVersion=fundingVersion;g.players.forEach(p=>p.fundingRulesVersion=fundingVersion);E.validatePilot(g);const legacy=g.version==='6.0';if(legacy){g.trend=[];g.economy={key:'steady',...E.MACRO_REGIMES.steady};g.players.forEach((p,i)=>{if(!E.DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';p.achievements=[]})}return E.ensureSimulation(repairOpenEnded(g))}
+function repairGame(g){return E.repairSavedCampaign(g)}
+function repairOpenEnded(g){return E.repairSavedRivalry(g)}
+function migrateGame(g){return E.migrateCampaign(g)}
 function saveLocal(){try{if(game&&(['ai','hotseat'].includes(game.mode)||(game.mode==='lan'&&p2pRole==='host')))localStorage.setItem('branchWarsV7Save',JSON.stringify(game))}catch(e){if(!storageWarned){storageWarned=true;toast('This browser blocks local storage, so the campaign cannot autosave. Use EXPORT to keep a copy.')}}updateContinue()}
 function savedGame(){try{return JSON.parse(localStorage.getItem('branchWarsV7Save')||localStorage.getItem('branchWarsV6Save')||'null')}catch{return null}}
 function updateContinue(){let ok=false;try{const g=savedGame();ok=g&&['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4'].includes(g.version)&&!g.gameOver}catch{}$('#continueBtn').classList.toggle('hidden',!ok)}
@@ -2529,8 +2960,8 @@ function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.ac
 
 async function lanRequest(path,options={}){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),8000);try{const response=await fetch(path,{headers:{'Content-Type':'application/json'},...options,signal:ctrl.signal});let data={};try{data=await response.json()}catch{}if(!response.ok)throw Error(data.error||`LAN server returned ${response.status}.`);return data}catch(e){if(e&&e.name==='AbortError')throw Error('LAN server did not respond within 8 seconds.');throw e}finally{clearTimeout(timer)}}
 function messageId(){return globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}
-async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
-async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
+async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
+async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
 async function pollLan(){while(lan.active){let delay=700;try{const data=await lanRequest(`/api/poll?room=${encodeURIComponent(lan.room)}&token=${encodeURIComponent(lan.token)}&after=${lan.after}`);lan.failures=0;for(const item of data.messages||[]){lan.after=Math.max(lan.after,Number(item.seq)||0);handleMessage(item.message)}if(data.connected)setConnection(`ROOM ${lan.room} // CONNECTED`,'good')}catch(e){if(lan.active){lan.failures++;delay=Math.min(8000,700*(2**Math.min(lan.failures,4)));setConnection(`LAN LINK INTERRUPTED // retrying // ${e.message}`,'bad')}}await new Promise(resolve=>setTimeout(resolve,delay))}}
 async function lanFlush(){if(lan.busy||!lan.active||!lan.outbox.length)return;lan.busy=true;try{while(lan.active&&lan.outbox.length){const item=lan.outbox[0];const data=await lanRequest('/api/send',{method:'POST',body:JSON.stringify({room:lan.room,token:lan.token,clientId:item.id,message:item.msg})});if(!data.ok)throw Error('The LAN server did not acknowledge the message.');lan.outbox.shift();lan.failures=0}}catch(e){if(lan.active){lan.failures++;setConnection(`LAN SEND INTERRUPTED // queued for retry // ${e.message}`,'bad');clearTimeout(lan.retryTimer);lan.retryTimer=setTimeout(()=>{lan.retryTimer=null;lanFlush()},Math.min(8000,800*(2**Math.min(lan.failures,4))))}}finally{lan.busy=false;if(lan.active&&lan.outbox.length&&!lan.retryTimer)queueMicrotask(lanFlush)}}
 function lanSend(msg){lan.outbox.push({id:messageId(),msg});lanFlush()}
@@ -2615,9 +3046,9 @@ async function ghWrite(side,payload,sha){
  const next=body&&body.content&&body.content.sha;if(!next)throw Error('GitHub accepted the update but did not return its version.');return next;
 }
 function ghCompact(messages){
- // A state is a replacement snapshot, not a command. Keep only the newest one.
- const latest=messages.filter(e=>e.msg.type==='state').at(-1);
- return messages.filter(e=>e.msg.type!=='state'||e===latest);
+ // Lobby and game states are replacement snapshots, not commands.
+ const latest=new Map();for(const e of messages)if(['state','lobby'].includes(e.msg.type))latest.set(e.msg.type,e);
+ return messages.filter(e=>!latest.has(e.msg.type)||e===latest.get(e.msg.type));
 }
 function ghAccepted(current){
  const n=Number(current.data&&current.data.seq)||0;
@@ -2643,7 +3074,7 @@ async function ghFlush(){
    if(!sha&&session.published<target)throw Error('The room changed repeatedly. Close duplicate game tabs and retry.');
    if(sha){session.sha=sha;session.published=target}session.inflight=null;session.sendFailures=0;ghCheckpoint();
   }
-  setConnection('REPOSITORY '+session.room+' // UPDATE STORED; WAITING FOR PEER','warn');
+  if(gh===session&&session.active)ghPaintHealth('UPDATE STORED · waiting for friend');
  }catch(e){if(gh===session&&session.active){
   session.sendFailures++;setConnection('REPOSITORY SEND INTERRUPTED // queued for retry // '+e.message,'bad');
   clearTimeout(session.retryTimer);if(!session.paused)session.retryTimer=setTimeout(()=>{session.retryTimer=null;if(gh===session)ghFlush()},ghDelay(Math.min(30000,1200*2**Math.min(session.sendFailures,5))));
@@ -2652,7 +3083,16 @@ async function ghFlush(){
 function ghSend(msg){
  const next=ghCompact([...gh.outbox,{seq:gh.mine+1,msg}]);
  if(next.length>100)throw Error('Repository command queue is full. Keep this tab open and reconnect before sending more commands.');
- gh.mine++;gh.outbox=next;ghCheckpoint();setConnection('REPOSITORY ROOM '+gh.room+' // SENDING','warn');ghFlush();
+ gh.mine++;gh.outbox=next;ghCheckpoint();ghPaintHealth('SENDING UPDATE');ghFlush();
+}
+function ghPaintHealth(activity){
+ // A quiet peer file is not a broken link; it also does not prove a live peer.
+ if(gh.paused){setConnection('REPOSITORY ACCESS PAUSED // Check access and retry.','bad');return}
+ if(gh.sendFailures||gh.pollFailures){setConnection('REPOSITORY LINK INTERRUPTED // queued updates retained; retrying','bad');return}
+ if(gh.cooldownUntil>Date.now()){setConnection('REPOSITORY COOLDOWN // retry after '+new Date(gh.cooldownUntil).toLocaleTimeString(),'warn');return}
+ const known=gh.peerFileSeen===true;
+ const label=known?'REPOSITORY REACHABLE':'WAITING FOR PEER FILE';
+ setConnection('REPOSITORY ROOM '+gh.room+' // '+label+' · '+activity+(gh.lastContact?' · last peer update '+new Date(gh.lastContact).toLocaleTimeString():''),known?'good':'warn');
 }
 async function ghPoll(){
  const session=gh;if(session.polling)return;session.polling=true;
@@ -2673,11 +3113,10 @@ async function ghPoll(){
     session.etag=result.etag;session.lastContact=Date.now();
     const ack=Number(result.data.ack)||0;
     session.outbox=session.outbox.filter(e=>e.msg.type==='state'||e.seq>Math.min(ack,session.published));
-    if(!session.sendFailures)setConnection('REPOSITORY ROOM '+session.room+' // SYNCED · last message '+new Date(session.lastContact).toLocaleTimeString(),'good');
-   }else if(!session.sendFailures){
-    setConnection('REPOSITORY ROOM '+session.room+' // '+(result.missing?'WAITING FOR PEER FILE':'WAITING FOR PEER · no new message'),'warn');
    }
-   session.pollFailures=0;ghCheckpoint();
+   session.peerFileSeen=!result.missing;session.lastPoll=Date.now();session.pollFailures=0;
+   ghPaintHealth(result.missing?'waiting for friend to join':result.unchanged?'no new messages':'peer update received');
+   ghCheckpoint();
   }catch(e){if(gh===session&&session.active){session.pollFailures++;delay=ghDelay(Math.min(30000,5000*2**Math.min(session.pollFailures,3)));setConnection('REPOSITORY LINK INTERRUPTED // retrying // '+e.message,'bad')}}
   await new Promise(resolve=>setTimeout(resolve,delay));
  }}finally{session.polling=false}
@@ -2686,7 +3125,7 @@ function ghCheckpoint(){
  if(!gh.active)return;
  try{
   const {token,busy,retryTimer,polling,...connection}=gh;
-  sessionStorage.setItem('branchWarsGhResume',JSON.stringify({version:1,connection,game:p2pRole==='host'?game:null,view:p2pRole==='guest'?view:null,p2pConfig,ghPendingPlan,ghIncomingCommit}));
+  sessionStorage.setItem('branchWarsGhResume',JSON.stringify({version:1,connection,game:p2pRole==='host'?game:null,view:p2pRole==='guest'?view:null,p2pConfig,ghPendingPlan,ghIncomingCommit,lobby:game||view?null:lobby,lobbyPending}));
  }catch{if(!gh.storageWarned){gh.storageWarned=true;toast('Repository reload recovery could not be saved. Keep this tab open; the host should EXPORT a backup.')}}
 }
 function ghRetry(){
@@ -2705,12 +3144,12 @@ async function ghResume(){
   const repo=ghNormalizeRepo(c.repo),api=ghNormalizeApi(c.api);
   if(!/^[A-Z2-9]{8}$/.test(c.room))throw Error('Invalid saved room.');
   const restored=saved.game?migrateGame(saved.game):null;
-  resetLink();gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:1};
+  resetLink();gh={...emptyGh(),...c,repo,api,token,active:true,busy:false,polling:false,retryTimer:null,paused:false,etag:'',sendFailures:c.published<c.mine?1:0};
   mode='gh';p2pRole=c.side;seat=c.side==='host'?0:1;p2pConfig=saved.p2pConfig;game=restored;view=saved.view;
-  ghPendingPlan=saved.ghPendingPlan;ghIncomingCommit=saved.ghIncomingCommit;draft=null;if(view&&ghPendingPlan)view.me.submitted=true;
+  ghPendingPlan=saved.ghPendingPlan;ghIncomingCommit=saved.ghIncomingCommit;lobby=saved.lobby||null;lobbyPending=saved.lobbyPending||null;draft=null;if(view&&ghPendingPlan)view.me.submitted=true;
   await ghCheckRepo();gh.branch=c.branch||gh.branch;const own=await ghRead(c.side,'');
   if(!own.missing)ghAccepted(own);
-  ghRemember();if(game||view)enterGame(true);else show('#connectScreen');
+  ghRemember();if(game||view)enterGame(true);else if(lobby)renderLobby();else show('#connectScreen');
   ghPoll();ghFlush();setConnection('REPOSITORY '+gh.room+' // RESUMING SAVED SESSION','warn');
  }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message)}
 }
@@ -2731,7 +3170,7 @@ function ghRoomCode(){const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=ne
 async function ghCreateRoom(){
  try{setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
   resetLink();game=null;view=null;mode='gh';p2pRole='host';
-  p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
+  p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
   gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();ghRemember();
   for(let attempt=0;attempt<5&&!gh.sha;attempt++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){const accepted=await ghRead('host','');if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
   if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
@@ -2747,13 +3186,13 @@ async function ghJoinRoom(){
   if(!token)throw Error('Enter your own access token. Never use your rival\u2019s.');
   const repo=ghNormalizeRepo(invite.repo),room=String(invite.room||'').trim().toUpperCase(),api=ghNormalizeApi($('#ghGuestApi').value);if(!/^[A-Z2-9]{8}$/.test(room))throw Error('That repository-room code is invalid or incomplete. Ask the host for a fresh code.');
   resetLink();game=null;view=null;mode='gh';p2pRole='guest';
-  p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
+  p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
   gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();const occupied=await ghRead('guest','');if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM JOINED.</b> Waiting for the host to open the campaign.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;
   $('#outCodeLabel').textContent='ROOM';$('#outCode').classList.add('room-code');$('#outCode').value=gh.room;
   setConnection(`REPOSITORY ROOM ${gh.room} // CONNECTING`,'warn');ghPoll();
-  ghSend({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name,doctrine:'commercial'});
+  ghSend({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name,doctrine:'commercial'});
  }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
 function pack(prefix,obj){return prefix+btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.
@@ -2792,12 +3231,12 @@ function withLocalAddress(desc){
  return{type:desc.type,sdp:merged.join('\r\n')+'\r\n'};
 }
 function linkDetail(){if(gh.active)return `${gh.repo}`;if(lan.active)return '';if(!pc)return '';return `PEER ${String(pc.connectionState||'new').toUpperCase()} / CHANNEL ${dc?String(dc.readyState).toUpperCase():'NONE'}`}
-function paintLink(){const detail=linkDetail(),full=linkText+(detail?` // ${detail}`:'');if($('#connectionStatus')){$('#connectionStatus').textContent=full;$('#connectionStatus').className='notice '+linkCls}if($('#linkState')){$('#linkState').textContent=full;$('#linkState').className='connection '+linkCls}}
+function paintLink(){const detail=linkDetail(),full=linkText+(detail?` // ${detail}`:'');if($('#connectionStatus')){$('#connectionStatus').textContent=full;$('#connectionStatus').className='notice '+linkCls}if($('#lobbyConnection')){$('#lobbyConnection').textContent=full;$('#lobbyConnection').className='connection '+linkCls}if($('#linkState')){$('#linkState').textContent=full;$('#linkState').className='connection '+linkCls}}
 function setConnection(text,cls='warn'){linkText=text;linkCls=cls;paintLink()}
-function resetLink(){ghCheckpoint();linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
+function resetLink(){ghCheckpoint();$('#connectHint').textContent='';lobby=null;lobbyPending=null;lobbyDirty=false;lobbySettingsDirty=false;linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
 function handshakeDone(){return linkReady}
 function stopHandshake(){if(handshakeTimer){clearInterval(handshakeTimer);handshakeTimer=null}}
-function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
+function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
 function armLinkWatch(){clearTimeout(linkWatch);linkWatch=setTimeout(()=>{if(!dc||dc.readyState!=='open'){setConnection('DIRECT LINK STALLED // The network connected but the game data channel never opened. This network is blocking direct browser traffic; try Intranet Room mode.','bad');offerRelink()}else if(!handshakeDone()){setConnection('DIRECT LINK STALLED // The channel is open but the rival has not answered. Exchange fresh codes.','bad');offerRelink()}},9000)}
 function newPeer(){if(!window.RTCPeerConnection)throw Error('This browser has disabled direct WebRTC connections. Use AI or Pass & Play.');const p=new RTCPeerConnection({iceServers:[]});p.onconnectionstatechange=()=>{if(p!==pc)return;const s=p.connectionState||'connecting',open=!!dc&&dc.readyState==='open';
  if(s==='disconnected'){if(!dropGrace)dropGrace=setTimeout(()=>{dropGrace=null;if(pc===p&&(p.connectionState==='disconnected'||p.connectionState==='failed'))linkLost('The direct link dropped and did not recover.')},12000);setConnection('DIRECT LINK UNSTEADY // waiting for it to recover','warn');return}
@@ -2812,7 +3251,7 @@ function startRejoin(){relinking=true;show('#startScreen');setMode('p2p');setSta
 function wireChannel(ch){dc=ch;const opened=()=>{clearTimeout(dropGrace);dropGrace=null;linkReady=false;setConnection('DIRECT LINK CONNECTED','good');if($('#rejoinBtn'))$('#rejoinBtn').classList.add('hidden');startHandshake()};dc.onopen=opened;dc.onclose=()=>{stopHandshake();setConnection('DIRECT LINK CLOSED','bad')};dc.onerror=e=>{const detail=e&&e.error&&e.error.message?` // ${e.error.message}`:'';setConnection(`DIRECT LINK ERROR${detail}`,'bad')};dc.onmessage=e=>{try{handleMessage(JSON.parse(e.data))}catch(err){console.error('Branch Wars could not process a direct-link message',err);setConnection(`DIRECT LINK MESSAGE REJECTED // ${err.message||err}`,'bad');toast(`Direct-link message could not be processed: ${err.message||err}`)}};if(dc.readyState==='open')opened()}
 function send(msg){if(gh.active){ghSend(msg);return}if(lan.active){lanSend(msg);return}if(!dc||dc.readyState!=='open')throw Error(`The direct link is not connected (channel ${dc?dc.readyState:'missing'}).`);dc.send(JSON.stringify(msg))}
 async function createOffer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='host'&&!!game&&game.mode==='p2p');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='host';
- if(!rejoin||!p2pConfig)p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
+ if(!rejoin||!p2pConfig)p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
  linkSession=(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)).slice(0,12);
  pc=newPeer();wireChannel(pc.createDataChannel('branch-wars',{ordered:true}));await pc.setLocalDescription(await pc.createOffer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
@@ -2822,7 +3261,7 @@ async function createOffer(reconnect=false){try{setStartMessage('');rememberLanI
  $('#outCodeLabel').textContent='HOST INVITATION';$('#outCode').classList.remove('room-code');$('#outCode').value=pack('BW7-OFFER-',{sdp:withLocalAddress(pc.localDescription),config:p2pConfig,session:linkSession});
  $('#answerArea').classList.remove('hidden');setConnection('WAITING FOR RIVAL RESPONSE','warn')}catch(e){setStartMessage(e.message);show(game?'#gameScreen':'#startScreen')}}
 async function createAnswer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='guest'&&!!view&&view.mode==='p2p');const invite=unpack($('#offerInput').value,'BW7-OFFER-');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='guest';
- p2pConfig={customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
+ p2pConfig={lobbyRequired:true,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
  pc=newPeer();pc.ondatachannel=e=>wireChannel(e.channel);await pc.setRemoteDescription(invite.sdp);await pc.setLocalDescription(await pc.createAnswer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
  await waitIce(pc,n=>setConnection(`MAPPING NETWORK ROUTES // ${n} found`,'warn'));
@@ -2845,9 +3284,10 @@ function handleMessage(m){
    if(((game&&game.managementVersion===2)||(!game&&p2pConfig.managementVersion===2))&&m.relationshipSupported!==1){send({type:'error',message:'Relationship operations requires the updated game on both computers.'});setConnection('RELATIONSHIP LINK REFUSED','bad');return}
    if(((game&&game.managementVersion>=1)||(!game&&p2pConfig.managementVersion>=1))&&m.managementSupported!==1){send({type:'error',message:'Living institution requires the updated game on both computers.'});setConnection('LIVING INSTITUTION LINK REFUSED','bad');return}
    if(((game&&game.campaignRulesVersion===1)||(!game&&p2pConfig.campaignRulesVersion===1))&&m.pilotSupported!==11){send({type:'error',message:'Regional Rivalry requires the updated game on both computers.'});setConnection('PILOT LINK REFUSED // Update the rival game file.','bad');return}
-   if(!game){try{if(p2pConfig.campaignRulesVersion===1&&m.pilotSupported!==11)throw Error('Regional Rivalry requires the updated game on both computers.');game=E.createGame({customerDemandVersion:p2pConfig.customerDemandVersion||0,managementVersion:p2pConfig.managementVersion||0,serviceExpansionVersion:p2pConfig.serviceExpansionVersion||0,campaignRulesVersion:p2pConfig.campaignRulesVersion,color1:p2pConfig.color,color2:m.color,mode:(lan.active||gh.active)?'lan':'p2p',name1:p2pConfig.name,name2:m.name,scope:p2pConfig.scope,scenario:p2pConfig.scenario,difficulty:'vp',doctrine1:p2pConfig.doctrine,doctrine2:m.doctrine});seat=0;draft=null;lastResolutionId=0;enterGame(true)}catch(e){game=null;console.error('Branch Wars could not open the direct campaign',e);setConnection(`DIRECT LINK REFUSED // ${e.message}`,'bad');try{send({type:'error',message:`The host could not open the campaign: ${e.message}`})}catch{}return}}
+   if(!game){try{openLobby(m)}catch(e){setConnection('LOBBY REFUSED // '+e.message,'bad');send({type:'error',code:'lobby_required',message:e.message})}return}
    linkReady=true;stopHandshake();syncPeers();return
   }
+  if(m.type==='lobby_update'&&!game){applyLobbyUpdate(1,m);return}
   if(!game){try{send({type:'hello_request'})}catch{}return}
   if(m.type==='plan_commit'&&gh.active){try{if(m.cycle<game.cycle||game.players[1].submitted){syncPeers();return}if(!/^[0-9a-f]{64}$/.test(String(m.hash||''))||m.cycle!==game.cycle)throw Error('The rival sent an invalid plan commitment.');if(ghIncomingCommit&&ghIncomingCommit.hash!==m.hash)throw Error('The rival tried to replace a locked plan commitment.');ghIncomingCommit={hash:m.hash,cycle:m.cycle};syncPeers()}catch(e){try{send({type:'error',message:e.message})}catch{}toast(`The rival commitment was rejected: ${e.message}`)}return}
   if(m.type==='plan_reveal'&&gh.active)return acceptGhReveal(m);
@@ -2856,9 +3296,10 @@ function handleMessage(m){
   if(m.type==='rematch'){try{E.rematch(game,1);syncPeers()}catch(e){try{send({type:'error',message:e.message})}catch{}}return}
   return
  }
- if(m.type==='hello_request'){try{send({type:'hello',pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
- if(m.type==='state'){linkReady=true;stopHandshake();clearTimeout(planAckTimer);planAckTimer=null;view=m.state;if(ghPendingPlan&&(view.gameOver||view.cycle!==ghPendingPlan.cycle))ghPendingPlan=null;if(ghPendingPlan&&ghPendingPlan.recallRequested&&!view.me.submitted&&!view.rival.submitted)ghPendingPlan=null;if(gh.active&&ghPendingPlan&&view.rival.submitted)ghRevealPlan();if(ghPendingPlan)view.me.submitted=true;if(!lan.active&&!gh.active)mode='p2p';setConnection(gh.active?`REPOSITORY ROOM ${gh.room} // LINKED`:lan.active?`ROOM ${lan.room} // CONNECTED`:'DIRECT LINK CONNECTED','good');if($('#gameScreen').classList.contains('hidden')&&$('#gameOver').classList.contains('hidden'))enterGame(true);else render();return}
- if(m.type==='error'){if(gh.active&&m.code==='plan_rejected')ghPendingPlan=null;clearTimeout(planAckTimer);planAckTimer=null;if(view&&view.me&&view.me.submitted){view.me.submitted=false;render()}if($('#submitMsg'))$('#submitMsg').textContent=`THE HOST REJECTED THAT PLAN // ${m.message}`;toast(m.message);return}
+ if(m.type==='hello_request'){try{send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
+ if(m.type==='lobby'){receiveLobby(m);return}
+ if(m.type==='state'){if(!view&&p2pConfig&&p2pConfig.lobbyRequired&&!lobby){$('#connectHint').textContent='The host skipped the lobby. Both players need this updated game file.';setConnection('LOBBY REQUIRED // Update the host game before starting.','bad');toast('The host skipped the lobby. Both players need this updated build.');return}linkReady=true;stopHandshake();clearTimeout(planAckTimer);planAckTimer=null;view=m.state;if(ghPendingPlan&&(view.gameOver||view.cycle!==ghPendingPlan.cycle))ghPendingPlan=null;if(ghPendingPlan&&ghPendingPlan.recallRequested&&!view.me.submitted&&!view.rival.submitted)ghPendingPlan=null;if(gh.active&&ghPendingPlan&&view.rival.submitted)ghRevealPlan();if(ghPendingPlan)view.me.submitted=true;if(!lan.active&&!gh.active)mode='p2p';setConnection(gh.active?`REPOSITORY ROOM ${gh.room} // LINKED`:lan.active?`ROOM ${lan.room} // CONNECTED`:'DIRECT LINK CONNECTED','good');if($('#gameScreen').classList.contains('hidden')&&$('#gameOver').classList.contains('hidden'))enterGame(true);else render();return}
+ if(m.type==='error'){if(!game&&!view){$('#connectHint').textContent=m.message;setConnection(m.message,'bad');if($('#lobbyError'))$('#lobbyError').textContent=m.message;toast(m.message);return}if(gh.active&&m.code==='plan_rejected')ghPendingPlan=null;clearTimeout(planAckTimer);planAckTimer=null;if(view&&view.me&&view.me.submitted){view.me.submitted=false;render()}if($('#submitMsg'))$('#submitMsg').textContent=`THE HOST REJECTED THAT PLAN // ${m.message}`;toast(m.message);return}
 }
 
 function syncPeers(){if(game&&game.mode==='lan')saveLocal();const mine=E.publicState(game,0),theirs=E.publicState(game,1);if(gh.active&&ghIncomingCommit){mine.rival.submitted=true;theirs.me.submitted=true}let sendErr=null;try{send({type:'state',state:theirs})}catch(e){sendErr=e}view=mine;try{render()}catch(e){console.error('Branch Wars failed to redraw the host view',e);toast(`Display error: ${e.message}`)}if(sendErr){setConnection(`LINK SEND FAILED // ${sendErr.message}`,'bad');toast(`The rival did not receive the update: ${sendErr.message}`)}}
@@ -2950,12 +3391,12 @@ renderProjects=function(v){
  if(!v.me.serviceDesk)return;
  const quote=E.planBudget(v.me,draft);
  const cards=Object.entries(E.SERVICE_APPLICATIONS).map(([key,d])=>{
-  const def=v.projects[key],picked=draft.newProjects.includes(key),running=v.me.projects.some(x=>E.SERVICE_APPLICATIONS[x.key]&&E.SERVICE_APPLICATIONS[x.key].app===d.app),conflict=draft.newProjects.some(x=>x!==key&&E.SERVICE_APPLICATIONS[x]&&E.SERVICE_APPLICATIONS[x].app===d.app);
-  const reason=def.barred||(running?'Deployment in progress':conflict?'Another route is selected':!picked&&quote.freeCapacity<d.capacity?'Insufficient execution capacity':!picked&&quote.remaining<def.cost?'Insufficient cash / capital':'');
+  const def=v.projects[key],picked=draft.newProjects.includes(key),status=projectChoiceStatus(v,key);
+  const reason=status.reason;
   return '<article class="opportunity"><b>'+esc(d.name)+'</b><p class="micro">'+esc(d.desc)+'</p><p class="micro">'+money(def.cost)+' setup · '+def.cycles+' work cycles · '+d.capacity+' execution capacity</p><p class="micro">'+esc(reason||'Prerequisites complete. Deployment competes with branch and product work.')+'</p><button type="button" class="btn '+(picked?'active':'')+'" data-service-project="'+key+'" '+(v.me.submitted||reason?'disabled':'')+'>'+(picked?'Remove deployment':'Plan deployment')+'</button></article>';
  }).join('');
  $('#strategyTree').insertAdjacentHTML('afterend','<section id="serviceApplications"><h3>RESEARCH APPLICATIONS · COMMERCIAL SERVICES</h3><p class="micro muted">Combine capabilities to unlock a new business or delivery model. Deployment is separate from activation; completed platforms can remain inactive without recurring charges. Controls for staffing, activation and renewal prices are in Markets > Commercial Service Desk.</p><div class="pipeline">'+cards+'</div></section>');
- $$('[data-service-project]').forEach(el=>el.addEventListener('click',()=>{toggleInitiative(el.dataset.serviceProject);renderProjects(v);renderReady(v)}));
+ $$('[data-service-project]').forEach(el=>el.addEventListener('click',()=>{toggleInitiative(el.dataset.serviceProject,v);renderProjects(v);renderReady(v)}));
 };
 function serviceDraftPlayer(v){
  if(!draft.servicePolicy)draft.servicePolicy=JSON.parse(JSON.stringify(v.me.serviceDesk.policy));
@@ -3112,7 +3553,26 @@ renderPipeline=function(v){const open=$('#serviceWorkforce')?.open;workforcePipe
 
 function renderProducts(v){$('#productPortfolio').innerHTML=Object.entries(v.productPortfolios).map(([line,group])=>line==='retail'&&v.me.retailLifecycle?renderRetailOffers(v):`<div class="portfolio-line"><div class="portfolio-head"><b>${esc(group.name)}</b><span class="micro muted">Persistent until changed</span></div><div class="portfolio-options">${Object.entries(group.options).map(([key,option])=>`<button type="button" class="product-option ${draft.products[line]===key?'selected':''}" data-product-line="${line}" data-product-key="${key}" ${v.me.submitted?'disabled':''}><b>${esc(option.name)}</b><div class="micro muted">${esc(option.desc)}</div><div class="impact-tags">${productImpactTags(option)}</div></button>`).join('')}</div></div>`).join('');if(v.me.termFunding){const ts=E.termSummary(v.me);$('#productPortfolio').insertAdjacentHTML('beforeend',`<div class="portfolio-line"><h3>SIX-MONTH TERM FUNDING</h3><p class="micro muted">Lock customer funding against ordinary withdrawals and rival deposit raids. Each month, up to 10% of eligible demand balances converts, capped at 30% of total deposits. Existing promotional savings are not converted. Pays 25% above the current high-yield quote, fixed for six monthly payments. No cash or equity is created.</p><div class="portfolio-options"><label>New subscriptions <select id="termOffer" ${v.me.submitted?'disabled':''}><option value="off" ${draft.termPolicy.offer==='off'?'selected':''}>Closed</option><option value="six" ${draft.termPolicy.offer==='six'?'selected':''}>Offer six-month deposits</option></select></label><label>At maturity <select id="termMaturity" ${v.me.submitted?'disabled':''}><option value="release" ${draft.termPolicy.maturity==='release'?'selected':''}>Release to current savings</option><option value="renew" ${draft.termPolicy.maturity==='renew'?'selected':''}>Renew at then-current quote</option></select></label></div><p class="micro">Locked: ${money(ts.locked)} · Maturing next operations: ${money(ts.maturing)} · Current monthly interest: ${money(ts.interest)}. Closing subscriptions does not cancel existing terms or renewal instructions. Acquisition transfers preserve obligations; released balances become contestable.</p></div>`);$('#termOffer').addEventListener('change',e=>{draft.termPolicy.offer=e.target.value;renderReady(v)});$('#termMaturity').addEventListener('change',e=>{draft.termPolicy.maturity=e.target.value;renderReady(v)})}$$('[data-retail-emphasis]').forEach(input=>input.addEventListener('change',()=>{const proposed={...draft.retailMix,[input.dataset.retailEmphasis]:Number(input.value)};if(Object.values(proposed).every(n=>n===0)){toast('Keep at least one retail offer open.');renderProducts(v);return}draft.retailMix=proposed;renderProducts(v);renderReady(v)}));const chosen=Object.entries(v.productPortfolios).map(([line,group])=>line==='retail'&&v.me.retailLifecycle?Object.entries(draft.retailMix).filter(([,weight])=>weight>0).map(([key])=>group.options[key].name).join(' + '):group.options[draft.products[line]].name);$('#portfolioBridge').innerHTML=`<b>CURRENT BANK MODEL</b> // ${chosen.map(esc).join(' · ')}<br><span class="muted">These choices combine with pricing, underwriting, staff, facilities, and the economy in the next cycle—not as isolated score bonuses.</span>`;$$('[data-product-line]').forEach(b=>b.addEventListener('click',()=>{draft.products[b.dataset.productLine]=b.dataset.productKey;renderProducts(v);renderReady(v)}))}
 function renderCampaignBuff(v){const turns=v.me.marketingTurns||0;if(turns>0)$('#activeProject').insertAdjacentHTML('beforeend',`<div class="micro blue" style="margin-top:6px">ADVERTISING CAMPAIGN ACTIVE // ${turns} more cycle${turns===1?'':'s'} of added market influence</div>`)}
-function toggleInitiative(key){if(!draft)return;if(!Array.isArray(draft.newProjects))draft.newProjects=[];const i=draft.newProjects.indexOf(key);if(i>=0)draft.newProjects.splice(i,1);else draft.newProjects.push(key);draft.newProject=draft.newProjects[0]||null}
+function projectChoiceStatus(v,key){
+ if(v.me.submitted)return {eligible:false,reason:'Your plan is already locked.'};
+ // Removal is always available, including after a focus or staffing change.
+ const chosen=E.planInitiatives(draft);if(chosen.includes(key))return {eligible:true,reason:''};
+ const terms=E.projectTerms(v.me,key,draft.focus);
+ if(!terms)return {eligible:false,reason:'That strategic project does not exist.'};
+ const def=E.PROJECTS[key],target=E.projectTargetIssue(v,v.me,def,draft.focus);
+ if(target)return {eligible:false,reason:target};
+ const newProjects=[...chosen,key],candidate={...draft,newProjects,newProject:newProjects[0]};
+ // Choosing expansion cancels a staged board request, as the click handler does.
+ if(['branch','acquisition'].includes(def.kind))candidate.capitalAction=false;
+ return E.projectPlanStatus(v.me,candidate);
+}
+function toggleInitiative(key,v){
+ if(!draft)return;
+ if(v){const status=projectChoiceStatus(v,key);if(!status.eligible){toast(status.reason);return}}
+ if(!Array.isArray(draft.newProjects))draft.newProjects=[];
+ const i=draft.newProjects.indexOf(key);if(i>=0)draft.newProjects.splice(i,1);else draft.newProjects.push(key);
+ draft.newProject=draft.newProjects[0]||null;
+}
 function capacityLine(budget,load,free){const pct=budget>0?Math.min(100,Math.round(load/budget*100)):0;const cls=free<0?'hot':free<1?'watch':'';return`<div class="capacity-readout ${cls}"><div class="micro"><b>EXECUTION CAPACITY</b> ${load.toFixed(1)} / ${budget.toFixed(1)} committed · <b>${free.toFixed(1)} free</b></div><div class="capacity-bar"><span style="width:${pct}%"></span></div><div class="micro muted">Your executive team carries 1.5 on its own; each Operations &amp; Risk banker adds 2.0 and operations infrastructure adds more. Move bankers into Operations to run more at once.</div></div>`}
 function renderProjectEffect(p,key,target){
  const effect=E.regionalProjectPreview(p,key,target);if(!effect)return '';
@@ -3131,21 +3591,21 @@ function renderProjects(v){
  const pledgedTotal=Object.keys(v.strategyBranches).reduce((s,k)=>s+Math.max(0,Math.round(draft.investments[k]||0)),0);$('#strategySummary').innerHTML=`${primary?`READS AS // <b>${esc(primary.name)}</b>`:'NO CLEAR IDENTITY YET'} · Fund any capability, in any order, any cycle — nothing is locked${capstone?` · CAPSTONE: <b>${esc(v.strategyBranches[capstone].name)}</b>`:''}${pledgedTotal?` · <b>${money(pledgedTotal)}</b> committed this cycle`:''}`;
   $('#strategyTree').innerHTML=Object.entries(v.strategyBranches).map(([branch,info])=>{const spent=v.me.capability[branch]||0,tiers=v.capabilityTiers[branch],level=v.me.strategyLevels[branch]||0,pledged=Math.max(0,Math.min(v.capabilityCap,Math.round(draft.investments[branch]||0))),done=level>=tiers.length,nextIdx=Math.min(level,tiers.length-1),floor=level>0?tiers[level-1]:0,ceiling=tiers[nextIdx],span=Math.max(1,ceiling-floor),pct=done?100:Math.min(100,Math.round((spent-floor)/span*100)),pledgePct=done?0:Math.min(100-pct,Math.round(pledged/span*100)),toNext=Math.max(0,ceiling-spent-pledged),lockedSpec=v.me.specializations[branch],chosenSpec=lockedSpec||draft.specializations[branch],specs=v.strategySpecializations[branch],specFork=level>=1?`<div class="specialization-fork"><span class="strategy-tier">${lockedSpec?'OPERATING MODEL LOCKED':'CHOOSE AN OPERATING MODEL'}</span><div class="specialization-options">${Object.entries(specs).map(([sk,sp])=>`<button type="button" class="specialization-option ${chosenSpec===sk?'selected':''}" data-specialization-branch="${branch}" data-specialization-key="${sk}" ${lockedSpec||v.me.submitted?'disabled':''}><b>${esc(sp.name)}</b><div>${esc(sp.desc)}</div></button>`).join('')}</div></div>`:'',milestones=info.nodes.map((node,i)=>`<div class="capability-milestone ${i<level?'reached':i===level?'next':''}"><b>${esc(node.name)}</b><span>${i<level?'REACHED':`$${Math.round(tiers[i]/1000)}K total`}</span><div class="micro muted">${esc(node.desc)}</div></div>`).join(''),cardCap=Math.min(v.capabilityCap,ceiling-spent);return`<div class="strategy-lane ${level>=tiers.length?'primary':''}"><h3>${esc(info.name)} // TIER ${level}/${tiers.length}</h3><div class="micro muted">${esc(info.promise)}</div><div class="capability-bar"><span class="filled" style="width:${pct}%"></span><span class="pledged" style="width:${pledgePct}%"></span></div><div class="micro">${done?'<b>FULLY DEVELOPED</b>':`$${Math.round(spent/1000)}K invested · $${Math.round(toNext/1000)}K to ${esc(info.nodes[nextIdx].name)}`}</div><div class="capability-fund">${done?'<span class="micro muted">No further investment is possible.</span>':`<button type="button" class="stepper" aria-label="Reduce ${esc(info.name)} funding" data-fund="${branch}" data-fund-step="-50000" ${v.me.submitted||!pledged?'disabled':''}>−</button><span class="fund-amount">${pledged?money(pledged):'—'}</span><button type="button" class="stepper" aria-label="Increase ${esc(info.name)} funding" data-fund="${branch}" data-fund-step="50000" ${v.me.submitted||pledged>=cardCap||E.fundingStep(v.me,draft,branch,50000)<=pledged?'disabled':''}>+</button><span class="micro muted">this cycle · max ${money(Math.max(0,cardCap))}</span><button type="button" class="fund-next" aria-label="Fund ${esc(info.name)} to the next milestone" data-fund="${branch}" data-fund-step="${v.capabilityCap}" ${v.me.submitted||E.fundingStep(v.me,draft,branch,v.capabilityCap)<=pledged?'disabled':''}>Fund to milestone</button>`}</div>${milestones}${v.me.productDeployment&&['network','digital'].includes(branch)?`<p class="micro"><b>PRODUCT UNLOCK · TIER 1</b><br>${branch==='network'?'Rewards Checking':'High-Yield Savings'} rollout becomes available under Operations initiatives. Research alone does not deploy or open the offer.</p>`:''}${specFork}</div>`}).join('');
  const cap=v.me.capitalRequest,capDisabled=v.me.submitted||!cap.eligible;$('#capitalAction').classList.toggle('hidden',!cap.eligible&&!draft.capitalAction);$('#capitalAction').classList.toggle('selected',!!draft.capitalAction);$('#capitalAction').innerHTML=`<b>EMERGENCY BOARD CAPITAL</b><div class="micro">${esc(cap.reason)}</div><div class="micro muted">Permanent concessions: ${cap.concessions} · Current oversight: ${cap.restriction} cycles</div><button type="button" id="capitalActionBtn" class="btn ${draft.capitalAction?'active':''}" ${capDisabled?'disabled':''}>${draft.capitalAction?'[ BOARD REQUEST ADDED ]':'[ REQUEST EMERGENCY CAPITAL ]'}</button>`;
-  const tactical=Object.entries(v.projects).filter(([,p])=>!p.strategy&&!p.legacy&&!p.serviceOnly&&(!p.contractOnly||v.me.serviceContracts)&&(!p.deploymentProduct||v.me.productDeployment)&&(!p.regionalOnly||v.me.regionalOperations));$('#projectGrid').innerHTML=tactical.map(([k,p])=>{const running=active.some(x=>x.key===k),picked=draft.newProjects.includes(k),targetBad=(p.kind==='branch'&&v.me.branches[draft.focus]>=3)||(v.me.regionalOperations&&(p.kind==='branch'||p.regionalOnly)&&(active.some(x=>x.target===draft.focus&&(v.projects[x.key].kind==='branch'||v.projects[x.key].regionalOnly))||draft.newProjects.some(x=>x!==k&&(v.projects[x].kind==='branch'||v.projects[x].regionalOnly)))),poor=!picked&&quote.remaining<p.cost,tooBig=!picked&&(p.capacity||1.5)>free+1e-9,blocked=p.barred,facilityLabel=p.facility?` · ${p.facility.toUpperCase()} MODEL`:'';return`<button type="button" class="project ${picked?'selected':''}" data-project="${k}" ${v.me.submitted||targetBad||running||(!picked&&(poor||tooBig))||blocked?'disabled':''}><span class="project-title">${esc(p.name)}</span><div class="micro">${money(p.cost)} // ${p.cycles} cycle${p.cycles===1?'':'s'} // ${(p.capacity||1.5).toFixed(1)} cap${p.target?` // ${esc(v.territories[draft.focus].name)}`:''}${facilityLabel}${running?' // UNDER WAY':tooBig?' // NEEDS CAPACITY':poor?' // INSUFFICIENT CASH / CAPITAL':''}</div><div class="micro muted">${esc(blocked||p.desc)}</div>${renderProjectEffect(v.me,k,draft.focus)}</button>`}).join('');
-  $$('[data-strategy-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.strategyProject);renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
+  const tactical=Object.entries(v.projects).filter(([,p])=>!p.strategy&&!p.legacy&&!p.serviceOnly&&(!p.contractOnly||v.me.serviceContracts)&&(!p.deploymentProduct||v.me.productDeployment)&&(!p.regionalOnly||v.me.regionalOperations));$('#projectGrid').innerHTML=tactical.map(([k,p])=>{const running=active.some(x=>x.key===k),picked=draft.newProjects.includes(k),status=projectChoiceStatus(v,k),poor=!picked&&['cash','capital-reserve'].includes(status.code),tooBig=!picked&&status.code==='capacity',blocked=status.reason,facilityLabel=p.facility?` · ${p.facility.toUpperCase()} MODEL`:'';return`<button type="button" class="project ${picked?'selected':''}" data-project="${k}" ${!status.eligible?'disabled':''}><span class="project-title">${esc(p.name)}</span><div class="micro">${money(p.cost)} // ${p.cycles} cycle${p.cycles===1?'':'s'} // ${(p.capacity||1.5).toFixed(1)} cap${p.target?` // ${esc(v.territories[draft.focus].name)}`:''}${facilityLabel}${running?' // UNDER WAY':tooBig?' // NEEDS CAPACITY':poor?' // INSUFFICIENT CASH / CAPITAL':''}</div><div class="micro muted">${esc(blocked||p.desc)}</div>${renderProjectEffect(v.me,k,draft.focus)}</button>`}).join('');
+  $$('[data-strategy-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.strategyProject,v);renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
   $$('[data-specialization-branch]').forEach(b=>b.addEventListener('click',()=>{draft.specializations[b.dataset.specializationBranch]=b.dataset.specializationKey;draft.newProjects=draft.newProjects.filter(k=>k!==roadmapKeys[b.dataset.specializationBranch]);renderProjects(v);renderReady(v)}));
-  $$('[data-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.project);if(draft.newProjects.some(k=>['branch','acquisition'].includes(v.projects[k].kind)))draft.capitalAction=false;renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
+  $$('[data-project]').forEach(b=>b.addEventListener('click',()=>{toggleInitiative(b.dataset.project,v);if(draft.newProjects.some(k=>['branch','acquisition'].includes(v.projects[k].kind)))draft.capitalAction=false;renderProjects(v);renderCompetitiveActions(v);renderReady(v)}));
  $('#capitalActionBtn').addEventListener('click',()=>{draft.capitalAction=!draft.capitalAction;if(draft.capitalAction)draft.newProjects=draft.newProjects.filter(k=>!['branch','acquisition'].includes(v.projects[k].kind));renderProjects(v);renderReady(v)});
  const initiativeSpend=draft.newProjects.reduce((s,k)=>s+(v.projects[k]?v.projects[k].cost:0),0);
  const committedSpend=E.planBudget(v.me,draft).total;
 
- const nextHireUnaffordable=v.me.stats.cash < committedSpend - hireBill + E.hireCost(v.me,(draft.hires||0)+1);
+ const nextHireUnaffordable=E.planBudget(v.me,{...draft,hires:(draft.hires||0)+1}).remaining<0;
  $('#hiringPanel').innerHTML=`<b>RECRUITING</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||draft.hires>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} signing cost · payroll +${money(draft.hires*18000)}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
  $$('[data-fund]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.fund,step=Number(b.dataset.fundStep);draft.investments[key]=E.fundingStep(v.me,draft,key,step);if(!draft.investments[key])delete draft.investments[key];renderProjects(v);renderReady(v)}));
  $$('[data-hire]').forEach(b=>b.addEventListener('click',()=>{const step=Number(b.dataset.hire);draft.hires=Math.max(0,Math.min(hireMax,(draft.hires||0)+step));renderProjects(v);renderReady(v)}));
  renderCampaignBuff(v)
 }
-function renderReady(v){if(draft.contractBid&&draft.allocation.business<1){draft.contractBid=null}if(v.serviceAgreements)renderPipeline(v);const pool=unassigned(v),action=v.competitiveActions[draft.competitiveAction],items=[...(v.serviceAgreements?[draft.contractBid?'✓ Service agreement bid':'— Service bid (automatic incumbent defense)']:[]),`${draft.focus?'✓':'○'} Focus market`,`${draft.decision?'✓':'○'} Executive decision`,`${pool===0?'✓':'○'} Staff allocated`,`⚔ ${action.name}`,`${draft.opportunity?'✓':'—'} Priority opportunity (optional)`,`${draft.newProjects&&draft.newProjects.length?`✓ ${draft.newProjects.length} initiative${draft.newProjects.length===1?'':'s'}`:'— Initiatives (optional)'}`,`${draft.hires?`✓ Hiring ${draft.hires}`:'— Hiring (optional)'}`,`${Object.keys(draft.investments||{}).length?`✓ Funding ${Object.keys(draft.investments).length} capabilit${Object.keys(draft.investments).length===1?'y':'ies'}`:'— Capability funding (optional)'}`];$('#planChecklist').innerHTML=items.join(' &nbsp; ');const quote=E.planBudget(v.me,draft),overBudget=quote.remaining<0;renderPlanBudget(v);renderOperatingPreview(v);renderCompetitiveActions(v);$('#readyBtn').disabled=v.me.submitted||!planReady(v)||overBudget;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'PLAN LOCKED // WAITING FOR RIVAL':overBudget?`This plan commits ${money(quote.total)} but ${v.campaignRulesVersion===1?money(quote.capitalBudget)+' is available within capital limits':'only '+money(quote.cash)+' is available'}. Reduce funding, initiatives, hiring or the competitive action.`:'The market remains paused until both institutions are ready.';$('#submitMsg').className='small '+(overBudget?'bad':'muted')}
+function renderReady(v){if(draft.contractBid&&draft.allocation.business<1){draft.contractBid=null}if(v.serviceAgreements)renderPipeline(v);const pool=unassigned(v),action=v.competitiveActions[draft.competitiveAction],items=[...(v.serviceAgreements?[draft.contractBid?'✓ Service agreement bid':'— Service bid (automatic incumbent defense)']:[]),`${draft.focus?'✓':'○'} Focus market`,`${draft.decision?'✓':'○'} Executive decision`,`${pool===0?'✓':'○'} Staff allocated`,`⚔ ${action.name}`,`${draft.opportunity?'✓':'—'} Priority opportunity (optional)`,`${draft.newProjects&&draft.newProjects.length?`✓ ${draft.newProjects.length} initiative${draft.newProjects.length===1?'':'s'}`:'— Initiatives (optional)'}`,`${draft.hires?`✓ Hiring ${draft.hires}`:'— Hiring (optional)'}`,`${Object.keys(draft.investments||{}).length?`✓ Funding ${Object.keys(draft.investments).length} capabilit${Object.keys(draft.investments).length===1?'y':'ies'}`:'— Capability funding (optional)'}`];$('#planChecklist').innerHTML=items.join(' &nbsp; ');const projectStatus=E.projectPlanStatus(v.me,draft),quote=projectStatus.quote,overBudget=quote.remaining<0;renderPlanBudget(v);renderOperatingPreview(v);renderCompetitiveActions(v);$('#readyBtn').disabled=v.me.submitted||!planReady(v)||overBudget||!projectStatus.eligible;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'PLAN LOCKED // WAITING FOR RIVAL':overBudget?`This plan commits ${money(quote.total)} but ${v.campaignRulesVersion===1?money(quote.capitalBudget)+' is available within capital limits':'only '+money(quote.cash)+' is available'}. Reduce funding, initiatives, hiring or the competitive action.`:!projectStatus.eligible?projectStatus.reason:'The market remains paused until both institutions are ready.';$('#submitMsg').className='small '+(overBudget||!projectStatus.eligible?'bad':'muted')}
 function renderDetails(v){$('#myName').textContent=v.me.name;$('#rivalName').textContent=v.rival.name;const rows=[['Enterprise Value','score'],['Capital Ratio','capitalRatio'],['Regulatory Standing','capitalTier'],['Markets Controlled','controlled'],['Regulatory Capital','capital'],['Deposits','deposits'],['Loans','loans'],['Customers','customers'],['Business Relationships','business'],['Merchant Clients','merchant'],['Wealth Relationships','wealth'],['Digital Adoption','digital'],['Reputation','reputation'],['Staff','staff'],['Cumulative Earnings','earnings'],['Credit Losses','chargeoffs']];$('#scoreRows').innerHTML=rows.map(([label,k])=>{const pick=(side)=>k==='score'?side.score:k==='controlled'?side.controlled:k==='capitalRatio'?side.capitalRatio:k==='capitalTier'?side.capitalTier.short:side.stats[k],a=pick(v.me),b=pick(v.rival),fmt=['deposits','loans','earnings','chargeoffs','capital'].includes(k)?money:k==='score'?x=>Number(x).toFixed(1):k==='capitalRatio'?x=>`${Number(x).toFixed(1)}%`:k==='capitalTier'?x=>String(x):integer;return`<tr><td>${esc(label)}</td><td><b>${esc(fmt(a))}</b></td><td><b>${esc(fmt(b))}</b></td></tr>`}).join('');const s=v.me.stats,u=v.me.upgrades,primary=v.me.primaryStrategy?v.strategyBranches[v.me.primaryStrategy].name:'UNCOMMITTED';$('#internalStats').innerHTML=`Reads as <b>${esc(v.me.doctrine.name)}</b> // Primary Strategy <b>${esc(primary)}</b> // Morale <b>${s.morale}</b> // Risk <b>${s.compliance}</b> // Attention <b>${s.attention}</b> // Influence <b>${s.influence}</b> // Momentum <b>${s.momentum}</b> // Legacy Tech <b>${u.technology}</b> // Legacy Training <b>${u.training}</b> // Legacy Analytics <b>${u.analytics}</b> // Legacy Wealth <b>${u.wealth}</b> // Legacy Ops <b>${u.operations}</b> // Board Concessions <b>${v.me.boardConcessions}</b> // Status <b>${esc(v.me.corporateStatus)}</b>`;const m=v.me.mandate;$('#mandateName').textContent=`${m.name} // +${m.bonus} POINTS`;$('#mandateDesc').textContent=m.desc;$('#mandateProgress').textContent=(m.achieved?'ACHIEVED // ':'PROGRESS // ')+m.progress;$('#mandateProgress').className='small '+(m.achieved?'good':'');$('#milestones').innerHTML=Object.entries(v.milestoneDefinitions).map(([k,d])=>`<div class="milestone ${v.me.milestones[k]?'done':''}"><b>${v.me.milestones[k]?'✓':'○'} ${esc(d.name)}</b><div class="micro">${esc(d.desc)}</div></div>`).join('');$('#log').innerHTML=v.log.map(x=>`<div class="history-item"><span class="history-kind">CYCLE ${x.cycle} / ${esc(x.kind)}</span>${esc(x.text)}</div>`).join('')}
 const renderDetailsCore=renderDetails;renderDetails=function(v){renderDetailsCore(v);const productNames=Object.entries(v.me.products).map(([line,key])=>v.productPortfolios[line].options[key].name),specialties=Object.entries(v.me.specializations).map(([branch,key])=>v.strategySpecializations[branch][key].name);$('#internalStats').insertAdjacentHTML('beforeend',`<br>Products <b>${productNames.map(esc).join(' · ')}</b> // Facilities <b>${v.me.facilities.retail} full-service · ${v.me.facilities.commercial} commercial · ${v.me.facilities.digital} digital advisory</b>${specialties.length?` // Specializations <b>${specialties.map(esc).join(' · ')}</b>`:''}`)};
 function renderHistory(v){$('#lastResolution').innerHTML=v.resolution.length?v.resolution.map(x=>`<div class="history-item">${esc(x)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}

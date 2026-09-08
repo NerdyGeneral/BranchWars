@@ -2,10 +2,15 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
-Open the [game folder](Branch_Wars_Executive_Command_v6_No_Server/README.md) for launch instructions, or browse the [documentation index](Branch_Wars_Executive_Command_v6_No_Server/docs/README.md).
+Run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) to play, or [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) to host a local-network game.
 
-- [Current release status](Branch_Wars_Executive_Command_v6_No_Server/docs/release-status.md)
-- [Blueprint roadmap](Branch_Wars_Executive_Command_v6_No_Server/docs/roadmap.md)
-- [Game reference](Branch_Wars_Executive_Command_v6_No_Server/docs/game-reference.md)
+- [Player guide](game/docs/player-guide.md)
+- [Current release status](game/docs/release-status.md)
+- [Blueprint roadmap](game/docs/roadmap.md)
+- [Game reference](game/docs/game-reference.md)
+- [Architecture and maintenance](game/docs/architecture.md)
+- [Documentation index](game/docs/README.md)
 
-The package folder retains its historical name for compatibility. Documentation now uses a stable `docs/` layout rather than dozens of competing status files in the game folder. Preserve saves before updating; both friends should use the same build.
+The runnable package lives in `game/`. Its HTML, server and launchers retain their established names. Existing bookmarks or shortcuts into the old versioned folder must be updated; use the root launchers above. Export saves before switching URLs or replacing a download: browser storage belongs to its original origin. Both friends should use the same build.
+
+Development: run `node game/tools/check.js` for the fast gate, or `node game/tools/check.js --full` for complete regression and balance checks. No Node installation or build step is required to play.

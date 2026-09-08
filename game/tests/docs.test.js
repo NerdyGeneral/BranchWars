@@ -2,10 +2,10 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):e.name.endsWith('.md')?[path.join(dir,e.name)]:[]);
-const files=[path.join(root,'../README.md'),path.join(root,'README.md'),path.join(root,'tools/README.md'),...walk(path.join(root,'docs'))];
+const files=[path.join(root,'../README.md'),path.join(root,'../CONTRIBUTING.md'),path.join(root,'README.md'),path.join(root,'tools/README.md'),...walk(path.join(root,'docs'))];
 let links=0;
 for(const file of files){
- const name=path.basename(file);assert(name==='README.md'||/^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(name),'Document name: '+file);
+ const name=path.basename(file);assert(['README.md','CONTRIBUTING.md'].includes(name)||/^[a-z0-9]+(?:-[a-z0-9]+)*\.md$/.test(name),'Document name: '+file);
  const text=fs.readFileSync(file,'utf8');
  for(const m of text.matchAll(/\]\(([^)]+)\)/g)){
   let url=m[1].replace(/^<|>$/g,'');if(/^(?:[a-z]+:|#)/i.test(url))continue;

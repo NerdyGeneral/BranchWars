@@ -1,0 +1,5305 @@
+{
+  "sourceHash": "ff15fce9f8e4af3ebb6024c0b4d984dba3cededee0d8a4f7e5bb2f245a62453c",
+  "options": {
+    "scope": "town",
+    "fundingRulesVersion": 1,
+    "seed": "foundation-town-v1-0",
+    "created": 1,
+    "mode": "hotseat",
+    "name1": "North Bank",
+    "name2": "South Bank",
+    "scenario": "balanced"
+  },
+  "game": {
+    "version": "8.1",
+    "mode": "hotseat",
+    "scope": "town",
+    "scenario": "balanced",
+    "difficulty": "vp",
+    "cycle": 9,
+    "maxCycles": null,
+    "act": 1,
+    "buyoutPressure": [
+      0,
+      0
+    ],
+    "consolidationStalemate": 0,
+    "event": {
+      "key": "losses",
+      "name": "CREDIT WATCHLIST EXPANDS",
+      "text": "Several borrowers are showing early signs of stress.",
+      "a": "Build reserves",
+      "ad": "Pay now to contain future credit damage.",
+      "b": "Work through cases",
+      "bd": "Lending and Operations staffing determine losses."
+    },
+    "economy": {
+      "key": "steady",
+      "name": "STEADY GROWTH",
+      "text": "Production and funding markets are broadly balanced.",
+      "rate": 3.75,
+      "demand": 1,
+      "deposits": 1,
+      "credit": 1
+    },
+    "opportunities": [
+      {
+        "id": "9-0-398",
+        "type": "wealth",
+        "market": "suburbs",
+        "value": 1280000,
+        "name": "Private Banking Household",
+        "dept": "service",
+        "desc": "Deposits, wealth referrals, and executive visibility."
+      },
+      {
+        "id": "9-1-372",
+        "type": "public",
+        "market": "downtown",
+        "value": 1880000,
+        "name": "Municipal Banking Bid",
+        "dept": "operations",
+        "desc": "Public deposits requiring strong controls and influence."
+      },
+      {
+        "id": "9-2-144",
+        "type": "loan",
+        "market": "northside",
+        "value": 910000,
+        "name": "Commercial Loan Request",
+        "dept": "lending",
+        "desc": "Loan production with meaningful revenue and risk."
+      }
+    ],
+    "players": [
+      {
+        "id": "bank-f9b6d63d",
+        "name": "North Bank",
+        "stats": {
+          "deposits": 39551235,
+          "emergencyDebt": 0,
+          "rateSensitiveDeposits": 693320,
+          "fundingCost": 22888,
+          "depositRunoff": 67213,
+          "loans": 11125284,
+          "capital": 1994151,
+          "customers": 3158,
+          "business": 79,
+          "merchant": 52,
+          "wealth": 28,
+          "reputation": 100,
+          "digital": 42,
+          "morale": 72,
+          "staff": 9,
+          "cash": 234381,
+          "compliance": 9,
+          "attention": 27,
+          "influence": 33,
+          "momentum": 78,
+          "earnings": 780214,
+          "lastProfit": 160472,
+          "chargeoffs": 135417,
+          "opportunityWins": 7
+        },
+        "upgrades": {
+          "technology": 0,
+          "training": 0,
+          "analytics": 0,
+          "wealth": 0,
+          "operations": 0
+        },
+        "strategy": {
+          "network": 0,
+          "digital": 0,
+          "commercial": 0,
+          "operations": 0,
+          "acquisition": 0
+        },
+        "specializations": {
+          "network": "retailDensity"
+        },
+        "facilities": {
+          "retail": 2,
+          "commercial": 0,
+          "digital": 0
+        },
+        "facilityMarkets": {
+          "downtown": [
+            "retail",
+            "retail"
+          ]
+        },
+        "products": {
+          "retail": "essential",
+          "business": "relationship",
+          "credit": "mortgage"
+        },
+        "primaryStrategy": "network",
+        "boardConcessions": 0,
+        "capitalRestriction": 0,
+        "allocation": {
+          "service": 6,
+          "business": 1,
+          "lending": 1,
+          "operations": 1
+        },
+        "policies": {
+          "deposit": "margin",
+          "lending": "balanced",
+          "capital": "liquid"
+        },
+        "doctrine": "community",
+        "achievements": [
+          "firstMarket",
+          "trusted",
+          "scale"
+        ],
+        "focus": "industrial",
+        "branches": {
+          "downtown": 2,
+          "northside": 0,
+          "industrial": 0,
+          "suburbs": 0
+        },
+        "projects": [],
+        "hiresTotal": 0,
+        "payrollSpend": 0,
+        "buildSpend": 1330000,
+        "capability": {
+          "network": 1052551,
+          "digital": 250000,
+          "commercial": 0,
+          "operations": 0,
+          "acquisition": 0
+        },
+        "distress": 0,
+        "fundingGap": 0,
+        "capitalRequests": 0,
+        "marketingTurns": 0,
+        "lastCompetitiveAction": "none",
+        "submitted": {
+          "focus": "suburbs",
+          "allocation": {
+            "service": 5,
+            "business": 1,
+            "lending": 1,
+            "operations": 2
+          },
+          "depositPolicy": "margin",
+          "lendingPolicy": "balanced",
+          "capitalPolicy": "liquid",
+          "products": {
+            "retail": "essential",
+            "business": "relationship",
+            "credit": "mortgage"
+          },
+          "specializations": {
+            "network": "retailDensity"
+          },
+          "opportunity": "9-0-398",
+          "newProject": "remediation",
+          "newProjects": [
+            "remediation"
+          ],
+          "investments": {},
+          "hires": 0,
+          "capitalAction": false,
+          "competitiveAction": "none",
+          "decision": "b"
+        },
+        "mandate": "people",
+        "isBot": false,
+        "turnEffects": {},
+        "color": "#2878e0",
+        "fundingRulesVersion": 1,
+        "operatingReport": {
+          "cycle": 8,
+          "depositIncome": 161130.20893200004,
+          "fundingCost": 22887.813768750002,
+          "loanIncome": 56053.523587366675,
+          "commercialIncome": 90086.4,
+          "otherIncome": 104600.00000000003,
+          "expense": 206000,
+          "chargeoff": 22510,
+          "eventAdjustment": 0,
+          "profit": 160472,
+          "depositGrowth": 1069728,
+          "loanGrowth": 143750,
+          "depositRunoff": 67213
+        }
+      },
+      {
+        "id": "bank-2e598377",
+        "name": "South Bank",
+        "stats": {
+          "deposits": 31094474,
+          "emergencyDebt": 0,
+          "rateSensitiveDeposits": 355845,
+          "fundingCost": 18383,
+          "depositRunoff": 34530,
+          "loans": 11179027,
+          "capital": 1997352,
+          "customers": 2658,
+          "business": 76,
+          "merchant": 48,
+          "wealth": 16,
+          "reputation": 100,
+          "digital": 56,
+          "morale": 78,
+          "staff": 7,
+          "cash": 146239,
+          "compliance": 7,
+          "attention": 12,
+          "influence": 27,
+          "momentum": 54,
+          "earnings": 844884,
+          "lastProfit": 157337,
+          "chargeoffs": 139566,
+          "opportunityWins": 1
+        },
+        "upgrades": {
+          "technology": 0,
+          "training": 0,
+          "analytics": 0,
+          "wealth": 0,
+          "operations": 0
+        },
+        "strategy": {
+          "network": 0,
+          "digital": 0,
+          "commercial": 0,
+          "operations": 0,
+          "acquisition": 0
+        },
+        "specializations": {
+          "network": "retailDensity"
+        },
+        "facilities": {
+          "retail": 1,
+          "commercial": 0,
+          "digital": 0
+        },
+        "facilityMarkets": {
+          "northside": [
+            "retail"
+          ]
+        },
+        "products": {
+          "retail": "essential",
+          "business": "relationship",
+          "credit": "mortgage"
+        },
+        "primaryStrategy": "network",
+        "boardConcessions": 0,
+        "capitalRestriction": 0,
+        "allocation": {
+          "service": 4,
+          "business": 1,
+          "lending": 1,
+          "operations": 1
+        },
+        "policies": {
+          "deposit": "margin",
+          "lending": "balanced",
+          "capital": "liquid"
+        },
+        "doctrine": "community",
+        "achievements": [
+          "firstMarket",
+          "trusted"
+        ],
+        "focus": "industrial",
+        "branches": {
+          "downtown": 0,
+          "northside": 1,
+          "industrial": 0,
+          "suburbs": 0
+        },
+        "projects": [],
+        "hiresTotal": 0,
+        "payrollSpend": 0,
+        "buildSpend": 1030000,
+        "capability": {
+          "network": 923656,
+          "digital": 500000,
+          "commercial": 0,
+          "operations": 0,
+          "acquisition": 0
+        },
+        "distress": 0,
+        "fundingGap": 0,
+        "capitalRequests": 0,
+        "marketingTurns": 0,
+        "lastCompetitiveAction": "none",
+        "submitted": null,
+        "mandate": "map",
+        "isBot": false,
+        "turnEffects": {},
+        "color": "#e1505c",
+        "fundingRulesVersion": 1,
+        "operatingReport": {
+          "cycle": 8,
+          "depositIncome": 129412.98909000002,
+          "fundingCost": 18382.526859375,
+          "loanIncome": 56324.3031113,
+          "commercialIncome": 85401.59999999999,
+          "otherIncome": 75199.99999999999,
+          "expense": 148000,
+          "chargeoff": 22619,
+          "eventAdjustment": 0,
+          "profit": 157337,
+          "depositGrowth": 669501,
+          "loanGrowth": 143641,
+          "depositRunoff": 34530
+        }
+      }
+    ],
+    "territories": {
+      "downtown": {
+        "name": "Downtown",
+        "tier": 0,
+        "unlock": 1,
+        "value": 15,
+        "specialties": [
+          "service",
+          "corporate"
+        ],
+        "note": "Deposits + executive visibility",
+        "shares": [
+          95,
+          5
+        ],
+        "exitStreak": [
+          0,
+          2
+        ],
+        "exited": [
+          false,
+          false
+        ]
+      },
+      "northside": {
+        "name": "Northside",
+        "tier": 0,
+        "unlock": 1,
+        "value": 15,
+        "specialties": [
+          "service",
+          "digital"
+        ],
+        "note": "Households + digital adoption",
+        "shares": [
+          19.9,
+          80.1
+        ],
+        "exitStreak": [
+          0,
+          0
+        ],
+        "exited": [
+          false,
+          false
+        ]
+      },
+      "industrial": {
+        "name": "Industrial Corridor",
+        "tier": 0,
+        "unlock": 1,
+        "value": 18,
+        "specialties": [
+          "business"
+        ],
+        "note": "Treasury + merchant services",
+        "shares": [
+          47.1,
+          52.9
+        ],
+        "exitStreak": [
+          0,
+          0
+        ],
+        "exited": [
+          false,
+          false
+        ]
+      },
+      "suburbs": {
+        "name": "Suburban Growth Belt",
+        "tier": 0,
+        "unlock": 1,
+        "value": 15,
+        "specialties": [
+          "lending",
+          "people"
+        ],
+        "note": "Consumer lending + staffing",
+        "shares": [
+          49.4,
+          50.6
+        ],
+        "exitStreak": [
+          0,
+          0
+        ],
+        "exited": [
+          false,
+          false
+        ]
+      }
+    },
+    "trend": [
+      {
+        "cycle": 0,
+        "scores": [
+          644.6,
+          644.6
+        ],
+        "deposits": [
+          24000000,
+          24000000
+        ],
+        "loans": [
+          9500000,
+          9500000
+        ],
+        "cash": [
+          2400000,
+          2400000
+        ],
+        "profits": [
+          0,
+          0
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 1,
+        "scores": [
+          707.9,
+          677.6
+        ],
+        "deposits": [
+          25942284,
+          24842284
+        ],
+        "loans": [
+          9972276,
+          9972276
+        ],
+        "cash": [
+          729514,
+          1419514
+        ],
+        "profits": [
+          69514,
+          69514
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 2,
+        "scores": [
+          814.6,
+          767.6
+        ],
+        "deposits": [
+          28676545,
+          25853708
+        ],
+        "loans": [
+          10201980,
+          10201980
+        ],
+        "cash": [
+          503508,
+          831007
+        ],
+        "profits": [
+          83248,
+          74665
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 3,
+        "scores": [
+          872.2,
+          812.9
+        ],
+        "deposits": [
+          30535458,
+          26896155
+        ],
+        "loans": [
+          10373580,
+          10431401
+        ],
+        "cash": [
+          92412,
+          212241
+        ],
+        "profits": [
+          96805,
+          83958
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 4,
+        "scores": [
+          895.7,
+          828.7
+        ],
+        "deposits": [
+          32198295,
+          27473838
+        ],
+        "loans": [
+          10544969,
+          10602718
+        ],
+        "cash": [
+          198275,
+          315739
+        ],
+        "profits": [
+          127221,
+          131621
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 5,
+        "scores": [
+          899.4,
+          882.1
+        ],
+        "deposits": [
+          33034057,
+          29251204
+        ],
+        "loans": [
+          10691354,
+          10747232
+        ],
+        "cash": [
+          196959,
+          238865
+        ],
+        "profits": [
+          112946,
+          130229
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 6,
+        "scores": [
+          928.3,
+          886.8
+        ],
+        "deposits": [
+          35232618,
+          29765722
+        ],
+        "loans": [
+          10835689,
+          10891455
+        ],
+        "cash": [
+          400671,
+          176649
+        ],
+        "profits": [
+          125055,
+          144959
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 7,
+        "scores": [
+          965.7,
+          905.5
+        ],
+        "deposits": [
+          37682126,
+          30454354
+        ],
+        "loans": [
+          10981534,
+          11035386
+        ],
+        "cash": [
+          259423,
+          157813
+        ],
+        "profits": [
+          4953,
+          52601
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      },
+      {
+        "cycle": 8,
+        "scores": [
+          1002.8,
+          911
+        ],
+        "deposits": [
+          39551235,
+          31094474
+        ],
+        "loans": [
+          11125284,
+          11179027
+        ],
+        "cash": [
+          234381,
+          146239
+        ],
+        "profits": [
+          160472,
+          157337
+        ],
+        "markets": [
+          1,
+          1
+        ]
+      }
+    ],
+    "lastPlans": {
+      "bank-f9b6d63d": {
+        "focus": "industrial",
+        "allocation": {
+          "service": 6,
+          "business": 1,
+          "lending": 1,
+          "operations": 1
+        },
+        "depositPolicy": "margin",
+        "lendingPolicy": "balanced",
+        "capitalPolicy": "liquid",
+        "products": {
+          "retail": "essential",
+          "business": "relationship",
+          "credit": "mortgage"
+        },
+        "specializations": {
+          "network": "retailDensity"
+        },
+        "opportunity": "8-1-816",
+        "newProject": null,
+        "newProjects": [],
+        "investments": {
+          "network": 142682
+        },
+        "hires": 0,
+        "capitalAction": false,
+        "competitiveAction": "none",
+        "decision": "a"
+      },
+      "bank-2e598377": {
+        "focus": "industrial",
+        "allocation": {
+          "service": 4,
+          "business": 1,
+          "lending": 1,
+          "operations": 1
+        },
+        "depositPolicy": "margin",
+        "lendingPolicy": "balanced",
+        "capitalPolicy": "liquid",
+        "products": {
+          "retail": "essential",
+          "business": "relationship",
+          "credit": "mortgage"
+        },
+        "specializations": {
+          "network": "retailDensity"
+        },
+        "opportunity": "8-1-816",
+        "newProject": null,
+        "newProjects": [],
+        "investments": {},
+        "hires": 0,
+        "capitalAction": false,
+        "competitiveAction": "none",
+        "decision": "a"
+      }
+    },
+    "scoreDelta": {
+      "bank-f9b6d63d": 37.1,
+      "bank-2e598377": 5.5
+    },
+    "resolution": [
+      "North Bank produced 1,136,941 in deposits, 166,260 in loans, paid $22,888 in funding cost, earned $160,472, and absorbed $22,510 in credit losses; $67,213 of rate-sensitive deposits also left.",
+      "South Bank produced 704,031 in deposits, 166,260 in loans, paid $18,383 in funding cost, earned $157,337, and absorbed $22,619 in credit losses; $34,530 of rate-sensitive deposits also left.",
+      "North Bank pulled $29,381 of deposits away from South Bank, led by Downtown; $2,350 entered as rate-sensitive funding.",
+      "North Bank defeated its rival for Large Deposit Household in Industrial Corridor.",
+      "North Bank gained 7.0 points of share in Downtown.",
+      "South Bank gained 6.9 points of share in Northside.",
+      "North Bank triggered a low-liquidity warning at 0.7%.",
+      "South Bank triggered a low-liquidity warning at 0.5%.",
+      "North Bank achieved Balance-Sheet Scale: +25 enterprise value and a $100,000 capital award."
+    ],
+    "resolutionId": 8,
+    "log": [
+      {
+        "cycle": 9,
+        "text": "ECONOMIC REGIME // STEADY GROWTH: Production and funding markets are broadly balanced.",
+        "kind": "ECONOMY",
+        "ts": 13
+      },
+      {
+        "cycle": 8,
+        "text": "CYCLE 8 // North Bank produced 1,136,941 in deposits, 166,260 in loans, paid $22,888 in funding cost, earned $160,472, and absorbed $22,510 in credit losses; $67,213 of rate-sensitive deposits also left. South Bank produced 704,031 in deposits, 166,260 in loans, paid $18,383 in funding cost, earned $157,337, and absorbed $22,619 in credit losses; $34,530 of rate-sensitive deposits also left. North Bank pulled $29,381 of deposits away from South Bank, led by Downtown; $2,350 entered as rate-sensitive funding. North Bank defeated its rival for Large Deposit Household in Industrial Corridor. North Bank gained 7.0 points of share in Downtown. South Bank gained 6.9 points of share in Northside. North Bank triggered a low-liquidity warning at 0.7%. South Bank triggered a low-liquidity warning at 0.5%. North Bank achieved Balance-Sheet Scale: +25 enterprise value and a $100,000 capital award.",
+        "kind": "RESOLUTION",
+        "ts": 12
+      },
+      {
+        "cycle": 7,
+        "text": "CYCLE 7 // North Bank produced 1,715,840 in deposits, 166,260 in loans, paid $52,372 in funding cost, earned $4,953, and absorbed $20,415 in credit losses; $1,439 of rate-sensitive deposits also left. South Bank produced 795,069 in deposits, 166,260 in loans, paid $43,318 in funding cost, earned $52,601, and absorbed $22,329 in credit losses; $1,330 of rate-sensitive deposits also left. North Bank pulled $105,107 of deposits away from South Bank, led by Downtown; $73,575 entered as rate-sensitive funding. North Bank defeated its rival for Operating Company Relationship in Suburban Growth Belt. North Bank gained 5.3 points of share in Downtown. South Bank gained 3.4 points of share in Northside. South Bank's Compliance Remediation reached 100%. South Bank completed Compliance Remediation. North Bank triggered a low-liquidity warning at 1.1%. South Bank triggered a low-liquidity warning at 0.5%. North Bank reached Hub-and-Spoke Network in BRANCH NETWORK. ACT II BEGINS — REGIONAL EXPANSION. Strategic platforms intensify competition and weak franchises begin to retreat.",
+        "kind": "RESOLUTION",
+        "ts": 11
+      },
+      {
+        "cycle": 7,
+        "text": "ACT II // REGIONAL EXPANSION — Strategic platforms intensify competition and weak franchises begin to retreat.",
+        "kind": "ACT",
+        "ts": 10
+      },
+      {
+        "cycle": 6,
+        "text": "CYCLE 6 // South Bank began Compliance Remediation over 2 cycles. North Bank produced 914,904 in deposits, 166,260 in loans, paid $20,043 in funding cost, earned $125,055, and absorbed $21,925 in credit losses; $14,452 of rate-sensitive deposits also left. South Bank produced 586,693 in deposits, 166,260 in loans, paid $17,615 in funding cost, earned $144,959, and absorbed $22,037 in credit losses; $14,066 of rate-sensitive deposits also left. North Bank pulled $58,109 of deposits away from South Bank, led by Downtown; $4,649 entered as rate-sensitive funding. North Bank defeated its rival for Private Banking Household in Northside. North Bank gained 5.5 points of share in Downtown. North Bank's Compliance Remediation reached 100%. North Bank completed Compliance Remediation. South Bank's Compliance Remediation reached 54%. North Bank triggered a low-liquidity warning at 1.1%. South Bank triggered a low-liquidity warning at 0.6%.",
+        "kind": "RESOLUTION",
+        "ts": 9
+      },
+      {
+        "cycle": 5,
+        "text": "CYCLE 5 // North Bank began Compliance Remediation over 2 cycles. North Bank produced 815,024 in deposits, 166,260 in loans, paid $19,490 in funding cost, earned $112,946, and absorbed $19,875 in credit losses; $14,794 of rate-sensitive deposits also left. South Bank produced 567,813 in deposits, 166,260 in loans, paid $16,553 in funding cost, earned $130,229, and absorbed $21,746 in credit losses; $14,915 of rate-sensitive deposits also left. North Bank pulled $35,532 of deposits away from South Bank, led by Downtown; $2,843 entered as rate-sensitive funding. South Bank defeated its rival for Private Banking Household in Northside. North Bank gained 5.8 points of share in Downtown. North Bank's Compliance Remediation reached 58%. North Bank triggered a low-liquidity warning at 0.6%. South Bank reached Hub-and-Spoke Network in BRANCH NETWORK.",
+        "kind": "RESOLUTION",
+        "ts": 8
+      },
+      {
+        "cycle": 5,
+        "text": "ECONOMIC REGIME // EARLY RECOVERY: Confidence is returning, but weak credits still require attention.",
+        "kind": "ECONOMY",
+        "ts": 7
+      },
+      {
+        "cycle": 4,
+        "text": "CYCLE 4 // North Bank produced 876,783 in deposits, 184,397 in loans, paid $22,519 in funding cost, earned $127,221, and absorbed $13,008 in credit losses; $13,189 of rate-sensitive deposits also left. South Bank produced 640,806 in deposits, 184,397 in loans, paid $19,739 in funding cost, earned $131,621, and absorbed $13,080 in credit losses; $13,880 of rate-sensitive deposits also left. North Bank pulled $49,243 of deposits away from South Bank, led by Downtown; $3,939 entered as rate-sensitive funding. North Bank defeated its rival for Large Deposit Household in Industrial Corridor. North Bank gained 7.0 points of share in Downtown. North Bank's Compliance Remediation reached 100%. North Bank completed Compliance Remediation. South Bank's Market-Wide Advertising reached 100%. South Bank completed Market-Wide Advertising. South Bank's Compliance Remediation reached 100%. South Bank completed Compliance Remediation. North Bank triggered a low-liquidity warning at 0.6%. South Bank's internal succession plan exposed a leadership gap. South Bank triggered a low-liquidity warning at 1.1%.",
+        "kind": "RESOLUTION",
+        "ts": 6
+      },
+      {
+        "cycle": 3,
+        "text": "CYCLE 3 // North Bank began Compliance Remediation over 2 cycles. South Bank began Market-Wide Advertising over 2 cycles. South Bank began Compliance Remediation over 2 cycles. North Bank produced 781,814 in deposits, 184,397 in loans, paid $33,800 in funding cost, earned $96,805, and absorbed $12,797 in credit losses; $2,901 of rate-sensitive deposits also left. South Bank produced 1,045,171 in deposits, 242,289 in loans, paid $30,863 in funding cost, earned $83,958, and absorbed $12,868 in credit losses; $2,724 of rate-sensitive deposits also left. North Bank defeated its rival for Private Banking Household in Industrial Corridor. North Bank gained 3.3 points of share in Downtown. South Bank gained 3.3 points of share in Northside. North Bank's Full-Service Financial Center reached 100%. North Bank completed Full-Service Financial Center in Downtown. North Bank's Compliance Remediation reached 54%. South Bank's Market-Wide Advertising reached 54%. South Bank's Compliance Remediation reached 54%. North Bank triggered a low-liquidity warning at 1.1%. North Bank adopted the Retail Density operating model in BRANCH NETWORK. South Bank adopted the Retail Density operating model in BRANCH NETWORK. South Bank achieved Trusted Institution: +25 enterprise value and a $100,000 capital award.",
+        "kind": "RESOLUTION",
+        "ts": 5
+      },
+      {
+        "cycle": 2,
+        "text": "CYCLE 2 // South Bank launched a targeted deposit campaign in Downtown. North Bank produced 1,193,515 in deposits, 242,289 in loans, paid $31,137 in funding cost, earned $83,248, and absorbed $12,585 in credit losses; $1,213 of rate-sensitive deposits also left. South Bank produced 994,596 in deposits, 242,289 in loans, paid $29,646 in funding cost, earned $74,665, and absorbed $12,585 in credit losses; $1,213 of rate-sensitive deposits also left. South Bank pulled $18,041 of deposits away from North Bank, led by Northside; $4,510 entered as rate-sensitive funding. North Bank defeated its rival for Private Banking Household in Downtown. North Bank gained 5.7 points of share in Downtown. North Bank's Full-Service Financial Center reached 72%. North Bank's Market-Wide Advertising reached 100%. North Bank completed Market-Wide Advertising. North Bank's Compliance Remediation reached 100%. North Bank completed Compliance Remediation. South Bank's Market-Wide Advertising reached 100%. South Bank completed Market-Wide Advertising. South Bank's Compliance Remediation reached 100%. South Bank completed Compliance Remediation. North Bank reached Local Market Playbook in BRANCH NETWORK. South Bank reached Local Market Playbook in BRANCH NETWORK. South Bank reached Mobile Onboarding in DIGITAL PLATFORM. North Bank achieved Trusted Institution: +25 enterprise value and a $100,000 capital award.",
+        "kind": "RESOLUTION",
+        "ts": 4
+      },
+      {
+        "cycle": 1,
+        "text": "CYCLE 1 // North Bank raided South Bank's relationship book, transferring 4 business, 4 merchant, and 55 household relationships. South Bank raided North Bank's relationship book, transferring 4 business, 4 merchant, and 55 household relationships. North Bank began Full-Service Financial Center in Downtown over 3 cycles. North Bank began Market-Wide Advertising over 2 cycles. North Bank began Compliance Remediation over 2 cycles. South Bank began Market-Wide Advertising over 2 cycles. South Bank began Compliance Remediation over 2 cycles. North Bank produced 842,284 in deposits, 484,578 in loans, paid $28,507 in funding cost, earned $69,514, and absorbed $12,302 in credit losses. South Bank produced 842,284 in deposits, 484,578 in loans, paid $28,507 in funding cost, earned $69,514, and absorbed $12,302 in credit losses. North Bank defeated its rival for Private Banking Household in Downtown. North Bank's Full-Service Financial Center reached 36%. North Bank's Market-Wide Advertising reached 54%. North Bank's Compliance Remediation reached 54%. South Bank's Market-Wide Advertising reached 54%. South Bank's Compliance Remediation reached 54%. North Bank achieved Market Leader: +25 enterprise value and a $100,000 capital award. South Bank achieved Market Leader: +25 enterprise value and a $100,000 capital award.",
+        "kind": "RESOLUTION",
+        "ts": 3
+      },
+      {
+        "cycle": 1,
+        "text": "North Bank and South Bank entered an open-ended market war. Opening regime: BROAD EXPANSION.",
+        "kind": "SYSTEM",
+        "ts": 2
+      }
+    ],
+    "gameOver": false,
+    "winnerId": null,
+    "rematchVotes": [],
+    "created": 1,
+    "logSequence": 12,
+    "fundingRulesVersion": 1,
+    "simulationVersion": 1,
+    "rng": {
+      "algorithm": "lcg32-v1",
+      "seed": 613278934,
+      "state": 213712404,
+      "aiState": 3046947560
+    },
+    "eventLedger": [
+      {
+        "id": 1,
+        "cycle": 1,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 1
+      },
+      {
+        "id": 2,
+        "cycle": 1,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 1
+      },
+      {
+        "id": 3,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -130000,
+          "compliance": -12,
+          "attention": -5
+        },
+        "changes": {}
+      },
+      {
+        "id": 4,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "audit": true
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "competition.actions",
+        "source": "resolveCompetitiveActions",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -2,
+          "cash": -220000,
+          "attention": 2
+        },
+        "changes": {}
+      },
+      {
+        "id": 6,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "competition.actions",
+        "source": "resolveCompetitiveActions",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -2,
+          "cash": -220000,
+          "attention": 2
+        },
+        "changes": {}
+      },
+      {
+        "id": 7,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -560000
+        },
+        "changes": {
+          "projects": {
+            "before": [],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 8,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -260000
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              }
+            ],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 9,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 10,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -260000
+        },
+        "changes": {
+          "projects": {
+            "before": [],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 11,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 12,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 842284,
+          "rateSensitiveDeposits": 50537,
+          "fundingCost": 28507,
+          "loans": 472276,
+          "capital": 17378,
+          "customers": 67,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "cash": 69514,
+          "compliance": 2,
+          "earnings": 69514,
+          "lastProfit": 69514,
+          "chargeoffs": 12302
+        },
+        "changes": {}
+      },
+      {
+        "id": 13,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 842284,
+          "rateSensitiveDeposits": 50537,
+          "fundingCost": 28507,
+          "loans": 472276,
+          "capital": 17378,
+          "customers": 80,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "cash": 69514,
+          "compliance": 2,
+          "earnings": 69514,
+          "lastProfit": 69514,
+          "chargeoffs": 12302
+        },
+        "changes": {}
+      },
+      {
+        "id": 14,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1100000,
+          "wealth": 4,
+          "reputation": 3,
+          "influence": 3,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 15,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 56,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 44,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 58.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 41.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 16,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 44,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 56,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 41.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 58.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 49.4,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 17,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 0,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 1.08,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 18,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 19,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -500000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 0,
+              "digital": 0,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 250000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 20,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -500000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 0,
+              "digital": 0,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 250000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 21,
+        "cycle": 1,
+        "parentCause": 1,
+        "category": "milestones",
+        "source": "awardMilestones",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": 100000,
+          "influence": 3
+        },
+        "changes": {
+          "achievements": {
+            "before": [],
+            "after": [
+              "firstMarket"
+            ]
+          }
+        }
+      },
+      {
+        "id": 22,
+        "cycle": 1,
+        "parentCause": 2,
+        "category": "milestones",
+        "source": "awardMilestones",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": 100000,
+          "influence": 3
+        },
+        "changes": {
+          "achievements": {
+            "before": [],
+            "after": [
+              "firstMarket"
+            ]
+          }
+        }
+      },
+      {
+        "id": 23,
+        "cycle": 1,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 1,
+          "depositIncome": 81731.11436,
+          "fundingCost": 28506.520890000003,
+          "loanIncome": 53078.93190098334,
+          "commercialIncome": 68112,
+          "otherIncome": 73400,
+          "expense": 166000,
+          "chargeoff": 12302,
+          "eventAdjustment": 0,
+          "profit": 69514,
+          "depositGrowth": 842284,
+          "loanGrowth": 472276,
+          "depositRunoff": 0
+        }
+      },
+      {
+        "id": 24,
+        "cycle": 1,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 1,
+          "depositIncome": 81731.11436,
+          "fundingCost": 28506.520890000003,
+          "loanIncome": 53078.93190098334,
+          "commercialIncome": 68112,
+          "otherIncome": 73400,
+          "expense": 166000,
+          "chargeoff": 12302,
+          "eventAdjustment": 0,
+          "profit": 69514,
+          "depositGrowth": 842284,
+          "loanGrowth": 472276,
+          "depositRunoff": 0
+        }
+      },
+      {
+        "id": 25,
+        "cycle": 2,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 2
+      },
+      {
+        "id": 26,
+        "cycle": 2,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 2
+      },
+      {
+        "id": 27,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -140000
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "market": 1.35,
+              "deposit": 1.2
+            }
+          }
+        }
+      },
+      {
+        "id": 28,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "market": 1.12
+            }
+          }
+        }
+      },
+      {
+        "id": 29,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "competition.actions",
+        "source": "resolveCompetitiveActions",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -180000,
+          "attention": 2
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {
+              "market": 1.12
+            },
+            "after": {
+              "market": 1.12,
+              "depositAttack": 3.1
+            }
+          }
+        }
+      },
+      {
+        "id": 30,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1192302,
+          "rateSensitiveDeposits": 70398,
+          "fundingCost": 2630,
+          "depositRunoff": 1213,
+          "loans": 229704,
+          "capital": 20812,
+          "customers": 73,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "morale": 1,
+          "cash": 83248,
+          "compliance": 2,
+          "earnings": 83248,
+          "lastProfit": 13734,
+          "chargeoffs": 12585
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 1213
+          }
+        }
+      },
+      {
+        "id": 31,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 993383,
+          "rateSensitiveDeposits": 58463,
+          "fundingCost": 1139,
+          "depositRunoff": 1213,
+          "loans": 229704,
+          "capital": 18666,
+          "customers": 65,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "morale": 1,
+          "cash": 74665,
+          "compliance": 2,
+          "earnings": 74665,
+          "lastProfit": 5151,
+          "chargeoffs": 12585
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 1213
+          }
+        }
+      },
+      {
+        "id": 32,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -18041,
+          "rateSensitiveDeposits": -80,
+          "capital": -902,
+          "customers": -2
+        },
+        "changes": {}
+      },
+      {
+        "id": 33,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 18041,
+          "rateSensitiveDeposits": 4510,
+          "customers": 2,
+          "cash": 18041
+        },
+        "changes": {}
+      },
+      {
+        "id": 34,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -19254
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 1213,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 35,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -1213
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 1213,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 36,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1560000,
+          "wealth": 4,
+          "reputation": 3,
+          "influence": 3,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 37,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 58.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 41.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 64.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 39.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 38,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 41.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 58.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 49.4,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 35.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 60.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 39,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "reputation": 7,
+          "compliance": -4,
+          "attention": -2
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 1.08,
+                "total": 3
+              },
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 2.16,
+                "total": 3
+              }
+            ]
+          },
+          "marketingTurns": {
+            "before": 0,
+            "after": 4
+          }
+        }
+      },
+      {
+        "id": 40,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "reputation": 7,
+          "compliance": -16,
+          "attention": -9
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ],
+            "after": []
+          },
+          "marketingTurns": {
+            "before": 0,
+            "after": 4
+          }
+        }
+      },
+      {
+        "id": 41,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "customers": 40,
+          "reputation": 3,
+          "cash": -250000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 250000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 500000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 42,
+        "cycle": 2,
+        "parentCause": 26,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "customers": 40,
+          "reputation": 3,
+          "digital": 8,
+          "cash": -500000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 250000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 500000,
+              "digital": 500000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 43,
+        "cycle": 2,
+        "parentCause": 25,
+        "category": "milestones",
+        "source": "awardMilestones",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": 100000,
+          "influence": 3
+        },
+        "changes": {
+          "achievements": {
+            "before": [
+              "firstMarket"
+            ],
+            "after": [
+              "firstMarket",
+              "trusted"
+            ]
+          }
+        }
+      },
+      {
+        "id": 44,
+        "cycle": 2,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 2,
+          "depositIncome": 89272.78794000001,
+          "fundingCost": 31136.937435000003,
+          "loanIncome": 54301.56387512501,
+          "commercialIncome": 70195.2,
+          "otherIncome": 79200.00000000001,
+          "expense": 166000,
+          "chargeoff": 12585,
+          "eventAdjustment": 0,
+          "profit": 83248,
+          "depositGrowth": 1192302,
+          "loanGrowth": 229704,
+          "depositRunoff": 1213
+        }
+      },
+      {
+        "id": 45,
+        "cycle": 2,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 2,
+          "depositIncome": 84999.34443,
+          "fundingCost": 29646.4278825,
+          "loanIncome": 54301.56387512501,
+          "commercialIncome": 70195.2,
+          "otherIncome": 73400.00000000001,
+          "expense": 166000,
+          "chargeoff": 12585,
+          "eventAdjustment": 0,
+          "profit": 74665,
+          "depositGrowth": 993383,
+          "loanGrowth": 229704,
+          "depositRunoff": 1213
+        }
+      },
+      {
+        "id": 46,
+        "cycle": 3,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 3
+      },
+      {
+        "id": 47,
+        "cycle": 3,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 3
+      },
+      {
+        "id": 48,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "morale": 8,
+          "cash": -120000
+        },
+        "changes": {}
+      },
+      {
+        "id": 49,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "morale": 8,
+          "cash": -120000
+        },
+        "changes": {}
+      },
+      {
+        "id": 50,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 2.16,
+                "total": 3
+              }
+            ],
+            "after": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 2.16,
+                "total": 3
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 51,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -260000
+        },
+        "changes": {
+          "projects": {
+            "before": [],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 52,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 53,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 778913,
+          "rateSensitiveDeposits": 44008,
+          "fundingCost": 2663,
+          "depositRunoff": 1688,
+          "loans": 171600,
+          "capital": 24201,
+          "customers": 98,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "morale": 1,
+          "cash": 131805,
+          "earnings": 96805,
+          "lastProfit": 13557,
+          "chargeoffs": 12797
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 2901
+          }
+        }
+      },
+      {
+        "id": 54,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1042447,
+          "rateSensitiveDeposits": 59986,
+          "fundingCost": 1217,
+          "depositRunoff": 1511,
+          "loans": 229421,
+          "capital": 20990,
+          "customers": 74,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "digital": 1,
+          "morale": 1,
+          "cash": 83958,
+          "compliance": 2,
+          "earnings": 83958,
+          "lastProfit": 9293,
+          "chargeoffs": 12868
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 2724
+          }
+        }
+      },
+      {
+        "id": 55,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -2901
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 2901,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 56,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -2724
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 2724,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 57,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1080000,
+          "wealth": 4,
+          "reputation": 3,
+          "influence": 3,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 58,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 64.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 39.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 67.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 36.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 59,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 35.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 60.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 32.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 63.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 60,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "customers": 143,
+          "reputation": 7
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "branch",
+                "target": "downtown",
+                "progress": 2.16,
+                "total": 3
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ]
+          },
+          "branches": {
+            "before": {
+              "downtown": 1,
+              "northside": 0,
+              "industrial": 0,
+              "suburbs": 0
+            },
+            "after": {
+              "downtown": 2,
+              "northside": 0,
+              "industrial": 0,
+              "suburbs": 0
+            }
+          },
+          "facilities": {
+            "before": {
+              "retail": 1,
+              "commercial": 0,
+              "digital": 0
+            },
+            "after": {
+              "retail": 2,
+              "commercial": 0,
+              "digital": 0
+            }
+          },
+          "facilityMarkets": {
+            "before": {
+              "downtown": [
+                "retail"
+              ]
+            },
+            "after": {
+              "downtown": [
+                "retail",
+                "retail"
+              ]
+            }
+          },
+          "marketingTurns": {
+            "before": 4,
+            "after": 3
+          }
+        }
+      },
+      {
+        "id": 61,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ]
+          },
+          "marketingTurns": {
+            "before": 4,
+            "after": 3
+          }
+        }
+      },
+      {
+        "id": 62,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 63,
+        "cycle": 3,
+        "parentCause": 46,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -250000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 500000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 750000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          },
+          "specializations": {
+            "before": {},
+            "after": {
+              "network": "retailDensity"
+            }
+          }
+        }
+      },
+      {
+        "id": 64,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -250000
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 500000,
+              "digital": 500000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 750000,
+              "digital": 500000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          },
+          "specializations": {
+            "before": {},
+            "after": {
+              "network": "retailDensity"
+            }
+          }
+        }
+      },
+      {
+        "id": 65,
+        "cycle": 3,
+        "parentCause": 47,
+        "category": "milestones",
+        "source": "awardMilestones",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": 100000,
+          "influence": 3
+        },
+        "changes": {
+          "achievements": {
+            "before": [
+              "firstMarket"
+            ],
+            "after": [
+              "firstMarket",
+              "trusted"
+            ]
+          }
+        }
+      },
+      {
+        "id": 66,
+        "cycle": 3,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 3,
+          "depositIncome": 96908.45682,
+          "fundingCost": 33800.138055,
+          "loanIncome": 55214.93221655834,
+          "commercialIncome": 72278.4,
+          "otherIncome": 85000,
+          "expense": 166000,
+          "chargeoff": 12797,
+          "eventAdjustment": 0,
+          "profit": 96805,
+          "depositGrowth": 778913,
+          "loanGrowth": 171600,
+          "depositRunoff": 2901
+        }
+      },
+      {
+        "id": 67,
+        "cycle": 3,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 3,
+          "depositIncome": 88488.34995,
+          "fundingCost": 30863.337862500004,
+          "loanIncome": 55522.69139532501,
+          "commercialIncome": 72278.4,
+          "otherIncome": 77399.99999999997,
+          "expense": 166000,
+          "chargeoff": 12868,
+          "eventAdjustment": 0,
+          "profit": 83958,
+          "depositGrowth": 1042447,
+          "loanGrowth": 229421,
+          "depositRunoff": 2724
+        }
+      },
+      {
+        "id": 68,
+        "cycle": 4,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 4
+      },
+      {
+        "id": 69,
+        "cycle": 4,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 4
+      },
+      {
+        "id": 70,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -2,
+          "staff": 1,
+          "cash": -92412
+        },
+        "changes": {
+          "allocation": {
+            "before": {
+              "service": 5,
+              "business": 1,
+              "lending": 1,
+              "operations": 1
+            },
+            "after": {
+              "service": 6,
+              "business": 1,
+              "lending": 1,
+              "operations": 1
+            }
+          }
+        }
+      },
+      {
+        "id": 71,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "succession": true
+            }
+          }
+        }
+      },
+      {
+        "id": 72,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 863594,
+          "rateSensitiveDeposits": -4421,
+          "fundingCost": -11281,
+          "depositRunoff": 10288,
+          "loans": 171389,
+          "capital": 31805,
+          "customers": 137,
+          "business": 2,
+          "merchant": 1,
+          "morale": 1,
+          "cash": 162221,
+          "compliance": -1,
+          "earnings": 127221,
+          "lastProfit": 30416,
+          "chargeoffs": 13008
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 13189
+          }
+        }
+      },
+      {
+        "id": 73,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 626926,
+          "rateSensitiveDeposits": -7472,
+          "fundingCost": -11124,
+          "depositRunoff": 11156,
+          "loans": 171317,
+          "capital": 32905,
+          "customers": 61,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 5,
+          "digital": 1,
+          "morale": 1,
+          "cash": 166621,
+          "compliance": -1,
+          "earnings": 131621,
+          "lastProfit": 47663,
+          "chargeoffs": 13080
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 13880
+          }
+        }
+      },
+      {
+        "id": 74,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 49243,
+          "rateSensitiveDeposits": 3939,
+          "customers": 5,
+          "cash": 49243
+        },
+        "changes": {}
+      },
+      {
+        "id": 75,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -49243,
+          "rateSensitiveDeposits": -297,
+          "capital": -2462,
+          "customers": -5
+        },
+        "changes": {}
+      },
+      {
+        "id": 76,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -13189
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 13189,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 77,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -63123
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 13880,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 78,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 750000,
+          "customers": 18,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 79,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 67.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 36.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 74.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 34.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 51,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 52.4,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 80,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 32.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 63.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 25.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 65.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 47.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 81,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": -3,
+          "attention": -6
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ],
+            "after": []
+          },
+          "marketingTurns": {
+            "before": 3,
+            "after": 2
+          }
+        }
+      },
+      {
+        "id": 82,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "reputation": 7,
+          "compliance": -1
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "marketing",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              },
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ],
+            "after": []
+          },
+          "marketingTurns": {
+            "before": 3,
+            "after": 4
+          }
+        }
+      },
+      {
+        "id": 83,
+        "cycle": 4,
+        "parentCause": 68,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 84,
+        "cycle": 4,
+        "parentCause": 69,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -6,
+          "staff": -1,
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {
+          "allocation": {
+            "before": {
+              "service": 5,
+              "business": 1,
+              "lending": 1,
+              "operations": 1
+            },
+            "after": {
+              "service": 4,
+              "business": 1,
+              "lending": 1,
+              "operations": 1
+            }
+          }
+        }
+      },
+      {
+        "id": 85,
+        "cycle": 4,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 4,
+          "depositIncome": 139458.88945800002,
+          "fundingCost": 22519.00760625,
+          "loanIncome": 56127.17354655834,
+          "commercialIncome": 74361.59999999999,
+          "otherIncome": 98800.00000000001,
+          "expense": 206000,
+          "chargeoff": 13008,
+          "eventAdjustment": 0,
+          "profit": 127221,
+          "depositGrowth": 863594,
+          "loanGrowth": 171389,
+          "depositRunoff": 13189
+        }
+      },
+      {
+        "id": 86,
+        "cycle": 4,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 4,
+          "depositIncome": 122243.76426150002,
+          "fundingCost": 19739.2096546875,
+          "loanIncome": 56434.55528281667,
+          "commercialIncome": 74361.59999999999,
+          "otherIncome": 77400.00000000001,
+          "expense": 166000,
+          "chargeoff": 13080,
+          "eventAdjustment": 0,
+          "profit": 131621,
+          "depositGrowth": 626926,
+          "loanGrowth": 171317,
+          "depositRunoff": 13880
+        }
+      },
+      {
+        "id": 87,
+        "cycle": 5,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 5
+      },
+      {
+        "id": 88,
+        "cycle": 5,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 5
+      },
+      {
+        "id": 89,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -5
+        },
+        "changes": {}
+      },
+      {
+        "id": 90,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "morale": 8,
+          "cash": -18000
+        },
+        "changes": {}
+      },
+      {
+        "id": 91,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [],
+            "after": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 92,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 800230,
+          "rateSensitiveDeposits": -6644,
+          "fundingCost": -3029,
+          "depositRunoff": 1605,
+          "loans": 146385,
+          "capital": 28237,
+          "customers": 80,
+          "business": 2,
+          "merchant": 1,
+          "morale": 2,
+          "cash": 147946,
+          "compliance": -2,
+          "earnings": 112946,
+          "lastProfit": -14275,
+          "chargeoffs": 19875
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 14794
+          }
+        }
+      },
+      {
+        "id": 93,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 552898,
+          "rateSensitiveDeposits": -9237,
+          "fundingCost": -3186,
+          "depositRunoff": 1035,
+          "loans": 144514,
+          "capital": 32557,
+          "customers": 65,
+          "business": 2,
+          "merchant": 1,
+          "reputation": 4,
+          "digital": 1,
+          "cash": 165229,
+          "compliance": -1,
+          "earnings": 130229,
+          "lastProfit": -1392,
+          "chargeoffs": 21746
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 14915
+          }
+        }
+      },
+      {
+        "id": 94,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 35532,
+          "rateSensitiveDeposits": 2843,
+          "customers": 4,
+          "cash": 35532
+        },
+        "changes": {}
+      },
+      {
+        "id": 95,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -35532,
+          "rateSensitiveDeposits": -198,
+          "capital": -1777,
+          "customers": -4
+        },
+        "changes": {}
+      },
+      {
+        "id": 96,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -14794
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 14794,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 97,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -50447
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 14915,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 98,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1260000,
+          "wealth": 4,
+          "influence": 3,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 99,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 74.4,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 34.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 51,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 52.4,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 80.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 32.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 51,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 52.2,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 100,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 25.6,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 65.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 47.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 19.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 67.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 47.8,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 101,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.16,
+                "total": 2
+              }
+            ]
+          },
+          "marketingTurns": {
+            "before": 2,
+            "after": 1
+          }
+        }
+      },
+      {
+        "id": 102,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "marketingTurns": {
+            "before": 4,
+            "after": 3
+          }
+        }
+      },
+      {
+        "id": 103,
+        "cycle": 5,
+        "parentCause": 87,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 104,
+        "cycle": 5,
+        "parentCause": 88,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "customers": 40,
+          "cash": -173656
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 750000,
+              "digital": 500000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 923656,
+              "digital": 500000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 105,
+        "cycle": 5,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 5,
+          "depositIncome": 137207.86695000003,
+          "fundingCost": 19489.753828125,
+          "loanIncome": 53858.38017828334,
+          "commercialIncome": 76444.8,
+          "otherIncome": 90800.00000000004,
+          "expense": 206000,
+          "chargeoff": 19875,
+          "eventAdjustment": 0,
+          "profit": 112946,
+          "depositGrowth": 800230,
+          "loanGrowth": 146385,
+          "depositRunoff": 14794
+        }
+      },
+      {
+        "id": 106,
+        "cycle": 5,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 5,
+          "depositIncome": 116535.168288,
+          "fundingCost": 16553.290950000002,
+          "loanIncome": 54148.75466256667,
+          "commercialIncome": 76444.8,
+          "otherIncome": 69400.00000000001,
+          "expense": 148000,
+          "chargeoff": 21746,
+          "eventAdjustment": 0,
+          "profit": 130229,
+          "depositGrowth": 552898,
+          "loanGrowth": 144514,
+          "depositRunoff": 14915
+        }
+      },
+      {
+        "id": 107,
+        "cycle": 6,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 6
+      },
+      {
+        "id": 108,
+        "cycle": 6,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 6
+      },
+      {
+        "id": 109,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "manager": true
+            }
+          }
+        }
+      },
+      {
+        "id": 110,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "manager": true
+            }
+          }
+        }
+      },
+      {
+        "id": 111,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "project.start",
+        "source": "startProject",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -170000
+        },
+        "changes": {
+          "projects": {
+            "before": [],
+            "after": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 112,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 900452,
+          "rateSensitiveDeposits": -5303,
+          "fundingCost": 553,
+          "depositRunoff": -342,
+          "loans": 144335,
+          "capital": 31264,
+          "customers": 137,
+          "business": 2,
+          "merchant": 1,
+          "morale": 1,
+          "cash": 160055,
+          "compliance": -1,
+          "earnings": 125055,
+          "lastProfit": 12109,
+          "chargeoffs": 21925
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 14452
+          }
+        }
+      },
+      {
+        "id": 113,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 572627,
+          "rateSensitiveDeposits": -8199,
+          "fundingCost": 1062,
+          "depositRunoff": -849,
+          "loans": 144223,
+          "capital": 36240,
+          "customers": 59,
+          "business": 2,
+          "merchant": 1,
+          "digital": 1,
+          "cash": 179959,
+          "compliance": -1,
+          "earnings": 144959,
+          "lastProfit": 14730,
+          "chargeoffs": 22037
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 14066
+          }
+        }
+      },
+      {
+        "id": 114,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 58109,
+          "rateSensitiveDeposits": 4649,
+          "customers": 6,
+          "cash": 58109
+        },
+        "changes": {}
+      },
+      {
+        "id": 115,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -58109,
+          "rateSensitiveDeposits": -289,
+          "capital": -2905,
+          "customers": -6
+        },
+        "changes": {}
+      },
+      {
+        "id": 116,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -14452
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 14452,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 117,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -72175
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 14066,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 118,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1240000,
+          "wealth": 4,
+          "influence": 3,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 119,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 80.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 32.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 51,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 52.2,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 85.7,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 30.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.8,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 120,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 19.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 67.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 47.8,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 14.3,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 69.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.2,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 121,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": -5,
+          "attention": -12
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.16,
+                "total": 2
+              }
+            ],
+            "after": []
+          },
+          "marketingTurns": {
+            "before": 1,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 122,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 0,
+                "total": 2
+              }
+            ],
+            "after": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ]
+          },
+          "marketingTurns": {
+            "before": 3,
+            "after": 2
+          }
+        }
+      },
+      {
+        "id": 123,
+        "cycle": 6,
+        "parentCause": 107,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "morale": -4,
+          "compliance": 4,
+          "attention": 13
+        },
+        "changes": {}
+      },
+      {
+        "id": 124,
+        "cycle": 6,
+        "parentCause": 108,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6,
+          "influence": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 125,
+        "cycle": 6,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 6,
+          "depositIncome": 141099.688422,
+          "fundingCost": 20042.569378125005,
+          "loanIncome": 54594.43567503334,
+          "commercialIncome": 78528,
+          "otherIncome": 98800,
+          "expense": 206000,
+          "chargeoff": 21925,
+          "eventAdjustment": 0,
+          "profit": 125055,
+          "depositGrowth": 900452,
+          "loanGrowth": 144335,
+          "depositRunoff": 14452
+        }
+      },
+      {
+        "id": 126,
+        "cycle": 6,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 6,
+          "depositIncome": 124007.48929800001,
+          "fundingCost": 17614.700184375,
+          "loanIncome": 54875.40236593334,
+          "commercialIncome": 78528,
+          "otherIncome": 75200,
+          "expense": 148000,
+          "chargeoff": 22037,
+          "eventAdjustment": 0,
+          "profit": 144959,
+          "depositGrowth": 572627,
+          "loanGrowth": 144223,
+          "depositRunoff": 14066
+        }
+      },
+      {
+        "id": 127,
+        "cycle": 7,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 7
+      },
+      {
+        "id": 128,
+        "cycle": 7,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 7
+      },
+      {
+        "id": 129,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -100000,
+          "attention": 2
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "deposit": 1.28
+            }
+          }
+        }
+      },
+      {
+        "id": 130,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "profit": 1.15
+            }
+          }
+        }
+      },
+      {
+        "id": 131,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "competition.actions",
+        "source": "resolveCompetitiveActions",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -110000
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {
+              "deposit": 1.28
+            },
+            "after": {
+              "deposit": 1.28,
+              "depositDefense": 3
+            }
+          }
+        }
+      },
+      {
+        "id": 132,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1714401,
+          "rateSensitiveDeposits": 513313,
+          "fundingCost": 32329,
+          "depositRunoff": -13013,
+          "loans": 145845,
+          "capital": 1238,
+          "customers": 90,
+          "business": 2,
+          "merchant": 1,
+          "morale": 2,
+          "cash": 39953,
+          "compliance": -2,
+          "earnings": 4953,
+          "lastProfit": -120102,
+          "chargeoffs": 20415
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 1439
+          }
+        }
+      },
+      {
+        "id": 133,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 793739,
+          "rateSensitiveDeposits": 237191,
+          "fundingCost": 25703,
+          "depositRunoff": -12736,
+          "loans": 143931,
+          "capital": 13150,
+          "customers": 64,
+          "business": 4,
+          "merchant": 3,
+          "digital": 1,
+          "morale": -1,
+          "cash": 87601,
+          "compliance": -1,
+          "earnings": 52601,
+          "lastProfit": -92358,
+          "chargeoffs": 22329
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 1330
+          }
+        }
+      },
+      {
+        "id": 134,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 105107,
+          "rateSensitiveDeposits": 73575,
+          "customers": 12,
+          "cash": 105107
+        },
+        "changes": {}
+      },
+      {
+        "id": 135,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -105107,
+          "rateSensitiveDeposits": -1324,
+          "capital": -5255,
+          "customers": -12
+        },
+        "changes": {}
+      },
+      {
+        "id": 136,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -1439
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 1439,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 137,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -106437
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 1330,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 138,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 630000,
+          "business": 5,
+          "merchant": 6,
+          "cash": 85000,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 139,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 85.7,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 30.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 50.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.8,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 91,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 26.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 48,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 140,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 14.3,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 69.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 49.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.2,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 73.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 141,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "markets.exit",
+        "source": "resolveMarketExits",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 73.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 9,
+                "exited": false,
+                "exitStreak": 1
+              },
+              "northside": {
+                "share": 73.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 142,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": -5,
+          "attention": -12
+        },
+        "changes": {
+          "projects": {
+            "before": [
+              {
+                "key": "remediation",
+                "target": null,
+                "progress": 1.08,
+                "total": 2
+              }
+            ],
+            "after": []
+          },
+          "marketingTurns": {
+            "before": 2,
+            "after": 1
+          }
+        }
+      },
+      {
+        "id": 143,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 144,
+        "cycle": 7,
+        "parentCause": 128,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 145,
+        "cycle": 7,
+        "parentCause": 127,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "customers": 40,
+          "cash": -159869
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 750000,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 909869,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 146,
+        "cycle": 7,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 7,
+          "depositIncome": 51208.56833400001,
+          "fundingCost": 52372.399432499995,
+          "loanIncome": 55320.18332761667,
+          "commercialIncome": 80611.2,
+          "otherIncome": 96600.00000000001,
+          "expense": 206000,
+          "chargeoff": 20415,
+          "eventAdjustment": 0,
+          "profit": 4953,
+          "depositGrowth": 1714401,
+          "loanGrowth": 145845,
+          "depositRunoff": 1439
+        }
+      },
+      {
+        "id": 147,
+        "cycle": 7,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 7,
+          "depositIncome": 42355.412946000004,
+          "fundingCost": 43318.03596750001,
+          "loanIncome": 55600.58685825001,
+          "commercialIncome": 83318.4,
+          "otherIncome": 75199.99999999997,
+          "expense": 148000,
+          "chargeoff": 22329,
+          "eventAdjustment": 9773.454575512491,
+          "profit": 52601,
+          "depositGrowth": 793739,
+          "loanGrowth": 143931,
+          "depositRunoff": 1330
+        }
+      },
+      {
+        "id": 148,
+        "cycle": 8,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "resolutionId": 8
+      },
+      {
+        "id": 149,
+        "cycle": 8,
+        "category": "resolution.start",
+        "source": "resolveCycle",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "resolutionId": 8
+      },
+      {
+        "id": 150,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -140000
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "market": 1.35,
+              "deposit": 1.2
+            }
+          }
+        }
+      },
+      {
+        "id": 151,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "decision",
+        "source": "applyDecision",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -140000
+        },
+        "changes": {
+          "turnEffects": {
+            "before": {},
+            "after": {
+              "market": 1.35,
+              "deposit": 1.2
+            }
+          }
+        }
+      },
+      {
+        "id": 152,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 1069728,
+          "rateSensitiveDeposits": -55844,
+          "fundingCost": -29484,
+          "depositRunoff": 65774,
+          "loans": 143750,
+          "capital": 40118,
+          "customers": 139,
+          "business": 2,
+          "merchant": 1,
+          "morale": 1,
+          "cash": 195472,
+          "compliance": -1,
+          "earnings": 160472,
+          "lastProfit": 155519,
+          "chargeoffs": 22510
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 67213
+          }
+        }
+      },
+      {
+        "id": 153,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "operations",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 669501,
+          "rateSensitiveDeposits": -27490,
+          "fundingCost": -24935,
+          "depositRunoff": 33200,
+          "loans": 143641,
+          "capital": 39334,
+          "customers": 88,
+          "business": 2,
+          "merchant": 1,
+          "digital": 1,
+          "cash": 192337,
+          "compliance": -1,
+          "earnings": 157337,
+          "lastProfit": 104736,
+          "chargeoffs": 22619
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 0,
+            "after": 34530
+          }
+        }
+      },
+      {
+        "id": 154,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 29381,
+          "rateSensitiveDeposits": 2350,
+          "customers": 3,
+          "cash": 29381
+        },
+        "changes": {}
+      },
+      {
+        "id": 155,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "competition.deposits",
+        "source": "depositContest",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": -29381,
+          "rateSensitiveDeposits": -336,
+          "capital": -1469,
+          "customers": -3
+        },
+        "changes": {}
+      },
+      {
+        "id": 156,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -67213
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 67213,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 157,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "funding.settlement",
+        "source": "settleFunding",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -63911
+        },
+        "changes": {
+          "fundingGap": {
+            "before": 34530,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 158,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "relationships",
+        "source": "resolveOpportunities",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "deposits": 770000,
+          "customers": 18,
+          "momentum": 4,
+          "opportunityWins": 1
+        },
+        "changes": {}
+      },
+      {
+        "id": 159,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 91,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 26.8,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 48,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 51.3,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 95,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "northside": {
+                "share": 19.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 47.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 49.4,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 160,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "markets.competition",
+        "source": "simulateMarkets",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 9,
+                "exited": false,
+                "exitStreak": 1
+              },
+              "northside": {
+                "share": 73.2,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 48.7,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 5,
+                "exited": false,
+                "exitStreak": 1
+              },
+              "northside": {
+                "share": 80.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 161,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "markets.exit",
+        "source": "resolveMarketExits",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "markets": {
+            "before": {
+              "downtown": {
+                "share": 5,
+                "exited": false,
+                "exitStreak": 1
+              },
+              "northside": {
+                "share": 80.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            },
+            "after": {
+              "downtown": {
+                "share": 5,
+                "exited": false,
+                "exitStreak": 2
+              },
+              "northside": {
+                "share": 80.1,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "industrial": {
+                "share": 52.9,
+                "exited": false,
+                "exitStreak": 0
+              },
+              "suburbs": {
+                "share": 50.6,
+                "exited": false,
+                "exitStreak": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": 162,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "project.advance",
+        "source": "advanceProjects",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {},
+        "changes": {
+          "marketingTurns": {
+            "before": 1,
+            "after": 0
+          }
+        }
+      },
+      {
+        "id": 163,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 164,
+        "cycle": 8,
+        "parentCause": 149,
+        "category": "risk.consequences",
+        "source": "consequences",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "deltas": {
+          "compliance": 4,
+          "attention": 6
+        },
+        "changes": {}
+      },
+      {
+        "id": 165,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "research.investment",
+        "source": "applyInvestments",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": -142682
+        },
+        "changes": {
+          "capability": {
+            "before": {
+              "network": 909869,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            },
+            "after": {
+              "network": 1052551,
+              "digital": 250000,
+              "commercial": 0,
+              "operations": 0,
+              "acquisition": 0
+            }
+          }
+        }
+      },
+      {
+        "id": 166,
+        "cycle": 8,
+        "parentCause": 148,
+        "category": "milestones",
+        "source": "awardMilestones",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "deltas": {
+          "cash": 100000,
+          "influence": 3
+        },
+        "changes": {
+          "achievements": {
+            "before": [
+              "firstMarket",
+              "trusted"
+            ],
+            "after": [
+              "firstMarket",
+              "trusted",
+              "scale"
+            ]
+          }
+        }
+      },
+      {
+        "id": 167,
+        "cycle": 8,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-f9b6d63d",
+        "visibility": "owner",
+        "report": {
+          "cycle": 8,
+          "depositIncome": 161130.20893200004,
+          "fundingCost": 22887.813768750002,
+          "loanIncome": 56053.523587366675,
+          "commercialIncome": 90086.4,
+          "otherIncome": 104600.00000000003,
+          "expense": 206000,
+          "chargeoff": 22510,
+          "eventAdjustment": 0,
+          "profit": 160472,
+          "depositGrowth": 1069728,
+          "loanGrowth": 143750,
+          "depositRunoff": 67213
+        }
+      },
+      {
+        "id": 168,
+        "cycle": 8,
+        "category": "operations.result",
+        "source": "operate",
+        "target": "bank-2e598377",
+        "visibility": "owner",
+        "report": {
+          "cycle": 8,
+          "depositIncome": 129412.98909000002,
+          "fundingCost": 18382.526859375,
+          "loanIncome": 56324.3031113,
+          "commercialIncome": 85401.59999999999,
+          "otherIncome": 75199.99999999999,
+          "expense": 148000,
+          "chargeoff": 22619,
+          "eventAdjustment": 0,
+          "profit": 157337,
+          "depositGrowth": 669501,
+          "loanGrowth": 143641,
+          "depositRunoff": 34530
+        }
+      }
+    ],
+    "ledgerSequence": 168
+  }
+}

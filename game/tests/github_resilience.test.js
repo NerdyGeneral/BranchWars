@@ -17,7 +17,7 @@ function harness(side='host'){
  vm.createContext(c);vm.runInContext(engine,c);c.window={BWEngine:c.BWEngine};
  vm.runInContext(client,c);
  vm.runInContext("render=()=>{};enterGame=()=>{};saveLocal=()=>{};toast=()=>{};setMode=()=>{};gh={...emptyGh(),active:true,side:'"+side+"',api:'https://api.github.com',repo:'test/game',branch:'main',room:'ABCDEFGH',token:'PRIVATE_TEST_TOKEN'};p2pRole='"+side+"';p2pConfig={campaignRulesVersion:1,name:'Host',guestName:'Guest'};",c);
- return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit})',c)};
+ return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
 }
 async function main(){
  const customerDemandVersion=process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
@@ -133,7 +133,13 @@ async function main(){
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
  const [ph,pg]=pair;
- ph.run("game=E.createGame({customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",campaignRulesVersion:1,mode:'lan',seed:77});syncPeers()");
+ ph.run("p2pConfig={serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
+ pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
+ await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
+ assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
+ pg.run('editLobbyIdentity(true)');await deliver(pg,ph);await deliver(ph,pg);
+ ph.run('editLobbyIdentity(true)');await deliver(ph,pg);
+ ph.run('startLobbyCampaign()');
  await deliver(ph,pg);
  let rounds=0;
  for(;rounds<12&&!ph.state().game.gameOver;rounds++){
@@ -151,4 +157,5 @@ async function main(){
  assert.equal(rounds,12);assert(lost>0);
  console.log(JSON.stringify({passed:true,relayTurns:rounds,acceptedWrites:writes,lostResponses:lost,sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['oversized rooms','snapshot compaction','rate cooldown','authentication pause','request timeout','stale sessions','conflicting writers','seat ownership','sealed timeout','live engine commit/reveal','duplicate reveal','reload checkpoint','ordered async polling']},null,2));
 }
-main().catch(e=>{console.error(e);process.exitCode=1});
+if(require.main===module)main().catch(e=>{console.error(e);process.exitCode=1});
+module.exports={harness,response};

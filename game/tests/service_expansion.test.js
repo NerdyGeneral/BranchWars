@@ -90,7 +90,24 @@ old.gameOver=true;E.rematch(old,0);E.rematch(old,1);assert.equal(old.serviceExpa
 const fresh=create('fresh');fresh.gameOver=true;E.rematch(fresh,0);E.rematch(fresh,1);assert.equal(fresh.serviceExpansionVersion,1);
 assert.match(source,/pilotSupported:11/);assert.match(source,/m\.pilotSupported!==11/);assert.match(source,/COMMERCIAL SERVICE DESK/);assert.match(source,/RESEARCH APPLICATIONS/);
 assert.match(source,/<input id="serviceExpansion" type="checkbox">/,'the experimental feature is not selected by default');
-assert.match(source,/serviceExpansionVersion:p2pConfig.serviceExpansionVersion\|\|0/,'the host passes the chosen rules to the engine');
+// Exercise the real lobby/engine boundary instead of prescribing the old
+// pre-lobby source spelling. Omitted and disabled previews must stay disabled.
+const {harness}=require('./github_resilience.test.js');
+for(const transport of ['gh','lan','p2p'])for(const selected of [undefined,0,1]){
+ const host=harness('host');
+ host.c.settings={campaignRulesVersion:1,name:'Host',color:'#2878e0',scope:'national',scenario:'rate',...(selected===undefined?{}:{serviceExpansionVersion:selected})};
+ host.run("p2pConfig=settings;sent=[];send=m=>sent.push(m);game=null;view=null;gh.active="+(transport==='gh')+";lan.active="+(transport==='lan'));
+ host.run("openLobby({lobbySupported:1,name:'Guest',color:'#e1505c'})");
+ assert.equal(host.state().game,null,'the greeting must not bypass the lobby');
+ assert.equal(host.state().lobby.settings.serviceExpansionVersion,selected||0);
+ host.run('applyLobbyUpdate(0,{revision:lobby.revision,player:lobby.players[0],ready:true});applyLobbyUpdate(1,{id:"confirm",revision:lobby.revision,player:lobby.players[1],ready:true});startLobbyCampaign()');
+ const started=host.state().game;
+ assert(started,'confirmed host must create the campaign');
+ assert.equal(started.serviceExpansionVersion,selected===1?1:undefined,'host must pass the selected service rules to the engine');
+ assert.equal(started.mode,transport==='p2p'?'p2p':'lan');
+ assert.equal(started.scenario,'rate');
+ assert.equal(host.run('sent.filter(m=>m.type==="state").at(-1).state.serviceExpansionVersion'),started.serviceExpansionVersion,'guest must receive the same service rules');
+}
 assert.match(source,/const expanded=\$\('#servicePricing'\)\?\.open/,'pricing disclosure survives plan rerenders');
 
 let turns=0,maxViewBytes=0,changes=0;const results=[];

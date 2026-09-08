@@ -114,7 +114,7 @@ async function testRepositoryQueue() {
   const functions = [
     'ghPath', 'ghUrl', 'ghHeaders', 'ghEncode', 'ghDecode', 'ghNonce', 'ghPlanHash', 'ghFail',
     'ghNormalizeRepo', 'ghNormalizeApi', 'ghDelay', 'ghRequest', 'ghCheckRepo', 'ghRead', 'ghWrite',
-    'ghCompact', 'ghAccepted', 'ghFlush', 'ghSend',
+    'ghCompact', 'ghAccepted', 'ghFlush', 'ghSend', 'ghPaintHealth',
   ];
   vm.runInContext(`const GH_MAX_TRAIL=20; var gh; ${functions.map(clientFunction).join('\n')}`, context);
   context.gh = { active: true, api: 'https://api.github.com', repo: 'test/branchwars', branch: '', private: true, room: 'ABCDEFGH', token: 'token', side: 'guest', mine: 0, published: 0, seen: 0, sha: '', etag: '', outbox: [], busy: false, sendFailures: 0, pollFailures: 0, retryTimer: null };

@@ -1,0 +1,696 @@
+{
+  "format": 1,
+  "cases": [
+    {
+      "name": "town-v1-0",
+      "options": {
+        "scope": "town",
+        "fundingRulesVersion": 1,
+        "seed": "foundation-town-v1-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "balanced"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "9c921bec77c5fa781b9d4f9d8a139a9ff4e97ab6b7db10fed1f9c9c1c95a6c04",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "31a32aa5c70a9a5559c62b848492c9c5eb0464d364a555e98c67856284422fe9"
+        },
+        {
+          "turn": 20,
+          "state": "e5f17d8f84dc8dc111858245ff4fa1c72624949f98fc857a94f3ad5dbb9c5ec4"
+        },
+        {
+          "turn": 30,
+          "state": "08f5238c1fee4a88ff0fc4fd9e2d9b938e6e528c1a96c5d89063d76e4bc6f803"
+        },
+        {
+          "turn": 40,
+          "state": "c140d252fddd68493bd2f0d246e4a06131569d4322366a09221132b28f07916a"
+        }
+      ],
+      "final": "c140d252fddd68493bd2f0d246e4a06131569d4322366a09221132b28f07916a"
+    },
+    {
+      "name": "town-v1-1",
+      "options": {
+        "scope": "town",
+        "fundingRulesVersion": 1,
+        "seed": "foundation-town-v1-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 1,
+      "turns": 34,
+      "trajectory": "e4360a4af076890e9023c74355b17d16efe3af4d96d428250b26e1187f925b7e",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "0bf441075484f3621aedaa99c61e108474b72f69a7aa16947355f6ab52b1d0c4"
+        },
+        {
+          "turn": 20,
+          "state": "4c0af4ebcb10fb12b6bf70fecca2dd2b548b13610e236ae66a357718fbcb5629"
+        },
+        {
+          "turn": 30,
+          "state": "3bf2e7ea9e706705f7a317803d1655b2b107f67ecea263edf38f9dfdd6e58f5e"
+        }
+      ],
+      "final": "e60f073952b6a80f2548cce2714b328a7a6c1e7b435a1485d7df3455399e2604"
+    },
+    {
+      "name": "regional-v2-0",
+      "options": {
+        "scope": "regional",
+        "seed": "foundation-regional-v2-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "0632337131572a1a8c4db2c9c90c8576ca18b7ee99fe4d676126f75bbb8cde90",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "977ed17d57ca01caa4e0e9c37aed27235cc5dab766b467d75838dbd396c1a39d"
+        },
+        {
+          "turn": 20,
+          "state": "36399c098de09bbf2c0965551d4fab61e21ca3ef46e758bfa396d4d82425ef48"
+        },
+        {
+          "turn": 30,
+          "state": "543001fc346cafa9b893fe2bee927f1a4d31d5c87d3f735df3000b6d0dfa99e8"
+        },
+        {
+          "turn": 40,
+          "state": "88e06f505e85c51b57a34d83c822d2231b441b24f972a9cdb6277935ed9d2e58"
+        }
+      ],
+      "final": "88e06f505e85c51b57a34d83c822d2231b441b24f972a9cdb6277935ed9d2e58"
+    },
+    {
+      "name": "regional-v2-1",
+      "options": {
+        "scope": "regional",
+        "seed": "foundation-regional-v2-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "regulatory"
+      },
+      "seatOrder": 1,
+      "turns": 36,
+      "trajectory": "8241fe50bfc22ae4c6491540ca87c23e0378a16d709df5d4f239076ae0d68a8c",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "bee231c957b35671cd3f7312eab599a15b68fb48c0f30d9f24b3c86c99c7d12f"
+        },
+        {
+          "turn": 20,
+          "state": "9c2695dcb1d6ee0c33eebbeee91e6a110ae25a8cfe92c19771fc2b836b116659"
+        },
+        {
+          "turn": 30,
+          "state": "4c85d657dbfba27ef50b15fc395d2919192e5c94daf0e7175d2e634e6fc6c97d"
+        }
+      ],
+      "final": "7e94f2b9d7b05acbd234056259510c0ec2606623e08451c315a365b9ab2904d6"
+    },
+    {
+      "name": "state-v2-0",
+      "options": {
+        "scope": "state",
+        "seed": "foundation-state-v2-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "regulatory"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "56739c1f158aa9db4c01fa207decb5190451efaba26473e304f4afa09c5fa50f",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "6c5ad653efe2a53da9c656d77d5aaed2fb1353621242360e4167dee7a9477460"
+        },
+        {
+          "turn": 20,
+          "state": "743d47d2e3539ffb7267c7cef136689929669bc85567436112bd6dba49e3fa0f"
+        },
+        {
+          "turn": 30,
+          "state": "89eeae6efd0249185e3cfdb8b51603e0c1603a7607626eb8e799a683955517cc"
+        },
+        {
+          "turn": 40,
+          "state": "097f2a0aa0c0613bdb964234a50f27c559c76af1c7e600d4379d175bca8865b9"
+        }
+      ],
+      "final": "097f2a0aa0c0613bdb964234a50f27c559c76af1c7e600d4379d175bca8865b9"
+    },
+    {
+      "name": "state-v2-1",
+      "options": {
+        "scope": "state",
+        "seed": "foundation-state-v2-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "growth"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "3466a6e3a92afb130ae1194d017e2a63dec83ed173773a6b6fda2b879a1b18bd",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "6a49a2dc44c6a7be673ce72a0566da6c814f130c7145e152d5d0fd58e7606476"
+        },
+        {
+          "turn": 20,
+          "state": "5c20512981f5d09c91d3b12f81c96aa60220cbc2412a1e6e1ba539a46fc7b021"
+        },
+        {
+          "turn": 30,
+          "state": "bafd19b3a992af0b4147b3e523ae5ba116adbaa5a14da3dbdf53b009571991f2"
+        },
+        {
+          "turn": 40,
+          "state": "723a9636b609d66b5268241c1ae04256929b00cf53c8d6714d75ad6cf8afa0df"
+        }
+      ],
+      "final": "723a9636b609d66b5268241c1ae04256929b00cf53c8d6714d75ad6cf8afa0df"
+    },
+    {
+      "name": "national-v2-0",
+      "options": {
+        "scope": "national",
+        "seed": "foundation-national-v2-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "growth"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "47814effd8a8afa8105975b546c48d24db009a9ac6ae01ebdf69621a60736044",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "95dc0b5d546a7c1dec12e57ee0cd2626791fcf6ce5be2e7dd00758ea26a1b36d"
+        },
+        {
+          "turn": 20,
+          "state": "737b9a1aa22a5c93a2e5f8bad9ace5657534b84bbd1411e463350248e82c5a5b"
+        },
+        {
+          "turn": 30,
+          "state": "25c726e2b95d9a772f452f3383a0da9114e3f6d1589eea0914b79d552bb810a9"
+        },
+        {
+          "turn": 40,
+          "state": "faebfb9bc41a329419091ef2fe71d9002d607fadbdc7c8078f4b410f9b4cc42d"
+        }
+      ],
+      "final": "faebfb9bc41a329419091ef2fe71d9002d607fadbdc7c8078f4b410f9b4cc42d"
+    },
+    {
+      "name": "national-v2-1",
+      "options": {
+        "scope": "national",
+        "seed": "foundation-national-v2-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "balanced"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "e815f0007fef6fe60587aa0a32b98bf8e5df2c2a876e0d383a333c3c2a6f35fc",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "9601fabdab9e035380e78b1c02aafdb86ea0990a06956abfefb9cb37c1d0afb5"
+        },
+        {
+          "turn": 20,
+          "state": "f7b4b49dd9c2baa383d60c9c7cc9c666b89859dbc3fc32ba4e31f4a11db8fde2"
+        },
+        {
+          "turn": 30,
+          "state": "b76012bc57156a0e99bf4673abdef1f6ef92c62c6eab952da1bfefd7ba661c38"
+        },
+        {
+          "turn": 40,
+          "state": "fad23128f08dad5649bccc47847314ec8a444fafa52d23ae8c23ad8abc8c920d"
+        }
+      ],
+      "final": "fad23128f08dad5649bccc47847314ec8a444fafa52d23ae8c23ad8abc8c920d"
+    },
+    {
+      "name": "regional-pilot-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "serviceExpansionVersion": 0,
+        "seed": "foundation-regional-pilot-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "balanced"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "8bd72c8afe2229f611c9e7e8b20d563ee4cff8d0e6cd383ee2c85077e3d8cc8d",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "296545c894ea87846a69720f357d1a8c7224476236d8470b342e853fb3433b00"
+        },
+        {
+          "turn": 20,
+          "state": "aecf145ed511a12d8bcf7438406142ebd8dfdfadf74ee46e82a56c82352e6dc4"
+        },
+        {
+          "turn": 30,
+          "state": "0b67e0a5c3b13bf059eb150ccdcd192c838e1285f12d089841e0eb33ffc84d2b"
+        },
+        {
+          "turn": 40,
+          "state": "e8d6575bb0a2d3344056fddd960361b0545cda86b9e17f3a661d5a9c28467f16"
+        }
+      ],
+      "final": "e8d6575bb0a2d3344056fddd960361b0545cda86b9e17f3a661d5a9c28467f16"
+    },
+    {
+      "name": "regional-pilot-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "serviceExpansionVersion": 0,
+        "seed": "foundation-regional-pilot-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "f48f9914d74b4eeb80f8883e84449f1df17869162579ef0a1face887b7e2a71f",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "48ab0a61b5311cc19994027a4cd91831150ba0962a27bbc5bf8ebff80874e5ee"
+        },
+        {
+          "turn": 20,
+          "state": "382444a908493cae8052f173dbdda4c3a2bfadd0a4f401f008270ab1991a667a"
+        },
+        {
+          "turn": 30,
+          "state": "b1704d0be40f5994147f8b35e70f8112e54d6111ba1773691413232471111b04"
+        },
+        {
+          "turn": 40,
+          "state": "d3b6647738ecf4db06fe90fc6ad92a275cadf3471f511879399f9e4289e31888"
+        }
+      ],
+      "final": "d3b6647738ecf4db06fe90fc6ad92a275cadf3471f511879399f9e4289e31888"
+    },
+    {
+      "name": "services-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "serviceExpansionVersion": 1,
+        "seed": "foundation-services-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "5e3705defa8f24d3b40dfaf3664fe07936dcaff01d2c10246566f1ca43803721",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "c322a9079ce4328c01c416a37b70090c803cb8a39f63910dcfc1074c8ea818c6"
+        },
+        {
+          "turn": 20,
+          "state": "1776a2ede69ec5e8f4697cf895d31ebc9b1bbec3c88d1f6a8a076abfc8ef96df"
+        },
+        {
+          "turn": 30,
+          "state": "90fe3313d7f570f00b16d35e8eec0da48a9000335947f94550c3ec7d91e17555"
+        },
+        {
+          "turn": 40,
+          "state": "b5aa58dbad43c3005cb6233e89b50a7a2ead3431028f361a2e53705ef0074bbc"
+        }
+      ],
+      "final": "b5aa58dbad43c3005cb6233e89b50a7a2ead3431028f361a2e53705ef0074bbc"
+    },
+    {
+      "name": "services-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "serviceExpansionVersion": 1,
+        "seed": "foundation-services-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "regulatory"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "d74249fec836984e166c441a82099b35a4b96fa52b07488b0ffcf955d7151492",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "c90065b5f8a281839d624efaed60a68e7ad6a59cbf87c8563592c5202807cb36"
+        },
+        {
+          "turn": 20,
+          "state": "174905d9b72b6615ffe390c04e7851df76e8c63ba92358ca1661e328673e7f3b"
+        },
+        {
+          "turn": 30,
+          "state": "3e50bef460769bad80198ac54ba96f5be6ad459f1ca58b88ed3bf22e6ef1d347"
+        },
+        {
+          "turn": 40,
+          "state": "1ef9a88e5dc4b66d73518333e25df325381e249c68268adbd2ac327184b42d61"
+        }
+      ],
+      "final": "1ef9a88e5dc4b66d73518333e25df325381e249c68268adbd2ac327184b42d61"
+    },
+    {
+      "name": "management-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 1,
+        "seed": "foundation-management-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "regulatory"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "2413788abb0303584d32b40a5fa1edfabdb59026ec4bcc5601bd09f4fb430222",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "01a1dd3be4f840e7fc1dfbeba9083f65d1eca6c9e544857e3e20f2db06f0f8de"
+        },
+        {
+          "turn": 20,
+          "state": "b0e3118287feae3820d40a9b943c31637f1618fb3c6cdaf3393049cdfd93fa64"
+        },
+        {
+          "turn": 30,
+          "state": "d220e6ab836c164c19cdcaab80568eff9afb388237cab9794b472c3cc6ff6db5"
+        },
+        {
+          "turn": 40,
+          "state": "a510fa38d8f4877ea8d0a22cae98f1b674ee1c6f7ee01d157fcd25a47fce2e5e"
+        }
+      ],
+      "final": "a510fa38d8f4877ea8d0a22cae98f1b674ee1c6f7ee01d157fcd25a47fce2e5e"
+    },
+    {
+      "name": "management-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 1,
+        "seed": "foundation-management-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "growth"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "27393cc05785f0bb1bae124455370a3cc3287a4cdbc705ef0dca828956b5086a",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "49af4cb7242d3ec244fd2ec5831aa158e604dc7bfc1fffd4b1bba0de29a679df"
+        },
+        {
+          "turn": 20,
+          "state": "6f2f2a56e2774cf47a47b0487105a9498add07b0dbbc61e970277f646e4b8a21"
+        },
+        {
+          "turn": 30,
+          "state": "6f4b1942047adc58733c030e14a6fc9e1601b6f638fb7fab5485518967aad7dd"
+        },
+        {
+          "turn": 40,
+          "state": "085ac8b33de136d72a6c022d4ff04193a61f3118b205bacf5b242a3ad24ef5a0"
+        }
+      ],
+      "final": "085ac8b33de136d72a6c022d4ff04193a61f3118b205bacf5b242a3ad24ef5a0"
+    },
+    {
+      "name": "relationships-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "seed": "foundation-relationships-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "growth"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "ac7786eb0b3362e9e72f08c35b05c7dc7cb75f290c6724e8aac8c40890406b10",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "28a4dae0f512b6c2af5342a833ccc59b387830726cecd4cb2dbbe6599b659e3f"
+        },
+        {
+          "turn": 20,
+          "state": "0446ca9f43d26b0ae8102df4fc14d5c87b170c0c3260bdd0094289385f999882"
+        },
+        {
+          "turn": 30,
+          "state": "0f849e769d6bc7562f444cb835c13788119e369d165e0d7ebccdf70f8b21a9fa"
+        },
+        {
+          "turn": 40,
+          "state": "6cb753b61a5be1f4dcc7389b69a8d57aa40761998cb24c85196e85a429a9a53b"
+        }
+      ],
+      "final": "6cb753b61a5be1f4dcc7389b69a8d57aa40761998cb24c85196e85a429a9a53b"
+    },
+    {
+      "name": "relationships-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "seed": "foundation-relationships-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "balanced"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "74b1e66f2ad198418e88cee75dffebdf52ec90cf04ab639a86b973b530ce4ad1",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "239237cd10fc6559cff7e06237d440f9e6f17f11763899e9635f31fbfce867ce"
+        },
+        {
+          "turn": 20,
+          "state": "c88015a9da67ab0326646f6c2b3a60206ee899e42e0116573256579aaf3f1f59"
+        },
+        {
+          "turn": 30,
+          "state": "e09ca59c62657a00ebe2e92dc72c18ae642add2241a384b771ffbaeca283657c"
+        },
+        {
+          "turn": 40,
+          "state": "07e52758aa7f00516928ec4dafef2af96a84cbffefee4f96dc81e0ada8f1147f"
+        }
+      ],
+      "final": "07e52758aa7f00516928ec4dafef2af96a84cbffefee4f96dc81e0ada8f1147f"
+    },
+    {
+      "name": "customer-needs-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "customerDemandVersion": 1,
+        "seed": "foundation-customer-needs-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "balanced"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "adc6d4e5c8d3c0dc38b48b679bcd0bb8701b09d08ab3360df051cadb023b1600",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "c9e619bf986b7f29fa91dd263e5bb13ec81106c12acde2041216d3f92dd1f5f7"
+        },
+        {
+          "turn": 20,
+          "state": "3486f39faabc1bbe323bdc763dce68859b1f8dbaeea3436b11dd228dc2f8d944"
+        },
+        {
+          "turn": 30,
+          "state": "1d91d5c7c88095c24de4a70e873bb2563e6447443a52aa3c9647c8dcf2ac8239"
+        },
+        {
+          "turn": 40,
+          "state": "294d26283178ee967a45f601ca57028f4b6e33e36a54e73f0041aba482611dec"
+        }
+      ],
+      "final": "294d26283178ee967a45f601ca57028f4b6e33e36a54e73f0041aba482611dec"
+    },
+    {
+      "name": "customer-needs-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "customerDemandVersion": 1,
+        "seed": "foundation-customer-needs-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "d516ff0c984b15d8ad7f558653e9373101cafe9710db059537aa2f8ce747d2e5",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "1b58ecae20e860ee7ce93f29f600601f2424384a605d0522046641ce7444a56c"
+        },
+        {
+          "turn": 20,
+          "state": "5debb098973de66e202bbeae2a8f77f6c238ab6e970d4b43c6e48860c1e2dce8"
+        },
+        {
+          "turn": 30,
+          "state": "05f16816e39086c76e6d24870b4d501a2a7f64adbf4dda1048214af1599e2800"
+        },
+        {
+          "turn": 40,
+          "state": "67933d30b26c62c2a687671ce003b8081c6a328cbdad79949086ca670c740791"
+        }
+      ],
+      "final": "67933d30b26c62c2a687671ce003b8081c6a328cbdad79949086ca670c740791"
+    },
+    {
+      "name": "goodwill-0",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "customerDemandVersion": 2,
+        "seed": "foundation-goodwill-0",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "rate"
+      },
+      "seatOrder": 0,
+      "turns": 40,
+      "trajectory": "e7d2b42d739f72d8839e3c79578dda32ded4807c579921fb2e1b40e1a487b136",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "b5acc8c1002f50ad04132ca509d86420ff210c3b6f1c09b64dde3c52a093eb93"
+        },
+        {
+          "turn": 20,
+          "state": "8d8b6cfee151c43c147e1c050d0a879d7f40a2046304c53dcffac6c517db2b9e"
+        },
+        {
+          "turn": 30,
+          "state": "0cec1fa384af08438d61731951daf34934e8b501f1709941386e639734ac5dda"
+        },
+        {
+          "turn": 40,
+          "state": "96208f8df07a4e25de5c50820cdb143cc98c54abc8eb52aefa877ea33a2a4276"
+        }
+      ],
+      "final": "96208f8df07a4e25de5c50820cdb143cc98c54abc8eb52aefa877ea33a2a4276"
+    },
+    {
+      "name": "goodwill-1",
+      "options": {
+        "campaignRulesVersion": 1,
+        "managementVersion": 2,
+        "customerDemandVersion": 2,
+        "seed": "foundation-goodwill-1",
+        "created": 1,
+        "mode": "hotseat",
+        "name1": "North Bank",
+        "name2": "South Bank",
+        "scenario": "regulatory"
+      },
+      "seatOrder": 1,
+      "turns": 40,
+      "trajectory": "e72548bb10b1432ed59e80c394f592f509dfafd4a8674b629862e4bc431fb575",
+      "checkpoints": [
+        {
+          "turn": 10,
+          "state": "692dbceb6b6dca616b00a97f06a64aaa8e8c7ab0cfa0f24de8af8224cd977a6a"
+        },
+        {
+          "turn": 20,
+          "state": "ba887452cc4be0335452e94bfcda51631bc26142cf35afec4afc346fabcf6147"
+        },
+        {
+          "turn": 30,
+          "state": "08ba951e73bac22a04581e6ca9f7bb9a320ccf56f7cb1d083648999508296b5e"
+        },
+        {
+          "turn": 40,
+          "state": "cbadd07a6798a44e94d69798594c08b93732b4190d2f4636ed7142cafa13b1e9"
+        }
+      ],
+      "final": "cbadd07a6798a44e94d69798594c08b93732b4190d2f4636ed7142cafa13b1e9"
+    }
+  ],
+  "baselineSource": "ff15fce9f8e4af3ebb6024c0b4d984dba3cededee0d8a4f7e5bb2f245a62453c"
+}

@@ -1,0 +1,10 @@
+{
+  "format": 1,
+  "source": "a5c46364574b7a6216833f0ef3e918a711c1a2ff",
+  "afterHalfReadyCompletionAndTurns": 12,
+  "expected": {
+    "legacy-half-ready.json": "2038d692a6bdb2027eaec6437131498306e63a3da73a0ca72ba7013cabeae322",
+    "pilot-half-ready.json": "3c8c2daa89a525aef2ff6036e3ae22c552c9ae44b3d4bc427d52747f2b3d34c3",
+    "goodwill-half-ready.json": "870e41f8911d10aace8279648ede4a7debb99f3152fde89048b81199f0f9f866"
+  }
+}
