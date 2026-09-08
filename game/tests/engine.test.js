@@ -1214,7 +1214,7 @@ function opsCycle(g, newProject) {
   E.publicState(carried, 0);
   checkGame(carried);
 
-  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8.12/);
+  assert.throws(() => migrateGame({ version: '5.0', players: [{}, {}], territories: { downtown: {} } }), /v6.0 through v8\.14/);
   assert.throws(() => migrateGame({ version: '7.0', players: [{}], territories: {} }), /not a valid/i);
 }
 
@@ -1247,14 +1247,17 @@ assert(html.includes('id="capitalPolicies"'));
 assert(html.includes('id="isometric-city-overhaul"'));
 assert(html.includes('function districtArt'));
 assert(html.includes('id="trendChart"'));
-assert(html.includes('BRANCH WARS v8.1'));
+assert(html.includes('<title>Branch Wars: Executive Command</title>'), 'portable keeps its product identity');
+assert(html.includes('BRANCH WARS // OPEN-ENDED MARKET WAR'), 'footer describes the current open-ended campaign');
+assert(!html.includes('BRANCH WARS v8.1'), 'do not label modern optional-rule campaigns with a stale release version');
 assert(html.includes('ENTERPRISE STRATEGY TREE'));
 assert(html.includes('id="productPortfolio"'));
 assert(html.includes('function renderProducts'));
 assert(html.includes('data-specialization-branch'));
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
-assert.equal((html.match(/data-workspace-tab=/g) || []).length, 10, 'command center has six core workspaces plus optional Workforce, Customers, Credit and Products workspaces');
+assert.equal((html.match(/data-workspace-tab=/g) || []).length, 11, 'command center has six core workspaces plus optional Workforce, Customers, Credit, Products and Group workspaces');
+assert(html.includes('id="financialGroupNav"') && html.includes('id="financialGroupPanel"'), 'optional group capital has a dedicated workspace');
 assert(html.includes('id="productProgramsNav"') && html.includes('id="productProgramsPanel"'), 'product development and targeting have a dedicated workspace');
 assert(html.includes('data-workspace-tab="workforce"'), 'the optional workforce workspace has its own navigation target');
 for (const id of ['competitiveActions', 'threatBoard']) assert(html.includes(`id="${id}"`), `${id} must be present`);
@@ -1360,7 +1363,11 @@ for (const [status, why] of [['401','a rejected token'],['404','a missing reposi
 // LAN sends have an application-level id so retrying after a lost acknowledgement
 // cannot submit the same plan twice. The queue is drained serially and backed off.
 assert(clientFn('lanSend').includes('messageId()'), 'every LAN message must have an idempotency id');
-assert(clientFn('lanFlush').includes('while(lan.active&&lan.outbox.length)'), 'LAN messages must be sent in order');
+const lanQueueBody=clientFn('lanFlush');
+assert(lanQueueBody.includes('const session=lan')&&lanQueueBody.includes('while(lan===session&&session.active&&lan.outbox.length)'), 'LAN serial flushing must stay bound to its original room');
+assert(lanQueueBody.includes('const item=lan.outbox[0]'), 'LAN flush must send the oldest queued message first');
+assert(lanQueueBody.indexOf('await lanRequest(')<lanQueueBody.indexOf('lan.outbox.shift()')&&lanQueueBody.indexOf('if(!data.ok)')<lanQueueBody.indexOf('lan.outbox.shift()'), 'LAN queue advances only after the oldest message is acknowledged');
+assert(lanQueueBody.indexOf('if(lan!==session||!session.active)return')<lanQueueBody.indexOf('lan.outbox.shift()'), 'A late acknowledgement from an old room cannot remove a new room message');
 assert(clientFn('lanFlush').includes('queued for retry'), 'an interrupted LAN send must remain queued');
 assert(clientFn('lanRequest').includes('AbortController'), 'a dead LAN request must time out instead of hanging forever');
 

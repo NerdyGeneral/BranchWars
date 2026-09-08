@@ -1,0 +1,7 @@
+# Preserve tested portable/package and compatibility-reference bytes on Windows.
+/game/BRANCH_WARS.html -text
+/game/BRANCH_WARS_LAN_SERVER.ps1 -text
+/game/OPEN_BRANCH_WARS.bat -text
+/game/OPEN_LAN_GAME.bat -text
+/game/reports/reference-builds/BRANCH_WARS_group_822b386.html -text
+/releases/** -text

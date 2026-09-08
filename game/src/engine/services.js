@@ -34,6 +34,7 @@ function serviceLoad(p){
  return {count:rows.length,served:rows.filter(c=>c.served).length,fees,cost:direct+outsourced+platform,direct,outsourced,platform,capacity,used:capacity-free,staff,sales:commercialSalesStaff(p),rows};
 }
 function serviceBidStatus(p,c){
+ if(c.companyClosed)return {eligible:false,reason:'This company has closed; its service contract is unavailable.'};
  if(!p.serviceDesk)return {eligible:false,reason:'Requires the expanded service pilot.'};
  if(c.kind==='treasury'&&!serviceApplicationActive(p,'treasury'))return {eligible:false,reason:'Activate a built or partnered Corporate Treasury platform.'};
  const load=serviceLoad(p),other=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0);
@@ -83,7 +84,7 @@ resolveOpportunities=function(g,plans){
  }
  syncServiceBook(g);
  for(const c of g.serviceAgreements){
-  if(c.due!==g.cycle)continue;
+  if(c.due!==g.cycle||c.companyClosed)continue;
   const order=[...g.players].sort((a,b)=>(b.id===c.owner)-(a.id===c.owner)||a.id.localeCompare(b.id));
   const outside=10+simulationRandom()*4;let winner=null,best=outside;
   for(const p of order){const i=g.players.indexOf(p);if(plans[i].contractExit===c.id||(c.owner!==p.id&&plans[i].contractBid!==c.id)||!serviceBidStatus(p,c).eligible)continue;
@@ -104,7 +105,7 @@ function planServiceDesk(g,index,plan){
  policy.payroll=!!p.serviceDesk.applications.payroll&&p.serviceDesk.contracts.some(c=>c.kind==='payroll');
  policy.treasury=!!p.serviceDesk.applications.treasury;
  policy.pricing={payroll:'standard',merchant:'standard',treasury:'standard'};
- const due=g.serviceAgreements.filter(c=>c.due===g.cycle&&c.owner!==p.id&& (c.kind!=='treasury'||policy.treasury));
+ const due=g.serviceAgreements.filter(c=>!c.companyClosed&&c.due===g.cycle&&c.owner!==p.id&& (c.kind!=='treasury'||policy.treasury));
  const demand=p.serviceDesk.contracts.reduce((n,c)=>n+SERVICE_TYPES[c.kind].load,0);
  policy.outsourcing=Math.min(4,demand);
  policy.staff=Math.min(plan.allocation.business,Math.ceil(Math.max(0,demand-4)/2));
@@ -130,7 +131,7 @@ function planServiceDesk(g,index,plan){
 // No saved balances, quoted contract terms or human intents are changed here.
 function servicePlanReview(p,plan,economy){
  const planned={...p,focus:plan.focus||p.focus},forecast=operatingPreview(planned,plan,economy),budget=planBudget(planned,plan),exposure=riskAssets(p);
- const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.training||0)+(budget.relationshipOffers||0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
+ const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.training||0)+(budget.relationshipOffers||0)+(budget.onboarding||0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
  const reserve=exposure*.10+200000,lossBuffer=Math.max(0,-netOperating)*2;
  return {profit:forecast.profit,fundingLoss,netOperating,spend:budget.total,includedOperatingSpend,nonOperatingSpend,netAfterSpend:netOperating-nonOperatingSpend,equityAfterPlan,reserve,
   headroom:equityAfterPlan-reserve,spendingLimit:Math.max(0,Math.min(budget.capitalBudget,p.stats.capital-reserve-lossBuffer)),

@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),{webcrypto,createHash}=require('node:crypto');
-const html=fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'),'utf8');
+const html=process.argv.includes('--source')?require('../tools/build_game.js').assemble().html:fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'),'utf8');
 for(const s of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(s[1]);
 const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 const client=html.slice(html.indexOf('const E=window.BWEngine'),html.lastIndexOf("$$('[data-workspace-tab]').forEach"));
@@ -8,16 +8,38 @@ const copy=x=>JSON.parse(JSON.stringify(x));
 function response(status,body,headers={}){return {status,ok:status>=200&&status<300,headers:{get:k=>headers[k.toLowerCase()]??null},json:async()=>body}}
 function harness(side='host'){
  const storage=new Map(),elements=new Map(),timers=new Map();let timerId=0;
+ function elementFor(selector){
+  if(elements.has(selector))return elements.get(selector);
+  const el={id:selector.startsWith('#')?selector.slice(1):'',value:'',textContent:'',checked:false,disabled:false,dataset:{},listeners:{},
+   focus(){},querySelector:s=>elementFor(s),
+   addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},
+   classList:{add(){},remove(){},toggle(){},contains(){return false}}};
+  let markup='';
+  Object.defineProperty(el,'innerHTML',{configurable:true,get:()=>markup,set:html=>{
+   markup=String(html);
+   for(const input of markup.matchAll(/<input\b[^>]*>/g)){
+    const id=input[0].match(/\bid="([^"]+)"/)?.[1];if(!id)continue;
+    const control=elementFor('#'+id),field=input[0].match(/\bdata-feature-field="([^"]+)"/)?.[1];
+    control.checked=/\schecked(?:\s|>)/.test(input[0]);control.disabled=/\sdisabled(?:\s|>)/.test(input[0]);
+    if(field)control.dataset.featureField=field;
+   }
+  }});
+  elements.set(selector,el);return el;
+ }
  const c={console,URL,TextEncoder,AbortController,crypto:webcrypto,queueMicrotask,btoa:x=>Buffer.from(x,'binary').toString('base64'),atob:x=>Buffer.from(x,'base64').toString('binary'),
   setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms});return id},clearTimeout:id=>timers.delete(id),clearInterval:()=>{},
   localStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null},
   sessionStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null,removeItem:k=>storage.delete(k)},
-  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',checked:false,listeners:{},addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
+  document:{querySelector:elementFor,querySelectorAll:()=>[]},
  };
  vm.createContext(c);vm.runInContext(engine,c);c.window={BWEngine:c.BWEngine};
  vm.runInContext(client,c);
  vm.runInContext("render=()=>{};enterGame=()=>{};saveLocal=()=>{};toast=()=>{};setMode=()=>{};gh={...emptyGh(),active:true,side:'"+side+"',api:'https://api.github.com',repo:'test/game',branch:'main',room:'ABCDEFGH',token:'PRIVATE_TEST_TOKEN'};p2pRole='"+side+"';p2pConfig={campaignRulesVersion:1,name:'Host',guestName:'Guest'};",c);
- return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
+ return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),
+  changeFeature(id,checked){const control=elementFor(id);assert(control.dataset.featureField,'Rendered feature control '+id);control.checked=checked;elementFor('#setupFeatureOptions').listeners.change({target:control})},
+  confirmFeatures(){return vm.runInContext('confirmFeatureSelection()',c)},
+  state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
+
 }
 async function main(){
  const relationshipOffersVersion=process.argv.includes('--relationship-offers')?1:0;
@@ -60,12 +82,16 @@ async function main(){
  // Compact a long host trail: old framing exceeds inline Contents limit.
  const h=harness(),frames=Array.from({length:20},(_,i)=>({seq:i+1,msg:{type:'state',state:{cycle:i+1,padding:'x'.repeat(100000)}}}));
  // The new service preview requires, and explicitly enables, the regional pilot.
- const preview=h.elements.get('#serviceExpansion');
- assert(preview.listeners.change, 'service preview registers its change handler');
+ assert(h.elements.get('#setupFeatureOptions').listeners.change,'Feature selector binds delegated changes');
  assert.equal(h.c.document.querySelector('#rivalryPilot').checked,false);
- preview.checked=true;preview.listeners.change();
- assert.equal(h.elements.get('#rivalryPilot').checked,true);
- preview.checked=false;preview.listeners.change();
+ h.changeFeature('#serviceExpansion',true);
+ assert(h.run('featureSelectionPending()'),'Dependent setup changes await explicit confirmation');
+ assert.equal(h.elements.get('#rivalryPilot').checked,false,'Unconfirmed prerequisites are not selected');
+ assert(h.confirmFeatures());assert.equal(h.elements.get('#rivalryPilot').checked,true);
+ assert.equal(h.elements.get('#serviceExpansion').checked,true);
+ h.changeFeature('#serviceExpansion',false);
+ if(h.run('featureSelectionPending()'))assert(h.confirmFeatures());
+ assert.equal(h.elements.get('#serviceExpansion').checked,false);
  assert.equal(h.elements.get('#rivalryPilot').checked,true,'disabling preview does not disable the existing pilot');
  h.c.frames=frames;
  assert(Buffer.byteLength(JSON.stringify(frames))>1000000);

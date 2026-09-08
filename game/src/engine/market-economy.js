@@ -92,6 +92,11 @@ function settleMonthlyProduction(g,p,preview=false){
  if(!world.marketEconomy)throw Error('Market preview has no supply snapshot');
  return withMarket(world,()=>{
   p.marketSupply=marketSupply(world,p);
+  if(p.onboarding){
+   traceProductDeposits(p,'onboarding',()=>settleOnboarding(world,p));
+   // Settlement leaves the same supply and frozen quotas reduced by activations.
+   // Re-quoting here would restore part of the shared, fit-adjusted allowance.
+  }
   const before=Object.fromEntries(MARKET_RESOURCES.filter(k=>k!=='deposits').map(k=>[k,p.stats[k]]));
   const result=postMonthlyOperations(g,p,preview);
   // The accounting adapter copies nonfinancial calculation results; settle those against real franchises.
@@ -124,8 +129,9 @@ const marketCompetition=depositContest;
 depositContest=function(g){
  if(!g.marketEconomy)return marketCompetition(g);
  return withMarket(g,()=>{
+  const priceEdges=productPricingEdges(g);
   const lines=[],outsideLoss=[0,0];for(const [key,t]of activeTerritories(g)){
-   const edge=depositPull(g.players[0],key,t)-depositPull(g.players[1],key,t),win=edge>0?0:1,lose=1-win;
+   const edge=depositPull(g.players[0],key,t)-depositPull(g.players[1],key,t)+(priceEdges?priceEdges[key].edge:0),win=edge>0?0:1,lose=1-win;
    if(Math.abs(edge)>=.5){
     const from=g.players[lose],to=g.players[win],request=Math.min(from.marketBook.markets[key].deposits*.025,Math.abs(edge)*t.value*3500);
     const n=transferMarket(g,from,to,key,'deposits',request);

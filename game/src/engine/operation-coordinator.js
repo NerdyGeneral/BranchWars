@@ -4,6 +4,9 @@ function runLegacyOperations(g, p, preview = false) {
     : withRandom(g, 'state', () => calculateLegacyOperations(g, p, preview));
 }
 function operate(g, p, preview = false) {
+  const ownsOnboardingQuota = !!p.onboarding && !p.marketQuota;
+  // v8.13 forecasts share a private outside book through returns and onboarding.
+  if (preview && p.onboarding) g = { ...g, marketEconomy: JSON.parse(JSON.stringify(g.marketEconomy || marketContext?.marketEconomy || p.marketSnapshot)) };
   return recordLedgerStage(g, 'operate', 'operations', () => {
     const intake = [1, 2].includes(p.customerDemandVersion);
     if (intake)
@@ -14,16 +17,16 @@ function operate(g, p, preview = false) {
     try {
       beginAdvertisingCycle(g,p,preview);
       if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
-      const retention = settleHouseholdRetention(g, p, preview);
+      const retention = traceProductDeposits(p,'retention',()=>settleHouseholdRetention(g, p, preview && !p.onboarding));
       // Locked maturities precede promotion repricing; repayment precedes new lending.
       const termSequence = p.accounting?.sequence || 0;
-      const term = prepareTermFunding(g, p, preview),
+      const term = traceProductDeposits(p,'terms',()=>prepareTermFunding(g, p, preview && !p.onboarding)),
         oldDepositWorld = depositWorld;
       const termFundingLoss = p.segmentDeposits ? p.accounting.journal.filter(e=>e.id>termSequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0) : 0;
       if (p.depositBook) depositWorld = g;
       try {
-        const offers = settleRelationshipOffers(g, p);
-        if (p.depositBook) repriceWithdrawableDeposits(g, p);
+        const offers = traceProductDeposits(p,'productSwitches',()=>settleRelationshipOffers(g, p));
+        if (p.depositBook) traceProductDeposits(p,'productSwitches',()=>repriceWithdrawableDeposits(g, p));
         const oldCreditWorld = creditWorld;
         if (p.creditBook) creditWorld = g;
         try {
@@ -74,6 +77,8 @@ function operate(g, p, preview = false) {
     } finally {
       cleanupAdvertisingCycle(p);
       if(p.relationshipOffers)delete p._relationshipOfferBudget;
+      if(p.onboarding)delete p._onboardingBudget;
+      if(ownsOnboardingQuota)delete p.marketQuota;
       if (intake) delete p._customerIntake;
       if (p.workforce) { delete p._workforceCosts; delete p._workforceReserved; }
     }

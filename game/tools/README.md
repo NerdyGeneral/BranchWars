@@ -65,8 +65,9 @@ significant.
 **Hold the budget constant.** Capability lanes looked worthless when measured with
 building disabled — the project-multiplier lanes had nothing to multiply — and
 negative when measured with building enabled, because capability spend crowded
-out branches. Fund the lane out of band (hand the arm exactly the cash it
-invests) to isolate it.
+out branches. Historical attribution experiments used out-of-band funding to
+isolate a multiplier; that is not a playable balance result. Release acceptance
+controllers must pay normal costs from actual resources and preserve books.
 
 **Equalise everything except the variable.** A playstyle matchup matrix inverted
 almost completely — one archetype went from 10% to 82% — once every archetype was
@@ -87,6 +88,36 @@ parity, not a defect to tune.
 **Watch the realm.** The engine runs under `vm.runInNewContext`, so arrays derived
 from game state carry the sandbox's prototypes. `assert.deepStrictEqual` against
 a locally built array fails on identical contents.
+
+## Local release packaging
+
+After the release gates pass, create a new directory outside the repository:
+
+```text
+node tools/package_release.js --output C:/absolute/existing-parent/new-release
+node tools/package_release.js --verify C:/absolute/existing-parent/new-release
+```
+
+The parent must already exist and the release directory must not. The tool checks
+the portable through the normal builder, then copies only the HTML, two Windows
+launchers and LAN server, with a generated README and SHA-256 manifest. It never
+merges with an old release or copies the developer workspace, private saves,
+reports, credentials or checkpoints. Verification rejects extra, missing or
+modified files. It does not publish anything to GitHub.
+
+`tests/paired_release_balance.test.js --report` separately compares two scripted
+policy controllers in genuine swapped-seat pairs on identical starting worlds.
+Neither controller receives free funding or mirrored assets. Reported dominance
+and existing early endings are observations, not automatic balance failures.
+
+`tests/stabilization_balance.test.js --report` is the bounded six-controller
+release diagnostic: 64 campaigns through 120 months and eight through 480,
+unless a legitimate ending occurs. `--shard N --shards 4 --report` partitions the
+same case list across four separate processes; `--quick` runs two months per
+short case and is only a harness smoke test. It uses normal plan submission,
+four scenarios, paired controller assignments and fixed seeds. It does not
+replace optional-feature/network regression gates or human balance acceptance.
+This extended matrix is a release exercise, not an extra run of every CI job.
 
 ## Reference points
 

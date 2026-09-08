@@ -1,4 +1,5 @@
-function chooseOpenBot(g, index) {
+function chooseOpenBot(g,index){return withCorporateForecast(g,()=>chooseOpenBotCore(g,index));}
+function chooseOpenBotCore(g, index) {
   const initial = () => {
     let plan = withRandom(g, 'aiState', () => chooseBaselinePlan(g, index));
     plan = planPilotReserve(g, index, plan);
@@ -21,12 +22,19 @@ function chooseOpenBot(g, index) {
   plan = planHouseholdService(g, index, plan);
   plan = planAdvertising(g, index, plan);
   plan = planRelationshipOffers(g, index, plan);
+  plan = planOnboarding(g, index, plan);
   plan = collectionsPlan(g, index, plan);
   plan = planBankRecovery(g, index, plan);
-  return planFinalCashReserve(g, index, plan);
+  plan = planFinalCashReserve(g, index, plan);
+  plan = reconsiderOnboardingPending(g, index, plan);
+  plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
+  plan=planFinancialGroup(g,index,plan);
+  // A changed loan mix can change the loss reserve after the earlier pricing
+  // pass. Recheck only new group campaigns; old AI order remains byte-exact.
+  return [1,2].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }
 function aiCashPlanningReview(g, index, plan) {
-  if (g.productProgramsVersion !== 1) return null;
+  if (![1, 2].includes(g.productProgramsVersion)) return null;
   const p = g.players[index], decisionOwner = JSON.parse(JSON.stringify(p));
   // The announced executive call is public. Dry-run its existing settlement on
   // a private copy so this reserve cannot drift from a second table of prices.
@@ -36,6 +44,7 @@ function aiCashPlanningReview(g, index, plan) {
   const forecastPlan = JSON.parse(JSON.stringify(plan));
   if (forecastPlan.advertisingPolicy) forecastPlan.advertisingPolicy.budget = 0;
   if (forecastPlan.relationshipOfferPolicy) forecastPlan.relationshipOfferPolicy.share = 0;
+  if (forecastPlan.onboardingPolicy) forecastPlan.onboardingPolicy.share = 0;
   if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
   const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy);
   const operatingLoss = Math.max(0, -forecast.profit + (forecast.fundingLoss || 0));
@@ -47,7 +56,7 @@ function aiCashPlanningReview(g, index, plan) {
 function planFinalCashReserve(g, index, input) {
   // Earlier versions keep their exact planner order and decisions. This final
   // pass closes the reserve gap left when later product/staff planners add spend.
-  if (g.productProgramsVersion !== 1) return input;
+  if (![1, 2].includes(g.productProgramsVersion)) return input;
   const p = g.players[index], plan = JSON.parse(JSON.stringify(input));
   if (plan.contractBid && p.serviceDesk) {
     const bid = g.serviceAgreements.find(c => c.id === plan.contractBid);
@@ -80,6 +89,7 @@ function planFinalCashReserve(g, index, input) {
   if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
   if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
+  if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;
   if (excess()) { plan.hires = 0; if (plan.specialistHires) for (const role of Object.keys(plan.specialistHires)) plan.specialistHires[role] = 0; }
   plan.newProjects = [...planInitiatives(plan)];
   while (plan.newProjects.length && excess()) plan.newProjects.pop();
@@ -97,6 +107,7 @@ function planFinalCashReserve(g, index, input) {
   return plan;
 }
 function validatePilot(g) {
+  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1'].includes(g.version)) validateCampaignRules(g, 'game');
   validateAccountingSave(g);
   validateRegionalSave(g);
   validateMarketSave(g);
@@ -120,12 +131,16 @@ function validatePilot(g) {
   validateAdvertisingSave(g);
   validateRegionalGrowthSave(g);
   validateRelationshipOfferSave(g);
+  validateOnboardingSave(g);
+  validateFinancialGroupSave(g);
+  validateCorporateSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
   normalizeProductProgramPlan(p, plan);
   normalizeAdvertisingPlan(p, plan);
   normalizeRelationshipOfferPlan(p, plan);
+  normalizeOnboardingPlan(p, plan);
   normalizePortfolioProducts(p, plan);
   validateDeploymentPolicy(p, plan);
   normalizeServicePolicy(p, plan);
@@ -133,4 +148,5 @@ function validatePortfolioPlan(p, plan) {
   normalizeWorkforcePlan(p, plan);
   normalizeHouseholdPlan(p, plan);
   normalizeCollectionsPlan(p, plan);
+  normalizeGroupPlan(p, plan);
 }

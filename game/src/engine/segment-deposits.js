@@ -41,6 +41,7 @@ function returnSegmentDeposits(m, amounts) {
   }
 }
 function moveOutsideSegmentDeposits(p, key, outside, positive, limited) {
+ return traceProductDeposits(p,positive?(limited?'ordinaryIntake':'outsideOther'):'outsideWithdrawals',()=>{
   const g = marketContext, m = g.marketEconomy.markets[key];
   if (positive) {
     const amounts = emptyDepositSegments();
@@ -52,11 +53,12 @@ function moveOutsideSegmentDeposits(p, key, outside, positive, limited) {
     const taken = takeDeposits(p,key,outside.community + outside.union);
     returnSegmentDeposits(m,depositSegmentAmounts(taken));
   }
+ });
 }
 function transferSegmentDeposits(g, from, to, key, requested) {
   const n = Math.min(Math.max(0,Math.round(requested)),withdrawableDeposits(from,key));
   if (!n) return 0;
-  return withMarket(g, () => {
+  return traceProductDeposits(from,'rivalTransfers',()=>traceProductDeposits(to,'rivalTransfers',()=>withMarket(g, () => {
     const sensitive = Math.min(from.stats.rateSensitiveDeposits || 0, Math.round(n * (from.stats.rateSensitiveDeposits || 0) / Math.max(1,from.stats.deposits)));
     const taken = takeDeposits(from,key,n);
     to.depositBook.cohorts.push(...taken); compactDeposits(to);
@@ -64,7 +66,7 @@ function transferSegmentDeposits(g, from, to, key, requested) {
     marketDelta(from,'deposits',-n); marketDelta(to,'deposits',n);
     if (sensitive) { marketDelta(from,'rateSensitiveDeposits',-sensitive); marketDelta(to,'rateSensitiveDeposits',sensitive); }
     return n;
-  });
+  })));
 }
 function withdrawOwnedDeposits(g, p, key, segment, requested) {
   const amount = Math.min(requested, p.depositBook.cohorts.filter(c => c.market === key && c.segment === segment && !c.locked).reduce((n,c) => n+c.principal,0));
@@ -149,12 +151,12 @@ function segmentDepositSummary(p,g) {
     const remainder=platform-rows[product].platform;centralPlatform+=remainder;rows[product].platform+=remainder;rows[product].service+=remainder;
     rows[product].directCost=rows[product].interest+rows[product].service-rows[product].fees;
   }
-  return {rows,markets,centralPlatform,interest:Object.values(rows).reduce((n,r)=>n+r.interest,0),fees:Object.values(rows).reduce((n,r)=>n+r.fees,0),service:Object.values(rows).reduce((n,r)=>n+r.service,0)};
+  return {...(p.productPrograms?.version===2?{cells}:{}),rows,markets,centralPlatform,interest:Object.values(rows).reduce((n,r)=>n+r.interest,0),fees:Object.values(rows).reduce((n,r)=>n+r.fees,0),service:Object.values(rows).reduce((n,r)=>n+r.service,0)};
 }
 function validateSegmentDepositSave(g) {
   const has = p => p.segmentDeposits !== undefined || p.depositBook?.cohorts.some(c => c.segment!==undefined || c.exiting!==undefined);
   if(g.segmentDepositsVersion===undefined){if(g.players.some(has)||Object.values(g.marketEconomy?.markets||{}).some(m=>m.segmentDeposits!==undefined))throw Error('Unversioned segment deposits');return g;}
-  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!==(g.relationshipOffersVersion===1?'8.12':g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':'8.8'))throw Error('Unsupported segment deposit save');
+  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version !== campaignVersion(g))throw Error('Unsupported segment deposit save');
   const uint=n=>Number.isSafeInteger(n)&&n>=0, valid=r=>r&&Object.keys(r).sort().join()==='connected,everyday,reserve'&&Object.values(r).every(uint);
   for(const p of g.players) {
     if(!p.segmentDeposits||Object.keys(p.segmentDeposits).join()!=='version'||p.segmentDeposits.version!==1)throw Error('Invalid segment deposit state');

@@ -28,6 +28,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
 function renderWorkforce(v) {
   renderHouseholds(v);
   renderCollections(v);
+  renderFinancialGroup(v);
   $('#workforceNav').classList.toggle('hidden', !v.me.workforce);
   if (!v.me.workforce) {
     $('#workforcePanel').innerHTML = '';

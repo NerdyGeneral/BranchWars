@@ -35,7 +35,7 @@ function regionalGrowthOpeningOutside(g) {
 }
 function initializeRegionalGrowth(g, o) {
   if (o.regionalGrowthVersion !== 1) return g;
-  if (g.advertisingVersion !== 1) throw Error('Regional growth requires the Advertising preview and its prerequisites.');
+  if (g.advertisingVersion !== 1 && !(o.featureRulesVersion === 1 && [1, 2].includes(g.productProgramsVersion))) throw Error('Regional growth requires the Advertising preview and its prerequisites.');
   if (g.regionalGrowth !== undefined || g.regionalGrowthVersion !== undefined) throw Error('Regional growth is already initialized.');
   g.regionalGrowthVersion = 1; g.version = '8.11';
   g.regionalGrowth = { version: 1, lastCycle: 0, openingOutside: regionalGrowthOutside(g), openingWorld: regionalGrowthWorld(g),
@@ -94,7 +94,11 @@ function regionalGrowthValidGrid(g, grid) {
 function validateRegionalGrowthState(g, settling = false) {
   const fail = message => { throw Error('Invalid regional growth ' + message); };
   const b = g.regionalGrowth;
-  if (g.regionalGrowthVersion !== 1 || g.advertisingVersion !== 1 || g.version !== (g.relationshipOffersVersion === 1 ? '8.12' : '8.11')) fail('version or prerequisites.');
+  // This check also runs on a prospective closing book before the month commits.
+  // Validate only metadata here; full saved lifecycle validation would recurse
+  // or reject the legitimate intermediate lastCycle boundary.
+  if (g.featureRulesVersion !== undefined) validateCampaignRules(g, 'game');
+  if (g.regionalGrowthVersion !== 1 || (g.featureRulesVersion !== 1 && g.advertisingVersion !== 1) || g.version !== campaignVersion(g)) fail('version or prerequisites.');
   if (!regionalGrowthShape(b, ['version', 'lastCycle', 'openingOutside', 'openingWorld', 'cumulativeIn', 'cumulativeOut', 'carry', 'regimeCycles', 'report']) ||
       b.version !== 1 || !regionalGrowthUint(b.lastCycle) || !Number.isSafeInteger(g.cycle) || g.cycle < 1 ||
       (settling ? ![g.cycle - 1, g.cycle].includes(b.lastCycle) : b.lastCycle !== g.cycle - (g.gameOver ? 0 : 1))) fail('lifecycle.');

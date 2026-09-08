@@ -15,19 +15,37 @@ files.push('tests/docs.test.js','tools/build_reference.js','tools/reference-temp
 files.push('tests/behavior-golden.test.js','tests/architecture.test.js','tests/fixtures/behavior-golden.json','tests/fixtures/override-ceilings.json','tests/fixtures/legacy-half-ready.json','tests/fixtures/pilot-half-ready.json','tests/fixtures/goodwill-half-ready.json','tools/check.js');
 files.push('tests/save-baseline.test.js','tests/launcher-path.test.js','tests/fixtures/save-continuation.json');
 files.push('tests/reference-eol.test.js');
+files.push('OPEN_BRANCH_WARS.bat','OPEN_LAN_GAME.bat','tests/portable-launcher.test.js');
+files.push('tests/storage_capacity.test.js','tests/storage_recovery.js','tests/storage_guest_recovery.test.js');
 files.push('tests/project-rules.test.js');
 files.push('tests/campaign-lifecycle.test.js');
 files.push('tests/multiplayer_lobby.test.js');
+files.push('tests/network_lifecycle.test.js','tests/local_session_transition.test.js','tests/strategy_release_ui.test.js','tests/operations_workspace.test.js','tests/game_overlay.test.js','tests/decision_quote.test.js','tests/initiative_feedback.test.js','tests/paired_release_balance.test.js','tests/package_release.test.js','tools/package_release.js');
+files.push('tests/features.test.js','tests/feature_setup.test.js','tests/feature_lobby.test.js','tests/feature_network.test.js','tests/modular_features.test.js');
 files.push('tests/runtime-stages.test.js');
 files.push('tests/recovery_planning.test.js','tests/recovery_ui.test.js','tests/github_recovery_acceptance.test.js');
 files.push('tests/households.test.js');
 files.push('tests/regional_growth.test.js','tests/regional_growth_ui.test.js');
 files.push('tests/relationship_offers.test.js','tests/relationship_offers_ui.test.js');
+files.push('tests/onboarding.test.js','tests/onboarding_ui.test.js','tests/onboarding_network.test.js');
+files.push('tests/customer_effects.test.js','tests/customer_effects_ui.test.js','tests/balance-attribution.js');
+files.push('tests/deposit_pricing.test.js','tests/deposit_pricing_ui.test.js','tests/deposit_pricing_balance.test.js','tests/deposit_pricing_adversarial.test.js');
+files.push('tests/deposit_pricing_transitions.test.js');
+files.push('tests/group_accounting.test.js','tests/financial_group.test.js','tests/financial_group_ui.test.js');
+files.push('tests/company_finance.test.js');
+files.push('tests/accounting_receivables.test.js');
+files.push('tests/company_bank_funding.test.js','tests/corporate_income.test.js');
+files.push('tests/group_foundation_compat.test.js','reports/reference-builds/BRANCH_WARS_group_822b386.html');
+files.push('tests/group_lending_comparison.test.js','tests/financial_group_balance.test.js','tests/group_planning_candidate.js');
 files.push('tests/advertising.test.js','tests/ai_cash_planning.test.js','tests/product_draft.test.js','tests/collections.test.js','tests/segment_deposits.test.js','tests/product_programs.test.js');
 files.push('tests/specialist_workforce.test.js','tests/workforce_network.test.js','tests/release_balance.test.js');
 files.push('tools/build_game.js','tests/build.test.js');
 files.push(...require('../tools/build_game').assemble().files.map(file => path.relative(root, file).replace(/\\/g, '/')));
 function run(label, command, args) {
+  // Trust only this already selected checkout for this invocation. Never edit
+  // global Git configuration merely to capture metadata under a Windows user
+  // different from the account that created the workspace.
+  if(command==='git')args=['-c','safe.directory='+path.resolve(root,'..').replace(/\\/g,'/'),...args];
   process.stdout.write(`Running ${label}...\n`);
   const start = Date.now();
   const r = spawnSync(command, args, { cwd: root, encoding: 'utf8', windowsHide: true, timeout: 600000, maxBuffer: 8 * 1024 * 1024 });
@@ -45,15 +63,26 @@ for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activiti
 }
 report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/service_workforce.test.js']));
 report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
+for (const file of ['network_lifecycle.test.js','local_session_transition.test.js','strategy_release_ui.test.js','operations_workspace.test.js','game_overlay.test.js','decision_quote.test.js','initiative_feedback.test.js','package_release.test.js','portable-launcher.test.js','storage_capacity.test.js','storage_guest_recovery.test.js'])
+  report.tests.push(run(file, process.execPath, ['tests/'+file]));
+report.tests.push(run('Paired controller balance smoke',process.execPath,['tests/paired_release_balance.test.js','--quick']));
 report.tests.push(run('reference-eol.test.js', process.execPath, ['tests/reference-eol.test.js']));
 report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project-rules.test.js']));
 report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/campaign-lifecycle.test.js']));
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
+for(const file of ['features.test.js','feature_setup.test.js','feature_lobby.test.js','feature_network.test.js','modular_features.test.js'])
+  report.tests.push(run(file, process.execPath, ['tests/'+file]));
 report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
 report.tests.push(run('households.test.js', process.execPath, ['tests/households.test.js']));
 report.tests.push(run('Regional demand rules', process.execPath, ['tests/regional_growth.test.js']));
 report.tests.push(run('Existing-customer offers', process.execPath, ['tests/relationship_offers.test.js']));
 report.tests.push(run('Existing-customer offers UI', process.execPath, ['tests/relationship_offers_ui.test.js']));
+report.tests.push(run('Application pipeline', process.execPath, ['tests/onboarding.test.js']));
+report.tests.push(run('Application pipeline UI', process.execPath, ['tests/onboarding_ui.test.js']));
+report.tests.push(run('Application pipeline network', process.execPath, ['tests/onboarding_network.test.js']));
+report.tests.push(run('Customer effects comparison', process.execPath, ['tests/customer_effects.test.js']));
+report.tests.push(run('Customer effects UI', process.execPath, ['tests/customer_effects_ui.test.js']));
+report.tests.push(run('Balance attribution invariants', process.execPath, ['tests/release_balance.test.js','--relationship-offers','--attribution','--scenario','regulatory','--seeds','1','--turns','3']));
 report.tests.push(run('Existing-customer offers network', process.execPath, ['tests/workforce_network.test.js','--relationship-offers']));
 report.tests.push(run('Existing-customer offers GitHub relay', process.execPath, ['tests/github_resilience.test.js','--relationship-offers']));
 report.tests.push(run('Regional demand UI', process.execPath, ['tests/regional_growth_ui.test.js']));
@@ -69,6 +98,21 @@ report.tests.push(run('Product draft repair', process.execPath, ['tests/product_
 report.tests.push(run('Advertising network', process.execPath, ['tests/workforce_network.test.js','--advertising']));
 report.tests.push(run('Advertising GitHub relay', process.execPath, ['tests/github_resilience.test.js','--advertising']));
 report.tests.push(run('product_programs.test.js', process.execPath, ['tests/product_programs.test.js']));
+report.tests.push(run('deposit_pricing.test.js', process.execPath, ['tests/deposit_pricing.test.js']));
+report.tests.push(run('deposit_pricing_ui.test.js', process.execPath, ['tests/deposit_pricing_ui.test.js']));
+report.tests.push(run('Pricing boundary books', process.execPath, ['tests/deposit_pricing_adversarial.test.js']));
+report.tests.push(run('Pricing contract transitions', process.execPath, ['tests/deposit_pricing_transitions.test.js']));
+report.tests.push(run('Group entity accounting', process.execPath, ['tests/group_accounting.test.js']));
+report.tests.push(run('Explicit bank receivables', process.execPath, ['tests/accounting_receivables.test.js']));
+report.tests.push(run('Corporate finance kernel', process.execPath, ['tests/company_finance.test.js']));
+report.tests.push(run('Company bank funding boundary', process.execPath, ['tests/company_bank_funding.test.js']));
+report.tests.push(run('Live corporate banking', process.execPath, ['tests/corporate_income.test.js']));
+report.tests.push(run('Preserved group foundation', process.execPath, ['tests/group_foundation_compat.test.js']));
+report.tests.push(run('Group capital and simultaneous lending', process.execPath, ['tests/financial_group.test.js']));
+report.tests.push(run('Group capital UI', process.execPath, ['tests/financial_group_ui.test.js']));
+report.tests.push(run('Group lending comparison', process.execPath, ['tests/group_lending_comparison.test.js']));
+report.tests.push(run('Group four-scenario smoke', process.execPath, ['tests/financial_group_balance.test.js','--quick']));
+report.tests.push(run('Pricing nine-profile smoke', process.execPath, ['tests/deposit_pricing_balance.test.js','--quick']));
 report.tests.push(run('Product programmes network', process.execPath, ['tests/workforce_network.test.js','--product-programs']));
 report.tests.push(run('Product programmes GitHub relay', process.execPath, ['tests/github_resilience.test.js','--product-programs']));
 report.tests.push(run('Segment deposits network', process.execPath, ['tests/workforce_network.test.js','--segment-deposits']));
@@ -99,7 +143,8 @@ report.filesAfter = Object.fromEntries(files.map(f => [f, hash(f)]));
 report.sourceUnchanged = JSON.stringify(report.filesBefore) === JSON.stringify(report.filesAfter);
 const audits = report.tests.filter(t => t.label === 'balance_audit.js');
 report.balanceOutputReproduced = audits.every(t => t.exitCode === 0) && audits[0].stdout === audits[1].stdout;
-report.passed = report.tests.every(t => t.exitCode === 0 && !t.error) && report.sourceUnchanged && report.balanceOutputReproduced && !report.lanNotRun;
+report.gitMetadataCaptured = [report.head,report.statusBefore,report.diffStat].every(t=>t.exitCode===0&&!t.error);
+report.passed = report.tests.every(t => t.exitCode === 0 && !t.error) && report.sourceUnchanged && report.balanceOutputReproduced && report.gitMetadataCaptured && !report.lanNotRun;
 report.limitations = ['Passing regression suites does not certify accounting correctness or strategic balance.', 'Repeated seeded harness output does not prove saved-game RNG/replay determinism.', 'No browser or physical two-computer acceptance was performed by this runner.'];
 const dir = path.join(root, 'reports', 'baselines');
 fs.mkdirSync(dir, { recursive: true });

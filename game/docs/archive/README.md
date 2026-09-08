@@ -2,6 +2,21 @@
 
 These records preserve previous designs, test results and limitations. They are not the current status. Use [release status](../release-status.md) and [roadmap](../roadmap.md) first. Historical reports retain the dates and hashes of their original builds.
 
+## Preserved at V2 stabilization
+
+- [Full earlier status and evidence](release-status-pre-stabilization-2026-09-07.md)
+- [Earlier roadmap and decision detail](roadmap-pre-stabilization-2026-09-07.md)
+- [Architecture/refactor/branch-recovery history](architecture-pre-stabilization-2026-09-07.md)
+- [Original unified blueprint v7 and amendments](unified-blueprint-v7-original.md)
+
+These retain unique decisions and prior limits. Superseded pending/stop statements
+are historical, not current implementation authority.
+References labeled local historical evidence are retained by filename only:
+their reports were not selected for distribution. Current verified release
+evidence is linked from the active release status.
+
+## Earlier batches
+
 - [banking empire roadmap](banking-empire-roadmap.md)
 - [bank identity and phase status](bank-identity-and-phase-status.md)
 - [credit lifecycle status](credit-lifecycle-status.md)

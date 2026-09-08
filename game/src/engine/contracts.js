@@ -46,7 +46,7 @@ resolveOpportunities=function(g,plans){
 
 function planContractBid(g,index,plan){
  if(g.contractRulesVersion!==1)return plan;
- const p=g.players[index],due=g.serviceAgreements.filter(c=>c.due===g.cycle&&c.owner!==p.id);
+ const p=g.players[index],due=g.serviceAgreements.filter(c=>!c.companyClosed&&c.due===g.cycle&&c.owner!==p.id);
  if(plan.allocation.business>0&&due.length){const candidate=due.sort((a,b)=>contractPower(g,p,b)-contractPower(g,p,a)||a.id.localeCompare(b.id))[0];if(contractPower(g,p,candidate)>=8){plan.contractBid=candidate.id;plan.opportunity=null}else plan.contractBid=null}
  else plan.contractBid=null;
  return plan;
@@ -57,7 +57,7 @@ function validateContractSave(g){
  if(g.contractRulesVersion!==1||g.productDeploymentVersion!==1||!Array.isArray(g.serviceAgreements)||g.serviceAgreements.length!==Object.keys(g.territories).length)throw Error('Invalid service contracts');
  const seen=new Set();
  for(const c of g.serviceAgreements){
-  if(!c||!g.territories[c.market]||c.id!=='service-'+c.market||seen.has(c.id)||!Number.isSafeInteger(c.due)||c.due<g.cycle||c.due>g.cycle+CONTRACT_TERM||(c.owner!==null&&!g.players.some(p=>p.id===c.owner)))throw Error('Invalid service agreement');
+  if(!c||!g.territories[c.market]||c.id!=='service-'+c.market||seen.has(c.id)||!Number.isSafeInteger(c.due)||(c.companyClosed?c.due<1||c.due>g.cycle:c.due<g.cycle||c.due>g.cycle+CONTRACT_TERM)||(c.owner!==null&&!g.players.some(p=>p.id===c.owner)))throw Error('Invalid service agreement');
   seen.add(c.id);
  }
  for(const p of g.players){
@@ -65,7 +65,7 @@ function validateContractSave(g){
   if(!Array.isArray(p.serviceContracts)||JSON.stringify(p.serviceContracts)!==JSON.stringify(expected))throw Error('Service contract ownership mismatch');
   const ad=p.contractAds;
   if(ad!==null&&(!ad||!g.territories[ad.market]||!Number.isSafeInteger(ad.expires)||ad.expires<1||ad.expires>g.cycle+4))throw Error('Invalid targeted advertising');
-  if(p.submitted&&p.submitted.contractBid!=null){const c=g.serviceAgreements.find(c=>c.id===p.submitted.contractBid);if(!c||c.due!==g.cycle||p.submitted.allocation.business<1||p.submitted.opportunity)throw Error('Invalid service contract bid')}
+  if(p.submitted&&p.submitted.contractBid!=null){const c=g.serviceAgreements.find(c=>c.id===p.submitted.contractBid);if(!c||c.companyClosed||c.due!==g.cycle||p.submitted.allocation.business<1||p.submitted.opportunity)throw Error('Invalid service contract bid')}
  }
  return g;
 }

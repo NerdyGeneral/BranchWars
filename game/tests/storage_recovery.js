@@ -1,0 +1,21 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {harness}=require('./github_resilience.test.js'),copy=x=>JSON.parse(JSON.stringify(x));
+module.exports=async function verifyStorageRecovery(campaign){
+ const quota=5*1024*1024,host=harness('host'),local=new Map();let localLimit=quota,sessionLimit=quota;
+ const adapter=(store,limit)=>({getItem:k=>store.get(k)||null,removeItem:k=>store.delete(k),setItem(k,v){const size=[...store].reduce((n,[key,value])=>n+(key===k?0:(key.length+value.length)*2),0)+(k.length+v.length)*2;if(size>limit())throw Error('QuotaExceededError');store.set(k,v)}});
+ host.c.localStorage=adapter(local,()=>localLimit);host.c.sessionStorage=adapter(host.storage,()=>sessionLimit);host.c.snapshot=copy(campaign);
+ host.run('game=snapshot;notices=[];toast=m=>notices.push(m)');host.run(fs.readFileSync(path.join(__dirname,'../src/persistence/saves.js'),'utf8'));
+ assert.throws(()=>host.c.localStorage.setItem('branchWarsV7Save',JSON.stringify(campaign)),/Quota/,'The old storage path must reproduce quota failure');
+ host.run('saveLocal()');const saved=local.get('branchWarsV7Save');assert(saved);assert.equal(host.run('notices.length'),0);assert.deepEqual(copy(host.run('savedGame()')),campaign);
+ local.set('branchWarsV7Save',JSON.stringify({version:'7.0',gameOver:false}));assert.equal(host.run('savedGame().version'),'7.0');local.set('branchWarsV7Save',saved);
+ host.run("game.mode='p2p';view=null;gh.mine=3;gh.published=2;gh.seen=2;gh.outbox=[{seq:3,msg:{type:'state',state:E.publicState(game,1)}}];gh.inflight={messages:gh.outbox};ghCheckpoint()");
+ const checkpoint=host.storage.get('branchWarsGhResume');assert(checkpoint);assert(checkpoint.length*2<quota);assert.equal(host.run('notices.length'),0);assert(!checkpoint.includes('PRIVATE_TEST_TOKEN'));
+ host.c.expectedSnapshot=copy(host.state().game);const expected=copy(host.run('E.migrateCampaign(expectedSnapshot)')),restored=harness('host');restored.storage.set('branchWarsGhResume',checkpoint);restored.c.document.querySelector('#ghToken').value='PRIVATE_TEST_TOKEN';
+ restored.run('gh.active=false;ghPoll=()=>{};ghFlush=()=>{};ghCheckRepo=async()=>{};ghRead=async()=>({missing:true});sent=[];send=m=>sent.push(m)');
+ await restored.run('ghResume()');assert(restored.state().gh.active);assert.deepEqual(copy(restored.state().game),expected);assert(restored.run('peerFeatureStatus().pending'),'Resume must demand a fresh peer handshake');assert.equal(restored.state().gh.outbox.length,1);assert.equal(restored.state().gh.published,2);
+ const bad=JSON.parse(checkpoint);bad.game.checksum='00000000';const refused=harness('host');refused.storage.set('branchWarsGhResume',JSON.stringify(bad));refused.run('gh.active=false');await refused.run('ghResume()');assert.equal(refused.state().game,null);assert.equal(refused.state().gh.active,false);
+ localLimit=512;host.run("game.players[0].name='Changed bank';game.mode='hotseat';saveLocal()");assert.equal(local.get('branchWarsV7Save'),saved);assert(host.run('notices.some(m=>m.includes("could not autosave"))'));
+ sessionLimit=512;host.run('ghCheckpoint()');assert.equal(host.storage.get('branchWarsGhResume'),checkpoint);assert(host.run('notices.some(m=>m.includes("reload recovery"))'));
+ return {quotaBytes:quota,localStorageBytes:saved.length*2,sessionStorageBytes:checkpoint.length*2,checks:['actual old-path quota failure','real saveLocal/savedGame roundtrip','old raw JSON support','real host checkpoint/reload','pending retry queue retained','fresh handshake after reload','damaged compressed checkpoint refused','failed write retains prior record and warns']};
+};

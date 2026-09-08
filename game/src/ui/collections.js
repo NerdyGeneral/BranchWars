@@ -37,4 +37,5 @@ function renderCollections(v) {
   const update=()=>stageCollectionsPolicy(v,Number($('#collectionShare').value),$('#collectionApproach').value);
   $('#collectionShare').addEventListener('change',update);$('#collectionApproach').addEventListener('change',update);
   $('#creditMarket').addEventListener('change',e=>{inspectedCreditMarket=e.target.value;renderCollections(v);});
+  if(p.creditPortfolio){$('#creditPanel').insertAdjacentHTML('afterbegin',groupCreditControls(v));bindGroupCreditControls(v);}
 }

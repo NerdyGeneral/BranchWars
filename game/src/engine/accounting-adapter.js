@@ -52,7 +52,8 @@ function postMonthlyOperations(g,p,preview=false){
  // Apply funding in actual chronological order, not by borrowing an unexplained residual.
  const inflow=Math.round(r.depositGrowth+r.depositRunoff),originations=Math.round(r.loanGrowth+r.chargeoff);
  if(p.creditBook){
-  const terms=creditTerms(p,g),oldInterest=r.loanIncome,oldLoss=r.chargeoff,total=p.stats.loans+originations;
+  const parts=p.creditPortfolio?creditProductionParts(p,g,originations):null;
+  const terms=parts&&originations?{rate:parts.reduce((n,c)=>n+c.principal*c.rate,0)/originations,risk:parts.reduce((n,c)=>n+c.principal*c.risk,0)/originations}:creditTerms(p,g),oldInterest=r.loanIncome,oldLoss=r.chargeoff,total=p.stats.loans+originations;
   r.loanIncome=p.creditBook.cohorts.reduce((n,c)=>n+performingCredit(c)*c.rate/1000000,0)+originations*terms.rate/1000000;
   const weightedRisk=p.creditBook.cohorts.reduce((n,c)=>n+c.principal*c.risk/10000,0)+originations*terms.risk/10000;
   const ops=strategyLevel(p,'operations'),guard=Math.max(.28,1-(workforceAllocation(p).operations+p.upgrades.training+p.upgrades.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1);
@@ -66,13 +67,21 @@ function postMonthlyOperations(g,p,preview=false){
  try{
   delta(p,'deposits',inflow);const beforeRunoff=p.stats.deposits;delta(p,'deposits',-r.depositRunoff);if(p.termFunding){r.depositRunoff=beforeRunoff-p.stats.deposits;r.depositGrowth=inflow-r.depositRunoff;calculation.stats.depositRunoff=r.depositRunoff}delta(p,'loans',originations);
   adjustDepositReport(p,g,r);
+  if(p.creditPortfolio){
+   const actualInterest=p.creditBook.cohorts.reduce((n,c)=>n+performingCredit(c)*c.rate/1000000,0),difference=actualInterest-r.loanIncome;
+   r.loanIncome=actualInterest;r.eventAdjustment+=difference*((p.turnEffects.profit||1)-1);
+   r.profit=Math.round(r.profit+difference*(p.turnEffects.profit||1));
+  }
   adjustAdvertisingReport(p,r);
   adjustRelationshipOfferReport(p,r);
+  adjustOnboardingReport(p,r);
   if(p.creditPerformance){const credit=p.creditPerformance.report;r.collectionsCost=credit.cost;r.creditRecovery=credit.recovered;r.creditEntered=credit.entered;r.creditCured=credit.cured;r.interestForgone=p.creditBook.cohorts.reduce((n,c)=>n+(c.principal-performingCredit(c))*c.rate/1000000,0);r.expense+=credit.cost;r.profit-=credit.cost}
   settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
-  const income=Math.round(r.depositIncome+r.loanIncome+r.commercialIncome+r.otherIncome),expense=Math.round(r.fundingCost+r.expense),event=Math.round(r.eventAdjustment);
-  const rounding=r.profit-(income-expense+event-Math.round(r.chargeoff));
+  const corporate=adjustCorporateIncomeReport(g,p,r,preview);
+  const grossIncome=Math.round(r.depositIncome+r.loanIncome+r.commercialIncome+r.otherIncome),income=grossIncome-(corporate?.receivable||0),expense=Math.round(r.fundingCost+r.expense),event=Math.round(r.eventAdjustment);
+  const rounding=r.profit-(grossIncome-expense+event-Math.round(r.chargeoff)-(corporate?.writtenOff||0));
   if(Math.abs(rounding)>2)throw Error('Operating report does not reconcile');
+  postCorporateReceivables(g,p,corporate,preview);
   delta(p,'cash',income+Math.max(0,event+rounding));delta(p,'cash',-(expense+Math.max(0,-event-rounding)));if(!p.creditPerformance)delta(p,'loans',-Math.round(r.chargeoff));
   for(const k of Object.keys(p.stats))if(!['cash','loans','deposits','capital','earnings','emergencyDebt'].includes(k))p.stats[k]=calculation.stats[k];
   r.closingCash=p.stats.cash;r.closingEquity=p.stats.capital;r.fundingLoss=p.accounting.journal.filter(e=>e.id>before.sequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0);p.operatingReport=r;p.stats.lastProfit=r.profit;p.fundingGap=0;
@@ -167,6 +176,7 @@ function validateAccountingSave(g){
  for(const [key,t]of Object.entries(g.territories))if(!g.regions[t.region]||!g.regions[t.region].markets.includes(key)||t.exited.some(Boolean))throw Error('Invalid pilot market');
  for(const p of g.players){
   if(!p.accounting||p.accounting.journal.length>192)throw Error('Invalid pilot accounts');
+  if(p.accounting.version!==(g.financialGroupVersion===2?2:1))throw Error('Invalid accounting book');
   const checked=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
   const a=checked.accounts;
   for(const [stat,account]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))if(p.stats[stat]!==a[account])throw Error('Bank statistics disagree with accounts');
