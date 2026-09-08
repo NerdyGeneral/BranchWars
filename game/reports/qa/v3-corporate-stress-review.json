@@ -1,0 +1,17 @@
+{
+  "release": "V3",
+  "sourceReportSha256": "ac59ce818ff470b886a0c3a8f8c1269631316bca58a0a91f4989be3215988de6",
+  "engineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+  "scenario": "regulatory",
+  "seed": "department-A",
+  "months": 480,
+  "openingCorporateCash": 48216000,
+  "closingOutsideCash": 284158,
+  "closingCreditorCash": 3857548,
+  "closingCompanyCash": 0,
+  "bankCashPaid": [10419748, 9404846],
+  "agencyCashNet": 24249700,
+  "companyResolutionMonths": [383, 383, 384, 384, 383, 384],
+  "interpretation": "The six-client pool resolves within two months. Current corporate purchases share one finite outside cash account, while bank and insurance boundary flows permanently remove cash from this corporate sub-economy. This supports investigating funded cash recirculation and economic renewal, rather than treating the outcome solely as six unrelated random failures. Insurance boundary flows include carrier premiums, not just agency revenue.",
+  "changeMade": false
+}

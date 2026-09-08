@@ -20,6 +20,7 @@ function repairSavedMetadata(g){
  for(const t of Object.values(g.territories)){if(!Array.isArray(t.shares)||t.shares.length!==2||!t.shares.every(Number.isFinite))t.shares=[50,50]}
 }
 function repairSavedPlayer(g,p,i){
+ const savedDoctrineValid=Object.hasOwn(DOCTRINES,p.doctrine);
  p.id=p.id||'legacy-institution-'+i;
  p.name=String(p.name||(i?'Institution Two':'Institution One'));
  p.stats={...OPENING_STATS,...p.stats};
@@ -51,7 +52,10 @@ function repairSavedPlayer(g,p,i){
  }
  delete p.strategy;
  p.primaryStrategy=leadCapability(p);
- syncDoctrine(p);
+ // Doctrine has hysteresis and is settled at a specific monthly stage. A
+ // valid saved value is gameplay state, not a derived cache to advance during
+ // import; late hiring/other profile changes must wait for normal settlement.
+ if(!savedDoctrineValid)syncDoctrine(p);
  p.lastCompetitiveAction=COMPETITIVE_ACTIONS[p.lastCompetitiveAction]?p.lastCompetitiveAction:'none';
  p.distress=Number(p.distress)||0;
  p.fundingGap=Number(p.fundingGap)||0;
@@ -140,7 +144,9 @@ function migrateCampaign(g){
  validatePilot(g);
  if(g.version==='6.0'){
   g.trend=[];g.economy={key:'steady',...MACRO_REGIMES.steady};
-  g.players.forEach((p,i)=>{if(!DOCTRINES[p.doctrine])p.doctrine=i?'commercial':'community';p.achievements=[]});
+  // Missing/invalid doctrine is reconstructed by repairSavedPlayer below;
+  // do not turn its fallback into an apparently valid saved value early.
+  g.players.forEach(p=>{p.achievements=[]});
  }
  return ensureSimulation(repairSavedRivalry(g));
 }

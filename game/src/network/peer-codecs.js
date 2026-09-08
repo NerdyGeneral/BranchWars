@@ -3,6 +3,7 @@ function pack(prefix,obj){return prefix+btoa(unescape(encodeURIComponent(JSON.st
 let peerTurnEnvelopeSupported=false,outgoingTurnContext=null,incomingTurnContext=null,turnContextGame=null;
 let turnStateRevision=0,incomingTurnRevision=0,incomingTurnChallenge='',seenTurnChallenges=new Set();
 let turnGuestChallenge='',peerTurnGuestChallenge='';
+let hostStaffingEvidence=null;
 function guestTurnChallenge(){
  if(!turnGuestChallenge)turnGuestChallenge=(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2));
  return turnGuestChallenge;
@@ -17,6 +18,7 @@ function getTurnContext(){
 }
 function turnMessage(type,extra={}){
  const v=currentView();
+ requireDepartmentPeer(v);
  return {type,...extra,cycle:v.cycle,resolutionId:v.resolutionId,...(incomingTurnContext?{turnContext:{...incomingTurnContext}}:{})};
 }
 function validateTurnMessage(message){
@@ -51,8 +53,32 @@ function resetFeaturePeer(){
  turnStateRevision=0;incomingTurnRevision=0;incomingTurnChallenge='';seenTurnChallenges=new Set();
  ghPendingTurnToken=null;
  turnGuestChallenge='';peerTurnGuestChallenge='';
+ hostStaffingEvidence=null;
 }
 function currentFeatureSource(){return game||lobby&&lobby.settings||p2pConfig||{}}
+function departmentPeerStatus(settings=currentFeatureSource()){
+ if(settings?.financialGroupVersion!==6&&!(p2pRole==='guest'&&hostStaffingEvidence?.required))return {compatible:true,pending:false,reason:''};
+ if(p2pRole==='host')return peerFeatureStatus(settings);
+ if(!hostStaffingEvidence||hostStaffingEvidence.generation!==featureConnectionGeneration||hostStaffingEvidence.challenge!==incomingTurnChallenge)
+  return {compatible:false,pending:true,reason:'Waiting for a fresh department-staffing handshake from the host.'};
+ if(hostStaffingEvidence.support!==2)return {compatible:false,pending:false,reason:'Department staffing requires matching updated game files on both computers. Update the host before playing.'};
+ return {compatible:true,pending:false,reason:''};
+}
+function requireDepartmentPeer(settings){
+ if(!['host','guest'].includes(p2pRole)||(!gh.active&&!lan.active&&!['p2p','lan'].includes(game?.mode)&&p2pRole!=='guest'))return;
+ const status=departmentPeerStatus(settings);if(!status.compatible)throw Error(status.reason);
+}
+function receiveDepartmentPeer(settings){
+ // A refused lobby is not adopted. Remember only its required handshake so a
+ // reachable repository file cannot subsequently repaint this refusal green.
+ if(p2pRole==='guest'){
+  if(!hostStaffingEvidence&&settings?.financialGroupVersion===6)hostStaffingEvidence={generation:featureConnectionGeneration};
+  if(hostStaffingEvidence)hostStaffingEvidence.required=settings?.financialGroupVersion===6;
+ }
+ const status=departmentPeerStatus(settings);
+ if(status.compatible)return true;
+ linkReady=false;setConnection(status.reason,status.pending?'warn':'bad');toast(status.reason);return false;
+}
 function peerFeatureStatus(settings=currentFeatureSource()){
  const context=game&&settings===game?'game':'lobby',rules=E.campaignRules(settings,{context});
  if(!featurePeerCapabilities||featurePeerGeneration!==featureConnectionGeneration)return {compatible:false,pending:true,reason:'Waiting for the other computer to confirm supported campaign rules.'};
@@ -63,7 +89,7 @@ function peerFeatureStatus(settings=currentFeatureSource()){
 }
 function challengePeerFeatures(){
  if(!featureChallenge)featureChallenge=String(featureConnectionGeneration)+'-'+(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2));
- send({type:'hello_request',featureChallenge,turnEnvelopeSupported:1,turnGuestChallenge:peerTurnGuestChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported});
+ send({type:'hello_request',featureChallenge,turnEnvelopeSupported:1,turnGuestChallenge:peerTurnGuestChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported,departmentStaffingSupported:E.campaignCapabilities().departmentStaffingSupported});
 }
 function makeFeatureHello(request){
  const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),turnEnvelopeSupported:1,turnGuestChallenge:guestTurnChallenge(),color:config.color,name:config.guestName,doctrine:config.doctrine};
@@ -76,6 +102,10 @@ function makeFeatureHello(request){
   // A delayed host challenge cannot establish a new guest connection. Bootstrap
   // once with this connection's nonce; the host must echo it before state adoption.
   if(request.turnEnvelopeSupported===1&&request.turnGuestChallenge!==guestTurnChallenge())return hello;
+  // Host evidence is accepted only with this connection's nonce, and is immutable
+  // for an authenticated challenge. Legacy requests remain usable below Group 6.
+  if(request.turnEnvelopeSupported===1&&request.turnGuestChallenge===guestTurnChallenge()&&!seenTurnChallenges.has(request.featureChallenge))
+   hostStaffingEvidence={generation:featureConnectionGeneration,challenge:request.featureChallenge,support:request.departmentStaffingSupported,required:hostStaffingEvidence?.required===true};
   hello.featureChallenge=request.featureChallenge;
   if(!seenTurnChallenges.has(request.featureChallenge)){
    seenTurnChallenges.add(request.featureChallenge);incomingTurnChallenge=request.featureChallenge;incomingTurnRevision=0;incomingTurnContext=null;
@@ -99,6 +129,7 @@ function capturePeerFeatures(message){
  peerTurnEnvelopeSupported=peerTurnEnvelopeSupported||message.turnEnvelopeSupported===1;
  const caps=Object.fromEntries(Object.keys(E.campaignCapabilities()).map(key=>[key,message[key]]));
  const same=featurePeerGeneration===featureConnectionGeneration&&JSON.stringify(caps)===JSON.stringify(featurePeerCapabilities);
+ if(featurePeerFresh&&!same)return {...peerFeatureStatus(),ignored:true};
  featurePeerCapabilities=caps;featurePeerGeneration=featureConnectionGeneration;
  featurePeerFresh=Boolean(featureChallenge&&message.featureChallenge===featureChallenge)||same&&featurePeerFresh;
  // A modern guest's unsolicited hello deliberately speaks V2. Ask once before

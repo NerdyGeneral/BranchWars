@@ -25,8 +25,10 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
 if (!args.includes('--full')) commands.push(...[
   'department_functions.test.js','department_provider.test.js','department_function_context.test.js',
   'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',
-  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','department_planning_contract.test.js','department_runtime.test.js',
-  'department_group5_compat.test.js','department_functions_network.test.js'
+  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','facility_staff_planning.test.js','doctrine_resume.test.js','department_planning_contract.test.js','department_runtime.test.js',
+  'department_group5_compat.test.js','department_functions_network.test.js',
+  'department_customer_capacity.test.js','department_customer_capacity_ui.test.js','department_staffing_network.test.js',
+  'department_captured_replay.test.js','department_storage_capacity.test.js','department_storage_recovery.test.js','department_long_storage.test.js'
 ].map(file=>['tests/'+file]));
 for (const command of commands) {
   console.log('Checking ' + command.join(' '));

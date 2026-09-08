@@ -26,7 +26,13 @@ function withLocalAddress(desc){
 }
 function linkDetail(){if(gh.active)return `${gh.repo}`;if(lan.active)return '';if(!pc)return '';return `PEER ${String(pc.connectionState||'new').toUpperCase()} / CHANNEL ${dc?String(dc.readyState).toUpperCase():'NONE'}`}
 function paintLink(){const detail=linkDetail(),full=linkText+(detail?` // ${detail}`:'');if($('#connectionStatus')){$('#connectionStatus').textContent=full;$('#connectionStatus').className='notice '+linkCls}if($('#lobbyConnection')){$('#lobbyConnection').textContent=full;$('#lobbyConnection').className='connection '+linkCls}if($('#linkState')){$('#linkState').textContent=full;$('#linkState').className='connection '+linkCls}}
-function setConnection(text,cls='warn'){linkText=text;linkCls=cls;paintLink()}
+function setConnection(text,cls='warn'){
+ const settings=game||view||lobby?.settings||p2pConfig;
+ if(cls==='good'&&['host','guest'].includes(p2pRole)){
+  const status=departmentPeerStatus(settings);if(!status.compatible){text=status.reason;cls=status.pending?'warn':'bad';}
+ }
+ linkText=text;linkCls=cls;paintLink();
+}
 let connectionAttempt=0;
 function resetLink(){connectionAttempt++;ghCheckpoint();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();resetFeaturePeer();$('#connectHint').textContent='';lobby=null;lobbyPending=null;lobbyDirty=false;lobbySettingsDirty=false;linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
 function handshakeDone(){return linkReady}

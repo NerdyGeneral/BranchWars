@@ -43,6 +43,7 @@ function specialistPayroll(p) {
   return p.workforce ? Object.entries(SPECIALIST_ROLES).reduce((n, [k, d]) => n + p.workforce.departments[k].count * d.payroll, 0) : 0;
 }
 function specialistBonus(p, role, allocation = p.allocation) {
+  const frozen=departmentFunctionFrozenBonus(p,role,allocation);if(frozen!==null)return frozen;
   const row = p.workforce?.departments[role];
   const productive = p.departmentOffice ? departmentProductiveAllocation(p, allocation) : allocation;
   const qualified=row?Math.max(0,row.count-(p.departmentOffice&&departmentTeachingActive(p,role,p.workforce.policy,allocation)?1:0)):0;
@@ -252,7 +253,7 @@ function validateWorkforceSave(g) {
       if (amounts.some(k => !Number.isSafeInteger(report[k]) || report[k] < 0) || ![0, 1].includes(report.workforceTrainingPaused) ||
           report.workforceTraining > report.workforceTrainingRequested || (report.workforceTrainingPaused && report.workforceTraining !== 0) ||
           Object.keys(SPECIALIST_ROLES).reduce((n, k) => n + report['trainingSpend_' + k], 0) !== report.workforceTraining ||
-          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
+          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5,6].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
             !Number.isFinite(report['specialistBonus_' + k]) || report['specialistBonus_' + k] < 0)) throw Error('Invalid workforce operating report');
     }
     if (p.submitted) {

@@ -24,6 +24,10 @@ function onboardingLive(v) {
  return live && live.me.id === v.me.id ? live : null;
 }
 function onboardingDraftPreview(v) {
+ if(v.financialGroupVersion===6){
+  const prepared=E.departmentCustomerPreview(v.me,v,draft);
+  return {p:prepared.owner,policy:prepared.plan.onboardingPolicy,quote:prepared.onboarding,staffing:prepared.staffing.onboarding};
+ }
  const plan = JSON.parse(JSON.stringify(draft)), p = JSON.parse(JSON.stringify(v.me));
  E.normalizeProductProgramPlan(v.me, plan); E.normalizeAdvertisingPlan(v.me, plan);
  E.normalizeRelationshipOfferPlan(v.me, plan); E.normalizeOnboardingPlan(v.me, plan);
@@ -57,6 +61,15 @@ function onboardingPendingContent(v) {
   return '<li><b>' + esc(target) + '</b><span>' + integer(row.count) + ' pending requests · $' + row.principal.toLocaleString() + ' requested principal; not deposits</span><span>Generated M' + esc(row.createdCycle) + ' · eligible M' + esc(row.eligibleCycle) + '–M' + esc(row.expiresCycle - 1) + ' · expires M' + esc(row.expiresCycle) + '</span><span>Source-month awareness: ' + (row.awareness / 100).toFixed(1) + '%. A recorded targeting input, not measured causal lift or a promise of activation.</span></li>';
  }).join('') + '</ul></details>';
 }
+function onboardingUiLocked(v){return v.me.submitted||v.gameOver||v.financialGroupVersion===6&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
+function onboardingPolicyControls(v,p,policy){
+ const disabled=onboardingUiLocked(v)?'disabled':'';
+ const select=(field,label,options)=>'<label for="onboarding-'+field+'">'+label+'<select id="onboarding-'+field+'" '+disabled+'>'+options.map(([value,name,closed])=>'<option value="'+esc(value)+'" '+(String(policy[field])===String(value)?'selected':'')+' '+(closed?'disabled':'')+'>'+esc(name)+'</option>').join('')+'</select></label>';
+ return select('market','New application market',Object.entries(v.territories).map(([key,item])=>[key,item.name]))+
+  select('segment','New application segment',Object.entries(E.CUSTOMER_SEGMENTS).map(([key,item])=>[key,item.name]))+
+  select('product','New application product',Object.entries(v.productPortfolios.retail.options).map(([key,item])=>{const open=p.productPrograms.markets[policy.market]?.[policy.segment]?.[key];return [key,item.name+(open?'':' · sales closed'),!open];}))+
+  select('share','Share of remaining Retail sales time',[0,25,50].map(n=>[n,n?n+'% to onboarding':'Paused · 0%']));
+}
 function onboardingContent(v) {
  if (!v.me.onboarding || !draft) return '';
  const dollars = n => '$' + Math.round(n).toLocaleString();
@@ -78,11 +91,20 @@ function onboardingContent(v) {
  let prepared, quote;
  try {
   prepared = onboardingDraftPreview(v);
-  quote = E.onboardingReview(prepared.p, v, prepared.policy);
+  quote = prepared.quote||E.onboardingReview(prepared.p, v, prepared.policy);
  } catch (error) {
-  return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice">Draft quote unavailable: ' + esc(error.message) + '</p>' + actual + '</section>';
+  if(v.financialGroupVersion!==6)return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice">Draft quote unavailable: ' + esc(error.message) + '</p>' + actual + '</section>';
+  const repair='<div class="onboarding-controls">'+onboardingPolicyControls(v,v.me,draft.onboardingPolicy||v.me.onboarding.policy)+'</div><p class="micro">You can pause onboarding here while repairing shared staffing or budget instructions. Existing orders are unchanged; Ready remains blocked until the whole plan is valid.</p>';
+  return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice" role="status">Draft quote unavailable: ' + esc(error.message) + '</p>' + repair + onboardingPendingContent(v) + actual + '</section>';
  }
- const { p, policy } = prepared, t = quote.totals, disabled = v.me.submitted ? 'disabled' : '';
+ const { p, policy } = prepared, t = quote.totals, disabled = onboardingUiLocked(v) ? 'disabled' : '';
+ const staffing=prepared.staffing;
+ const staffingSummary=quote.staffingVersion===2?
+  stat('Bank staff assigned',staffing.physicalAssigned.toFixed(2)+' FTE','Existing shared staff; not new employees')+
+  stat('Purchased onboarding work',staffing.vendorStaff.toFixed(2)+' banker-equivalents','Vendor work is capacity, not headcount')+
+  stat('Effective onboarding throughput',quote.assignedStaff.toFixed(2)+' banker-equivalents','Staff, funded vendor work and eligible expertise')+
+  stat('Remaining Retail sales staff',staffing.physicalSales.toFixed(2)+' FTE',quote.salesStaff.toFixed(2)+' effective bankers after all reservations'):
+  stat('Reserved / remaining Retail time',quote.assignedStaff.toFixed(2)+' / '+quote.salesStaff.toFixed(2),'Effective bankers after retention and existing-customer offers');
  const select = (field, label, options) => '<label for="onboarding-' + field + '">' + label + '<select id="onboarding-' + field + '" ' + disabled + '>' +
   options.map(([value, name, closed]) => '<option value="' + esc(value) + '" ' + (String(policy[field]) === String(value) ? 'selected' : '') + ' ' + (closed ? 'disabled' : '') + '>' + esc(name) + '</option>').join('') + '</select></label>';
  const controls = select('market', 'New application market', Object.entries(v.territories).map(([key, item]) => [key, item.name])) +
@@ -97,7 +119,7 @@ function onboardingContent(v) {
   stat('Conditional activations', integer(t.activated.count), dollars(t.activated.principal) + ' potential deposit inflow') +
   stat('New applications forecast', integer(t.generated.count), dollars(t.generated.principal) + ' requested; cannot activate this month') +
   stat('Activation expense quote', dollars(quote.cost), dollars(quote.budget) + ' draft ceiling') +
-  stat('Reserved / remaining Retail time', quote.assignedStaff.toFixed(2) + ' / ' + quote.salesStaff.toFixed(2), 'Effective bankers after retention and existing-customer offers') + '</div>' + onboardingPendingContent(v) +
+  staffingSummary + '</div>' + onboardingPendingContent(v) +
   '<details class="onboarding-details"><summary>Timing, blocked applications and capacity</summary><div class="onboarding-summary">' +
   stat('Work used / capacity', integer(quote.workUsed) + ' / ' + integer(quote.capacity)) +
   stat('Expiring this settlement', integer(t.expired.count)) +
@@ -106,26 +128,29 @@ function onboardingContent(v) {
   stat('Pending after this quote', integer(t.after.count), dollars(t.after.principal) + ' requested; not deposits') + '</div>' +
   onboardingBatchOutcomes(v, quote.rows, true) +
   '<p class="micro">Applications generated in month M can activate in M+1 or M+2 and expire in M+3. No same-month activation. Oldest eligible applications use work first; remaining work generates new requests. Both generation and activation consume one work unit per relationship. Pending principal is a request, not escrow, guaranteed funding or income.</p>' +
-  '<p class="micro">Only activated principal incurs onboarding expense: ' + Object.values(E.CUSTOMER_SEGMENTS).map(s => esc(s.name) + ' ' + (s.onboarding * 100).toFixed(2) + '%').join(' · ') + '. Application generation has no separate cash fee. Reserved staff are existing payroll, not new recruits; this time is unavailable for ordinary Retail acquisition and advertising-assisted intake.</p>' +
+  '<p class="micro">Only activated principal incurs onboarding expense: ' + Object.values(E.CUSTOMER_SEGMENTS).map(s => esc(s.name) + ' ' + (s.onboarding * 100).toFixed(2) + '%').join(' · ') + '. Application generation has no separate cash fee. Reserved staff are existing payroll, not new recruits; this time is unavailable for ordinary Retail acquisition and advertising-assisted intake.'+(quote.staffingVersion===2?' Additional function allocations and purchased work can add throughput. Vendor fees are already included once in the shared plan, separately from activation expense. Expertise improves work output; it does not create staff.':'')+'</p>' +
   '<p class="micro muted">This shared quote uses today’s outside supply and normalized draft policies. New-request counts use current audience awareness; this month’s advertising reach and decay apply at settlement. Rival activity, executive events and other monthly changes can block or reduce activation. Blocked requests can remain pending until expiry; actuals may differ. Onboarding is separate from ordinary intake, advertising attribution and existing-customer product switches.</p></details>' + actual + '</section>';
 }
-function stageOnboarding(v, field, value, sourceKey = onboardingSourceKey(v)) {
+function stageOnboarding(v, field, value, sourceKey = onboardingSourceKey(v),campaign=game||view) {
  const live = onboardingLive(v);
  if (!live || !draft || !live.me.onboarding || live.me.submitted || live.gameOver || !['market', 'segment', 'product', 'share'].includes(field) || sourceKey !== onboardingSourceKey(live)) return false;
+ if(live.financialGroupVersion===6&&(campaign!==(game||view)||draftOwner!==live.me.id||lastCycle!==live.cycle||gh.active&&gh.paused))return false;
  try {
   const next = JSON.parse(JSON.stringify(draft));
   next.onboardingPolicy = { ...(next.onboardingPolicy || live.me.onboarding.policy), [field]: field === 'share' ? Number(value) : value };
   E.normalizeProductProgramPlan(live.me, next); E.normalizeAdvertisingPlan(live.me, next);
   E.normalizeRelationshipOfferPlan(live.me, next); E.normalizeOnboardingPlan(live.me, next);
-  const status = E.projectPlanStatus(live.me, next);
-  const decrease = field === 'share' && next.onboardingPolicy.share < (draft.onboardingPolicy || live.me.onboarding.policy).share && E.onboardingBudget(live.me, next) <= E.onboardingBudget(live.me, draft);
+  const pauseRepair=live.financialGroupVersion===6&&field==='share'&&next.onboardingPolicy.share===0&&(draft.onboardingPolicy||live.me.onboarding.policy).share>0;
+  const status = pauseRepair?{eligible:true}:E.projectPlanStatus(live.me, next);
+  const decrease = pauseRepair || field === 'share' && next.onboardingPolicy.share < (draft.onboardingPolicy || live.me.onboarding.policy).share && E.onboardingBudget(live.me, next) <= E.onboardingBudget(live.me, draft);
   if (!status.eligible && !decrease) throw Error(status.reason);
+  if(live.financialGroupVersion===6&&!pauseRepair)E.departmentCustomerPreview(live.me,live,next);
   const fresh = onboardingLive(live);
-  if (!fresh || fresh.me.submitted || fresh.gameOver || sourceKey !== onboardingSourceKey(fresh)) return false;
+  if (!fresh || fresh.me.submitted || fresh.gameOver || sourceKey !== onboardingSourceKey(fresh)||live.financialGroupVersion===6&&campaign!==(game||view)) return false;
   draft = next; renderProducts(fresh); renderProjects(fresh); renderReady(fresh); return true;
  } catch (error) { toast(error.message); const fresh = onboardingLive(live); if (fresh) renderProductPrograms(fresh); return false; }
 }
 function bindOnboardingDesk(v) {
- const sourceKey = onboardingSourceKey(v);
- for (const field of ['market', 'segment', 'product', 'share']) $('#onboarding-' + field)?.addEventListener('change', event => stageOnboarding(v, field, event.target.value, sourceKey));
+ const sourceKey = onboardingSourceKey(v),campaign=game||view;
+ for (const field of ['market', 'segment', 'product', 'share']) $('#onboarding-' + field)?.addEventListener('change', event => stageOnboarding(v, field, event.target.value, sourceKey,campaign));
 }

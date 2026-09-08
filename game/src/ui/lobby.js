@@ -25,7 +25,7 @@ function lobbyCompatibility(){
  if(!lobby)return {compatible:false,pending:true,reason:'Waiting for the shared campaign rules.'};
  try{
   validateIncomingFeatureRules(lobby.settings,'lobby');
-  return p2pRole==='host'?peerFeatureStatus(lobby.settings):{compatible:true,pending:false,reason:''};
+  return p2pRole==='host'?peerFeatureStatus(lobby.settings):departmentPeerStatus(lobby.settings);
  }catch(e){return {compatible:false,pending:false,reason:e.message}}
 }
 function discardLobbySettings(){
@@ -90,6 +90,7 @@ function applyLobbyUpdate(index,message){
 function editLobbyIdentity(ready=false){
  try{
   if(!lobby||game||view||lobbyPending)return;
+  if(ready&&!lobbyCompatibility().compatible)throw Error(lobbyCompatibility().reason);
   const i=p2pRole==='host'?0:1;
   const player=lobbyIdentity({name:$('#lobbyName').value,color:$('#lobbyColor').value},i);
   if(lobbyColorsClash(player.color,lobby.players[1-i].color))throw Error('Those colors are too similar. Choose a more distinct bank color.');
@@ -125,9 +126,11 @@ function receiveLobby(message){
  next.players.forEach(lobbyIdentity);
  if(!next.settings||!['town','regional','state','national'].includes(next.settings.scope)||!['balanced','rate','regulatory','growth'].includes(next.settings.scenario))throw Error('Invalid lobby settings.');
  validateIncomingFeatureRules(next.settings,'lobby');
+ if(!receiveDepartmentPeer(next.settings))return;
  if(lobby&&next.revision<lobby.revision)return;
  if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
  lobby=JSON.parse(JSON.stringify(next));linkReady=true;stopHandshake();ghCheckpoint();renderLobby();
+ if(next.settings.financialGroupVersion===6)setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
 }
 function renderLobbyControls(){
  if(!lobby)return;

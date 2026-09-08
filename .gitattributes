@@ -9,4 +9,7 @@
 /game/reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html -text
 /game/reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html -text
 /game/tests/fixtures/department-matrix192-second.json.gz -text
+/game/tests/fixtures/department-captured-regressions.json.gz -text
+/game/tests/fixtures/department-regulatory480.json.gz -text
 /releases/** -text
+/releases/*.pdf binary

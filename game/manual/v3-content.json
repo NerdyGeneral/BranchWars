@@ -1,0 +1,1721 @@
+{
+  "chapters": [
+    {
+      "title": "Your commission",
+      "kicker": "DIRECTOR'S ORDERS",
+      "briefing": "Build a bank that can survive the consequences of its own success.",
+      "sections": [
+        {
+          "heading": "The campaign you are commanding",
+          "text": [
+            "Branch Wars is a simultaneous-turn banking rivalry. You operate one institution against an AI executive team or a friend. A turn is an operating month: make an executive decision, assign your existing people, set standing policies and choose any affordable initiatives. Both plans then resolve together. There is no requirement to buy something every month.",
+            "The release name V3 is a distribution label, not a command to rewrite older campaigns. The newest optional Financial Group campaigns use rules generation 6 and save format 9.5. Older supported campaigns keep their own feature boundaries. This manual identifies conditional systems rather than pretending every control appears in every save.",
+            "Your institution is not its score. Cash pays bills; deposits are liabilities owed to customers; loans are assets exposed to repayment and losses; capital absorbs damage. A growing enterprise value can coexist with dangerous liquidity or poor retained earnings. Read the books before treating a large number as a victory."
+          ]
+        },
+        {
+          "heading": "Director's memorandum",
+          "text": [
+            "Conquest is not a substitute for management. Mature relationships still require service, products still carry promises, and a successful expansion adds operating obligations. The Regional Rivalry preview preserves contested franchises and paid re-entry instead of awarding permanent ownership of the economy. A bank can nevertheless fail.",
+            "Command discipline: establish an operating model, measure the next month's bottleneck, and fund the specific capability needed to relieve it. An idle project button is not an emergency. Your adversary must live with their commitments too."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/engine/features.js",
+        "game/src/engine/campaign.js",
+        "game/src/ui/dashboard.js"
+      ]
+    },
+    {
+      "title": "Open the command center",
+      "kicker": "SETUP DESK",
+      "briefing": "Choose your opponent, economy and complexity before the first month begins.",
+      "sections": [
+        {
+          "heading": "Starting a campaign",
+          "text": [
+            "On the start screen select Solo vs Corporate AI or Pass & Play for local play. Enter the institution names and choose bank colors with the color controls. Solo offers Junior Analysts, Regional VPs and Chairman's Office. These are difficulty selections, not extra human seats.",
+            "Select Balanced Economy, Rate Shock, Regulatory Siege or Growth Frenzy. The economy changes the setting in which your decisions operate; none removes cash, capital or capacity constraints. Review every optional feature before pressing Open Command Center or Open Pass & Play.",
+            "The legacy size selector offers Town, Region, State and National, corresponding to four, six, eight and twelve markets. When Regional Rivalry is selected, its six-market pilot overrides that selector. Read the effective-size summary. The National label on the older selector does not mean the deferred National Empire expansion is installed."
+          ]
+        },
+        {
+          "heading": "Add complexity deliberately",
+          "text": [
+            "Optional systems remain preview selections. Enabling a feature may require others; a confirmation lists the complete change. Confirm applies the proposal; Cancel leaves the previous selection intact. Disabling a prerequisite can remove several dependent previews, so read the list rather than clicking through.",
+            "Campaign rules are fixed once play starts. A loaded save does not acquire new mechanics just because the current executable knows about them. For a first campaign, choose a manageable chain; for the deepest currently supported setup, enable Financial Group and confirm its required foundations."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/page.html",
+        "game/src/ui/features.js",
+        "game/src/engine/features.js"
+      ]
+    },
+    {
+      "title": "Optional systems register",
+      "kicker": "RULES ANNEX",
+      "briefing": "Checkboxes select connected systems, not isolated cosmetic panels.",
+      "sections": [
+        {
+          "heading": "The cumulative chain",
+          "text": [
+            "Regional Rivalry supplies the regional foundation: local capacity, finite outside institutions, owned loan and deposit books, funding obligations, locked terms and service contracts. Expanded commercial services adds dedicated delivery, priced renewals and deployed applications. Later visible options generally build on the preceding foundation.",
+            "The current setup selects generation 2 for Living institution, Customer needs and Product programmes. Financial Group selects generation 6. Other listed preview generations are 1. These are compatibility facts, not additional drop-down choices: older supported versions are retained for existing campaigns.",
+            "Customer effects are integrated with the appropriate customer systems; there is no separate checkbox for every calculation. Similarly, choosing Financial Group adds its current institution-management layers through the existing group option, not separate switches for each department or facility."
+          ],
+          "table": {
+            "headers": [
+              "Visible selection",
+              "What it adds"
+            ],
+            "rows": [
+              [
+                "Living institution / Customer needs",
+                "Research and service mandates; client continuity and local product fit."
+              ],
+              [
+                "Specialist workforce / Household ownership",
+                "Expertise and paid training; conserved segment relationships and retention."
+              ],
+              [
+                "Credit performance / Segment deposits",
+                "Aging arrears and collections; segment-owned product balances."
+              ],
+              [
+                "Product programmes",
+                "Build/license, local targeting, retirement and variable-account pricing."
+              ],
+              [
+                "Advertising / Regional growth",
+                "Awareness attribution; outside arrivals and departures."
+              ],
+              [
+                "Relationship offers / Customer onboarding",
+                "Existing-product switching; pending applications and funded activation."
+              ],
+              [
+                "Financial Group",
+                "Parent capital, agency, corporate books, facilities, leadership and function workloads."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "The bounded independent pilot",
+          "text": [
+            "Modular combinations requires Product programmes and its foundations. It allows Advertising and Regional growth to be independently on or off. Relationship offers, Customer onboarding and Financial Group are unavailable inside that pilot. Leaving it may propose restoring the legacy advertising prerequisite for growth. Confirm the dependency change; nothing should silently upgrade an existing campaign."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/engine/features.js",
+        "game/src/ui/features.js"
+      ]
+    },
+    {
+      "title": "Connect two institutions",
+      "kicker": "COMMUNICATIONS ROOM",
+      "briefing": "A linked lobby establishes identities and rules before either bank can act.",
+      "sections": [
+        {
+          "heading": "Choose a transport",
+          "text": [
+            "Intranet Room uses OPEN_LAN_GAME.bat. The host shares the displayed network address and six-character room code; the friend opens that address on the same permitted local network. Direct P2P is the manual fallback: the host creates an invitation, the guest returns a response, and the host completes the link. Network policy can block either route.",
+            "Repository Link uses a private GitHub repository and authorized access tokens. Enter the repository and open a room, then send the generated join code. The guest supplies their own authorized token. A code is not a substitute for repository access. Do not put tokens into institution names, exported saves, screenshots or ordinary messages.",
+            "The Campaign Lobby shows both banks. Each player edits their own name and color with Save identity. The host controls shared size, economy and feature settings. Apply settings commits the complete change and clears readiness; uncommitted settings must be applied or discarded before starting."
+          ]
+        },
+        {
+          "heading": "Ready is a handshake, not a guess",
+          "text": [
+            "Both players confirm ready before the host starts. Incompatible feature versions remain blocked rather than being silently downgraded. Reconnecting requires fresh compatibility information. When a link is paused or stale, follow its displayed recovery controls rather than repeatedly submitting.",
+            "Use Retry repository link or the connection instructions when offered. Keep the host available because the authoritative campaign belongs there. Automated network checks cannot certify a particular router, corporate firewall or remote computer; a successful two-computer session remains the practical acceptance test."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/page.html",
+        "game/src/ui/lobby.js",
+        "game/src/network/repository.js",
+        "game/src/network/lan.js",
+        "game/src/network/direct.js"
+      ]
+    },
+    {
+      "title": "The monthly command cycle",
+      "kicker": "TURN PROCEDURE",
+      "briefing": "All desks edit one plan. Changing tabs neither spends cash nor resolves the month.",
+      "sections": [
+        {
+          "heading": "A complete order",
+          "text": [
+            "Begin in Overview and inspect the latest result. Open Markets and select your focus market. In Operations > Monthly plan, answer the executive call and allocate all existing staff across Retail & Service, Business Banking, Lending and Operations & Risk. The readiness checklist identifies missing required instructions.",
+            "Set deposit pricing, lending standards and capital policy under Products & funding. Review any persistent customer, collections, service or department instructions that use the same workers. Choose optional projects, recruitment, research, a competitive action and one opportunity or service bid only when they support your plan.",
+            "The shared plan budget remains visible across workspaces. Forecast income is not available cash for current commitments. Several systems use a working form: Preview only calculates; Stage or Adopt copies reviewed values into the draft. Read the status message. Changing a form alone may not change your submitted instructions."
+          ]
+        },
+        {
+          "heading": "Seal, resolve, review",
+          "text": [
+            "Mark Ready seals your plan. The month waits for both institutions. Recall is available only while the opposing plan has not also sealed and the campaign permits it; it is not an undo button for a completed resolution. In Pass & Play, use the confidential handoff screen and confirm that the correct player has the computer.",
+            "After resolution, Review New Market returns to planning. Compare actual costs, lost relationships and work delivered with your intentions. Standing policies usually persist; one-month capital transfers, hiring and new initiatives do not imply automatic repetition. Optional actions can remain unused."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/page.html",
+        "game/src/ui/projects.js",
+        "game/src/ui/results.js",
+        "game/src/ui/operations-workspace.js"
+      ]
+    },
+    {
+      "title": "Read the institution, not just the score",
+      "kicker": "ACCOUNTING ROOM",
+      "briefing": "The profit display and the cash drawer answer different questions.",
+      "sections": [
+        {
+          "heading": "Your instruments",
+          "text": [
+            "Overview presents enterprise value, deposits, loans, cash, last operating profit, risk, attention and capital ratio. The trend chart and portfolio intelligence give context; Intelligence contains the public scorecard, private executive mandate, career milestones and corporate wire. Your rival's public metrics do not grant access to their sealed instructions.",
+            "Operations > Forecast & books evaluates the current draft under the current economy. It is an estimate, not a guarantee: executive events, competition, awards and project completions can change outcomes. Read the exclusions beneath each specialized quote. A departmental contribution already included in bank profit must not be added again.",
+            "In the latest Financial Group rules, Overview also supplies a collapsed bank retained-earnings bridge for the latest completed month when sufficient authoritative evidence exists. It separates operating profit from the other net earnings changes. A positive operating month can still reduce retained earnings after investment expenses or other losses."
+          ]
+        },
+        {
+          "heading": "Four distinctions to remember",
+          "text": [
+            "Deposits are customer funding, not shareholder profit. Principal repayment returns an asset to cash, not new revenue. Collecting an old company invoice replaces a receivable with cash, not a second sale. Moving capital between bank, parent and agency changes its location, not consolidated wealth.",
+            "The shared budget separates optional spending room from obligations already owed. Reducing a leadership envelope does not cancel an invoice. A low-cash bank may be able to submit a zero-discretionary plan while compensation remains payable; that is financial distress, not free spending capacity."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/dashboard.js",
+        "game/src/ui/earnings-bridge.js",
+        "game/src/engine/earnings-bridge.js",
+        "game/src/ui/projects.js"
+      ]
+    },
+    {
+      "title": "Territory and recurring rivalry",
+      "kicker": "MARKET INTELLIGENCE",
+      "briefing": "Influence, customer ownership and deposits are different measures.",
+      "sections": [
+        {
+          "heading": "Survey the map",
+          "text": [
+            "Click a district to set focus. The map identifies your bank and rival by name and color, with local influence and office presence. Inspect details before buying capacity. With the regional systems enabled, the authored markets are Downtown, Northside, Industrial Corridor, Suburban Growth Belt, County Seat and University District.",
+            "Market profiles differ in entry cost, rent, deposit opportunity and lending opportunity. Downtown favors corporate activity but costs more; Industrial Corridor favors lending and manufacturing; Northside has stronger household funding potential. These are operating differences, not guarantees of profit or an instruction to follow a universal build order.",
+            "Finite outside institutions own real local deposits and household relationships. New acquisition and competitive transfers use those books rather than rewarding map percentages with unlimited assets. A market can be commercially mature while renewable mandates, service failures, advertising, deposit competition and product switching still matter."
+          ]
+        },
+        {
+          "heading": "A foothold is not permanent safety",
+          "text": [
+            "Regional Rivalry permits paid re-entry. Sustained weakness can force one office to withdraw without erasing the remaining network or granting permanent exclusion. The regional office rule tracks prolonged influence below 12%; after six weak cycles one office closes. React before a temporary disadvantage becomes a recurring expense problem.",
+            "An inspection selector inside a customer, product or credit desk does not necessarily change map focus. Read the target shown on the actual initiative before staging it. A branch in the wrong district is still an expensive branch.",
+            "Director's memorandum: control of the map is a bargaining position. Control of the cash flow is what pays for it."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/dashboard.js",
+        "game/src/engine/regional.js",
+        "game/src/content/regional-markets.js",
+        "game/src/engine/market-economy.js"
+      ]
+    },
+    {
+      "title": "Build the physical network",
+      "kicker": "FACILITY PROCUREMENT",
+      "briefing": "Purchase the office you can staff, not the largest silhouette.",
+      "sections": [
+        {
+          "heading": "Construction and conversion",
+          "text": [
+            "Open Operations > Projects & hiring to stage a location in the current focus market. New work shares cash and executive delivery capacity with product rollouts and other initiatives. Base work units are not a promise of calendar completion: weak Operations coverage can slow progress.",
+            "Regional campaigns offer local Relationship Service Upgrade and Branch Workflow Automation, each with a maximum of two levels per market. Service raises local deposit capacity and competitive pull but adds running cost; automation lowers local base facility expense. Consolidate One Office closes the last-opened office in the selected market, saves its costs and removes its capacity without asset-sale proceeds.",
+            "Financial Group generation 4 and later identifies individual offices. Markets > Facility Network lets you select an existing office and compare a conversion's before, during and after economics. Stage the conversion explicitly. Cancellation retains the old model but does not refund sunk conversion expenses. Deposits and loans are not deleted by changing the building."
+          ],
+          "table": {
+            "headers": [
+              "Current usable model",
+              "Strategic purpose"
+            ],
+            "rows": [
+              [
+                "Retail / full-service center",
+                "Household reach, local service and balanced capacity."
+              ],
+              [
+                "Commercial banking office",
+                "Business relationships, treasury and lending emphasis."
+              ],
+              [
+                "Digital advisory studio",
+                "Lower-overhead digital acquisition and service."
+              ],
+              [
+                "ATM / micro service point — Group5+",
+                "Small staffed deposit/service footprint; no lending."
+              ],
+              [
+                "Integrated financial center — Group5+",
+                "Large mixed banking capacity and substantial overhead."
+              ],
+              [
+                "Regional operations hub — Group5+",
+                "Staffed throughput support to eligible nearby offices."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Unavailable is a real restriction",
+          "text": [
+            "The wealth-office catalog entry is blocked: no licensed operating wealth subsidiary exists in this release. An insurance agency or research milestone does not supply that license. Financial centers can perform their banking roles, but their advisory throughput remains unavailable. Always use the quoted local cost, not a catalog headline, when budgeting construction."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/engine/regional.js",
+        "game/src/engine/facility-adapter.js",
+        "game/src/ui/facility-network.js"
+      ]
+    },
+    {
+      "title": "Condition, staffing and renovation",
+      "kicker": "NETWORK MAINTENANCE",
+      "briefing": "Latest group facilities are living obligations, not permanent percentage bonuses.",
+      "sections": [
+        {
+          "heading": "Operate every location",
+          "text": [
+            "In Financial Group generation 5 or 6, open Markets > Office condition & staffing. The compact network lists identified offices, condition, wear, ramp-up, upkeep, maintenance and current work. Select one office to edit its standing instructions. Inspection does not place an order.",
+            "Choose Off, Basic or Full maintenance. Spending is additional to ordinary upkeep; less maintenance accelerates wear. Assign quarter-FTE by eligible role: four quarters equal one banker's monthly physical time. The available pool is calculated after teaching and retained customer, collections, service and departmental work. Adding a number cannot create staff.",
+            "Prepare staffing proposal offers a bounded allocation for review. It neither hires people nor automatically changes the draft. Preview settings, inspect the shared budget, then Stage settings and renovation order. Discard unsubmitted lifecycle changes restores the unsubmitted lifecycle instructions rather than refunding completed spending."
+          ]
+        },
+        {
+          "heading": "Restore deliberately",
+          "text": [
+            "Preview renovation at this office is available for a worn operating location without conflicting work. Its comparison shows costs and disrupted capacity before, during and after repair. Paid work must finish before restoration activates; an active cancellation is explicitly staged with no refund. Conversion and renovation can compete for the same local and executive resources.",
+            "Authored nearby hub links move finite service throughput from a staffed regional hub. They do not multiply capacity and cannot be invented between arbitrary map coordinates. A new facility also ramps up; full-size capacity requires appropriate staffing and condition.",
+            "Director's memorandum: a low maintenance line is not a saving if it leaves the branch unable to serve the book you already bought."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/facility-lifecycle.js",
+        "game/src/engine/facility-lifecycle.js",
+        "game/src/engine/facility-lifecycle-quotes.js"
+      ]
+    },
+    {
+      "title": "Recruit and train the bank",
+      "kicker": "PERSONNEL OFFICE",
+      "briefing": "Specialists remain employees inside your existing headcount.",
+      "sections": [
+        {
+          "heading": "Physical people first",
+          "text": [
+            "Operations > Monthly plan assigns the bank's staff to four physical roles. Projects & hiring stages general recruitment; Workforce adds specialist recruitment when enabled. New hires arrive under the normal next-cycle recruiting rules, so do not assign tomorrow's employee to today's work.",
+            "Workforce lets you inspect Retail advisers, Relationship bankers, Credit analysts and Risk specialists. Their expertise applies to their appropriate team, not every activity in the bank. Existing salary premiums continue even when you move people away from their specialty. Recruiting and future payroll are separate costs.",
+            "Select a specialty to inspect count, assigned staff, skill, productive contribution, premium payroll and proposed recruitment. Stage additions or remove unsubmitted hires with the available controls. All recruitment shares the bank's current cash and hiring limits; taking staff from another department can impair that department immediately."
+          ],
+          "table": {
+            "headers": [
+              "Specialty",
+              "One-time premium / extra monthly payroll"
+            ],
+            "rows": [
+              [
+                "Retail advisers",
+                "$30,000 / $4,000"
+              ],
+              [
+                "Relationship bankers",
+                "$45,000 / $5,000"
+              ],
+              [
+                "Credit analysts",
+                "$50,000 / $6,000"
+              ],
+              [
+                "Risk specialists",
+                "$60,000 / $6,500"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Training is work",
+          "text": [
+            "Choose recurring training budgets and a cash reserve. Only eligible existing specialists improve; spending a ceiling is not automatic when there is nobody to train or funding protection pauses the classes. Skill increases occur on settlement, not when the forecast is opened.",
+            "In group campaigns, a paid leader can accelerate classes but the teaching banker leaves productive duty. The department view exposes that opportunity cost. Do not count specialist productivity as additional physical people for office assignments, or count the teacher as simultaneously selling, servicing and teaching."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/content/workforce.js",
+        "game/src/ui/workforce.js",
+        "game/src/engine/workforce.js",
+        "game/src/ui/departments.js"
+      ]
+    },
+    {
+      "title": "Leadership and spending envelopes",
+      "kicker": "DEPARTMENT COMMAND",
+      "briefing": "An envelope limits spending; it does not fund it.",
+      "sections": [
+        {
+          "heading": "Persistent management",
+          "text": [
+            "Financial Group generation 4 and later adds Departments & leadership in Workforce. In generation 6, choose Leadership & budgets beside Functions & workload. Set the common discretionary cash reserve and ceilings for research, vendors, leadership and training in each physical role.",
+            "Use the explicit leader order for each department: retain, demote, or appoint one of the three profiles. Appointment promotes a qualified existing specialist; it does not add an employee. Replacement can incur severance and a new appointment cost, and the new leader does not inherit the former leader's personal experience.",
+            "Development mentors are the most expensive general teaching profile. Service delivery leaders favor Retail and Business instruction; Credit and controls leaders favor Lending and Operations. Inspect salary, appointment cost, qualifications, experience and outstanding compensation before choosing. Demotion leaves the employee in the bank and does not erase unpaid salary."
+          ],
+          "table": {
+            "headers": [
+              "Leader",
+              "Appointment / monthly compensation"
+            ],
+            "rows": [
+              [
+                "Development mentor",
+                "$30,000 / $7,000"
+              ],
+              [
+                "Service delivery leader",
+                "$22,000 / $4,000"
+              ],
+              [
+                "Credit and controls leader",
+                "$25,000 / $4,500"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Limits before delegation",
+          "text": [
+            "Preview form calculates without changing the plan. Stage limits and leader orders commits the form to the draft. The bounded proposal controls can prepare service or training instructions within staff, vendor, sales-floor and skill-target limits. Prepare is not approval: inspect exact changes before staging the proposal.",
+            "Leaders cannot independently borrow, hire, acquire, close offices, change products or submit a turn. Owed compensation remains a liability even after a ceiling is reduced. Unpaid leaders cannot provide normal teaching benefits. This is an organizational commitment with a balance-sheet consequence, not a free morale upgrade."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/departments.js",
+        "game/src/engine/departments.js"
+      ]
+    },
+    {
+      "title": "Eight functions, one workforce",
+      "kicker": "GROUP6 OPERATING DESK",
+      "briefing": "The newest group rules make missing administrative work visible.",
+      "sections": [
+        {
+          "heading": "Read the workload matrix",
+          "text": [
+            "In Workforce > Functions & workload, inspect estimated workload, retained staff, additional staff, vendor throughput, shortfall and recurring vendor cost. Existing service and collections reservations appear as retained time; extra quotas draw only on the remaining physical pool. Specialist expertise is not another employee.",
+            "Select Inspect or edit one function. Enter additional quarters only from compatible roles and choose finite vendor work. Preview function edits before Adopt reviewed function changes. Adoption changes the shared draft and its budget, not the bank's cash. New quotas can reduce the pool available to offices or ordinary sales, so repair those plans explicitly if necessary.",
+            "Current functions are Sales and relationships, Onboarding and customer service, Credit administration, Servicing and collections, Technology operations, Risk and compliance, Treasury operations and People management. Their work is connected to production, servicing and controls. Buying an unused unit is still an expense; a vendor unit is throughput rather than a recruit."
+          ]
+        },
+        {
+          "heading": "Use a bounded proposal",
+          "text": [
+            "Open Prepare a bounded staffing proposal. Order priorities with Move priority up/down, set maximum NEW quarters, TOTAL vendor envelope and residual role floors for facilities or sales. Prepare proposal from reviewed form preserves explicit allocations and purchases only permitted available work. Review the changes, then Adopt; Discard preview leaves the existing plan unchanged.",
+            "Last completed month shows actual vendor cash paid and task requested/delivered/shortfall, including the affected consumer. Use it to explain why a nominally staffed bank produced no new loans or could not process applications. A selected opportunity also shows its required unused funded capacity; the same work cannot be spent twice."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/department-functions.js",
+        "game/src/engine/department-functions.js",
+        "game/src/engine/department-runtime.js"
+      ]
+    },
+    {
+      "title": "Retail and deposit funding",
+      "kicker": "FUNDING DESK",
+      "briefing": "Attracting deposits is only half the decision; paying for them is the other half.",
+      "sections": [
+        {
+          "heading": "Standing pricing and offers",
+          "text": [
+            "Operations > Products & funding contains Protect Margin, Balanced and Win Deposits. More aggressive pricing seeks faster acquisition but raises funding cost and exposure to rate-sensitive runoff. Changing that posture is not a cost-free way to retain every balance previously attracted.",
+            "Retail products are Essential Banking, Rewards Checking and High-Yield Savings. Essential favors low-fee household service; Rewards connects acquisition with digital engagement; High-Yield emphasizes expensive, rate-sensitive funding. In the simpler retail lifecycle, sales emphasis runs from Closed through Low, Standard, High and Priority. At least one usable offer must remain available.",
+            "Product programmes move local targeting and product development into Products. Existing accounts retain their product and contractual promises when you change sales emphasis. Closing new sales does not close all accounts or eliminate their servicing cost. Read Customers > Deposit accounts for owned balances, interest, fees, service costs and guarantees."
+          ]
+        },
+        {
+          "heading": "Lock terms carefully",
+          "text": [
+            "Six-month term funding is a separate standing instruction in Operations. New subscriptions can be closed or opened; maturity can release balances to current savings or renew at the then-current quote. Locked balances resist ordinary withdrawals and deposit raids, but continue paying the promised rate.",
+            "Each month the term offer converts eligible existing demand balances subject to its limits; it is not a source of free cash. Closing subscriptions does not cancel outstanding terms or a renewal instruction. Acquisitions preserve the obligations. A funding book that looks secure today can become contestable when many cohorts mature together."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/products.js",
+        "game/src/engine/term-funding.js",
+        "game/src/engine/deposits.js",
+        "game/src/content/catalog.js"
+      ]
+    },
+    {
+      "title": "Develop, target, price and retire",
+      "kicker": "PRODUCT MANAGEMENT",
+      "briefing": "Research opens an implementation choice; it does not open the account for you.",
+      "sections": [
+        {
+          "heading": "Choose a delivery route",
+          "text": [
+            "In Products > Development & retirement, Rewards Checking and High-Yield Savings can be developed in-house or licensed. In-house development needs the corresponding completed tier-1 capability and more setup work. Licensing launches without that research gate but retains availability and balance-based vendor charges.",
+            "Choose a route to stage its initiative. It shares cash and executive capacity with branches and other work. Licensing costs $90,000 initially, $12,000 monthly availability and 0.01% of non-term product balances monthly. Retirement costs $25,000. After completion, open Local sales targets, select a market and set product emphasis for each audience. Inspection does not change focus. Keep an available fallback in every row; a closed product cannot receive an advertised or onboarding allocation.",
+            "A later in-house replacement removes the vendor arrangement without repricing existing accounts. Retirement is explicit: it closes new sales, ends availability fees and retains servicing obligations. Balance-based license charges can persist on old accounts. Reopening requires a new paid rollout, not cancellation of history."
+          ]
+        },
+        {
+          "heading": "Generation-2 pricing controls",
+          "text": [
+            "Pricing & funding provides annual adjustments of minus 25, zero or plus 25 basis points for editable variable offers. High-yield guarantees keep their automatic protected quote; term deposits remain separate. Inspect variable versus protected balances and the direct monthly cost before staging.",
+            "Last settled rival offers are public information, not a window into next month's sealed price instruction. Direct product cost means interest plus service and platform costs minus fees; it is not product profit because loan earnings and shared overhead are elsewhere.",
+            "Director's memorandum: a cheap launch can be an expensive operating model. Compare the recurring license bill with the time, research and cash required to build."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/product-programs.js",
+        "game/src/engine/product-programs.js",
+        "game/src/engine/product-pricing.js",
+        "game/src/engine/deployment.js"
+      ]
+    },
+    {
+      "title": "Keep the customer relationship",
+      "kicker": "CUSTOMER SERVICE ROOM",
+      "briefing": "Ownership must be serviced, not merely counted.",
+      "sections": [
+        {
+          "heading": "Retention and local fit",
+          "text": [
+            "Customers appears with Household ownership. Select Service & retention to inspect conserved relationships by market and segment. Everyday households, digitally connected customers and reserve savers have different preferences and service demands. Owned household share is not the same as map influence or a deposit-balance share.",
+            "Set the Retail retention share to 25%, 50%, 75% or 100%, then choose segment priorities. More retention capacity protects the installed book but removes time from new sales and later customer activities. No retention time, Standard, Double and Triple priority weight how the reserved capacity is distributed. Neglected goodwill deteriorates before relationships depart.",
+            "The market inspection selector changes the table, not necessarily the campaign focus. Compare your household counts, rival and outside counts, workload and expected departures. Outside relationships are finite; a retention forecast is conditional on current staffing, books and economy rather than a promise that every person will stay."
+          ]
+        },
+        {
+          "heading": "Read deposit accounts separately",
+          "text": [
+            "With Segment deposits, switch to Deposit accounts for owned balances split by segment and product. Interest, servicing, fees and protected maturities reconcile with the deposit books. Customers and deposits remain separate aggregate resources, not a simulation of a named person's entire financial life.",
+            "Product fit, service quality and pricing interact with acquisition and retention. Better fit does not grant a guaranteed conversion or create a second pool of customers. In the latest group rules, function allocations and paid expertise also affect available customer throughput; review physical time and effective output without treating vendors as headcount.",
+            "Director's memorandum: when customers leave, ask whether the offer failed them or whether nobody had time to deliver it."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/households.js",
+        "game/src/engine/households.js",
+        "game/src/engine/segment-deposits.js",
+        "game/src/content/customer-markets.js"
+      ]
+    },
+    {
+      "title": "Offers and application queues",
+      "kicker": "CUSTOMER OPERATIONS",
+      "briefing": "A pending request is neither a deposit nor an activated customer.",
+      "sections": [
+        {
+          "heading": "Existing-customer offers",
+          "text": [
+            "Products > Existing customers appears with Relationship offers. Choose an offer market, existing segment, better-fitting target product and a share of Retail sales time: 0%, 25% or 50%. Zero pauses the instruction. The target must be locally open and capable of improving the eligible customer's product fit.",
+            "Offers move eligible existing balances between your products; they do not win a second customer or create new deposits. Conversion consumes time and incurs an expense. Review converted equivalents, moved principal and the change in direct monthly product cost. The latter is not total relationship lifetime value.",
+            "Product retirement or closed sales can pause an instruction. If a shared plan becomes invalid, the controls remain available to pause the offer while repairing other commitments. A paused order does not silently erase unrelated function or facility allocations."
+          ]
+        },
+        {
+          "heading": "Applications and onboarding",
+          "text": [
+            "Choose Products > Applications & onboarding. Select market, segment, product and 0%, 25% or 50% processing share. Pending batches show creation, eligibility and expiry months. Applications stay outside the bank until capacity, cash for activation expenses, households and deposit supply support actual activation.",
+            "Existing requests age even when processing is paused. Closing or retiring their product can cancel them, and unprocessed batches expire after their eligibility window. Do not count requested principal as cash or add application counts to active relationships.",
+            "Group6 quotes distinguish physical assigned time, purchased work, expertise and final residual sales capacity. Last actual results explain activated, expired and cancelled batches. Prepare a sustainable staffing plan before expanding the queue; advertising reach alone cannot force activation."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/relationship-offers.js",
+        "game/src/ui/onboarding.js",
+        "game/src/engine/onboarding.js"
+      ]
+    },
+    {
+      "title": "Advertising and regional change",
+      "kicker": "MARKETING OFFICE",
+      "briefing": "Attention changes preference; it does not print customer balances.",
+      "sections": [
+        {
+          "heading": "Three different advertising tools",
+          "text": [
+            "Market-Wide Advertising is an operating initiative that temporarily improves reputation and influence. Targeted Relationship Advertising supports commercial service contests in one focus market for four future turns. Neither is the detailed retail attribution system.",
+            "With Advertising attribution, Products > Advertising & attribution holds one standing campaign per bank. Select a campaign market, customer audience, advertised open offer and a monthly budget of $0, $15,000, $40,000 or $80,000. Pausing sets spending to zero; already accumulated awareness fades rather than vanishing immediately.",
+            "Inspect reach, awareness before/after, offer suitability, Retail sales time and the targeting-weight bonus. Awareness decays before new reach. Closed offers or unavailable sales time prevent the expected conversion benefit. The budget shares current reserves and can pause when protected cash or capital is insufficient."
+          ]
+        },
+        {
+          "heading": "Interpret the result honestly",
+          "text": [
+            "Last resolved month reports actual spending, intake in aware audiences and model-attributed assisted intake. Assisted is not incremental: it is not a controlled experiment, a win probability or return on advertising. The observed ordinary intake already belongs to the bank's other reports, so never add it a second time.",
+            "Regional growth is a separate optional system shown in Markets. Its tables report opening outside supply, arrivals, departures, net change and closing supply by region and audience. Growth adds or removes external economic resources through the authored rules, not by awarding your bank a direct gift.",
+            "The Modular combinations pilot can run either system independently. An advertising-only campaign cannot rely on growth to replenish outside supply; a growth-only campaign receives economic changes without purchasing awareness."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/advertising.js",
+        "game/src/ui/regional-growth.js",
+        "game/src/engine/advertising.js",
+        "game/src/engine/regional-growth.js",
+        "game/src/engine/contracts.js"
+      ]
+    },
+    {
+      "title": "Choose the lending portfolio",
+      "kicker": "CREDIT COMMITTEE",
+      "briefing": "Today's origination target becomes several years of servicing work.",
+      "sections": [
+        {
+          "heading": "Three current families",
+          "text": [
+            "The playable lending families are Mortgage Franchise, Middle-Market Lending and Consumer Finance. In older campaigns, Operations chooses a credit portfolio. Financial Group supplies a simultaneous allocation in Credit > New Lending Portfolio: set the three percentages to total 100 and Stage lending allocation.",
+            "Percentages divide one shared production budget, not three independent loan engines. Product productivity affects actual dollars. Funding, capital, physical staffing, retained collections time and, in Group6, delivered credit work constrain the combined result. Zero allocation stops new origination in that family but does not stop servicing its existing loans.",
+            "Lending standards remain Conservative, Balanced or Growth. New cohorts retain their origination risk, product, interest and term; changing today's appetite does not rewrite yesterday's borrower. Mortgage terms are 120 months, middle-market terms 48 and consumer terms 24 under the current cohort system."
+          ]
+        },
+        {
+          "heading": "Use the comparison as a scenario",
+          "text": [
+            "Compare lending mixes shows first-month origination, operating profit, capital ratio and a 24-month contribution/loss scenario for the new cohort. A Use mix button stages the reviewed choice. Existing bank overhead and funding costs are not charged again inside that cohort contribution.",
+            "The 24-month scenario holds assumptions fixed and does not cover the complete life of a mortgage. It is not a guaranteed full-bank profit forecast. Higher yield can be accompanied by greater delinquency and capital usage. The current release does not offer the experimental individual company-loan auction, collateral register or revolving draw interface.",
+            "Director's memorandum: a loan that cannot be funded or administered is not an opportunity waiting to happen. It is an unapproved commitment."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/financial-group.js",
+        "game/src/engine/credit.js",
+        "game/src/content/catalog.js"
+      ]
+    },
+    {
+      "title": "Delinquency and collections",
+      "kicker": "RECOVERY DEPARTMENT",
+      "briefing": "A loss does not become harmless because it stopped paying interest.",
+      "sections": [
+        {
+          "heading": "The aging book",
+          "text": [
+            "Credit performance adds Credit quality & collections. Inspect performing principal, 30-day, 60-day and 90-plus-day balances, retained origination risk and the local forecast. Newly originated loans receive two seasoning reviews before entering arrears; opening loans are already seasoned.",
+            "Uncured balances age one group per month. A new 90-plus-day balance cannot resolve in the same review that moves it there. Delinquent principal stops normal payments and interest; a cure resumes ordinary payments without inventing back-interest. Scheduled maturity does not delete unpaid principal.",
+            "Reserve 0%, 25%, 50%, 75% or 100% of Lending time for collections. That choice competes with new origination, and latest group functions share the same physical reservation. Choose Relationship workout, Balanced collections or Accelerated recovery."
+          ],
+          "table": {
+            "headers": [
+              "Approach",
+              "Primary tradeoff"
+            ],
+            "rows": [
+              [
+                "Relationship workout",
+                "Stronger early cures, slower default resolution, lower loss severity and higher case cost."
+              ],
+              [
+                "Balanced collections",
+                "Middle course on cure, resolution speed, severity and expense."
+              ],
+              [
+                "Accelerated recovery",
+                "Faster removal of defaults, weaker cures and larger realized losses."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Accounting under pressure",
+          "text": [
+            "Recovery returns principal to cash; it is not revenue. A write-off reduces the loan asset and equity rather than paying the same amount in cash again. External case expenses are separate operating costs. A thin cash position can force funding sales while collections are still working.",
+            "Funding and regulatory sales use worsening discounts when the book contains arrears. Selling impaired loans is not a near-par escape hatch. The forecast uses the opening book and current assumptions; executive credit events and other activity may produce additional losses beyond this aging report."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/collections.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/credit.js"
+      ]
+    },
+    {
+      "title": "Commercial mandates and delivery",
+      "kicker": "BUSINESS BANKING",
+      "briefing": "A contract award is a promise to keep supplying capacity.",
+      "sections": [
+        {
+          "heading": "Deploy, activate, then compete",
+          "text": [
+            "In Markets, open Commercial Service Desk. Reserve Business bankers and optional outsourced points for existing signed mandates. Those bankers leave ordinary business production. Each ordinary reserved banker supplies two service points; conventional service outsourcing supplies one point for $6,000 a month, whether used or not.",
+            "Employer Payroll, Merchant Settlement and Corporate Treasury require one, two and three service points respectively. In Strategy, commercial service applications offer Deploy Payroll Automation, Build Corporate Treasury and Partner for Corporate Treasury. Deployment and activation are separate; turn on a completed application in the service desk when its running cost is justified.",
+            "Payroll deployment combines Network and Operations tier 1. Treasury build combines Commercial and Digital tier 1; partnering needs Commercial tier 1 and is faster but has higher ongoing cost. Treasury cannot be won simply by checking an undeployed activation box."
+          ]
+        },
+        {
+          "heading": "Quote and defend",
+          "text": [
+            "Set Relationship, Standard or Premium renewal pricing. Existing signed fees do not reprice until renewal. Pursue agreement selects a challenger bid in place of the ordinary opportunity; incumbent defense is automatic unless you Decline renewal. New awards earn next turn, while the former provider receives the final term's service fee.",
+            "Mandates are serviced in renewal-date order. Two missed service turns reopen the agreement; inactive or unsupported work can retain cost while earning no fee. Delivery comparison and plan resilience evaluates capacity mixes but does not secretly place bids or activate platforms.",
+            "Six named clients have different price, reliability or control priorities. In group campaigns their actual company cash also determines payment and invoice risk. Contracted contribution is before that credit risk, not guaranteed receipts."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/services.js",
+        "game/src/engine/services.js",
+        "game/src/content/anchor-clients.js"
+      ]
+    },
+    {
+      "title": "Research and operating identity",
+      "kicker": "STRATEGY COMMAND",
+      "briefing": "All five capabilities remain open; permanent models make your institution distinct.",
+      "sections": [
+        {
+          "heading": "Fund capability milestones",
+          "text": [
+            "Strategy shows Branch Network, Digital Platform, Commercial Bank, Operational Excellence and Acquisition Strategy. Each has four milestones. Use minus/plus funding controls or Stage to milestone / Stage monthly maximum to add research to the shared draft. Per-capability monthly limits, current cash and capital rules still apply.",
+            "The progress bar distinguishes paid research from staged funding. Full roadmap expands all milestones; Related product & service applications shows what the capability can help unlock. Completing research is not the same as deploying a product, activating a platform or acquiring customers.",
+            "Once a branch's first tier is completed, or sufficiently funded for completion in the current draft, choose one of its two operating models. Confirm model stages the choice; it becomes permanent at resolution if eligible. A completed first tier does not require further research spending merely to adopt its model."
+          ],
+          "table": {
+            "headers": [
+              "Capability",
+              "Operating-model alternatives"
+            ],
+            "rows": [
+              [
+                "Branch Network",
+                "Retail Density / Regional Hubs"
+              ],
+              [
+                "Digital Platform",
+                "Customer Experience / Back-Office Automation"
+              ],
+              [
+                "Commercial Bank",
+                "Treasury & Payments / Specialized Credit"
+              ],
+              [
+                "Operational Excellence",
+                "Lean Delivery / Risk & Resilience"
+              ],
+              [
+                "Acquisition Strategy",
+                "Dealmaker / Integration Discipline"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Set recurring boundaries",
+          "text": [
+            "Living institution adds Recurring research & service manager. Choose enablement, total monthly budget, reserve, priority and milestone ceilings. Prepare draft within these limits applies a bounded suggestion; manual edits and sealed plans remain protected. Future prepared drafts can continue the mandate after settlement.",
+            "Research competes with immediate service, construction and solvency. Do not repeat the obsolete rule that the first tier-two lane permanently locks every other lane: the current strategy interface explicitly leaves all five open. Read current milestone descriptions; some older catalog summaries are broader than their exact implemented effect."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/ui/management.js",
+        "game/src/engine/institution.js",
+        "game/src/content/catalog.js"
+      ]
+    },
+    {
+      "title": "Competitive orders",
+      "kicker": "RIVALRY DESK",
+      "briefing": "Spend on an attack only when the bank can exploit the result.",
+      "sections": [
+        {
+          "heading": "One concealed tactical order",
+          "text": [
+            "Competition offers one attack or defense in the shared plan. Hold Position costs nothing and is a legitimate choice. The focus market, committed spend and last known rival action appear above the cards. The opponent's next action remains concealed until resolution.",
+            "Targeted Deposit Campaign pressures rival funding; Commercial Client Raid contests commercial and related relationships; Talent Poach attempts to recruit a rival banker and has an influence requirement. Liquidity Defense, Relationship Defense and Retention Package counter the corresponding threats. Shareholder Defense belongs to the bank-buyout rules and has its own eligibility limits.",
+            "Actions resolve simultaneously, so defense is a strategic prediction rather than an undo command after seeing the attack. Research, staffing, funding condition and market position affect results. A large attack bill can leave its sender less able to serve the customers they hoped to win."
+          ],
+          "table": {
+            "headers": [
+              "Order",
+              "Base commitment"
+            ],
+            "rows": [
+              [
+                "Hold Position",
+                "$0"
+              ],
+              [
+                "Targeted Deposit Campaign",
+                "$180,000"
+              ],
+              [
+                "Commercial Client Raid",
+                "$220,000"
+              ],
+              [
+                "Talent Poach",
+                "$250,000"
+              ],
+              [
+                "Liquidity Defense",
+                "$110,000"
+              ],
+              [
+                "Relationship Defense",
+                "$120,000"
+              ],
+              [
+                "Retention Package",
+                "$100,000"
+              ],
+              [
+                "Shareholder Defense",
+                "$260,000"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Different meanings of acquisition",
+          "text": [
+            "Competitor Book Acquisition is an operating initiative with time, cash and capacity requirements. It is not a stock-market order. Legacy bank-level score buyouts and permanent domination endings are disabled in Regional Rivalry; receivership remains possible. These rules are separate from owning shares in the six corporate clients.",
+            "Inspect current eligibility and safeguards instead of assuming every attack is available. An initiative, a service bid and an ordinary opportunity consume different resources; a service challenger replaces the ordinary opportunity. In Group6, an opportunity can also require unused funded task throughput. Keep enough capacity to execute the promised business after the contest."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/competition.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "Liquidity, supervision and recovery",
+      "kicker": "TREASURY ALERT",
+      "briefing": "Deposits are not a substitute for loss-absorbing equity.",
+      "sections": [
+        {
+          "heading": "Manage the buffer",
+          "text": [
+            "Capital strategy offers Build Liquidity, Balanced and Reinvest. More cash protection can constrain expansion; reinvestment can leave less room for shocks. Deposit repricing, term maturities, loan growth, operating expenses and rivalry all meet in the same institution.",
+            "Watch the capital tier. Well capitalized begins at 8% under the displayed tier system; supervision and stronger orders progressively restrict projects, growth and the balance sheet. Critically undercapitalized status for three consecutive cycles forces receivership. The game's thresholds are fictional campaign rules, not real-world regulatory advice.",
+            "Emergency Board Capital is a constrained rescue action, not a routine growth project. When available its panel explains restrictions, concessions and oversight. It can conflict with expansion orders. Never assume unlimited rescues, debt forgiveness or immediate freedom to resume aggressive acquisition.",
+            "Regional funding uses cash, securities sales with a 2% haircut, loan sales with a 6% base haircut plus applicable distress penalties, then emergency debt at 1% monthly. The covenant limit is 5% of deposits plus 50% of positive equity, minimum $250,000. Three consecutive month-end excesses can force resolution independently of ordinary capital distress. Securities here are liquid bank assets, not a playable company-share exchange."
+          ]
+        },
+        {
+          "heading": "Compare a repair before accepting it",
+          "text": [
+            "With Product programmes, Overview offers Compare recovery options after an executive response is chosen. The comparison includes known decision expense and estimates equity after planned spend. Stage this option changes only the draft; Undo staged recovery is available while the recorded draft remains unchanged and unlocked.",
+            "A recovery suggestion may reduce research, recruiting, marketing or production commitments. Review its list of changed instructions, including the executive response. Existing contractual promises survive. An option that improves this month's estimate may sacrifice future sales, and a failing bank may have no qualifying rescue.",
+            "Latest group safeguards distinguish mandatory obligations from optional commitments. A plan with no discretionary spending can still expose unpaid compensation and require further repair. Do not try to make a liability disappear by lowering its budget ceiling or moving it to another tab."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/recovery.js",
+        "game/src/ui/projects.js",
+        "game/src/engine/funding.js",
+        "game/src/content/catalog.js"
+      ]
+    },
+    {
+      "title": "Run the financial parent",
+      "kicker": "GROUP CAPITAL ROOM",
+      "briefing": "Separate accounts create control, not extra money.",
+      "sections": [
+        {
+          "heading": "Move earned capital deliberately",
+          "text": [
+            "Financial Group adds the Group workspace. Current campaigns provide Capital, Insurance agency and Companies subdesks. Switching between them keeps the same monthly draft. The parent has its own cash and accounts; bank deposits do not become a freely spendable holding-company balance.",
+            "In Capital, enter Bank profit to parent or Parent investment into bank and Stage capital instruction. Choose one direction per month. These are one-month requests rechecked at settlement, so the final amount can be reduced. Parent injections occur at month end and cannot finance earlier bank spending in the same plan.",
+            "The dividend ceiling considers retained earnings, a 10% bank-capital safeguard, a 5% deposit-cash safeguard and restrictions such as emergency debt or recovery status. Parent support cannot exceed its existing available resources. The panel shows current limits; do not plan against an expected future dividend."
+          ]
+        },
+        {
+          "heading": "Read consolidated accounts",
+          "text": [
+            "Reconciled balance sheets show parent assets, liabilities, equity and the eliminated investment in the consolidated group. Internal dividends are not group operating revenue. Cash sent into the bank strengthens that entity only when the transfer settles; cash still held by the parent does not satisfy the bank's capital requirement.",
+            "The insurance agency is separately funded and appears in the group accounting once active. Parent support caps are permissions to use existing money, not guaranteed outside funding. A subsidiary failure can destroy its investment while leaving the parent's historical decisions visible.",
+            "Director's memorandum: send the investment committee a source of funds, not a forecast. The agency launch desk cannot spend a bank dividend that has not reached the parent."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/financial-group.js",
+        "game/src/engine/financial-group.js",
+        "game/src/engine/group-accounting.js"
+      ]
+    },
+    {
+      "title": "Operate the insurance agency",
+      "kicker": "SUBSIDIARY COMMAND",
+      "briefing": "You distribute third-party insurance; you do not underwrite claims.",
+      "sections": [
+        {
+          "heading": "Fund and launch",
+          "text": [
+            "Use Group > Insurance agency. First accumulate eligible parent cash through a settled bank dividend. Launch requires at least $120,000 of existing parent funding, including a $30,000 setup expense. Select Launch agency this month, capital, one to four agency employees, acquisition focus, outreach and optional support cap. Preview instruction, then Stage agency instruction.",
+            "Agency staff are separately paid subsidiary employees, not bank staff borrowed from Retail or Operations. Current base overhead is $1,500 monthly plus $4,500 per employee; recruitment is $7,000 per added employee and each outreach level adds $1,000 monthly. Use the live quote because setup, recruitment and recurring costs occur together at launch.",
+            "Staff, focus, outreach and support cap persist. Capital additions and distributions are one-month orders. Standing support defaults off and is capped at $100,000 monthly, subject to existing parent money. There is no automatic use of customer deposits as a bailout."
+          ],
+          "table": {
+            "headers": [
+              "Corporate cover",
+              "Commission / service load"
+            ],
+            "rows": [
+              [
+                "Commercial property",
+                "18% of funded premium / 1 unit"
+              ],
+              [
+                "Business liability",
+                "20% of funded premium / 1 unit"
+              ],
+              [
+                "Employee benefits",
+                "15% of funded premium / 2 units"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Service, renew, survive",
+          "text": [
+            "The six companies provide eighteen independent cover relationships. Each employee supplies eight service units. Covers normally return to contest on a twelve-month renewal; capacity failures or unpaid premiums can end them earlier. A company can move insurance without moving its banking mandate.",
+            "Read commission, invoiced expense, cash paid, wins/losses and the roster. Premiums passed to carriers are not agency revenue. Distributions require earned profit and cash above a three-month expense reserve. An exhausted agency can fail; relaunch pays fresh costs and does not erase its loss history."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/agency.js",
+        "game/src/engine/agency.js"
+      ]
+    },
+    {
+      "title": "The six operating companies",
+      "kicker": "CORPORATE CREDIT FILE",
+      "briefing": "A client can owe your bank money without your bank owning the company.",
+      "sections": [
+        {
+          "heading": "Read public statements",
+          "text": [
+            "Group > Companies displays the operating-company accounts associated with six commercial clients: Foundry Works, Cornerstone Stores, Civic Infrastructure, Harbor Logistics, Campus Services and Summit Advisors. Their sectors and service priorities matter when competing for mandates.",
+            "Inspect cash, debt, unpaid bills, equity, monthly profit and your unpaid company invoices. Sales respond to the economy and draw from a finite corporate customer/supplier pool. Operating costs, outside debt, service bills and insurance premiums draw on actual company funds. This is separate from the retail deposit economy.",
+            "Fees billed are not necessarily cash received. Your bank can carry an unpaid invoice as an asset; later collection reduces that receivable and increases cash without recording another fee. Historical claims remain with the original service provider even after a rival wins the next mandate. Insolvency can lead to liquidation and a write-off of unrecovered bank claims."
+          ]
+        },
+        {
+          "heading": "What this release does not offer",
+          "text": [
+            "There is no player share-trading screen, company stock auction or corporate takeover instruction in this release. Public company books are operational context, not an investable exchange. The experimental living-loan contracts and company-loan forecasting files are not part of the playable manifest.",
+            "Brokerage, a licensed wealth-management subsidiary, individual collateralized company-lending controls and insurance underwriting are also not installed. A Private Banking Household opportunity or a Financial Center label does not unlock those businesses. Wealth-office construction remains explicitly blocked.",
+            "Director's memorandum: keep three ledgers conceptually separate—who owns the company, who provides its banking service and who arranges its insurance. Only the latter two relationships are currently playable competitive mandates."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/financial-group.js",
+        "game/src/content/anchor-clients.js",
+        "game/src/manifest.json",
+        "game/src/engine/regional.js"
+      ]
+    },
+    {
+      "title": "Preserve the campaign",
+      "kicker": "ARCHIVES AND RECOVERY",
+      "briefing": "Protect the record before troubleshooting the connection.",
+      "sections": [
+        {
+          "heading": "Save and resume deliberately",
+          "text": [
+            "Use Export on the authoritative host to keep a portable JSON campaign record. The guest cannot export the host's authoritative game. Continue Saved Campaign resumes local stored state; Import Save validates a selected file before adoption. Keep dated exports around important milestones rather than assuming one browser's local storage is a permanent archive.",
+            "Supported existing campaigns preserve their feature generations; importing does not opt them into the newest group rules. A locally restored LAN or direct-link campaign can become Pass & Play under the local restore workflow. Repository recovery uses its own linked checkpoint/session controls. Do not assume every import reconstructs the original remote connection.",
+            "Never edit a save's version marker to unlock features. The books and lifecycle counters behind a feature must also agree, and malformed state is rejected. Keep access tokens outside save files and protect the repository credentials used by each player.",
+            "V3 retains complete history using lossless compression, but storage is not unlimited. The raw safety ceiling is 64 MiB and browser quotas can be lower. A very long campaign may pause briefly while it is encoded. If autosave or repository recovery warns that a write failed, keep the tab open and export a backup immediately; the preceding stored record is preserved, not silently replaced with a partial save."
+          ]
+        },
+        {
+          "heading": "A field checklist when the desk stops",
+          "text": [
+            "If Mark Ready is disabled, inspect the checklist and the reason beside it. Confirm an executive decision, allocate all staff, remove unaffordable optional commitments and repair shared facility/function conflicts. Pause a customer instruction where appropriate; do not erase unrelated orders blindly.",
+            "If a quote is stale, reopen or preview the current form. If the link is paused, recover communication before resubmitting. If a result surprises you, inspect Last completed month, the earnings bridge and company/agency reports before changing strategy. Preserve the save and record the month, mode, selected previews and exact message when reporting a bug.",
+            "Long campaigns are supported as ongoing rivalry, not proof that every institution survives forever. National Empire and the broader financial-product roadmap remain expansions. Your task is to produce a bank with an intelligible history—not to check every purchase box."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/local-game.js",
+        "game/src/persistence/saves.js",
+        "game/src/network/repository.js",
+        "game/src/ui/projects.js"
+      ]
+    },
+    {
+      "title": "Capability milestone register",
+      "kicker": "STRATEGY ANNEX",
+      "briefing": "Names identify milestones; the current UI explains their implemented effects.",
+      "sections": [
+        {
+          "heading": "Five parallel development programs",
+          "text": [
+            "Each capability has four cumulative funding milestones. The table lists them in order, not as separate construction projects. Stage research on the corresponding lane; completing a milestone does not automatically open every related product or service.",
+            "Current research is limited to $250,000 per capability per month, within the shared plan's cash and capital room. The plus/minus controls change funding in steps of up to $50,000. Stage to milestone stops at the remaining threshold; Stage monthly maximum may complete only part of it. Earlier paid research is preserved when you stop funding a lane."
+          ],
+          "table": {
+            "headers": [
+              "Capability",
+              "Milestones in order"
+            ],
+            "rows": [
+              [
+                "Branch Network",
+                "Local Market Playbook; Hub-and-Spoke Network; Deposit Franchise; National Charter."
+              ],
+              [
+                "Digital Platform",
+                "Mobile Onboarding; Automation Engine; Data-Led Growth; Digital Challenger."
+              ],
+              [
+                "Commercial Bank",
+                "Relationship Teams; Treasury Platform; Specialized Credit; Corporate Bank."
+              ],
+              [
+                "Operational Excellence",
+                "Process Redesign; Dual Delivery; Lean Operations; Resilient Enterprise."
+              ],
+              [
+                "Acquisition Strategy",
+                "Integration Office; Deal Pipeline; Consolidation Playbook; Serial Acquirer."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Interpret names in their actual campaign",
+          "text": [
+            "National Charter and Digital Challenger are research milestone names, not a National Empire map unlock. Mobile Onboarding research is not the optional pending-application system. Treasury Platform is not the same instruction as deploying and activating Corporate Treasury service delivery. These distinctions prevent spending on the right-sounding title while leaving the necessary application unfinished.",
+            "Read the lane's related-application panel and the destination desk's eligibility reason. The present game deliberately mixes capability improvements with explicit deployments and operating-model choices; it is not yet a universal research-to-maintenance framework for every business.",
+            "Director's memorandum: your board approved a capability, not a miracle. Send the implementation order, assign delivery capacity and verify activation next month."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/ui/projects.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js"
+      ]
+    },
+    {
+      "title": "BRANCH NETWORK dossier",
+      "kicker": "CAPABILITY FIELD REFERENCE",
+      "briefing": "Match physical reach to a book your bank can fund and serve.",
+      "sections": [
+        {
+          "heading": "Milestones and current Group6 descriptions",
+          "text": [
+            "Step cost is the additional funding between milestones; cumulative cost is total research paid from zero. The descriptions below reproduce the current Group6 Strategy panel. Operational qualifications beneath the table explain where broad milestone captions must not be mistaken for unlimited resources."
+          ],
+          "table": {
+            "headers": [
+              "Milestone",
+              "Step / cumulative",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "1. Local Market Playbook",
+                "$280,000 / $280,000",
+                "Branches cost 8% less and generate stronger local pull."
+              ],
+              [
+                "2. Hub-and-Spoke Network",
+                "$480,000 / $760,000",
+                "Branch projects require one fewer work unit; this does not stack with Regional Hubs. Staffing and execution capacity still determine completion time."
+              ],
+              [
+                "3. Deposit Franchise",
+                "$760,000 / $1,520,000",
+                "Every branch compounds deposit growth and reputation."
+              ],
+              [
+                "4. National Charter",
+                "$1,180,000 / $2,700,000",
+                "Maximum network tier strengthens deposit pull and lowers branch costs. Entering a regional market preserves its existing share; additional offices in an already-served market retain the capstone share bonus."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What the rules actually apply",
+          "text": [
+            "Network levels progressively strengthen branch-related deposit acquisition and local pull. Branch construction has an 8% discount per completed Network tier before other applicable discounts and local entry pricing. The milestone captions describe a scaling capability, not four independent gifts of customers. Group6 customer and deposit transfers remain bounded by owned outside books and funded capacity."
+          ]
+        },
+        {
+          "heading": "Choose one permanent operating model",
+          "text": [
+            "Retail Density changes the retail-product acquisition factors (a 6% multiplier to household/deposit factors plus its reputation component), not the number of installed employees. Regional Hubs is the one-work-unit construction shortcut; it is not the staffed Regional Operations Hub facility and does not transfer its throughput."
+          ],
+          "table": {
+            "headers": [
+              "Operating model",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "Retail Density",
+                "Full-service branches produce more households, deposits, and reputation."
+              ],
+              [
+                "Regional Hubs",
+                "Branch projects require one fewer work unit, the same non-stacking reduction as Network tier 2. This model does not increase regional deposit or loan capacity."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Related implementation orders",
+          "text": [
+            "Network tier 1 unlocks in-house Rewards Checking development ($180,000, three base work units, two execution capacity). Network plus Operations tier 1 unlocks Deploy Payroll Automation ($160,000, three base work units, two capacity). Research alone opens neither sales nor the payroll activation switch.",
+            "Research is a staged bank expense and has no refund through a model change. Local project quotes and the complete shared-plan validation remain authoritative; research does not bypass staff, funds, licensing or delivery prerequisites."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/engine/operations.js",
+        "game/src/engine/market-economy.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "DIGITAL PLATFORM dossier",
+      "kicker": "CAPABILITY FIELD REFERENCE",
+      "briefing": "Choose an acquisition engine or lower base expense; do not confuse the two.",
+      "sections": [
+        {
+          "heading": "Milestones and current Group6 descriptions",
+          "text": [
+            "Step cost is the additional funding between milestones; cumulative cost is total research paid from zero. The descriptions below reproduce the current Group6 Strategy panel. Operational qualifications beneath the table explain where broad milestone captions must not be mistaken for unlimited resources."
+          ],
+          "table": {
+            "headers": [
+              "Milestone",
+              "Step / cumulative",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "1. Mobile Onboarding",
+                "$320,000 / $320,000",
+                "Accelerate digital adoption and household acquisition."
+              ],
+              [
+                "2. Automation Engine",
+                "$540,000 / $860,000",
+                "Builds digital adoption, service production and deposit acquisition. Operating-expense savings require the separate Back-Office Automation model; this tier alone does not reduce expense."
+              ],
+              [
+                "3. Data-Led Growth",
+                "$820,000 / $1,680,000",
+                "Improve opportunity conversion and digital deposit growth."
+              ],
+              [
+                "4. Digital Challenger",
+                "$1,260,000 / $2,940,000",
+                "Capstone: a high-scale national digital deposit franchise."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What the rules actually apply",
+          "text": [
+            "Digital tiers feed adoption, acquisition, local reach and parts of operational resilience. The Automation Engine milestone itself is not the separate Back-Office Automation operating model. Digital Challenger is a high-level capstone caption: it does not add National Empire geography, a new customer pool or a guarantee of deposits. Existing production and finite-market limits still apply."
+          ]
+        },
+        {
+          "heading": "Choose one permanent operating model",
+          "text": [
+            "Customer Experience multiplies organic deposit acquisition by 1.07. Back-Office Automation multiplies base staff-and-facility expense by 0.92. Those are different factors acting on different bases; neither supplies employees, eliminates every subsidiary invoice or makes a deployment complete immediately."
+          ],
+          "table": {
+            "headers": [
+              "Operating model",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "Customer Experience",
+                "Raises the organic deposit-acquisition multiplier by 7%, subject to supply and capacity limits. It does not directly add a household-acquisition bonus."
+              ],
+              [
+                "Back-Office Automation",
+                "Reduces base staff and facility operating expense by 8%. It does not directly change project cost or execution speed."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Related implementation orders",
+          "text": [
+            "Digital tier 1 unlocks in-house High-Yield Savings ($220,000, three base work units, two execution capacity). Digital plus Commercial tier 1 unlocks Build Corporate Treasury ($220,000, three base work units, two capacity). After deployment, set retail sales targets or activate/staff treasury separately. A licensed savings route or partnered treasury route has its own eligibility and running cost.",
+            "Research is a staged bank expense and has no refund through a model change. Local project quotes and the complete shared-plan validation remain authoritative; research does not bypass staff, funds, licensing or delivery prerequisites."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/engine/operations.js",
+        "game/src/engine/market-economy.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "COMMERCIAL BANK dossier",
+      "kicker": "CAPABILITY FIELD REFERENCE",
+      "briefing": "Growing commercial volume is not the same as controlling credit risk.",
+      "sections": [
+        {
+          "heading": "Milestones and current Group6 descriptions",
+          "text": [
+            "Step cost is the additional funding between milestones; cumulative cost is total research paid from zero. The descriptions below reproduce the current Group6 Strategy panel. Operational qualifications beneath the table explain where broad milestone captions must not be mistaken for unlimited resources."
+          ],
+          "table": {
+            "headers": [
+              "Milestone",
+              "Step / cumulative",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "1. Relationship Teams",
+                "$360,000 / $360,000",
+                "Grow business and merchant relationships faster."
+              ],
+              [
+                "2. Treasury Platform",
+                "$620,000 / $980,000",
+                "Increase fee income from operating companies."
+              ],
+              [
+                "3. Specialized Credit",
+                "$1,010,000 / $1,990,000",
+                "Expands loan production and business/merchant growth. This commercial tier does not reduce underwriting risk."
+              ],
+              [
+                "4. Corporate Bank",
+                "$1,560,000 / $3,550,000",
+                "Capstone: convert commercial scale into major earnings power."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What the rules actually apply",
+          "text": [
+            "Commercial levels strengthen business and merchant production, loan production and commercial income factors. In Group6 those flows remain subject to actual function delivery and finite customer resources. The Corporate Bank capstone does not create a new incorporated banking subsidiary or a separate loan family. Specialized Credit at tier 3 is not a reduction in underwriting risk."
+          ]
+        },
+        {
+          "heading": "Choose one permanent operating model",
+          "text": [
+            "Treasury & Payments applies a 1.14 multiplier to the applicable commercial-income calculation, not to the fixed fees on all signed corporate contracts. Specialized Credit applies a 1.12 production multiplier to new lending and a 1.08 factor to new-loan risk. Funding and capacity can bind before the production benefit is realized; old cohort terms are not rewritten."
+          ],
+          "table": {
+            "headers": [
+              "Operating model",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "Treasury & Payments",
+                "Merchant services and operating-account fee income compound faster."
+              ],
+              [
+                "Specialized Credit",
+                "Loan production accelerates with a measured increase in underwriting risk."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Related implementation orders",
+          "text": [
+            "Commercial tier 1 permits Partner for Corporate Treasury ($60,000 setup, one base work unit, one capacity; $18,000 per month when active). Add Digital tier 1 for the in-house build ($220,000, three base work units, two capacity; $6,000 monthly when active). Winning and servicing renewable mandates remains separate from deploying either platform.",
+            "Research is a staged bank expense and has no refund through a model change. Local project quotes and the complete shared-plan validation remain authoritative; research does not bypass staff, funds, licensing or delivery prerequisites."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/engine/operations.js",
+        "game/src/engine/market-economy.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "OPERATIONAL EXCELLENCE dossier",
+      "kicker": "CAPABILITY FIELD REFERENCE",
+      "briefing": "Execution, expenses and credit control have different limits and different consumers.",
+      "sections": [
+        {
+          "heading": "Milestones and current Group6 descriptions",
+          "text": [
+            "Step cost is the additional funding between milestones; cumulative cost is total research paid from zero. The descriptions below reproduce the current Group6 Strategy panel. Operational qualifications beneath the table explain where broad milestone captions must not be mistaken for unlimited resources."
+          ],
+          "table": {
+            "headers": [
+              "Milestone",
+              "Step / cumulative",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "1. Process Redesign",
+                "$290,000 / $290,000",
+                "Qualifying projects with at least three work units require one fewer unit. Staffing and execution capacity still determine completion time."
+              ],
+              [
+                "2. Dual Delivery",
+                "$560,000 / $850,000",
+                "Executive capacity gains 1.5 points per effective Operations level, using the higher of research tier and legacy Operations infrastructure, not their sum."
+              ],
+              [
+                "3. Lean Operations",
+                "$860,000 / $1,710,000",
+                "Reduce project costs and recurring operating expense."
+              ],
+              [
+                "4. Resilient Enterprise",
+                "$1,280,000 / $2,990,000",
+                "Capstone: exceptional risk control and disruption resilience."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What the rules actually apply",
+          "text": [
+            "Operations uses the higher of its research tier and legacy Operations infrastructure for executive capacity. Each effective level contributes 1.5 capacity; the tier-2 title does not mean this begins only at level 2. Each research tier also enters the ordinary base-expense factor and control calculations. At effective level 3, qualifying project cost receives a 15% discount, non-stacking with Lean Delivery."
+          ]
+        },
+        {
+          "heading": "Choose one permanent operating model",
+          "text": [
+            "Lean Delivery reduces base staff/facility expense by 10% and adds the same non-stacking 15% project discount. Risk & Resilience multiplies the risk assigned to new cohorts by 0.82. It does not retroactively cure arrears or provide every defensive bonus suggested by its broad name. Operations capability can separately affect disruption checks; that is not a new effect of the specialization."
+          ],
+          "table": {
+            "headers": [
+              "Operating model",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "Lean Delivery",
+                "Reduces base staff and facility operating expense by 10% and project costs by 15%. The project discount does not stack with Operations level 3; this model does not add execution capacity."
+              ],
+              [
+                "Risk & Resilience",
+                "Reduces the risk assigned to new loans; existing loan cohorts retain their risk. It does not directly improve deposit defense, talent retention or event resilience."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Related implementation orders",
+          "text": [
+            "Operations plus Network tier 1 permits Deploy Payroll Automation: $160,000, three base work units and two execution capacity before applicable work reductions. Activate for $4,000 monthly after delivery; payroll bids gain +2 and direct servicing falls $1,500 per payroll agreement. Staff still has to deliver the mandates.",
+            "Research is a staged bank expense and has no refund through a model change. Local project quotes and the complete shared-plan validation remain authoritative; research does not bypass staff, funds, licensing or delivery prerequisites."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/engine/operations.js",
+        "game/src/engine/market-economy.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "ACQUISITION STRATEGY dossier",
+      "kicker": "CAPABILITY FIELD REFERENCE",
+      "briefing": "Buy an existing franchise; do not budget against customers that do not exist.",
+      "sections": [
+        {
+          "heading": "Milestones and current Group6 descriptions",
+          "text": [
+            "Step cost is the additional funding between milestones; cumulative cost is total research paid from zero. The descriptions below reproduce the current Group6 Strategy panel. Operational qualifications beneath the table explain where broad milestone captions must not be mistaken for unlimited resources."
+          ],
+          "table": {
+            "headers": [
+              "Milestone",
+              "Step / cumulative",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "1. Integration Office",
+                "$240,000 / $240,000",
+                "Lower acquisition cost and integration risk."
+              ],
+              [
+                "2. Deal Pipeline",
+                "$410,000 / $650,000",
+                "Acquisition projects require one fewer work unit. Staffing and execution capacity still determine completion time."
+              ],
+              [
+                "3. Consolidation Playbook",
+                "$630,000 / $1,280,000",
+                "Acquisitions deliver more deposits, loans, and customers."
+              ],
+              [
+                "4. Serial Acquirer",
+                "$950,000 / $2,230,000",
+                "Capstone: acquisitions seize substantially more market share."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What the rules actually apply",
+          "text": [
+            "Each Acquisition tier lowers the base acquisition-project price by 10%. Deal Pipeline removes one work unit from acquisition projects. The deal's transferred balances and customers are calculated from the seller's actual target-market book; higher tiers do not create new financial resources. Remaining capacity, ownership and settlement restrictions can limit the transaction."
+          ]
+        },
+        {
+          "heading": "Choose one permanent operating model",
+          "text": [
+            "Dealmaker supplies another 10 percentage points of acquisition cost reduction and a two-point market-share push on completion. Integration Discipline lowers post-deal attention by three and selects a commercial office when a deal adds a location. Neither is a company-share takeover system. Acquired cohort terms and deposit obligations remain attached to their transferred books."
+          ],
+          "table": {
+            "headers": [
+              "Operating model",
+              "Current panel description"
+            ],
+            "rows": [
+              [
+                "Dealmaker",
+                "Acquisitions cost less and close with stronger market-share impact."
+              ],
+              [
+                "Integration Discipline",
+                "Reduces attention by 3 after an acquisition and uses a commercial facility when the deal adds an office. It does not increase the quantity of transferred customers or assets."
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Related implementation orders",
+          "text": [
+            "No separate retail or commercial-service deployment lists Acquisition as a prerequisite in the current applications registry. Its direct operating application is Competitor Book Acquisition: a $1.10 million base initiative, four base work units and three execution capacity before applicable reductions. Review the focus market and seller resources; a displayed capstone cannot overcome an empty target book.",
+            "Research is a staged bank expense and has no refund through a model change. Local project quotes and the complete shared-plan validation remain authoritative; research does not bypass staff, funds, licensing or delivery prerequisites."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/ui/projects.js",
+        "game/src/content/catalog.js",
+        "game/src/engine/institution.js",
+        "game/src/engine/operations.js",
+        "game/src/engine/market-economy.js",
+        "game/src/engine/collections.js",
+        "game/src/engine/services.js",
+        "game/src/engine/deployment.js",
+        "game/src/engine/projects.js"
+      ]
+    },
+    {
+      "title": "Facility procurement and staffing register",
+      "kicker": "GROUP5–6 TECHNICAL ANNEX",
+      "briefing": "Base reference values are not a quote for an unstaffed office in a particular district.",
+      "sections": [
+        {
+          "heading": "Construction and recurring upkeep",
+          "text": [
+            "Construction values below come from playable project definitions, not the unmodified lifecycle descriptor. In particular, the current retail, commercial and digital construction bases are $560,000, $560,000 and $470,000. Local entry multipliers, Network discounts and applicable Operations discounts change the actual price. Use the staged project or conversion quote.",
+            "Ordinary upkeep below excludes local rent, automation/service-upgrade changes, maintenance and bank-wide efficiency. Base work units are reduced by eligible research and are delivered using actual execution resources; they are not guaranteed calendar months."
+          ],
+          "table": {
+            "headers": [
+              "Model",
+              "Base construction / work / execution",
+              "Base monthly upkeep"
+            ],
+            "rows": [
+              [
+                "Retail / full-service",
+                "$560,000 / 3 / 1.5",
+                "$22,000"
+              ],
+              [
+                "Commercial banking office",
+                "$560,000 / 3 / 1.5",
+                "$22,000"
+              ],
+              [
+                "Digital advisory studio",
+                "$470,000 / 2 / 1.25",
+                "$12,000"
+              ],
+              [
+                "ATM / micro",
+                "$150,000 / 1 / 0.5",
+                "$4,500"
+              ],
+              [
+                "Integrated financial center",
+                "$1,400,000 / 4 / 2",
+                "$48,000"
+              ],
+              [
+                "Regional operations hub",
+                "$1,850,000 / 5 / 2.5",
+                "$62,000"
+              ],
+              [
+                "Wealth advisory office — BLOCKED",
+                "Catalog $800,000 / 3 / 1.5; not purchasable",
+                "Catalog $25,000; no licensed business"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Physical staffing reference",
+          "text": [
+            "Columns use quarter-FTE: four quarters equal one employee's monthly physical time. The order is Retail / Business / Lending / Operations / Wealth. These are model staffing requirements, not employees supplied by construction. The current wealth pool is zero; the wealth office is blocked, and a financial center cannot generate advisory work. Bank-related capacity still follows its applicable staffed roles.",
+            "Teaching, retained service/collections/customer work and Group6 additional function quotas consume the same physical pools before site allocation. A proportional shortage reduces output; assigning zero required Operations time can stop it. Specialist expertise or paid external vendor work is not another assignable office employee."
+          ],
+          "table": {
+            "headers": [
+              "Model",
+              "Required quarters R / B / L / O / W"
+            ],
+            "rows": [
+              [
+                "Retail",
+                "8 / 0 / 2 / 2 / 0"
+              ],
+              [
+                "Commercial",
+                "0 / 8 / 6 / 2 / 0"
+              ],
+              [
+                "Digital",
+                "4 / 2 / 0 / 4 / 0"
+              ],
+              [
+                "ATM / micro",
+                "1 / 0 / 0 / 1 / 0"
+              ],
+              [
+                "Financial center",
+                "8 / 8 / 8 / 4 / 4"
+              ],
+              [
+                "Regional hub",
+                "8 / 4 / 4 / 12 / 0"
+              ],
+              [
+                "Wealth — BLOCKED",
+                "2 / 0 / 0 / 2 / 8; no qualified wealth pool"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Local production reference",
+          "text": [
+            "Amounts are base monthly deposit/loan capacity before district profile, service upgrades, staffing, condition, ramp and disruption. They are throughput ceilings, not account balances granted on opening. Original retail/commercial/digital local service factors use the production adapter: 0.85 / 0.55 / 0.77, each plus 0.05 per Network tier. Do not substitute the lifecycle descriptor's generic service values for these live adapter values.",
+            "A regional hub transfers finite service units to authored same-region neighbors; its sent units leave its own service pool. Condition below the operational threshold can remove output, and renovation or conversion halves affected capacity while under way. The before/during/after quote is the final authority."
+          ],
+          "table": {
+            "headers": [
+              "Model",
+              "Base deposit / loan capacity",
+              "Base local service capacity"
+            ],
+            "rows": [
+              [
+                "Retail",
+                "$450,000 / $250,000",
+                "0.85 + 0.05 × Network tier"
+              ],
+              [
+                "Commercial",
+                "$230,000 / $430,000",
+                "0.55 + 0.05 × Network tier"
+              ],
+              [
+                "Digital",
+                "$320,000 / $150,000",
+                "0.77 + 0.05 × Network tier"
+              ],
+              [
+                "ATM / micro",
+                "$70,000 / $0",
+                "0.35"
+              ],
+              [
+                "Financial center",
+                "$700,000 / $600,000",
+                "3; advisory unavailable"
+              ],
+              [
+                "Regional hub",
+                "$200,000 / $300,000",
+                "5; up to 3 base units eligible for finite support"
+              ],
+              [
+                "Wealth — BLOCKED",
+                "No live licensed throughput",
+                "0"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "Maintenance and paid work",
+          "text": [
+            "Full maintenance costs 12% of the quoted ordinary office upkeep; Basic spends half that amount and Off spends none. Base wear is 0.20, 0.70 or 1.80 condition points monthly for Full, Basic or Off before applicable age/workload effects. Renovation costs 22% of the current replacement quote, requires two work units and reserves one execution unit. Conversion costs 35% of the destination construction quote and also requires two work units and one execution unit. Cancellation does not refund paid work."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/content/catalog.js",
+        "game/src/engine/regional.js",
+        "game/src/engine/facility-adapter.js",
+        "game/src/engine/facility-lifecycle.js",
+        "game/src/engine/facility-lifecycle-quotes.js",
+        "game/src/engine/facility-network.js"
+      ]
+    },
+    {
+      "title": "Department work and vendor register",
+      "kicker": "GROUP6 PURCHASE AUTHORITY",
+      "briefing": "External throughput has a finite supplier and a recurring cash price.",
+      "sections": [
+        {
+          "heading": "Compatible roles and unit prices",
+          "text": [
+            "One function work unit is one quarter of an ordinary banker's monthly task time, not a loan, customer or productive-specialist multiplier. Manual quotas are additional to existing retained reservations. Compatible physical roles are listed below; the user cannot relabel an Operations employee as unlimited specialist capacity.",
+            "Vendor prices are dollars per purchased quarter-work unit per month. Supply is bounded, with up to sixteen vendor units per function in the current provider contract. Actual spending must fit the shared vendor envelope, protected cash, mandatory obligations and other commitments. The displayed authoritative quote can refuse a theoretically available purchase."
+          ],
+          "table": {
+            "headers": [
+              "Function",
+              "Compatible bank roles",
+              "Vendor $ / unit / month"
+            ],
+            "rows": [
+              [
+                "Sales and relationships",
+                "Retail & Service; Business Banking",
+                "$3,000"
+              ],
+              [
+                "Onboarding and customer service",
+                "Retail & Service; Business Banking",
+                "$2,200"
+              ],
+              [
+                "Credit administration",
+                "Lending; Operations & Risk",
+                "$2,800"
+              ],
+              [
+                "Servicing and collections",
+                "Lending; Retail & Service",
+                "$2,600"
+              ],
+              [
+                "Technology operations",
+                "Operations & Risk",
+                "$3,500"
+              ],
+              [
+                "Risk and compliance",
+                "Operations & Risk; Lending",
+                "$3,200"
+              ],
+              [
+                "Treasury operations",
+                "Operations & Risk; Business Banking",
+                "$3,400"
+              ],
+              [
+                "People management",
+                "Operations & Risk",
+                "$2,400"
+              ]
+            ]
+          }
+        },
+        {
+          "heading": "What a purchase can and cannot do",
+          "text": [
+            "Purchased work may cover its allocated tasks when paid at settlement. It does not add headcount, supply new project-execution capacity or create bankers for office staffing. A function order also does not automatically activate a closed retail product, reopen onboarding, buy a treasury platform or submit a competitive bid.",
+            "The eight-function vendor units are distinct from conventional Commercial Service Desk outsourcing, which costs $6,000 per service point and has its own four-point limit. Both draw on constrained resources. Do not use one unit label interchangeably with the other or charge the same purchase twice.",
+            "Use the selected function's task breakdown and Last completed month to see where work went. Opportunity pursuits require unused already-funded throughput after ordinary commitments, not a second use of delivered customer or credit work. When changing quotas, preserve residual floors for offices and ordinary sales.",
+            "Director's memorandum: the invoice buys a defined job. If your order does not identify which workload it relieves, inspect the staffing table before authorizing it."
+          ]
+        }
+      ],
+      "sources": [
+        "game/src/engine/department-functions.js",
+        "game/src/engine/department-provider.js",
+        "game/src/engine/department-dispatch.js",
+        "game/src/engine/department-runtime.js",
+        "game/src/ui/department-functions.js",
+        "game/src/engine/services.js"
+      ]
+    }
+  ]
+}

@@ -41,13 +41,17 @@ institutionChecks.push('facility_lifecycle_legacy_compat.test.js','facility_life
 files.push(...institutionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html');
 const functionChecks=['department_functions.test.js','department_provider.test.js','department_function_context.test.js',
   'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',
-  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','department_planning_contract.test.js','department_runtime.test.js',
-  'department_group5_compat.test.js','department_functions_network.test.js'];
+  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','facility_staff_planning.test.js','doctrine_resume.test.js','department_planning_contract.test.js','department_runtime.test.js',
+  'department_group5_compat.test.js','department_functions_network.test.js',
+  'department_customer_capacity.test.js','department_customer_capacity_ui.test.js','department_staffing_network.test.js',
+  'department_captured_replay.test.js','department_storage_capacity.test.js','department_storage_recovery.test.js','department_long_storage.test.js'];
 institutionChecks.push(...functionChecks);
 files.push(...functionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html',
   'experiments/institution/department-functions-ui.js');
 files.push('tests/fixtures/department-matrix192-second.json.gz',
   'reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html','tools/package_department_fixture.js');
+files.push('tests/fixtures/department-captured-regressions.json.gz','tools/package_department_regressions.js');
+files.push('tests/fixtures/department-regulatory480.json.gz','tools/package_department_long_fixture.js');
 files.push('experiments/institution/department-ai-affordability.patch','experiments/institution/department-mandatory-obligations.patch','experiments/institution/patch-engine.cjs');
 files.push('experiments/institution/department-obligations-ui.patch','tests/facility_catalog.test.js','reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html');
 files.push('tests/facility_lifecycle_balance.test.js','tools/institution_qa_fixture.js');

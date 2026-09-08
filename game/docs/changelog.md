@@ -1,5 +1,27 @@
 # Changelog
 
+## V3 Regional Command snapshot — September 8, 2026
+
+- Staffed, separately funded commercial insurance agency with actual costs,
+  carrier-funded commissions, independent client covers and capped parent support.
+- Physical facility networks, conversions, maintenance, condition, renovation,
+  construction ramp and bounded nearby hub support.
+- Persistent compensated leadership and eight department functions sharing real
+  staff, paid vendor capacity, reserves and settlement obligations.
+- Retained-earnings bridge, workload/budget desks and clearer customer capacity.
+- Fixed captured month37/customer and month264/import regressions, productive
+  staff assignment and Group6 facility completion.
+- Hardened fresh peer staffing compatibility and lossless large save/checkpoint
+  recovery; corrected the outer compression version for DAG-packed GitHub games.
+- Preserved the actual 480-month stress campaign and fixed its raw-text autosave
+  ceiling without removing history or relaxing corruption/reference-bomb checks.
+- Preserved old campaign rules and V2 rollback packages. New Group campaigns use
+  rules6/save9.5 through the existing unchecked Financial Group preview.
+- Clean player ZIP, original 45-page retro manual, and comprehensive
+  [V3 debug/balance report](v3-release-report.md). Publication separately approved.
+- Broader loan/equity experiments are not playable; blueprint completion,
+  two-computer acceptance and enjoyable late-game balance are not claimed.
+
 ## V2 stabilization RC1 — local technical gates passed
 
 - Reinforced LAN authentication, JSON/timeouts, validation and ordered polling.

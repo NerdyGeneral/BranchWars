@@ -2,14 +2,17 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
-**V2 stabilization release candidate.** Real two-computer multiplayer acceptance
-is still pending; automated checks are not a zero-bug guarantee. Current evidence
-and remaining limits are in the [release status](game/docs/release-status.md).
+**V3 regional banking / Financial Group preview.** This is a playable snapshot,
+not the completed expansion blueprint. Real two-computer multiplayer acceptance
+is still pending; automated checks are not a zero-bug or balance guarantee.
 
-For a clean player-only copy, keep the six files in
-[releases/v2-stabilization-rc1](releases/v2-stabilization-rc1/README.txt) together.
-The original [V2 package](V2%20release/README.md) remains an unchanged rollback
-artifact, not the recommended build for these multiplayer fixes.
+Download [the V3 player ZIP](releases/branch-wars-v3.zip), extract it, and keep its
+six files together. No development tools are needed. Read the
+[45-page V3 field manual](releases/branch-wars-v3-manual.pdf) and
+[V3 changes, debug and balance report](game/docs/v3-release-report.md).
+The unpacked player copy is in [releases/v3](releases/v3/README.txt).
+The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and
+[original V2 package](V2%20release/README.md) remain unchanged rollback artifacts.
 
 Run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) to play, or [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) to host a local-network game.
 

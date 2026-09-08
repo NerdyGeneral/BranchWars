@@ -61,6 +61,7 @@
       "engine/facility-adapter.js",
       "engine/departments.js",
       "engine/facility-lifecycle.js",
+      "engine/facility-staff-planning.js",
       "engine/facility-lifecycle-quotes.js",
       "engine/facility-settlement.js",
       "engine/facility-lifecycle-adapter.js",
