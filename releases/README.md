@@ -18,7 +18,8 @@ expansion merely to make a release available. Each package below is separate.
 ## V3 — Regional Command / Financial Group preview
 
 - [Download ZIP](branch-wars-v3.zip), [unpacked player files](v3/README.txt),
-  [45-page field manual](branch-wars-v3-manual.pdf),
+  [download the complete 45-page field manual](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf),
+  [manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip),
   [eight-hour changes and debug/balance report](v3-release-report.md).
 - New Financial Group campaigns: rules 6 / save 9.5. Existing rules stay fixed.
 - Exact source: [immutable v3.0.0 tag](https://github.com/NerdyGeneral/BranchWars/tree/v3.0.0),
@@ -31,6 +32,16 @@ expansion merely to make a release available. Each package below is separate.
   underwriting remain deferred.
 
 ## Multiplayer and saves
+
+### Opening the manual
+
+The full PDF is 45 pages. The [GitHub preview](branch-wars-v3-manual.pdf) initially
+renders five and uses a **More Pages** button to load the rest. This is not a
+five-page upload. Use the full download link above to open the manual in your
+PDF reader, or extract the ZIP fallback if the embedded preview fails.
+Both downloads contain the same verified PDF, with no content removed or changed.
+
+### Keeping your campaign
 
 Both players should download the same edition. Export before switching folders,
 origins or versions; retain the old package and save. In multiplayer the host

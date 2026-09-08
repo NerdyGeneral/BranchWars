@@ -12,7 +12,11 @@ packages; extract a ZIP and use the launcher inside its own folder.
 |---|---|---|
 | Current main game (preserved) | Root launchers below / [game](game/BRANCH_WARS.html) | [Main player guide](game/docs/player-guide.md) |
 | V2 — Company Banking, stabilization RC1 | [Download V2 ZIP](releases/branch-wars-v2.zip) / [V2 files](releases/v2/README.txt) | [V2 player guide](releases/v2-player-guide.md) |
-| V3 — Regional Command / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [45-page V3 field manual](releases/branch-wars-v3-manual.pdf) |
+| V3 — Regional Command / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [Download full 45-page PDF](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf) / [Manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip) |
+
+The manual download contains all 45 pages. [GitHub's PDF preview](releases/branch-wars-v3-manual.pdf)
+initially shows five pages and requires **More Pages** to continue. If the preview
+is blank or incomplete, use the full download or extract the manual ZIP above.
 
 See the [version catalog and source links](releases/README.md) and
 [V3 changes, debug and balance review](releases/v3-release-report.md).
