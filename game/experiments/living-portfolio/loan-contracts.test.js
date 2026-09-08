@@ -119,6 +119,22 @@ test('malformed, duplicate, unsupported and overflow inputs reject without repai
   const s=fixture();assert.throws(()=>Loan.clearOriginations(s,[offer(s),offer(s)]));
   assert.throws(()=>Loan.terms('mortgage',{annualRateBps:1000,feeBps:0,termMonths:999,underwriting:'balanced'}));
 });
+test('one-dollar capital headroom respects each product risk weight without fee-funded capacity',()=>{
+  for(const product of Object.keys(Loan.catalog)){
+    const s=fixture(product,1000000),b=s.banks[0],weight=Loan.catalog[product].riskWeightBps;
+    b.capital=101;b.minimumCapitalRatioBps=1300;b.riskWeightedAssets=775;
+    const before=JSON.stringify(s),o=offer(s);o.terms.feeBps=500;
+    const result=Loan.clearOriginations(s,[o]),headroom=Number(BigInt(b.capital)*10000n/BigInt(b.minimumCapitalRatioBps))-b.riskWeightedAssets;
+    assert.equal(headroom,1);assert.equal(result.decisions[0].committed,Math.floor(10000/weight));audit(s,result);
+    assert.equal(JSON.stringify(s),before);
+    // Even a positive contractual fee is not equity until a funded advance.
+    // An opening bank already at its risk ceiling cannot bootstrap origination.
+    b.riskWeightedAssets=776;const blocked=Loan.clearOriginations(s,[o]);
+    assert.equal(blocked.contracts.length,0);assert.equal(blocked.postings.length,0);
+    assert.equal(blocked.banks[0].remainingCreditWork,b.creditWork);
+  }
+});
+
 test('bounded seeded combination sweep preserves flows and input-order equality',()=>{
   let seed=89123;const random=n=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed%n;};
   for(let i=0;i<600;i++){
