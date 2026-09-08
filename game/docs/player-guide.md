@@ -39,6 +39,35 @@ Executive Command v8.1 · Long-form / multiplayer edition
    operating forecasts and can stage an allocation or a next-cycle recruit.
    Existing goodwill campaigns gain this tool without changing save rules.
    See archive/service-workforce-status.md and roadmap.md for current scope.
+   Specialist workforce preview adds Retail advisers, Relationship bankers,
+   Credit analysts and Risk specialists in a separate Workforce workspace.
+   This option enables its prerequisites and creates a v8.5 campaign; both
+   computers must update. Existing saves are not silently upgraded.
+   Specialists are part of bank headcount. They add capacity only when assigned
+   to their own department; their premium salary is paid even when reassigned.
+   Generalists and specialists share a limit of six recruits per month.
+   Recruitment pays the combined size-adjusted signing cost plus specialist
+   premiums. New bankers begin work next month, at skill 20.
+   Give each department a recurring training ceiling and protect a bank-wide
+   cash reserve. Training costs $1K per skill point per existing specialist,
+   up to four points a month and skill 100. Skill applies the following month.
+   All training pauses together when cash/capital protection cannot fund the
+   combined bill; unused ceilings are not charged. Compare the forecast and
+   last month's actual costs before expanding a team.
+   Household ownership preview builds on those rules in save format 8.6.
+   Customers has exact household counts by segment and market, not influence
+   scores. Sales, raids and acquisitions move people from an existing owner.
+   Reserve 25/50/75/100% of Retail time for retention, then choose relative
+   segment priorities. More retention means less banker-led acquisition.
+   Everyday, Connected and Reserve households have different workloads;
+   office models, local service upgrades and Retail expertise help capacity.
+   Neglect first lowers goodwill. Below 45, households gradually leave for
+   outside institutions. Restoring service reduces departures while trust
+   rebuilds. Review actual departures and deposit outflows after each month.
+   Deposits are still pooled by market: departures withdraw a local-average
+   estimate capped to unlocked balances. Term funding cannot be broken early.
+   This is not individual household finance, cross-selling or delinquent loans.
+   Both friends must update; old campaigns are not silently converted.
 6. For play between offices, both players open OPEN_BRANCH_WARS.bat and select
    REPOSITORY LINK after completing the one-time GitHub setup below.
 
@@ -66,12 +95,13 @@ career milestones, and market-share movement all resolve simultaneously.
 
 ## COMMAND CENTER WORKSPACES
 
-The campaign is divided into six persistent workspaces instead of one continuous
-planning page:
+The campaign is divided into six persistent workspaces, plus Workforce in new
+specialist campaigns, instead of one continuous planning page:
 
   OVERVIEW      enterprise trend, balance sheet, character, and capital signals
   MARKETS       isometric city, district focus, opportunities, renewal contracts
   OPERATIONS    executive call, staffing, policies, products, operating initiatives
+  WORKFORCE     specialist recruiting, skill, training ceilings and premium payroll
   COMPETITION   concealed attacks, counters, focus, and committed spend
   STRATEGY      capability funding and operating specializations
   INTELLIGENCE  threat forecasts, prior-cycle resolution, scorecard, and wire

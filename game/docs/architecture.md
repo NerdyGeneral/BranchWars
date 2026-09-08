@@ -4,12 +4,12 @@ Updated: 2026-09-05. This is the current implementation plan; the user's separat
 
 ## Stabilization foundation
 
-- The active package is `game/`, with repository-root launchers. HTML/server filenames, simulation bytes and save rules are unchanged by this relocation.
+- The active package is `game/`, with repository-root launchers. HTML/server filenames and save rules are preserved. The relocation itself did not change simulation bytes; later refactors preserve behavior through fixed gates.
 - Twenty committed seeded campaign expectations cover four legacy scopes, both funding generations, regional pilots, services, management, customer needs and goodwill. Hashes cover the full state, chosen plans, public views and each turn, not just an end score.
 - Three preserved half-ready saves exercise the real importer and continued play. Existing reference-engine comparisons remain active.
 - A conservative textual override ceiling detects increases in assignments to declared engine function names and their exported engine API. Data-member writes are excluded. It is a smoke check, not a full JavaScript parser or proof that every form of indirection is forbidden.
 - One non-interactive developer command runs fast or full validation. Windows full checks retain the LAN suite. GitHub PR checks use pinned actions, read-only contents access and no relay credentials, following [GitHub's secure-use guidance](https://docs.github.com/en/actions/reference/security/secure-use).
-- The foundation recorded existing runtime debt rather than fixing it. Subsequent batches removed the creation and project-validation stacks; operations, project completion and AI still have multiple layers. The committed ceiling is the machine-checked count; it also includes explicit API assignments, not just wrappers.
+- The foundation recorded existing runtime debt rather than fixing it. Subsequent batches removed the creation, project-validation, monthly-resolution, project-completion and AI/validation stacks. Other feature/instrumentation adapters remain. The committed ceiling is the machine-checked count; it also includes explicit API assignments, not just wrappers.
 
 ## Shared project rules: implemented
 
@@ -38,12 +38,61 @@ The targeted rule suite compares 1,296 cases against the preserved pre-refactor 
 
 Moving player repair into the engine exposed a textual guard false positive: `player.stats = ...` is not an override of the accounting `stats` function. The guard now excludes data-member assignments while retaining exported engine API replacements; sensitivity tests cover both. Corresponding false-positive ceilings were lowered, not counted as additional removed wrappers.
 
-## Next: staged engine cleanup
+## Monthly resolution and project completion: implemented
 
-1. Extend the shared-rule pattern to remaining policy and plan normalization boundaries. Keep project execution's explicit, uncharged cancellation notices and verify each change against preserved behavior.
-2. Flatten one override family per behavior-preserving commit. Project rules and creation/migration are now explicit; next trace monthly operations and project completion, then the remaining AI stack. Preserve accounting/ledger timing and lower the committed override ceiling when a layer is removed.
-3. Extract pure simulation/content modules only after the behavioral baseline remains stable. Separate UI, transport and save adapters at explicit boundaries.
-4. Generate a portable single-file release from source only when a reproducible build and freshness check are in place. Do not create empty `src/` or `dist/` folders or duplicate editable sources in anticipation.
+`operate` now explicitly sequences term maturities, promotion repricing, scheduled principal, production/accounting, local settlement and reports. Customer intake and world contexts have explicit cleanup; only the legacy demand calculation consumes world randomness. `resolveCycle` owns ledger context and symmetric frozen market quotas, executes the monthly steps, retains account snapshots and cleans up. No captured chain of previous implementations remains for these entry points.
+
+`finishProject` dispatches service/product deployment directly, then owns deposit/credit cohort transfers, market context and accounting settlement. Regional office work and re-entry rules are explicit settlement steps; facility effects remain separate from financial settlement. These are not new game rules: sequencing, cancellation messages, rounding and retained journals are preserved.
+
+The three ceilings are zero. This removes ten operating wrappers, nine completion wrappers and three resolution wrappers; the separate operation API assignment was also folded into the original export object. The new runtime comparison suite exercises 192 operations, 864 completions and 64 fault/recovery pairs against the frozen implementation. Fixed campaigns and save continuations pass unchanged. The complete four-step batch passes 47/47 local Windows regression invocations; paired campaign audits show no outcome drift in 2,880 sampled turns. Exact reports and acceptance limits are in [release status](release-status.md).
+
+## AI and policy validation: implemented
+
+`chooseOpenBot` prepares one intent through named reserve, regional, funding, product, contract, service, management and customer stages. It no longer captures previous planners. Market scope and the separate AI random stream retain their original boundaries. This does not revise the AI's strategy or promise that every stressed draft is optimal.
+
+`validatePilot` explicitly runs fifteen domain save validators in order; an absent optional feature returns from its own check, not from the whole validation sequence. `validatePortfolioPlan` runs product normalization, deployment, service and management rules in their original order. UI/network submission and AI still use the same engine entry points. All three override ceilings are zero, removing 31 more replacement layers. The runtime suite additionally compares 64 AI preparations, 160 policy normalizations and 416 damaged-save validations against the frozen implementation.
+
+## Modular source and portable build: implemented
+
+The editable source is `src/`; `BRANCH_WARS.html` is generated. `src/manifest.json` explicitly lists the ordered inputs. `node game/tools/build_game.js` assembles the existing game without third-party build packages, runtime imports, CDNs or external assets. The original game filename, two inline script scopes and launcher/server routes are retained. Players can still copy only the HTML file and play locally.
+
+| Source area | Responsibility |
+|---|---|
+| `src/content/` | Base catalogs, regional geography, anchor clients and customer-market definitions |
+| `src/engine/` | Simulation domains, accounts/books, creation/import, shared rules and explicit coordinators |
+| `src/ui/` and `src/styles/` | Lobby, drafts, renderers, event wiring and the existing CSS cascade |
+| `src/network/` | Repository relay, LAN, peer codes, Direct P2P and protocol/seat handling |
+| `src/persistence/` | Local save/import/export adapters; relay checkpoint logic remains beside its transport |
+| `src/page.html` | Page markup with build slots, not a second executable implementation |
+
+There are 80 listed inputs including shells, manifest and markup (four were added for specialists, then three for household engine rules, UI and styles). These are **ordered build-time source modules sharing private lexical scopes**, not isolated ES modules. `BWEngine` is the engine/browser boundary. The engine runs headlessly without DOM, storage, timers or transports; the client still shares session/draft state and some transport functions call presentation helpers. File separation does not erase that coupling or the preserved CSS override cascade.
+
+The extraction was checked byte-for-byte after line-ending normalization: engine, client, styles and markup were unchanged except a generated-file comment. The new coordinators were then formatted for readability. Fixed behavior and save tests remain authoritative; no golden/reference engines were regenerated.
+
+Both fast/full gates check source freshness before testing. The builder rejects missing, duplicate, unwired, escaping or syntactically invalid inputs; check mode never overwrites the artifact. Build tests cover repeated assembly, all-input CRLF parity, output/source drift, malformed slots, external code/style dependencies and DOM-free execution. Full-run fingerprints now include every source input and the builder.
+
+## Remaining architecture debt
+
+The specialist gameplay slice uses explicit creation, monthly, AI and validation
+calls in the existing coordinators, not new runtime replacements. Role content,
+workforce rules, presentation and styles have separate source files.
+Premium payroll is settled once, and elective training affordability is rechecked
+after bank production before expense posting. Sealed plans, migrations and
+owner-only views carry the versioned workforce state; all three lobby transports
+require workforce support from the peer before a v8.5 game starts.
+
+The household ownership slice follows the same explicit coordinator pattern.
+Customer movement calls the segment-book transfer functions directly; monthly
+retention settles before maturities and production, with the same settlement
+routine used on private preview clones. Household counts are conserved across
+both banks and outside institutions; no monthly reconciliation recreates them.
+The v8.6 owner book and sealed service mandate have dedicated validators and
+private-view filtering. All three lobby transports require household support.
+Deposits remain market-level pools, not segment-owned accounts. This adds no new
+runtime replacement assignments and does not solve the shared transaction-context
+debt described below.
+
+The approved four-step batch is implemented, not the end of all architecture work. Remaining priorities are explicit transaction context (replacing the shared market/credit/deposit context variables), flattening other feature and ledger adapters, typed plan/state contracts, a cleaner client session/transport interface, and renderer/CSS consolidation during the separate UI batch. The current guard permits 76 remaining textual assignments across other functions; this is a conservative debt count, not 76 independently verified defects. Do not turn this into a mutable plugin-registration system.
 
 Refactors must preserve fixed expectations; balance changes require separately reviewed expectation diffs and rule-version decisions. Passing AI campaigns does not establish human balance or game depth.
 
@@ -70,7 +119,7 @@ git switch -c recovery/direct-p2p archive/2026-09-05/claude/direct-p2p-turn-bug-
 
 The multiplayer-reliability unmatched commit is patch-equivalent to a commit in main; the other divergent histories were retained rather than assumed redundant. Tags can restore every retired branch.
 
-Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. Pending review, the current stack is `refactor/stabilization-foundation` → `refactor/shared-project-rules` → `refactor/campaign-lifecycle`. Review the foundation first, then retarget each dependent PR to main after its prerequisite merges. No PR is automatically merged. Do not reuse merged branch names for subsequent releases.
+Future work uses short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current main. Pending review, the stack is `refactor/stabilization-foundation` → `refactor/shared-project-rules` → `refactor/campaign-lifecycle` → `fix/multiplayer-lobby` → `refactor/explicit-runtime` → `feat/specialist-workforce` → `feat/household-retention`. Review the foundation first, then retarget each dependent PR to main after its prerequisite merges. No PR is automatically merged. Do not reuse merged branch names for subsequent releases.
 
 ## Local folders and compatibility
 

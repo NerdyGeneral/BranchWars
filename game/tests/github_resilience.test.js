@@ -12,7 +12,7 @@ function harness(side='host'){
   setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms});return id},clearTimeout:id=>timers.delete(id),clearInterval:()=>{},
   localStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null},
   sessionStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null,removeItem:k=>storage.delete(k)},
-  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',checked:false,listeners:{},addEventListener(event,listener){this.listeners[event]=listener},classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
+  document:{querySelector:s=>{if(!elements.has(s))elements.set(s,{value:'',textContent:'',checked:false,listeners:{},addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},classList:{add(){},remove(){},toggle(){},contains(){return false}}});return elements.get(s)},querySelectorAll:()=>[]},
  };
  vm.createContext(c);vm.runInContext(engine,c);c.window={BWEngine:c.BWEngine};
  vm.runInContext(client,c);
@@ -20,7 +20,9 @@ function harness(side='host'){
  return {c,storage,elements,timers,run:s=>vm.runInContext(s,c),state:()=>vm.runInContext('({gh,game,view,ghPendingPlan,ghIncomingCommit,lobby,lobbyPending,linkCls,linkText})',c)};
 }
 async function main(){
- const customerDemandVersion=process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
+ const customerOwnershipVersion=process.argv.includes('--households')?1:0;
+ const workforceVersion=customerOwnershipVersion||process.argv.includes('--workforce')?1:0;
+ const customerDemandVersion=workforceVersion||process.argv.includes('--customer-relationships')?2:process.argv.includes('--customer-needs')?1:0;
  const managementVersion=customerDemandVersion||process.argv.includes('--relationships')?2:process.argv.includes('--management')?1:0;
  const incompatible=harness();incompatible.run("game=null;p2pConfig.managementVersion=1;sent=[];send=m=>sent.push(m);setConnection=()=>{}");
  await incompatible.run("handleMessage({type:'hello',pilotSupported:11,name:'Older guest'})");
@@ -133,7 +135,7 @@ async function main(){
   await to.run('(async()=>{for(const e of packet.data.messages)if(e.seq>gh.seen){await handleMessage(e.msg);gh.seen=e.seq}gh.outbox=gh.outbox.filter(e=>e.msg.type==="state"||e.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
  const [ph,pg]=pair;
- ph.run("p2pConfig={serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
+ ph.run("p2pConfig={customerOwnershipVersion:"+customerOwnershipVersion+",workforceVersion:"+workforceVersion+",serviceExpansionVersion:"+ (managementVersion?1:0)+",campaignRulesVersion:1,customerDemandVersion:"+customerDemandVersion+",managementVersion:"+managementVersion+",name:'Host',color:'#2878e0',scope:'national',scenario:'balanced'};const seededCreate=E.createGame;E.createGame=o=>seededCreate({...o,seed:77})");
  pg.run("p2pConfig={lobbyRequired:true,guestName:'Guest',color:'#2878e0'}");
  await pg.run("handleMessage({type:'hello_request'})");await deliver(pg,ph);await deliver(ph,pg);
  assert.equal(ph.state().game,null,'real relay handshake pauses in the lobby');
@@ -152,6 +154,8 @@ async function main(){
   if(managementVersion===2)assert.deepEqual(copy(pg.state().view.relationshipRecords),copy(ph.state().game.relationshipRecords));
   if(customerDemandVersion){assert.equal(pg.state().view.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.customerDemandVersion,customerDemandVersion);assert.equal(pg.state().view.me.operatingReport.customerAcquisitionCost,ph.state().game.players[1].operatingReport.customerAcquisitionCost)}
   if(customerDemandVersion===2){assert.deepEqual(copy(pg.state().view.me.customerRelationships),copy(ph.state().game.players[1].customerRelationships));assert.equal(pg.state().view.rival.customerRelationships,undefined)}
+  if(customerOwnershipVersion){assert.equal(pg.state().view.customerOwnershipVersion,1);assert.deepEqual(copy(pg.state().view.me.householdBook),copy(ph.state().game.players[1].householdBook));assert.equal(pg.state().view.rival.householdBook,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].householdPolicy,undefined)}
+  if(workforceVersion){assert.equal(pg.state().view.workforceVersion,1);assert.deepEqual(copy(pg.state().view.me.workforce),copy(ph.state().game.players[1].workforce));assert.equal(pg.state().view.rival.workforce,undefined);assert.equal(pg.state().view.lastPlans[ph.state().game.players[0].id].workforcePolicy,undefined)}
   ph.run('E.validatePilot(game);E.validateLedger(game)');
  }
  assert.equal(rounds,12);assert(lost>0);

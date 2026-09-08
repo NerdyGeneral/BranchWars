@@ -1,0 +1,467 @@
+{
+  "passed": true,
+  "sourceSha256": "87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac",
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 0,
+  "customerDemandVersion": 0,
+  "seedStart": 0,
+  "seedCount": 4,
+  "turnLimit": 120,
+  "turns": 1920,
+  "maxViewBytes": 559901,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2111103,
+        2253187
+      ],
+      "deposits": [
+        40981716,
+        105880010
+      ],
+      "profit": [
+        220061,
+        397727
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1868304,
+        1693453
+      ],
+      "deposits": [
+        48362271,
+        77390496
+      ],
+      "profit": [
+        136175,
+        74022
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2179608,
+        2383354
+      ],
+      "deposits": [
+        104484195,
+        41100994
+      ],
+      "profit": [
+        230151,
+        388054
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1835025,
+        1983572
+      ],
+      "deposits": [
+        35946948,
+        95252985
+      ],
+      "profit": [
+        211243,
+        214192
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1542651,
+        1482763
+      ],
+      "deposits": [
+        62248029,
+        53439031
+      ],
+      "profit": [
+        102752,
+        115240
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2087911,
+        1534049
+      ],
+      "deposits": [
+        52853286,
+        72593686
+      ],
+      "profit": [
+        249901,
+        78486
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1965392,
+        1718528
+      ],
+      "deposits": [
+        52684534,
+        78876928
+      ],
+      "profit": [
+        242879,
+        139216
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1908352,
+        1551642
+      ],
+      "deposits": [
+        92509721,
+        58819683
+      ],
+      "profit": [
+        312853,
+        206169
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1990370,
+        1040508
+      ],
+      "deposits": [
+        54080646,
+        95644392
+      ],
+      "profit": [
+        374180,
+        34568
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1741879,
+        2735835
+      ],
+      "deposits": [
+        35913935,
+        101777299
+      ],
+      "profit": [
+        220368,
+        507677
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1871293,
+        1687159
+      ],
+      "deposits": [
+        54744385,
+        69478770
+      ],
+      "profit": [
+        347792,
+        196991
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1980048,
+        1957707
+      ],
+      "deposits": [
+        60612413,
+        49527467
+      ],
+      "profit": [
+        186118,
+        257101
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1541347,
+        3937445
+      ],
+      "deposits": [
+        75250676,
+        68480425
+      ],
+      "profit": [
+        60461,
+        387968
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3066266,
+        4023477
+      ],
+      "deposits": [
+        49404034,
+        107120972
+      ],
+      "profit": [
+        248967,
+        427228
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2746313,
+        1658593
+      ],
+      "deposits": [
+        60666232,
+        77396776
+      ],
+      "profit": [
+        255627,
+        275927
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2687967,
+        1652535
+      ],
+      "deposits": [
+        70994618,
+        64978263
+      ],
+      "profit": [
+        225448,
+        334623
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "providerChanges": 22,
+      "lateProviderChanges": 10,
+      "initiatives": 52,
+      "competitiveActions": 44
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "providerChanges": 14,
+      "lateProviderChanges": 3,
+      "initiatives": 27,
+      "competitiveActions": 21
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "providerChanges": 13,
+      "lateProviderChanges": 6,
+      "initiatives": 66,
+      "competitiveActions": 82
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "providerChanges": 17,
+      "lateProviderChanges": 6,
+      "initiatives": 47,
+      "competitiveActions": 68
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "providerChanges": 16,
+      "lateProviderChanges": 5,
+      "initiatives": 50,
+      "competitiveActions": 73
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "providerChanges": 22,
+      "lateProviderChanges": 9,
+      "initiatives": 37,
+      "competitiveActions": 65
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "providerChanges": 26,
+      "lateProviderChanges": 15,
+      "initiatives": 33,
+      "competitiveActions": 39
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "providerChanges": 16,
+      "lateProviderChanges": 3,
+      "initiatives": 57,
+      "competitiveActions": 87
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "providerChanges": 17,
+      "lateProviderChanges": 4,
+      "initiatives": 49,
+      "competitiveActions": 65
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "providerChanges": 14,
+      "lateProviderChanges": 6,
+      "initiatives": 66,
+      "competitiveActions": 90
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "providerChanges": 18,
+      "lateProviderChanges": 7,
+      "initiatives": 48,
+      "competitiveActions": 61
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "providerChanges": 19,
+      "lateProviderChanges": 8,
+      "initiatives": 54,
+      "competitiveActions": 64
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "providerChanges": 14,
+      "lateProviderChanges": 1,
+      "initiatives": 64,
+      "competitiveActions": 61
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "providerChanges": 15,
+      "lateProviderChanges": 7,
+      "initiatives": 79,
+      "competitiveActions": 89
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "providerChanges": 20,
+      "lateProviderChanges": 7,
+      "initiatives": 56,
+      "competitiveActions": 91
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "providerChanges": 14,
+      "lateProviderChanges": 6,
+      "initiatives": 41,
+      "competitiveActions": 51
+    }
+  ]
+}
