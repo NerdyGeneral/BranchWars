@@ -1,4 +1,6 @@
 function finishProject(g, p, project) {
+  const programme = project && finishProductProgram(p, project.key);
+  if(programme)return programme;
   const service = project && SERVICE_APPLICATIONS[project.key];
   if (service) {
     if (!p.serviceDesk) throw Error('Unversioned service application');

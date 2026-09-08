@@ -55,6 +55,34 @@ Markets unlock over time and the contest sharpens by act.
 
 ## 2. The monthly plan
 
+### Capital recovery comparisons (product-programme campaigns)
+
+Overview now offers a draft-only recovery comparison for v8.9/v8.10. Choose an
+executive response, then compare postponing discretionary spending, a lower-cost
+response supported by existing controls, and limited spare-Retail-to-Business
+reallocation. Each option lists its changes and estimated equity effect. Stage
+only edits the draft; Undo restores it until a later manual edit or turn lock.
+Existing work and signed obligations continue, and no rescue money is created.
+
+The estimate uses the current economy and owner books. It subtracts the known
+executive equity expense and non-operating commitments from the operating
+forecast. Advertising/training already appear in operating profit and are not
+subtracted twice. It does not predict uncertain executive effects, rival moves,
+opportunity awards, regulatory sales, future project benefits or board aid.
+Cash and deposits are not equity. Deposit-share leadership is not solvency.
+
+Product-programme AI runs this review after product/staff/collections planning
+and before the final cash/bid eligibility pass. It acts only below 10% current
+capital, below its forecast 10%-exposure plus $200K cushion, or when losses
+threaten that cushion. It requires over $1K estimated improvement and protects
+household/signed-service coverage. Staffing choices move at most two Retail
+bankers, preserve Lending/Operations and require 105% household coverage.
+Executive alternatives check existing resilience/control thresholds with
+conservative workload buffers; they are not guarantees against rival shocks.
+Healthy plans and pre-product-programme AI retain their previous path. This is
+an AI/advisory repair, not a new save-rule version or rubber-band subsidy.
+
+
 A plan is one object. Everything in it is optional except a focus market, a
 staff allocation covering every banker, and an answer to any executive call.
 
@@ -738,3 +766,115 @@ pools so it cannot reconstruct the rival's segment balances by subtraction.
 The causal ledger records compact segment principal, locked and pending totals.
 Individual household finance, cross-selling, full product development/retirement
 and subsidiary/group accounting remain future scope.
+
+## Retail product programmes — v8.9 opt-in
+
+Enable Product programmes preview when creating a campaign. It requires the
+segment-deposit preview and its prerequisites; existing campaigns retain their
+rules. Both peers must use a supporting build. Products has separate Development
+& retirement and Local sales targets views; business, credit and term-funding
+policies remain in Operations.
+
+Rewards Checking and High-Yield Savings now have two delivery routes. In-house
+development requires completed Branch Network or Digital Platform tier one,
+respectively, and uses the existing $180,000 / $220,000, three-base-month,
+two-capacity rollout. Licensing costs $90,000, takes one base month and one
+execution capacity, without internal research. Existing project modifiers,
+cash/capital limits and Operations capacity apply. Delivery creates no customers
+or deposits. New sales stay closed until explicitly targeted in a later plan.
+Only one rollout per product can be staged or active.
+
+A licensed platform costs $12,000 per month while available, even if every sales
+target is closed, plus 0.01% per month of its existing non-term deposit balances.
+These vendor costs are additional to ordinary product-platform/account servicing.
+They enter deposit servicing and bank profit exactly once and are allocated to
+the product's balance-bearing segments; an empty platform remains central.
+Converting a licensed platform in-house requires the ordinary research, capital
+and delivery time. Completion ends vendor charges from the following month,
+without repricing or replacing existing accounts.
+
+Each of the six pilot markets has independent Everyday, Connected and Reserve
+sales instructions. Each available offer receives relative emphasis 0–4; zero
+closes new sales, and every audience must retain at least one available offer.
+Local fit changes prospective response and incoming balances split by emphasis
+times segment suitability. Bank-wide acquisition modifiers are weighted by
+reachable outside market/segment supply, not the maximum emphasis anywhere.
+Targeting a tiny or unreachable audience cannot activate a bank-wide bonus.
+These are sales instructions, not advertising budgets or guaranteed demand.
+Existing balances retain their product and contractual guarantees. Customer
+retention priorities remain separate and compete for service capacity.
+
+Retiring an available product costs $25,000, shares the plan's cash/capital
+budget, closes its sales everywhere and ends availability fees. It does not
+refund development, convert checking accounts, or cancel promotional/term
+promises. Existing licensed balances continue paying vendor balance charges.
+When locally closed promotional savings reaches guarantee expiry, it moves to
+the highest-emphasis available local offer. Ordinary term maturity uses the same
+local fallback after pending customer exits and optional renewal. Retirement
+cannot overlap a rollout. Reopening requires another paid rollout. Canceling a
+staged retirement keeps its sales targets closed; reopen them explicitly.
+
+The Products quotes hold today's book fixed and exclude shared payroll, loan
+income, new intake and one-time spending. Operations supplies the broader
+forecast; events, competitors, maturity and funding can change actual results.
+Policy changes and retirement expense are recorded in the owner-only causal
+ledger. Saved/sealed plans, rematches and all three multiplayer transports carry
+the new rules; detailed targeting and delivery state remain private.
+
+The AI compares local-fit targets against the current plan using forecast
+profit, funding loss and a small value for deposit intake. A growth mandate can
+accept lower current earnings when forecast profit remains positive and at least
+half the current-policy forecast, cash is at least $500,000, funding is not
+stressed, and extra intake exceeds $5,000 and 5%. This is an explicit growth
+budget, not a multi-month earnings forecast. It can license before
+research, convert in-house, and retire an uneconomic licensed platform while
+losing money. Rollouts preserve an extra $250,000 planning headroom. This is a
+heuristic, not proven optimal play. A final v8.9+ cash-planning safeguard now reserves the announced executive-call expense, $250,000 cash and a 10% exposure/capital cushion plus $200,000 and two forecast operating losses. It trims unfunded research, training, advertising, hires and initiatives after all planners have run; it does not inspect hidden rival plans or count expected windfalls.
+Authored new product families, configurable terms, per-customer cross-selling,
+the wider advertising funnel and subsidiary/group accounting remain future scope.
+## Local advertising and attribution — v8.10 opt-in
+
+Enable Advertising attribution preview for a new campaign; setup enables Product
+programmes and its prerequisites. Existing v8.9 and older games keep their rules.
+Both peers must update. In Products, Advertising & attribution stages one standing
+market/audience/offer campaign per bank. Budgets are $0, $15,000, $40,000 or $80,000
+per month. Pausing costs nothing; closing the advertised offer automatically
+pauses that campaign. Known but closed products cannot receive a targeting bonus.
+
+Awareness is separate for all six markets, three segments and three offers.
+Each month 75% survives; new spending reaches up to the finite outside audience
+at fictional contact costs of $15 Everyday, $12 Connected or $30 Reserve.
+Repeat reach has diminishing returns as awareness saturates. Awareness raises
+acquisition weights according to local offer fit and Retail sales time, capped
+at a 50% weight bonus. A bonus is not a conversion probability. Zero sales time
+means no bonus; retention and sales still compete for Retail staffing.
+
+Advertising redistributes ordinary acquisition inside the existing market and
+bank-wide monthly quotas. It never adds customers or deposit money, expands
+frozen quotas, or attributes rival raids, book acquisitions, term renewals or
+commercial mandates. The observed segment and product deposits are measured
+during actual intake. Household counts are observed by segment; their product
+split is modelled because the game does not yet link individual accounts.
+
+The assisted share is observed intake times bonus / (1 + bonus), rounded down.
+It is an attribution model, not a causal comparison, incremental lift, profit,
+return on advertising or a guarantee of growth. Recent awareness can keep
+assisting intake after paid spending stops. The current report exposes expense,
+reach, awareness, observed intake and the assisted portion separately.
+
+Advertising reserves its requested budget with other commitments. Actual expense
+is charged once through operating profit and the reconciled accounts; it can
+pause when cash/capital and the training reserve cannot support the campaign.
+Training also reserves campaign expense. The planner quote precedes executive
+events, competition and operating cash changes; actuals can differ. Advertising
+does not buy retention or excuse poor servicing; use Customers to manage that.
+
+The AI only funds modest periodic campaigns with spare sales capacity, positive
+profit and cash headroom. It can release retention time only when the remaining
+service capacity covers demand. This is a bounded policy, not an optimal marketer.
+Detailed awareness, plans and attribution remain owner-private across saved,
+sealed and linked games. No new runtime wrapper or external service is required.
+
+This is an attribution-first slice. Named channels, delayed application queues,
+creative testing, cross-selling, tracked lifetime value and richer product designs
+remain future work; it does not complete N-08.

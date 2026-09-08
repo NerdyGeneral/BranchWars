@@ -34,6 +34,7 @@ function initializeHouseholds(g, o) {
 }
 function householdSalesStaff(p, staff) { return p.householdBook ? staff * (1 - p.householdBook.policy.retention / 100) : staff; }
 function householdAcquisitionWeights(p, key) {
+  if(p.productPrograms)return advertisingHouseholdWeights(p,key,Object.fromEntries(Object.entries(CUSTOMER_SEGMENTS).map(([s,d])=>{const mix=productTargetMix(p,key,s),total=Object.values(mix).reduce((a,n)=>a+n,0);return [s,Object.entries(mix).reduce((n,[k,w])=>n+w*d.fit[k],0)/total]})));
   const mix = p.retailLifecycle.mix, total = Object.values(mix).reduce((n, v) => n + v, 0);
   return Object.fromEntries(Object.entries(CUSTOMER_SEGMENTS).map(([s, def]) =>
     [s, Object.entries(mix).reduce((n, [product, emphasis]) => n + emphasis * def.fit[product], 0) / total]));
@@ -57,9 +58,11 @@ function moveHouseholdCounts(from, to, amount, preference = null) {
 function moveOutsideHouseholds(p, key, outside, positive, limited) {
   if (!p.householdBook) return;
   const pools = marketContext.marketEconomy.markets[key].households, own = p.householdBook.markets[key];
+  const before=p.advertising&&positive&&limited?{...own}:null;
   for (const institution of ['community', 'union']) moveHouseholdCounts(
     positive ? pools[institution] : own, positive ? own : pools[institution], outside[institution],
     positive && limited ? householdAcquisitionWeights(p, key) : null);
+  if(before)captureAdvertisingHouseholds(p,key,Object.fromEntries(Object.keys(own).map(s=>[s,own[s]-before[s]])));
 }
 function transferHouseholds(from, to, key, amount) {
   if (from.householdBook) moveHouseholdCounts(from.householdBook.markets[key], to.householdBook.markets[key], amount);
@@ -148,7 +151,7 @@ function validateHouseholdSave(g) {
         Object.values(g.marketEconomy?.markets || {}).some(m => m.households !== undefined)) throw Error('Unversioned household ownership');
     return g;
   }
-  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
+  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.advertisingVersion === 1 ? '8.10' : g.productProgramsVersion === 1 ? '8.9' : g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
   const keys = Object.keys(g.territories).sort().join(), uint = n => Number.isSafeInteger(n) && n >= 0;
   const counts = row => row && Object.keys(row).sort().join() === 'connected,everyday,reserve' && Object.values(row).every(uint);
   for (const p of g.players) {

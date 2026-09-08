@@ -31,6 +31,7 @@ function validation(engine, g, p, intent) {
 const profiles = [{fundingRulesVersion: 1}, {fundingRulesVersion: 2},
   {campaignRulesVersion: 1, serviceExpansionVersion: 0},
   {campaignRulesVersion: 1, managementVersion: 2, customerDemandVersion: 2}];
+assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['licenseHighYield','licenseRewards']);
 let compared = 0;
 for (const [index, options] of profiles.entries()) {
   const g = E.createGame({...options, seed: 'project-rules-' + index, created: 1, mode: 'hotseat'});
@@ -43,7 +44,8 @@ for (const [index, options] of profiles.entries()) {
     if (variation === 'board') p.capitalRestriction = 2;
     if (variation === 'capacity') p.allocation = {service: p.stats.staff, business: 0, lending: 0, operations: 0};
     if (variation === 'full') p.branches[focus] = 3;
-    for (const key of Object.keys(E.PROJECTS)) {
+    // Preserve the complete frozen project set. New opt-in routes have their own suite.
+    for (const key of Object.keys(Old.PROJECTS)) {
       const proposed = {...copy(intent), focus, allocation: copy(p.allocation), newProject: key, newProjects: [key]};
       const owner = {...p, focus}, before = JSON.stringify({p, proposed});
       const terms = E.projectTerms(p, key, focus), status = E.projectPlanStatus(p, proposed);
@@ -121,7 +123,7 @@ const node = selector => {
   return sinks.get(selector);
 };
 const c = {E, draft: copy(base), esc: String, money: String, toast() {}, capacityLine: () => '',
-  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {}, renderWorkforce() {},
+  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {}, renderWorkforce() {}, renderProductPrograms() {},
   renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {},
   unassigned: () => 0, planReady: () => true,
   $: node, $$: selector => selector === '[data-project]' ? [{dataset: {project: 'branch'}, addEventListener: (_, f) => callbacks.push(f)}] : []};

@@ -13,7 +13,7 @@ function initializeProductDeployments(g,o){
  return g;
 }
 const deploymentCatalog=projectCatalog;
-projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
+projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productPrograms)for(const [k,d]of Object.entries(PROJECTS))if(d.programOnly)delete out[k];if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
 
 
 const deploymentMix=applyRetailMix;
@@ -28,6 +28,7 @@ function planProductDeployment(g,index,plan){
  if(!p.productDeployment)return plan;
  for(const key of Object.keys(RETAIL_DEPLOYMENTS))if(!p.productDeployment.ready[key])plan.retailMix[key]=0;
  if(!Object.values(plan.retailMix).some(Boolean))plan.retailMix.essential=4;
+ if(p.productPrograms)return plan;
  const key=index===0?'rewards':'highYield',d=RETAIL_DEPLOYMENTS[key];
  if(p.productDeployment.ready[key]||p.stats.lastProfit<=0||fundingPosition(p).excess>0)return plan;
  if(strategyLevel(p,d.branch)<1){
@@ -47,7 +48,7 @@ function validateDeploymentSave(g){
   const state=p.productDeployment;
   if(!state||state.version!==1||!state.ready||Object.keys(state.ready).length!==2||Object.keys(RETAIL_DEPLOYMENTS).some(k=>typeof state.ready[k]!=='boolean'))throw Error('Invalid product deployment');
   validateDeployedMix(p,p.retailLifecycle.mix);if(p.submitted)validateDeployedMix(p,p.submitted.retailMix);
-  const seen=new Set();for(const x of p.projects){const def=PROJECTS[x.key];if(!def||!def.deploymentProduct)continue;if(seen.has(x.key)||state.ready[def.deploymentProduct]||strategyLevel(p,RETAIL_DEPLOYMENTS[def.deploymentProduct].branch)<1||x.target!==null)throw Error('Invalid deployment project');seen.add(x.key)}
+  const seen=new Set();for(const x of p.projects){const def=PROJECTS[x.key];if(!def||!def.deploymentProduct||p.productPrograms)continue;if(seen.has(x.key)||state.ready[def.deploymentProduct]||strategyLevel(p,RETAIL_DEPLOYMENTS[def.deploymentProduct].branch)<1||x.target!==null)throw Error('Invalid deployment project');seen.add(x.key)}
  }
  return g;
 }

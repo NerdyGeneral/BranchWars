@@ -1,19 +1,20 @@
-function customerDemand(p,g,market,mix=p.retailLifecycle.mix){
+function customerDemand(p,g,market,mix=null){
  const macro=g&&g.economy||MACRO_REGIMES.steady,base=CUSTOMER_MARKETS[market];
  if(!base)throw Error('Unknown customer demand market');
  const raw={everyday:base.everyday*(macro.demand<1?1.15:1),connected:base.connected*macro.demand,reserve:base.reserve*(.8+macro.rate/20)};
- const total=Object.values(raw).reduce((a,b)=>a+b,0),emphasis=Object.values(mix).reduce((a,b)=>a+b,0);
+ const total=Object.values(raw).reduce((a,b)=>a+b,0);
  const models=marketFacilities(p,market),weights={essential:0,rewards:0,highYield:0},segments=[];
  let fit=0,cost=0;
  for(const [key,d]of Object.entries(CUSTOMER_SEGMENTS)){
   const share=raw[key]/total,channel=key==='everyday'&&models.includes('retail')?.08:key==='connected'&&models.includes('digital')?.1:0;
+  const local=mix||productTargetMix(p,market,key),emphasis=Object.values(local).reduce((a,b)=>a+b,0);
   let match=0;
-  for(const product of Object.keys(weights)){const strength=d.fit[product]+channel;weights[product]+=share*mix[product]*strength;match+=mix[product]*strength/emphasis}
+  for(const product of Object.keys(weights)){const strength=d.fit[product]+channel;weights[product]+=share*local[product]*strength;match+=local[product]*strength/emphasis}
   fit+=share*match;cost+=share*match*d.onboarding;segments.push({key,name:d.name,share,fit:match,onboarding:d.onboarding});
  }
  return {market,segments,fit,onboardingRate:cost/fit,weights};
 }
-function customerBankFit(p,g,mix=p.retailLifecycle.mix){
+function customerBankFit(p,g,mix=null){
  const snapshot=g&&g.marketEconomy||marketContext&&marketContext.marketEconomy||p.marketSnapshot,rows=Object.keys(p.marketBook.markets).map(key=>{
   const m=snapshot&&snapshot.markets[key],outside=m?m.community.deposits+m.union.deposits:0;
   return {key,weight:outside*marketReach(p,key),demand:customerDemand(p,g,key,mix)};
@@ -34,7 +35,7 @@ marketSupply=function(g,p,freeze=false){
   const fit=Math.min(1,customerDemand(p,g,key).fit);
   for(const r of ['deposits','customers'])supply[r][key]=Math.floor(supply[r][key]*fit);
  }
- return supply;
+ return advertisingSupply(g,p,supply,freeze);
 };
 const customerOption=productOption;
 productOption=function(p,line){
@@ -63,7 +64,7 @@ r.customerAcquisitionCost=cost;r.customerAcquiredDeposits=Object.values(rows).re
 
 
 function customerMixPlan(g,p,input){
- if(![1,2].includes(p.customerDemandVersion))return input;
+ if(![1,2].includes(p.customerDemandVersion)||p.productPrograms)return input;
  const candidates=[input.retailMix,{essential:4,rewards:0,highYield:0}];
  for(const product of ['rewards','highYield'])if(p.productDeployment.ready[product])candidates.push({essential:1,rewards:0,highYield:0,[product]:3});
  let chosen=input,value=-Infinity;
@@ -80,7 +81,7 @@ function customerMixPlan(g,p,input){
 
 function validateCustomerSave(g){
  if(g.customerDemandVersion===undefined){if(g.players.some(p=>p.customerDemandVersion!==undefined||p._customerIntake!==undefined))throw Error('Unversioned customer demand');return g}
- if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
+ if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
  for(const p of g.players){
   if(p.customerDemandVersion!==g.customerDemandVersion||p._customerIntake!==undefined)throw Error('Invalid customer demand state');
   const report=p.operatingReport;

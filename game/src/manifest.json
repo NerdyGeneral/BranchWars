@@ -41,6 +41,9 @@
       "engine/households.js",
       "engine/collections.js",
       "engine/segment-deposits.js",
+      "engine/product-programs.js",
+      "engine/advertising.js",
+      "engine/recovery.js",
       "engine/ledger.js",
       "engine/accounting.js",
       "engine/migration.js",
@@ -71,6 +74,9 @@
       "ui/households.js",
       "ui/collections.js",
       "ui/products.js",
+      "ui/product-programs.js",
+      "ui/advertising.js",
+      "ui/recovery.js",
       "ui/projects.js",
       "ui/results.js",
       "ui/bootstrap.js"
@@ -91,6 +97,7 @@
     "styles/lobby-ui.css",
     "styles/workforce.css",
     "styles/households.css",
-    "styles/collections.css"
+    "styles/collections.css",
+    "styles/product-programs.css"
   ]
 }

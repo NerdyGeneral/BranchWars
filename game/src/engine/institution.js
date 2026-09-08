@@ -61,6 +61,7 @@ function projectBarred(p,key){
  if(rank>=1&&def&&['branch','acquisition'].includes(def.kind))return 'Expansion projects are suspended under regulatory supervision.';
  if((p.capitalRestriction||0)>0&&def&&['branch','acquisition'].includes(def.kind))return `Board assistance suspends expansion for ${p.capitalRestriction} more cycle${p.capitalRestriction===1?'':'s'}.`;
  const strategy=strategyBarred(p,key);if(strategy)return strategy;
+ if(def&&(def.programOnly||p.productPrograms&&PRODUCT_PROGRAM_PROJECTS[key]))return productProgramBarred(p,key);
  if(def&&def.deploymentProduct){
   if(!p.productDeployment)return 'Requires a new product-deployment pilot.';
   if(p.productDeployment.ready[def.deploymentProduct])return 'Already deployed. Manage sales in Operations.';
@@ -92,9 +93,13 @@ function planBudget(p,plan){
  const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
  const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
  const hires=planHires(plan),recruiting=(hires?hireCost(p,hires):0)+(p.workforce?specialistHirePremium(plan):0);
- const base=action+projects+research+recruiting,training=p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const productRetirement=p.productPrograms?(plan.productProgramPolicy?.retire?.length||0)*PRODUCT_RETIRE_COST:0;
+ const advertising=p.advertising?(plan.advertisingPolicy||p.advertising.policy).budget:0;
+ const base=action+projects+research+recruiting+productRetirement+advertising,training=p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.productPrograms)quote.productRetirement=productRetirement;
+ if(p.advertising)quote.advertising=advertising;
  if(p.workforce){quote.training=training;quote.specialistPayrollAdded=Object.entries(SPECIALIST_ROLES).reduce((n,[k,d])=>n+(Number(plan.specialistHires?.[k])||0)*d.payroll,0)}
  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
  return quote;
@@ -157,6 +162,7 @@ function projectPlanStatus(p,plan){
   if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
  }
  if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
+ if(p.productPrograms){const products=chosen.filter(key=>PRODUCT_PROGRAM_PROJECTS[key]).map(key=>PRODUCT_PROGRAM_PROJECTS[key].product);if(new Set(products).size!==products.length||products.some(k=>plan.productProgramPolicy?.retire?.includes(k)))return fail('product-conflict','Choose one development route or retirement per product.');}
  if(p.serviceDesk){
   const apps=chosen.filter(key=>SERVICE_APPLICATIONS[key]).map(key=>SERVICE_APPLICATIONS[key].app);
   if(new Set(apps).size!==apps.length)return fail('application-conflict','Choose one deployment route per service application.');

@@ -1,6 +1,366 @@
 # Current release status
 
-Updated: 2026-09-05.
+Updated: 2026-09-06.
+
+## Product programmes, advertising and recovery — verified release batch
+
+Release branch: `feat/product-lifecycle`, stacked on `feat/segment-deposits`
+(PR #15). This consolidates the product/advertising batches below with the recovery
+follow-up. Publication is a branch/PR update, not an automatic merge of its
+prerequisites. No remote CI or physical two-computer acceptance is asserted here.
+
+Publication recheck on 2026-09-06: a fresh
+[70-suite Windows run](../reports/baselines/N-00-2026-09-06T06-35-05-753Z.json)
+passes with unchanged source and reproduced balance output, followed by a
+[1,920-month default-rule audit](../reports/baselines/release-balance-2026-09-06T06-54-12-172Z.json)
+with zero skipped/cancelled initiatives. `node tools/check.js --full` finishes
+successfully. All 164 source/test fingerprints still match the previous full
+sweep; all 91 staged source inputs match after line-ending normalization and
+the staged portable artifact has the exact SHA-256 below. The repeated default
+sample is not counted again as independent balance evidence. Stale README/save
+label and architecture input-count wording were corrected; game rules did not
+change during publication checks. Selected inspected reports are included;
+user proposals, raw snapshots, local saves and diagnostic helpers are excluded.
+
+- Added **Overview → Compare recovery options** for product-programme campaigns.
+  Estimates include known executive costs, distinguish cash from equity and
+  compare paused commitments, supported lower-cost responses and limited spare
+  staff reallocation. Stage/Undo affect only the unlocked draft. No free equity,
+  forgiven debt, changed failure threshold or forced equalization is added.
+- v8.9/v8.10 AI now reviews capital recovery after its domain planners. The prior
+  Growth seed-2 failure had abundant cash but exhausted equity; repeated optional
+  executive bills outstripped thin recurring earnings. The planner protects
+  existing household/service capacity and avoids known dangerous cheap responses.
+  Audit, succession, manager and fintech checks include conservative same-turn
+  workload buffers. Future rival shocks remain uncertain.
+- Corrected service-plan equity estimates that counted advertising/training
+  again after they were included in operating profit. No expense is refunded.
+- Added a simulated GitHub test in which both seats reload a sealed pending turn,
+  followed by another host reload after an accepted state-write response is lost.
+  Checks preserve commitment, exact resolution, identities and private reports.
+  The [player guide](player-guide.md#two-computer-acceptance-checklist) now gives
+  the actual two-PC checklist and clear stop/recovery criteria.
+- Balance reports now distinguish deposit dominance from bank health: both
+  capital ratios, cash/debt, exact household shares, below-10% spells and returns,
+  loss months, lead changes and duration of 80% player-deposit dominance. All
+  player shares exclude outside institutions and are not victory criteria.
+
+### Current candidate verification
+
+Artifact SHA-256:
+`a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9`.
+The fresh [full Windows sweep](../reports/baselines/N-00-2026-09-06T06-03-50-077Z.json)
+passes all 70 suites, including Windows LAN, saved-game/legacy compatibility,
+accounting and resource reconciliation, recovery engine/UI, lobby identities
+and simulated GitHub relay/checkpoint recovery. The report confirms unchanged
+source and reproduced legacy balance output. `node tools/check.js --full`
+finishes successfully, including build/reference checks and the default release
+campaign audit. The previous batch's 67-suite/7,640-turn result below is historical.
+
+Completed same-artifact extended audits:
+
+| Rules and sample | Resolved months | Result | Largest owner view |
+|---|---:|---|---:|
+| [Default release rules, 16 campaigns x 120](../reports/baselines/release-balance-2026-09-06T06-23-17-604Z.json) | 1,920 | All survive; zero skipped/cancelled initiatives | 559,901 bytes |
+| [Advertising, 16 campaigns x 120](../reports/baselines/release-balance-2026-09-06T06-14-55-271Z.json) | 1,920 | All survive; zero skipped/cancelled initiatives | 717,153 bytes |
+| [Advertising, four seed-20 campaigns x 480](../reports/baselines/release-balance-2026-09-06T06-16-42-118Z.json) | 1,920 | All survive; zero skipped/cancelled initiatives | 815,843 bytes |
+| [Product programmes, four seed-20 campaigns x 480](../reports/baselines/release-balance-2026-09-06T06-16-10-761Z.json) | 1,920 | All survive; zero skipped/cancelled initiatives | 827,206 bytes |
+
+Together these are 40 campaign runs and 7,680 resolved months, separate from
+suite-level simulations and the old-save continuation probes below. Every run
+checks accounting/cohort/local-book reconciliation, the ledger and owner-view
+size limits against this exact artifact. No sampled campaign ends in receivership;
+this is a bounded AI sample, not proof that all player strategies are viable.
+
+The original Advertising Growth seed-2 case now completes 120 months with
+$2.17M/$3.07M equity and 12.24%/12.46% capital ratios. Deposits finish 49.13%/
+50.87%, with ten deposit-leader changes. Across the 16 advertising campaigns,
+there are 1,089 competitive actions, 1,256 initiatives and 68 provider changes
+after month 60. No sampled seat reaches 80% player-deposit share in that
+120-month sample. This does not imply the longer-game concentration is fixed.
+
+**Pacing remains unresolved.** Advertising Balanced seed 20 peaks at 92.91%
+player deposits and stays at or above 80% for 178 consecutive months, before
+the former leader ends at 35.34% versus 64.66%. Household ownership ends
+50.91%/49.09%, capital ratios 12.45%/10.99%, with 21 deposit-leader changes and
+39 late provider changes. Product-programme rules without advertising also
+produce an 89.93% peak and an 85-month dominance spell. These are individual
+normal-AI trajectories, not a controlled advertising-strength experiment.
+
+Deposit dominance is not enterprise dominance: the Advertising Growth seed-20
+deposit leader finishes at 74.27% but loses $31K that month while its rival earns
+$446K and holds a 32.09% capital ratio. Recovery and contract turnover remain
+possible; the current evidence does not establish engaging human counterplay
+or acceptable time-to-recovery. More seeds and human recovery sessions must
+measure local customer/service control and profitability alongside deposits
+before changing dominance caps or adding catch-up bonuses.
+
+In the advertising balanced extension the two players eventually hold all 31,100
+households and $167,999,670 of the initial $168M deposit pool. Late competition
+is mostly redistribution within the six-market pilot. The next pacing pass
+should trace dominance onset/peak/reversal by funding flow, cost, local service
+coverage and available player counters, then test human recovery time. Renewing
+demand and national expansion remain separate blueprint-scale work.
+
+Dedicated recovery engine/UI, AI cash planning, architecture, portable build,
+service planning and the new GitHub checkpoint test pass. The latter resolves
+three months across three reloads, 17 accepted simulated writes and one lost
+accepted-write response. It is not a live repository or physical two-PC test.
+
+Read-only normal-AI continuation probes imported three deep snapshots from the
+original failing campaign and resolved 36 months each (108 total) on this hash.
+Migration, accounting, ledger and pilot validation pass at import and after
+each month. Both previously used board rescues stay consumed, with no additional
+board aid or emergency borrowing. These are ad-hoc probes, not a separately
+published baseline or isolated causal experiment.
+
+| Starting snapshot | Starting equity / capital ratio | After 36 months |
+|---|---|---|
+| Month 65 | $688,667 / 8.20% | $596,921 / 7.72%; survives but remains weak |
+| Month 75 | $449,251 / 5.71% | $991,405 / 13.39% |
+| Month 78 | $152,673 / 2.04% | $994,002 / 13.04% |
+
+The month-78 continuation briefly dips to 1.92% before recovering. Its deposits
+contract from about $81.89M to $58.22M. Recovery is possible with ordinary game
+tradeoffs, not guaranteed and not evidence that human comeback pacing is accepted.
+
+Browser QA on the final build verifies Overview placement, comparison, draft-only
+staging and Undo ($15K advertising commitment to $0 and back), and unchanged bank
+balances. At a 500px viewport the body is 485px wide, the card 361px wide with no
+internal overflow, and buttons are 40.7px high. No page warnings/errors were
+captured. The temporary QA tab/server were closed and viewport override reset.
+
+## Advertising attribution and final cash planning — prior local batch
+
+Implemented locally on `feat/product-lifecycle`; not committed or pushed. This
+continues the uncommitted product-programme batch below. No remote merge or CI
+status is asserted. Enable **Advertising attribution preview** in a new v8.10
+campaign; the setup selects prerequisites. Both peers must update. Existing
+campaigns retain their rule versions; v8.9 AI receives the cash-planning repair.
+
+- Products now has an **Advertising & attribution** view. Choose one recurring
+  market/audience/offer campaign at $0 / $15K / $40K / $80K per month. Awareness
+  decays, repeated reach saturates, and offer suitability plus spare Retail sales
+  time govern the bounded targeting effect. Closing an offer pauses its campaign.
+- Advertising redirects ordinary intake inside existing quotas. It creates no
+  customer money or relationships. Costs enter operating profit/accounts once,
+  share the plan budget, and are protected from double-spending by training.
+  Advertising remains central expense rather than inflating facility costs.
+  Owner-only reports distinguish observed intake from model-attributed assisted
+  intake; they do not claim incremental lift, ROI or matched individual accounts.
+- The AI's final spending check includes the known executive-call expense, then
+  protects cash/capital and forecast-loss cushions after all planners. It trims
+  unfunded commitments before submission; unpredictable execution cancellations
+  remain safe and explicit. Older pre-product AI plans remain unchanged.
+- Extended testing reproduced an invalid AI service bid at balanced seed 20,
+  month 286. Adding Business generalists diluted a specialist delivery bonus
+  after an earlier bid reservation. The final planner now rechecks shared
+  service eligibility and reserves existing delivery capacity or withdraws the
+  unfundable bid; the engine's capacity rule is unchanged.
+- Fixed incremental Products decommit: reducing an overcommitted plan no longer
+  fails merely because other commitments still need removing. Additions and
+  product targets remain validated; Ready stays blocked until the full plan works.
+- New save/version negotiation covers all transports and rematches. Integration
+  testing caught and repaired a missing v8.10 relationship-save format entry and
+  a retirement-preview interaction with an existing advertising instruction.
+- Source build: 89 ordered inputs, no new runtime replacement layer, no external
+  dependency. Frozen reference engines and golden fixtures were not regenerated.
+
+### Current candidate validation
+
+Candidate artifact SHA-256:
+`b92656daa756b740a7ef66f04a48323c3c24553ae816397222fc6d12cdd39d3c`.
+
+The fresh [full Windows sweep](../reports/baselines/N-00-2026-09-06T05-23-43-640Z.json)
+passed all 67 suites, including Windows LAN, simulated GitHub relay recovery,
+save/identity/privacy, accounting, deterministic legacy compatibility, new
+advertising rules and final AI cash planning. The report confirms unchanged
+source and reproduced legacy balance output. Build and generated-reference
+checks also passed. The first combined run was interrupted after the extended
+audit exposed the month-286 bid failure above; that run is not a pass. After
+repair, source and tests were frozen and all checks restarted on this artifact.
+
+Completed unchanged-artifact audits:
+
+- [Default release rules, 120 months](../reports/baselines/release-balance-2026-09-06T05-44-22-702Z.json):
+  16 campaigns / 1,920 turns, all reaching month 120. Zero skipped or cancelled
+  initiatives; maximum owner view 559,901 bytes. Together with the three audits
+  below, this is 7,640 resolved campaign turns, separate from the suite-level
+  stress and regression runs.
+- [Advertising, 120-month sample](../reports/baselines/release-balance-2026-09-06T05-33-13-935Z.json):
+  16 campaigns / 1,880 resolved turns. Fifteen reach 120; Growth seed 2 ends in
+  receivership at month 80. No skipped or cancelled initiatives; maximum owner
+  view 718,816 bytes. There are 985 competitive actions, 166 provider changes
+  (51 after month 60), and 41 paid advertising months / $615,000 spend.
+- [Advertising, 480-month extension](../reports/baselines/release-balance-2026-09-06T05-35-49-302Z.json):
+  four seed-20 campaigns / 1,920 turns, all completing 480 months. Zero skipped
+  or cancelled initiatives. Maximum owner view 846,322 bytes, below 1 MiB.
+  Competition remains active: 1,780 actions and 168 provider changes, including
+  140 after month 60. AI buys 181 campaign-months ($2,715,000); one request pauses
+  for reserves. Assisted intake totals $2,458,425 and 1,844 model-attributed
+  relationships. Those amounts are not incremental profit or an ROI measure.
+- [Existing product-programme rules, 480 months](../reports/baselines/release-balance-2026-09-06T05-35-04-855Z.json):
+  four seed-20 campaigns / 1,920 turns, all reaching month 480. Zero skipped or
+  cancelled initiatives versus 42 explicit cash cancellations in the prior
+  extension. Maximum view 845,616 bytes; 1,915 competitive actions and 114
+  late provider changes. This intentionally changes v8.9 AI decisions while
+  retaining its game rules; it is not a claim of unchanged v8.9 outcomes.
+
+These audits check account/cohort/local-book reconciliation, conserved resources,
+validated resolved saves, causal ledgers and both seat projections. They do not
+establish human balance. The final Advertising Growth seed-20 leader holds 81.4%
+of combined player deposits; the corresponding v8.9 case reaches 82.3%. The
+month-80 receivership and continued concentration require recovery/pacing
+playtests. Early 96-turn AI tests find no paid campaigns because service staff
+are occupied; a staffed fixture and the long runs establish actual reachability.
+
+Browser QA exercised a real paid $15K turn, operating-forecast cost, actual
+attribution, paused draft and saved-game Continue. The final artifact preserves
+that report on reload, with no captured page warnings/errors. Tablet navigation
+stays non-sticky. At 500px, controls are 395px wide / 39px high and the body is
+485px wide; the page does not overflow. The temporary tab/server were closed and
+viewport settings reset. No live GitHub room or physical two-PC game was used.
+
+### Remaining scope
+
+This is an attribution-first N-08 slice, not the complete marketing funnel.
+Delayed application queues, named channels, creative testing, cross-selling,
+customer lifetime value and configurable product families remain ahead. Existing
+commercial advertising and market-wide reputation initiatives are separate.
+Group accounting, subsidiaries, company shares, national management and human
+competition/recovery acceptance remain substantial later packages. No physical
+two-computer or live repository-room test is claimed for this batch.
+
+
+## Product programmes — N-04/N-06/N-07 preview
+
+Local implementation on `feat/product-lifecycle`, based on segment-deposit
+commit `8999aa0` ([PR #15](https://github.com/NerdyGeneral/BranchWars/pull/15)).
+This batch has not been committed or pushed. No current remote merge/CI status
+is asserted. Enable **Product programmes preview** for a new v8.9 campaign;
+setup enables prerequisites. Existing saves keep their rules. Update both peers.
+
+- Rewards Checking and High-Yield Savings can be built in-house after tier-one
+  research, or licensed sooner for less initial capital and recurring vendor
+  charges. Both consume shared project capacity; completion creates no deposits.
+  A licensed product can later be converted in-house without repricing accounts.
+- Local sales instructions cover all six markets and three customer segments.
+  Actual intake uses local fit; aggregate acquisition effects are weighted by
+  reachable outside supply. There is no tiny-market bank-wide bonus.
+- Paid retirement closes sales, not obligations: existing accounts, savings
+  guarantees and locked funding remain serviced. Availability charges end;
+  licensed balance charges continue until balances leave or convert in-house.
+  One-time retirement spend shares the normal plan's cash/capital budget.
+- Products separates Development & retirement from Local sales targets, with
+  current-book costs and explicit eligibility reasons. Operations retains
+  business/credit/term policy and the full operating forecast. The taller
+  v8.9 navigation stops sticking at tablet widths; financial tables scroll
+  inside their panels on narrow screens.
+- AI compares target policies, can license or build, and can retire a losing
+  unused platform. Its growth mandate can accept lower forecast earnings while
+  retaining at least half the current-policy profit, a $500,000 opening cash
+  buffer and no added funding loss; intake must improve by $5,000 and 5%.
+  New rollouts preserve extra planning headroom. This does not replace the broader AI cash-reserve/retry work.
+- New rules use explicit creation/validation/monthly/project stages, private
+  owner projections, sealed saves, rematches and all three transports.
+  Build inventory is 87 ordered inputs; no new runtime replacement layer.
+
+### Product candidate verification
+
+The [full Windows sweep](../reports/baselines/N-00-2026-09-06T04-16-13-146Z.json)
+passed 61 of 62 suites, including Windows LAN, with unchanged fingerprints and
+reproduced seeded output. The remaining engine suite first stopped at an old
+project-count assertion. Its rerun also caught an old workspace-count assertion
+and a genuine v6-save import bug: the new feature-presence probe read a missing
+project list before legacy repair supplied it. The two inventories now include
+the new projects/workspace explicitly, and the presence guard checks for an array.
+The [targeted follow-up](../reports/baselines/N-00-product-followup-2026-09-06T04-45-16-030Z.json)
+passes all 14 checks, including the engine suite, creation/import comparisons,
+fixed campaigns, preserved saves, product rules, both network harnesses,
+build/reference and architecture checks. It verifies all 154 original
+fingerprints and exact reverse patches: only the guard, its generated HTML,
+and the two inventory assertions differ. Source stayed unchanged during reruns.
+All 62 suites are covered across the full run and targeted follow-up; this is
+**not** a fresh all-green `check.js --full` invocation. The original failed
+report is preserved. The fingerprint proof and reruns used the local diagnostic
+runner `product-programmes-followup.cjs`, which is not included in this published
+checkout.
+
+Current artifact SHA-256:
+`011b21486a3fb5e2c725eda947734742e842803303fd5338ef24805fdab8bbdb`.
+
+Earlier diagnostics are not counted as final-candidate acceptance. An earlier 1,920-turn
+run passed accounting and transport-size checks but revealed zero AI product
+targeting despite paid launches. That was not balance acceptance. The forecast's
+one-month preference was replaced with a bounded, explicit growth mandate, and
+the dedicated suite now requires actual targeting (1,272 targeted audience-turns
+in its 96-turn sample). The interrupted full/480-month diagnostics are not passes.
+The completed product audits below used the pre-import-guard artifact:
+`813fc740c9535210c774c4a501bcbc0914662767528b18c953a2e724f0ece325`.
+
+- [120-month audit](../reports/baselines/release-balance-2026-09-06T04-25-15-307Z.json):
+  16 campaigns / 1,920 turns, all reaching month 120; no cancellations or silent
+  skips. Both seats stay below 1 MiB (maximum 707,276 bytes). There are 23 in-house
+  and 56 licensed rollout starts, 35 planned retirements, and 23,784 targeted
+  audience-turns. Competition continues through 448 actions and 183 service
+  provider changes, including 58 after month 60.
+- [480-month extension](../reports/baselines/release-balance-2026-09-06T04-25-29-692Z.json):
+  four campaigns / 1,656 turns. Balanced and Rate seed 20 reach month 480;
+  Regulatory ends in receivership at 406 and Growth at 290. Both seats stay below
+  1 MiB (maximum 802,897 bytes). Zero silent skips; 42 explicit uncharged
+  cancellations after cash changes. The run records 472 competitive actions,
+  116 provider changes (92 after month 60), 10 in-house and 14 licensed planned
+  launches, six planned retirements and 25,512 targeted audience-turns.
+
+Both audits fingerprint their unchanged artifact. Since those runs, the only
+runtime change is the legacy-save presence guard above; normal project-array
+states follow the same path. The targeted follow-up proves the exact source
+change and reruns affected validation/gameplay checks. These audits validate
+mechanical integrity and feature reachability, not equal route strength or enjoyable
+endgame pacing. In the extreme Regulatory/Growth endings, one bank holds over
+98% of combined player deposits. Cash-reserve/retry behavior and comeback
+acceptance remain unfinished.
+
+Dedicated checks pass for paid delivery, capacity stalls, research/route
+conflicts, local intake, vendor-cost reconciliation, guaranteed-term retirement,
+preview purity, sealed imports, corrupt-save rejection, owner privacy and UI
+draft staging. LAN/Direct simulated plans execute launch, targeting and
+retirement for both seats. The GitHub relay simulation passes 12 sealed turns,
+66 accepted writes and nine lost responses, with exact owner-state comparisons.
+No live repository room was written.
+
+The [final default-rules audit](../reports/baselines/release-balance-2026-09-06T04-42-45-906Z.json)
+passed 16 campaigns / 1,920 turns on the current artifact, with zero cancellations
+or skips and a maximum view of 559,901 bytes. Every result/activity field exactly
+matches the preceding release's default audit; only the artifact hash differs.
+
+The auxiliary previous-version comparison against `8999aa0` passed 160 turns
+with Product programmes OFF on the pre-import-guard gameplay artifact (complete
+creation states, AI plans and resolved states). Frozen fixtures and reference
+engines were not regenerated.
+
+Computer-use browser QA verified new campaign setup, paid launch through a
+normal turn, Products subviews, local fit/target changes, unaffected other-market
+instructions, retirement quotes and saved-game Continue. The tablet navigation
+overlap was repaired; at 500px the 650px target table stays inside its 395px
+scroll panel without widening the page. No captured page warnings/errors.
+Temporary viewport, tab and local server were reset/closed. The final AI-only
+repair and corrected research-destination hint are additionally covered by
+source/build and automated checks; the browser walk-through preceded them.
+
+### Product scope limits and next step
+
+This is a lifecycle and delivery choice for two existing retail offers, not a
+complete product designer, commercial/retail split or per-customer cross-sell
+system. Quotes are current-book run rates, not complete segment profitability.
+Research still needs a broader capability web. Existing Operations navigation
+still needs a larger decluttering pass. No live GitHub room or physical two-PC
+game has been exercised for this batch.
+
+Next: connect advertising spend to a visible, finite audience funnel and
+attribution, then broaden product designs. Holding companies, insurance agency,
+brokerage/wealth, shares and national management remain substantial later work.
+N-04/N-06/N-07 have progressed; none is declared complete by this slice.
 
 ## Segment-owned deposit accounts — N-04/N-06 preview
 
