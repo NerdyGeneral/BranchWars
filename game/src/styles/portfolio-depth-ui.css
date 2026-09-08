@@ -3,3 +3,19 @@
 #financialGroupPanel #agencyDesk .agency-launch-label input{width:18px;height:18px;min-height:0;min-width:0;margin:0;padding:0;flex:0 0 auto;accent-color:#2878e0}
 #financialGroupPanel #agencyDesk select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
 #financialGroupPanel #agencyDesk select:focus-visible,#financialGroupPanel #agencyDesk input:focus-visible{outline:3px solid #1c72cd;outline-offset:2px}
+#facilityNetworkPanel,#departmentPanel{min-width:0;margin-bottom:18px}
+#facilityNetworkPanel>details,#departmentPanel>details{border:1px solid #bdcddd;border-radius:10px;background:#f8fbff;padding:12px}
+#facilityNetworkPanel summary,#departmentPanel summary{cursor:pointer;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+#facilityNetworkPanel label,#departmentPanel label{display:grid;gap:5px;min-width:0;margin:8px 0}
+#facilityNetworkPanel input,#facilityNetworkPanel select,#departmentPanel input,#departmentPanel select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
+#facilityNetworkPanel :focus-visible,#departmentPanel :focus-visible{outline:3px solid #1c72cd;outline-offset:2px}
+#facilityNetworkPanel .table-scroll,#departmentPanel .table-scroll{max-width:100%;overflow:auto}
+#departmentPanel .credit-controls>*,#facilityNetworkPanel .credit-summary>*{min-width:0;overflow-wrap:anywhere}
+#facilityLifecyclePanel{min-width:0;margin-bottom:18px}
+#facilityLifecyclePanel>details{border:1px solid #bdcddd;border-radius:10px;background:#f8fbff;padding:12px}
+#facilityLifecyclePanel summary{cursor:pointer;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
+#facilityLifecyclePanel label{display:grid;gap:5px;min-width:0;margin:8px 0}
+#facilityLifecyclePanel input,#facilityLifecyclePanel select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
+#facilityLifecyclePanel :focus-visible{outline:3px solid #1c72cd;outline-offset:2px}
+#facilityLifecyclePanel .credit-controls>*,#facilityLifecyclePanel .credit-summary>*{min-width:0;overflow-wrap:anywhere}
+#facilityLifecyclePanel .btn{max-width:100%;white-space:normal;margin:4px 4px 4px 0}

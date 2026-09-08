@@ -80,7 +80,13 @@ function operate(g, p, preview = false) {
       if(p.onboarding)delete p._onboardingBudget;
       if(ownsOnboardingQuota)delete p.marketQuota;
       if (intake) delete p._customerIntake;
-      if (p.workforce) { delete p._workforceCosts; delete p._workforceReserved; }
+      if (p.workforce) {
+        // Project execution occurs after operations but before training settles.
+        // Keep the actual paid/paused class decision for that same month's staff
+        // allocation; later cash movements must not create or release a teacher.
+        if(p.departmentOffice&&p._workforceCosts?.training)p._departmentTraining=JSON.parse(JSON.stringify(p._workforceCosts.training));
+        delete p._workforceCosts; delete p._workforceReserved;
+      }
     }
     updateCustomerRelationships(g, p);
     return text;

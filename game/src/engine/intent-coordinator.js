@@ -2,6 +2,14 @@ function chooseOpenBot(g,index){return withCorporateForecast(g,()=>chooseOpenBot
 function chooseOpenBotCore(g, index) {
   const initial = () => {
     let plan = withRandom(g, 'aiState', () => chooseBaselinePlan(g, index));
+    if(identifiedInstitution(g)){
+      const draft=defaultDepartmentPlan(g.players[index]);
+      // Intermediate AI planners may add capability prerequisites. Give this
+      // uncommitted exploratory draft the legal research ceiling; planDepartments
+      // sets the actual final envelope after all proposals and reserve cuts.
+      draft.departmentPolicy.envelopes.research=DEPARTMENT_POLICY_LIMITS.research;
+      Object.assign(plan,draft);
+    }
     plan = planPilotReserve(g, index, plan);
     return planRegionalOffice(g, index, plan);
   };
@@ -30,9 +38,12 @@ function chooseOpenBotCore(g, index) {
   plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
   plan=planFinancialGroup(g,index,plan);
   plan=planAgency(g,index,plan);
+  plan=planFacilityNetwork(g,index,plan);
+  plan=planDepartments(g,index,plan);
   // A changed loan mix can change the loss reserve after the earlier pricing
   // pass. Recheck only new group campaigns; old AI order remains byte-exact.
-  return [1,2,3].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
+  if(g.financialGroupVersion===5)plan=planFacilityLifecycle(g,index,planFinalCashReserve(g,index,plan));
+  return [1,2,3,4,5].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }
 function aiCashPlanningReview(g, index, plan) {
   if (![1, 2].includes(g.productProgramsVersion)) return null;
@@ -82,7 +93,13 @@ function planFinalCashReserve(g, index, input) {
     }
   }
   const review = aiCashPlanningReview(g, index, plan);
-  const excess = () => Math.max(0, planBudget(p, plan).total - review.limit);
+  const excess = () => {
+    const budget=planBudget(p,plan);
+    // Group5 lifecycle and final AI cleanup share the same whole-plan reserve.
+    // Existing versions retain their exact raw-limit ordering and decisions.
+    return Math.max(0,budget.total-review.limit,
+      g.financialGroupVersion===5?-facilityLifecycleProtectedBudget(p,plan,budget).remaining:0);
+  };
   for (const key of Object.keys(plan.investments || {})) {
     plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
     if (plan.investments[key] < 1000) delete plan.investments[key];
@@ -96,7 +113,14 @@ function planFinalCashReserve(g, index, input) {
   while (plan.newProjects.length && excess()) plan.newProjects.pop();
   plan.newProject = plan.newProjects[0] || null;
   if (excess()) plan.competitiveAction = 'none';
+  if (excess() && plan.facilityPolicy) plan.facilityPolicy.convert=null;
+  if (excess() && plan.leaderOrders) for(const role of Object.keys(plan.leaderOrders))if(plan.leaderOrders[role]&&plan.leaderOrders[role]!=='none')plan.leaderOrders[role]=null;
   if (excess() && plan.productProgramPolicy) plan.productProgramPolicy.retire = [];
+  if (g.financialGroupVersion===5&&excess()) {
+    plan.facilityLifecyclePolicy=plan.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p);
+    plan.facilityLifecyclePolicy.renovate=null;
+    if(excess())for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance='off';
+  }
   if (input.advertisingPolicy?.budget && !plan.advertisingPolicy.budget) {
     // A cancelled campaign must not leave its temporary sales-time release in
     // place. Reprice the reserve once with the ordinary retention mandate; the
@@ -105,10 +129,12 @@ function planFinalCashReserve(g, index, input) {
   }
   // No persistent retry queue: an unfunded initiative stays unstaged until a
   // later plan can fund it. Execution checks still handle unpredictable shocks.
+  if(g.financialGroupVersion===5&&plan.facilityLifecyclePolicy)
+    plan.facilityLifecyclePolicy=facilityLifecycleStaffProposal(g,p,plan).policy;
   return plan;
 }
 function validatePilot(g) {
-  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2'].includes(g.version)) validateCampaignRules(g, 'game');
+  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4'].includes(g.version)) validateCampaignRules(g, 'game');
   validateAccountingSave(g);
   validateRegionalSave(g);
   validateMarketSave(g);
@@ -136,6 +162,9 @@ function validatePilot(g) {
   validateFinancialGroupSave(g);
   validateCorporateSave(g);
   validateAgencySave(g);
+  validateFacilitySave(g);
+  validateDepartmentSave(g);
+  validateFacilityLifecycleSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
@@ -152,4 +181,5 @@ function validatePortfolioPlan(p, plan) {
   normalizeCollectionsPlan(p, plan);
   normalizeGroupPlan(p, plan);
   normalizeAgencyPlan(p, plan);
+  normalizeDepartmentPlan(p, plan);
 }

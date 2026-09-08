@@ -159,6 +159,82 @@ carrier-loss events are not implemented yet. Brokerage and wealth remain future
 approved work. Buying cover currently does not promise simulated compensation
 for a company's future loss event.
 
+### Identified offices and departmental leadership — current Group preview
+
+New Financial Group campaigns use the Group 5 development rules (save 9.4). Existing saved
+campaigns keep their original rules; selecting a preview does not upgrade them.
+This is still an implementation candidate, not the completed expansion.
+
+Open **Markets → Office network** to inspect a particular office. Its stable ID
+and conversion count follow its history. Compare retail, commercial and digital
+models using the **before / during work / after activation** table. These figures
+are capacity and upkeep, not guaranteed new customers or profit.
+
+Conversion costs 35% of the destination's current construction quote and reserves
+one shared execution-capacity unit. It requires two work units. During work, the
+old model retains full upkeep but half capacity. The new model activates in the
+month after work completes. Another local construction, upgrade or closure cannot
+occupy the same market simultaneously. Existing customer and loan obligations
+persist. A conversion can stall if you reassign its execution staff.
+
+**Stage office conversion** adds an instruction to the current plan; it does not
+pay or change the office immediately. **Clear unsubmitted facility order** removes
+that draft commitment. Cancelling a conversion that has already started is a
+different instruction and refunds none of its sunk cost.
+
+Open **Workforce → Departments & leadership** to set persistent spending ceilings
+and a common reserve. An envelope is a limit, not extra cash or a prepaid budget.
+Training, vendor, research and leadership commitments still share the bank's
+existing cash, capital limits and staff.
+
+Leaders are appointed from existing qualified specialists, not created as free
+employees. The current development mentor, service delivery and credit/controls
+profiles differ in appointment cost, recurring compensation and teaching strength.
+A paid class reserves one assigned specialist for teaching: that banker cannot
+also supply their ordinary production bonus or project-execution time. The table
+shows assigned versus productive staff, paid class cost and expected skill gain.
+Experience comes from delivered training, not simply holding the title.
+
+**Preview form** changes nothing. **Stage limits and leader orders** applies the
+form to your draft. Existing leaders remain unless you explicitly replace or
+demote them; severance and unpaid compensation do not disappear. The balance sheet
+shows unpaid obligations as liabilities. Paying those invoices is not a second
+expense. Bounded delegation prepares an operating proposal for your review; it
+does not borrow, close an office, acquire a company or submit your turn.
+
+In new Group 5 campaigns, **Markets → Office condition & staffing** adds condition,
+maintenance and quarter-FTE staffing for identified offices. Staffing is drawn
+from existing productive bankers after teaching and customer-service obligations;
+assigning an office never hires anyone. **Prepare staffing proposal** only fills
+the form; review and stage it before submitting the shared plan.
+
+ATM/micro locations, financial centers and regional hubs have distinct costs and
+capacity alongside the existing three models. New construction ramps over four
+months and initially has no assigned employees. Wealth-office construction and
+conversion remain visibly unavailable until a real licensed wealth business is
+implemented. A financial center currently provides banking capacity, not a free
+wealth subsidiary.
+
+Maintenance is a recurring cash expense in addition to ordinary upkeep. Off,
+basic and full currently cost 0%, 6% and 12% of local upkeep; condition loses
+1.8, 0.7 or 0.2 percentage points monthly when the instruction is funded.
+Unfunded maintenance accelerates deterioration instead of creating debt. Your
+shared cash reserve and other commitments still apply. A bank below its reserve
+can explicitly defer maintenance and submit a no-spend turn; it cannot erase
+existing leader wages or payables.
+
+Renovating costs 22% of the model's current construction quote, takes two work
+units and reserves one execution unit. Capacity halves during work, full upkeep
+continues, and restored condition activates the following month. Cancelling
+does not refund sunk spending. Regional hubs can transfer a finite amount of
+their service capacity to nearby offices; this is shared support, not free staff.
+Condition, staffing and ramp-up affect capacity and local reach, not guaranteed
+customers. These provisional values need long-campaign and player acceptance.
+
+The broader department catalog, licensed wealth operations and remaining group
+businesses are still under implementation. Existing Group 4 saves keep their
+original office behavior and never acquire condition or maintenance automatically.
+
 1. Extract the ZIP.
 2. For Solo AI, Pass & Play, or Direct P2P, double-click OPEN_BRANCH_WARS.bat.
 3. For an intranet room, the host double-clicks OPEN_LAN_GAME.bat.

@@ -1,0 +1,105 @@
+*** Begin Patch
+*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/accounting.js
+@@
+- const bookKeys=b=>b.version===2?[...keys,'receivables']:keys;
++ const bookKeys=b=>b.version===3?[...keys,'receivables','payables']:b.version===2?[...keys,'receivables']:keys;
+@@
+-  if(!b||![1,2].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
++  if(!b||![1,2,3].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
++  if(b.version===3&&Object.keys(b).sort().join()!==['version','accounts','retainedEarnings','sequence','journal',...(Object.hasOwn(b,'journalBase')?['journalBase']:[])].sort().join())throw new Error('Invalid payable accounting fields');
+@@
+-  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+(b.version===2?b.accounts.receivables:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0);
++  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+([2,3].includes(b.version)?b.accounts.receivables:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0)+(b.version===3?b.accounts.payables:0);
+@@
+-  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...(version===2?{receivables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
++  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...([2,3].includes(version)?{receivables:0}:{}),...(version===3?{payables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
+@@
+-   ...(book.version===2?{invoice:{receivables:amount,equity:amount},
+-     collectInvoice:{cash:amount,receivables:-amount},
+-     writeOffInvoice:{receivables:-amount,equity:-amount}}:{})
++   ...([2,3].includes(book.version)?{invoice:{receivables:amount,equity:amount},
++     collectInvoice:{cash:amount,receivables:-amount},
++     writeOffInvoice:{receivables:-amount,equity:-amount}}:{}),
++   ...(book.version===3?{incurPayable:{payables:amount,equity:-amount},
++     settlePayable:{cash:-amount,payables:-amount}}:{})
+@@
+-  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice'].includes(type)?-amount:0;
++  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice','incurPayable'].includes(type)?-amount:0;
+@@
+-  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
+-  const version=snapshotValue.format==='bw-accounting-2'?2:1;
++  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2','bw-accounting-3'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
++  const version=Number(snapshotValue.format.slice(-1));
+@@
+-  const validated=restore(snapshot(book));if(validated.version===2)return validated;
++  const validated=restore(snapshot(book));if([2,3].includes(validated.version))return validated;
+@@
+- return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables});
++ // Explicit new-campaign boundary; never repair or upgrade an imported book.
++ function withPayables(book){
++  const validated=restore(snapshot(book));if(validated.version===3)return validated;
++  const next={...validated,version:3,accounts:{...validated.accounts,...(validated.version===1?{receivables:0}:{}),payables:0},journal:[]};
++  next.journalBase=stateOf(next);check(next);return next;
++ }
++ return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables,withPayables});
+*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/group-accounting.js
+@@
+-  function capitalizeBank(bank, parent, amount) {
++  // Paired external service claims. businessAssets here records the provider's
++  // receivable, not new cash. Domain ledgers must also attribute each invoice.
++  function bankServiceInvoice(bank, provider, amount, bankId, source = 'service.invoice') {
++    AccountingPrototype.check(bank); validate(provider); integer(amount);
++    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100 ||
++        typeof source !== 'string' || !source.length || source.length > 80) throw Error('Invalid bank payable invoice.');
++    return {
++      bank: AccountingPrototype.post(bank, source, { payables: amount, equity: -amount }, -amount),
++      provider: post(provider, source, bankId, { businessAssets: amount, equity: amount }, amount)
++    };
++  }
++  function settleBankPayable(bank, provider, amount, bankId) {
++    AccountingPrototype.check(bank); validate(provider); integer(amount);
++    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100)
++      throw Error('Invalid bank payable settlement.');
++    // No auto-borrowing, sale, second expense or receipt from an unpaid invoice.
++    return {
++      bank: AccountingPrototype.transact(bank, 'settlePayable', amount),
++      provider: post(provider, 'payable.received', bankId, { cash: amount, businessAssets: -amount })
++    };
++  }
++  function writeOffBankPayable(bank, provider, amount, bankId) {
++    AccountingPrototype.check(bank); validate(provider); integer(amount);
++    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100)
++      throw Error('Invalid bank creditor write-off.');
++    // Resolution-only paired release: creditor loses its asset; debtor recognizes
++    // a noncash liability-release gain. This is not payment or a free cash rescue.
++    return {
++      bank: AccountingPrototype.post(bank, 'resolution.payableRelease', { payables: -amount, equity: amount }, amount),
++      provider: post(provider, 'resolution.creditorLoss', bankId, { businessAssets: -amount, equity: -amount }, -amount)
++    };
++  }
++  function capitalizeBank(bank, parent, amount) {
+@@
+-        bank.accounts.cash - amount < minimumCash || bank.accounts.equity - amount < minimumCapital)
++        bank.accounts.cash - amount < minimumCash + (bank.version === 3 ? bank.accounts.payables : 0) || bank.accounts.equity - amount < minimumCapital)
+@@
+-    servicePayment, settlePayable, capitalizeBank, bankDividend, consolidate, historyLimit });
++    servicePayment, settlePayable, bankServiceInvoice, settleBankPayable, writeOffBankPayable, capitalizeBank, bankDividend, consolidate, historyLimit });
+*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/accounting-adapter.js
+@@
+- const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve));
++ const duePayables=p.accounting.version===3?p.accounting.accounts.payables:0;
++ const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve-duePayables));
+@@
+-function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
++function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-(p.accounting.version===3?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
+*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/financial-group.js
+@@
+-  const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
++  const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
++  const duePayables = p.accounting.version===3?p.accounting.accounts.payables:0;
+@@
+-  return { minimumCapital, minimumCash, restricted,
+-    dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash,p.stats.capital-minimumCapital)),
++  return { minimumCapital, minimumCash, restricted,...(p.accounting.version===3?{duePayables}:{}),
++    dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash-duePayables,p.stats.capital-minimumCapital)),
+*** End Patch

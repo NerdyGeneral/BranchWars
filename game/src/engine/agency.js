@@ -22,7 +22,7 @@ function agencyRelationships(companies) {
   })));
 }
 function initializeAgency(g) {
-  if (g.financialGroupVersion !== 3) return;
+  if (![3,4,5].includes(g.financialGroupVersion)) return;
   if (!g.companyEconomy || g.agencyEconomy) throw Error('Agency requires an initialized company economy.');
   if (g.companyEconomy.version !== 3) throw Error('Agency requires versioned corporate premium accounting.');
   g.agencyEconomy = { version: 1, month: 0, carrier: GroupAccounting.opening('agency:carriers'),
@@ -175,14 +175,14 @@ function agencyPrepare(g, p, plan) {
   if (a.book.accounts.payables || a.book.accounts.equity < 0) agencyWindDown(g, p);
 }
 function agencyCandidateScore(p, company, relationship, incumbent) {
-  const local = (p.branches?.[company.market] || 0) * 4;
+  const local = (p.facilityNetwork?effectiveFacilityBranches(p,company.market):(p.branches?.[company.market] || 0)) * 4;
   const service = Math.min(15, p.regionalOperations?.markets?.[company.market]?.service * 3 || 0);
   const digital = Math.min(12, strategyLevel(p, 'digital') * 3);
   return 50 + local + service + digital + p.agency.staff * 2 + p.agency.policy.outreach * 5 +
     (incumbent ? 8 + relationship.quality : 0);
 }
 function settleAgency(g, plans) {
-  if (g.financialGroupVersion !== 3) return [];
+  if (![3,4,5].includes(g.financialGroupVersion)) return [];
   const e = g.agencyEconomy;
   if (e.month !== g.cycle - 1 || g.companyEconomy.month !== g.cycle)
     throw Error('Agency settlement must occur once after company operations.');
@@ -295,7 +295,7 @@ function validateAgencyRelationships(relationships, companies, ids) {
     throw Error('Invalid insurance relationship.');
 }
 function validateAgencySave(g) {
-  if (g.financialGroupVersion !== 3) {
+  if (![3,4,5].includes(g.financialGroupVersion)) {
     if (g.agencyEconomy !== undefined || g.players.some(p => p.agency !== undefined || p.submitted?.agencyPolicy !== undefined))
       throw Error('Unversioned insurance agency.');
     return;
@@ -326,7 +326,7 @@ function validateAgencySave(g) {
     throw Error('Agency cash and counterparty resources do not reconcile.');
 }
 function projectAgency(g, out, index) {
-  if (g.financialGroupVersion !== 3) return;
+  if (![3,4,5].includes(g.financialGroupVersion)) return;
   const p = g.players[index], rival = g.players[1-index];
   out.me.agency = agencyCopy(p.agency);
   out.me.agencySnapshot = { version: 1, month: g.agencyEconomy.month, relationships: agencyCopy(g.agencyEconomy.relationships) };
@@ -334,7 +334,7 @@ function projectAgency(g, out, index) {
   if (out.lastPlans?.[rival.id]) delete out.lastPlans[rival.id].agencyPolicy;
 }
 function validateAgencyView(view) {
-  if (view.financialGroupVersion !== 3) {
+  if (![3,4,5].includes(view.financialGroupVersion)) {
     if (view.agencyEconomy !== undefined || view.me?.agency !== undefined || view.me?.agencySnapshot !== undefined || view.rival?.agency !== undefined || view.rival?.agencySnapshot !== undefined)
       throw Error('Unversioned insurance agency view.');
     return;
@@ -348,7 +348,7 @@ function validateAgencyView(view) {
     throw Error('Private insurance agency information exposed.');
 }
 function planAgency(g, index, plan) {
-  if (g.financialGroupVersion !== 3) return plan;
+  if (![3,4,5].includes(g.financialGroupVersion)) return plan;
   const p = g.players[index], a = p.agency, s = defaultAgencyPlan(p);
   const free = p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0);
   const open = g.companyEconomy.companies.filter(c => !c.resolution);

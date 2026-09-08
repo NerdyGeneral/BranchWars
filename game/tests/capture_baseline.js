@@ -34,6 +34,14 @@ files.push('tests/deposit_pricing_transitions.test.js');
 files.push('tests/group_accounting.test.js','tests/financial_group.test.js','tests/financial_group_ui.test.js');
 files.push('tests/company_finance.test.js');
 files.push('tests/company_agency_boundary.test.js','tests/agency.test.js','tests/agency_ui.test.js','tests/agency_legacy_compat.test.js','tests/agency_peer_compat.test.js');
+const institutionChecks=['accounting_payables.test.js','facility_network.test.js','facilities_integration.test.js','facility_ui.test.js','facility_ai_conflicts.test.js',
+  'departments.test.js','departments_integration.test.js','department_ui.test.js','department_workforce_ui.test.js','department_execution.test.js','balance_sheet_ui.test.js','institution_legacy_compat.test.js','institution_network.test.js'];
+institutionChecks.push('department_ai_affordability.test.js','department_obligations.test.js','department_obligations_ui.test.js');
+institutionChecks.push('facility_lifecycle_legacy_compat.test.js','facility_lifecycle_integration.test.js','facility_conversion_lifecycle.test.js','facility_hub_transitions.test.js','facility_lifecycle_network.test.js','facility_lifecycle_ui.test.js','facility_submission.test.js');
+files.push(...institutionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html');
+files.push('experiments/institution/department-ai-affordability.patch','experiments/institution/department-mandatory-obligations.patch','experiments/institution/patch-engine.cjs');
+files.push('experiments/institution/department-obligations-ui.patch','tests/facility_catalog.test.js','reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html');
+files.push('tests/facility_lifecycle_balance.test.js','tools/institution_qa_fixture.js');
 files.push('tests/accounting_receivables.test.js');
 files.push('tests/company_bank_funding.test.js','tests/corporate_income.test.js');
 files.push('tests/group_foundation_compat.test.js','reports/reference-builds/BRANCH_WARS_group_822b386.html');
@@ -63,6 +71,8 @@ for (const file of ['engine.test.js', 'accounting.test.js', 'accounting_activiti
   report.tests.push(run(file, process.execPath, [path.join('tests', file)]));
 }
 report.tests.push(run('service_workforce.test.js', process.execPath, ['tests/service_workforce.test.js']));
+for(const file of institutionChecks)report.tests.push(run(file,process.execPath,['tests/'+file]));
+report.tests.push(run('facility_catalog.test.js integrated',process.execPath,['tests/facility_catalog.test.js','--integrated']));
 report.tests.push(run('docs.test.js', process.execPath, ['tests/docs.test.js']));
 for (const file of ['network_lifecycle.test.js','local_session_transition.test.js','strategy_release_ui.test.js','operations_workspace.test.js','game_overlay.test.js','decision_quote.test.js','initiative_feedback.test.js','package_release.test.js','portable-launcher.test.js','storage_capacity.test.js','storage_guest_recovery.test.js'])
   report.tests.push(run(file, process.execPath, ['tests/'+file]));

@@ -38,7 +38,7 @@ function capturePeerFeatures(message){
  // A modern guest's unsolicited hello deliberately speaks V2. Ask once before
  // deciding Group 3 is unsupported; an actual V2 guest then replies 2 and fails.
  if(!featureChallenge&&message.featureChallenge===undefined&&
-    currentFeatureSource().financialGroupVersion===3&&caps.financialGroupSupported===2)
+    [3,4,5].includes(currentFeatureSource().financialGroupVersion)&&caps.financialGroupSupported===2)
   return {compatible:false,pending:true,reason:'Confirming Financial Group support with the other computer.'};
  return peerFeatureStatus();
 }

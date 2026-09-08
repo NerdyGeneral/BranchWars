@@ -47,6 +47,7 @@ function syncPrimaryStrategy(p){p.primaryStrategy=leadCapability(p);return p.pri
 function strategyBarred(){return''}
 function projectBarred(p,key){
  const def=PROJECTS[key];
+ const facilityIssue=facilityProjectIssue(p,key);if(facilityIssue)return facilityIssue;
  // Preserve legacy precedence: contract availability, local-office rules,
  // regulatory restrictions, retail deployment, then service applications.
  if(def&&def.contractOnly&&!p.serviceContracts)return 'Requires a new service-contract pilot.';
@@ -79,9 +80,9 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=productive&&Number.isFinite(productive.operations)?productive.operations:0;return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
-function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0))*10)/10}
+function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0)+(p.facilityNetwork?FacilityNetwork.committedCapacity(p):0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
 function hireCost(p,count){let total=0;const staff=p.stats.staff;for(let i=0;i<count;i++)total+=Math.round(HIRE_BASE_COST*(1+(staff+i)/45));return total}
 function hireLimit(p){return MAX_HIRES_PER_CYCLE}
@@ -97,15 +98,28 @@ function planBudget(p,plan){
  const advertising=p.advertising?(plan.advertisingPolicy||p.advertising.policy).budget:0;
  const relationshipOffers=p.relationshipOffers?relationshipOfferBudget(p,plan):0;
  const onboarding=p.onboarding?onboardingBudget(p,plan):0;
- const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding,training=p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
- const capacity=executionCapacity(p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean));
+ const facilityConversion=facilityDraftSpend(p,plan),departmentLeadership=p.departmentOffice?departmentLeadershipQuote(p,plan).total:0;
+ const lifecycle=facilityLifecycleDraftCommitment(p,plan);
+ const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const capacity=executionCapacity(departmental?.owner||p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity;
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
+ if(p.facilityNetwork)quote.facilityConversion=facilityConversion;
+ if(p.departmentOffice)quote.departmentLeadership=departmentLeadership;
  if(p.productPrograms)quote.productRetirement=productRetirement;
  if(p.advertising)quote.advertising=advertising;
  if(p.relationshipOffers)quote.relationshipOffers=relationshipOffers;
  if(p.onboarding)quote.onboarding=onboarding;
  if(p.workforce){quote.training=training;quote.specialistPayrollAdded=Object.entries(SPECIALIST_ROLES).reduce((n,[k,d])=>n+(Number(plan.specialistHires?.[k])||0)*d.payroll,0)}
  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
+ if(p.departmentOffice){
+  const leadership=departmentLeadershipQuote(p,plan);
+  quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0);
+  quote.discretionaryCommitments=quote.total-quote.mandatoryObligations;
+  quote.discretionaryCashAvailable=Math.max(0,p.stats.cash-(p.accounting.accounts.payables||0)-quote.mandatoryObligations);
+  quote.discretionaryCapitalAvailable=Math.max(0,quote.capitalBudget-quote.mandatoryObligations);
+  quote.discretionaryRemaining=Math.min(quote.discretionaryCashAvailable,quote.discretionaryCapitalAvailable)-quote.discretionaryCommitments;
+ }
  return quote;
 }
 function fundingStep(p,plan,key,step){
@@ -145,7 +159,7 @@ function projectTerms(p,key,focus=p.focus){
 function projectPlanStatus(p,plan){
  const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan);
  const fail=(code,reason)=>({eligible:false,code,reason,quote});
- let load=usedCapacity(owner);
+ let load=usedCapacity(owner)+facilityDraftCapacity(owner,plan);
  for(const key of chosen){
   const def=PROJECTS[key],terms=projectTerms(owner,key,plan.focus);
   if(!terms)return fail('unknown','That strategic project does not exist.');
@@ -158,11 +172,13 @@ function projectPlanStatus(p,plan){
   if(terms.atMaximum)return fail('maximum','That capability is already at maximum level.');
   if(terms.barred)return fail('barred',terms.barred);
  }
- if(owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
- if(owner.accounting&&quote.remaining<0)return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
+ if(owner.departmentOffice?quote.discretionaryCommitments>quote.discretionaryCashAvailable:owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
+ if(owner.accounting&&(owner.departmentOffice?quote.discretionaryRemaining<0:quote.remaining<0))return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
  if(regionalOperations(owner)){
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
   const projects=chosen.filter(local),active=owner.projects.filter(x=>x.target===plan.focus&&local(x.key));
+  if(owner.facilityNetwork)active.push(...FacilityNetwork.pending(owner).filter(o=>o.market===plan.focus&&o.id!==plan.facilityPolicy?.cancel));
+  if(owner.facilityLifecycle)active.push(...owner.facilityNetwork.offices.filter(o=>o.market===plan.focus&&owner.facilityLifecycle.records[o.id].renovation&&o.id!==plan.facilityLifecyclePolicy?.cancel));
   if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
  }
  if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
@@ -195,7 +211,7 @@ function projectStartStatus(g,p,key){
  // executive/rival effects would change already accepted campaign rules.
  return {eligible:true,code:null,terms};
 }
-function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
+function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
 function branchGoal(g){return{town:4,regional:5,state:6,national:8}[g.scope]||8}
