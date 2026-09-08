@@ -29,9 +29,10 @@ jobs:
 
   full-windows:
     runs-on: windows-latest
-    # Hosted Windows needs ~36 minutes for regression before the campaign audit.
-    # Keep every gate; allow the audit and evidence upload to finish.
-    timeout-minutes: 60
+    # Run21 took 14.4 minutes for work taking 5.6 locally (~2.6x).
+    # The 27-minute local regression plus campaign audit needs hosted headroom.
+    # Keep every gate and its per-test timeout; permit the evidence upload.
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
