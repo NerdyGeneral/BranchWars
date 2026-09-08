@@ -13,20 +13,33 @@ function peerFeatureStatus(settings=currentFeatureSource()){
 }
 function challengePeerFeatures(){
  if(!featureChallenge)featureChallenge=String(featureConnectionGeneration)+'-'+(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2));
- send({type:'hello_request',featureChallenge});
+ send({type:'hello_request',featureChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported});
 }
 function makeFeatureHello(request){
  const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),color:config.color,name:config.guestName,doctrine:config.doctrine};
+ // Released V2 hosts reject capabilities above their known maximum, even when
+ // playing retained Group 1/2 rules. Advertise the legacy-compatible range until
+ // the host explicitly requests the modern range. This never changes game rules.
+ hello.financialGroupSupported=Math.min(hello.financialGroupSupported,
+  Number.isInteger(request?.financialGroupSupported)&&request.financialGroupSupported>=3?request.financialGroupSupported:2);
  if(request&&typeof request.featureChallenge==='string'&&request.featureChallenge.length>0&&request.featureChallenge.length<=100)hello.featureChallenge=request.featureChallenge;
  return hello;
 }
 function capturePeerFeatures(message){
  // A challenged reply from an earlier connection may not replace current support.
  if(message.featureChallenge!==undefined&&message.featureChallenge!==featureChallenge)return {...peerFeatureStatus(),ignored:true};
+ // Connection capabilities are immutable once freshly challenged. A late
+ // bootstrap retry must not replace the stronger reply with its V2 fallback.
+ if(featurePeerFresh&&message.featureChallenge===undefined)return {...peerFeatureStatus(),ignored:true};
  const caps=Object.fromEntries(Object.keys(E.campaignCapabilities()).map(key=>[key,message[key]]));
  const same=featurePeerGeneration===featureConnectionGeneration&&JSON.stringify(caps)===JSON.stringify(featurePeerCapabilities);
  featurePeerCapabilities=caps;featurePeerGeneration=featureConnectionGeneration;
  featurePeerFresh=Boolean(featureChallenge&&message.featureChallenge===featureChallenge)||same&&featurePeerFresh;
+ // A modern guest's unsolicited hello deliberately speaks V2. Ask once before
+ // deciding Group 3 is unsupported; an actual V2 guest then replies 2 and fails.
+ if(!featureChallenge&&message.featureChallenge===undefined&&
+    currentFeatureSource().financialGroupVersion===3&&caps.financialGroupSupported===2)
+  return {compatible:false,pending:true,reason:'Confirming Financial Group support with the other computer.'};
  return peerFeatureStatus();
 }
 function validateIncomingFeatureRules(snapshot,context='view'){

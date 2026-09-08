@@ -1,7 +1,45 @@
+// Presentation-only desks: changing desks neither stages nor discards a plan.
+const FINANCIAL_GROUP_DESKS=Object.freeze({capital:['Capital','Funding and group statements'],agency:['Insurance agency','Staff, sales and client covers'],companies:['Companies','Cash, invoices and credit exposure']});
+let financialGroupDesk='capital',financialGroupDeskOwner=null;
+function setFinancialGroupDesk(key,{focus=false}={}){
+  financialGroupDesk=Object.hasOwn(FINANCIAL_GROUP_DESKS,key)?key:'capital';
+  for(const name of Object.keys(FINANCIAL_GROUP_DESKS)){
+    const active=name===financialGroupDesk,button=$('#groupTab-'+name),panel=$('#groupDesk-'+name);
+    button.ariaSelected=active?'true':'false';button.tabIndex=active?0:-1;button.classList.toggle('active',active);
+    panel.hidden=!active;if(active&&focus)button.focus();
+  }
+}
+function financialGroupDeskKey(event,key){
+  const keys=Object.keys(FINANCIAL_GROUP_DESKS),at=keys.indexOf(key);let next;
+  if(event.key==='ArrowRight'||event.key==='ArrowDown')next=keys[(at+1)%keys.length];
+  else if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=keys[(at+keys.length-1)%keys.length];
+  else if(event.key==='Home')next=keys[0];
+  else if(event.key==='End')next=keys.at(-1);
+  else return;
+  event.preventDefault();setFinancialGroupDesk(next,{focus:true});
+}
+function financialGroupDeskNavigation(v){
+  if(financialGroupDeskOwner!==v.me.id){financialGroupDeskOwner=v.me.id;financialGroupDesk='capital';}
+  return '<div class="section-head"><div><h2>FINANCIAL GROUP</h2><p class="small muted">One shared monthly plan. Switch desks without changing staged instructions.</p></div></div>'+
+    '<div class="operations-tabs" role="tablist" aria-label="Financial Group desks" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))">'+
+    Object.entries(FINANCIAL_GROUP_DESKS).map(([key,[label,hint]])=>'<button type="button" role="tab" id="groupTab-'+key+'" aria-controls="groupDesk-'+key+'" aria-selected="'+(financialGroupDesk===key?'true':'false')+'" tabindex="'+(financialGroupDesk===key?'0':'-1')+'">'+label+'<span>'+hint+'</span></button>').join('')+'</div>';
+}
+function financialGroupDeskPanel(key,html){
+  return '<section class="operations-pane" id="groupDesk-'+key+'" role="tabpanel" aria-labelledby="groupTab-'+key+'"'+(financialGroupDesk===key?'':' hidden')+'>'+html+'</section>';
+}
+function bindFinancialGroupDesks(){
+  for(const key of Object.keys(FINANCIAL_GROUP_DESKS)){
+    const button=$('#groupTab-'+key);
+    button.addEventListener('click',()=>setFinancialGroupDesk(key));
+    button.addEventListener('keydown',event=>financialGroupDeskKey(event,key));
+  }
+  setFinancialGroupDesk(financialGroupDesk);
+}
 function stageGroupPolicy(v, policy) {
   if(!draft||v.me.submitted||!v.me.financialGroup)return false;
   const next=JSON.parse(JSON.stringify(draft));next.groupPolicy=policy;
-  try{E.normalizeGroupPlan(v.me,next);draft=next;renderReady(v);return true;}
+  try{E.normalizeGroupPlan(v.me,next);E.normalizeAgencyPlan(v.me,next);draft=next;renderReady(v);
+    if(v.me.agency&&workspaceTab==='group')renderFinancialGroup(v);return true;}
   catch(error){toast(error.message);return false;}
 }
 function groupCreditControls(v) {
@@ -76,7 +114,7 @@ function renderFinancialGroup(v) {
   if(workspaceTab!=='group')return;
   const p=v.me,book=p.financialGroup.parent,quote=E.groupCapitalQuote(p),summary=p.groupSummary,report=p.financialGroup.report;
   const disabled=p.submitted?' disabled':'';
-  $('#financialGroupPanel').innerHTML='<div class="section-head"><div><h2>GROUP CAPITAL</h2>'+
+  const capitalContent='<div class="section-head"><div><h2>GROUP CAPITAL</h2>'+
     '<p class="small muted">One institution, separate bank and parent accounts. Internal transfers change where capital is held—not how much the group owns.</p></div></div>'+
     '<div class="credit-summary"><div><span>Parent operating cash</span><b>'+money(book.accounts.cash)+'</b><small>Not bank deposits or customer investments.</small></div>'+
     '<div><span>Consolidated equity</span><b>'+money(summary.equity)+'</b><small>Parent investment eliminated once.</small></div>'+
@@ -93,9 +131,23 @@ function renderFinancialGroup(v) {
     '<tr><th>Liabilities</th><td>'+money(E.GroupAccounting.validate(book).liabilities)+'</td><td>'+money(summary.liabilities)+'</td></tr>'+
     '<tr><th>Equity</th><td>'+money(book.accounts.equity)+'</td><td>'+money(summary.equity)+'</td></tr>'+
     '<tr><th>Investment eliminated</th><td>'+money(book.accounts.investments)+'</td><td>'+money(summary.eliminatedInvestment)+'</td></tr></tbody></table></div>'+
-    '<p class="micro">Opening parent ownership creates no extra cash. Bank dividends are not group operating income. These totals do not yet represent completed insurance, brokerage, wealth or company-share systems; those remain in development.</p></details>'+corporateCompanyPanel(v);
+    '<p class="micro">Opening parent ownership creates no extra cash. Bank dividends are not group operating income. '+(p.agency?
+      'These totals include the operating insurance agency and eliminate its parent investment. This commercial agency is not an insurer; brokerage, wealth and company-share systems remain in development.':
+      'These totals do not yet represent completed insurance, brokerage, wealth or company-share systems; those remain in development.')+'</p></details>';
+  const navigation=p.agency?financialGroupDeskNavigation(v):'';
+  $('#financialGroupPanel').innerHTML=p.agency?navigation+financialGroupDeskPanel('capital',capitalContent)+
+    financialGroupDeskPanel('agency',agencyPanel(v))+financialGroupDeskPanel('companies',corporateCompanyPanel(v)):
+    capitalContent+corporateCompanyPanel(v);
+  const groupSignature=JSON.stringify(draft),groupCampaign=game||view;
   $('#stageGroupCapital').addEventListener('click',()=>{
+    if(p.agency&&!agencyDraftCurrent(v,groupSignature,groupCampaign)){
+      toast('The institution, month or plan changed. Reopen the capital desk before staging.');return;
+    }
     const policy={...draft.groupPolicy,bankDividend:Number($('#groupBankDividend').value),bankSupport:Number($('#groupBankSupport').value)};
     if(stageGroupPolicy(v,policy))$('#groupCapitalStatus').textContent='Capital instruction staged; final safeguards will be rechecked at settlement.';
   });
+  if(v.me.agency){
+    bindFinancialGroupDesks();
+    bindAgencyControls(v);
+  }
 }

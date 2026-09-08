@@ -9,8 +9,8 @@ const CompanyFinance = (() => {
     Object.keys(x).sort().join() === [...keys].sort().join();
   const sensitivity = [1.3, 1.2, .4, 1.1, 1, .8];
   function companyValidate(world) {
-    if (!exact(world, ['version','month','outside','creditor','companies','openingCash','recoveredAssets','bankCashPaid','bankFlows']) ||
-        world.version !== 2 || !whole(world.month) || !whole(world.openingCash) ||
+    if (!exact(world, ['version','month','outside','creditor','companies','openingCash','recoveredAssets','bankCashPaid','bankFlows',...(world?.version===3?['agencyCashNet']:[])]) ||
+        ![2,3].includes(world.version) || (world.version===3&&!Number.isSafeInteger(world.agencyCashNet)) || !whole(world.month) || !whole(world.openingCash) ||
         !whole(world.recoveredAssets) ||
         !Array.isArray(world.companies) || world.companies.length !== 6) throw Error('Invalid corporate economy.');
     GroupAccounting.validate(world.outside); GroupAccounting.validate(world.creditor);
@@ -51,13 +51,13 @@ const CompanyFinance = (() => {
       const r=c.report;
       if (r !== null) {
         const fields=['month','salesRequested','sales','operatingCost','operatingPaid','interest','interestPaid',
-          'principalDue','principalPaid','serviceDue','servicePaid','profit','resolutionEarnings','dividend','arrears','cashLimited'];
+          'principalDue','principalPaid','serviceDue','servicePaid','profit','resolutionEarnings','dividend','arrears','cashLimited',...(world.version===3?['agencyExpense']:[])];
         if (!exact(r,fields) || r.month!==world.month || typeof r.cashLimited!=='boolean' ||
             fields.filter(k=>!['cashLimited','profit','resolutionEarnings'].includes(k)).some(k=>!whole(r[k])) ||
             !Number.isSafeInteger(r.profit) || !Number.isSafeInteger(r.resolutionEarnings) || r.sales>r.salesRequested ||
             r.operatingPaid>r.operatingCost || r.interestPaid>r.interest ||
             r.principalPaid>r.principalDue || r.servicePaid>r.serviceDue ||
-            r.profit!==r.sales-r.operatingCost-r.interest-r.serviceDue+r.resolutionEarnings ||
+            r.profit!==r.sales-r.operatingCost-r.interest-r.serviceDue+r.resolutionEarnings-(world.version===3?r.agencyExpense:0) ||
             r.resolutionEarnings!==(c.resolution?.month===world.month?
               -c.resolution.assetLoss+c.resolution.creditorWriteoff+c.resolution.supplierWriteoff+c.resolution.bankWriteoff.reduce((a,b)=>a+b,0):0) ||
             r.arrears!==c.book.accounts.payables) throw Error('Invalid corporate report.');
@@ -73,7 +73,7 @@ const CompanyFinance = (() => {
     for (const book of [world.outside,world.creditor]) if (book.accounts.debt || book.accounts.payables ||
       book.accounts.investments || book.accounts.custodyAssets) throw Error('Unsupported corporate counterparty account.');
     const cash = [world.outside,world.creditor,...world.companies.map(c=>c.book)].reduce((n,b)=>n+b.accounts.cash,0);
-    if (cash+world.bankCashPaid[0]+world.bankCashPaid[1] !== world.openingCash) throw Error('Corporate cash is not conserved.');
+    if (cash+world.bankCashPaid[0]+world.bankCashPaid[1]+(world.version===3?world.agencyCashNet:0) !== world.openingCash) throw Error('Corporate cash is not conserved.');
     return {cash,debt,payable,companies:6};
   }
   function companyOpening(profiles) {
@@ -213,7 +213,7 @@ const CompanyFinance = (() => {
       if(c.resolution){
         c.report={month:world.month,salesRequested:0,sales:0,operatingCost:0,operatingPaid:0,
           interest:0,interestPaid:0,principalDue:0,principalPaid:0,serviceDue:0,servicePaid:0,
-          profit:0,resolutionEarnings:0,dividend:0,arrears:0,cashLimited:false};
+          profit:0,resolutionEarnings:0,dividend:0,arrears:0,cashLimited:false,...(world.version===3?{agencyExpense:0}:{})};
         continue;
       }
       // Old supplier invoices have priority. Settlement creates no second cost.
@@ -274,7 +274,7 @@ const CompanyFinance = (() => {
       }
       c.report={month:world.month,salesRequested:requests[i],sales:paid[i],operatingCost,operatingPaid,
         interest,interestPaid,principalDue,principalPaid,serviceDue,servicePaid,profit,resolutionEarnings:0,dividend,arrears:c.book.accounts.payables,
-        cashLimited:paid[i]<requests[i]||operatingPaid<operatingCost||interestPaid<interest||
+        ...(world.version===3?{agencyExpense:0}:{}),cashLimited:paid[i]<requests[i]||operatingPaid<operatingCost||interestPaid<interest||
           principalPaid<principalDue||servicePaid<serviceDue};
     }
     // Provisional credit stop: three normal operating months of unpaid bills
@@ -289,5 +289,26 @@ const CompanyFinance = (() => {
     }
     companyValidate(world);return world;
   }
-  return Object.freeze({opening:companyOpening,validate:companyValidate,step:companyStep});
+  // Explicit creation boundary, never an import repair or an implicit upgrade.
+  function withAgency(input) {
+    companyValidate(input);
+    if(input.version!==2||input.month!==0)throw Error('Agency company rules must be selected at campaign creation.');
+    const world=clone(input);world.version=3;world.agencyCashNet=0;
+    companyValidate(world);return world;
+  }
+  function payAgencyPremium(input,index,carrier,amount) {
+    companyValidate(input);GroupAccounting.validate(carrier);
+    if(input.version!==3||!Number.isInteger(index)||index<0||index>=6||!whole(amount))
+      throw Error('Invalid company insurance payment.');
+    const world=clone(input),company=world.companies[index];
+    if(company.resolution||!company.report||company.book.accounts.cash<amount)
+      throw Error('Company cannot fund this insurance premium.');
+    const premiumTransfer=GroupAccounting.servicePayment(company.book,carrier,amount);
+    company.book=premiumTransfer.payer;
+    company.report.agencyExpense+=amount;company.report.profit-=amount;
+    world.agencyCashNet+=amount;
+    companyValidate(world);
+    return {world,carrier:premiumTransfer.provider};
+  }
+  return Object.freeze({opening:companyOpening,validate:companyValidate,step:companyStep,withAgency,payAgencyPremium});
 })();

@@ -1,5 +1,98 @@
 # Release status and known issues
 
+## Active regional / Financial Group completion work — September 8, 2026
+
+The new approved goal authorizes implementation through the complete nondeferred
+regional banking and optional Financial Group blueprint. It supersedes the
+earlier stabilization-only stop instruction, but **does not authorize a GitHub
+push, PR merge or publication**. National Empire, underwriting, presets/broader
+independence, unrelated expansion and removal of supported options remain outside
+this goal. Provisional engineering, UI, content and numerical decisions are
+authorized; major identity/scope/mode changes still require approval.
+
+The [single roadmap](roadmap.md) owns the frozen **48-row checklist**, retaining
+01a–10e and X1–X5 from the preserved original matrix. Baseline/partial/missing
+describe evidence, not percentages or proof of final integration. Every row
+inherits UI, AI, accounting, compatibility, privacy and meaningful interactions.
+The implemented commercial-agency slice alone does not complete N-09 or the goal.
+
+### Preservation and current checkpoint
+
+- Verified starting backup:
+  `C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-regional-completion-start`.
+  Game, releases and untracked game files are preserved; unrelated work remains
+  user-owned.
+- Last-passing release: packaged **V2 stabilization RC1**, Group rules 2 / save 9.1,
+  with its hashes and evidence preserved below. Those checks do not certify
+  subsequent working source. Existing packaged releases must not be overwritten.
+- Implemented development checkpoint: **Group 3 / save 9.2 staffed commercial
+  insurance agency**, using the existing Group checkbox/cumulative prerequisites.
+  Finite carrier-funded commissions, 18 independent company-cover relationships,
+  dedicated staff/capacity/expenses, acquisition/renewal/service, capped parent
+  support, wind-down/relaunch, owner UI and same-rule AI are implemented.
+  Existing Group 1/2 campaigns do not silently acquire the new mechanics.
+- Status: **partial N-09; targeted checks passed, final integration incomplete**.
+  Source has **114 ordered assembly inputs**. Agency checkpoint portable SHA-256:
+  `c3af45b3aa4da99fa1333c260de90395552c56f6046735daf8615225e3e355ce`.
+  The generated reference is current. This identifies the agency checkpoint,
+  not the eventual completed regional expansion. No new
+  release-candidate, full Windows gate or publication claim is made.
+- Remaining after that checkpoint: wider facilities/leadership/departments,
+  banking products and delivery/marketing/wallet, brokerage then wealth, shares
+  and financed control/integration, followed by all-row integrated acceptance.
+
+### Agency checkpoint evidence — not the full expansion gate
+
+| Check | Completed evidence or explicit limit |
+|---|---|
+| Agency domain/full-engine suite | `tests/agency.test.js`: 36 checks; 123 full-engine months plus 604 isolated-domain months. These populations are distinct and must not be described as 727 full-bank months. |
+| Ordinary AI reachability | One bank launched at month 25 using bank profit paid to its parent in an earlier month; the other bank was not forced or given launch money. |
+| Four economic scenarios | Balanced/rate/regulatory/growth full-engine campaigns, 24 months each with funded test fixtures; zero agency failures and zero company closures in these samples. |
+| Isolated 120-month normal economy | Approximately $2.162M total commissions, no agency failures or company closures; domain conservation evidence, not a 120-month whole-bank balance verdict. |
+| Isolated 480-month severe demand stress | Demand factor 0.5; each agency failed once and all six companies closed. Accounting conserved resources. Failure is not an assertion that long-game recovery or replacement content is complete. |
+| Owner UI | Agency and existing Financial Group UI harnesses pass: joint cash commitment validation, pure previews, staged instructions, sealed/stale/reloaded controls, privacy and legacy hiding. Group 3 has keyboard-accessible Capital/Insurance agency/Companies subdesks; tab changes preserve the shared plan. |
+| Actual local browser | Group 3 Continue loads; all three subdesks switch, including ArrowRight focus/selection. At 500×900, document scroll/client widths both measured 485px: no page-wide horizontal overflow. Launch checkbox is 18×18; inputs are readable. A $120K launch with $0 parent cash is visibly rejected; a valid preview leaves the plan unchanged. No captured warning/error logs. |
+| Exact retained-engine comparison | `tests/agency_legacy_compat.test.js` passes 16 Group 1/2 profiles, 48 paired month comparisons including 16 explicit human-plan months: creation, AI/human resolution, RNG, owner views, half-ready resume and rematch agree with preserved V2 bytes; fixtures were not regenerated. |
+| Actual mixed-version peer sessions | `tests/agency_peer_compat.test.js`: 12 mixed sessions use immutable V2 engine/client bytes with current code, both host directions and Group 1/2 across three simulated transports. Also covers modern Group 3 bootstrap, old-peer refusal, lobby upgrades and delayed-message fences. This is not physical two-computer play. |
+| Main feature-network matrix | `tests/feature_network.test.js --source` passes after replacing its unsuitable funding horizon with an explicitly conserving prior-capital-return fixture. This artificial network fixture isolates active-agency synchronization and is not evidence of ordinary launch affordability; the month-25 AI test establishes that separately. |
+| Broader agency regression checks | All fast-gate commands passed against the agency portable above. The run resumed after an unlisted next-phase prototype was moved outside `src`, and after updating the new-setup expectation from Group 2 to Group 3. No frozen legacy fixture changed. Build/reference/architecture, existing economics, save/privacy, lobby/network, Windows launchers, packaging, paired quick balance and the added agency suites passed. |
+| Final expansion / full Windows gate | **Pending** on the eventual integrated expansion build. This fast-gate checkpoint is not the final full Windows release gate or completion of all 48 requirements. Preserved V2 hashes and tests below certify only V2. |
+
+Agency numerical assumptions are provisional: $120K launch capital, $30K setup,
+$7K per hire, $4.5K salary per employee/month, $1.5K monthly overhead and $0/$1K/$2K
+outreach. One to four dedicated staff supply eight service units each; property/
+liability/benefits consume 1/1/2 units. Covers renew on a 12-month term. Scheduled
+premiums are 25%/15%/35% of company base service fees, with 18%/20%/15% commission.
+Support defaults off, is capped at $100K/month and competes for actual parent cash
+after bank support commitments. Distributions protect obligations plus three
+months of operating expense and cannot exceed retained earnings/equity.
+
+N-09 still lacks broader household/customer-wallet distribution, selectable carrier
+relationships and carrier/claims events, brokerage, wealth, custody, broader group
+allocations/shared services and their integrated failure scenarios. The current
+carrier book funds premium/commission transfers only; no claim-loss protection or
+underwriting simulator is implied. The six-company pool can exhaust under severe
+stress; conservation alone does not prove enjoyable indefinite business demand.
+
+No balance claim is made from the staffed-agency UI fixture, which deliberately
+provides parent cash to test controls. Ordinary earning-to-launch reachability is
+the separate month-25 test above. Full-bank long-run counterplay, human enjoyment,
+physical two-computer acceptance and all 48 integrated requirements remain open.
+
+### Decisions for Xande — single active queue
+
+No minor content or numerical approval currently blocks implementation. D09–D13 A
+and provisional remaining content are approved. Record any newly discovered
+identity-changing redesign, removed approved system, major mode or material scope
+expansion here with recommendation and consequences; continue independent work.
+There are no newly pending content decisions at this checkpoint.
+
+Human enjoyment, strategy/recovery viability, multi-session play and a real
+two-computer multiplayer session remain **pending human acceptance**, not minor
+design blockers or automated passes. They must be listed in the final handoff.
+
+## Preserved V2 stabilization evidence — not new expansion verification
+
 Updated September 7, 2026. **V2 stabilization RC1 — local technical gates passed;
 real two-computer acceptance remains pending.**
 Publication and remote CI are tracked by [PR #18](https://github.com/NerdyGeneral/BranchWars/pull/18).
@@ -116,11 +209,11 @@ These are measured samples, not guaranteed latency or unlimited storage capacity
    The Windows launcher parser is tested; default-browser file association
    still needs a manual check on the recipient's computer.
 
-## Decisions / exceptions
+## Historical stabilization exception record
 
-No minor content/numeric approval blocks this goal. Record any unresolved material
-failure before publication; do not hide it or tune away legitimate dominance.
-Human multiplayer/playability remains an acceptance task.
+No minor content/numeric approval blocked the completed stabilization goal.
+Its publication authority applied to that release only. The single active
+decision queue is above; human multiplayer/playability remains pending.
 
 Selected machine-readable evidence:
 [final candidate](../reports/baselines/v2-stabilization-final.json) and

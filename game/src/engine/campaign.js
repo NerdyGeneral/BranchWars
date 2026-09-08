@@ -68,6 +68,7 @@ function createGame(o){
  initializeOnboarding(g,o);
  initializeFinancialGroup(g,o);
  initializeCorporateEconomy(g);
+ initializeAgency(g);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;

@@ -1,6 +1,6 @@
 # Branch Wars — Player Guide
 
-Executive Command · Living Bank release candidate
+Executive Command · Living Bank working build
 
 V2 stabilization remains a release candidate, not certified two-computer
 acceptance. Both desks need the same candidate HTML and updated PowerShell server.
@@ -35,18 +35,22 @@ modular mode asks to restore Advertising's legacy prerequisite. Both peers need
 this build. Rules and obligations remain fixed after play starts; older saves
 are not upgraded. This deep pilot still overrides campaign size to six markets.
 
-**Financial Group preview (working build, new saves 9.1)** adds group capital,
-simultaneous lending and six operating corporate clients. It is unchecked by default, requires
+**Financial Group preview (working build, new saves 9.2)** adds group capital,
+simultaneous lending, six operating corporate clients and a staffed commercial
+insurance agency. It is unchecked by default, requires
 Customer onboarding and priced Product programmes with their prerequisites, and
 cannot be combined with the limited Modular combinations pilot. Both multiplayer
 peers must support it; an older peer is blocked rather than silently downgraded.
-This is not yet the complete insurance/brokerage/wealth or company-shares system.
+This is not yet the complete Financial Group, brokerage/wealth or company-shares system.
 Campaign rules remain fixed: do not assume a campaign started on this foundation
 will automatically acquire future subsidiary or share-trading mechanics.
 Existing save 9.0 campaigns retain the earlier parent/lending foundation without
-the company economy. Both players need rules-2 support for new 9.1 campaigns.
+the company economy; save 9.1 retains corporate clients without agencies.
+Both players need rules-3 support for new 9.2 campaigns. No older campaign
+automatically gains the agency. This development checkpoint is not the completed
+regional release; final integration and human multiplayer acceptance are pending.
 
-- **Group > Corporate clients:** inspect companies' cash, debt, unpaid bills,
+- **Group > Companies** (Corporate clients in older Group campaigns): inspect companies' cash, debt, unpaid bills,
   equity and monthly profit before bidding for their commercial service mandates
   in Markets. A banking relationship is not company ownership.
 - Service fees are paid from company cash. Unpaid invoices are bank assets but
@@ -83,6 +87,77 @@ the company economy. Both players need rules-2 support for new 9.1 campaigns.
 - Capital transfer amounts reset to zero for the next month. The last settled
   request/result and reconciled balance sheets appear in Group. Your rival
   cannot see your private parent ledger or sealed capital instructions.
+
+### Insurance agency — Group rules 3 only
+
+Group has three desks: **Capital**, **Insurance agency** and **Companies**.
+Changing desks does not submit a turn, alter your staged plan or erase working
+form values. Arrow keys, Home and End navigate the desk tabs. Company tables and
+the optional cover roster scroll within their own container on narrow displays.
+
+To open an agency:
+
+1. Earn bank profit, then use **Capital > Bank profit to parent** to request a
+   dividend. The bank must retain its protected capital/cash and meet existing
+   restrictions. Stage and resolve the month; the requested amount may be reduced.
+2. Accumulate at least **$120,000 of actual parent cash**. A dividend merely
+   requested this month cannot fund an agency order in the same month.
+3. In **Insurance agency**, check **Launch agency this month**, enter the funded
+   capital amount, choose staff, a new-business focus and outreach. Preview the
+   instruction, then **Stage agency instruction** and submit the shared turn.
+   A quote or checked box alone does not launch or spend anything.
+
+The following new-system values are provisional and may be tuned in future rules:
+
+| Agency decision | Cost or consequence |
+|---|---|
+| Launch or relaunch | At least $120,000 funded capital; $30,000 setup expense paid from it |
+| Dedicated staff | One to four agency employees; $7,000 per new hire and $4,500 per employee each month |
+| Overhead | $1,500 each active month |
+| Outreach | Off / focused / intensive: $0 / $1,000 / $2,000 per month; paid effort is not a guaranteed win |
+| Capacity | Eight service units per employee; property/liability use one unit, benefits two |
+| Parent support | Default $0/off; optional standing cap up to $100,000 per month, limited by available parent cash after bank support commitments |
+| Agency distribution | Earned profit only, limited by equity and cash remaining after obligations plus a three-month operating-expense reserve |
+
+For example, launching with one employee and focused outreach incurs $30,000
+setup, $7,000 recruitment and $7,000 recurring expense in the launch month, before
+any commissions. Without funded launch, the displayed prospective costs are not
+charged. Staff reductions lower future salary/capacity; they do not refund hiring.
+The agency cannot borrow or draw automatically on bank deposits.
+
+Capital injections and distributions are one-month instructions and reset after
+settlement. Staffing, focus, outreach and the support cap persist. Automatic
+support only covers a funding shortfall within your cap; it is not a recurring
+free grant or assurance that the parent can rescue the business.
+
+Each of the six corporate clients has separate property, liability and employee
+benefits cover: **18 independently renewable relationships**, not 18 new companies.
+Your focus applies to new business; staff first services existing relationships.
+Policies normally run for 12 months. At renewal a rival can contest them; staff
+shortages, unaffordable premiums or company closure can end them earlier. Local
+facilities, service delivery, digital development, agency staff and outreach
+influence competition. Keeping a banking mandate does not guarantee insurance,
+and winning insurance does not buy shares or move the client's bank account.
+
+Companies pay monthly premiums from their own finite cash to outside carriers.
+Property/liability/benefits schedules are 25%/15%/35% of the company's base service
+fee; carrier commission rates are 18%/20%/15% of the paid premium. The roster shows
+the actual scheduled dollars. **The premium is not agency revenue:** only the
+commission is, and expenses must still be deducted. Current-book commission
+estimates are not guaranteed receipts, future acquisitions or profit.
+
+The last settled report separates commissions, invoiced expenses, cash payments,
+won/lost covers and capital transfers. If the agency cannot pay due obligations
+or has negative equity, it winds down: creditors receive actual available cash,
+unrecovered investment is lost, and covers return to outside providers. The bank
+continues under its existing failure rules. Relaunch needs fresh minimum capital,
+setup and hiring; the prior loss and failure count are not erased.
+
+This is a third-party commercial distribution business, **not an underwriter**.
+Household insurance, wider wallet/cross-selling, carrier selection and claims or
+carrier-loss events are not implemented yet. Brokerage and wealth remain future
+approved work. Buying cover currently does not promise simulated compensation
+for a company's future loss event.
 
 1. Extract the ZIP.
 2. For Solo AI, Pass & Play, or Direct P2P, double-click OPEN_BRANCH_WARS.bat.

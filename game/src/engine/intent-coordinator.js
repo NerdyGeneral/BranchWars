@@ -29,9 +29,10 @@ function chooseOpenBotCore(g, index) {
   plan = reconsiderOnboardingPending(g, index, plan);
   plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
   plan=planFinancialGroup(g,index,plan);
+  plan=planAgency(g,index,plan);
   // A changed loan mix can change the loss reserve after the earlier pricing
   // pass. Recheck only new group campaigns; old AI order remains byte-exact.
-  return [1,2].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
+  return [1,2,3].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }
 function aiCashPlanningReview(g, index, plan) {
   if (![1, 2].includes(g.productProgramsVersion)) return null;
@@ -107,7 +108,7 @@ function planFinalCashReserve(g, index, input) {
   return plan;
 }
 function validatePilot(g) {
-  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1'].includes(g.version)) validateCampaignRules(g, 'game');
+  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2'].includes(g.version)) validateCampaignRules(g, 'game');
   validateAccountingSave(g);
   validateRegionalSave(g);
   validateMarketSave(g);
@@ -134,6 +135,7 @@ function validatePilot(g) {
   validateOnboardingSave(g);
   validateFinancialGroupSave(g);
   validateCorporateSave(g);
+  validateAgencySave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
@@ -149,4 +151,5 @@ function validatePortfolioPlan(p, plan) {
   normalizeHouseholdPlan(p, plan);
   normalizeCollectionsPlan(p, plan);
   normalizeGroupPlan(p, plan);
+  normalizeAgencyPlan(p, plan);
 }
