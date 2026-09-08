@@ -17,6 +17,7 @@ function departmentFunctionPlanningBudget(p,plan){
   if(p._departmentFunctionOpening){
     const shadow=departmentFunctionCopy(p),authorizedOpening=p._departmentFunctionOpening;
     shadow._departmentFunctionExecution=DepartmentDelivery.deliver(authorizedOpening.dispatch,authorizedOpening.attribution,{headcount:authorizedOpening.attribution.employedHeadcount,physicalQuarters:authorizedOpening.attribution.rawAfterTeachingQuarters,paidVendorQuarters:p.departmentFunctions.policy.vendors});
+    shadow._departmentFunctionExpertise=departmentFunctionExpertise(p,authorizedOpening.attribution.rawAfterTeachingQuarters,authorizedOpening.attribution.paidTeacherQuarters);
     return planBudgetBase(shadow,plan);
   }
   const raw=departmentFunctionCopy(p);raw._departmentFunctionsRaw=true;delete raw._departmentFunctionExecution;
@@ -32,6 +33,7 @@ function departmentFunctionPlanningBudget(p,plan){
     const dispatch=DepartmentDispatch.dispatch(quote,built.attribution,built.taskWorkloads),shadow=departmentFunctionCopy(raw);
     shadow._departmentFunctionsRaw=false;
     shadow._departmentFunctionExecution=DepartmentDelivery.deliver(dispatch,built.attribution,{headcount:p.stats.staff,physicalQuarters:built.attribution.rawAfterTeachingQuarters,paidVendorQuarters:quote.policy.vendors});
+    shadow._departmentFunctionExpertise=departmentFunctionExpertise(p,built.attribution.rawAfterTeachingQuarters,built.attribution.paidTeacherQuarters);
     const next=planBudgetBase(shadow,plan);
     if(next.total===budget.total&&next.training===budget.training&&next.relationshipOffers===budget.relationshipOffers&&next.onboarding===budget.onboarding&&next.capacity===budget.capacity)return next;
     budget=next;
@@ -67,12 +69,60 @@ function normalizeDepartmentFunctionsPlan(g,p,plan){
 }
 function departmentFunctionExecution(p){return !p._departmentFunctionsRaw&&p.departmentFunctions?p._departmentFunctionExecution:null;}
 function departmentFunctionTask(p,id){const row=departmentFunctionExecution(p)?.rows.find(row=>row.id===id);return row?{...row.delivered,workload:row.workload}:null;}
+function departmentFunctionExpertise(p,physical=departmentFunctionPhysical(p),teachers=null){
+  return {version:1,roles:Object.fromEntries(DepartmentFunctions.ROLES.map(role=>{
+    const row=p.workforce.departments[role],teaching=teachers?teachers[role]===4:departmentTeachingActive(p,role);
+    return [role,{count:row.count,skill:row.skill,allocation:physical[role]/4+(teaching?1:0),teaching}];
+  }))};
+}
+function departmentFunctionExpertBonus(expertise,physical,role){
+  const row=expertise.roles[role];
+  return Math.min(Math.max(0,row.count-(row.teaching?1:0)),physical[role]/4)*(.1+row.skill*.003);
+}
+function departmentFunctionFrozenBonus(p,role,allocation=p.allocation){
+  const execution=departmentFunctionExecution(p),expertise=p._departmentFunctionExpertise;
+  if(!execution||!expertise||DepartmentFunctions.ROLES.some(r=>allocation[r]!==p.allocation[r]))return null;
+  return departmentFunctionExpertBonus(expertise,execution.physical.available,role);
+}
 function departmentFunctionTaskFte(p,id,fallback){
   const row=departmentFunctionTask(p,id);if(!row)return fallback;
   // Expertise improves delivered work, never the physical staffing pool or
   // purchased vendor count. Each role's bonus is apportioned once by task time.
   const physical=departmentFunctionExecution(p).physical.available;
   return row.capacity/4+DepartmentFunctions.ROLES.reduce((n,role)=>n+(physical[role]?specialistBonus(p,role)*(row.retained[role]+row.additional[role])/physical[role]:0),0);
+}
+// Physical task authorization, purchased work and expertise are different
+// quantities. Vendor work can exceed local staffing, but cannot consume or
+// manufacture the residual physical sales pool.
+function departmentCustomerStaffingDetails(execution,expertise,id){
+  const row=execution.rows.find(row=>row.id===id).delivered,physical=execution.physical.available;
+  const physicalAssigned=DepartmentFunctions.ROLES.reduce((n,r)=>n+row.retained[r]+row.additional[r],0)/4;
+  const taskBonus=DepartmentFunctions.ROLES.reduce((n,r)=>n+(physical[r]?departmentFunctionExpertBonus(expertise,physical,r)*(row.retained[r]+row.additional[r])/physical[r]:0),0);
+  const physicalSales=execution.remainingPools.service/4;
+  return {physicalAssigned,vendorStaff:row.vendor/4,expertise:taskBonus,physicalSales,
+    assignedStaff:physicalAssigned+row.vendor/4+taskBonus,
+    salesStaff:physicalSales+(physical.service?departmentFunctionExpertBonus(expertise,physical,'service')*execution.remainingPools.service/physical.service:0)};
+}
+function departmentCustomerStaffing(p,id,enabled,legacyAssigned,legacySales){
+  const execution=departmentFunctionExecution(p);
+  if(!execution)return {assignedStaff:legacyAssigned,salesStaff:legacySales};
+  const expertise=p._departmentFunctionExpertise||departmentFunctionExpertise(p,execution.physical.available),
+    details=departmentCustomerStaffingDetails(execution,expertise,id);
+  return {staffingVersion:2,assignedStaff:enabled?details.assignedStaff:0,salesStaff:details.salesStaff};
+}
+function validateDepartmentCustomerStaffing(p,report,id,evidenceChecked=false){
+  const saved=p.departmentFunctionDelivery,modern=report?.staffingVersion!==undefined;
+  if(!modern){if(saved?.expertise!==undefined)throw Error('Department staffing report marker missing.');return false;}
+  if(report.staffingVersion!==2||!p.departmentFunctions||!saved?.expertise||saved.cycle!==report.cycle)throw Error('Unsupported department staffing report.');
+  if(!evidenceChecked)validateDepartmentFunctionOwner(p,report.cycle);
+  const details=departmentCustomerStaffingDetails(saved.report,saved.expertise,id),
+    assigned=report.policy.share>0?details.assignedStaff:0,
+    retained=saved.attribution.rawAfterTeachingQuarters.service*(1-p.householdBook.policy.retention/100)*
+      (id==='applicationProcessing'?(1-p.relationshipOffers.policy.share/100):1)*report.policy.share/100;
+  if(Math.abs(saved.attribution.exactRetainedTasks[id].service-retained)>1e-8||
+    Math.abs(report.assignedStaff-assigned)>1e-8||Math.abs(report.salesStaff-details.salesStaff)>1e-8)
+    throw Error('Department customer staffing does not reconcile with authorized delivery.');
+  return true;
 }
 function departmentFunctionCoverage(p,id,fallback=1){const row=departmentFunctionTask(p,id);return row?(row.workload===0?1:Math.min(1,departmentFunctionTaskFte(p,id,0)*4/row.workload)):fallback;}
 function departmentFunctionResidual(p,role,fallback){const execution=departmentFunctionExecution(p);return execution?execution.remainingPools[role]/4:fallback;}
@@ -123,18 +173,19 @@ function deliverDepartmentFunctions(g){
     const actual={headcount:p.stats.staff,physicalQuarters:departmentFunctionPhysical(p),paidVendorQuarters:p.departmentFunctions.policy.vendors},
       report=DepartmentDelivery.deliver(authorizedOpening.dispatch,authorizedOpening.attribution,actual);
     p._departmentFunctionExecution=report;
+    p._departmentFunctionExpertise=departmentFunctionExpertise(p,actual.physicalQuarters);
     // Opening commitments are maxima, not a second bill. A late staffing loss
     // cannot increase the authorized rebate/activation cash allowance.
     p._relationshipOfferBudget=Math.min(authorizedOpening.budgets.relationshipOffers,relationshipOfferBudget(p,{}));
     p._onboardingBudget=Math.min(authorizedOpening.budgets.onboarding,onboardingBudget(p,{}));
-    p.departmentFunctionDelivery={cycle:g.cycle,attribution:departmentFunctionCopy(authorizedOpening.attribution),taskWorkloads:departmentFunctionCopy(authorizedOpening.taskWorkloads),actual:departmentFunctionCopy(actual),report:departmentFunctionCopy(report),opportunity:null};
+    p.departmentFunctionDelivery={cycle:g.cycle,attribution:departmentFunctionCopy(authorizedOpening.attribution),taskWorkloads:departmentFunctionCopy(authorizedOpening.taskWorkloads),actual:departmentFunctionCopy(actual),report:departmentFunctionCopy(report),expertise:departmentFunctionCopy(p._departmentFunctionExpertise),opportunity:null};
   }
 }
 function finishDepartmentFunctions(g){
   if(g.financialGroupVersion!==6)return [];
   for(const p of g.players){
     addDepartmentFunctionOperatingReport(p);
-    delete p._departmentFunctionExecution;delete p._departmentFunctionOpening;delete p._departmentFunctionPaidCycle;
+    delete p._departmentFunctionExecution;delete p._departmentFunctionExpertise;delete p._departmentFunctionOpening;delete p._departmentFunctionPaidCycle;
   }
   return [];
 }
@@ -147,10 +198,10 @@ function addDepartmentFunctionOperatingReport(p){
 function validateDepartmentFunctionOwner(p,month){
   DepartmentFunctions.validate(p);
   if(p.departmentFunctions.lastCycle!==month)throw Error('Department function campaign month mismatch.');
-  for(const key of ['_departmentFunctionExecution','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p[key]!==undefined)throw Error('Unsettled department function transient.');
+  for(const key of ['_departmentFunctionExecution','_departmentFunctionExpertise','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p[key]!==undefined)throw Error('Unsettled department function transient.');
   const saved=p.departmentFunctionDelivery;
   if(month===p.departmentFunctions.startedCycle-1){if(saved!==null)throw Error('Unexpected opening department delivery.');return;}
-  if(!saved||Object.keys(saved).filter(k=>k!=='opportunity').sort().join('|')!==['actual','attribution','cycle','report','taskWorkloads'].sort().join('|')||saved.cycle!==month)throw Error('Department delivery evidence missing.');
+  if(!saved||Object.keys(saved).filter(k=>k!=='opportunity').sort().join('|')!==['actual','attribution','cycle','report','taskWorkloads',...(saved.expertise!==undefined?['expertise']:[])].sort().join('|')||saved.cycle!==month)throw Error('Department delivery evidence missing.');
   if(JSON.stringify(saved.actual?.paidVendorQuarters)!==JSON.stringify(p.departmentFunctions.report.policy.vendors))throw Error('Department delivery claims unpaid vendor work.');
   const basis=p.departmentFunctions.report.basis;
   if(saved.attribution.employedHeadcount!==basis.headcount)throw Error('Opening department headcount does not reconcile.');
@@ -160,6 +211,33 @@ function validateDepartmentFunctionOwner(p,month){
   }
   const dispatched=DepartmentDispatch.dispatch(p.departmentFunctions.report,saved.attribution,saved.taskWorkloads),expected=DepartmentDelivery.deliver(dispatched,saved.attribution,saved.actual);
   if(JSON.stringify(expected)!==JSON.stringify(saved.report))throw Error('Department delivery evidence does not reconcile.');
+  if(saved.expertise!==undefined){
+    const e=saved.expertise,exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join('|')===keys.slice().sort().join('|');
+    if(!exact(e,['version','roles'])||e.version!==1||!exact(e.roles,DepartmentFunctions.ROLES))throw Error('Invalid department expertise evidence.');
+    let assigned=0,specialists=0;
+    for(const role of DepartmentFunctions.ROLES){
+      const row=e.roles[role],leadership=p.departmentOffice?.report?.rows.find(r=>r.role===role);
+      if(!exact(row,['count','skill','allocation','teaching'])||!Number.isSafeInteger(row.count)||row.count<0||row.count>saved.actual.headcount||
+        !Number.isSafeInteger(row.skill)||row.skill<0||row.skill>100||(!row.count&&row.skill!==0)||
+        !Number.isSafeInteger(row.allocation)||row.allocation<0||row.allocation>saved.actual.headcount||typeof row.teaching!=='boolean'||
+        saved.actual.physicalQuarters[role]!==4*(row.allocation-(row.teaching?1:0))||
+        (row.teaching&&(row.count<2||row.skill>=100||row.allocation<1||!leadership?.profile||leadership.paid!==leadership.expense+leadership.arrears)))
+        throw Error('Department expertise exceeds the employed, paid productive role pool.');
+      assigned+=row.allocation;specialists+=row.count;
+      const recorded=p.operatingReport?.['specialistBonus_'+role];
+      if(!Number.isFinite(recorded)||Math.abs(recorded-departmentFunctionExpertBonus(e,saved.actual.physicalQuarters,role))>1e-8)throw Error('Frozen department expertise disagrees with the operating report.');
+    }
+    if(assigned!==saved.actual.headcount||specialists>saved.actual.headcount)throw Error('Department expertise headcount does not reconcile.');
+    if(p.relationshipOffers?.report?.staffingVersion!==2||p.onboarding?.report?.staffingVersion!==2)throw Error('Department expertise requires versioned customer staffing reports.');
+  }
+  for(const [field,id]of [['relationshipOffers','offerSales'],['onboarding','applicationProcessing']]){
+    const customer=p[field]?.report;
+    if(saved.expertise!==undefined||customer?.staffingVersion!==undefined){
+      if(!customer||!Number.isFinite(customer.assignedStaff)||customer.assignedStaff<0||!Number.isFinite(customer.salesStaff)||customer.salesStaff<0)
+        throw Error('Invalid owner customer staffing report.');
+      validateDepartmentCustomerStaffing(p,customer,id,true);
+    }
+  }
   if(saved.opportunity!==undefined&&saved.opportunity!==null){
     const work=saved.opportunity;
     if(Object.keys(work).sort().join('|')!=='awarded|cycle|quote|result|terms'||work.cycle!==month||
@@ -178,7 +256,7 @@ function validateStoredDepartmentFunctionPolicies(g){
   }
 }
 function validateDepartmentFunctionsSave(g){
-  for(const p of g.players)for(const key of ['_departmentFunctionExecution','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p[key]!==undefined)throw Error('Unsettled department function transient.');
+  for(const p of g.players)for(const key of ['_departmentFunctionExecution','_departmentFunctionExpertise','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p[key]!==undefined)throw Error('Unsettled department function transient.');
   if(g.financialGroupVersion!==6){
     if(g.departmentFunctionEconomy!==undefined||g.players.some(p=>p.departmentFunctions!==undefined||p.departmentFunctionDelivery!==undefined||p.submitted?.departmentFunctionsPolicy!==undefined)||Object.values(g.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function state.');return;
   }
@@ -207,7 +285,7 @@ function projectDepartmentFunctions(g,out,index){
   if(out.lastPlans?.[out.rival.id])delete out.lastPlans[out.rival.id].departmentFunctionsPolicy;
 }
 function validateDepartmentFunctionsView(v){
-  for(const p of [v.me,v.rival])for(const key of ['_departmentFunctionExecution','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p?.[key]!==undefined)throw Error('Unsettled department function transient exposed.');
+  for(const p of [v.me,v.rival])for(const key of ['_departmentFunctionExecution','_departmentFunctionExpertise','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p?.[key]!==undefined)throw Error('Unsettled department function transient exposed.');
   if(v.departmentFunctionEconomy!==undefined||v.rival?.departmentFunctions!==undefined||v.rival?.departmentFunctionDelivery!==undefined||v.lastPlans?.[v.rival?.id]?.departmentFunctionsPolicy!==undefined)throw Error('Private department function data exposed.');
   if(v.financialGroupVersion!==6){if(v.me?.departmentFunctions!==undefined||v.me?.departmentFunctionDelivery!==undefined||v.me?.submitted?.departmentFunctionsPolicy!==undefined||Object.values(v.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function view.');return;}
   validateDepartmentFunctionOwner(v.me,v.cycle-(v.gameOver?0:1));
@@ -309,7 +387,25 @@ function prepareDepartmentFunctionForecast(p,plan){
   if(quote.vendorExpense){copy.accounting=AccountingPrototype.post(copy.accounting,'department.functions',{cash:-quote.vendorExpense,equity:-quote.vendorExpense},-quote.vendorExpense);syncAccounts(copy);}
   copy._departmentFunctionPaidCycle=copy.departmentFunctions.lastCycle;
   copy._departmentFunctionExecution=quote.delivery;
+  copy._departmentFunctionExpertise=departmentFunctionExpertise(p,quote.delivery.physical.available,quote.attribution.paidTeacherQuarters);
   // A forecast is not a completed campaign: do not mutate chronological history.
   copy._departmentFunctionForecastExpense=quote.vendorExpense;
   return copy;
+}
+function departmentCustomerPreview(p,v,draft){
+  if(!p.departmentFunctions)throw Error('Department customer preview requires the supported department campaign.');
+  const plan=departmentFunctionCopy(draft);
+  normalizeProductProgramPlan(p,plan);normalizeAdvertisingPlan(p,plan);
+  normalizeRelationshipOfferPlan(p,plan);normalizeOnboardingPlan(p,plan);normalizeDepartmentPlan(p,plan);
+  const authorized=departmentFunctionsQuote(v,p,plan);
+  if(!authorized.status.eligible)throw Error(authorized.status.reason);
+  const functionPrepared=prepareDepartmentFunctionForecast(p,plan),prepared=prepareOperatingForecast(functionPrepared,plan),
+    facilityCost=facilityDraftSpend(prepared,plan),network=facilityProspectiveOwner(prepared,plan),
+    owner=prepareFacilityLifecycleForecast(departmentPreparedOwner(network,plan),plan);
+  owner.focus=plan.focus;
+  owner._workforceReserved=Math.max(0,(owner._workforceReserved||0)-departmentLeadershipQuote(p,plan).total-facilityCost-facilityLifecycleDraftCommitment(prepared,plan).renovation);
+  owner._workforceCosts=workforceOperatingCosts(owner);
+  const staffing=id=>departmentCustomerStaffingDetails(owner._departmentFunctionExecution,owner._departmentFunctionExpertise,id);
+  return {owner,plan,relationshipOffers:relationshipOfferReview(owner,v),onboarding:onboardingReview(owner,v),
+    staffing:{relationshipOffers:staffing('offerSales'),onboarding:staffing('applicationProcessing')}};
 }

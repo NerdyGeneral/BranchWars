@@ -74,21 +74,22 @@ if(process.argv.includes('--integrated')){
  integratedCandidateSha256=sha(assembled);
  vm.runInNewContext(assembled.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],current);const A=current.BWEngine;
  test('Real current creation/catalog blocks wider facilities in old campaigns and wealth until licensed',()=>{
-  for(const version of [1,2,3,4,5]){
+  for(const version of [1,2,3,4,5,6]){
    const options=A.previewFeatureSelection({}, {field:'financialGroupVersion',value:version}).options;
    const g=A.createGame({...options,mode:'hotseat',seed:'catalog-live:'+version,created:1}),p=g.players[0],catalog=A.projectCatalog(p);
    if(version<5){for(const key of ['branchAtm','branchWealth','branchFinancialCenter','branchRegionalHub'])assert.equal(catalog[key],undefined);}
-   else{assert.equal(g.version,'9.4');assert.equal(p.facilityNetwork.version,2);assert(catalog.branchAtm&&!catalog.branchAtm.barred);assert.match(catalog.branchWealth.barred,/licensed/i);}
+   else{assert.equal(g.version,version===5?'9.4':'9.5');assert.equal(p.facilityNetwork.version,2);assert(catalog.branchAtm&&!catalog.branchAtm.barred);assert.match(catalog.branchWealth.barred,/licensed/i);}
   }
  });
- test('Real paid ATM construction and closure run through monthly settlement, identity metadata and save/resume',()=>{
-  const options=A.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;
+ for(const version of [5,6])test('Real paid ATM construction and closure run through Group'+version+' monthly settlement, identity metadata and save/resume',()=>{
+  const options=A.previewFeatureSelection({}, {field:'financialGroupVersion',value:version}).options;
   let g=A.createGame({...options,mode:'hotseat',scenario:'balanced',seed:'catalog-paid-construction',created:1});
   const quiet=index=>{
    const p=g.players[index],q=A.chooseBot(g,index);
    q.newProject=null;q.newProjects=[];q.investments={};q.hires=0;q.specialistHires=A.emptySpecialistOrders();q.competitiveAction='none';
    q.facilityPolicy=A.defaultFacilityPolicy();Object.assign(q,A.defaultDepartmentPlan(p));q.agencyPolicy=A.defaultAgencyPlan(p);
    q.groupPolicy.bankSupport=0;q.groupPolicy.bankDividend=0;q.facilityLifecyclePolicy=A.defaultFacilityLifecyclePlan(p);
+   if(p.departmentFunctions)q.departmentFunctionsPolicy=A.defaultDepartmentFunctionsPolicy(p);
    return q;
   };
   const plans=[quiet(0),quiet(1)],before=g.players[0].buildSpend;

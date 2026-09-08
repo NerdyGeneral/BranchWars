@@ -2,24 +2,43 @@
 
 Current authority: approved regional banking / optional Financial Group completion
 goal, September 8, 2026. This supersedes the completed stabilization-only stop
-boundary; it does not authorize GitHub publication.
+boundary. The subsequent V3 snapshot request separately authorizes publication
+of that snapshot, not unrestricted publication of later work.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
+
+## V3 delivery checkpoint
+
+V3 packages the current Group6/save9.5 regional preview; it does not close the
+48-row checklist. Its staffed commercial agency, physical facility lifecycle,
+leadership, eight department functions, customer-capacity integration and earnings
+bridge are playable. Broader product contracts and company ownership experiments
+remain outside the production assembly. See the [V3 report](v3-release-report.md)
+for overnight changes, exact build evidence and unresolved AI/balance issues.
+
+After release, prioritize viable AI origination, sustained product/network
+choices and funded corporate cash recirculation. The 480-month Regulatory sample
+resolved all six firms in months383-384 and ended with both banks using ATM-only
+networks; technical survival is not sufficient long-game competition. Then resume
+approved product/wallet, brokerage/wealth and equity/control
+integration. Preserve legacy rules and optional complexity. Human late-game and
+two-computer acceptance are separate gates, not automatic consequences of tests.
 
 ## Current delivery boundary
 
 Implement and verify the 48 stable requirements below as a playable regional
 release candidate. Preserve their full original acceptance scope, not merely
 labels, passive bonuses, data structures or isolated tests. Continue safe approved
-work after each subsystem; local checkpoint commits are authorized, publication
-is not. The [preserved original matrix](archive/release-status-pre-stabilization-2026-09-07.md)
+work after each subsystem; local checkpoint commits are authorized. The V3
+snapshot is separately approved for publication; later releases still require
+approval. The [preserved original matrix](archive/release-status-pre-stabilization-2026-09-07.md)
 and [unified blueprint](archive/unified-blueprint-v7-original.md) retain detailed
 contracts. Historical stop/approval/publication statements are superseded by the
 current goal.
 
 N-00 preservation baseline: game, releases and untracked game files are backed up
 at `C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-regional-completion-start`.
-The separately packaged V2 stabilization RC remains the last-passing release;
+The separately packaged V2 stabilization RC remains an unchanged rollback copy;
 its verification does not certify subsequent working source.
 
 Preserve supported selections and fixed historical rules. Previews remain opt-in.
@@ -140,7 +159,9 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
    `ee80e569...`. Its frozen Windows baseline passes 158 suites; exact-build
    192-month/eight-campaign and 120-month characterization also pass. The full
    gate's outer 1,920 older-profile months pass separately; the frozen Group6
-   480-month run remains pending. The later lossless fixture-packaging harness
+   480-month run failed at month 264 on half-ready replay divergence. Its exact
+   opening state/plans are preserved for diagnosis; earlier passes do not certify
+   this late-game recovery path. The later lossless fixture-packaging harness
    repair is separately revalidated; no
    artificial funding or broad project/research suppression is authorized by this fix.
    Delayed-plan/state/recall and sealed-checkpoint transport fences are also under
@@ -148,8 +169,24 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
    all six failures now pass in the fresh 158-suite baseline. The 120-month run
    still finds shrinking loan books, all-ATM convergence, zero morale and
    unproductive partial facility staffing. Address these measured constraints,
-   rather than treating survival as strategic-variety acceptance. Both agencies
-   launched; one failed. Final combined expansion acceptance remains required.
+   rather than treating survival as strategic-variety acceptance. The subsequent
+   `00668d05...` 134-input candidate repairs unproductive facility staff proposals
+   with same-kernel output protection, passing targeted UI/AI/legacy/network gates.
+   Its separate frozen 120-month comparison failed at month 37 on onboarding's
+   old percentage-only validation versus actual department delivery. Both captured
+   months now replay exactly in cold-engine regression. The combined repair also
+   separates physical/vendor/expertise capacity, uses authoritative customer UI
+   forecasts, gates Group 6 support bilaterally, fixes paid mentor validation and
+   wider-facility completion, and preserves large saves through lossless history
+   deduplication. The exact `f9836bda...` combined build now passes a fresh
+   120-month balanced campaign / 11 replays, with one earned agency launch still
+   active, two constructions and three renovations. Final loans remain only
+   $505K/$746K and both banks have five staff; the observed origination staffing
+   bottleneck and absent leadership/specialist hiring remain open balance work.
+   Its full Windows and separately frozen 480-month regulatory checks are still
+   running. Actual customer-desk UI, one resolved month, reload/Continue and a
+   500px layout were checked, not physical multiplayer. Earlier two-agency/one-
+   failure observations refer to older builds. Final expansion acceptance remains.
    Frozen Group 5 baseline now passes 145 suites and its full outer gate passes;
    the outer 1,920-month older regional-profile test is not a Group 5 campaign.
    Full blueprint acceptance remains separate in release status.
@@ -160,6 +197,11 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
    positive and boundary tests. It is not in the manifest or a completed row:
    actual funded borrower books, canonical transfer/loss handling, attributed
    interest claims, compact storage and player/AI/transport integration remain.
+   Local checkpoint `ed544d6` adds finite authored company demand/property and an
+   owner-safe pre-loan company-service forecast (9/45 and 8/89 test groups/months),
+   including combined collateral limits and current-owner snapshot fences.
+   These isolated company prerequisites do not satisfy the full seven-product
+   runnable slice below or replace the missing household/small-business funding.
 4. **Brokerage then wealth:** reuse entity/customer/department/distribution
    foundations; finish custody/AUM, cross-selling, support and wind-down stress.
 5. **Equity then control:** six issuers, finite call auction, diligence/financing,

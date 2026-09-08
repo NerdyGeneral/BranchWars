@@ -98,6 +98,22 @@ for(const spec of [{scenario:'growth',seed:'department-B',seat:1,gross:95261},{s
  assert.deepEqual(copy(a.functions.attribution.paidTeacherQuarters),copy(b.functions.attribution.paidTeacherQuarters));
  assert.deepEqual(copy(a.functions.attribution.exactRetainedQuarters),copy(b.functions.attribution.exactRetainedQuarters));
  const instructionA=copy(plans[0][spec.seat]),instructionB=copy(plans[1][spec.seat]);delete instructionA.departmentFunctionsPolicy;delete instructionB.departmentFunctionsPolicy;
+ // The separately approved Group6 facility allocator may release genuinely
+ // unproductive office staffing. Reproduce that exact shared proposal using
+ // the untouched frozen plan, not the new floor policy or an edited fixture.
+ const frozenPlan=copy(plans[0][spec.seat]),currentPlan=copy(plans[1][spec.seat]),currentOwner=worlds[1].players[spec.seat];
+ const sharedStaffing=E.facilityLifecycleStaffProposal(worlds[1],currentOwner,frozenPlan).policy;
+ assert.deepEqual(copy(currentPlan.facilityLifecyclePolicy),copy(sharedStaffing),'Current office changes must be exactly the authoritative shared proposal on the frozen plan.');
+ const oldOfficeQuote=E.lifecycleInstructionQuote(worlds[1],currentOwner,frozenPlan),newOfficeQuote=E.lifecycleInstructionQuote(worlds[1],currentOwner,currentPlan);
+ assert(oldOfficeQuote.status.eligible,oldOfficeQuote.status.reason);assert(newOfficeQuote.status.eligible,newOfficeQuote.status.reason);
+ assert.equal(newOfficeQuote.quote.total,oldOfficeQuote.quote.total,'Facility staffing cannot change maintenance or renovation funding.');
+ const oldBudget=E.planBudget(currentOwner,frozenPlan),newBudget=E.planBudget(currentOwner,currentPlan);
+ for(const key of ['total','remaining','mandatoryObligations','capitalBudget'])assert.equal(newBudget[key],oldBudget[key],'Shared funding must remain unchanged: '+key);
+ for(const [id,order]of Object.entries(instructionA.facilityLifecyclePolicy.offices)){
+  const normalized=copy(order);normalized.staffQuarters=copy(sharedStaffing.offices[id].staffQuarters);
+  assert.deepEqual(normalized,instructionB.facilityLifecyclePolicy.offices[id],'Maintenance, hub links and all non-staff office instructions remain identical.');
+  order.staffQuarters=normalized.staffQuarters;
+ }
  assert.deepEqual(instructionA,instructionB,'Existing research/projects/office/service/training/collection instructions remain identical.');
  const actual=[];
  for(let variant=0;variant<2;variant++){

@@ -3,6 +3,7 @@
 const MODULAR_FEATURE_RULES_AVAILABLE = true;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
   ['financialGroupVersion', 'financialGroupSupported', 6, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
+  ['financialGroupVersion', 'departmentStaffingSupported', 2, 6, 'Frozen department staffing evidence', 'DEPARTMENT STAFFING'],
   ['featureRulesVersion', 'featureRulesSupported', 1, 1, 'Modular combinations preview', 'MODULAR RULES'],
   ['onboardingVersion', 'onboardingSupported', 1, 1, 'Customer onboarding preview', 'ONBOARDING'],
   ['relationshipOffersVersion', 'relationshipOffersSupported', 1, 1, 'Relationship offers preview', 'RELATIONSHIP OFFERS'],

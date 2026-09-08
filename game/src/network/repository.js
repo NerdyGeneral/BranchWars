@@ -13,6 +13,7 @@ function ghNonce(){const bytes=new Uint8Array(24);if(globalThis.crypto&&crypto.g
 async function ghPlanHash(plan,nonce){if(!globalThis.crypto||!crypto.subtle)throw Error('This browser cannot seal repository plans. Use LAN or Direct P2P instead.');const payload=new TextEncoder().encode(`${nonce}\n${JSON.stringify(plan)}`),digest=await crypto.subtle.digest('SHA-256',payload);return[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 let ghSealingPlan=null,ghPendingTurnToken=null;
 async function ghCommitPlan(plan){
+ requireDepartmentPeer(view);
  const session=gh,sourceView=view,cycle=view&&view.cycle;
  if(ghPendingPlan||ghSealingPlan&&ghSealingPlan.session===session)throw Error('A sealed plan is still pending. Retry the connection or wait for recall confirmation.');
  const attempt={session},current=()=>gh===session&&session.active&&view===sourceView&&view&&view.cycle===cycle&&p2pRole==='guest';
@@ -20,6 +21,7 @@ async function ghCommitPlan(plan){
  try{
   const sealedPlan=JSON.parse(JSON.stringify(plan)),nonce=ghNonce(),hash=await ghPlanHash(sealedPlan,nonce);
   if(!current())return false;
+  requireDepartmentPeer(view);
   const pending={plan:sealedPlan,nonce,hash,cycle,revealed:false},sequence=session.mine;ghPendingPlan=pending;
   try{send(turnMessage('plan_commit',{hash,cycle}));ghPendingTurnToken=incomingTurnContext?.token||null;}catch(error){if(session.mine===sequence&&ghPendingPlan===pending)ghPendingPlan=null;throw error}
   if(view.rival&&view.rival.submitted)ghRevealPlan();return true;
@@ -28,13 +30,14 @@ async function ghCommitPlan(plan){
 }
 function ghRefreshPendingTurn(){
  if(!ghPendingPlan||!incomingTurnContext||ghPendingPlan.cycle!==view.cycle||ghPendingTurnToken===incomingTurnContext.token)return;
+ if(!departmentPeerStatus(view).compatible)return;
  if(ghPendingPlan.recallRequested){send(turnMessage('recall'));ghPendingTurnToken=incomingTurnContext.token;return;}
  // Retain the exact sealed plan and nonce across reconnect, but obtain a fresh
  // transport authorization. Old persisted envelopes remain unusable.
  send(turnMessage('plan_commit',{hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));
  ghPendingTurnToken=incomingTurnContext.token;ghPendingPlan.revealed=false;
 }
-function ghRevealPlan(){if(!ghPendingPlan||ghPendingPlan.revealed||ghPendingPlan.recallRequested||ghPendingPlan.cycle!==view?.cycle)return;send(turnMessage('plan_reveal',{plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));ghPendingPlan.revealed=true;ghCheckpoint()}
+function ghRevealPlan(){if(!departmentPeerStatus(view).compatible)return;if(!ghPendingPlan||ghPendingPlan.revealed||ghPendingPlan.recallRequested||ghPendingPlan.cycle!==view?.cycle)return;send(turnMessage('plan_reveal',{plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));ghPendingPlan.revealed=true;ghCheckpoint()}
 function ghFail(response,body){
  const detail=body&&body.message?String(body.message).slice(0,250):'HTTP '+response.status;
  const rateLimited=response.status===429||(response.status===403&&(response.headers.get('x-ratelimit-remaining')==='0'||response.headers.get('retry-after')||/rate limit|abuse/i.test(detail)));
@@ -181,7 +184,7 @@ function ghCheckpoint(){
  try{
   const {token,busy,retryTimer,polling,...connection}=gh;
   const checkpoint={version:1,connection:packStorageValue(connection,'connection'),game:packStorageValue(p2pRole==='host'?game:null,'game'),view:packStorageValue(p2pRole==='guest'?view:null,'view'),p2pConfig,ghPendingPlan,ghIncomingCommit,lobby:game||view?null:lobby,lobbyPending};
-  if(['connection','game','view'].some(key=>checkpoint[key]?.branchWarsStorage===1))checkpoint.version=2;
+  if(['connection','game','view'].some(key=>[1,2].includes(checkpoint[key]?.branchWarsStorage)))checkpoint.version=2;
   sessionStorage.setItem('branchWarsGhResume',JSON.stringify(checkpoint));
  }catch{if(!gh.storageWarned){gh.storageWarned=true;toast('Repository reload recovery could not be saved. Keep this tab open; the host should EXPORT a backup.')}}
 }

@@ -1,5 +1,27 @@
 # Release status and known issues
 
+## V3 snapshot and publication authorization — September 8, 2026
+
+The user separately authorized publication of the current **V3** snapshot, its
+eight-hour change summary, debug/balance report and retro field manual. This
+overrides earlier no-publication statements for this release only. It does not
+complete the broader blueprint or authorize National Empire or underwriting.
+
+Current player candidate: **Group rules 6 / save 9.5**, 134 assembly inputs,
+portable SHA-256 `4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107`.
+The [V3 report](v3-release-report.md) owns exact final test results and balance
+limits. The [player ZIP](../../releases/branch-wars-v3.zip) and
+[45-page manual](../../releases/branch-wars-v3-manual.pdf) describe this snapshot.
+All V2 packages remain unchanged. The earlier sections below are checkpoint
+history, not claims that old builds certify V3.
+
+Release status: final exact-build Windows gate **167/167 passed**, followed by
+**16 campaigns / 1,920 months** of release-balance checks, also passed. Real two-computer
+repository-room acceptance remains outstanding. Group6 AI origination starvation,
+ATM-only long-run networks and corporate customer-pool exhaustion remain
+documented balance weaknesses. The actual 52MB stress save now passes bounded
+autosave/checkpoint recovery; the final gate includes its regression fixture.
+
 ## Active regional / Financial Group completion work — September 8, 2026
 
 The new approved goal authorizes implementation through the complete nondeferred
@@ -354,11 +376,17 @@ physical multiplayer guarantee is implied.
   hiring lockout, administration dominated by tiny aggregate cohorts, and inherited
   fee income not depending on current commercial servicing. Do not erase loans,
   grant free staff, force lending or relax cash safeguards to conceal these gaps.
-- A 480-month Regulatory Siege characterization is running on a hash-verified,
-  separately copied source/test/portable under
+- The 480-month Regulatory Siege characterization **failed at resolved month
+  264 / cycle 265**: half-ready save/resume produced a different economic result
+  from uninterrupted settlement. It passed 22 earlier replay comparisons; source
+  and portable remained unchanged. This is a replay defect, not a balance pass.
+  The separately copied source/test/portable and complete failure checkpoint are under
   `C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-ee80e569-balance-source`.
-  Its result remains pending; the separate snapshot allows subsequent source work
-  without falsely claiming unchanged bytes for another build.
+  Report `reports/qa/department-group6-ee80e569-regulatory480.json`, SHA-256
+  `52050f609671a6941c49034e8f68d23b71a56e7709393c186bfdb24259ff469c`.
+  Its captured opening game and exact plans allow a one-month reproduction without
+  replaying 264 months. Investigation is in progress; do not certify recovery from
+  the earlier short-run or full-gate passes.
 - Actual `ee80e569...` browser QA used normal Continue and paid-turn controls:
   a $24,000 advertising initiative produced the month-2 retained-earnings bridge
   $14,788 + $16,592 - $24,000 = $7,380. Reload/Continue preserved that bridge and
@@ -410,13 +438,137 @@ physical multiplayer guarantee is implied.
   output was empty. The earlier 390px and paid-turn/Continue checks remain
   distinct evidence; physical two-computer and human fun acceptance are pending.
 
+#### Productive facility staffing repair — subsequent Group 6 candidate
+
+The current 134-input portable is
+`00668d0543267003c47e030c5a9155c8620cc4949697f3d4d34eacaf23a8f506`,
+engine `fd00de48ad1adf0670925fa1ece67c43b91d9523258bcfd3e9e1d8f72fa2ef90`.
+Group 6 staffing proposals release staff assigned to zero-output facilities and
+refill viable bundles using the actual facility metric kernel. Existing productive
+output, maintenance, hub links, renovation and funding instructions are preserved;
+if hub redistribution reduces any existing output, the old proposal is retained.
+The historical Group 5 path is unchanged. No headcount or cash is granted.
+
+Targeted verification: 12 staffing groups, 4,096-facility cases taking 423–626ms,
+12 historical profiles / 28 months / 56 owner views, six planning-contract checks,
+three simulated transports / six mixed-version cases / eight months, and the
+guarded lending suite pass. The latter preserves the original actual origination
+comparisons (0 to $95,261 and 0 to $62,353); it now permits only the staffing
+differences independently reproduced by the shared helper. Legacy fixtures and
+all other instruction/budget assertions remain unchanged.
+
+Live browser Continue, Markets staffing proposal and explicit Stage were inspected
+on the exact served bytes. Preparing changes only the form; staging preserves the
+month, cash and pending executive decision. The normal one-office form and cost
+table render without clipping at the observed viewport; warning/error logs were
+empty. This is not a maximum-network or physical multiplayer UI acceptance claim.
+
+A fresh 120-month balanced characterization **failed after 37 resolved months**
+on the separate frozen copy at
+`C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-00668d05-balance-source`.
+Report `reports/qa/department-group6-00668d05-balanced120.json`, SHA-256
+`28bcefd83b2da2f416773f761a564f5d23b16bf174adbff203d5897d77b67397`.
+After an event increased actual Service staffing, the department allocation kept
+the extra banker unassigned, but the onboarding report's legacy percentage
+reconciliation used a different base. It rejected assigned 0.125 / sales 0.625 /
+25% despite recorded 0.5 quarter-work of actual application capacity. Investigation
+also covers paid-vendor/additional-work and relationship-offer report boundaries;
+do not remove conservation checks to conceal the mismatch. Four earlier replay
+checks passed. This candidate has not passed a new full Windows gate, and neither
+this nor the separate month-264 replay defect is a balance acceptance result.
+
+#### Combined department/recovery repair — current source, final gate pending
+
+Current rebuilt candidate: **134 inputs**, portable SHA-256
+`f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c`,
+engine `12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350`.
+This remains Group 6/save 9.5 development work, not a published release.
+
+The two preserved long-campaign failures now have permanent compressed regression
+fixtures. They retain the exact opening campaigns and submitted plans, not revised
+goldens. Cold-engine half-ready replay passes at both month 37 and month 264,
+including owner-view privacy and input/validation purity. These two reproduced
+months do **not** replace fresh 120/480-month balance acceptance.
+
+- Migration preserves an existing valid doctrine until its normal settlement
+  stage. The month-264 defect followed a paid retail-to-ATM conversion activating
+  after doctrine settlement; import had prematurely changed the saved doctrine.
+  Missing/invalid historical doctrine reconstruction is unchanged.
+- Group 6 customer reports now distinguish authorized physical work, purchased
+  vendor work, specialist productivity and final residual sales capacity.
+  Frozen, strictly validated expertise evidence and `staffingVersion: 2` reports
+  prevent late training/hiring from rewriting the month that was just reported.
+  Valid old reports remain supported; no campaign option/version is silently added.
+  Actual paid mentor training and talent-raid staffing loss are tested. A separate
+  Group 6 validation omission that rejected the legitimate six-point mentor gain
+  is repaired without changing the training benefit.
+- Both customer desks use one authoritative departmental forecast. They show
+  physical staffing, purchased capacity, effective throughput and remaining sales
+  separately. Invalid drafts retain controls for pausing work; quote preparation
+  does not alter orders, spend twice or read rival-private books.
+- Both peers must freshly confirm `departmentStaffingSupported: 2` for Group 6.
+  Old-host/new-guest and new-host/old-guest combinations are visibly refused;
+  Groups 1–5 remain interoperable. Lobby/state adoption, submit/recall/rematch,
+  asynchronous sealing/reveal and resumed commitments are protected. Transport
+  availability alone cannot paint an unconfirmed Group 6 connection green.
+- A further real construction regression is repaired: the wider-office completion
+  guard admitted Group 5 but rejected Group 6. Actual paid ATM construction,
+  closure, identity history and save/resume now pass in both groups. Wealth remains
+  license-blocked; no new capability or subsidy is granted.
+- The original month-264 campaign could not fit the existing compressed browser
+  save limit. A lossless, versioned local-storage envelope interns repeated JSON
+  containers before compression. All 2,000 causal records remain byte-identical;
+  no gameplay field or wire/export schema changes. The captured full save occupies
+  1,038,596 UTF-16 bytes and its actual host retry checkpoint 1,456,252 bytes under
+  a simulated 5 MiB quota. Month 37 uses 671,354 / 1,039,734 bytes respectively.
+  Old raw/LZW saves still load. Malformed graph references, expansion bombs,
+  checksum damage and failed writes are covered. The independent review also
+  identified repeated reset-code allocation and a stale small-save cache;
+  those are repaired; the expanded 126-check codec suite passes.
+
+Targeted evidence: five customer-capacity groups; eight new customer UI checks;
+three simulated transports with six retained mixed-version cases and four live
+months; exact historical comparison across 12 profiles / 28 months / 56 owner
+views. The productive-facility proposal, doctrine test, captured replay, new
+customer/network checks and lossless storage/recovery checks are registered in
+the Windows gate. The combined portable/reference and final regression/balance
+  identity are being refreshed; earlier hashes above certify only those earlier
+  builds. Physical two-computer and human play acceptance remain pending.
+
+Fresh evidence for this exact `f9836bda...` candidate:
+- The 120-month balanced campaign completed with unchanged assembled/portable
+  bytes and **11 exact save/replay checks**. Both banks survived and all six
+  companies remained active. Two constructions, four conversions, three
+  renovations and one agency launch occurred; that agency remained active with
+  no failures. Final deposit shares were 35.78% / 64.22% (peak leader 69.92%).
+  One bank's minimum capital ratio was 5.27%; survival is not a stability guarantee.
+  Report `reports/qa/department-group6-f9836bda-balanced120.json`, SHA-256
+  `4c898075e12c5782e683cfbe0cd8e72fafec0eedff013ce67a3af71078fc0392`.
+- Remaining balance concerns are material: loan books ended at $505,036 and
+  $746,347 against $9.5M opening balances, with five staff each and no leadership
+  or specialist hiring. The retained last-40-month ledger shows 38 and 29
+  zero-origination months respectively. Bank one's 38 zero months coincide with
+  zero residual lending quarters. Department servicing coverage above 98% does
+  not establish capacity for new lending. A staffing-choice diagnostic is being
+  reviewed; no technology/risk protection has been relaxed in production.
+- Actual browser QA resumed the current build, staged and reversed both customer
+  allocations, visibly blocked a facility conflict without losing repair controls,
+  resolved an ordinary month and restored cycle 4 after reload/Continue. Customer
+  capacity cards were visually checked at normal width and 500px, with no horizontal
+  overflow or browser warnings/errors. Exact observations are in
+  `reports/qa/department-f9836bda-browser-acceptance.json`. This root-owned QA save
+  is not an earned-economy balance sample or a physical multiplayer session.
+- The full Windows gate and separately frozen 480-month regulatory run remain
+  running. Do not infer final results from earlier checkpoints or restart a live
+  process because a tool observation times out.
+
 #### Living-product foundation — isolated, not playable
 
 `experiments/living-portfolio/loan-contracts.js` defines seven retained lending
 offers, simultaneous finite origination, collateral/concentration/funding/work
 limits, contractual servicing, arrears/non-accrual and borrower draw/repayment
-transitions. Current isolated checks cover 17 origination groups / 600 seeded
-combinations, 11 servicing groups / 217 months and 13 transaction groups / 41
+  transitions. Current isolated checks cover 18 origination groups / 600 seeded
+combinations, 12 servicing groups / 278 months and 14 transaction groups / 47
 servicing months. Repayments and advances have paired borrower/lender postings;
 same-month activity replay rejects, undrawn commitments remain obligations, and
 expired lines cannot redraw. A reviewed bug is repaired: repaid historical loans
@@ -430,7 +582,7 @@ pooled deposits cannot simply become borrower cash. Opening $9.5M bank credit is
 not the six companies' separately matched outside debt. The explicit CompanyFinance
 v4 candidate pairs actual bank/company advances, fees, repayments, interest and
 liquidation, with external debt separated and monthly service/activity/origination
-fences. Fifteen fixture checks cover 96 exact legacy months and 82 candidate
+fences. Nineteen fixture checks cover 96 exact legacy months and 93 candidate
 months, not earned gameplay. An aggregate public-statement boundary is also under
 review; full rival contracts remain private. Seven public-boundary checks / 16
 fixture months pass, including strict nested payload rejection. A valid positive-
@@ -438,11 +590,50 @@ cash insolvency exposed a reconciliation bug: liquidation can spend existing cas
 as well as asset-sale proceeds. The candidate now retains opening cash and strictly
 matches their sum to every recovery/distribution; no validator was relaxed.
 
-Raw 20,000-contract serialization exceeds 12 MB. A lossless compact codec now
-reduces its fixture to 1,945,681 bytes (85% reduction), rejects noncanonical terms
+Contracts now retain immutable originating-bank identity separately from current
+ownership, plus signed holder purchase basis. Basis amortizes only on actual
+principal payments, never changes borrower terms or interest, and clears exactly
+at payoff. Zero-basis posting shapes stay unchanged. The isolated v4 bank-accounting
+adapter passes 11 groups / 72 exact legacy operations and uses bounded, replayable
+256-entry journals. Eight canonical-ownership checks prove paired full-loan sales,
+zero buyer day-one earnings, immutable original terms, actual new-holder service
+and protected opening cash plus inherited undrawn reservations. Company liquidation
+writes off bank carrying value while borrower debt forgiveness remains face value.
+No shadow saved position map is added. Actual acquisition/fire-sale dispatch,
+minimum-capital policy, transaction fees and live UI/AI/transport integration remain.
+The eight isolated scripts were rerun successfully and preserved in local commit
+  `6fad61b`; this is not a playable promotion or GitHub publication.
+
+The next isolated prerequisite checkpoint is local commit `ed544d6`:
+- Authored company demand identifies CRE property within existing productive
+  assets, preserves the six named sector identities and splits one finite
+  liquidity need between Commercial and CRE requests. Cash, retained debt,
+  undrawn commitments and provisional debt/equity ceilings constrain requests.
+  Nine groups / 45 actual funded company-kernel months pass. Review reproduced
+  and fixed an aggregate collateral defect: individually valid claims from both
+  lenders could overpledge one fixed property. Combined live pledges now cannot
+  exceed that actual property or survive its resolved zero value.
+- The owner-safe company-service forecast uses public statements and the owner's
+  own fee claims, fenced to a separately supplied current owner snapshot. It
+  reproduces the pre-loan service stage without rival contract terms; later loan
+  servicing/liquidation uncertainty remains explicit. Eight groups / 89 actual
+  fixture months cover both seats, five demand conditions, real loan servicing,
+  provider changes with mixed scarce-cash claims, and stale/mismatched boundaries.
+  This is not an exact final-profit forecast or live transport authentication.
+- A seven-product one-dollar capital-boundary regression verifies that new fees
+  cannot finance originations beyond the opening capital envelope. No balance
+  numbers were changed to make that regression pass.
+These are dependencies for integration, not a replacement for the full seven-
+product requirement. Household/small-business funded wallets, canonical credit
+dispatch, acquisition/funding-sale preservation, lending risk acceptance and
+complete UI/AI/save/network wiring remain unfinished. No new selection is enabled.
+
+Raw 20,000-contract serialization exceeds 14 MB. The revised isolated codec v2
+reduces its fixture to 2,065,681 bytes (85% reduction), rejects noncanonical terms
 ordering, and round-trips all retained obligations. Using the existing storage
 codec, a synthetic wrapper containing the old 120-month campaign plus this
-candidate portfolio uses 3,180,576 UTF-16 bytes. This wrapper is **not an accepted
+candidate portfolio uses 3,190,188 UTF-16 bytes. Six codec checks pass, including
+original identity/current ownership and signed basis. This wrapper is **not an accepted
 game save**, browser quota test or GitHub payload test. Actual versioned schema,
 maximum identities, network/UI, loan transfers, other funded borrower segments
 and owner-safe forecasts remain. No Group 7/save upgrade or new checkbox is enabled.

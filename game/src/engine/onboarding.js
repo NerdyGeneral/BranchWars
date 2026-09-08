@@ -43,7 +43,8 @@ function onboardingSalesStaff(p, staff) { return p.onboarding ? staff * (1 - p.o
 function onboardingStaff(p, policy) {
   const base = workforceAllocation(p).service * (1 - p.householdBook.policy.retention / 100) * (1 - p.relationshipOffers.policy.share / 100);
   const assignedStaff = onboardingOpen(p, policy)&&policy.share>0 ? departmentFunctionTaskFte(p,'applicationProcessing',base * policy.share / 100) : 0;
-  return { assignedStaff, salesStaff: base - assignedStaff, capacity: Math.floor(assignedStaff * ONBOARDING_CAPACITY) };
+  const staffing=departmentCustomerStaffing(p,'applicationProcessing',onboardingOpen(p,policy)&&policy.share>0,assignedStaff,base-assignedStaff);
+  return { ...staffing, capacity: Math.floor(staffing.assignedStaff * ONBOARDING_CAPACITY) };
 }
 function onboardingDraft(p, plan) {
   // Only policy branches are writable here. Journals, cohorts, pending requests
@@ -241,12 +242,12 @@ function validateOnboardingSave(g) {
     if (p.submitted) { const plan = onboardingCopy(p.submitted); normalizeOnboardingPlan(p, plan); if (JSON.stringify(plan.onboardingPolicy) !== JSON.stringify(p.submitted.onboardingPolicy)) fail(); }
     if (!state.lastCycle) { if (state.report !== null || state.pending.length) fail(); continue; }
     const r = state.report, integers = ['capacity', 'workUsed', 'available', 'budget', 'cost', 'awareness', 'audience', 'unitPrincipal', 'depositCapacity'];
-    if (!onboardingShape(r, ['cycle', 'policy', 'assignedStaff', 'salesStaff', ...integers, 'response', 'paused', 'reason', 'budgetLimited', 'stockLimited', 'totals', 'rows', 'generatedBatch']) ||
+    if (!onboardingShape(r, ['cycle', 'policy', 'assignedStaff', 'salesStaff', ...(r?.staffingVersion!==undefined?['staffingVersion']:[]), ...integers, 'response', 'paused', 'reason', 'budgetLimited', 'stockLimited', 'totals', 'rows', 'generatedBatch']) ||
         r.cycle !== state.lastCycle || JSON.stringify(r.policy) !== JSON.stringify(state.policy) || !integers.every(k => onboardingUint(r[k])) ||
         !['assignedStaff', 'salesStaff', 'response'].every(k => Number.isFinite(r[k]) && r[k] >= 0) || !['paused', 'budgetLimited', 'stockLimited'].every(k => typeof r[k] === 'boolean') ||
         r.awareness > 10000 || r.unitPrincipal > ONBOARDING_MAX_PRINCIPAL || r.response !== Math.min(1, .8 * CUSTOMER_SEGMENTS[r.policy.segment].fit[r.policy.product] * (1 + r.awareness / 10000 * .4)) ||
         r.capacity !== Math.floor(r.assignedStaff * ONBOARDING_CAPACITY) || r.workUsed > r.capacity || r.cost > Math.min(r.available, r.budget) ||
-        Math.abs(r.assignedStaff - (r.assignedStaff + r.salesStaff) * r.policy.share / 100) > 1e-8 || !Array.isArray(r.rows) || r.rows.length > 3) fail();
+        (!validateDepartmentCustomerStaffing(p,r,'applicationProcessing')&&Math.abs(r.assignedStaff - (r.assignedStaff + r.salesStaff) * r.policy.share / 100) > 1e-8) || !Array.isArray(r.rows) || r.rows.length > 3) fail();
     const totalKeys = ['before', 'due', 'activated', 'generated', 'expired', 'cancelled', 'after'];
     if (!onboardingShape(r.totals, totalKeys) || Object.values(r.totals).some(t => !onboardingShape(t, ['count', 'principal']) || !Object.values(t).every(onboardingUint))) fail();
     const totals = Object.fromEntries(totalKeys.map(k => [k, onboardingAmount()])), pending = []; let cost = 0, stockLimited = false, budgetLimited = false;

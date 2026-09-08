@@ -55,9 +55,10 @@ function relationshipOfferEligibility(p, policy) {
   // non-retention amount directly so the same service time is never counted twice.
   const baseSalesStaff = workforceAllocation(p).service * (1 - p.householdBook.policy.retention / 100);
   const assignedStaff = relationshipOfferOpen(p, policy)&&policy.share>0 ? departmentFunctionTaskFte(p,'offerSales',baseSalesStaff * policy.share / 100) : 0;
-  const capacity = Math.floor(assignedStaff * RELATIONSHIP_OFFER_CAPACITY), uptakeLimit = Math.floor(eligibleEquivalents / 10);
+  const staffing=departmentCustomerStaffing(p,'offerSales',relationshipOfferOpen(p,policy)&&policy.share>0,assignedStaff,baseSalesStaff-assignedStaff);
+  const capacity = Math.floor(staffing.assignedStaff * RELATIONSHIP_OFFER_CAPACITY), uptakeLimit = Math.floor(eligibleEquivalents / 10);
   return { eligible, segmentPrincipal, segmentHouseholds, eligiblePrincipal, excludedPrincipal, eligibleEquivalents,
-    assignedStaff, salesStaff: baseSalesStaff - assignedStaff, capacity, uptakeLimit, requested: Math.min(capacity, uptakeLimit) };
+    ...staffing, capacity, uptakeLimit, requested: Math.min(capacity, uptakeLimit) };
 }
 function relationshipOfferDraft(p, plan) {
   const shadow = { ...p, allocation: plan.allocation || p.allocation,
@@ -150,14 +151,14 @@ function validateRelationshipOfferSave(g) {
     if (p.submitted) { const plan = relationshipOfferCopy(p.submitted); normalizeRelationshipOfferPlan(p, plan); if (JSON.stringify(plan.relationshipOfferPolicy) !== JSON.stringify(p.submitted.relationshipOfferPolicy)) fail('submitted policy.'); }
     if (!state.lastCycle) { if (state.report !== null) fail('opening report.'); continue; }
     const r = state.report, integers = ['segmentPrincipal', 'segmentHouseholds', 'eligiblePrincipal', 'excludedPrincipal', 'eligibleEquivalents', 'capacity', 'uptakeLimit', 'requested', 'converted', 'principal', 'cost', 'available', 'budget', 'rate', 'remaining'];
-    if (!relationshipOfferShape(r, ['cycle', 'policy', 'assignedStaff', 'salesStaff', ...integers, 'paused', 'budgetLimited', 'reason', 'directCostBefore', 'directCostAfter', 'runRateDelta']) ||
+    if (!relationshipOfferShape(r, ['cycle', 'policy', 'assignedStaff', 'salesStaff', ...(r?.staffingVersion!==undefined?['staffingVersion']:[]), ...integers, 'paused', 'budgetLimited', 'reason', 'directCostBefore', 'directCostAfter', 'runRateDelta']) ||
         r.cycle !== state.lastCycle || !integers.every(k => relationshipOfferUint(r[k])) || !['assignedStaff', 'salesStaff'].every(k => Number.isFinite(r[k]) && r[k] >= 0) ||
         !['directCostBefore', 'directCostAfter', 'runRateDelta'].every(k => Number.isSafeInteger(r[k])) || typeof r.paused !== 'boolean' || typeof r.budgetLimited !== 'boolean') fail('report shape.');
     validateRelationshipOfferPolicy(p, r.policy);
     const closed = !relationshipOfferOpen(p, r.policy);
     if (JSON.stringify(r.policy) !== JSON.stringify(state.policy) || (closed && r.policy.share !== 0) || r.excludedPrincipal + r.eligiblePrincipal > r.segmentPrincipal ||
         r.eligibleEquivalents !== relationshipOfferPortion(r.segmentHouseholds, r.eligiblePrincipal, r.segmentPrincipal) ||
-        Math.abs(r.assignedStaff - (r.assignedStaff + r.salesStaff) * r.policy.share / 100) > 1e-8 ||
+        (!validateDepartmentCustomerStaffing(p,r,'offerSales')&&Math.abs(r.assignedStaff - (r.assignedStaff + r.salesStaff) * r.policy.share / 100) > 1e-8) ||
         r.capacity !== Math.floor(r.assignedStaff * RELATIONSHIP_OFFER_CAPACITY) || r.uptakeLimit !== Math.floor(r.eligibleEquivalents / 10) ||
         r.requested !== Math.min(r.capacity, r.uptakeLimit) || r.converted !== Math.min(r.requested, Math.floor(Math.min(r.available, r.budget) / RELATIONSHIP_OFFER_COST)) ||
         r.principal !== relationshipOfferPortion(r.eligiblePrincipal, r.converted, r.eligibleEquivalents) || r.cost !== r.converted * RELATIONSHIP_OFFER_COST ||

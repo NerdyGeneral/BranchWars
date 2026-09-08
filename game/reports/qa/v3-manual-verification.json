@@ -1,0 +1,15 @@
+{
+  "release": "V3",
+  "date": "2026-09-08",
+  "pdf": "releases/branch-wars-v3-manual.pdf",
+  "pdfSha256": "b577325f9c4fd34a2e73a3feda41acd47dc4e0ecd7b2b3c3dfec568cb5b9e1ed",
+  "portableSha256": "4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107",
+  "contentSha256": "1928f53a3bfda3357aa8803efdd7b7cbe1e93fe838a426f435819b5fc58985c2",
+  "pages": 45,
+  "chapters": 35,
+  "outlineEntries": 37,
+  "renderedPages": 45,
+  "pageBoundsIssues": [],
+  "visualInspection": "All 45 pages rendered and checked. Forty-three final page images are byte-identical to the previously visually inspected final2 render; changed pages 2 and 30 were re-inspected at full size. Dense registers also inspected at full size. Orphan continuation pages repaired before final export.",
+  "scope": "Original boxed-strategy briefing style. No franchise artwork or dialogue reproduced. Current mechanics and unavailable expansion content distinguished. This is documentation QA, not subjective user approval."
+}
