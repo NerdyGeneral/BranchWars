@@ -5,4 +5,6 @@
 /game/OPEN_LAN_GAME.bat -text
 /game/reports/reference-builds/BRANCH_WARS_group_822b386.html -text
 /game/reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html -text
+/game/reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html -text
+/game/reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html -text
 /releases/** -text

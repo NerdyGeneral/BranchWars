@@ -100,7 +100,8 @@ settleFunding=function(g,p,outflow){
  if(!p.accounting)return pilotSettle(g,p,outflow);
  if(outflow)throw Error('Pilot deposit outflows must settle at transfer');
  const reserve=Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[p.policies.capital]||.05));
- const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve));
+ const duePayables=p.accounting.version===3?p.accounting.accounts.payables:0;
+ const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve-duePayables));
  if(amount){bookPost(p,'repayDebt',amount);return[p.name+' repaid $'+amount.toLocaleString()+' of emergency debt.']}return [];
 };
 
@@ -149,7 +150,7 @@ function initializeRegionalPilot(g,o){
 }
 
 
-function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
+function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-(p.accounting.version===3?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
 
 
 function planPilotReserve(g,index,plan){
@@ -176,7 +177,7 @@ function validateAccountingSave(g){
  for(const [key,t]of Object.entries(g.territories))if(!g.regions[t.region]||!g.regions[t.region].markets.includes(key)||t.exited.some(Boolean))throw Error('Invalid pilot market');
  for(const p of g.players){
   if(!p.accounting||p.accounting.journal.length>192)throw Error('Invalid pilot accounts');
-  if(p.accounting.version!==([2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
+  if(p.accounting.version!==([4,5].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
   const checked=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
   const a=checked.accounts;
   for(const [stat,account]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))if(p.stats[stat]!==a[account])throw Error('Bank statistics disagree with accounts');

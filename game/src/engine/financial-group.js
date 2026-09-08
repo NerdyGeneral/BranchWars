@@ -2,7 +2,7 @@
 const GROUP_SAFEGUARDS = Object.freeze({ capitalRatio: .10, depositCash: .05, subsidiaryReserveMonths: 3 });
 const CREDIT_ALLOCATION_STEPS = Object.freeze([0,25,50,75,100]);
 function initializeFinancialGroup(g, options) {
-  if (![1,2,3].includes(options.financialGroupVersion)) return;
+  if (![1,2,3,4,5].includes(options.financialGroupVersion)) return;
   g.financialGroupVersion = options.financialGroupVersion;
   for (const p of g.players) {
     const parent = GroupAccounting.post(GroupAccounting.opening(p.id + ':parent'), 'opening.bankOwnership',
@@ -20,10 +20,11 @@ function groupCapitalQuote(p) {
   if (!p.financialGroup) return null;
   const minimumCapital = Math.ceil(riskAssets(p)*GROUP_SAFEGUARDS.capitalRatio);
   const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
+  const duePayables = p.accounting.version===3?p.accounting.accounts.payables:0;
   const restricted = p.stats.emergencyDebt>0 || p.capitalRestriction>0 || tierRank(p)>=2 ||
     (p.fundingCovenant && (p.fundingCovenant.streak>0||fundingPosition(p).excess>0));
-  return { minimumCapital, minimumCash, restricted,
-    dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash,p.stats.capital-minimumCapital)),
+  return { minimumCapital, minimumCash, restricted,...(p.accounting.version===3?{duePayables}:{}),
+    dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash-duePayables,p.stats.capital-minimumCapital)),
     supportLimit: p.financialGroup.parent.accounts.cash };
 }
 function defaultGroupPlan(p) {
@@ -49,7 +50,7 @@ function applyGroupPortfolio(p, plan) {
   if(p.financialGroup&&plan.groupPolicy)p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
 }
 function settleGroupCapital(g, plans) {
-  if(![1,2,3].includes(g.financialGroupVersion))return [];
+  if(![1,2,3,4,5].includes(g.financialGroupVersion))return [];
   const lines=[];
   for(const [index,p] of g.players.entries()) {
     const policy=plans[index].groupPolicy,quote=groupCapitalQuote(p);
@@ -102,15 +103,15 @@ function validateFinancialGroupSave(g) {
     if(g.players.some(p=>p.financialGroup!==undefined||p.creditPortfolio!==undefined))throw Error('Unversioned Financial Group state.');
     return;
   }
-  if(![1,2,3].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
+  if(![1,2,3,4,5].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
   for(const p of g.players) {
-    if(p.financialGroup?.version!==(g.financialGroupVersion===3?2:1))throw Error('Group entity rules do not match the campaign.');
+    if(p.financialGroup?.version!==([3,4,5].includes(g.financialGroupVersion)?2:1))throw Error('Group entity rules do not match the campaign.');
     validateFinancialGroupPlayer(p,g.cycle,true);
     GroupAccounting.consolidate(p.financialGroup.parent,groupEntities(p),p.accounting);
   }
 }
 function projectFinancialGroup(g,out,index) {
-  if(![1,2,3].includes(g.financialGroupVersion))return;
+  if(![1,2,3,4,5].includes(g.financialGroupVersion))return;
   out.financialGroupVersion=g.financialGroupVersion;
   const me=g.players[index],rival=g.players[1-index];
   out.me.financialGroup=JSON.parse(JSON.stringify(me.financialGroup));
@@ -122,13 +123,19 @@ function projectFinancialGroup(g,out,index) {
   if(out.lastPlans?.[rival.id])delete out.lastPlans[rival.id].groupPolicy;
   projectCorporateEconomy(g,out,index);
   projectAgency(g,out,index);
+  FacilityNetwork.project(g,out,index,identifiedInstitution(g));
+  projectDepartments(g,out,index);
+  projectFacilityLifecycle(g,out,index);
 }
 function validateFinancialGroupView(view) {
   validateCorporateView(view);
   validateAgencyView(view);
-  if(view.me?.accounting&&view.me.accounting.version!==([2,3].includes(view.financialGroupVersion)?2:1))
+  validateFacilityView(view);
+  validateDepartmentView(view);
+  validateFacilityLifecycleView(view);
+  if(view.me?.accounting&&view.me.accounting.version!==([4,5].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
     throw Error('Unsupported bank accounting view for the current campaign rules.');
-  if(![1,2,3].includes(view.financialGroupVersion)) {
+  if(![1,2,3,4,5].includes(view.financialGroupVersion)) {
     if(view.me?.financialGroup!==undefined||view.me?.creditPortfolio!==undefined||view.rival?.groupSummary!==undefined)
       throw Error('Unversioned Financial Group view.');
     return;

@@ -1,20 +1,21 @@
 const AccountingPrototype=(()=>{
  const keys=['cash','loans','securities','deposits','emergencyDebt','equity'];
  const assets=['cash','loans','securities'],liabilities=['deposits','emergencyDebt'];
- const bookKeys=b=>b.version===2?[...keys,'receivables']:keys;
+ const bookKeys=b=>b.version===3?[...keys,'receivables','payables']:b.version===2?[...keys,'receivables']:keys;
  const copy=x=>JSON.parse(JSON.stringify(x));
  const dollar=(n,signed=false)=>{if(!Number.isSafeInteger(n)||(!signed&&n<0))throw new Error('Invalid accounting amount');return n};
  function check(b){
-  if(!b||![1,2].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
+  if(!b||![1,2,3].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
+  if(b.version===3&&Object.keys(b).sort().join()!==['version','accounts','retainedEarnings','sequence','journal',...(Object.hasOwn(b,'journalBase')?['journalBase']:[])].sort().join())throw new Error('Invalid payable accounting fields');
   for(const k of bookKeys(b))dollar(b.accounts[k],k==='equity');
   dollar(b.retainedEarnings,true);dollar(b.sequence);
-  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+(b.version===2?b.accounts.receivables:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0);
+  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+([2,3].includes(b.version)?b.accounts.receivables:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0)+(b.version===3?b.accounts.payables:0);
   if(!Number.isSafeInteger(a)||!Number.isSafeInteger(l)||!Number.isSafeInteger(l+b.accounts.equity)||a!==l+b.accounts.equity)throw new Error('Unbalanced accounting book');
   if(!Array.isArray(b.journal))throw new Error('Invalid accounting journal');
   return {assets:a,liabilities:l,equity:b.accounts.equity,residual:0};
  }
  function opening(version=1){
-  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...(version===2?{receivables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
+  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...([2,3].includes(version)?{receivables:0}:{}),...(version===3?{payables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
   check(b);return b;
  }
  // Signed account changes, not debit/credit labels. Every entry balances before commit.
@@ -35,12 +36,14 @@ const AccountingPrototype=(()=>{
    chargeoff:{loans:-amount,equity:-amount},issueEquity:{cash:amount,equity:amount},
    borrow:{cash:amount,emergencyDebt:amount},repayDebt:{cash:-amount,emergencyDebt:-amount},
    buySecurities:{cash:-amount,securities:amount},
-   ...(book.version===2?{invoice:{receivables:amount,equity:amount},
+   ...([2,3].includes(book.version)?{invoice:{receivables:amount,equity:amount},
      collectInvoice:{cash:amount,receivables:-amount},
-     writeOffInvoice:{receivables:-amount,equity:-amount}}:{})
+     writeOffInvoice:{receivables:-amount,equity:-amount}}:{}),
+   ...(book.version===3?{incurPayable:{payables:amount,equity:-amount},
+     settlePayable:{cash:-amount,payables:-amount}}:{})
   };
   if(!Object.hasOwn(entries,type))throw new Error('Unknown accounting transaction');
-  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice'].includes(type)?-amount:0;
+  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice','incurPayable'].includes(type)?-amount:0;
   return post(book,type,entries[type],earnings);
  }
  function sell(book,asset,face,haircutBps){
@@ -174,8 +177,8 @@ const AccountingPrototype=(()=>{
   return {format:'bw-accounting-'+book.version,checkpoint,entries:copy(book.journal.slice(cut)),closing:stateOf(book)};
  }
  function restore(snapshotValue){
-  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
-  const version=snapshotValue.format==='bw-accounting-2'?2:1;
+  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2','bw-accounting-3'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
+  const version=Number(snapshotValue.format.slice(-1));
   let b=fromState(snapshotValue.checkpoint,version);const end=fromState(snapshotValue.closing,version);
   for(const entry of snapshotValue.entries)b=replayEntry(b,entry);
   if(!sameState(b,end))throw new Error('Accounting snapshot does not reconcile');
@@ -184,11 +187,17 @@ const AccountingPrototype=(()=>{
  // Explicit new-campaign initialization only. Never invoked by legacy imports.
  // The validated old balance becomes the opening checkpoint of the new format.
  function withReceivables(book){
-  const validated=restore(snapshot(book));if(validated.version===2)return validated;
+  const validated=restore(snapshot(book));if([2,3].includes(validated.version))return validated;
   const next={...validated,version:2,accounts:{...validated.accounts,receivables:0},journal:[]};
   next.journalBase=stateOf(next);check(next);return next;
  }
- return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables});
+ // Explicit new-campaign boundary; never repair or upgrade an imported book.
+ function withPayables(book){
+  const validated=restore(snapshot(book));if(validated.version===3)return validated;
+  const next={...validated,version:3,accounts:{...validated.accounts,...(validated.version===1?{receivables:0}:{}),payables:0},journal:[]};
+  next.journalBase=stateOf(next);check(next);return next;
+ }
+ return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables,withPayables});
 })();
 // Save repair is engine-owned. Validate the cloned save before legacy defaults.
 // Repair helpers mutate their argument; migrateCampaign gives them a private clone.

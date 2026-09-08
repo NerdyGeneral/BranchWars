@@ -111,6 +111,38 @@ const GroupAccounting = (() => {
     integer(amount);
     return post(book, 'payable.paid', creditor, { cash: -amount, payables: -amount });
   }
+  // Paired external service claims. businessAssets here records the provider's
+  // receivable, not new cash. Domain ledgers must also attribute each invoice.
+  function bankServiceInvoice(bank, provider, amount, bankId, source = 'service.invoice') {
+    AccountingPrototype.check(bank); validate(provider); integer(amount);
+    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100 ||
+        typeof source !== 'string' || !source.length || source.length > 80) throw Error('Invalid bank payable invoice.');
+    return {
+      bank: AccountingPrototype.post(bank, source, { payables: amount, equity: -amount }, -amount),
+      provider: post(provider, source, bankId, { businessAssets: amount, equity: amount }, amount)
+    };
+  }
+  function settleBankPayable(bank, provider, amount, bankId) {
+    AccountingPrototype.check(bank); validate(provider); integer(amount);
+    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100)
+      throw Error('Invalid bank payable settlement.');
+    // No auto-borrowing, sale, second expense or receipt from an unpaid invoice.
+    return {
+      bank: AccountingPrototype.transact(bank, 'settlePayable', amount),
+      provider: post(provider, 'payable.received', bankId, { cash: amount, businessAssets: -amount })
+    };
+  }
+  function writeOffBankPayable(bank, provider, amount, bankId) {
+    AccountingPrototype.check(bank); validate(provider); integer(amount);
+    if (bank.version !== 3 || typeof bankId !== 'string' || !bankId.length || bankId.length > 100)
+      throw Error('Invalid bank creditor write-off.');
+    // Resolution-only paired release: creditor loses its asset; debtor recognizes
+    // a noncash liability-release gain. This is not payment or a free cash rescue.
+    return {
+      bank: AccountingPrototype.post(bank, 'resolution.payableRelease', { payables: -amount, equity: amount }, amount),
+      provider: post(provider, 'resolution.creditorLoss', bankId, { businessAssets: -amount, equity: -amount }, -amount)
+    };
+  }
   function capitalizeBank(bank, parent, amount) {
     AccountingPrototype.check(bank); validate(parent); integer(amount);
     return {
@@ -121,7 +153,7 @@ const GroupAccounting = (() => {
   function bankDividend(bank, parent, amount, { minimumCapital, minimumCash, restricted = false } = {}) {
     AccountingPrototype.check(bank); validate(parent); integer(amount); integer(minimumCapital); integer(minimumCash);
     if (restricted || bank.accounts.emergencyDebt || amount > Math.max(0, bank.retainedEarnings) ||
-        bank.accounts.cash - amount < minimumCash || bank.accounts.equity - amount < minimumCapital)
+        bank.accounts.cash - amount < minimumCash + (bank.version === 3 ? bank.accounts.payables : 0) || bank.accounts.equity - amount < minimumCapital)
       throw Error('Bank distribution breaches retained earnings, capital, cash or recovery safeguards.');
     return {
       bank: AccountingPrototype.post(bank, 'group.bankDividend', { cash: -amount, equity: -amount }, -amount),
@@ -152,5 +184,5 @@ const GroupAccounting = (() => {
     return { assets, liabilities, equity, retainedEarnings, custodyAssets, operatingAssets: assets - custodyAssets, eliminatedInvestment, residual: 0 };
   }
   return Object.freeze({ opening, validate, post, invest, dividend: payGroupDividend, distributionLimit, custody,
-    servicePayment, settlePayable, capitalizeBank, bankDividend, consolidate, historyLimit });
+    servicePayment, settlePayable, bankServiceInvoice, settleBankPayable, writeOffBankPayable, capitalizeBank, bankDividend, consolidate, historyLimit });
 })();

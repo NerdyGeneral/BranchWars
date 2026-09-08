@@ -24,6 +24,8 @@ function validatePlan(g,p,plan){
   if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');
  }
  const hires=planHires(plan);if(hires>hireLimit(p))throw Error(`You may hire at most ${hireLimit(p)} bankers in one cycle.`);
+ normalizeFacilityPlan(g,p,plan);
+ normalizeFacilityLifecyclePlan(g,p,plan);
  const projects=projectPlanStatus(p,plan);if(!projects.eligible)throw Error(projects.reason);
  if(plan.contractBid!=null){
   if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');

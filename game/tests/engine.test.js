@@ -32,7 +32,8 @@ E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersi
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly).length, 18);
+assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly&&!p.institutionOnlyVersion).length, 18);
+assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.institutionOnlyVersion).map(([k])=>k)).sort(), ['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth']);
 assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.programOnly).map(([k])=>k)).sort(), ['licenseHighYield','licenseRewards']);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.deploymentProduct).length, 2);
@@ -1436,7 +1437,10 @@ for (const fn of ['createOffer', 'createAnswer']) {
   assert(clientFn(fn).includes('withLocalAddress('), `${fn}() must publish the address it was given`);
 }
 
-const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
+// Script bodies contain template-source fragments, not document elements.
+// Keep the actual script elements/IDs, then test emitted UI markup separately.
+const documentMarkup = html.replace(/(<script\b[^>]*>)[\s\S]*?<\/script>/gi, '$1</script>');
+const ids = [...documentMarkup.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 // Execute the dynamic renderer with DOM sinks, rather than exempting its IDs.
 let managementMarkup='';
@@ -1448,10 +1452,20 @@ vm.runInNewContext(clientFn('renderManagement')+';renderManagement({me:{manageme
 const renderedIds=[...managementMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(new Set(renderedIds).size,renderedIds.length,'rendered management IDs must be unique');
 assert(renderedIds.includes('research-enabled')&&renderedIds.includes('manager-mode')&&renderedIds.includes('prepareManagement'));
+const agencyHarness=require('./github_resilience.test.js').harness();
+agencyHarness.run("game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:3}).options,mode:'hotseat',seed:'selector-contract',created:1});seat=0;workspaceTab='group';newDraft(currentView());renderFinancialGroup(currentView());");
+const agencyMarkup=agencyHarness.elements.get('#financialGroupPanel').innerHTML;
+const agencyIds=[...agencyMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(new Set(agencyIds).size,agencyIds.length,'Rendered group/agency IDs must be unique');
+assert(agencyIds.every(id=>!ids.includes(id)),'Rendered group controls must not duplicate document IDs');
+// Literal IDs declared by other dynamic templates remain valid selector targets.
+// Their source occurrences are not simultaneous DOM elements; each workspace
+// renderer has its own emitted-markup checks in the UI suites.
+const declaredIds=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 // Check the leading ID of descendant selectors too; it is not itself an ID.
 const missingIds = [...html.matchAll(/\$\('#([\w-]+)(?:[^']*)'\)/g)]
   .map((item) => item[1])
-  .filter((id) => !ids.includes(id)&&!renderedIds.includes(id));
+  .filter((id) => !declaredIds.includes(id)&&!renderedIds.includes(id)&&!agencyIds.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
 assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
 assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');

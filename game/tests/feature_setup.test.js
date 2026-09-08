@@ -18,7 +18,7 @@ assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0
 groupSetup.run('cancelFeatureSelectionConfirmation()');
 assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0);
 groupSetup.changeFeature('#financialGroupPreview',true);assert(groupSetup.confirmFeatures());
-assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),3,'New selections opt into the staffed agency; existing saves retain their version.');
+assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),5,'New selections opt into facility lifecycle and institution management; existing saves retain their version.');
 assert.equal(groupSetup.run('readSetupFeatureOptions().onboardingVersion'),1);
 assert.equal(groupSetup.run('readSetupFeatureOptions().productProgramsVersion'),2);
 groupSetup.changeFeature('#onboardingPreview',false);assert(groupSetup.run('featureSelectionPending()'));

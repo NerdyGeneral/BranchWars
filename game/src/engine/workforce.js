@@ -44,16 +44,22 @@ function specialistPayroll(p) {
 }
 function specialistBonus(p, role, allocation = p.allocation) {
   const row = p.workforce?.departments[role];
-  return row ? Math.min(row.count, Math.max(0, allocation[role] || 0)) * (.1 + row.skill * .003) : 0;
+  const productive = p.departmentOffice ? departmentProductiveAllocation(p, allocation) : allocation;
+  const qualified=row?Math.max(0,row.count-(p.departmentOffice&&departmentTeachingActive(p,role,p.workforce.policy,allocation)?1:0)):0;
+  return row ? Math.min(qualified, Math.max(0, productive[role] || 0)) * (.1 + row.skill * .003) : 0;
 }
 function workforceAllocation(p, allocation = p.allocation) {
   if (!p.workforce) return allocation;
-  return Object.fromEntries(Object.keys(ROLES).map(k => [k, allocation[k] + specialistBonus(p, k, allocation)]));
+  const productive = p.departmentOffice ? departmentProductiveAllocation(p, allocation) : allocation;
+  // specialistBonus receives the ORIGINAL allocation: it excludes that same
+  // teaching head once, not a second time from an already reduced allocation.
+  return Object.fromEntries(Object.keys(ROLES).map(k => [k, productive[k] + specialistBonus(p, k, allocation)]));
 }
 function specialistBusinessBonus(p, delivery = false) {
-  const total = p.allocation.business;
+  const department = p.departmentOffice ? departmentDeliveryAllocation(p, p.serviceDesk?.policy.staff || 0) : null;
+  const total = department ? department.total : p.allocation.business;
   if (!total) return 0;
-  const reserved = Math.min(total, p.serviceDesk?.policy.staff || 0);
+  const reserved = department ? department.service : Math.min(total, p.serviceDesk?.policy.staff || 0);
   // Each qualified banker is used once. No double claim on sales and delivery.
   return specialistBonus(p, 'business') * (delivery ? reserved : total - reserved) / total;
 }
@@ -74,13 +80,15 @@ function applyWorkforcePolicy(p, policy) {
 function workforceTrainingQuote(p, policy = p.workforce?.policy, reserved = 0) {
   if (!p.workforce) return { total: 0, requested: 0, rows: [], paused: false };
   validateWorkforcePolicy(policy);
-  const rows = Object.keys(SPECIALIST_ROLES).map(role => {
+  let rows = Object.keys(SPECIALIST_ROLES).map(role => {
     const d = p.workforce.departments[role], unit = d.count * SPECIALIST_TRAINING_COST;
     const gain = unit ? Math.min(SPECIALIST_MAX_GAIN, 100 - d.skill, Math.floor(policy.training[role] / unit)) : 0;
     return { role, count: d.count, skill: d.skill, gain, spend: gain * unit };
   });
+  if (p.departmentOffice) rows = departmentTrainingRows(p, policy, rows);
   const requested = rows.reduce((n, r) => n + r.spend, 0);
-  const available = Math.max(0, Math.min(p.stats.cash - policy.reserve, pilotSpendingLimit(p)) - Math.max(0, reserved));
+  const reserve = p.departmentOffice ? Math.max(policy.reserve, p.departmentOffice.policy.reserve) : policy.reserve;
+  const available = Math.max(0, Math.min(p.stats.cash - reserve, pilotSpendingLimit(p)) - Math.max(0, reserved));
   // All departments pause together: no hidden priority from object iteration order.
   const paused = requested > available;
   if (paused) for (const row of rows) { row.gain = 0; row.spend = 0; }
@@ -92,7 +100,7 @@ function workforceOperatingCosts(p) {
 }
 function workforceLateReserve(p, plan) {
   const research = Object.values(plan.investments || {}).reduce((n, v) => n + Math.max(0, Number(v) || 0), 0);
-  return research + hireCost(p, planHires(plan)) + specialistHirePremium(plan);
+  return research + hireCost(p, planHires(plan)) + specialistHirePremium(plan) + facilityLifecycleDraftCommitment(p,plan).maintenance;
 }
 function addWorkforceReport(p, report) {
   if (!p.workforce) return;
@@ -243,7 +251,7 @@ function validateWorkforceSave(g) {
       if (amounts.some(k => !Number.isSafeInteger(report[k]) || report[k] < 0) || ![0, 1].includes(report.workforceTrainingPaused) ||
           report.workforceTraining > report.workforceTrainingRequested || (report.workforceTrainingPaused && report.workforceTraining !== 0) ||
           Object.keys(SPECIALIST_ROLES).reduce((n, k) => n + report['trainingSpend_' + k], 0) !== report.workforceTraining ||
-          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > SPECIALIST_MAX_GAIN ||
+          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
             !Number.isFinite(report['specialistBonus_' + k]) || report['specialistBonus_' + k] < 0)) throw Error('Invalid workforce operating report');
     }
     if (p.submitted) {

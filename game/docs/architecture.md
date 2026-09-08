@@ -5,7 +5,7 @@ boundaries, not every future blueprint system.
 
 ## Source of truth
 
-Edit `src/`. `src/manifest.json` lists 114 ordered assembly inputs.
+Edit `src/`. `src/manifest.json` lists 124 ordered assembly inputs.
 `tools/build_game.js` produces the standalone `BRANCH_WARS.html`, with no runtime
 package dependencies. Never hand-edit the output, frozen engines or releases.
 
@@ -47,8 +47,8 @@ concealed rival behavior or future economics.
 
 ### Commercial agency boundary — partial N-09
 
-The existing opt-in Group selector creates rules 3 / save 9.2 in this working
-build. Existing rules 1/save 9.0 and rules 2/save 9.1 retain their exact boundaries.
+The existing opt-in Group selector creates rules 5 / save 9.4 in this working
+candidate. Existing rules 1/save 9.0 through 4/save 9.3 retain their boundaries.
 Initialization creates the versioned company economy before the agency; the
 completed game is stamped afterward. Agency settlement runs once after company
 operations and before final group-capital settlement. It uses existing parent
@@ -83,6 +83,36 @@ This is a commercial-agency slice, not complete N-09: household distribution,
 broader share-of-wallet, selectable carrier contracts, carrier/claim events,
 brokerage, wealth and their custody/service/failure obligations remain unfinished.
 The carrier book models premium/commission funding, not claims or underwriting.
+
+### Institution boundary — partial N-05
+
+`facility-network.js` is a pure identified-office domain, with prices/accounting
+and execution supplied through `facility-adapter.js`. Existing branch/model
+arrays are strict derived mirrors, not a second authority. Conversions consume
+shared execution before ordinary projects, retain old upkeep and half capacity,
+and activate on the following planning month. No import repairs or new offices
+are inferred from malformed mirrors. Public views preserve owner-private orders.
+
+`departments.js` owns versioned envelopes, leader identities/history, compensation
+and paired supplier claims. Bank accounting v3 adds payables; actual payment
+reduces the existing liability and never expenses it twice. Forecasts use private
+prepared copies with the same transaction order and no new money. Workforce and
+service helpers share paid-training/teaching capacity. UI modules provide collapsed
+Network and Departments desks, canonical draft fields and explicit staging.
+Group 5 adds `facility-lifecycle.js` (pure condition/staff/maintenance/renovation),
+`facility-lifecycle-quotes.js` (shared planning context), `facility-settlement.js`
+(paired bank/supplier cash) and `facility-lifecycle-adapter.js` (ordered runtime,
+forecasts, AI and privacy). Network schema v1 remains three models for Group 4;
+v2 offers seven for Group 5. A wealth office remains blocked until an actual
+licensed operating subsidiary exists; agency status never supplies a license.
+Maintenance consumes existing protected cash, with no borrowing or fabricated
+payable when deferred. Renovation uses remaining execution after conversions,
+before ordinary projects; repeated advance never reserves capacity twice.
+Quarter-FTE staffing uses actual residual staff after teaching/servicing, not
+specialist productivity as extra employees. Hub support transfers finite service
+capacity across the authored six-market adjacency. Forecasts use private copies.
+The wider department/leadership catalog and licensed wealth operations remain
+unfinished; actual Group 5 UI, long-run and release acceptance are separate gates.
 
 ## Multiplayer reliability
 

@@ -5,6 +5,7 @@ const elements = new Map();
 function element() {
  const classes = new Set();
  return { innerHTML: '', hidden: false, dataset: {}, classList: {
+  add(key) { classes.add(key); }, remove(key) { classes.delete(key); },
   toggle(key, on) { if (on) classes.add(key); else classes.delete(key); },
   contains(key) { return classes.has(key); }
  } };
@@ -12,13 +13,21 @@ function element() {
 elements.set('#regionalGrowthWorkspace', element());
 elements.set('#regionalGrowthMount', element());
 elements.set('#gameScreen', element());
+elements.set('#facilityNetworkPanel', element());
 elements.get('#regionalGrowthWorkspace').dataset.workspace = 'markets';
-const context = { window: { BWEngine: {} }, document: { querySelector: key => elements.get(key) || null,
+let projectionCalls = 0;
+// Narrow renderer fixture: the campaign below is deliberately only a mutation
+// sentinel, not a valid engine save. Supply its already-redacted frozen view to
+// the new Markets refresh path. Real projection is covered by institution tests;
+// retain the actual facility renderer here to exercise feature-off hiding.
+const context = { window: { BWEngine: { publicState(world) {
+  assert.equal(world.rng.state, 42); projectionCalls++; return context.testView;
+} } }, document: { querySelector: key => elements.get(key) || null,
  querySelectorAll: key => key === '[data-workspace]' ? [elements.get('#regionalGrowthWorkspace')] : [] },
  console, Math: Object.create(Math) };
 context.Math.random = () => { throw Error('A review cannot consume randomness'); };
 vm.createContext(context);
-vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/regional-growth.js'), context);
+vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/facility-network.js') + '\n' + read('src/ui/regional-growth.js'), context);
 const run = code => vm.runInContext(code, context);
 const mount = elements.get('#regionalGrowthMount'), section = elements.get('#regionalGrowthWorkspace');
 const grid = (customers, deposits) => ({ customers: { everyday: customers, connected: 0, reserve: 0 }, deposits: { everyday: deposits, connected: 0, reserve: 0 } });
@@ -35,13 +44,15 @@ function freeze(value) {
  return value;
 }
 function render(view) { context.testView = freeze(view); run('renderRegionalGrowth(testView)'); return mount.innerHTML; }
-const base = { territories: { downtown: { name: 'Downtown' } }, regions: { heartland: { name: 'Heartland' } } };
+const base = { me: { id: 'growth-review-fixture' }, territories: { downtown: { name: 'Downtown' } }, regions: { heartland: { name: 'Heartland' } } };
 run("draft={focus:'northside',advertisingPolicy:{budget:50000}};game={rng:{state:42},players:[{submitted:{focus:'northside'}}]}");
 const untouched = run('JSON.stringify({draft,game})');
 
 assert.equal(render(base), '');
 assert(section.hidden && section.classList.contains('hidden'), 'older campaigns hide the whole section');
 run("setWorkspaceTab('markets')");
+assert(projectionCalls > 0, 'Markets refresh uses the current redacted view');
+assert(elements.get('#facilityNetworkPanel').classList.contains('hidden'), 'actual facility renderer keeps older campaigns hidden');
 assert(section.classList.contains('active'), 'test exercises the actual Markets activation');
 assert(section.hidden && section.classList.contains('hidden'), 'workspace switching must not reveal feature-off content');
 const initial = { ...clone(base), regionalGrowth: { version: 1, lastCycle: 0, report: null, forecast: { ...closing(1, 'steady'), conditional: true } } };

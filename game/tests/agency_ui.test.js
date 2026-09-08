@@ -7,6 +7,15 @@ h.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion
   "game.players[0].financialGroup.parent=E.GroupAccounting.post(game.players[0].financialGroup.parent,'test.parentCapital','external',{cash:240000,equity:240000});"+
   "newDraft(currentView());renderReady=()=>{};toast=t=>lastToast=t;let lastToast='';renderFinancialGroup(currentView());");
 const markup=h.elements.get('#financialGroupPanel').innerHTML;
+function uniqueRenderedIds(markup){
+ const ids=[...markup.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(new Set(ids).size,ids.length,'Actual Financial Group controls must have unique IDs');
+ const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'../BRANCH_WARS.html'),'utf8');
+ const staticMarkup=html.replace(/(<script\b[^>]*>)[\s\S]*?<\/script>/gi,'$1</script>');
+ const staticIds=new Set([...staticMarkup.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+ assert(ids.every(id=>!staticIds.has(id)),'Emitted controls cannot duplicate a static document ID');
+}
+uniqueRenderedIds(markup);
 assert.match(markup,/INSURANCE AGENCY/);assert.match(markup,/separate from banking mandates/);
 assert.match(markup,/18 independent relationships/);assert.match(markup,/does not insure claims/);
 assert.match(markup,/not guaranteed revenue/i);assert.match(markup,/service units/);
@@ -81,6 +90,7 @@ assert.equal(h.run('financialGroupDesk'),'agency','Same-owner settlement must ke
 assert.equal(h.run('draft.agencyPolicy.launch'),false);
 assert.equal(h.run('draft.agencyPolicy.capital'),0);
 assert.match(h.elements.get('#financialGroupPanel').innerHTML,/LAST SETTLED MONTH · 1/);
+uniqueRenderedIds(h.elements.get('#financialGroupPanel').innerHTML);
 assert.match(h.elements.get('#financialGroupPanel').innerHTML,/Expenses invoiced/);
 const settled=h.run('JSON.stringify(game)');
 h.run('agencyPanel(currentView());agencyResultsMarkup(currentView());');
@@ -102,6 +112,7 @@ assert.equal(h.run('currentView().rival.agency'),undefined);
 // Failure is a funded relaunch decision, never a silent restoration of the lost investment.
 h.run("const failedView=currentView();failedView.me.agency.status='failed';failedView.me.agency.failedCycle=1;failedView.me.agency.failures=1;const failedHtml=agencyPanel(failedView);");
 assert.match(h.run('failedHtml'),/Relaunch agency/);assert.match(h.run('failedHtml'),/prior loss remains/);
+uniqueRenderedIds(h.run('failedHtml'));
 const legacy=harness();
 legacy.run("game=E.createGame({mode:'hotseat',seed:1,created:1});seat=0;newDraft(currentView());");
 assert.equal(legacy.run('agencyPanel(currentView())'),'');

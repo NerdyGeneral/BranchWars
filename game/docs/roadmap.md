@@ -36,7 +36,7 @@ unrestricted feature combinations.
 | N-02 Accounting/funding | Bank/parent/company/agency cash, invoices, paired losses and agency elimination | Broader subsidiaries, custody and securities |
 | N-03 Rivalry | Open-ended regional contests, re-entry/recovery | Human late-game/comeback acceptance |
 | N-04 Economy | Two regions, six finite markets, six firms | Richer industry/adjacency exposures |
-| N-05 Institution | Offices/upgrades, workforce/service management | Expanded facilities, condition/conversions, budgets/leaders |
+| N-05 Institution | Group 5 candidate: seven-model catalog, physical staffing, condition/maintenance/renovation and finite hub support, alongside existing conversion/leadership | Full Windows gate, frozen 145-suite baseline, hub transitions, 192/120-month runs and actual renovation/conversion UI verified. Broader strategy viability, licensed wealth offices and wider departments remain |
 | N-06 Products | Pricing/programmes, credit/collections, three-family allocation | Broader terms, collateral, concentration/catalog |
 | N-07 Research/delivery | Capabilities/models and explicit deployments | Full cross-capability build/buy/adoption/maintenance web |
 | N-08 Relationships | Ads, onboarding, retention/switching, mandates | Separate multi-product wallet competition |
@@ -80,10 +80,10 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
 | 04c | Local economic flows, sector mix and richer customer/company exposures | Partial: demand/growth and six financed firms; add borrower/service/ownership interactions. |
 | 04d | Adjacency/channel reach and priced physical/disconnected entry | Partial: reach/premiums exist; actual adjacency/hub economics and paid digital distribution remain. |
 | 04e | Bounded supporting competitors/partners without privileged resources | Partial: outside books/defense/company finance and finite carrier premium/commission payments; selectable carrier/platform/distribution relationships and carrier events remain. |
-| 05a | Distinct facilities, upkeep, staff/capacity and attributed contribution | Partial: retail/commercial/digital metrics; micro/ATM, wealth, financial-center/hub roles and reconciled attribution remain. |
-| 05b | Identified-office upgrades/conversion/condition/renovation/closure/disruption | Partial: market upgrades/last-office closure; retain identity/obligations and test disruption/activation timing. |
+| 05a | Distinct facilities, upkeep, staff/capacity and attributed contribution | Partial: Group 5 candidate integrates micro/ATM, financial centers/hubs, physical quarter-FTE, finite support and expense attribution. Wealth offices remain blocked pending licensed subsidiary; integrated long-run/UI acceptance remains. |
+| 05b | Identified-office upgrades/conversion/condition/renovation/closure/disruption | Partial: existing paid conversion/history plus Group 5 condition, ramp-up, funded maintenance, shared execution renovation/cancellation and next-month activation. Targeted actual integration and simulated transports pass; final acceptance remains. |
 | 05c | Departments, skills/pay, workload/service/training and specialists | Partial: four roles/workforce; wider credit/collections, technology, treasury, risk, people and subsidiary responsibilities remain. |
-| 05d | Department budgets/reserves, outsourcing, leaders and bounded delegation | Partial: existing research/service limits; leader strengths/weaknesses, compensation/experience/history and mandates remain. |
+| 05d | Department budgets/reserves, outsourcing, leaders and bounded delegation | Partial: Group 4 candidate adds envelopes, three paid leadership profiles, compensation/payables, experience/history and explicit bounded draft proposals; shared-budget/teaching corrections now verified; wider leadership/department catalog remains. |
 | 05e | Separate execution/operating capacity, persistent policies and visible exceptions | Partial: current limits; delegated draft/ledger actions must obey caps and never borrow, close, acquire or submit autonomously. |
 | 06a | Simultaneous products and segment/channel deployment | Partial: three-family lending; broader consumer/deposit/small-business/mortgage/commercial/CRE/treasury catalog with shared funding/capacity remains. |
 | 06b | Product pricing, fees, eligibility, terms and retained guarantees | Partial: retail pricing and promotional/term locks; broader choices must not rewrite protected contracts. |
@@ -126,6 +126,16 @@ authoritative costs/capacity. Human acceptance is separate from technical eviden
 2. **Institution depth:** identified existing-office conversion and departmental
    envelopes/mandates, then condition/renovation and wider facilities/leadership.
    Add only required agency dependencies ahead of the first playable slice.
+   Group 5 now covers paid lifecycle work and limited actual three-turn UI play;
+   the combined renovation/conversion budget repair preserves one opening funding
+   envelope. Eight-function department allocation/vendor work is an isolated
+   candidate only, not an integrated or completed row: finite paired vendors,
+   exact retained task attribution, role-specific dispatch and a guarded UI have
+   isolated tests. Live workload consumers, post-raid fulfillment, new-version
+   boundaries, shared physical-pool settlement and rendered integration remain.
+   Frozen Group 5 baseline now passes 145 suites and its full outer gate passes;
+   the outer 1,920-month older regional-profile test is not a Group 5 campaign.
+   Full blueprint acceptance remains separate in release status.
 3. **Living portfolio/relationships:** broader bank products/terms/exposures,
    research implementation/adoption/upkeep and marketing/separable wallets in
    coherent playable slices, not independent minigames.

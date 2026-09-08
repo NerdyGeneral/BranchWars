@@ -76,10 +76,10 @@ function repairSavedPortfolio(g,p){
  for(const market of Object.keys(g.territories)){
   const expected=Math.max(0,p.branches[market]||0);
   if(expected===0&&p.facilityMarkets[market]===undefined)continue;
-  p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>['retail','commercial','digital'].includes(x)).slice(0,expected):[];
+  p.facilityMarkets[market]=Array.isArray(p.facilityMarkets[market])?p.facilityMarkets[market].filter(x=>(p.facilityNetwork?.version===2?FacilityNetwork.ALL_MODELS:['retail','commercial','digital']).includes(x)).slice(0,expected):[];
   while(p.facilityMarkets[market].length<expected)p.facilityMarkets[market].push('retail');
  }
- p.facilities={retail:0,commercial:0,digital:0};
+ p.facilities=p.facilityNetwork?.version===2?Object.fromEntries(FacilityNetwork.ALL_MODELS.map(m=>[m,0])):{retail:0,commercial:0,digital:0};
  for(const models of Object.values(p.facilityMarkets))for(const type of models)p.facilities[type]++;
  p.projects.forEach(project=>{
   if(project.specialization){
@@ -115,7 +115,7 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2'].includes(g.version))validateCampaignRules(g,'game');
+ if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4'].includes(g.version))validateCampaignRules(g,'game');
  else {
  if(g.onboardingVersion!==undefined&&g.version!=='8.13')throw Error('Onboarding requires a v8.13 save.');
  if(g.relationshipOffersVersion!==undefined&&g.version!==(g.onboardingVersion===1?'8.13':'8.12'))throw Error('Relationship offers requires a v8.12 save.');

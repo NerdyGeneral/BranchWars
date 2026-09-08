@@ -222,7 +222,7 @@ It comes from the executive team, from Operations bankers, and from tiers of the
 Operational Excellence lane.
 
 ```js
-function executionCapacity(p,allocation=p.allocation){const ops=allocation&&Number.isFinite(allocation.operations)?allocation.operations:0;
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=productive&&Number.isFinite(productive.operations)?productive.operations:0;
 return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 ```
 
@@ -235,7 +235,7 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 function advanceProjects(g){const L=[];
 for(const p of g.players){if(p.marketingTurns>0)p.marketingTurns--;
 if(!p.projects.length)continue;
-const rate=1+p.allocation.operations*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p),carry=[];
+const rate=1+(p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
 let spent=0;
 for(const project of p.projects){const need=projectCapacity(PROJECTS[project.key]);
 if(spent+need>budget+1e-9){L.push(`${p.name}'s ${PROJECTS[project.key].name} stalled: the plan no longer staffs enough execution capacity.`);
@@ -354,6 +354,10 @@ capability tiers.
 | marketing | Market-Wide Advertising | $260K | 2 | 1 | -- | -- | no | Boost reputation and market influence for four cycles. |
 | remediation | Compliance Remediation | $170K | 2 | 1 | -- | -- | no | Aggressively reduce risk and Corporate Attention. |
 | acquisition | Competitor Book Acquisition | $1.10M | 4 | 3 | acquisition | -- | yes | Acquire customers, deposits, and share in the focus market. |
+| branchAtm | ATM / Micro Service Point | $150K | 1 | 0.5 | branch | atm | yes | Small local deposit/service footprint. Requires staffed service and operations support; no lending or free customer book. |
+| branchWealth | Wealth Advisory Office | $800K | 3 | 1.5 | branch | wealth | yes | Specialized advisory location. Requires a licensed operating wealth subsidiary and dedicated qualified staff; unavailable until that business exists. |
+| branchFinancialCenter | Integrated Financial Center | $1.40M | 4 | 2 | branch | financialCenter | yes | Large retail, commercial and lending facility with substantial staffing and upkeep. Advisory throughput remains unavailable without a licensed subsidiary. |
+| branchRegionalHub | Regional Operations Hub | $1.85M | 5 | 2.5 | branch | regionalHub | yes | High-overhead service hub. Staff can transfer finite service throughput to explicitly linked nearby offices in the same region; it does not create customers. |
 | licenseRewards | License Rewards Checking | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 | licenseHighYield | License High-Yield Savings | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 
