@@ -2,7 +2,7 @@
 // owns compatibility and setup choices, not simulation order or private books.
 const MODULAR_FEATURE_RULES_AVAILABLE = true;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
-  ['financialGroupVersion', 'financialGroupSupported', 5, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
+  ['financialGroupVersion', 'financialGroupSupported', 6, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
   ['featureRulesVersion', 'featureRulesSupported', 1, 1, 'Modular combinations preview', 'MODULAR RULES'],
   ['onboardingVersion', 'onboardingSupported', 1, 1, 'Customer onboarding preview', 'ONBOARDING'],
   ['relationshipOffersVersion', 'relationshipOffersSupported', 1, 1, 'Relationship offers preview', 'RELATIONSHIP OFFERS'],
@@ -43,13 +43,13 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['regionalGrowthVersion', 'Regional growth', 1, 'advertisingVersion', true, false, 'Outside economic arrivals and departures at month end.'],
   ['relationshipOffersVersion', 'Relationship offers', 1, 'regionalGrowthVersion', true, false, 'Voluntary product switching for existing customers.'],
   ['onboardingVersion', 'Customer onboarding', 1, 'relationshipOffersVersion', true, false, 'Applications, staff bottlenecks and funded activation.'],
-  ['financialGroupVersion', 'Financial Group preview', 5, 'onboardingVersion', true, false, 'Separate parent capital, staffed insurance agency, staffed facility networks, condition/renovation and departmental budgets/leadership.'],
+  ['financialGroupVersion', 'Financial Group preview', 6, 'onboardingVersion', true, false, 'Separate parent capital, staffed insurance agency, facility networks and renovation, plus departmental workloads, paid outsourcing and bounded leadership.'],
   ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
   peers: Object.freeze(CAMPAIGN_PEER_REQUIREMENTS.filter(peer => peer.field === field)),
-  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
+  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
   requires: Object.freeze(field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
 })));
 const CAMPAIGN_FEATURE_FIELDS = Object.freeze(CAMPAIGN_FEATURES.map(row => row.field));
@@ -76,6 +76,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if (source.financialGroupVersion===6) return '9.5';
   if (source.financialGroupVersion===5) return '9.4';
   if (source.financialGroupVersion===4) return '9.3';
   if (source.financialGroupVersion===3) return '9.2';
@@ -85,7 +86,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  return ['9.0','9.1','9.2','9.3','9.4'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || version === '8.15' || (MODULAR_FEATURE_RULES_AVAILABLE && version === '8.14');
+  return ['9.0','9.1','9.2','9.3','9.4','9.5'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || version === '8.15' || (MODULAR_FEATURE_RULES_AVAILABLE && version === '8.14');
 }
 function campaignOptionIssues(source, context) {
   const issues = [];

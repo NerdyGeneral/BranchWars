@@ -48,7 +48,7 @@ function initializeCreditPerformance(g, o) {
   return g;
 }
 function originationCreditGuard(p) {
-  return Math.max(.28, 1 - (workforceAllocation(p).operations + p.upgrades.training + p.upgrades.operations + strategyLevel(p,'operations')*.65)*.075) *
+  return Math.max(.28, 1 - (departmentFunctionTaskFte(p,'risk',workforceAllocation(p).operations) + p.upgrades.training + p.upgrades.operations + strategyLevel(p,'operations')*.65)*.075) *
     (hasSpecialization(p,'operations','resilience') ? .82 : 1) * (productOption(p,'business').risk || 1) *
     (hasSpecialization(p,'commercial','specializedCredit') ? 1.08 : 1);
 }
@@ -61,11 +61,11 @@ function creditSaleHaircut(p, baseBps) {
   const distress=p.creditBook.cohorts.reduce((n,c)=>n+c.late[0]*1000+c.late[1]*3000+c.late[2]*7000,0);
   return baseBps+(principal?Math.round(distress/principal):0);
 }
-function creditSalesStaff(p, staff) { return p.creditPerformance ? staff * (1 - p.creditPerformance.policy.share/100) : staff; }
+function creditSalesStaff(p, staff) { return departmentFunctionResidualProductivity(p,'lending',staff,p.creditPerformance ? staff * (1 - p.creditPerformance.policy.share/100) : staff); }
 function collectionsReview(p, allocation = p.allocation, policy = p.creditPerformance?.policy) {
   if (!p.creditPerformance) return null;
   validateCollectionsPolicy(policy);
-  const staff = allocation.lending + specialistBonus(p,'lending',allocation), capacity = staff * policy.share/100;
+  const staff = allocation.lending + specialistBonus(p,'lending',allocation), capacity = departmentFunctionTaskFte(p,'collections',staff * policy.share/100);
   const late = [0,1,2].map(i => p.creditBook.cohorts.reduce((n,c) => n+c.late[i],0)), demand = late.reduce((n,x) => n+x,0)/1000000;
   return { late, demand, capacity, coverage: demand ? Math.min(1,capacity/demand) : 1,
     salesStaff: staff-capacity, performing: p.creditBook.cohorts.reduce((n,c) => n+performingCredit(c),0),

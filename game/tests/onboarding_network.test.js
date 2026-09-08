@@ -166,9 +166,10 @@ async function linked(transport) {
   assert.equal(guest.state().lobby.settings.onboardingVersion,1);assert.match(guest.elements.get('#lobbyRules').textContent,/onboarding/i);
   host.run('editLobbyIdentity(true)');await drain();guest.run('editLobbyIdentity(true)');await drain();
   host.run('startLobbyCampaign()');await drain();assert.equal(host.state().game.version,'8.13');assert.equal(guest.state().view.onboardingVersion,1);
-  const untouched=JSON.stringify(host.state().game);host.c.oldHello=oldHello;await host.run('handleMessage(oldHello)');
+  const untouched=JSON.stringify(host.state().game);host.run('resetFeaturePeer()');host.c.oldHello=oldHello;await host.run('handleMessage(oldHello)');
   assert.equal(JSON.stringify(host.state().game),untouched,'Old-peer reconnect changed live game');
   assert(queue.some(([,m])=>m.type==='error'&&/onboarding/i.test(m.message)));queue.length=0;
+  await guest.run("handleMessage({type:'hello_request'})");await drain();
   let pendingSeen=0;
   for(let month=0;month<4;month++) {
     const plans=host.state().game.players.map(p=>({...planFor(p),allocation:{service:4,business:2,lending:1,operations:1},
@@ -186,7 +187,7 @@ async function linked(transport) {
       await host.run('handleMessage(duplicate)');await drain();assert.equal(host.state().game.cycle,month+2,'Duplicate onboarding reveal settled again');
     } else {
       host.c.plan=plans[0];host.run('E.submit(game,0,plan);syncPeers()');await drain();
-      guest.c.plan=plans[1];guest.run("send({type:'plan',plan})");await drain();
+      guest.c.plan=plans[1];guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan}):{type:'plan',plan})");await drain();
     }
     host.run('E.validatePilot(game);E.validateLedger(game)');
     const g=host.state().game,v=guest.state().view;assert.equal(g.cycle,month+2);

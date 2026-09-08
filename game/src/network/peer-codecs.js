@@ -1,6 +1,56 @@
 function pack(prefix,obj){return prefix+btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+// Transport fences are deliberately transient: no save fields or engine RNG.
+let peerTurnEnvelopeSupported=false,outgoingTurnContext=null,incomingTurnContext=null,turnContextGame=null;
+let turnStateRevision=0,incomingTurnRevision=0,incomingTurnChallenge='',seenTurnChallenges=new Set();
+let turnGuestChallenge='',peerTurnGuestChallenge='';
+function guestTurnChallenge(){
+ if(!turnGuestChallenge)turnGuestChallenge=(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2));
+ return turnGuestChallenge;
+}
+function getTurnContext(){
+ if(!game)return null;
+ if(turnContextGame!==game||!outgoingTurnContext||outgoingTurnContext.session!==featureChallenge||outgoingTurnContext.cycle!==game.cycle||outgoingTurnContext.resolutionId!==game.resolutionId){
+  turnContextGame=game;
+  outgoingTurnContext={version:1,cycle:game.cycle,resolutionId:game.resolutionId,session:featureChallenge,token:String(featureConnectionGeneration)+'-'+(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))};
+ }
+ return {...outgoingTurnContext};
+}
+function turnMessage(type,extra={}){
+ const v=currentView();
+ return {type,...extra,cycle:v.cycle,resolutionId:v.resolutionId,...(incomingTurnContext?{turnContext:{...incomingTurnContext}}:{})};
+}
+function validateTurnMessage(message){
+ const context=message.turnContext;
+ if(peerTurnEnvelopeSupported&&!context)throw Error('The turn confirmation is missing. Reconnect before submitting this plan.');
+ if(message.cycle!==undefined&&message.cycle!==game.cycle)throw Error('That instruction belongs to a different month. Review the current plan.');
+ if(message.resolutionId!==undefined&&message.resolutionId!==game.resolutionId)throw Error('That instruction belongs to an earlier resolution. Review the current plan.');
+ if(context!==undefined){
+  const expected=getTurnContext();
+  if(!context||context.version!==1||context.cycle!==game.cycle||context.resolutionId!==game.resolutionId||
+     message.cycle!==game.cycle||message.resolutionId!==game.resolutionId||context.session!==expected.session||context.token!==expected.token)
+   throw Error('That instruction has an expired or invalid turn confirmation. Reconnect and review the current plan.');
+ }
+}
+function receiveTurnContext(message){
+ const c=message.turnContext;
+ if(c===undefined){
+  if(incomingTurnContext)throw Error('The host omitted its turn confirmation. Reconnect with matching game files.');
+  return true;
+ }
+ if(!c||c.version!==1||c.cycle!==message.state.cycle||c.resolutionId!==message.state.resolutionId||typeof c.token!=='string'||c.token.length<4||c.token.length>100||!Number.isSafeInteger(c.revision)||c.revision<1||typeof c.session!=='string')
+  throw Error('The host sent an invalid turn confirmation.');
+ if(c.session!==incomingTurnChallenge)return false;
+ if(c.revision<=incomingTurnRevision)return false;
+ incomingTurnRevision=c.revision;
+ incomingTurnContext={...c};
+ return true;
+}
 function resetFeaturePeer(){
  featureConnectionGeneration++;featurePeerCapabilities=null;featurePeerGeneration=-1;featurePeerFresh=false;featureChallenge='';
+ peerTurnEnvelopeSupported=false;outgoingTurnContext=null;incomingTurnContext=null;turnContextGame=null;
+ turnStateRevision=0;incomingTurnRevision=0;incomingTurnChallenge='';seenTurnChallenges=new Set();
+ ghPendingTurnToken=null;
+ turnGuestChallenge='';peerTurnGuestChallenge='';
 }
 function currentFeatureSource(){return game||lobby&&lobby.settings||p2pConfig||{}}
 function peerFeatureStatus(settings=currentFeatureSource()){
@@ -8,21 +58,29 @@ function peerFeatureStatus(settings=currentFeatureSource()){
  if(!featurePeerCapabilities||featurePeerGeneration!==featureConnectionGeneration)return {compatible:false,pending:true,reason:'Waiting for the other computer to confirm supported campaign rules.'};
  const issue=E.peerRulesIssue(rules,featurePeerCapabilities);
  if(issue)return {compatible:false,pending:false,reason:issue.message,code:issue.code,status:issue.status};
- if(E.campaignNeedsFreshHandshake(rules.options)&&!featurePeerFresh)return {compatible:false,pending:true,reason:'Waiting for a fresh campaign-rules handshake from the other computer.'};
+ if((peerTurnEnvelopeSupported||E.campaignNeedsFreshHandshake(rules.options))&&!featurePeerFresh)return {compatible:false,pending:true,reason:'Waiting for a fresh campaign-rules handshake from the other computer.'};
  return {compatible:true,pending:false,reason:''};
 }
 function challengePeerFeatures(){
  if(!featureChallenge)featureChallenge=String(featureConnectionGeneration)+'-'+(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2));
- send({type:'hello_request',featureChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported});
+ send({type:'hello_request',featureChallenge,turnEnvelopeSupported:1,turnGuestChallenge:peerTurnGuestChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported});
 }
 function makeFeatureHello(request){
- const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),color:config.color,name:config.guestName,doctrine:config.doctrine};
+ const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),turnEnvelopeSupported:1,turnGuestChallenge:guestTurnChallenge(),color:config.color,name:config.guestName,doctrine:config.doctrine};
  // Released V2 hosts reject capabilities above their known maximum, even when
  // playing retained Group 1/2 rules. Advertise the legacy-compatible range until
  // the host explicitly requests the modern range. This never changes game rules.
  hello.financialGroupSupported=Math.min(hello.financialGroupSupported,
   Number.isInteger(request?.financialGroupSupported)&&request.financialGroupSupported>=3?request.financialGroupSupported:2);
- if(request&&typeof request.featureChallenge==='string'&&request.featureChallenge.length>0&&request.featureChallenge.length<=100)hello.featureChallenge=request.featureChallenge;
+ if(request&&typeof request.featureChallenge==='string'&&request.featureChallenge.length>0&&request.featureChallenge.length<=100){
+  // A delayed host challenge cannot establish a new guest connection. Bootstrap
+  // once with this connection's nonce; the host must echo it before state adoption.
+  if(request.turnEnvelopeSupported===1&&request.turnGuestChallenge!==guestTurnChallenge())return hello;
+  hello.featureChallenge=request.featureChallenge;
+  if(!seenTurnChallenges.has(request.featureChallenge)){
+   seenTurnChallenges.add(request.featureChallenge);incomingTurnChallenge=request.featureChallenge;incomingTurnRevision=0;incomingTurnContext=null;
+  }
+ }
  return hello;
 }
 function capturePeerFeatures(message){
@@ -31,6 +89,14 @@ function capturePeerFeatures(message){
  // Connection capabilities are immutable once freshly challenged. A late
  // bootstrap retry must not replace the stronger reply with its V2 fallback.
  if(featurePeerFresh&&message.featureChallenge===undefined)return {...peerFeatureStatus(),ignored:true};
+ if(message.turnEnvelopeSupported!==undefined&&message.turnEnvelopeSupported!==1)return {compatible:false,pending:false,reason:'The other computer uses an unsupported turn protocol.'};
+ if(message.turnEnvelopeSupported===1){
+  if(typeof message.turnGuestChallenge!=='string'||message.turnGuestChallenge.length<4||message.turnGuestChallenge.length>100)return {compatible:false,pending:false,reason:'The other computer sent an invalid connection confirmation.'};
+  if(message.featureChallenge!==undefined&&peerTurnGuestChallenge!==message.turnGuestChallenge)return {...peerFeatureStatus(),ignored:true};
+  peerTurnGuestChallenge=message.turnGuestChallenge;
+ }
+ // Never let an unsolicited retry downgrade an already observed modern peer.
+ peerTurnEnvelopeSupported=peerTurnEnvelopeSupported||message.turnEnvelopeSupported===1;
  const caps=Object.fromEntries(Object.keys(E.campaignCapabilities()).map(key=>[key,message[key]]));
  const same=featurePeerGeneration===featureConnectionGeneration&&JSON.stringify(caps)===JSON.stringify(featurePeerCapabilities);
  featurePeerCapabilities=caps;featurePeerGeneration=featureConnectionGeneration;
@@ -38,7 +104,7 @@ function capturePeerFeatures(message){
  // A modern guest's unsolicited hello deliberately speaks V2. Ask once before
  // deciding Group 3 is unsupported; an actual V2 guest then replies 2 and fails.
  if(!featureChallenge&&message.featureChallenge===undefined&&
-    [3,4,5].includes(currentFeatureSource().financialGroupVersion)&&caps.financialGroupSupported===2)
+    [3,4,5,6].includes(currentFeatureSource().financialGroupVersion)&&caps.financialGroupSupported===2)
   return {compatible:false,pending:true,reason:'Confirming Financial Group support with the other computer.'};
  return peerFeatureStatus();
 }

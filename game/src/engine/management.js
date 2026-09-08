@@ -33,6 +33,10 @@ function normalizeManagementPolicy(p,plan){
 // This is a pure DRAFT preparer, never called after a human locks a plan.
 // Existing explicit bids, offers, projects, hires and manual investments are preserved.
 function managementPlan(p,input,economy){
+ if(p.departmentFunctions){
+  const current=departmentFunctionsQuote({cycle:p.facilityLifecycle.lastActivatedCycle},p,input);
+  if(!current.status.eligible)return {plan:JSON.parse(JSON.stringify(input)),notes:['Management paused: '+current.status.reason+' Standing instructions are unchanged; review department and office staffing.']};
+ }
  const plan=JSON.parse(JSON.stringify(input)),notes=[];if(!p.management)return {plan,notes};
  const m=validateManagement(plan.management||p.management);plan.management=JSON.parse(JSON.stringify(m));
  const d=m.delivery;

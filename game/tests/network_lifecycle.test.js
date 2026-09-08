@@ -159,6 +159,7 @@ async function transportHardening(){
  const failedRecall=guest();failedRecall.run("ghPendingPlan={cycle:1,hash:'locked',plan:{cycle:1}};send=()=>{throw Error('queue full')};recallPlan()");
  assert(!failedRecall.run('ghPendingPlan.recallRequested'),'failed enqueue cannot mark the commitment recalled');
  const stale=preparation();stale.run("game=E.createGame({mode:'p2p',created:1,seed:1});game.cycle=2;ghIncomingCommit={cycle:2,hash:'b'.repeat(64)};syncPeers=()=>{}");
+ stale.run('capturePeerFeatures({...E.campaignCapabilities()})');
  await stale.run("handleMessage({type:'recall',cycle:1})");assert.equal(stale.run('ghIncomingCommit.cycle'),2,'old recall cannot clear a new cycle commitment');
  await stale.run("handleMessage({type:'recall',cycle:2})");assert.equal(stale.run('ghIncomingCommit'),null);
  console.log('Additional transport hardening: malformed/stalled LAN bodies, immutable LAN/GitHub queues, single ordered LAN poller, failed recall enqueue and stale-cycle recall passed.');

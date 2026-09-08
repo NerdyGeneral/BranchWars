@@ -37,6 +37,8 @@ function renderExpandedServices(v){
 }
 let serviceQuoteTarget='';
 function renderServicePlanning(v){
+ const issue=departmentForecastIssue(v);
+ if(issue){$('#pipeline').insertAdjacentHTML('beforeend',departmentForecastNotice(issue));return;}
  const p=serviceDraftPlayer(v),review=E.servicePlanReview(p,draft,v.economy),mandates=v.serviceAgreements.filter(c=>!c.companyClosed&&c.owner!==v.me.id);
  const target=mandates.find(c=>c.id===serviceQuoteTarget)||null,options=E.serviceDeliveryOptions(p,draft,v.economy,target),disabled=v.me.submitted?'disabled':'';
  const targetOptions='<option value="">Existing signed book only</option>'+mandates.map(c=>'<option value="'+c.id+'" '+(target&&target.id===c.id?'selected':'')+'>'+esc(E.SERVICE_TYPES[c.kind].name+' · '+v.territories[c.market].name)+'</option>').join('');

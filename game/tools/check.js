@@ -22,6 +22,12 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
   ['tests/institution_legacy_compat.test.js'], ['tests/institution_network.test.js'],
   ['tests/facility_catalog.test.js','--integrated'], ['tests/facility_lifecycle_legacy_compat.test.js'],
   ['tests/facility_lifecycle_integration.test.js'], ['tests/facility_conversion_lifecycle.test.js'], ['tests/facility_hub_transitions.test.js'], ['tests/facility_lifecycle_network.test.js'], ['tests/facility_lifecycle_ui.test.js'], ['tests/facility_submission.test.js']);
+if (!args.includes('--full')) commands.push(...[
+  'department_functions.test.js','department_provider.test.js','department_function_context.test.js',
+  'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',
+  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','department_planning_contract.test.js','department_runtime.test.js',
+  'department_group5_compat.test.js','department_functions_network.test.js'
+].map(file=>['tests/'+file]));
 for (const command of commands) {
   console.log('Checking ' + command.join(' '));
   const result = spawnSync(process.execPath, command, {cwd: root, stdio: 'inherit', windowsHide: true});

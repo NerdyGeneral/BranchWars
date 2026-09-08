@@ -18,7 +18,7 @@ oldModule._compile(oldHarnessText,harnessFile);
 const oldHarness=oldModule.exports.harness,{harness:modernHarness}=require('./github_resilience.test.js');
 const oldEngine=oldHarness().c.window.BWEngine,newEngine=modernHarness().c.window.BWEngine;
 assert.equal(oldEngine.campaignCapabilities().financialGroupSupported,3);
-assert.equal(newEngine.campaignCapabilities().financialGroupSupported,5);
+assert.equal(newEngine.campaignCapabilities().financialGroupSupported,6);
 for(const rules of [3]){
  const options=oldEngine.previewFeatureSelection({}, {field:'financialGroupVersion',value:rules}).options;
  const contract=oldEngine.campaignRules(options,{context:'lobby'});
@@ -69,7 +69,7 @@ async function mixedLegacy(){
    host.run('E.submit(game,0,legacyPlan);syncPeers()');await pair.drain();
   }else{
    host.run('E.submit(game,0,legacyPlan);syncPeers()');await pair.drain();
-   guest.run("send({type:'plan',plan:legacyPlan})");await pair.drain();
+   guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan:legacyPlan}):{type:'plan',plan:legacyPlan})");await pair.drain();
   }
   assert.equal(host.state().game.cycle,2);assert.equal(guest.state().view.cycle,2);
   assert.equal(guest.state().view.rival.financialGroup,undefined);
@@ -91,8 +91,8 @@ async function modernBoundaries(){
   assert.equal(pair.host.state().game.version,'9.3');
   const hellos=pair.frames.filter(([i,m])=>i===1&&m.type==='hello').map(([,m])=>m);
   assert.equal(hellos[0].financialGroupSupported,2);
-  assert(hellos.some(m=>m.financialGroupSupported===5&&m.featureChallenge));
-  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===5));
+  assert(hellos.some(m=>m.financialGroupSupported===6&&m.featureChallenge));
+  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===6));
   const before=JSON.stringify(pair.host.state().game),caps=copy(pair.host.run('featurePeerCapabilities'));
   pair.host.c.bootstrap=copy(hellos[0]);pair.host.run('handleMessage(bootstrap)');await pair.drain();
   assert.deepEqual(copy(pair.host.run('featurePeerCapabilities')),caps,'Late bootstrap replaced confirmed modern capability');
@@ -125,7 +125,7 @@ async function submitPair(pair,plans,transport){
   host.run('E.submit(game,0,testPlan);syncPeers()');await pair.drain();
  }else{
   host.run('E.submit(game,0,testPlan);syncPeers()');await pair.drain();
-  guest.run("send({type:'plan',plan:testPlan})");await pair.drain();
+  guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan:testPlan}):{type:'plan',plan:testPlan})");await pair.drain();
  }
 }
 function modestPlans(host){return host.run(`game.players.map((p,i)=>{

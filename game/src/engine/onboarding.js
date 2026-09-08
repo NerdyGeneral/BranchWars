@@ -42,7 +42,7 @@ function applyOnboardingPolicy(p, policy) {
 function onboardingSalesStaff(p, staff) { return p.onboarding ? staff * (1 - p.onboarding.policy.share / 100) : staff; }
 function onboardingStaff(p, policy) {
   const base = workforceAllocation(p).service * (1 - p.householdBook.policy.retention / 100) * (1 - p.relationshipOffers.policy.share / 100);
-  const assignedStaff = onboardingOpen(p, policy) ? base * policy.share / 100 : 0;
+  const assignedStaff = onboardingOpen(p, policy)&&policy.share>0 ? departmentFunctionTaskFte(p,'applicationProcessing',base * policy.share / 100) : 0;
   return { assignedStaff, salesStaff: base - assignedStaff, capacity: Math.floor(assignedStaff * ONBOARDING_CAPACITY) };
 }
 function onboardingDraft(p, plan) {

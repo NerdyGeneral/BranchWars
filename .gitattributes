@@ -7,4 +7,6 @@
 /game/reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html -text
 /game/reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html -text
 /game/reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html -text
+/game/reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html -text
+/game/tests/fixtures/department-matrix192-second.json.gz -text
 /releases/** -text

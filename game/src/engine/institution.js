@@ -80,7 +80,7 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=productive&&Number.isFinite(productive.operations)?productive.operations:0;return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
 function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0)+(p.facilityNetwork?FacilityNetwork.committedCapacity(p):0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
@@ -88,7 +88,8 @@ function hireCost(p,count){let total=0;const staff=p.stats.staff;for(let i=0;i<c
 function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
 function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return (n>0?n:0)+specialistHireCount(plan)}
-function planBudget(p,plan){
+function planBudget(p,plan){return p.departmentFunctions&&!p._departmentFunctionsRaw&&!departmentFunctionExecution(p)?departmentFunctionPlanningBudget(p,plan):planBudgetBase(p,plan);}
+function planBudgetBase(p,plan){
  if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
@@ -100,10 +101,14 @@ function planBudget(p,plan){
  const onboarding=p.onboarding?onboardingBudget(p,plan):0;
  const facilityConversion=facilityDraftSpend(p,plan),departmentLeadership=p.departmentOffice?departmentLeadershipQuote(p,plan).total:0;
  const lifecycle=facilityLifecycleDraftCommitment(p,plan);
- const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
- const capacity=executionCapacity(departmental?.owner||p,plan.allocation),load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity;
+ const departmentFunctions=p.departmentFunctions?departmentFunctionDraftCost(p,plan):0;
+ const unpaidDepartmentFunctions=p.departmentFunctions&&p._departmentFunctionPaidCycle===p.departmentFunctions.lastCycle?0:departmentFunctions;
+ const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
+ const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity;
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
  if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
+ if(p.departmentFunctions){quote.departmentFunctions=unpaidDepartmentFunctions;quote.departmentFunctionsCommitted=departmentFunctions;quote.departmentFunctionsPaid=departmentFunctions-unpaidDepartmentFunctions;}
  if(p.facilityNetwork)quote.facilityConversion=facilityConversion;
  if(p.departmentOffice)quote.departmentLeadership=departmentLeadership;
  if(p.productPrograms)quote.productRetirement=productRetirement;

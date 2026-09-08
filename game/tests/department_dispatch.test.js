@@ -2,8 +2,8 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),copy=x=>JSON.parse(JSON.stringify(x));
 const html=require('../tools/build_game').assemble().html,engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
-const code=['department-functions.js','department-function-context.js','department-dispatch.js'].map(f=>read('experiments/institution/'+f)).join('\n'),ctx={console};
-vm.runInNewContext(engine.replace('root.BWEngine={',code+'\nroot.BWEngine={DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,'),ctx);
+const ctx={console};
+vm.runInNewContext(engine,ctx);
 const E=ctx.BWEngine,D=E.DepartmentFunctions,C=E.DepartmentFunctionContext,T=E.DepartmentDispatch;let checks=0;
 const test=(name,fn)=>{try{fn();checks++;}catch(e){e.message=name+': '+e.message;throw e;}};
 function fixture(){

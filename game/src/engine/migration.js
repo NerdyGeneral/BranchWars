@@ -115,7 +115,7 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4'].includes(g.version))validateCampaignRules(g,'game');
+ if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5'].includes(g.version))validateCampaignRules(g,'game');
  else {
  if(g.onboardingVersion!==undefined&&g.version!=='8.13')throw Error('Onboarding requires a v8.13 save.');
  if(g.relationshipOffersVersion!==undefined&&g.version!==(g.onboardingVersion===1?'8.13':'8.12'))throw Error('Relationship offers requires a v8.12 save.');
@@ -128,6 +128,7 @@ function migrateCampaign(g){
  if(g.workforceVersion!==undefined&&g.version!==(g.onboardingVersion===1?'8.13':g.relationshipOffersVersion===1?'8.12':g.regionalGrowthVersion===1?'8.11':g.advertisingVersion===1?'8.10':g.productProgramsVersion===1?'8.9':g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
  if(!campaignVersionSupported(g.version))throw Error('Only v6.0 through v8.14 saves are supported.');
  }
+ validateStoredDepartmentFunctionPolicies(g);
  g=JSON.parse(JSON.stringify(g));
  // Never repair over invalid accounting, ledger or funding versions.
  validateLedger(g);

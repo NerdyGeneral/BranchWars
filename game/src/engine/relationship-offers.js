@@ -54,7 +54,7 @@ function relationshipOfferEligibility(p, policy) {
   // householdSalesStaff already deducts this offer's share. Use the unreserved
   // non-retention amount directly so the same service time is never counted twice.
   const baseSalesStaff = workforceAllocation(p).service * (1 - p.householdBook.policy.retention / 100);
-  const assignedStaff = relationshipOfferOpen(p, policy) ? baseSalesStaff * policy.share / 100 : 0;
+  const assignedStaff = relationshipOfferOpen(p, policy)&&policy.share>0 ? departmentFunctionTaskFte(p,'offerSales',baseSalesStaff * policy.share / 100) : 0;
   const capacity = Math.floor(assignedStaff * RELATIONSHIP_OFFER_CAPACITY), uptakeLimit = Math.floor(eligibleEquivalents / 10);
   return { eligible, segmentPrincipal, segmentHouseholds, eligiblePrincipal, excludedPrincipal, eligibleEquivalents,
     assignedStaff, salesStaff: baseSalesStaff - assignedStaff, capacity, uptakeLimit, requested: Math.min(capacity, uptakeLimit) };

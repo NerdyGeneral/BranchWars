@@ -5,8 +5,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),copy=x=>JSON.parse(JSON.stringify(x)),ctx={console};
 const engine=require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
-const prototype=read('experiments/institution/department-functions.js')+'\n'+read('experiments/institution/department-function-context.js');
-vm.runInNewContext(engine.replace('root.BWEngine={',prototype+'\nroot.BWEngine={DepartmentFunctions,DepartmentFunctionContext,'),ctx);
+vm.runInNewContext(engine,ctx);
 vm.runInNewContext(read('experiments/institution/department-functions-ui.js')+'\nthis.UI=DepartmentFunctionsUI;',ctx);
 const E=ctx.BWEngine,D=E.DepartmentFunctions,C=E.DepartmentFunctionContext;let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){error.message=name+': '+error.message;throw error;}}

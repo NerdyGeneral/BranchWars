@@ -41,6 +41,16 @@ async function main(){
   to.c.packet=await to.run("ghRead('"+from.state().gh.side+"','')");
   await to.run('(async()=>{for(const entry of packet.data.messages)if(entry.seq>gh.seen){await handleMessage(entry.msg);gh.seen=entry.seq;ghCheckpoint()}gh.outbox=gh.outbox.filter(entry=>entry.msg.type==="state"||entry.seq>Math.min(packet.data.ack||0,gh.published));ghCheckpoint()})()');
  }
+ async function reconnect(host,guest){
+  // Exercise the actual modern hello/challenge exchange over the stored relay.
+  // A test-created or restored game is not itself a fresh peer handshake.
+  guest.run('send(makeFeatureHello())');
+  for(let n=0;n<4;n++){
+   await deliver(guest,host);await deliver(host,guest);
+   if(host.run('peerFeatureStatus(game).compatible')&&guest.run('Boolean(incomingTurnContext&&incomingTurnContext.session===incomingTurnChallenge)'))return;
+  }
+  assert.fail('Recovery peer handshake did not converge');
+ }
  async function reload(peer){
   peer.run('ghCheckpoint()');
   const checkpoint=peer.storage.get('branchWarsGhResume');
@@ -58,7 +68,7 @@ async function main(){
  let host=client('host'),guest=client('guest');
  host.c.options=options;host.run('game=E.createGame(options);p2pConfig={...options,lobbyRequired:false};syncPeers()');
  guest.run('p2pConfig={lobbyRequired:false}');
- await deliver(host,guest);
+ await reconnect(host,guest);
  const identity=copy(host.run('game.players.map(p=>({id:p.id,name:p.name,color:p.color}))'));
  function plan(seat){
   const result=host.run('E.chooseBot(game,'+seat+')');
@@ -67,6 +77,7 @@ async function main(){
  }
  guest.c.plan=plan(1);await guest.run('ghCommitPlan(plan)');await deliver(guest,host);await flush(host);
  const sealed=copy(guest.state().ghPendingPlan),incoming=copy(host.state().ghIncomingCommit);
+ const firstTurn=copy(guest.run('incomingTurnContext'));
  assert(sealed&&!sealed.revealed);assert(incoming);
  assert.equal(host.state().game.players[0].submitted,null);
  // Both tabs reload after the guest locks but before the host submits/reveals.
@@ -75,6 +86,11 @@ async function main(){
  assert.deepEqual(copy(host.state().ghIncomingCommit),incoming,'host reload preserves its received commitment');
  assert.deepEqual(copy(host.run('game.players.map(p=>({id:p.id,name:p.name,color:p.color}))')),identity);
  assert(guest.state().view.me.submitted);assert.equal(guest.state().view.rival.advertising,undefined);
+ await reconnect(host,guest);
+ assert.notEqual(guest.run('incomingTurnContext.session'),firstTurn.session,'reload requires a fresh challenged connection');
+ assert.notEqual(guest.run('incomingTurnContext.token'),firstTurn.token,'reload does not reuse turn authorization');
+ assert.deepEqual(copy(guest.state().ghPendingPlan),sealed,'fresh authorization preserves the original sealed policy and nonce');
+ assert.deepEqual(copy(host.state().ghIncomingCommit),incoming,'same-hash recommit preserves the original commitment');
  host.c.plan=plan(0);host.run('E.submit(game,0,plan);syncPeers()');await deliver(host,guest);
  assert(guest.state().ghPendingPlan.revealed);
  const reveal=copy(guest.state().gh.outbox.find(entry=>entry.msg.type==='plan_reveal').msg);
@@ -85,7 +101,7 @@ async function main(){
  assert(host.state().gh.published<host.state().gh.mine,'host checkpoint still considers the accepted response unacknowledged');
  const resolved=copy(host.state().game);
  // A second host reload must reconcile the stored state, not replay resolution.
- host=await reload(host);await flush(host);await deliver(host,guest);
+ host=await reload(host);await flush(host);await reconnect(host,guest);
  assert.deepEqual(copy(host.state().game),resolved,'host restore preserves the already resolved month');
  assert.equal(guest.state().view.cycle,2);assert.equal(guest.state().ghPendingPlan,null);
  host.c.reveal=reveal;await host.run('handleMessage(reveal)');await deliver(host,guest);
@@ -101,7 +117,7 @@ async function main(){
  assert.equal(guest.state().view.rival.advertising,undefined);
  assert.deepEqual(copy(host.run('game.players.map(p=>({id:p.id,name:p.name,color:p.color}))')),identity);
  host.run('E.validatePilot(game);E.validateLedger(game)');
- const html=fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'));
- console.log(JSON.stringify({passed:true,simulatedOnly:true,resolvedTurns:3,reloads,acceptedWrites:writes,lostResponses:lost,sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['both seats reload before reveal','host resumes unacknowledged accepted resolution','same nonce and commitment','no duplicate month or expense','identity preserved','private advertising report','continued sealed play']},null,2));
+ const html=process.argv.includes('--source')?Buffer.from(require('../tools/build_game.js').assemble().html):fs.readFileSync(path.join(__dirname,'../BRANCH_WARS.html'));
+ console.log(JSON.stringify({passed:true,simulatedOnly:true,execution:process.argv.includes('--source')?'assembled-source':'portable',resolvedTurns:3,reloads,acceptedWrites:writes,lostResponses:lost,sourceSha256:createHash('sha256').update(html).digest('hex'),checks:['actual modern relay handshake','fresh session and turn authorization after reload','both seats reload before reveal','host resumes unacknowledged accepted resolution','same nonce and commitment','no duplicate month or expense','identity preserved','private advertising report','continued sealed play']},null,2));
 }
 main().catch(error=>{console.error(error);process.exitCode=1});

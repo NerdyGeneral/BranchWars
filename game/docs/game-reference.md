@@ -222,8 +222,8 @@ It comes from the executive team, from Operations bankers, and from tiers of the
 Operational Excellence lane.
 
 ```js
-function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=productive&&Number.isFinite(productive.operations)?productive.operations:0;
-return Math.round((BASE_CAPACITY+(ops+specialistBonus(p,'operations',allocation))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);
+return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
 ```
 
 Capacity is judged against **the allocation being submitted**, not last month's,
@@ -235,7 +235,7 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 function advanceProjects(g){const L=[];
 for(const p of g.players){if(p.marketingTurns>0)p.marketingTurns--;
 if(!p.projects.length)continue;
-const rate=1+(p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
+const rate=1+departmentFunctionResidual(p,'operations',p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
 let spent=0;
 for(const project of p.projects){const need=projectCapacity(PROJECTS[project.key]);
 if(spent+need>budget+1e-9){L.push(`${p.name}'s ${PROJECTS[project.key].name} stalled: the plan no longer staffs enough execution capacity.`);

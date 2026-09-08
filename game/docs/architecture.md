@@ -5,7 +5,8 @@ boundaries, not every future blueprint system.
 
 ## Source of truth
 
-Edit `src/`. `src/manifest.json` lists 124 ordered assembly inputs.
+Edit `src/`. The Group 6 source manifest has 131 ordered assembly inputs; the
+preserved Group 5 portable was built from 124.
 `tools/build_game.js` produces the standalone `BRANCH_WARS.html`, with no runtime
 package dependencies. Never hand-edit the output, frozen engines or releases.
 
@@ -21,6 +22,16 @@ package dependencies. Never hand-edit the output, frozen engines or releases.
 | Windows LAN server | Authenticated relay, sequencing and deduplication | Empty-token access or game settlement |
 
 ## Rules and settlement
+
+Transport-only turn authorization lives in `network/peer-codecs.js` and
+`network/protocol.js`, not in engine rules. Modern peers exchange a guest
+connection nonce and challenged host confirmation. State revisions prevent
+rollback within that connection; plan/recall/rematch tokens bind instructions to
+the current game/month/resolution. Accepted recall rotates the token. GitHub
+commit/reveal retains its seal and gains the same authorization, including safe
+identity checks after asynchronous hashing. Reconnect clears transient authority;
+pending seals obtain fresh authority without changing plan or nonce. Older peers
+retain explicitly supported legacy transport behavior, not modern guarantees.
 
 - `campaign.js`: ordered initialization followed by final version stamping.
 - `features.js`: scalar version fields remain authoritative. Missing and zero
@@ -113,6 +124,24 @@ specialist productivity as extra employees. Hub support transfers finite service
 capacity across the authored six-market adjacency. Forecasts use private copies.
 The wider department/leadership catalog and licensed wealth operations remain
 unfinished; actual Group 5 UI, long-run and release acceptance are separate gates.
+
+Group 6/save 9.5 source adds a separate department-function boundary; it does not
+upgrade existing campaigns. `department-functions.js` validates canonical manual
+quotas and bounded history; `department-function-context.js` attributes real book
+workloads and retained physical time; dispatch and delivery modules split work
+once and reconcile actual post-disruption staff. `department-provider.js` posts
+paired finite vendor payments. `department-runtime.js` coordinates ordered
+settlement, forecasts, owner projection, validation and bounded AI proposals.
+The function supplier is `departmentFunctionEconomy`, distinct from the existing
+leadership supplier `departmentEconomy`. Owner books and delivery evidence stay
+private; no parallel saved feature map is introduced.
+
+Planning has an explicit raw-budget boundary before dispatch, then accounts for
+customer-processing expenses and execution displaced by the selected work.
+Vendor throughput is never physical headcount or project execution. Any unresolved
+staff/cash conflict blocks the draft rather than clearing user orders; forecasts
+show an unavailable notice instead of invented zero-cost results. This integration
+remains under acceptance testing; the last-passing portable is still Group 5.
 
 ## Multiplayer reliability
 

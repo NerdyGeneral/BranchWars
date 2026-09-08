@@ -32,7 +32,7 @@ function initializeHouseholds(g, o) {
   }
   return g;
 }
-function householdSalesStaff(p, staff) { return p.householdBook ? onboardingSalesStaff(p, relationshipOfferSalesStaff(p, staff * (1 - p.householdBook.policy.retention / 100))) : staff; }
+function householdSalesStaff(p, staff) { return departmentFunctionResidualProductivity(p,'service',staff,p.householdBook ? onboardingSalesStaff(p, relationshipOfferSalesStaff(p, staff * (1 - p.householdBook.policy.retention / 100))) : staff); }
 function householdAcquisitionWeights(p, key) {
   if(p.productPrograms)return advertisingHouseholdWeights(p,key,Object.fromEntries(Object.entries(CUSTOMER_SEGMENTS).map(([s,d])=>{const mix=productTargetMix(p,key,s),total=Object.values(mix).reduce((a,n)=>a+n,0);return [s,Object.entries(mix).reduce((n,[k,w])=>n+w*d.fit[k],0)/total]})));
   const mix = p.retailLifecycle.mix, total = Object.values(mix).reduce((n, v) => n + v, 0);
@@ -70,7 +70,7 @@ function transferHouseholds(from, to, key, amount) {
 function householdServiceReview(p, allocation = p.allocation, policy = p.householdBook?.policy) {
   if (!p.householdBook) return null;
   validateHouseholdPolicy(policy);
-  const staff = allocation.service + specialistBonus(p, 'service', allocation), capacity = staff * policy.retention / 100 + (p.upgrades.training || 0) * .3;
+  const staff = allocation.service + specialistBonus(p, 'service', allocation), capacity = departmentFunctionTaskFte(p,'householdSupport',staff * policy.retention / 100) + (p.upgrades.training || 0) * .3;
   const rows = [];
   for (const [market, book] of Object.entries(p.householdBook.markets)) {
     const models = marketFacilities(p, market), upgrade = p.regionalOperations.markets[market].service;

@@ -4,7 +4,7 @@
 // attribution. Nothing from this candidate is registered in the shipped build.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),ctx={console};
-vm.createContext(ctx);vm.runInContext(read('src/engine/accounting.js')+'\n'+read('src/engine/group-accounting.js')+'\n'+read('experiments/institution/department-functions.js')+'\nthis.D=DepartmentFunctions;this.A=AccountingPrototype;this.G=GroupAccounting;',ctx);
+vm.createContext(ctx);vm.runInContext(read('src/engine/accounting.js')+'\n'+read('src/engine/group-accounting.js')+'\n'+read('src/engine/department-functions.js')+'\nthis.D=DepartmentFunctions;this.A=AccountingPrototype;this.G=GroupAccounting;',ctx);
 const {D,A,G}=ctx,copy=x=>JSON.parse(JSON.stringify(x)),plain=x=>copy(x);let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){error.message=name+': '+error.message;throw error;}}
 function context(cycle=1){return {cycle,headcount:8,physicalQuarters:{service:12,business:8,lending:8,operations:4},

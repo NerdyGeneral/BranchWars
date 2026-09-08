@@ -9,6 +9,8 @@ function retailDeploymentHint(v,key){
 }
 function renderCustomerNeeds(v){
  if(!v.customerDemandVersion)return;
+ const issue=departmentForecastIssue(v);
+ if(issue){$('#pipeline').insertAdjacentHTML('beforeend',departmentForecastNotice(issue));return;}
  const p={...v.me,allocation:draft.allocation,retailLifecycle:{...v.me.retailLifecycle,mix:draft.retailMix}},forecast=E.operatingPreview(p,draft,v.economy),actual=v.me.operatingReport;
  const rows=Object.entries(v.territories).map(([key,t])=>{
   const d=E.customerDemand(p,v,key),m=v.me.marketSnapshot.markets[key],outside=m.community.deposits+m.union.deposits;

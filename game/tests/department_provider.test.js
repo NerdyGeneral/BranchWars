@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),copy=x=>JSON.parse(JSON.stringify(x)),ctx={console};
-vm.runInNewContext(['src/engine/accounting.js','src/engine/group-accounting.js','experiments/institution/department-functions.js','experiments/institution/department-provider.js'].map(read).join('\n')+'\nthis.api={D:DepartmentFunctions,P:DepartmentProvider,A:AccountingPrototype};',ctx);
+vm.runInNewContext(['src/engine/accounting.js','src/engine/group-accounting.js','src/engine/department-functions.js','src/engine/department-provider.js'].map(read).join('\n')+'\nthis.api={D:DepartmentFunctions,P:DepartmentProvider,A:AccountingPrototype};',ctx);
 const {D,P,A}=ctx.api;let checks=0;
 const test=(name,fn)=>{try{fn();checks++;}catch(e){e.message=name+': '+e.message;throw e;}};
 function fixture(){

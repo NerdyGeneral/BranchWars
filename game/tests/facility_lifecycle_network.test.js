@@ -15,7 +15,7 @@ function loadHarness(document){
  owner._compile(text,harnessFile);return owner.exports.harness;
 }
 const modern=loadHarness(html),legacy=loadHarness(oldHtml),E=modern().c.window.BWEngine;
-assert.equal(E.campaignCapabilities().financialGroupSupported,5);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,4);
+assert.equal(E.campaignCapabilities().financialGroupSupported,6);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,4);
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);
 function peers(transport,version=5,oldSide=null){
  const host=(oldSide==='host'?legacy:modern)('host'),guest=(oldSide==='guest'?legacy:modern)('guest'),queue=[],frames=[];
@@ -59,7 +59,7 @@ async function submit(pair,input,transport){
   await pair.guest.run('ghCommitPlan(plan)');await pair.drain();assert.equal(pair.host.state().game.players[1].submitted,null);
   pair.host.run('E.submit(game,0,plan);syncPeers()');await pair.drain();
  }else{
-  pair.host.run('E.submit(game,0,plan);syncPeers()');await pair.drain();pair.guest.run("send({type:'plan',plan})");await pair.drain();
+  pair.host.run('E.submit(game,0,plan);syncPeers()');await pair.drain();pair.guest.run("send(typeof turnMessage==='function'?turnMessage('plan',{plan}):{type:'plan',plan})");await pair.drain();
  }
 }
 async function reload(pair){
@@ -119,7 +119,7 @@ async function activePairs(){
  for(const transport of ['gh','lan','p2p']){
   let pair=peers(transport);await open(pair);await start(pair);privateState(pair);
   const oldHello=copy(pair.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);
-  assert.equal(oldHello.financialGroupSupported,5);
+  assert.equal(oldHello.financialGroupSupported,6);
   const opening=copy(pair.host.state().game);await submit(pair,plans(pair),transport);months++;
   assert.equal(pair.host.state().game.cycle,2);privateState(pair);
   for(const [i,p]of pair.host.state().game.players.entries()){

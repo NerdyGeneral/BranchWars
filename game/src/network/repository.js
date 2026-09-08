@@ -11,7 +11,7 @@ function ghEncode(text){return btoa(unescape(encodeURIComponent(text)))}
 function ghDecode(b64){return decodeURIComponent(escape(atob(String(b64||'').replace(/\s+/g,''))))}
 function ghNonce(){const bytes=new Uint8Array(24);if(globalThis.crypto&&crypto.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);return[...bytes].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function ghPlanHash(plan,nonce){if(!globalThis.crypto||!crypto.subtle)throw Error('This browser cannot seal repository plans. Use LAN or Direct P2P instead.');const payload=new TextEncoder().encode(`${nonce}\n${JSON.stringify(plan)}`),digest=await crypto.subtle.digest('SHA-256',payload);return[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-let ghSealingPlan=null;
+let ghSealingPlan=null,ghPendingTurnToken=null;
 async function ghCommitPlan(plan){
  const session=gh,sourceView=view,cycle=view&&view.cycle;
  if(ghPendingPlan||ghSealingPlan&&ghSealingPlan.session===session)throw Error('A sealed plan is still pending. Retry the connection or wait for recall confirmation.');
@@ -21,12 +21,20 @@ async function ghCommitPlan(plan){
   const sealedPlan=JSON.parse(JSON.stringify(plan)),nonce=ghNonce(),hash=await ghPlanHash(sealedPlan,nonce);
   if(!current())return false;
   const pending={plan:sealedPlan,nonce,hash,cycle,revealed:false},sequence=session.mine;ghPendingPlan=pending;
-  try{send({type:'plan_commit',hash,cycle})}catch(error){if(session.mine===sequence&&ghPendingPlan===pending)ghPendingPlan=null;throw error}
+  try{send(turnMessage('plan_commit',{hash,cycle}));ghPendingTurnToken=incomingTurnContext?.token||null;}catch(error){if(session.mine===sequence&&ghPendingPlan===pending)ghPendingPlan=null;throw error}
   if(view.rival&&view.rival.submitted)ghRevealPlan();return true;
  }catch(error){if(!current())return false;throw error}
  finally{if(ghSealingPlan===attempt)ghSealingPlan=null}
 }
-function ghRevealPlan(){if(!ghPendingPlan||ghPendingPlan.revealed)return;send({type:'plan_reveal',plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle});ghPendingPlan.revealed=true;ghCheckpoint()}
+function ghRefreshPendingTurn(){
+ if(!ghPendingPlan||!incomingTurnContext||ghPendingPlan.cycle!==view.cycle||ghPendingTurnToken===incomingTurnContext.token)return;
+ if(ghPendingPlan.recallRequested){send(turnMessage('recall'));ghPendingTurnToken=incomingTurnContext.token;return;}
+ // Retain the exact sealed plan and nonce across reconnect, but obtain a fresh
+ // transport authorization. Old persisted envelopes remain unusable.
+ send(turnMessage('plan_commit',{hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));
+ ghPendingTurnToken=incomingTurnContext.token;ghPendingPlan.revealed=false;
+}
+function ghRevealPlan(){if(!ghPendingPlan||ghPendingPlan.revealed||ghPendingPlan.recallRequested||ghPendingPlan.cycle!==view?.cycle)return;send(turnMessage('plan_reveal',{plan:ghPendingPlan.plan,nonce:ghPendingPlan.nonce,hash:ghPendingPlan.hash,cycle:ghPendingPlan.cycle}));ghPendingPlan.revealed=true;ghCheckpoint()}
 function ghFail(response,body){
  const detail=body&&body.message?String(body.message).slice(0,250):'HTTP '+response.status;
  const rateLimited=response.status===429||(response.status===403&&(response.headers.get('x-ratelimit-remaining')==='0'||response.headers.get('retry-after')||/rate limit|abuse/i.test(detail)));

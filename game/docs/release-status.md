@@ -43,7 +43,7 @@ The implemented commercial-agency slice alone does not complete N-09 or the goal
 
 ### Current facility lifecycle candidate — Group 5 / save 9.4
 
-The existing unchecked Financial Group selection now creates Group 5, with 124
+At this checkpoint the existing unchecked Financial Group selection created Group 5, with 124
 ordered assembly inputs. Group 4/save 9.3 remains supported without automatic
 upgrades. Its preserved comparison is
 `reports/reference-builds/BRANCH_WARS_institution_group4_7cd113e1.html`, SHA-256
@@ -180,12 +180,107 @@ These identify the 124-input Group 5 build, not the isolated department prototyp
   This supplements the prior paid renovation and narrow-layout checks; it is not
   a physical two-computer or complete human usability/fun acceptance test.
 
-Eight-function department work remains **isolated, not playable or a new saved
-campaign version**. Its explicit-quota kernel has 28 checks / 60 sequential
+### Department integration in progress — Group 6 / save 9.5 development build
+
+The verified Group 5 portable is preserved as an immutable rollback reference.
+Current source and the rebuilt development portable enable Group 6 through the
+existing unchecked Group option. Local checkpoint `05926a1`
+preserves the last-passing source and the immutable
+`reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html` comparison.
+The first full-gate Group 6 candidate was
+`0edd3a4a9a49bccc78d4278c38e78413b5055aa9cc7da9796a6ac368d695dd62`,
+with 131 inputs and rebuilt generated reference. Its full Windows run failed
+six suites; it is not a verified release. No publication has occurred. Group 5's immutable
+`ba759abc...` reference remains the last-passing rollback build.
+
+The preserved first browser candidate `reports/qa/department-group6-browser-06606ef0.html`
+(`06606ef01ef2fbdcf4d076df0387ee0ca2a426f882c21a1da14b4931ccf2f9ca`)
+was launched through actual setup confirmation, not injected state. Browser QA
+completed a real solo month with a reviewed/adopted $2,400 People vendor order,
+then reloaded and continued the same month-2 bank. No browser errors were observed.
+At 390px viewport, page width stayed within the viewport and the workload table
+scroll stayed in its container; the temporary viewport was reset. This candidate
+predates later import/label/report refinements and is not the final artifact.
+
+#### Current integration repairs and transport evidence
+
+Pipeline deals now use only unused, funded compatible department work after
+ordinary bank work. A paused pursuit creates no award or fee. The owner UI shows
+the required function, quoted work and pause reason without promising a win.
+Vendor-payment details no longer appear in shared resolution text.
+
+The first captured Group 6 matrix completed two balanced 24-month profiles and
+one growth month before an AI capacity conflict at growth month 2. Its exact
+failure is preserved in `reports/qa/department-group6-matrix192-first.json`, engine
+`df5579e2fda0cfd98553f768630c2c2a356a7843512b43ee901e01a304487049`.
+This is a **failed 49-month diagnostic, not a 192-month pass**. The repaired saved
+case retains its conversion with execution capacity 3 / load 3. Runtime and 16
+live UI checks pass; the second matrix completed 192 months on engine
+`73504aa7f63ffa5f12ab8c44e083e64a874f5d0bb3cce11b541fea55d03894f8`.
+
+Expanded testing exposed a genuine LAN/direct defect: a valid previous-month
+guest plan could become the next month's submission. Source now negotiates a
+transient turn protocol with guest connection nonce, host challenge, per-turn
+token, cycle/resolution checks and monotonic state revisions. Accepted recalls
+rotate authorization. GitHub commit/reveal uses the same fences; checkpoint
+recovery retains the exact sealed plan/nonce but obtains fresh authorization.
+Late digests cannot erase newer commitments, same-hash retries preserve identity,
+and stale errors cannot unlock newer plans. These are transport fields, never
+saved campaign rules or simulation RNG inputs.
+
+Actual-client tests pass on source
+`782ddc26c50878b70c91cff98405a64c653c7ec6283377528f37bb2a568356f4`:
+three transports, six frozen Group 5 mixed starts, paid function months,
+missing/future/wrong-token refusal, same/cross-month replay, stale state/errors,
+reconnect challenge replay, sealed checkpoint recovery and deferred hash races.
+Additional async tests on
+`7ce57f89bb6c14126959b00da08ec661895d5918d6a83e70348155d06ac6cc3d`
+cover identical commit retries during hashing, incorrect-hash errors, and recall
+arriving after the host locks, with five actual resolved months. Final exact-build
+rerun remains required.
+
+Frozen older clients remain usable for their supported campaigns, but cannot
+provide the new envelope guarantee. Both players need the current build for that
+protection. Fixture send helpers now follow the modern protocol; intentionally
+legacy cases retain their known legacy handshake. No simulation golden changed.
+
+Source-only regression also passes feature/lobby/onboarding/workforce transports,
+mixed legacy peers, lifecycle, architecture and docs. Exact Group 1–5 comparison
+passes 12 profiles / 28 months / 56 views on captured `7ce57f89...`. The repository
+relay passes 12 months, 11 simulated lost accepted-write responses and two reloads
+on `5396975f402c2390cf0762d06771ece5b8fdb07c86497156a878a84f877b4bd0`.
+These development results do not certify a final release or real two-computer play.
+
+Eight-function modules are now in the source manifest. Actual creation, paid
+provider settlement, task delivery, owner-private books, AI allocation and a
+Functions/Leadership UI are wired. Shared customer-conversion/onboarding budgets,
+execution reservations and actual consumer work now have targeted integration
+evidence. This is **partial N-05**, not full blueprint acceptance: final combined
+regression, long-run AI viability and wider subsidiary responsibilities remain.
+
+Targeted evidence from captured working-source snapshots:
+- Exact Group 1–5 comparison passed 12 profiles / 28 months / 56 private views,
+  including creation, AI/RNG, human orders, save/resume and rematch. Candidate
+  `ca3b0ec48726dca3411896b59ac7c89e47b8baa11894b314bb2fadecc45eee98`
+  remained unchanged during that test; later source edits need a fresh comparison.
+- New Group 6 network checks passed three simulated paid-vendor months, six
+  mixed-version starts, actual frozen Group 5 refusal of Group 6, revision/readiness
+  reset, sealed GitHub checkpoint recovery, duplicate/stale messages and owner
+  privacy. Captured source was
+  `a8deede65a800f660d566793eb9cfc983d1707da39a46eaa1bfc0616c60c0274`.
+  No external repository access or physical two-computer playtest was performed.
+- Actual source UI checks found an invalid-staffing forecast crash. Forecast
+  panels now explicitly show unavailable/review-staffing notices while Ready is
+  blocked; invalid instructions are not repaired or converted into fake forecasts.
+  Ten live UI checks passed before further controller/affordability work.
+
+The promoted explicit-quota kernel retains 28 checks / 60 sequential
 accounting months; actual Group 5 context attribution has 12 checks, 180 share
 combinations and 33 campaign months. The initial 59-quarter workload estimate for
-32 employed quarters was reduced provisionally to 23 at opening scale, including
-existing customer work; role shortages and real downstream effects remain to test.
+32 employed quarters was reduced provisionally. The current opening fixture has
+21 required quarters, not the earlier 23-quarter household-count sales proxy:
+disabled relationship offers create no sales work. Context tests now assert the
+actual workload slices; no workload arithmetic was changed to fix that assertion.
 An eight-row review/adopt UI passes 13 isolated checks. Paired vendor settlement
 passes six checks / 60 months, and role-specific task dispatch passes five checks.
 The provisional outside service network has 32 quarter-work units per function,
@@ -193,11 +288,12 @@ with nontransferable guaranteed 16-unit bank entitlements; unused monthly slots
 expire and do not create bank employees or execution capacity. Every used unit
 requires a paired bank expense/provider receipt.
 
-The integration audit exposed required work before enablement: raw context/budget
+The earlier integration audit identified: raw context/budget
 separation to avoid recursion or double reservation, separate household support /
 application / commercial servicing slices, truthful delivery after talent raids,
 actual consumers for all eight functions, same-rule AI, version/save/peer privacy
-boundaries and rendered UI. No prototype initialization or aggregate function
+boundaries and rendered UI. These have since received targeted implementation
+and verification; final combined acceptance remains. No prototype initialization or aggregate function
 capacity may silently replace those requirements or count one banker three times.
 
 Pending: broader current-build long-run/multi-strategy balance and integrated
@@ -205,6 +301,151 @@ blueprint work. Wider departments,
 products, brokerage/wealth, wallet/campaigns and share/control systems remain on the
 same frozen 48-row checklist. No release publication, completion percentage or
 physical multiplayer guarantee is implied.
+
+#### Captured Group 6 results and subsequent repairs
+
+- Current 133-input integrated candidate:
+  `ee80e569ade28b6a91a9fb1b8e3626d46da8446817385504ce04c008552adf52`.
+  The guarded AI lending floor is now production code (ordinary named functions,
+  no runtime override). It retains historical Group 1–5 behavior and refuses
+  changes that weaken protected work, teaching, existing instructions, cash or
+  capital. Two recorded actual cases gained $95,261 / $62,353 origination without
+  extra vendor expense or funding loss. A four-plan timing sample showed about
+  17–19% extra AI planning time; broad performance and balance remain unproven.
+  Overview now has a collapsed owner-only monthly earnings bridge derived before
+  public-history pruning, with no saved field or economic posting. Ten bridge
+  checks (including 18 saved owners), 16 department UI checks, 10 balance-sheet
+  UI checks and the three-transport/eight-month department network suite pass.
+  Rebuilt portable freshness, architecture and documentation checks pass.
+  The fresh frozen Windows baseline now passes **158/158 suites**, unchanged
+  captured files, reproduced balance output, and Windows LAN. Report:
+  `reports/baselines/N-00-2026-09-08T10-29-58-995Z.json`, SHA-256
+  `1b3460bf3f3935415f69ca5d48f893d464fd5b7425b34faac169df45e7395fcf`.
+  The outer release-balance stage also passed: **1,920 established regional-profile
+  months**, no terminal banks, maximum public view 559,901 bytes; this is not
+  Group 6 campaign coverage. Report
+  `reports/baselines/release-balance-2026-09-08T11-09-41-295Z.json`, SHA-256
+  `b8f0c358372e47ff5861208d454c7e3d43d32a623b91d01812c84a4ba8b7042b`.
+  `node tools/check.js --full` exited successfully. No GitHub publication is authorized.
+  A subsequent test-packaging repair replaces the AI-lending test's required
+  ignored QA report with a 2,840,944-byte lossless gzip fixture. Its uncompressed
+  SHA-256 and all existing assertions remain unchanged. The fixture and preserved
+  pre-floor reference are now captured explicitly; this later harness change has
+  targeted revalidation, not a second full-gate run.
+- This exact `ee80e569...` build passes eight four-scenario/two-seed campaigns /
+  **192 months and 24 replays**. Source and portable remained unchanged; minimum
+  capital ratio was 7.53%, peak deposit share 59.37%, and there were 38 loss-bank
+  months out of 384. No bank ended, but there were no agency/leader/specialist
+  launches in these initial 24-month samples. Report
+  `reports/qa/department-group6-ee80e569-matrix192.json`, SHA-256
+  `44717ac1d1d2e472bc72201d71b2f0f210fb177bf36dc3d5c0fc1d7dbe0ee101`.
+- The exact-build **120-month balanced campaign and 11 replays** also pass, with
+  seven constructions, eight conversions, seven renovations, one specialist and
+  two agency launches. Both banks survive; one agency fails. Final deposit shares
+  are 53.44%/46.56%; retained earnings are $47,402/$2,542,512. Report
+  `reports/qa/department-group6-ee80e569-balanced120.json`, SHA-256
+  `00e2fbf603b2317f0f932afe7f4a9a9e1291d7172b3f8a014cc28cb9e9d9f9df`.
+  This is not strategic-variety acceptance: all six final offices are ATMs, final
+  loan books are only $312,371/$265,375, and morale is zero for both institutions.
+  Retained months 82–120 show zero originations in 36/39 and 33/39 bank-months.
+  The guarded lending floor correctly refuses next-month plans with only
+  $134,781/$0 uncommitted cash; it does not cancel their projects or reserves.
+  Further diagnosed issues are unproductive partial facility staffing, low-morale
+  hiring lockout, administration dominated by tiny aggregate cohorts, and inherited
+  fee income not depending on current commercial servicing. Do not erase loans,
+  grant free staff, force lending or relax cash safeguards to conceal these gaps.
+- A 480-month Regulatory Siege characterization is running on a hash-verified,
+  separately copied source/test/portable under
+  `C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-ee80e569-balance-source`.
+  Its result remains pending; the separate snapshot allows subsequent source work
+  without falsely claiming unchanged bytes for another build.
+- Actual `ee80e569...` browser QA used normal Continue and paid-turn controls:
+  a $24,000 advertising initiative produced the month-2 retained-earnings bridge
+  $14,788 + $16,592 - $24,000 = $7,380. Reload/Continue preserved that bridge and
+  warning/error logs were empty. This remains local-browser evidence, not physical
+  two-computer or human-fun acceptance.
+- Full Windows baseline `N-00-2026-09-08T09-33-20-494Z.json` ended with
+  **150/156 suites passing**, unchanged captured source, reproducible balance
+  output and Windows LAN passing. The outer gate stopped, so its final
+  release-balance stage did not run. Do not call this a full pass.
+- The six failures were: flat-source name collisions in engine/architecture
+  checks, the setup fixture's obsolete Group 5 expectation, the obsolete
+  department workload assertion, a synthetic legacy feature-handshake mismatch,
+  and a GitHub recovery fixture that skipped the required modern handshake.
+  Private names were clarified without changing APIs or override ceilings;
+  fixtures now exercise the real version/handshake contracts. No legacy golden
+  or production network protection was weakened.
+- Rebuilt candidate `57cc519e39eb78be7c17c9792cb80bf754571eac452e155ee04001d98eef97e0`
+  passes all six previously failing suites individually. Engine coverage includes
+  48 long-run campaigns; context coverage includes 12 checks / 180 combinations /
+  33 actual Group 5 months. GitHub recovery used real simulated modern handshakes,
+  three turns, three reloads, 43 accepted writes and one accepted-but-lost response.
+  This is targeted repair evidence, not a rerun full-gate pass. The exact pre-AI-fix
+  comparison is `reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html`.
+- The second matrix (`department-group6-matrix192-second.json`) passed eight
+  24-month campaigns / 192 months, with 24 half-ready replays, minimum capital
+  7.53% and maximum deposit share 62.08%. It captured an earlier assembly
+  `7ce57f89...`, not the final `0edd3a4a...` build. There were 43 loss-bank-months
+  out of 384, no terminal banks, and no agency/leader launches. Offers/onboarding
+  were enabled, but AI zero allocations produced no actual work in those systems.
+- The exact `0edd3a4a...` build completed a fresh 120-month balanced campaign
+  (`department-group6-balanced120-first.json`), with 11 replays and no bank ending.
+  Maximum share was 71.64%, minimum capital 7.44%; one agency launched and remained
+  active. Final loan balances shrank to approximately $326K / $815K. High final
+  capital ratios therefore do not establish healthy banking strategy.
+- A saved-history diagnostic found zero gross origination in 39/41 observed
+  bank-0 months and 26/41 bank-1 months: the AI frequently spent all Lending time
+  on administration. This is an AI capacity-allocation defect, not a reason to
+  fabricate lending, waive staffing or relax dividends. The guarded two-quarter
+  lending-floor correction is now integrated; the subsequent exact-build
+  120-month result and remaining constraints are recorded above.
+- A retained-earnings audit reconciled all 16 banks in the 24-month matrix exactly
+  to their causal events. Positive operating profit was outweighed by actual
+  project/research/event/competition spending, not duplicate vendor charges.
+  The broad experimental project/research deferral was rejected: it stopped all
+  new projects in its small comparison. It is not part of the production repair.
+- Actual `0edd3a4a...` browser QA verified the labelled function selector, owner
+  actual-delivery report, the $2,400 paid People vendor and the explanation that
+  uncovered credit administration pauses new lending. Console warning/error
+  output was empty. The earlier 390px and paid-turn/Continue checks remain
+  distinct evidence; physical two-computer and human fun acceptance are pending.
+
+#### Living-product foundation — isolated, not playable
+
+`experiments/living-portfolio/loan-contracts.js` defines seven retained lending
+offers, simultaneous finite origination, collateral/concentration/funding/work
+limits, contractual servicing, arrears/non-accrual and borrower draw/repayment
+transitions. Current isolated checks cover 17 origination groups / 600 seeded
+combinations, 11 servicing groups / 217 months and 13 transaction groups / 41
+servicing months. Repayments and advances have paired borrower/lender postings;
+same-month activity replay rejects, undrawn commitments remain obligations, and
+expired lines cannot redraw. A reviewed bug is repaired: repaid historical loans
+no longer pin current collateral ownership, while live claims still reject missing
+or forged owners. These tests do not satisfy integrated N-06.
+
+The integration review identified required real borrower books, attributed loan
+interest receivables, canonical cohort ownership/transfer and loss handling. The
+six companies already have financed books; household/small-business counts and
+pooled deposits cannot simply become borrower cash. Opening $9.5M bank credit is
+not the six companies' separately matched outside debt. The explicit CompanyFinance
+v4 candidate pairs actual bank/company advances, fees, repayments, interest and
+liquidation, with external debt separated and monthly service/activity/origination
+fences. Fifteen fixture checks cover 96 exact legacy months and 82 candidate
+months, not earned gameplay. An aggregate public-statement boundary is also under
+review; full rival contracts remain private. Seven public-boundary checks / 16
+fixture months pass, including strict nested payload rejection. A valid positive-
+cash insolvency exposed a reconciliation bug: liquidation can spend existing cash
+as well as asset-sale proceeds. The candidate now retains opening cash and strictly
+matches their sum to every recovery/distribution; no validator was relaxed.
+
+Raw 20,000-contract serialization exceeds 12 MB. A lossless compact codec now
+reduces its fixture to 1,945,681 bytes (85% reduction), rejects noncanonical terms
+ordering, and round-trips all retained obligations. Using the existing storage
+codec, a synthetic wrapper containing the old 120-month campaign plus this
+candidate portfolio uses 3,180,576 UTF-16 bytes. This wrapper is **not an accepted
+game save**, browser quota test or GitHub payload test. Actual versioned schema,
+maximum identities, network/UI, loan transfers, other funded borrower segments
+and owner-safe forecasts remain. No Group 7/save upgrade or new checkbox is enabled.
 
 ### Earlier institution evidence — Group 4 / save 9.3
 

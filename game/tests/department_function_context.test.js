@@ -1,11 +1,11 @@
 'use strict';
-// Actual assembled Group5 campaigns, with quarantined code injected in memory.
-// No manifest mutation, campaign flag rewrite or live department effects.
+// Actual assembled Group5 campaigns and promoted context/kernel exports.
+// No campaign flag rewrite or live department effects on historical campaigns.
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8'),copy=x=>JSON.parse(JSON.stringify(x));
 const html=require('../tools/build_game').assemble().html,engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
-const prototypes=read('experiments/institution/department-functions.js')+'\n'+read('experiments/institution/department-function-context.js'),ctx={console};
-vm.runInNewContext(engine.replace('root.BWEngine={',prototypes+'\nroot.BWEngine={DepartmentFunctions,DepartmentFunctionContext,facilityLifecyclePlanningContext,departmentProductiveAllocation,'),ctx);
+const ctx={console};
+vm.runInNewContext(engine.replace('root.BWEngine={','root.BWEngine={facilityLifecyclePlanningContext,departmentProductiveAllocation,'),ctx);
 const E=ctx.BWEngine,D=E.DepartmentFunctions,C=E.DepartmentFunctionContext;let checks=0,months=0,combinations=0,positiveEvidence=null;
 const settings=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;
 function test(name,fn){try{fn();checks++;}catch(error){error.message=name+': '+error.message;throw error;}}
@@ -33,7 +33,14 @@ test('actual creation and owner-public attribution match without rival data',()=
  assert.deepEqual(copy(a),copy(r));assert.equal(g.version,'9.4');assert.equal(r.workloadSources.loanPrincipal,g.players[0].stats.loans);assert.equal(r.workloadSources.depositPrincipal,g.players[0].stats.deposits);
  assert.equal(r.workloadSources.businessRelationships,58);assert.equal(r.workloadSources.merchantRelationships,38);assert.equal(r.workloadSources.riskPoints,12);
  assert.equal(r.context.workloads.people,1);assert.equal(r.context.workloads.credit,5);assert.equal(r.context.workloads.risk,2);assert.equal(r.context.workloads.treasury,2);
- assert.equal(Object.values(r.context.workloads).reduce((a,b)=>a+b,0),23,'Opening proxy workload must leave aggregate room for the physical office, not demand fifteen employees from eight.');
+ // The pre-integration prototype charged households/1200 for offer sales even
+ // when disabled (ceil3 relationship quarters, total23). Actual attribution
+ // retains commercial ties but charges no unrequested prospecting work.
+ assert.equal(r.workloadSources.eligibleOffers,0);assert.equal(r.workloadSources.intakeProspecting,0);
+ assert.equal(r.taskWorkloads.offerSales,0);assert.equal(r.taskWorkloads.applicationProcessing,0);
+ assert.equal(r.context.workloads.relationships,Math.ceil(58/80+38/150));
+ assert.deepEqual(copy(r.context.workloads),{relationships:1,onboarding:9,credit:5,collections:0,technology:1,risk:2,treasury:2,people:1});
+ assert.equal(Object.values(r.context.workloads).reduce((a,b)=>a+b,0),21,'Closed desks must not invent sales demand; existing customer support remains.');
  assert(r.context.workloads.technology>0);});
 test('sequential reservation grid conserves exact residual without cumulative ceiling losses',()=>{const g=fixture(),p=g.players[0],q=plan(g);
  for(const retention of [25,50,75,100])for(const offers of [0,25,50])for(const onboarding of [0,25,50])for(const collections of [0,25,50,75,100]){
