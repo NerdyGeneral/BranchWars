@@ -124,7 +124,7 @@ function validateCreditPerformanceSave(g) {
     if(g.players.some(p=>p.creditPerformance!==undefined||p.submitted?.collectionsPolicy!==undefined||p.creditBook?.cohorts.some(c=>c.late!==undefined||c.seasoning!==undefined)))throw Error('Unversioned credit performance');
     return g;
   }
-  if(g.creditPerformanceVersion!==1||g.customerOwnershipVersion!==1||g.version!=='8.7')throw Error('Unsupported credit performance save');
+  if(g.creditPerformanceVersion!==1||g.customerOwnershipVersion!==1||g.version!==(g.segmentDepositsVersion===1?'8.8':'8.7'))throw Error('Unsupported credit performance save');
   const uint=n=>Number.isSafeInteger(n)&&n>=0, fields=['cost','cured','entered','loss','recovered','resolved'];
   for(const p of g.players) {
     const s=p.creditPerformance;

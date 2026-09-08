@@ -75,7 +75,8 @@ function householdServiceReview(p, allocation = p.allocation, policy = p.househo
     for (const [segment, count] of Object.entries(book)) {
       const channel = segment === 'connected' && models.includes('digital') ? .8 : segment === 'everyday' && models.includes('retail') ? .9 : 1;
       const demand = count / 900 * HOUSEHOLD_SERVICE[segment] * channel * (1 - upgrade * .1);
-      const fit = deposits ? cohorts.reduce((n, c) => n + c.principal * CUSTOMER_SEGMENTS[segment].fit[c.product], 0) / deposits : 1;
+      const fitBook = p.segmentDeposits ? cohorts.filter(c => c.segment === segment) : cohorts, fitBalance = fitBook.reduce((n,c) => n+c.principal,0);
+      const fit = p.segmentDeposits ? (fitBalance ? fitBook.reduce((n,c) => n+c.principal*CUSTOMER_SEGMENTS[segment].fit[c.product],0)/fitBalance : 1) : deposits ? cohorts.reduce((n, c) => n + c.principal * CUSTOMER_SEGMENTS[segment].fit[c.product], 0) / deposits : 1;
       rows.push({ market, segment, count, demand, fit, current: p.customerRelationships.markets[market][segment] });
     }
   }
@@ -107,6 +108,7 @@ function settleHouseholdRetention(g, p, preview = false) {
       // Deposits have no individual/segment owner yet. Use the local average,
       // capped to withdrawable funding. Locked term balances never break early.
       const requested = before ? Math.min(withdrawableDeposits(p, key), Math.round(local.deposits * count / before)) : 0;
+      const ownedOutflow = p.segmentDeposits ? segmentRetentionOutflow(world,p,key,departures) : 0;
       for (const [segment, n] of Object.entries(departures)) {
         const split = marketSplit(n, { community: 3, union: 2 });
         source[segment] -= n;
@@ -117,8 +119,8 @@ function settleHouseholdRetention(g, p, preview = false) {
       local.customers -= count; marketDelta(p, 'customers', -count);
       const old = marketTarget; marketTarget = key;
       const beforeDeposits = p.stats.deposits;
-      try { delta(p, 'deposits', -requested); } finally { marketTarget = old; }
-      const outflow = beforeDeposits - p.stats.deposits;
+      try { if (!p.segmentDeposits) delta(p, 'deposits', -requested); } finally { marketTarget = old; }
+      const outflow = ownedOutflow + beforeDeposits - p.stats.deposits;
       p.stats.rateSensitiveDeposits = Math.min(p.stats.rateSensitiveDeposits, p.stats.deposits);
       rows[key] = { before, departures, depositOutflow: outflow };
     }
@@ -146,7 +148,7 @@ function validateHouseholdSave(g) {
         Object.values(g.marketEconomy?.markets || {}).some(m => m.households !== undefined)) throw Error('Unversioned household ownership');
     return g;
   }
-  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
+  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
   const keys = Object.keys(g.territories).sort().join(), uint = n => Number.isSafeInteger(n) && n >= 0;
   const counts = row => row && Object.keys(row).sort().join() === 'connected,everyday,reserve' && Object.values(row).every(uint);
   for (const p of g.players) {

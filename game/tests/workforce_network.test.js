@@ -2,7 +2,8 @@
 const assert = require('node:assert/strict');
 const { harness } = require('./github_resilience.test.js');
 const copy = x => JSON.parse(JSON.stringify(x));
-const collections = process.argv.includes('--collections');
+const segments = process.argv.includes('--segment-deposits');
+const collections = segments || process.argv.includes('--collections');
 const households = collections || process.argv.includes('--households');
 async function main() {
   for (const transport of ['gh', 'lan', 'p2p']) {
@@ -14,21 +15,23 @@ async function main() {
     }
     host.run('Object.assign(p2pConfig,{workforceVersion:1,campaignRulesVersion:1,serviceExpansionVersion:1,managementVersion:2,customerDemandVersion:2})');
     if(households)host.run('p2pConfig.customerOwnershipVersion=1');
+    if(segments)host.run('p2pConfig.segmentDepositsVersion=1');
     if(collections)host.run('p2pConfig.creditPerformanceVersion=1');
     const drain = async () => {
       for (let n = 0; queue.length; n++) { assert(n < 60); const [i, frame] = queue.shift(), receiver = i ? host : guest; receiver.c.frame = frame; await receiver.run('handleMessage(frame)'); }
     };
     await host.run("handleMessage({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,name:'Old guest',color:'#8642bc'})");
     assert.equal(host.state().game, null); assert.equal(host.state().lobby, null);
-    assert(queue.some(([, m]) => m.type === 'error' && (collections?/Credit performance/:households?/Household ownership/:/Specialist workforce/).test(m.message))); queue.length = 0;
+    assert(queue.some(([, m]) => m.type === 'error' && (segments?/Segment deposits/:collections?/Credit performance/:households?/Household ownership/:/Specialist workforce/).test(m.message))); queue.length = 0;
     await guest.run("handleMessage({type:'hello_request'})"); await drain();
     assert.equal(guest.state().lobby.settings.workforceVersion, 1);
     assert(guest.elements.get('#lobbyRules').textContent.includes('Specialist workforce'));
     host.run('editLobbyIdentity(true)'); await drain(); guest.run('editLobbyIdentity(true)'); await drain();
     host.run('startLobbyCampaign()'); await drain();
-    assert.equal(host.state().game.version, collections?'8.7':households?'8.6':'8.5'); assert.equal(guest.state().view.workforceVersion, 1);
+    assert.equal(host.state().game.version, segments?'8.8':collections?'8.7':households?'8.6':'8.5'); assert.equal(guest.state().view.workforceVersion, 1);
     assert.deepEqual(copy(host.state().game.players[1].workforce), copy(guest.state().view.me.workforce));
     if(households){assert.equal(guest.state().lobby.settings.customerOwnershipVersion,1);assert.equal(guest.state().view.customerOwnershipVersion,1)}
+    if(segments){assert.equal(guest.state().view.segmentDepositsVersion,1);assert(guest.state().view.me.segmentDeposits);assert.equal(guest.state().view.me.marketSnapshot.markets.downtown.segmentDeposits.total,undefined)}
     if(collections){assert.equal(guest.state().lobby.settings.creditPerformanceVersion,1);assert.equal(guest.state().view.creditPerformanceVersion,1)}
     if (transport === 'gh') {
       // The separate --workforce resilience run exercises actual sealed GitHub

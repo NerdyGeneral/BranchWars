@@ -101,6 +101,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .household-share{height:8px;border-radius:5px;overflow:hidden;background:#dee6ed;margin:10px 0}.household-share span{display:block;height:100%;background:var(--bank-me,#2878e0)}
 #householdPanel select:focus-visible,#householdPanel summary:focus-visible{outline:3px solid #215ea1;outline-offset:3px}
 @media(max-width:720px){.workspace-tabs:has(#householdNav:not(.hidden)){grid-template-columns:repeat(2,minmax(0,1fr))}.household-summary,.household-priorities{grid-template-columns:1fr}.household-market{display:block}}
+.household-switch{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.household-switch button{padding:10px 16px}.household-switch [aria-pressed="true"]{border-color:var(--blue,#2878e0);background:#eaf3ff;color:#174d87}
 </style>
 <style id="collections-ui">#gameScreen[data-tab="credit"] .game-layout{display:none}
 .workspace-tabs:has(#creditNav:not(.hidden)){grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -123,7 +124,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 
   <section id="startScreen" class="panel">
     <div class="kicker">OPEN A CAMPAIGN</div><div class="rule"></div>
-    <div class="notice"><label><input id="rivalryPilot" type="checkbox"> Try Regional Rivalry pilot · finite local franchises, competing institutions, branch upgrades</label><div class="micro">Opt-in test campaign. No automatic score buyouts or permanent exclusions. Rebuild offices to re-enter; institutional failure still ends play. Host selects rules for linked games. Existing saves keep their original rules. Overrides the campaign-size selector.</div><label><input id="serviceExpansion" type="checkbox"> Expanded commercial services preview · dedicated staff, cross-research deployments, priced renewals</label><div class="micro">Requires Regional Rivalry. Mechanics are regression-tested; long-campaign balance is not accepted yet and early failure remains possible. Leave unchecked for the previous pilot rules. The host chooses this for both players.</div><label><input id="institutionManagement" type="checkbox"> Living institution preview · client histories, recurring research, service manager</label><div class="micro">Requires both previews above. New campaigns add relationship operations. Existing saves keep their mechanics. Both players need this build for new rules; new v8.2 saves are refused by older builds.</div><label><input id="customerNeeds" type="checkbox"> Customer needs preview · product fit and persistent service relationships</label><div class="micro">Requires all previews above. Changes new-account acquisition and onboarding costs, not existing ownership counts. Adds persistent service goodwill. New v8.4 saves require this build. Experimental balance.</div><label><input id="specialistWorkforce" type="checkbox"> Specialist workforce preview · department expertise, recurring training and payroll</label><div class="micro">Requires Customer needs and the previews above. Specialists count toward bank staff. Training costs cash and takes time; old saves keep their rules. New v8.5 saves require this build on both computers.</div><label><input id="householdOwnership" type="checkbox"> Household ownership preview · real segment books and retention mandates</label><div class="micro">Requires all previews above. Split Retail time between sales and retention; neglected households can leave for outside institutions. Deposits still use pooled local balances. Experimental v8.6 rules; both players must update.</div><label><input id="creditPerformance" type="checkbox"> Credit performance preview · delayed delinquency and collections</label><div class="micro">Requires all previews above. Loans retain origination risk; arrears age before losses. Collections competes with new lending for staff. Experimental v8.7; both players must update.</div></div>
+    <div class="notice"><label><input id="rivalryPilot" type="checkbox"> Try Regional Rivalry pilot · finite local franchises, competing institutions, branch upgrades</label><div class="micro">Opt-in test campaign. No automatic score buyouts or permanent exclusions. Rebuild offices to re-enter; institutional failure still ends play. Host selects rules for linked games. Existing saves keep their original rules. Overrides the campaign-size selector.</div><label><input id="serviceExpansion" type="checkbox"> Expanded commercial services preview · dedicated staff, cross-research deployments, priced renewals</label><div class="micro">Requires Regional Rivalry. Mechanics are regression-tested; long-campaign balance is not accepted yet and early failure remains possible. Leave unchecked for the previous pilot rules. The host chooses this for both players.</div><label><input id="institutionManagement" type="checkbox"> Living institution preview · client histories, recurring research, service manager</label><div class="micro">Requires both previews above. New campaigns add relationship operations. Existing saves keep their mechanics. Both players need this build for new rules; new v8.2 saves are refused by older builds.</div><label><input id="customerNeeds" type="checkbox"> Customer needs preview · product fit and persistent service relationships</label><div class="micro">Requires all previews above. Changes new-account acquisition and onboarding costs, not existing ownership counts. Adds persistent service goodwill. New v8.4 saves require this build. Experimental balance.</div><label><input id="specialistWorkforce" type="checkbox"> Specialist workforce preview · department expertise, recurring training and payroll</label><div class="micro">Requires Customer needs and the previews above. Specialists count toward bank staff. Training costs cash and takes time; old saves keep their rules. New v8.5 saves require this build on both computers.</div><label><input id="householdOwnership" type="checkbox"> Household ownership preview · real segment books and retention mandates</label><div class="micro">Requires all previews above. Split Retail time between sales and retention; neglected households can leave for outside institutions. Deposits still use pooled local balances. Experimental v8.6 rules; both players must update.</div><label><input id="creditPerformance" type="checkbox"> Credit performance preview · delayed delinquency and collections</label><div class="micro">Requires all previews above. Loans retain origination risk; arrears age before losses. Collections competes with new lending for staff. Experimental v8.7; both players must update.</div><label><input id="segmentDeposits" type="checkbox"> Segment deposits preview · owned balances, product costs and maturity exits</label><div class="micro">Requires all previews above. Accounts retain segment ownership and promised terms. Departures withdraw their own segment balances; departed term savings pay out at maturity. Experimental v8.8; both players must update.</div></div>
     <div class="bank-colors"><div class="bank-color-fields"><div><label for="bankColor1">YOUR BANK COLOR / LOCAL PLAYER 1</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">AI RIVAL / LOCAL PLAYER 2 COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><p id="bankColorHelp" class="micro muted">Linked games open a shared lobby before play. Review both banks there, change your own name/color and confirm readiness. Colors stay attached to the bank on both computers and in saves.</p></div>
     <div class="mode-grid"><button class="mode active" data-mode="ai"><strong>Solo vs Corporate AI</strong><span>Deep campaign against one of three executive teams.</span></button><button class="mode" data-mode="hotseat"><strong>Pass &amp; Play</strong><span>Sealed simultaneous plans on one computer.</span></button><button class="mode" data-mode="lan"><strong>Intranet Room</strong><span>Join a reliable room-code game hosted on your local network.</span></button><button class="mode" data-mode="p2p"><strong>Direct P2P</strong><span>Fallback two-browser link with manually exchanged codes.</span></button><button class="mode" data-mode="gh"><strong>Repository Link</strong><span>Play across sites through a private GitHub repository.</span></button></div>
     <div id="ghGuide" class="setup hidden">
@@ -625,6 +626,7 @@ function createBaseCampaign(o){
 function validateCreationOptions(o){
  // Match the former outer-to-inner checks, including errors on disabled features.
  if(o.customerDemandVersion!==undefined&&![0,1,2].includes(o.customerDemandVersion))throw Error('Unsupported customer demand version');
+ if(o.segmentDepositsVersion!==undefined&&![0,1].includes(o.segmentDepositsVersion))throw Error('Unsupported segment deposit version');
  if(o.creditPerformanceVersion!==undefined&&![0,1].includes(o.creditPerformanceVersion))throw Error('Unsupported credit performance version');
  if(o.customerOwnershipVersion!==undefined&&![0,1].includes(o.customerOwnershipVersion))throw Error('Unsupported household ownership version');
  if(o.workforceVersion!==undefined&&![0,1].includes(o.workforceVersion))throw Error('Unsupported specialist workforce version');
@@ -665,6 +667,7 @@ function createGame(o){
  initializeWorkforce(g,o);
  initializeHouseholds(g,o);
  initializeCreditPerformance(g,o);
+ initializeSegmentDeposits(g,o);
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
@@ -974,8 +977,8 @@ function normalizePortfolioProducts(p,plan){
 function submit(g,index,plan){if(g.gameOver)throw Error('The campaign is complete.');const p=g.players[index],target=plan&&g.territories[plan.focus];if(p.submitted)throw Error('Your plan is already locked.');if(target&&target.exited&&target.exited[index])throw Error('Your institution permanently exited that market. Choose an operating market.');validatePortfolioPlan(p,plan);validatePlan(g,p,plan);p.submitted=JSON.parse(JSON.stringify(plan));if(g.mode==='ai'&&index===0)g.players[1].submitted=chooseOpenBot(g,1);if(g.players.every(x=>x.submitted))resolveCycle(g);return g}
 function competitiveForecast(g,index){const me=g.players[index],r=g.players[1-index],items=[],liquidity=me.stats.cash/Math.max(1,me.stats.deposits)*100,hostile=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,weak=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&t.exitStreak&&t.exitStreak[index]>0).sort((a,b)=>b[1].exitStreak[index]-a[1].exitStreak[index]);if(hostile)items.push({severity:'hot',title:'HOSTILE POSITION',text:`The rival has held ${hostile}/2 required takeover cycles. Shareholder Defense can break the position.`});if(tierRank(me)>=2)items.push({severity:'hot',title:'CAPITAL DISTRESS',text:`${capitalTier(me).name} limits expansion and makes the franchise vulnerable.`});if(liquidity<2.5)items.push({severity:'hot',title:'FUNDING EXPOSURE',text:`Liquid cash equals ${liquidity.toFixed(1)}% of deposits. A targeted deposit campaign could force asset sales.`});if(weak.length)items.push({severity:'watch',title:'MARKET EXIT WARNING',text:`${weak.map(([k,t])=>`${t.name} ${t.exitStreak[index]}/3`).join(' · ')} below the 12% survival line.`});if(r.lastCompetitiveAction&&r.lastCompetitiveAction!=='none'){const a=COMPETITIVE_ACTIONS[r.lastCompetitiveAction];items.push({severity:'watch',title:'RIVAL PLAYBOOK',text:`The rival's last revealed action was ${a.name}. Its direct counter is ${a.counter}.`})}if(r.stats.business+r.stats.merchant>(me.stats.business+me.stats.merchant)*1.2)items.push({severity:'watch',title:'RELATIONSHIP GAP',text:'The rival holds a material commercial relationship advantage. A raid can narrow it; Relationship Defense protects against retaliation.'});if(!items.length)items.push({severity:'stable',title:'POSITION STABLE',text:'No immediate franchise-level threat is visible. Intelligence cannot reveal the rival plan before both sides lock.'});return items}
 function publicState(g,index){const me=g.players[index],r=g.players[1-index],publicStats=p=>({deposits:p.stats.deposits,loans:p.stats.loans,customers:p.stats.customers,business:p.stats.business,merchant:p.stats.merchant,wealth:p.stats.wealth,reputation:p.stats.reputation,digital:p.stats.digital,staff:p.stats.staff,earnings:p.stats.earnings,lastProfit:p.stats.lastProfit,chargeoffs:p.stats.chargeoffs,capital:p.stats.capital}),pub=(p,i,self)=>({id:p.id,name:p.name,score:baseScore(g,i),controlled:controlledCount(g,i),submitted:!!p.submitted,branches:{...p.branches},upgrades:{...p.upgrades},strategy:{...p.strategy},primaryStrategy:p.primaryStrategy||null,boardConcessions:p.boardConcessions||0,capitalRestriction:p.capitalRestriction||0,doctrine:{key:p.doctrine,...DOCTRINES[p.doctrine]},doctrineProfile:doctrineProfile(p),achievements:[...(p.achievements||[])],milestones:milestoneStatus(g,p,i),capability:self?{...p.capability}:undefined,strategyLevels:Object.fromEntries(Object.keys(STRATEGY_BRANCHES).map(k=>[k,strategyLevel(p,k)])),capitalRatio:Math.round(capitalRatio(p)*10)/10,capitalTier:{...capitalTier(p)},distress:p.distress||0,stats:self?{...p.stats}:publicStats(p),policies:self?{...p.policies}:undefined,focus:self?p.focus:undefined,projects:self?p.projects.map(x=>({...x})):undefined,projectSlots:self?projectSlots(p):undefined,marketingTurns:self?p.marketingTurns:undefined,...(self?{allocation:{...p.allocation},mandate:mandateStatus(g,i),capitalRequest:capitalRequestStatus(p),corporateStatus:['CORPORATE UNAWARE','MARKET MANAGER HAS HEARD RUMORS','SURPRISE CONFERENCE CALL','REGIONAL INTERVENTION','PERFORMANCE ACTION PLAN'][p.stats.attention>=90?4:p.stats.attention>=70?3:p.stats.attention>=45?2:p.stats.attention>=22?1:0]}:{})});const territories={};for(const[k,t]of activeTerritories(g))territories[k]={...t,shares:index===0?[...t.shares]:[t.shares[1],t.shares[0]],branches:[g.players[index].branches[k]||0,g.players[1-index].branches[k]||0],unlocked:unlocked(g,t)};const trend=(g.trend||[]).map(x=>({cycle:x.cycle,meScore:x.scores[index],rivalScore:x.scores[1-index],meDeposits:x.deposits[index],rivalDeposits:x.deposits[1-index],meLoans:x.loans[index],rivalLoans:x.loans[1-index],meCash:x.cash[index],rivalCash:x.cash[1-index],meProfit:x.profits[index],rivalProfit:x.profits[1-index],meMarkets:x.markets[index],rivalMarkets:x.markets[1-index]}));const out={version:g.version,mode:g.mode,scope:g.scope,scenario:g.scenario,difficulty:g.difficulty,cycle:g.cycle,maxCycles:g.maxCycles,event:g.event,economy:{...g.economy},opportunities:g.opportunities,gameOver:g.gameOver,winnerId:g.winnerId,endReason:g.endReason||null,failedId:g.failedId||null,receivershipCycles:RECEIVERSHIP_CYCLES,capitalTiers:CAPITAL_TIERS,me:pub(me,index,true),rival:pub(r,1-index,false),territories,trend,lastPlans:g.lastPlans,scoreDelta:g.scoreDelta,resolution:g.resolution,resolutionId:g.resolutionId,log:g.log.slice(0,24),capabilityTiers:CAPABILITY_TIERS,capabilityCap:CAPABILITY_CAP_PER_CYCLE,doctrines:DOCTRINES,roles:ROLES,depositPolicies:DEPOSIT_POLICIES,lendingPolicies:LENDING_POLICIES,capitalPolicies:CAPITAL_POLICIES,strategyBranches:STRATEGY_BRANCHES,projects:projectCatalog(me),milestoneDefinitions:milestoneDefinitions(g),rematchReady:g.rematchVotes.includes(me.id),rivalRematchReady:g.rematchVotes.includes(r.id)};if(g.gameOver)out.final={[me.id]:{base:baseScore(g,index),mandate:mandateStatus(g,index),total:finalScore(g,index),markets:controlledCount(g,index),earnings:me.stats.earnings,achievements:me.achievements.length},[r.id]:{base:baseScore(g,1-index),mandate:mandateStatus(g,1-index),total:finalScore(g,1-index),markets:controlledCount(g,1-index),earnings:r.stats.earnings,achievements:r.achievements.length}};return out}
-function openEndedPublicState(g,index){const out=publicState(g,index),me=g.players[index],rival=g.players[1-index];if(g.creditPerformanceVersion===1){out.creditPerformanceVersion=1;out.me.creditPerformance=JSON.parse(JSON.stringify(me.creditPerformance));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id)delete plan.collectionsPolicy}if(g.customerOwnershipVersion===1){out.customerOwnershipVersion=1;out.me.householdBook=JSON.parse(JSON.stringify(me.householdBook));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id)delete plan.householdPolicy}out.me.color=bankColor(me.color,index);out.rival.color=bankColor(rival.color,1-index);out.fundingRulesVersion=g.fundingRulesVersion||1;out.me.fundingRulesVersion=me.fundingRulesVersion||1;out.campaignRulesVersion=g.campaignRulesVersion;out.regionalEconomyVersion=g.regionalEconomyVersion;out.marketEconomyVersion=g.marketEconomyVersion;if(g.workforceVersion===1){out.workforceVersion=1;out.me.workforce=JSON.parse(JSON.stringify(me.workforce));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id){delete plan.workforcePolicy;delete plan.specialistHires}}out.customerDemandVersion=g.customerDemandVersion;out.me.customerDemandVersion=me.customerDemandVersion;if(me.customerRelationships)out.me.customerRelationships=JSON.parse(JSON.stringify(me.customerRelationships));out.managementVersion=g.managementVersion;if(g.relationshipRecords)out.relationshipRecords=JSON.parse(JSON.stringify(g.relationshipRecords));if(me.management)out.me.management=JSON.parse(JSON.stringify(me.management));out.serviceExpansionVersion=g.serviceExpansionVersion;if(me.serviceDesk)out.me.serviceDesk=JSON.parse(JSON.stringify(me.serviceDesk));out.contractRulesVersion=g.contractRulesVersion;if(g.serviceAgreements)out.serviceAgreements=JSON.parse(JSON.stringify(g.serviceAgreements));if(me.serviceContracts){out.me.serviceContracts=[...me.serviceContracts];out.me.contractAds=me.contractAds?{...me.contractAds}:null}out.productDeploymentVersion=g.productDeploymentVersion;if(me.productDeployment)out.me.productDeployment=JSON.parse(JSON.stringify(me.productDeployment));out.retailLifecycleVersion=g.retailLifecycleVersion;if(me.retailLifecycle)out.me.retailLifecycle=JSON.parse(JSON.stringify(me.retailLifecycle));out.termFundingVersion=g.termFundingVersion;if(me.termFunding)out.me.termFunding=JSON.parse(JSON.stringify(me.termFunding));out.depositProductsVersion=g.depositProductsVersion;if(me.depositBook)out.me.depositBook=JSON.parse(JSON.stringify(me.depositBook));out.fundingCovenantVersion=g.fundingCovenantVersion;if(me.fundingCovenant)out.me.fundingCovenant={...me.fundingCovenant};out.creditLifecycleVersion=g.creditLifecycleVersion;if(me.creditBook)out.me.creditBook=JSON.parse(JSON.stringify(me.creditBook));if(me.marketBook){out.me.marketBook=JSON.parse(JSON.stringify(me.marketBook));out.me.marketReport=me.marketReport?JSON.parse(JSON.stringify(me.marketReport)):null;out.me.marketSnapshot=JSON.parse(JSON.stringify(g.marketEconomy));out.marketOwnership=Object.fromEntries(Object.keys(g.territories).map(k=>[k,{me:me.marketBook.markets[k].deposits,rival:rival.marketBook.markets[k].deposits,community:g.marketEconomy.markets[k].community.deposits,union:g.marketEconomy.markets[k].union.deposits,total:g.marketEconomy.markets[k].total.deposits}]))}if(me.regionalOperations)out.me.regionalOperations=JSON.parse(JSON.stringify(me.regionalOperations));out.regions=g.regions?JSON.parse(JSON.stringify(g.regions)):null;if(me.accounting)out.me.accounting=JSON.parse(JSON.stringify(me.accounting));out.maxCycles=null;out.act={...campaignAct(g)};out.buyoutPressure=index===0?[...(g.buyoutPressure||[0,0])]:[...(g.buyoutPressure||[0,0])].reverse();out.consolidationStalemate=Number(g.consolidationStalemate)||0;out.competitiveActions=COMPETITIVE_ACTIONS;out.competitiveForecast=pilot(g)?[{title:'PERSISTENT RIVALRY',severity:'stable',text:'No score buyouts or permanent market locks. A new office costs the normal project price; new Regional Operations campaigns grant eight cycles to establish service, without free market share.'},{title:'CAPITAL IS NOT CASH',severity:'watch',text:'Spending reduces equity. The planning limit preserves an 8% exposure reserve; income, losses and later events still change actual capital.'}]:competitiveForecast(g,index);out.productPortfolios=PRODUCT_PORTFOLIOS;out.strategySpecializations=STRATEGY_SPECIALIZATIONS;out.me.operatingReport=me.operatingReport?{...me.operatingReport}:null;out.me.lastCompetitiveAction=me.lastCompetitiveAction||'none';out.rival.lastCompetitiveAction=rival.lastCompetitiveAction||'none';out.me.products={...me.products};out.me.facilities={...me.facilities};out.me.facilityMarkets=Object.fromEntries(Object.entries(me.facilityMarkets||{}).map(([k,v])=>[k,[...v]]));out.me.specializations={...me.specializations};out.rival.products={...rival.products};out.rival.facilities={...rival.facilities};out.rival.specializations={...rival.specializations};for(const[k,t]of Object.entries(out.territories))t.facilityModels=[...(me.facilityMarkets&&me.facilityMarkets[k]||[])];if(index===1)for(const t of Object.values(out.territories)){if(Array.isArray(t.exited))t.exited=[t.exited[1],t.exited[0]];if(Array.isArray(t.exitStreak))t.exitStreak=[t.exitStreak[1],t.exitStreak[0]]}return out}
-function rematch(g,index){if(!g.gameOver)throw Error('Campaign still active.');if(!g.rematchVotes.includes(g.players[index].id))g.rematchVotes.push(g.players[index].id);if(g.mode==='ai'&&!g.rematchVotes.includes(g.players[1].id))g.rematchVotes.push(g.players[1].id);if(g.rematchVotes.length<2)return false;const fresh=createGame({mode:g.mode,creditPerformanceVersion:g.creditPerformanceVersion||0,customerOwnershipVersion:g.customerOwnershipVersion||0,workforceVersion:g.workforceVersion||0,customerDemandVersion:g.customerDemandVersion||0,managementVersion:g.managementVersion||0,serviceExpansionVersion:g.serviceExpansionVersion||0,contractRulesVersion:g.contractRulesVersion||0,productDeploymentVersion:g.productDeploymentVersion||0,retailLifecycleVersion:g.retailLifecycleVersion||0,termFundingVersion:g.termFundingVersion||0,depositProductsVersion:g.depositProductsVersion||0,fundingCovenantVersion:g.fundingCovenantVersion||0,creditLifecycleVersion:g.creditLifecycleVersion||0,marketEconomyVersion:g.marketEconomyVersion||0,regionalEconomyVersion:g.regionalEconomyVersion||0,campaignRulesVersion:g.campaignRulesVersion,color1:g.players[0].color,color2:g.players[1].color,fundingRulesVersion:g.fundingRulesVersion||1,scope:g.scope,scenario:g.scenario,difficulty:g.difficulty,name1:g.players[0].name,name2:g.players[1].name});Object.keys(g).forEach(k=>delete g[k]);Object.assign(g,fresh);return true}
+function openEndedPublicState(g,index){const out=publicState(g,index),me=g.players[index],rival=g.players[1-index];if(g.segmentDepositsVersion===1){out.segmentDepositsVersion=1;out.me.segmentDeposits={...me.segmentDeposits}}if(g.creditPerformanceVersion===1){out.creditPerformanceVersion=1;out.me.creditPerformance=JSON.parse(JSON.stringify(me.creditPerformance));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id)delete plan.collectionsPolicy}if(g.customerOwnershipVersion===1){out.customerOwnershipVersion=1;out.me.householdBook=JSON.parse(JSON.stringify(me.householdBook));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id)delete plan.householdPolicy}out.me.color=bankColor(me.color,index);out.rival.color=bankColor(rival.color,1-index);out.fundingRulesVersion=g.fundingRulesVersion||1;out.me.fundingRulesVersion=me.fundingRulesVersion||1;out.campaignRulesVersion=g.campaignRulesVersion;out.regionalEconomyVersion=g.regionalEconomyVersion;out.marketEconomyVersion=g.marketEconomyVersion;if(g.workforceVersion===1){out.workforceVersion=1;out.me.workforce=JSON.parse(JSON.stringify(me.workforce));out.lastPlans=JSON.parse(JSON.stringify(out.lastPlans));for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==me.id){delete plan.workforcePolicy;delete plan.specialistHires}}out.customerDemandVersion=g.customerDemandVersion;out.me.customerDemandVersion=me.customerDemandVersion;if(me.customerRelationships)out.me.customerRelationships=JSON.parse(JSON.stringify(me.customerRelationships));out.managementVersion=g.managementVersion;if(g.relationshipRecords)out.relationshipRecords=JSON.parse(JSON.stringify(g.relationshipRecords));if(me.management)out.me.management=JSON.parse(JSON.stringify(me.management));out.serviceExpansionVersion=g.serviceExpansionVersion;if(me.serviceDesk)out.me.serviceDesk=JSON.parse(JSON.stringify(me.serviceDesk));out.contractRulesVersion=g.contractRulesVersion;if(g.serviceAgreements)out.serviceAgreements=JSON.parse(JSON.stringify(g.serviceAgreements));if(me.serviceContracts){out.me.serviceContracts=[...me.serviceContracts];out.me.contractAds=me.contractAds?{...me.contractAds}:null}out.productDeploymentVersion=g.productDeploymentVersion;if(me.productDeployment)out.me.productDeployment=JSON.parse(JSON.stringify(me.productDeployment));out.retailLifecycleVersion=g.retailLifecycleVersion;if(me.retailLifecycle)out.me.retailLifecycle=JSON.parse(JSON.stringify(me.retailLifecycle));out.termFundingVersion=g.termFundingVersion;if(me.termFunding)out.me.termFunding=JSON.parse(JSON.stringify(me.termFunding));out.depositProductsVersion=g.depositProductsVersion;if(me.depositBook)out.me.depositBook=JSON.parse(JSON.stringify(me.depositBook));out.fundingCovenantVersion=g.fundingCovenantVersion;if(me.fundingCovenant)out.me.fundingCovenant={...me.fundingCovenant};out.creditLifecycleVersion=g.creditLifecycleVersion;if(me.creditBook)out.me.creditBook=JSON.parse(JSON.stringify(me.creditBook));if(me.marketBook){out.me.marketBook=JSON.parse(JSON.stringify(me.marketBook));out.me.marketReport=me.marketReport?JSON.parse(JSON.stringify(me.marketReport)):null;out.me.marketSnapshot=JSON.parse(JSON.stringify(g.marketEconomy));if(g.segmentDepositsVersion===1)for(const m of Object.values(out.me.marketSnapshot.markets))delete m.segmentDeposits.total;out.marketOwnership=Object.fromEntries(Object.keys(g.territories).map(k=>[k,{me:me.marketBook.markets[k].deposits,rival:rival.marketBook.markets[k].deposits,community:g.marketEconomy.markets[k].community.deposits,union:g.marketEconomy.markets[k].union.deposits,total:g.marketEconomy.markets[k].total.deposits}]))}if(me.regionalOperations)out.me.regionalOperations=JSON.parse(JSON.stringify(me.regionalOperations));out.regions=g.regions?JSON.parse(JSON.stringify(g.regions)):null;if(me.accounting)out.me.accounting=JSON.parse(JSON.stringify(me.accounting));out.maxCycles=null;out.act={...campaignAct(g)};out.buyoutPressure=index===0?[...(g.buyoutPressure||[0,0])]:[...(g.buyoutPressure||[0,0])].reverse();out.consolidationStalemate=Number(g.consolidationStalemate)||0;out.competitiveActions=COMPETITIVE_ACTIONS;out.competitiveForecast=pilot(g)?[{title:'PERSISTENT RIVALRY',severity:'stable',text:'No score buyouts or permanent market locks. A new office costs the normal project price; new Regional Operations campaigns grant eight cycles to establish service, without free market share.'},{title:'CAPITAL IS NOT CASH',severity:'watch',text:'Spending reduces equity. The planning limit preserves an 8% exposure reserve; income, losses and later events still change actual capital.'}]:competitiveForecast(g,index);out.productPortfolios=PRODUCT_PORTFOLIOS;out.strategySpecializations=STRATEGY_SPECIALIZATIONS;out.me.operatingReport=me.operatingReport?{...me.operatingReport}:null;out.me.lastCompetitiveAction=me.lastCompetitiveAction||'none';out.rival.lastCompetitiveAction=rival.lastCompetitiveAction||'none';out.me.products={...me.products};out.me.facilities={...me.facilities};out.me.facilityMarkets=Object.fromEntries(Object.entries(me.facilityMarkets||{}).map(([k,v])=>[k,[...v]]));out.me.specializations={...me.specializations};out.rival.products={...rival.products};out.rival.facilities={...rival.facilities};out.rival.specializations={...rival.specializations};for(const[k,t]of Object.entries(out.territories))t.facilityModels=[...(me.facilityMarkets&&me.facilityMarkets[k]||[])];if(index===1)for(const t of Object.values(out.territories)){if(Array.isArray(t.exited))t.exited=[t.exited[1],t.exited[0]];if(Array.isArray(t.exitStreak))t.exitStreak=[t.exitStreak[1],t.exitStreak[0]]}return out}
+function rematch(g,index){if(!g.gameOver)throw Error('Campaign still active.');if(!g.rematchVotes.includes(g.players[index].id))g.rematchVotes.push(g.players[index].id);if(g.mode==='ai'&&!g.rematchVotes.includes(g.players[1].id))g.rematchVotes.push(g.players[1].id);if(g.rematchVotes.length<2)return false;const fresh=createGame({mode:g.mode,segmentDepositsVersion:g.segmentDepositsVersion||0,creditPerformanceVersion:g.creditPerformanceVersion||0,customerOwnershipVersion:g.customerOwnershipVersion||0,workforceVersion:g.workforceVersion||0,customerDemandVersion:g.customerDemandVersion||0,managementVersion:g.managementVersion||0,serviceExpansionVersion:g.serviceExpansionVersion||0,contractRulesVersion:g.contractRulesVersion||0,productDeploymentVersion:g.productDeploymentVersion||0,retailLifecycleVersion:g.retailLifecycleVersion||0,termFundingVersion:g.termFundingVersion||0,depositProductsVersion:g.depositProductsVersion||0,fundingCovenantVersion:g.fundingCovenantVersion||0,creditLifecycleVersion:g.creditLifecycleVersion||0,marketEconomyVersion:g.marketEconomyVersion||0,regionalEconomyVersion:g.regionalEconomyVersion||0,campaignRulesVersion:g.campaignRulesVersion,color1:g.players[0].color,color2:g.players[1].color,fundingRulesVersion:g.fundingRulesVersion||1,scope:g.scope,scenario:g.scenario,difficulty:g.difficulty,name1:g.players[0].name,name2:g.players[1].name});Object.keys(g).forEach(k=>delete g[k]);Object.assign(g,fresh);return true}
 
 // Public and internal simulation entry points share the same scoped campaign RNG.
 // AI planning has its own stream, so supplied human intents do not consume world RNG.
@@ -1302,7 +1305,8 @@ function moveOutside(p,r,requested,target=null,limited=false){
  const amount=Math.min(Math.abs(Math.round(requested)),Object.values(weights).reduce((a,b)=>a+b,0)),parts=marketSplit(amount,weights);
  for(const [k,n]of Object.entries(parts)){if(!n)continue;const m=g.marketEconomy.markets[k],outside=positive?marketSplit(n,{community:m.community[r],union:m.union[r]}):marketSplit(n,{community:3,union:2});
   if(r==='customers')moveOutsideHouseholds(p,k,outside,positive,limited);
-  for(const institution of ['community','union'])m[institution][r]+=positive?-outside[institution]:outside[institution];
+  if(r==='deposits'&&p.segmentDeposits)moveOutsideSegmentDeposits(p,k,outside,positive,limited);
+  else for(const institution of ['community','union'])m[institution][r]+=positive?-outside[institution]:outside[institution];
   p.marketBook.markets[k][r]+=positive?n:-n;
   if(positive&&limited&&p.marketQuota&&p.marketQuota[r])p.marketQuota[r][k]=Math.max(0,p.marketQuota[r][k]-n);
  }
@@ -1610,12 +1614,12 @@ function depositRate(p,g,product){
 }
 function compactDeposits(p){
  const grouped=new Map();
- for(const c of p.depositBook.cohorts){if(!c.principal)continue;const k=[c.market,c.product,c.remaining,c.rate,c.quotedCycle,!!c.locked].join('|');if(grouped.has(k))grouped.get(k).principal+=c.principal;else grouped.set(k,{...c})}
+ for(const c of p.depositBook.cohorts){if(!c.principal)continue;const k=[c.market,c.product,c.remaining,c.rate,c.quotedCycle,!!c.locked,c.segment||''].join('|');if(grouped.has(k)){grouped.get(k).principal+=c.principal;if(p.segmentDeposits)grouped.get(k).exiting+=c.exiting;}else grouped.set(k,{...c})}
  p.depositBook.cohorts=[...grouped.values()];
 }
-function takeDeposits(p,market,amount,includeLocked=false){
- const rows=p.depositBook.cohorts.filter(c=>c.market===market&&(includeLocked||!c.locked)),parts=marketSplit(amount,Object.fromEntries(rows.map((c,i)=>[i,c.principal]))),taken=[];
- for(const [i,n]of Object.entries(parts))if(n){taken.push({...rows[i],principal:n});rows[i].principal-=n}
+function takeDeposits(p,market,amount,includeLocked=false,segment=null){
+ const rows=p.depositBook.cohorts.filter(c=>c.market===market&&(includeLocked||!c.locked)&&(!segment||c.segment===segment)),parts=marketSplit(amount,Object.fromEntries(rows.map((c,i)=>[i,c.principal]))),taken=[];
+ for(const [i,n]of Object.entries(parts))if(n){const c=rows[i],exiting=p.segmentDeposits?Math.floor(c.exiting*n/c.principal):0;taken.push({...c,principal:n,...(p.segmentDeposits?{exiting}:{})});c.principal-=n;if(p.segmentDeposits)c.exiting-=exiting}
  compactDeposits(p);return taken;
 }
 function reconcileDeposits(p){
@@ -1623,6 +1627,7 @@ function reconcileDeposits(p){
  const g=depositWorld||marketContext||{economy:{rate:3.75}};
  for(const [market,m]of Object.entries(p.marketBook.markets)){
   const held=p.depositBook.cohorts.filter(c=>c.market===market).reduce((n,c)=>n+c.principal,0),difference=m.deposits-held,product=p.products.retail;
+  if(p.segmentDeposits&&difference)throw Error('Segment deposit books disagree with local balances');
   if(difference>0){const parts=p.retailLifecycle?marketSplit(difference,retailAcquisitionMix(p,g,market)):{[product]:difference};for(const [offered,n]of Object.entries(parts))if(n)p.depositBook.cohorts.push({market,product:offered,principal:n,remaining:offered==='highYield'?6:0,quotedCycle:g.cycle||p.depositBook.asOfCycle+1,rate:depositRate(p,g,offered)})}
   else if(difference<0)takeDeposits(p,market,-difference);
  }
@@ -1632,6 +1637,7 @@ const depositSync=syncAccounts;
 syncAccounts=function(p){depositSync(p);reconcileDeposits(p)};
 function depositSummary(p,g){
  if(!p.depositBook)return null;
+ if(p.segmentDeposits)return segmentDepositSummary(p,g);
  const rows=Object.fromEntries(Object.keys(DEPOSIT_SERVICE).map(k=>[k,{principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0}]));
  if(p.termFunding)rows.term={principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0};
  for(const c of p.depositBook.cohorts){const row=rows[c.locked?'term':c.product];row.principal+=c.principal;row.interest+=c.principal*(c.remaining>0?c.rate:depositRate(p,g,c.product))/1000000;if(c.remaining>0)row.guaranteed+=c.principal;if(c.remaining===1)row.renewing+=c.principal}
@@ -1663,6 +1669,7 @@ function repriceWithdrawableDeposits(g,p){
 }
 const depositTransfer=transferMarket;
 transferMarket=function(g,from,to,...args){
+ if(from.segmentDeposits&&args[1]==='deposits')return transferSegmentDeposits(g,from,to,args[0],args[2]);
  const old=depositWorld;depositWorld=g;
  try{const n=depositTransfer(g,from,to,...args);reconcileDeposits(from);reconcileDeposits(to);return n}finally{depositWorld=old}
 };
@@ -1705,6 +1712,7 @@ function prepareTermFunding(g,p,preview=false){
  const cycle=g.cycle||p.depositBook.asOfCycle+1,policy=p.termFunding.policy;
  validateTermPolicy(policy);
  const rate=Math.round(depositRate(p,g,'highYield')*1.25);
+ const departed=settleDepartedTermDeposits(g,p,preview);
  let released=0,renewed=0,opened=0;
  for(const c of p.depositBook.cohorts){
   if(!c.locked)continue;
@@ -1723,7 +1731,7 @@ function prepareTermFunding(g,p,preview=false){
   for(const [i,n]of Object.entries(parts))if(n){const c=eligible[i];c.principal-=n;p.depositBook.cohorts.push({...c,principal:n,product:'highYield',locked:true,remaining:6,quotedCycle:cycle,rate});opened+=n}
  }
  compactDeposits(p);
- return {opened,renewed,released};
+ return {opened,renewed,released,...(p.segmentDeposits?{departed}:{})};
 }
 
 function planTermFunding(g,index,plan){
@@ -2275,7 +2283,7 @@ function renewalPricingPlan(g,p,input){
 
 function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
- if(g.version!=='8.2'&&!(['8.3','8.4','8.5','8.6','8.7'].includes(g.version)&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
+ if(g.version!=='8.2'&&!(['8.3','8.4','8.5','8.6','8.7','8.8'].includes(g.version)&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
  if(!records||Object.keys(records).sort().join()!==ids.join())throw Error('Invalid relationship roster');
  const owner=id=>id===null||g.players.some(p=>p.id===id);
@@ -2385,7 +2393,7 @@ function customerMixPlan(g,p,input){
 
 function validateCustomerSave(g){
  if(g.customerDemandVersion===undefined){if(g.players.some(p=>p.customerDemandVersion!==undefined||p._customerIntake!==undefined))throw Error('Unversioned customer demand');return g}
- if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
+ if(![1,2].includes(g.customerDemandVersion)||g.managementVersion!==2||g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':'8.3'))throw Error('Unsupported customer demand rules');
  for(const p of g.players){
   if(p.customerDemandVersion!==g.customerDemandVersion||p._customerIntake!==undefined)throw Error('Invalid customer demand state');
   const report=p.operatingReport;
@@ -2698,7 +2706,7 @@ function validateWorkforceSave(g) {
     if (g.players.some(p => p.workforce !== undefined || p.submitted?.workforcePolicy !== undefined || p.submitted?.specialistHires !== undefined)) throw Error('Unversioned specialist workforce');
     return g;
   }
-  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
+  if (g.workforceVersion !== 1 || g.customerDemandVersion !== 2 || g.version !== (g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : g.customerOwnershipVersion === 1 ? '8.6' : '8.5')) throw Error('Unsupported specialist workforce save');
   for (const p of g.players) {
     const w = p.workforce;
     if (!w || Object.keys(w).sort().join() !== 'departments,lastCycle,policy,version' || w.version !== 1 ||
@@ -2808,7 +2816,8 @@ function householdServiceReview(p, allocation = p.allocation, policy = p.househo
     for (const [segment, count] of Object.entries(book)) {
       const channel = segment === 'connected' && models.includes('digital') ? .8 : segment === 'everyday' && models.includes('retail') ? .9 : 1;
       const demand = count / 900 * HOUSEHOLD_SERVICE[segment] * channel * (1 - upgrade * .1);
-      const fit = deposits ? cohorts.reduce((n, c) => n + c.principal * CUSTOMER_SEGMENTS[segment].fit[c.product], 0) / deposits : 1;
+      const fitBook = p.segmentDeposits ? cohorts.filter(c => c.segment === segment) : cohorts, fitBalance = fitBook.reduce((n,c) => n+c.principal,0);
+      const fit = p.segmentDeposits ? (fitBalance ? fitBook.reduce((n,c) => n+c.principal*CUSTOMER_SEGMENTS[segment].fit[c.product],0)/fitBalance : 1) : deposits ? cohorts.reduce((n, c) => n + c.principal * CUSTOMER_SEGMENTS[segment].fit[c.product], 0) / deposits : 1;
       rows.push({ market, segment, count, demand, fit, current: p.customerRelationships.markets[market][segment] });
     }
   }
@@ -2840,6 +2849,7 @@ function settleHouseholdRetention(g, p, preview = false) {
       // Deposits have no individual/segment owner yet. Use the local average,
       // capped to withdrawable funding. Locked term balances never break early.
       const requested = before ? Math.min(withdrawableDeposits(p, key), Math.round(local.deposits * count / before)) : 0;
+      const ownedOutflow = p.segmentDeposits ? segmentRetentionOutflow(world,p,key,departures) : 0;
       for (const [segment, n] of Object.entries(departures)) {
         const split = marketSplit(n, { community: 3, union: 2 });
         source[segment] -= n;
@@ -2850,8 +2860,8 @@ function settleHouseholdRetention(g, p, preview = false) {
       local.customers -= count; marketDelta(p, 'customers', -count);
       const old = marketTarget; marketTarget = key;
       const beforeDeposits = p.stats.deposits;
-      try { delta(p, 'deposits', -requested); } finally { marketTarget = old; }
-      const outflow = beforeDeposits - p.stats.deposits;
+      try { if (!p.segmentDeposits) delta(p, 'deposits', -requested); } finally { marketTarget = old; }
+      const outflow = ownedOutflow + beforeDeposits - p.stats.deposits;
       p.stats.rateSensitiveDeposits = Math.min(p.stats.rateSensitiveDeposits, p.stats.deposits);
       rows[key] = { before, departures, depositOutflow: outflow };
     }
@@ -2879,7 +2889,7 @@ function validateHouseholdSave(g) {
         Object.values(g.marketEconomy?.markets || {}).some(m => m.households !== undefined)) throw Error('Unversioned household ownership');
     return g;
   }
-  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
+  if (g.customerOwnershipVersion !== 1 || g.workforceVersion !== 1 || g.version !== (g.segmentDepositsVersion === 1 ? '8.8' : g.creditPerformanceVersion === 1 ? '8.7' : '8.6')) throw Error('Unsupported household ownership save');
   const keys = Object.keys(g.territories).sort().join(), uint = n => Number.isSafeInteger(n) && n >= 0;
   const counts = row => row && Object.keys(row).sort().join() === 'connected,everyday,reserve' && Object.values(row).every(uint);
   for (const p of g.players) {
@@ -3039,7 +3049,7 @@ function validateCreditPerformanceSave(g) {
     if(g.players.some(p=>p.creditPerformance!==undefined||p.submitted?.collectionsPolicy!==undefined||p.creditBook?.cohorts.some(c=>c.late!==undefined||c.seasoning!==undefined)))throw Error('Unversioned credit performance');
     return g;
   }
-  if(g.creditPerformanceVersion!==1||g.customerOwnershipVersion!==1||g.version!=='8.7')throw Error('Unsupported credit performance save');
+  if(g.creditPerformanceVersion!==1||g.customerOwnershipVersion!==1||g.version!==(g.segmentDepositsVersion===1?'8.8':'8.7'))throw Error('Unsupported credit performance save');
   const uint=n=>Number.isSafeInteger(n)&&n>=0, fields=['cost','cured','entered','loss','recovered','resolved'];
   for(const p of g.players) {
     const s=p.creditPerformance;
@@ -3056,8 +3066,176 @@ function validateCreditPerformanceSave(g) {
   }
   return g;
 }
+// Segment deposit ownership v1. Existing accounts keep their owner and terms.
+// Relative opening balances are fictional scenario weights, not real-world data.
+const SEGMENT_BALANCE_WEIGHTS = { everyday: 1, connected: 1.5, reserve: 4 };
+const emptyDepositSegments = () => ({ everyday: 0, connected: 0, reserve: 0 });
+function initializeSegmentDeposits(g, o) {
+  if (o.segmentDepositsVersion !== 1) return g;
+  if (g.creditPerformanceVersion !== 1) throw Error('Segment deposits requires the credit performance preview and its prerequisites.');
+  g.segmentDepositsVersion = 1; g.version = '8.8';
+  const split = (amount, counts) => marketSplit(amount, Object.fromEntries(Object.keys(CUSTOMER_SEGMENTS).map(s => [s, counts[s] * SEGMENT_BALANCE_WEIGHTS[s]])));
+  for (const p of g.players) {
+    p.segmentDeposits = { version: 1 };
+    p.depositBook.cohorts = p.depositBook.cohorts.flatMap(c => Object.entries(split(c.principal, p.householdBook.markets[c.market])).filter(([,n]) => n).map(([segment, principal]) => ({ ...c, segment, principal, exiting: 0 })));
+  }
+  for (const [key, m] of Object.entries(g.marketEconomy.markets)) {
+    const community = split(m.community.deposits, m.households.community), union = split(m.union.deposits, m.households.union);
+    m.segmentDeposits = { community, union, total: Object.fromEntries(Object.keys(CUSTOMER_SEGMENTS).map(s =>
+      [s, community[s] + union[s] + g.players.reduce((n,p) => n + p.depositBook.cohorts.filter(c => c.market === key && c.segment === s).reduce((a,c) => a + c.principal, 0), 0)])) };
+  }
+  return g;
+}
+function depositSegmentAmounts(cohorts) {
+  const out = emptyDepositSegments();
+  for (const c of cohorts) out[c.segment] += c.principal;
+  return out;
+}
+function openSegmentDeposits(p, g, market, amounts) {
+  for (const [segment, amount] of Object.entries(amounts)) {
+    const weights = Object.fromEntries(Object.entries(p.retailLifecycle.mix).map(([product, emphasis]) => [product, emphasis * CUSTOMER_SEGMENTS[segment].fit[product]]));
+    for (const [product, principal] of Object.entries(marketSplit(amount, weights))) if (principal)
+      p.depositBook.cohorts.push({ market, segment, principal, product, exiting: 0, remaining: product === 'highYield' ? 6 : 0, quotedCycle: g.cycle || p.depositBook.asOfCycle + 1, rate: depositRate(p,g,product) });
+  }
+  compactDeposits(p);
+}
+function returnSegmentDeposits(m, amounts) {
+  for (const [s,n] of Object.entries(amounts)) {
+    const split = marketSplit(n, { community: 3, union: 2 });
+    for (const owner of ['community','union']) { m.segmentDeposits[owner][s] += split[owner]; m[owner].deposits += split[owner]; }
+  }
+}
+function moveOutsideSegmentDeposits(p, key, outside, positive, limited) {
+  const g = marketContext, m = g.marketEconomy.markets[key];
+  if (positive) {
+    const amounts = emptyDepositSegments();
+    for (const owner of ['community','union'])
+      moveHouseholdCounts(m.segmentDeposits[owner], amounts, outside[owner], limited ? householdAcquisitionWeights(p,key) : null);
+    openSegmentDeposits(p,g,key,amounts);
+    for (const owner of ['community','union']) m[owner].deposits -= outside[owner];
+  } else {
+    const taken = takeDeposits(p,key,outside.community + outside.union);
+    returnSegmentDeposits(m,depositSegmentAmounts(taken));
+  }
+}
+function transferSegmentDeposits(g, from, to, key, requested) {
+  const n = Math.min(Math.max(0,Math.round(requested)),withdrawableDeposits(from,key));
+  if (!n) return 0;
+  return withMarket(g, () => {
+    const sensitive = Math.min(from.stats.rateSensitiveDeposits || 0, Math.round(n * (from.stats.rateSensitiveDeposits || 0) / Math.max(1,from.stats.deposits)));
+    const taken = takeDeposits(from,key,n);
+    to.depositBook.cohorts.push(...taken); compactDeposits(to);
+    from.marketBook.markets[key].deposits -= n; to.marketBook.markets[key].deposits += n;
+    marketDelta(from,'deposits',-n); marketDelta(to,'deposits',n);
+    if (sensitive) { marketDelta(from,'rateSensitiveDeposits',-sensitive); marketDelta(to,'rateSensitiveDeposits',sensitive); }
+    return n;
+  });
+}
+function withdrawOwnedDeposits(g, p, key, segment, requested) {
+  const amount = Math.min(requested, p.depositBook.cohorts.filter(c => c.market === key && c.segment === segment && !c.locked).reduce((n,c) => n+c.principal,0));
+  if (!amount) return 0;
+  const taken = takeDeposits(p,key,amount,false,segment);
+  returnSegmentDeposits(g.marketEconomy.markets[key],depositSegmentAmounts(taken));
+  p.marketBook.markets[key].deposits -= amount;
+  marketDelta(p,'deposits',-amount);
+  return amount;
+}
+function segmentRetentionOutflow(g,p,key,departures) {
+  let outflow = 0;
+  for (const [segment,n] of Object.entries(departures)) {
+    const count = p.householdBook.markets[key][segment];
+    if (!count || !n) continue;
+    const rows = p.depositBook.cohorts.filter(c => c.market === key && c.segment === segment);
+    // A departure marks only the still-active portion of locked savings. Already
+    // departing funds cannot be marked again and must not renew indefinitely.
+    for (const c of rows.filter(c => c.locked)) c.exiting += Math.floor((c.principal-c.exiting)*n/count);
+    const withdrawablePrincipal = rows.filter(c => !c.locked).reduce((a,c) => a+c.principal,0);
+    outflow += withdrawOwnedDeposits(g,p,key,segment,Math.floor(withdrawablePrincipal*n/count));
+  }
+  return outflow;
+}
+function settleDepartedTermDeposits(g,p,preview=false) {
+  if (!p.segmentDeposits) return 0;
+  const depositSnapshot = g.marketEconomy || marketContext?.marketEconomy || p.marketSnapshot;
+  if (!depositSnapshot) throw Error('Term departures require the local market snapshot.');
+  const world = { ...g, marketEconomy: preview ? JSON.parse(JSON.stringify(depositSnapshot)) : depositSnapshot };
+  const cycle = g.cycle || p.depositBook.asOfCycle+1;
+  return withMarket(world, () => {
+    const due = p.depositBook.cohorts.filter(c => c.locked && c.exiting && c.remaining === 1 && c.quotedCycle < cycle);
+    let total = 0;
+    // Settle the due part directly, without converting other accounts or changing
+    // their guarantee. No renewal setting can keep a former customer's money.
+    for (const c of due) {
+      const n = c.exiting; c.principal -= n; c.exiting = 0;
+      returnSegmentDeposits(world.marketEconomy.markets[c.market],{...emptyDepositSegments(),[c.segment]:n});
+      p.marketBook.markets[c.market].deposits -= n;
+      total += n;
+    }
+    compactDeposits(p);
+    if(total)marketDelta(p,'deposits',-total);
+    p.stats.rateSensitiveDeposits = Math.min(p.stats.rateSensitiveDeposits,p.stats.deposits);
+    return total;
+  });
+}
+function segmentDepositSummary(p,g) {
+  if (!p.segmentDeposits) return null;
+  const fields = () => ({principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0,locked:0,exiting:0,platform:0});
+  const products = [...Object.keys(DEPOSIT_SERVICE),'term'], rows = Object.fromEntries(products.map(k => [k,fields()])), markets = {};
+  const cells = [];
+  for (const key of Object.keys(p.marketBook.markets)) {
+    markets[key] = {};
+    for (const segment of Object.keys(CUSTOMER_SEGMENTS)) {
+      const accounts = p.depositBook.cohorts.filter(c => c.market === key && c.segment === segment), row = fields();
+      const local = Object.fromEntries(products.map(k => [k,fields()]));
+      for (const c of accounts) {
+        const r = local[c.locked?'term':c.product]; r.principal += c.principal;
+        r.interest += c.principal * (c.remaining>0?c.rate:depositRate(p,g,c.product))/1000000;
+        if(c.remaining>0)r.guaranteed+=c.principal;if(c.remaining===1)r.renewing+=c.principal;
+        if(c.locked)r.locked+=c.principal;r.exiting+=c.exiting;
+      }
+      // One billable primary-account equivalent per active relationship, not one
+      // fee per product. Empty segments do not create fee-paying customers.
+      const counts = marketSplit(p.householdBook.markets[key][segment],Object.fromEntries(products.map(k => [k,Math.max(0,local[k].principal-local[k].exiting)])));
+      for (const product of products) {
+        const r=local[product],def=DEPOSIT_SERVICE[product]||DEPOSIT_SERVICE.highYield;
+        r.interest=Math.round(r.interest);r.fees=counts[product]*def.fee;r.service=Math.round(counts[product]*def.cost+r.principal*.00006);
+        cells.push({key,segment,product,row:r});
+        for(const f of Object.keys(row))row[f]+=r[f];
+      }
+      row.directCost=row.interest+row.service-row.fees;markets[key][segment]=row;
+    }
+  }
+  let centralPlatform=0;
+  for(const product of products) {
+    const selected=cells.filter(c=>c.product===product),platform=product==='term'||!p.retailLifecycle.mix[product]?0:RETAIL_PLATFORM[product];
+    const allocations=marketSplit(platform,Object.fromEntries(selected.map((c,i)=>[i,c.row.principal])));
+    for(const [i,n]of Object.entries(allocations)){const c=selected[i],r=markets[c.key][c.segment];c.row.platform+=n;c.row.service+=n;r.platform+=n;r.service+=n;r.directCost+=n;}
+    for(const c of selected)for(const f of Object.keys(rows[product]))rows[product][f]+=c.row[f];
+    const remainder=platform-rows[product].platform;centralPlatform+=remainder;rows[product].platform+=remainder;rows[product].service+=remainder;
+    rows[product].directCost=rows[product].interest+rows[product].service-rows[product].fees;
+  }
+  return {rows,markets,centralPlatform,interest:Object.values(rows).reduce((n,r)=>n+r.interest,0),fees:Object.values(rows).reduce((n,r)=>n+r.fees,0),service:Object.values(rows).reduce((n,r)=>n+r.service,0)};
+}
+function validateSegmentDepositSave(g) {
+  const has = p => p.segmentDeposits !== undefined || p.depositBook?.cohorts.some(c => c.segment!==undefined || c.exiting!==undefined);
+  if(g.segmentDepositsVersion===undefined){if(g.players.some(has)||Object.values(g.marketEconomy?.markets||{}).some(m=>m.segmentDeposits!==undefined))throw Error('Unversioned segment deposits');return g;}
+  if(g.segmentDepositsVersion!==1||g.creditPerformanceVersion!==1||g.version!=='8.8')throw Error('Unsupported segment deposit save');
+  const uint=n=>Number.isSafeInteger(n)&&n>=0, valid=r=>r&&Object.keys(r).sort().join()==='connected,everyday,reserve'&&Object.values(r).every(uint);
+  for(const p of g.players) {
+    if(!p.segmentDeposits||Object.keys(p.segmentDeposits).join()!=='version'||p.segmentDeposits.version!==1)throw Error('Invalid segment deposit state');
+    if(p.operatingReport&&(!uint(p.operatingReport.termDepartures)||!uint(p.operatingReport.termDepartureFundingLoss)))throw Error('Invalid term departure report');
+    for(const c of p.depositBook.cohorts)if(!Object.hasOwn(CUSTOMER_SEGMENTS,c.segment)||!uint(c.exiting)||c.exiting>c.principal||(!c.locked&&c.exiting))throw Error('Invalid segment deposit owner or departure');
+  }
+  for(const [key,m]of Object.entries(g.marketEconomy.markets)) {
+    const b=m.segmentDeposits;
+    if(!b||Object.keys(b).sort().join()!=='community,total,union'||!Object.values(b).every(valid))throw Error('Invalid outside segment deposits');
+    for(const owner of ['community','union','total'])if(Object.values(b[owner]).reduce((a,n)=>a+n,0)!==m[owner].deposits)throw Error('Outside segment deposits disagree');
+    for(const segment of Object.keys(CUSTOMER_SEGMENTS))if(b.community[segment]+b.union[segment]+g.players.reduce((n,p)=>n+p.depositBook.cohorts.filter(c=>c.market===key&&c.segment===segment).reduce((a,c)=>a+c.principal,0),0)!==b.total[segment])throw Error('Segment deposit conservation failed');
+  }
+  return g;
+}
 function depositLedgerSummary(p,g){
- const d=depositSummary(p,g);return d?{...(p.management?{management:JSON.parse(JSON.stringify(p.management))}:{}),serviceDesk:p.serviceDesk?JSON.parse(JSON.stringify(p.serviceDesk)):null,agreements:p.serviceContracts?[...p.serviceContracts]:null,advertising:p.contractAds?{...p.contractAds}:null,deployment:p.productDeployment?{...p.productDeployment.ready}:null,mix:p.retailLifecycle?{...p.retailLifecycle.mix}:null,term:termSummary(p),interest:d.interest,fees:d.fees,service:d.service,guaranteed:Object.values(d.rows).reduce((n,r)=>n+r.guaranteed,0),renewing:Object.values(d.rows).reduce((n,r)=>n+r.renewing,0)}:null;
+ const d=depositSummary(p,g);return d?{...(p.segmentDeposits?{segments:Object.fromEntries(Object.entries(d.markets).map(([key,rows])=>[key,Object.fromEntries(Object.entries(rows).map(([s,r])=>[s,{principal:r.principal,locked:r.locked,exiting:r.exiting}]))]))}:{}),...(p.management?{management:JSON.parse(JSON.stringify(p.management))}:{}),serviceDesk:p.serviceDesk?JSON.parse(JSON.stringify(p.serviceDesk)):null,agreements:p.serviceContracts?[...p.serviceContracts]:null,advertising:p.contractAds?{...p.contractAds}:null,deployment:p.productDeployment?{...p.productDeployment.ready}:null,mix:p.retailLifecycle?{...p.retailLifecycle.mix}:null,term:termSummary(p),interest:d.interest,fees:d.fees,service:d.service,guaranteed:Object.values(d.rows).reduce((n,r)=>n+r.guaranteed,0),renewing:Object.values(d.rows).reduce((n,r)=>n+r.renewing,0)}:null;
 }
 let ledgerContext=null;
 const ledgerCopy=x=>JSON.parse(JSON.stringify(x));
@@ -3401,7 +3579,7 @@ function repairSavedCampaign(g){
 }
 function repairSavedRivalry(g){
  repairSavedCampaign(g);
- g.version=g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
+ g.version=g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':g.workforceVersion===1?'8.5':g.customerDemandVersion===2?'8.4':g.customerDemandVersion===1?'8.3':g.managementVersion?'8.2':'8.1';
  g.maxCycles=null;
  g.act=Math.max(0,Math.min(2,Number(g.act)||0));
  g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure.slice(0,2):[0,0];
@@ -3419,10 +3597,11 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.creditPerformanceVersion!==undefined&&g.version!=='8.7')throw Error('Credit performance requires a v8.7 save.');
- if(g.customerOwnershipVersion!==undefined&&g.version!==(g.creditPerformanceVersion===1?'8.7':'8.6'))throw Error('Household ownership requires a v8.6 save.');
- if(g.workforceVersion!==undefined&&g.version!==(g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
- if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7'].includes(g.version))throw Error('Only v6.0 through v8.7 saves are supported.');
+ if(g.segmentDepositsVersion!==undefined&&g.version!=='8.8')throw Error('Segment deposits requires a v8.8 save.');
+ if(g.creditPerformanceVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':'8.7'))throw Error('Credit performance requires a v8.7 save.');
+ if(g.customerOwnershipVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':'8.6'))throw Error('Household ownership requires a v8.6 save.');
+ if(g.workforceVersion!==undefined&&g.version!==(g.segmentDepositsVersion===1?'8.8':g.creditPerformanceVersion===1?'8.7':g.customerOwnershipVersion===1?'8.6':'8.5'))throw Error('Specialist workforce requires a v8.5 save.');
+ if(!['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7','8.8'].includes(g.version))throw Error('Only v6.0 through v8.8 saves are supported.');
  g=JSON.parse(JSON.stringify(g));
  // Never repair over invalid accounting, ledger or funding versions.
  validateLedger(g);
@@ -3457,8 +3636,10 @@ function operate(g, p, preview = false) {
       if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
       const retention = settleHouseholdRetention(g, p, preview);
       // Locked maturities precede promotion repricing; repayment precedes new lending.
-      const term = prepareTermFunding(g, p),
+      const termSequence = p.accounting?.sequence || 0;
+      const term = prepareTermFunding(g, p, preview),
         oldDepositWorld = depositWorld;
+      const termFundingLoss = p.segmentDeposits ? p.accounting.journal.filter(e=>e.id>termSequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0) : 0;
       if (p.depositBook) depositWorld = g;
       try {
         if (p.depositBook) repriceWithdrawableDeposits(g, p);
@@ -3492,6 +3673,7 @@ function operate(g, p, preview = false) {
         text += ' Household retention: ' + retention.departed + ' relationships left with $' + retention.depositOutflow.toLocaleString() + ' in withdrawable deposits; funding-sale losses $' + retention.fundingLoss.toLocaleString() + '.';
       }
       if (term) {
+        if(p.segmentDeposits){p.operatingReport.termDepartures=term.departed;p.operatingReport.termDepartureFundingLoss=termFundingLoss;p.operatingReport.fundingLoss+=termFundingLoss;text+=' Former-customer term maturities paid out $'+term.departed.toLocaleString()+' (not an expense).';}
         const { opened, renewed, released } = term;
         Object.assign(p.operatingReport, {
           termOpened: opened,
@@ -3516,6 +3698,7 @@ function operate(g, p, preview = false) {
     return text;
   });
 }
+
 
 // The transaction owns all temporary book/context state. Cohorts move before
 // accounting settlement; franchise quantities move afterward. Finally blocks
@@ -3797,6 +3980,7 @@ function validatePilot(g) {
   validateWorkforceSave(g);
   validateHouseholdSave(g);
   validateCreditPerformanceSave(g);
+  validateSegmentDepositSave(g);
   return g;
 }
 function validatePortfolioPlan(p, plan) {
@@ -3808,7 +3992,7 @@ function validatePortfolioPlan(p, plan) {
   normalizeHouseholdPlan(p, plan);
   normalizeCollectionsPlan(p, plan);
 }
-root.BWEngine={COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
+root.BWEngine={SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectPlanStatus,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
 root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;if(g.creditPerformanceVersion===1)limitCreditHistoryView(out);return out};
@@ -3852,7 +4036,7 @@ function lobbyOptions(){
  return {scope:['town','regional','state','national'].includes(c.scope)?c.scope:'national',
   scenario:['balanced','rate','regulatory','growth'].includes(c.scenario)?c.scenario:'balanced',
   campaignRulesVersion:c.campaignRulesVersion||0,serviceExpansionVersion:c.serviceExpansionVersion||0,
-  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0,...(c.creditPerformanceVersion?{creditPerformanceVersion:c.creditPerformanceVersion}:{}),...(c.customerOwnershipVersion?{customerOwnershipVersion:c.customerOwnershipVersion}:{}),...(c.workforceVersion?{workforceVersion:c.workforceVersion}:{})};
+  managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0,...(c.segmentDepositsVersion?{segmentDepositsVersion:c.segmentDepositsVersion}:{}),...(c.creditPerformanceVersion?{creditPerformanceVersion:c.creditPerformanceVersion}:{}),...(c.customerOwnershipVersion?{customerOwnershipVersion:c.customerOwnershipVersion}:{}),...(c.workforceVersion?{workforceVersion:c.workforceVersion}:{})};
 }
 function publishLobby(){
  if(!lobby||game)return;
@@ -3937,7 +4121,7 @@ function renderLobby(){
  $('#lobbySettings').classList.toggle('hidden',!host);$('#lobbyStart').classList.toggle('hidden',!host);
  $('#lobbyRetry').classList.toggle('hidden',!gh.active);
  $('#lobbyRules').textContent=(settings.campaignRulesVersion===1?'Regional Rivalry pilot · 2 regions / 6 markets (overrides size).':'Legacy campaign rules · open-ended.')+
-  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+(settings.workforceVersion?' Specialist workforce preview.':'')+(settings.customerOwnershipVersion?' Household ownership preview.':'')+(settings.creditPerformanceVersion?' Credit performance preview.':'')+' Preview choices were set by the host when opening the room.';
+  (settings.serviceExpansionVersion?' Expanded services preview.':'')+(settings.managementVersion?' Living institution preview.':'')+(settings.customerDemandVersion?' Customer needs preview.':'')+(settings.workforceVersion?' Specialist workforce preview.':'')+(settings.customerOwnershipVersion?' Household ownership preview.':'')+(settings.segmentDepositsVersion?' Segment deposits preview.':'')+(settings.creditPerformanceVersion?' Credit performance preview.':'')+' Preview choices were set by the host when opening the room.';
  $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
  $('#lobbyError').textContent=lobby.error||'';
  $('#lobbyProgress').textContent=lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(host?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';
@@ -3973,7 +4157,7 @@ function repairOpenEnded(g){return E.repairSavedRivalry(g)}
 function migrateGame(g){return E.migrateCampaign(g)}
 function saveLocal(){try{if(game&&(['ai','hotseat'].includes(game.mode)||(game.mode==='lan'&&p2pRole==='host')))localStorage.setItem('branchWarsV7Save',JSON.stringify(game))}catch(e){if(!storageWarned){storageWarned=true;toast('This browser blocks local storage, so the campaign cannot autosave. Use EXPORT to keep a copy.')}}updateContinue()}
 function savedGame(){try{return JSON.parse(localStorage.getItem('branchWarsV7Save')||localStorage.getItem('branchWarsV6Save')||'null')}catch{return null}}
-function updateContinue(){let ok=false;try{const g=savedGame();ok=g&&['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7'].includes(g.version)&&!g.gameOver}catch{}$('#continueBtn').classList.toggle('hidden',!ok)}
+function updateContinue(){let ok=false;try{const g=savedGame();ok=g&&['6.0','7.0','7.1','8.0','8.1','8.2','8.3','8.4','8.5','8.6','8.7','8.8'].includes(g.version)&&!g.gameOver}catch{}$('#continueBtn').classList.toggle('hidden',!ok)}
 $('#serviceExpansion').addEventListener('change',()=>{if($('#serviceExpansion').checked)$('#rivalryPilot').checked=true;else $('#institutionManagement').checked=false});
 $('#customerNeeds').addEventListener('change',()=>{if($('#customerNeeds').checked){$('#institutionManagement').checked=true;$('#serviceExpansion').checked=true;$('#rivalryPilot').checked=true}});
 $('#institutionManagement').addEventListener('change',()=>{if($('#institutionManagement').checked){$('#serviceExpansion').checked=true;$('#rivalryPilot').checked=true}});
@@ -3983,7 +4167,9 @@ $('#householdOwnership').addEventListener('change',()=>{if($('#householdOwnershi
 for(const id of ['#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#householdOwnership').checked=false});
 $('#creditPerformance').addEventListener('change',()=>{if($('#creditPerformance').checked)for(const id of ['#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
 for(const id of ['#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#creditPerformance').checked=false});
-function startLocal(which){try{game=which==='ai'?E.createGame({creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'ai',name1:validName('#aiName'),name2:'Synergy Holdings AI',scope:$('#aiScope').value,scenario:$('#aiScenario').value,difficulty:$('#aiDifficulty').value}):E.createGame({creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'hotseat',name1:validName('#hotName1'),name2:validName('#hotName2'),scope:$('#hotScope').value,scenario:$('#hotScenario').value,difficulty:'vp'});mode=which;seat=0;draft=null;lastCycle=0;lastResolutionId=0;saveLocal();enterGame(true)}catch(e){setStartMessage(e.message)}}
+$('#segmentDeposits').addEventListener('change',()=>{if($('#segmentDeposits').checked)for(const id of ['#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).checked=true});
+for(const id of ['#creditPerformance','#householdOwnership','#specialistWorkforce','#customerNeeds','#institutionManagement','#serviceExpansion','#rivalryPilot'])$(id).addEventListener('change',()=>{if(!$(id).checked)$('#segmentDeposits').checked=false});
+function startLocal(which){try{game=which==='ai'?E.createGame({segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'ai',name1:validName('#aiName'),name2:'Synergy Holdings AI',scope:$('#aiScope').value,scenario:$('#aiScenario').value,difficulty:$('#aiDifficulty').value}):E.createGame({segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color1:$('#bankColor1').value,color2:$('#bankColor2').value,mode:'hotseat',name1:validName('#hotName1'),name2:validName('#hotName2'),scope:$('#hotScope').value,scenario:$('#hotScenario').value,difficulty:'vp'});mode=which;seat=0;draft=null;lastCycle=0;lastResolutionId=0;saveLocal();enterGame(true)}catch(e){setStartMessage(e.message)}}
 function continueSave(){try{game=migrateGame(savedGame());if(['lan','p2p'].includes(game.mode))game.mode='hotseat';mode=game.mode;seat=0;draft=null;lastCycle=0;lastResolutionId=game.resolutionId||0;saveLocal();if(game.mode==='hotseat'&&game.players[0].submitted&&!game.players[1].submitted){show('#gameScreen');showPrivacy(1,`PASS COMPUTER TO ${game.players[1].name}`,`${game.players[0].name}'s saved plan is sealed.`)}else enterGame(true)}catch(e){setStartMessage(e.message)}}
 function importSave(file){const r=new FileReader;r.onload=()=>{try{const g=migrateGame(JSON.parse(r.result));if(['p2p','lan'].includes(g.mode))g.mode='hotseat';game=g;mode=g.mode;seat=0;draft=null;lastCycle=0;lastResolutionId=g.resolutionId||0;saveLocal();enterGame(true);toast('Campaign imported.')}catch(e){setStartMessage(e.message)}};r.readAsText(file)}
 function exportSave(){if(p2pRole==='guest'){toast('Only the multiplayer host can export the authoritative save.');return}if(!game)return;const blob=new Blob([JSON.stringify(game,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Branch_Wars_Cycle_${game.cycle}_Save.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
@@ -3991,8 +4177,8 @@ function enterGame(suppressReplay=false){show('#gameScreen');const v=currentView
 function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();game=null;view=null;p2pRole='';draft=null;draftOwner='';lastCycle=0;lastResolutionId=0;show('#startScreen');updateContinue()}
 async function lanRequest(path,options={}){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),8000);try{const response=await fetch(path,{headers:{'Content-Type':'application/json'},...options,signal:ctrl.signal});let data={};try{data=await response.json()}catch{}if(!response.ok)throw Error(data.error||`LAN server returned ${response.status}.`);return data}catch(e){if(e&&e.name==='AbortError')throw Error('LAN server did not respond within 8 seconds.');throw e}finally{clearTimeout(timer)}}
 function messageId(){return globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`}
-async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
-async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
+async function createLanRoom(){try{setStartMessage('');mode='lan';p2pRole='host';p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#lanHostName'),scope:$('#lanScope').value,scenario:$('#lanScenario').value};const data=await lanRequest('/api/create',{method:'POST',body:JSON.stringify({hostName:p2pConfig.name})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM OPEN.</b> Give your friend the room code or the address shown in the LAN server window. Keep this browser and the server window open.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // WAITING FOR RIVAL`,'warn');pollLan()}catch(e){lan=emptyLan();setStartMessage(`${e.message} Start OPEN_LAN_GAME.bat to use room mode.`);show('#startScreen')}}
+async function joinLanRoom(){try{setStartMessage('');mode='lan';p2pRole='guest';p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:validName('#lanGuestName')};const room=$('#lanRoom').value.trim().toUpperCase();if(!/^[A-Z0-9]{6}$/.test(room))throw Error('Enter the six-character room code.');const data=await lanRequest('/api/join',{method:'POST',body:JSON.stringify({room,name:p2pConfig.guestName})});lan={...emptyLan(),active:true,room:data.room,token:data.token};show('#connectScreen');$('#connectInstructions').innerHTML='<b>ROOM JOINED.</b> Waiting for the host to open the campaign.';$('#outCodeLabel').textContent='ROOM CODE';$('#outCode').value=data.room;$('#outCode').classList.add('room-code');$('#answerArea').classList.add('hidden');setConnection(`ROOM ${data.room} // CONNECTING`,'warn');pollLan();send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){lan=emptyLan();setStartMessage(`${e.message} Confirm the room code and LAN server address.`);show('#startScreen')}}
 async function pollLan(){while(lan.active){let delay=700;try{const data=await lanRequest(`/api/poll?room=${encodeURIComponent(lan.room)}&token=${encodeURIComponent(lan.token)}&after=${lan.after}`);lan.failures=0;for(const item of data.messages||[]){lan.after=Math.max(lan.after,Number(item.seq)||0);handleMessage(item.message)}if(data.connected)setConnection(`ROOM ${lan.room} // CONNECTED`,'good')}catch(e){if(lan.active){lan.failures++;delay=Math.min(8000,700*(2**Math.min(lan.failures,4)));setConnection(`LAN LINK INTERRUPTED // retrying // ${e.message}`,'bad')}}await new Promise(resolve=>setTimeout(resolve,delay))}}
 async function lanFlush(){if(lan.busy||!lan.active||!lan.outbox.length)return;lan.busy=true;try{while(lan.active&&lan.outbox.length){const item=lan.outbox[0];const data=await lanRequest('/api/send',{method:'POST',body:JSON.stringify({room:lan.room,token:lan.token,clientId:item.id,message:item.msg})});if(!data.ok)throw Error('The LAN server did not acknowledge the message.');lan.outbox.shift();lan.failures=0}}catch(e){if(lan.active){lan.failures++;setConnection(`LAN SEND INTERRUPTED // queued for retry // ${e.message}`,'bad');clearTimeout(lan.retryTimer);lan.retryTimer=setTimeout(()=>{lan.retryTimer=null;lanFlush()},Math.min(8000,800*(2**Math.min(lan.failures,4))))}}finally{lan.busy=false;if(lan.active&&lan.outbox.length&&!lan.retryTimer)queueMicrotask(lanFlush)}}
 function lanSend(msg){lan.outbox.push({id:messageId(),msg});lanFlush()}
@@ -4200,7 +4386,7 @@ function ghRoomCode(){const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',bytes=ne
 async function ghCreateRoom(){
  try{setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
   resetLink();game=null;view=null;mode='gh';p2pRole='host';
-  p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
+  p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
   gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();ghRemember();
   for(let attempt=0;attempt<5&&!gh.sha;attempt++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){const accepted=await ghRead('host','');if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
   if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
@@ -4216,13 +4402,13 @@ async function ghJoinRoom(){
   if(!token)throw Error('Enter your own access token. Never use your rival\u2019s.');
   const repo=ghNormalizeRepo(invite.repo),room=String(invite.room||'').trim().toUpperCase(),api=ghNormalizeApi($('#ghGuestApi').value);if(!/^[A-Z2-9]{8}$/.test(room))throw Error('That repository-room code is invalid or incomplete. Ask the host for a fresh code.');
   resetLink();game=null;view=null;mode='gh';p2pRole='guest';
-  p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
+  p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
   gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();const occupied=await ghRead('guest','');if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM JOINED.</b> Waiting for the host to open the campaign.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;
   $('#outCodeLabel').textContent='ROOM';$('#outCode').classList.add('room-code');$('#outCode').value=gh.room;
   setConnection(`REPOSITORY ROOM ${gh.room} // CONNECTING`,'warn');ghPoll();
-  ghSend({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name,doctrine:'commercial'});
+  ghSend({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name,doctrine:'commercial'});
  }catch(e){gh.active=false;show('#startScreen');setMode('gh');setStartMessage(e.message);setConnection(e.message,'bad')}}
 function pack(prefix,obj){return prefix+btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.
@@ -4266,7 +4452,7 @@ function setConnection(text,cls='warn'){linkText=text;linkCls=cls;paintLink()}
 function resetLink(){ghCheckpoint();$('#connectHint').textContent='';lobby=null;lobbyPending=null;lobbyDirty=false;lobbySettingsDirty=false;linkReady=false;gh.active=false;ghPendingPlan=null;ghIncomingCommit=null;clearTimeout(gh.retryTimer);gh.retryTimer=null;stopHandshake();clearTimeout(linkWatch);linkWatch=null;clearTimeout(dropGrace);dropGrace=null;clearTimeout(planAckTimer);planAckTimer=null;linkText='';linkCls='warn';if(pc){try{pc.close()}catch{}}pc=null;dc=null}
 function handshakeDone(){return linkReady}
 function stopHandshake(){if(handshakeTimer){clearInterval(handshakeTimer);handshakeTimer=null}}
-function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
+function startHandshake(){stopHandshake();handshakeTries=0;const beat=()=>{if(handshakeDone()||!dc||dc.readyState!=='open'){stopHandshake();return}if(handshakeTries++>=12){stopHandshake();setConnection('DIRECT LINK STALLED // The channel is open but the rival never completed the handshake. Exchange fresh codes.','bad');offerRelink();return}try{if(p2pRole==='guest')send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine});else send({type:'hello_request'})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}};beat();handshakeTimer=setInterval(beat,1500)}
 function armLinkWatch(){clearTimeout(linkWatch);linkWatch=setTimeout(()=>{if(!dc||dc.readyState!=='open'){setConnection('DIRECT LINK STALLED // The network connected but the game data channel never opened. This network is blocking direct browser traffic; try Intranet Room mode.','bad');offerRelink()}else if(!handshakeDone()){setConnection('DIRECT LINK STALLED // The channel is open but the rival has not answered. Exchange fresh codes.','bad');offerRelink()}},9000)}
 function newPeer(){if(!window.RTCPeerConnection)throw Error('This browser has disabled direct WebRTC connections. Use AI or Pass & Play.');const p=new RTCPeerConnection({iceServers:[]});p.onconnectionstatechange=()=>{if(p!==pc)return;const s=p.connectionState||'connecting',open=!!dc&&dc.readyState==='open';
  if(s==='disconnected'){if(!dropGrace)dropGrace=setTimeout(()=>{dropGrace=null;if(pc===p&&(p.connectionState==='disconnected'||p.connectionState==='failed'))linkLost('The direct link dropped and did not recover.')},12000);setConnection('DIRECT LINK UNSTEADY // waiting for it to recover','warn');return}
@@ -4281,7 +4467,7 @@ function startRejoin(){relinking=true;show('#startScreen');setMode('p2p');setSta
 function wireChannel(ch){dc=ch;const opened=()=>{clearTimeout(dropGrace);dropGrace=null;linkReady=false;setConnection('DIRECT LINK CONNECTED','good');if($('#rejoinBtn'))$('#rejoinBtn').classList.add('hidden');startHandshake()};dc.onopen=opened;dc.onclose=()=>{stopHandshake();setConnection('DIRECT LINK CLOSED','bad')};dc.onerror=e=>{const detail=e&&e.error&&e.error.message?` // ${e.error.message}`:'';setConnection(`DIRECT LINK ERROR${detail}`,'bad')};dc.onmessage=e=>{try{handleMessage(JSON.parse(e.data))}catch(err){console.error('Branch Wars could not process a direct-link message',err);setConnection(`DIRECT LINK MESSAGE REJECTED // ${err.message||err}`,'bad');toast(`Direct-link message could not be processed: ${err.message||err}`)}};if(dc.readyState==='open')opened()}
 function send(msg){if(gh.active){ghSend(msg);return}if(lan.active){lanSend(msg);return}if(!dc||dc.readyState!=='open')throw Error(`The direct link is not connected (channel ${dc?dc.readyState:'missing'}).`);dc.send(JSON.stringify(msg))}
 async function createOffer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='host'&&!!game&&game.mode==='p2p');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='host';
- if(!rejoin||!p2pConfig)p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
+ if(!rejoin||!p2pConfig)p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,color:$('#bankColor1').value,name:validName('#hostName'),scope:$('#hostScope').value,scenario:$('#hostScenario').value,doctrine:'community'};
  linkSession=(globalThis.crypto&&crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)).slice(0,12);
  pc=newPeer();wireChannel(pc.createDataChannel('branch-wars',{ordered:true}));await pc.setLocalDescription(await pc.createOffer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
@@ -4291,7 +4477,7 @@ async function createOffer(reconnect=false){try{setStartMessage('');rememberLanI
  $('#outCodeLabel').textContent='HOST INVITATION';$('#outCode').classList.remove('room-code');$('#outCode').value=pack('BW7-OFFER-',{sdp:withLocalAddress(pc.localDescription),config:p2pConfig,session:linkSession});
  $('#answerArea').classList.remove('hidden');setConnection('WAITING FOR RIVAL RESPONSE','warn')}catch(e){setStartMessage(e.message);show(game?'#gameScreen':'#startScreen')}}
 async function createAnswer(reconnect=false){try{setStartMessage('');rememberLanIp();const rejoin=reconnect||(p2pRole==='guest'&&!!view&&view.mode==='p2p');const invite=unpack($('#offerInput').value,'BW7-OFFER-');resetLink();if(!rejoin){game=null;view=null}mode='p2p';p2pRole='guest';
- p2pConfig={lobbyRequired:true,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
+ p2pConfig={lobbyRequired:true,segmentDepositsVersion:$('#segmentDeposits').checked?1:0,creditPerformanceVersion:$('#creditPerformance').checked?1:0,customerOwnershipVersion:$('#householdOwnership').checked?1:0,workforceVersion:$('#specialistWorkforce').checked?1:0,customerDemandVersion:$('#customerNeeds').checked?2:0,managementVersion:$('#institutionManagement').checked?2:0,serviceExpansionVersion:$('#serviceExpansion').checked?1:0,campaignRulesVersion:$('#rivalryPilot').checked?1:undefined,...invite.config,color:$('#bankColor1').value,guestName:rejoin&&p2pConfig&&p2pConfig.guestName?p2pConfig.guestName:validName('#guestName'),doctrine:'commercial'};linkSession=invite.session||'';
  pc=newPeer();pc.ondatachannel=e=>wireChannel(e.channel);await pc.setRemoteDescription(invite.sdp);await pc.setLocalDescription(await pc.createAnswer());
  show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#outCode').value='';$('#answerInput').value='';$('#copyStatus').textContent='';setConnection('MAPPING NETWORK ROUTES','warn');
  await waitIce(pc,n=>setConnection(`MAPPING NETWORK ROUTES // ${n} found`,'warn'));
@@ -4310,6 +4496,7 @@ function handleMessage(m){
  if(!m||typeof m!=='object')return;
  if(p2pRole==='host'){
   if(m.type==='hello'){
+   if(((game&&game.segmentDepositsVersion)||(!game&&p2pConfig.segmentDepositsVersion))&&m.segmentDepositsSupported!==1){send({type:'error',message:'Segment deposits requires the updated game on both computers.'});setConnection('SEGMENT DEPOSITS LINK REFUSED','bad');return}
    if(((game&&game.creditPerformanceVersion)||(!game&&p2pConfig.creditPerformanceVersion))&&m.creditPerformanceSupported!==1){send({type:'error',message:'Credit performance requires the updated game on both computers.'});setConnection('CREDIT LINK REFUSED','bad');return}
    if(((game&&game.customerOwnershipVersion)||(!game&&p2pConfig.customerOwnershipVersion))&&m.customerOwnershipSupported!==1){send({type:'error',message:'Household ownership requires the updated game on both computers.'});setConnection('HOUSEHOLD LINK REFUSED','bad');return}
    if(((game&&game.workforceVersion)||(!game&&p2pConfig.workforceVersion))&&m.workforceSupported!==1){send({type:'error',message:'Specialist workforce requires the updated game on both computers.'});setConnection('WORKFORCE LINK REFUSED','bad');return}
@@ -4329,7 +4516,7 @@ function handleMessage(m){
   if(m.type==='rematch'){try{E.rematch(game,1);syncPeers()}catch(e){try{send({type:'error',message:e.message})}catch{}}return}
   return
  }
- if(m.type==='hello_request'){try{send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
+ if(m.type==='hello_request'){try{send({type:'hello',lobbySupported:1,pilotSupported:11,managementSupported:1,relationshipSupported:1,customerDemandSupported:2,segmentDepositsSupported:1,creditPerformanceSupported:1,customerOwnershipSupported:1,workforceSupported:1,color:p2pConfig.color,name:p2pConfig.guestName,doctrine:p2pConfig.doctrine})}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}
  if(m.type==='lobby'){receiveLobby(m);return}
  if(m.type==='state'){if(!view&&p2pConfig&&p2pConfig.lobbyRequired&&!lobby){$('#connectHint').textContent='The host skipped the lobby. Both players need this updated game file.';setConnection('LOBBY REQUIRED // Update the host game before starting.','bad');toast('The host skipped the lobby. Both players need this updated build.');return}linkReady=true;stopHandshake();clearTimeout(planAckTimer);planAckTimer=null;view=m.state;if(ghPendingPlan&&(view.gameOver||view.cycle!==ghPendingPlan.cycle))ghPendingPlan=null;if(ghPendingPlan&&ghPendingPlan.recallRequested&&!view.me.submitted&&!view.rival.submitted)ghPendingPlan=null;if(gh.active&&ghPendingPlan&&view.rival.submitted)ghRevealPlan();if(ghPendingPlan)view.me.submitted=true;if(!lan.active&&!gh.active)mode='p2p';setConnection(gh.active?`REPOSITORY ROOM ${gh.room} // LINKED`:lan.active?`ROOM ${lan.room} // CONNECTED`:'DIRECT LINK CONNECTED','good');if($('#gameScreen').classList.contains('hidden')&&$('#gameOver').classList.contains('hidden'))enterGame(true);else render();return}
  if(m.type==='error'){if(!game&&!view){$('#connectHint').textContent=m.message;setConnection(m.message,'bad');if($('#lobbyError'))$('#lobbyError').textContent=m.message;toast(m.message);return}if(gh.active&&m.code==='plan_rejected')ghPendingPlan=null;clearTimeout(planAckTimer);planAckTimer=null;if(view&&view.me&&view.me.submitted){view.me.submitted=false;render()}if($('#submitMsg'))$('#submitMsg').textContent=`THE HOST REJECTED THAT PLAN // ${m.message}`;toast(m.message);return}
@@ -4595,6 +4782,7 @@ function renderWorkforce(v) {
   $('#workforceReserve').addEventListener('change', policy);
 }
 let selectedHouseholdMarket = null;
+let householdWorkspace = 'service';
 function stageHouseholdPolicy(v, retention, priority) {
   if (!draft || v.me.submitted || !v.me.householdBook) return false;
   const next = JSON.parse(JSON.stringify(draft));
@@ -4626,18 +4814,35 @@ function renderHouseholds(v) {
     return `<tr><th>${esc(E.CUSTOMER_SEGMENTS[r.segment].name)}<div class="household-share" role="img" aria-label="Your owned share ${width.toFixed(1)} percent"><span style="width:${width}%"></span></div><small>${width.toFixed(1)}% owned · not map influence</small></th><td>${count(r.count)}<small>Rival ${count(rival)}<br>Outside ${count(outside)}</small></td><td>${r.demand.toFixed(2)}<small>${E.HOUSEHOLD_SERVICE[r.segment]} workload units per 900 households, before local relief</small></td><td class="${r.coverage < 1 ? 'warn' : 'good'}">${pct(r.coverage)}<small>${r.assigned.toFixed(2)} effective bankers reserved</small></td><td>${r.current} → ${r.next}<small>Local product fit ${pct(r.fit)} · ${r.departures} opening-book departures forecast</small></td></tr>`;
   }).join('');
   const previous = report?.rows[key];
+  const accountsVisible = p.segmentDeposits && householdWorkspace === 'deposits';
+  const deposits = accountsVisible ? renderSegmentDeposits(v,key,rows) : '';
+  const workspace = p.segmentDeposits ? `<div class="household-switch" role="group" aria-label="Customer workspace"><button id="householdServiceView" aria-pressed="${!accountsVisible}">Service &amp; retention</button><button id="householdDepositView" aria-pressed="${!!accountsVisible}">Deposit accounts</button></div>` : '';
   $('#householdPanel').innerHTML = `
     <div class="section-head"><div><h2>CUSTOMERS &amp; RETENTION</h2><p class="small muted">Own relationships. Decide whom to serve. Keep enough capacity to win the next customer.</p></div><span class="small">${esc(p.name)} · private service mandate</span></div>
     <div class="household-summary"><div><span>Owned household relationships</span><b>${count(total)}</b><small>Every household belongs to one bank or outside institution.</small></div><div><span>Retention / sales capacity</span><b>${review.capacity.toFixed(2)} / ${review.salesStaff.toFixed(2)}</b><small>Effective Retail bankers. Training upgrades add retention capacity separately.</small></div><div><span>Opening-book departures forecast</span><b>${count(atRisk)}</b><small>${report ? 'Last month: ' + count(report.departed) + ' left; ' + money(report.depositOutflow) + ' deposit outflow.' : 'No completed month yet. Neglect erodes goodwill before customers leave.'}</small></div></div>
-    <section class="household-mandate"><h3>RECURRING SERVICE MANDATE</h3><label for="householdRetention">Retail time reserved for existing households<select id="householdRetention" ${disabled}>${[25, 50, 75, 100].map(n => `<option value="${n}" ${policy.retention === n ? 'selected' : ''}>${n}% retention / ${100 - n}% acquisition</option>`).join('')}</select></label><p class="small">Changing this split adds no staff or salary. More retention leaves less banker-led acquisition. Offices still provide their existing sales reach. Current bank-wide demand: <b>${review.demand.toFixed(2)}</b> effective bankers; total coverage <b>${pct(review.coverage)}</b>. Coverage can differ sharply by segment.</p><div class="household-priorities">${priorities}</div><p class="micro muted">Priority allocates your limited retention time in proportion to workload; it does not add capacity. Zero priority abandons that segment's servicing. Unused time in an over-served segment is not automatically reassigned. Policies persist after submission; new recruits still arrive next month.</p></section>
+    ${workspace}
+    <section class="household-mandate ${accountsVisible ? 'hidden' : ''}"><h3>RECURRING SERVICE MANDATE</h3><label for="householdRetention">Retail time reserved for existing households<select id="householdRetention" ${disabled}>${[25, 50, 75, 100].map(n => `<option value="${n}" ${policy.retention === n ? 'selected' : ''}>${n}% retention / ${100 - n}% acquisition</option>`).join('')}</select></label><p class="small">Changing this split adds no staff or salary. More retention leaves less banker-led acquisition. Offices still provide their existing sales reach. Current bank-wide demand: <b>${review.demand.toFixed(2)}</b> effective bankers; total coverage <b>${pct(review.coverage)}</b>. Coverage can differ sharply by segment.</p><div class="household-priorities">${priorities}</div><p class="micro muted">Priority allocates your limited retention time in proportion to workload; it does not add capacity. Zero priority abandons that segment's servicing. Unused time in an over-served segment is not automatically reassigned. Policies persist after submission; new recruits still arrive next month.</p></section>
     <div class="household-market"><label for="householdMarket">INSPECT A MARKET<select id="householdMarket">${Object.entries(v.territories).map(([k, t]) => `<option value="${k}" ${key === k ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></label><p class="micro muted">Inspection does not change the plan's focus market. Retail offices ease Everyday workload; digital offices ease Connected workload; service upgrades help all local segments.</p></div>
-    <div class="table-scroll"><table class="regional-table"><thead><tr><th>Segment &amp; owned share</th><th>Relationships</th><th>Service demand</th><th>Draft coverage</th><th>Goodwill / retention</th></tr></thead><tbody>${table}</tbody></table></div>
-    <p class="small">${previous ? 'Last completed month in this market: ' + count(Object.values(previous.departures).reduce((a, b) => a + b, 0)) + ' service-related departures and ' + money(previous.depositOutflow) + ' withdrawable deposits returned to outside institutions.' : 'Actual local departures will appear after the first month.'}</p>
-    <details><summary>What these numbers mean</summary><p class="small">The household counts above are conserved across both players, community banks and credit unions. Sales, raids and acquisitions transfer existing people; changing the offer mix never rewrites who you already serve. Goodwill below 45 triggers gradual departures, capped at 1.5% of a segment per month; adequate service reduces that rate by 60% while rebuilding trust.</p><p class="small">Deposit accounts are still pooled by market, not assigned to individual households or segments. Departures withdraw a local-average deposit estimate, capped to unlocked balances; term deposits stay locked. Outflows move cash and deposits together, not operating profit. Funding sales may realize losses. Product-fit figures use the existing local deposit mix, not the sales mix you just selected. This is not yet individual household finance, cross-selling or loan delinquency.</p><p class="micro muted">Forecasts use the current book and draft staffing. Executive events, rival moves and new customers can change the final month. Aggregate bank coverage is not a promise that every segment is adequately served.</p></details>`;
+    <div class="table-scroll ${accountsVisible ? 'hidden' : ''}"><table class="regional-table"><thead><tr><th>Segment &amp; owned share</th><th>Relationships</th><th>Service demand</th><th>Draft coverage</th><th>Goodwill / retention</th></tr></thead><tbody>${table}</tbody></table></div>
+    <p class="small">${previous ? 'Last completed month in this market: ' + count(Object.values(previous.departures).reduce((a, b) => a + b, 0)) + ' service-related departures and ' + money(previous.depositOutflow) + ' withdrawable deposits returned to outside institutions.' : 'Actual local departures will appear after the first month.'}${p.segmentDeposits && p.operatingReport ? ' Bank-wide former-customer term payouts last month: '+money(p.operatingReport.termDepartures)+'.' : ''}</p>
+    ${deposits}
+    <details><summary>What these numbers mean</summary><p class="small">The household counts above are conserved across both players, community banks and credit unions. Sales, raids and acquisitions transfer existing people; changing the offer mix never rewrites who you already serve. Goodwill below 45 triggers gradual departures, capped at 1.5% of a segment per month; adequate service reduces that rate by 60% while rebuilding trust.</p><p class="small">${p.segmentDeposits ? 'Deposit balances belong to segments, with separate product terms. Departures withdraw that segment’s unlocked average; their locked share is marked for payout at maturity, even with automatic renewal selected.' : 'Deposit accounts are still pooled by market, not assigned to individual households or segments. Departures withdraw a local-average deposit estimate, capped to unlocked balances; term deposits stay locked.'} Outflows move cash and deposits together, not operating profit. Funding sales may realize losses. Product-fit figures use the existing local deposit mix, not the sales mix you just selected. This is not individual household finance or cross-selling.</p><p class="micro muted">Forecasts use the current book and draft staffing. Executive events, rival moves and new customers can change the final month. Aggregate bank coverage is not a promise that every segment is adequately served.</p></details>`;
+  if(p.segmentDeposits){$('#householdServiceView').addEventListener('click',()=>{householdWorkspace='service';renderHouseholds(v)});$('#householdDepositView').addEventListener('click',()=>{householdWorkspace='deposits';renderHouseholds(v)});}
   $('#householdMarket').addEventListener('change', e => { selectedHouseholdMarket = e.target.value; renderHouseholds(v); });
   const update = () => stageHouseholdPolicy(v, Number($('#householdRetention').value), Object.fromEntries(Object.keys(E.CUSTOMER_SEGMENTS).map(s => [s, Number($('#household-' + s).value)])));
   $('#householdRetention').addEventListener('change', update);
   for (const s of Object.keys(E.CUSTOMER_SEGMENTS)) $('#household-' + s).addEventListener('change', update);
+}
+function renderSegmentDeposits(v,key,reviewRows) {
+  const d=E.segmentDepositSummary(v.me,v), rows=d.markets[key];
+  const dollars=n=>'$'+n.toLocaleString();
+  const total=Object.values(rows).reduce((n,r)=>n+r.principal,0);
+  return `<section class="household-mandate"><h3>SEGMENT DEPOSIT BOOK</h3><p class="small">Actual owned balances · ${money(total)} in this market. Rates and product promises follow the account, including when acquired from a rival.</p>
+    <div class="table-scroll"><table class="regional-table"><thead><tr><th>Segment</th><th>Owned / locked</th><th>Monthly interest</th><th>Fees / servicing</th><th>Direct funding cost</th><th>Departure exposure</th></tr></thead><tbody>${Object.entries(rows).map(([s,r])=>{
+      const review=reviewRows.find(x=>x.segment===s), out=review.count?Math.floor((r.principal-r.locked)*review.departures/review.count):0;
+      return `<tr><th>${esc(E.CUSTOMER_SEGMENTS[s].name)}<small>Average per active relationship ${review.count?money(Math.round((r.principal-r.exiting)/review.count)):'No active relationships'}</small></th><td>${money(r.principal)}<small>${money(r.locked)} locked</small></td><td>${dollars(r.interest)}</td><td>${dollars(r.fees)} / ${dollars(r.service)}<small>Includes allocated platform expense</small></td><td>${dollars(r.directCost)}<small>Interest + service − fees</small></td><td>${dollars(out)}<small>Opening-book withdrawal forecast<br>${money(r.exiting)} already scheduled at term maturity</small></td></tr>`;
+    }).join('')}</tbody></table></div><p class="micro muted">Current-book monthly run rate, not full segment profit: excludes lending income, shared payroll, office costs, onboarding and event adjustments. One primary-account fee equivalent per active relationship, allocated across its segment's products; not one charge per product. Bank-wide idle product platforms: ${money(d.centralPlatform)}. Opening balances use fictional 1 : 1.5 : 4 Everyday / Connected / Reserve weights. Counts and balances can move separately through top-ups and competitive actions.</p>
+    <details><summary>Products owned by each segment</summary><div class="table-scroll"><table class="regional-table"><thead><tr><th>Segment</th><th>Essential</th><th>Rewards</th><th>High-yield</th><th>Term</th></tr></thead><tbody>${Object.keys(rows).map(s=>`<tr><th>${esc(E.CUSTOMER_SEGMENTS[s].name)}</th>${['essential','rewards','highYield','term'].map(product=>`<td>${money(v.me.depositBook.cohorts.filter(c=>c.market===key&&c.segment===s&&(c.locked?'term':c.product)===product).reduce((n,c)=>n+c.principal,0))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details></section>`;
 }
 function creditMoney(n) { return Math.abs(n)<10000 ? '$'+Number(n).toLocaleString() : money(n); }
 let inspectedCreditMarket = null;

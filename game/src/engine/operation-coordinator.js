@@ -15,8 +15,10 @@ function operate(g, p, preview = false) {
       if (p.workforce) p._workforceCosts = workforceOperatingCosts(p);
       const retention = settleHouseholdRetention(g, p, preview);
       // Locked maturities precede promotion repricing; repayment precedes new lending.
-      const term = prepareTermFunding(g, p),
+      const termSequence = p.accounting?.sequence || 0;
+      const term = prepareTermFunding(g, p, preview),
         oldDepositWorld = depositWorld;
+      const termFundingLoss = p.segmentDeposits ? p.accounting.journal.filter(e=>e.id>termSequence&&e.source.startsWith('sell.')).reduce((n,e)=>n-e.earnings,0) : 0;
       if (p.depositBook) depositWorld = g;
       try {
         if (p.depositBook) repriceWithdrawableDeposits(g, p);
@@ -50,6 +52,7 @@ function operate(g, p, preview = false) {
         text += ' Household retention: ' + retention.departed + ' relationships left with $' + retention.depositOutflow.toLocaleString() + ' in withdrawable deposits; funding-sale losses $' + retention.fundingLoss.toLocaleString() + '.';
       }
       if (term) {
+        if(p.segmentDeposits){p.operatingReport.termDepartures=term.departed;p.operatingReport.termDepartureFundingLoss=termFundingLoss;p.operatingReport.fundingLoss+=termFundingLoss;text+=' Former-customer term maturities paid out $'+term.departed.toLocaleString()+' (not an expense).';}
         const { opened, renewed, released } = term;
         Object.assign(p.operatingReport, {
           termOpened: opened,
@@ -74,6 +77,7 @@ function operate(g, p, preview = false) {
     return text;
   });
 }
+
 
 // The transaction owns all temporary book/context state. Cohorts move before
 // accounting settlement; franchise quantities move afterward. Finally blocks

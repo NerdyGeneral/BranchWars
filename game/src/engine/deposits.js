@@ -6,12 +6,12 @@ function depositRate(p,g,product){
 }
 function compactDeposits(p){
  const grouped=new Map();
- for(const c of p.depositBook.cohorts){if(!c.principal)continue;const k=[c.market,c.product,c.remaining,c.rate,c.quotedCycle,!!c.locked].join('|');if(grouped.has(k))grouped.get(k).principal+=c.principal;else grouped.set(k,{...c})}
+ for(const c of p.depositBook.cohorts){if(!c.principal)continue;const k=[c.market,c.product,c.remaining,c.rate,c.quotedCycle,!!c.locked,c.segment||''].join('|');if(grouped.has(k)){grouped.get(k).principal+=c.principal;if(p.segmentDeposits)grouped.get(k).exiting+=c.exiting;}else grouped.set(k,{...c})}
  p.depositBook.cohorts=[...grouped.values()];
 }
-function takeDeposits(p,market,amount,includeLocked=false){
- const rows=p.depositBook.cohorts.filter(c=>c.market===market&&(includeLocked||!c.locked)),parts=marketSplit(amount,Object.fromEntries(rows.map((c,i)=>[i,c.principal]))),taken=[];
- for(const [i,n]of Object.entries(parts))if(n){taken.push({...rows[i],principal:n});rows[i].principal-=n}
+function takeDeposits(p,market,amount,includeLocked=false,segment=null){
+ const rows=p.depositBook.cohorts.filter(c=>c.market===market&&(includeLocked||!c.locked)&&(!segment||c.segment===segment)),parts=marketSplit(amount,Object.fromEntries(rows.map((c,i)=>[i,c.principal]))),taken=[];
+ for(const [i,n]of Object.entries(parts))if(n){const c=rows[i],exiting=p.segmentDeposits?Math.floor(c.exiting*n/c.principal):0;taken.push({...c,principal:n,...(p.segmentDeposits?{exiting}:{})});c.principal-=n;if(p.segmentDeposits)c.exiting-=exiting}
  compactDeposits(p);return taken;
 }
 function reconcileDeposits(p){
@@ -19,6 +19,7 @@ function reconcileDeposits(p){
  const g=depositWorld||marketContext||{economy:{rate:3.75}};
  for(const [market,m]of Object.entries(p.marketBook.markets)){
   const held=p.depositBook.cohorts.filter(c=>c.market===market).reduce((n,c)=>n+c.principal,0),difference=m.deposits-held,product=p.products.retail;
+  if(p.segmentDeposits&&difference)throw Error('Segment deposit books disagree with local balances');
   if(difference>0){const parts=p.retailLifecycle?marketSplit(difference,retailAcquisitionMix(p,g,market)):{[product]:difference};for(const [offered,n]of Object.entries(parts))if(n)p.depositBook.cohorts.push({market,product:offered,principal:n,remaining:offered==='highYield'?6:0,quotedCycle:g.cycle||p.depositBook.asOfCycle+1,rate:depositRate(p,g,offered)})}
   else if(difference<0)takeDeposits(p,market,-difference);
  }
@@ -28,6 +29,7 @@ const depositSync=syncAccounts;
 syncAccounts=function(p){depositSync(p);reconcileDeposits(p)};
 function depositSummary(p,g){
  if(!p.depositBook)return null;
+ if(p.segmentDeposits)return segmentDepositSummary(p,g);
  const rows=Object.fromEntries(Object.keys(DEPOSIT_SERVICE).map(k=>[k,{principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0}]));
  if(p.termFunding)rows.term={principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0};
  for(const c of p.depositBook.cohorts){const row=rows[c.locked?'term':c.product];row.principal+=c.principal;row.interest+=c.principal*(c.remaining>0?c.rate:depositRate(p,g,c.product))/1000000;if(c.remaining>0)row.guaranteed+=c.principal;if(c.remaining===1)row.renewing+=c.principal}
@@ -59,6 +61,7 @@ function repriceWithdrawableDeposits(g,p){
 }
 const depositTransfer=transferMarket;
 transferMarket=function(g,from,to,...args){
+ if(from.segmentDeposits&&args[1]==='deposits')return transferSegmentDeposits(g,from,to,args[0],args[2]);
  const old=depositWorld;depositWorld=g;
  try{const n=depositTransfer(g,from,to,...args);reconcileDeposits(from);reconcileDeposits(to);return n}finally{depositWorld=old}
 };
