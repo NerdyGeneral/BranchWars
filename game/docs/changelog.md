@@ -23,6 +23,8 @@
 - Real two-computer acceptance pending; release candidate, not stable certification.
 - Hosted Linux run 21 reached its 15-minute job limit during passing regressions.
   Increased that allowance to 30 minutes; no test was removed or skipped.
+- The hosted Windows sample took 14.4 minutes versus 5.6 locally for the same
+  tests. Its full-job allowance is 90 minutes; existing per-test limits remain.
 
 ## V2 Connected Company Banking — September 7, 2026
 
