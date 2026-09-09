@@ -65,11 +65,18 @@ function facilityInvestmentReview(g,index,input,request){
  for(const [stage,draft]of [['current',plan],['construction',duringPlan]]){
   const authorized=departmentFunctionsQuote(g,p,draft);
   if(!authorized.status.eligible)return {...reject(stage+': '+authorized.status.reason),quote};
+  // A conversion and a new renovation can each quote successfully in
+  // isolation but cannot occupy the same local market. Keep the selected
+  // maintenance/work orders; reject the counterfactual before forecasting it.
+  const lifecycle=lifecycleInstructionQuote(g,p,draft);
+  if(!lifecycle.status.eligible)return {...reject(stage+': '+lifecycle.status.reason),quote};
  }
  const future=facilityInvestmentFutureOwner(g,p,plan,quote);
  if(future.status&&!future.status.eligible)return {...reject('activation: '+future.status.reason),quote};
  const authorized=departmentFunctionsQuote(g,future.owner,future.plan);
  if(!authorized.status.eligible)return {...reject('activation: '+authorized.status.reason),quote};
+ const lifecycle=lifecycleInstructionQuote(g,future.owner,future.plan);
+ if(!lifecycle.status.eligible)return {...reject('activation: '+lifecycle.status.reason),quote};
  const forecast=(owner,draft)=>operatingPreview({...owner,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
   before=forecast(p,plan),during=forecast(p,duringPlan),after=forecast(future.owner,future.plan);
  for(const report of [during,after])if(report.capitalRatio<10||report.profit-(report.fundingLoss||0)<=0||

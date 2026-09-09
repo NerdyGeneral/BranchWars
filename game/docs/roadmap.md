@@ -7,6 +7,13 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Follow-up checkpoint: actual Regulatory month92 planning/replay now covers
+conflicting renovation and conversion proposals. Group7 local expansion also
+respects existing paid renovations. The current budget warning has been visually
+inspected at month121. New exact-snapshot480-month runs are in progress; these
+repairs do not close the balance matrix, final Windows gate or packaging tasks.
+The preserved V3 Rate baseline failed at month227 and remains failure evidence.
+
 Current V3.1 checkpoint: real month120 regression now covers a funded hire
 surviving the complete AI pipeline and ordinary settlement, not just a hiring
 helper. Workload-preserving reassignment and post-obligation conversion staffing

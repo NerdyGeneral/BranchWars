@@ -2,6 +2,16 @@
 
 ## Local V3.1 candidate — in progress, not published
 
+- Reject mutually conflicting renovation/conversion counterfactuals before
+  operating forecasts. Preserve selected work and use shared lifecycle rules.
+- Group7 AI no longer proposes new local branch projects over existing paid
+  renovations; prior campaign planning remains behind its compatibility boundary.
+- Pin the genuine month92 failed campaign and verify normal AI settlement and
+  exact replay. Preserve the separate V3 month227 failure as baseline evidence.
+- Improve the protected-budget warning's contrast after actual browser review;
+  record strategy identity and correct simultaneous credit allocations in the
+  long-campaign characterization harness. No balance prices or resources changed.
+
 - Preserve Group1–6 campaigns; new optional Financial Group campaigns use
   Group7/save9.6, with explicit peer compatibility and no automatic save upgrade.
 - Add funded outside-provider cash circulation through paired accounting books.

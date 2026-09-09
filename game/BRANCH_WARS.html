@@ -91,6 +91,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 </style>
 <style id="planning-repair-ui">
 .plan-budget{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:9px;font-size:.75rem}.plan-budget>span{white-space:nowrap}.plan-budget details{flex-basis:100%;color:#63738a}.plan-budget details>div{max-width:900px;margin-top:5px}
+.plan-budget .budget-reserve-warning{flex-basis:100%;padding:7px 10px;border-left:3px solid #b7791f;background:#fff6df;color:#805400;font-size:.8rem;line-height:1.5}
 .operating-preview{margin-top:14px;border-top:1px solid #d4deea;padding-top:10px}.operating-preview h3{font-size:.8rem;margin:0 0 8px}.forecast-table{width:100%;border-collapse:collapse;font-size:.74rem}.forecast-table th,.forecast-table td{padding:7px 4px;text-align:right;border-bottom:1px solid #e5eaf0}.forecast-table th:first-child,.forecast-table td:first-child{text-align:left}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.report-grid>div{background:#f3f7fb;padding:8px;border-radius:7px}.report-grid span{display:block;font-size:.66rem;color:#60738b}.report-grid b{font-size:.87rem}
 .fund-next{padding:6px 9px;border:1px solid #b7cde4;border-radius:7px;background:#fff;font-size:.72rem}
 .workspace-view,.game-layout{scroll-margin-top:100px}
@@ -7797,6 +7798,11 @@ function planFacilityNetwork(g,index,plan,selectConversion=true) {
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
   let occupied=p.projects.some(project=>project.target===plan.focus&&local(project.key))||
     FacilityNetwork.pending(p).some(office=>office.market===plan.focus);
+  // Group7 also reserves the local site for already-paid renovation work.
+  // Earlier campaign planners remain unchanged; human orders stay strict.
+  if(g.financialGroupVersion===7&&p.facilityLifecycle)occupied=occupied||
+    p.facilityNetwork.offices.some(office=>office.closedCycle===null&&office.market===plan.focus&&
+      p.facilityLifecycle.records[office.id].renovation&&office.id!==plan.facilityLifecyclePolicy?.cancel);
   plan.newProjects=planInitiatives(plan).filter(key=>{
     if(!local(key))return true;
     if(occupied)return false;
@@ -10205,11 +10211,18 @@ function facilityInvestmentReview(g,index,input,request){
  for(const [stage,draft]of [['current',plan],['construction',duringPlan]]){
   const authorized=departmentFunctionsQuote(g,p,draft);
   if(!authorized.status.eligible)return {...reject(stage+': '+authorized.status.reason),quote};
+  // A conversion and a new renovation can each quote successfully in
+  // isolation but cannot occupy the same local market. Keep the selected
+  // maintenance/work orders; reject the counterfactual before forecasting it.
+  const lifecycle=lifecycleInstructionQuote(g,p,draft);
+  if(!lifecycle.status.eligible)return {...reject(stage+': '+lifecycle.status.reason),quote};
  }
  const future=facilityInvestmentFutureOwner(g,p,plan,quote);
  if(future.status&&!future.status.eligible)return {...reject('activation: '+future.status.reason),quote};
  const authorized=departmentFunctionsQuote(g,future.owner,future.plan);
  if(!authorized.status.eligible)return {...reject('activation: '+authorized.status.reason),quote};
+ const lifecycle=lifecycleInstructionQuote(g,future.owner,future.plan);
+ if(!lifecycle.status.eligible)return {...reject('activation: '+lifecycle.status.reason),quote};
  const forecast=(owner,draft)=>operatingPreview({...owner,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
   before=forecast(p,plan),during=forecast(p,duringPlan),after=forecast(future.owner,future.plan);
  for(const report of [during,after])if(report.capitalRatio<10||report.profit-(report.fundingLoss||0)<=0||
@@ -12345,7 +12358,7 @@ function renderPlanBudget(v){
   const protection=v.me.facilityLifecycle?E.facilityLifecycleProtectedBudget(v.me,draft,q):null,spendingRoom=protection?protection.remaining:q.discretionaryRemaining;
   const accrued=v.me.accounting.accounts.payables||0,unfunded=Math.max(0,accrued+q.mandatoryObligations-q.cash);
   $('#planBudget').innerHTML=`<span>Committed · full plan <b>${money(q.total)}</b></span><span>${protection?'Optional spending room after protected reserves':'Optional spending room after this plan'} <b class="${spendingRoom<0?'bad':''}">${money(spendingRoom)}</b></span><span>Existing monthly obligations <b>${money(q.mandatoryObligations)}</b></span><span>Already accrued payables <b>${money(accrued)}</b></span><span>Execution <b class="${q.freeCapacity<0?'warn':''}">${q.load.toFixed(1)} / ${q.capacity.toFixed(1)}</b></span><span>New base payroll <b>${money(q.basePayrollAdded)}/cycle</b>${v.me.workforce?' + specialist premiums <b>'+money(q.specialistPayrollAdded)+'/cycle</b>':''}</span>
-   ${protection?'<div class="'+(protection.remaining<0?'warn':'micro muted')+'" role="status">Protected cash reserve '+money(protection.reserve)+' (the higher Workforce or department reserve). '+(protection.remaining<0?'Current optional commitments exceed that protected envelope by '+money(-protection.remaining)+'. Reduce optional commitments or explicitly review Workforce: Bank-wide cash reserve and Leadership &amp; budgets: Common discretionary cash reserve.':'This spending room includes the shared cash reserve, capital limit and existing obligations.')+' Changing a reserve does not add cash.</div>':''}
+   ${protection?'<div class="'+(protection.remaining<0?'budget-reserve-warning':'micro muted')+'" role="status">Protected cash reserve '+money(protection.reserve)+' (the higher Workforce or department reserve). '+(protection.remaining<0?'Current optional commitments exceed that protected envelope by '+money(-protection.remaining)+'. Reduce optional commitments or explicitly review Workforce: Bank-wide cash reserve and Leadership &amp; budgets: Common discretionary cash reserve.':'This spending room includes the shared cash reserve, capital limit and existing obligations.')+' Changing a reserve does not add cash.</div>':''}
    ${accrued||unfunded?'<div class="warn" role="status">Obligations remain owed. Already accrued '+money(accrued)+'; unfunded from current cash '+money(unfunded)+'. Unpaid compensation accrues as a liability; it is not forgiven and does not create optional spending money.</div>':''}
    <details><summary>Spending & timing</summary><div>Initiatives ${money(q.projects)} · Research ${money(q.research)} · Reserved training ${money(q.training||0)} · Recruiting ${money(q.recruiting)} · Competition ${money(q.action)} · Leadership ${money(q.departmentLeadership)} · Office conversion ${money(q.facilityConversion||0)}${q.facilityLifecycle!==undefined?' · Facility maintenance + renovation '+money(q.facilityLifecycle):''}${q.departmentFunctions!==undefined?' · Department vendor work '+money(q.departmentFunctions):''} · Product retirement ${money(q.productRetirement||0)} · Advertising ${money(q.advertising||0)} · Relationship conversions ${money(q.relationshipOffers||0)} · Onboarding ${money(q.onboarding||0)}.</div><div>Optional commitments ${money(q.discretionaryCommitments)}; cash room before those commitments ${money(q.discretionaryCashAvailable)}, capital-safe room ${money(q.discretionaryCapitalAvailable)}. Both subtract existing obligations; cash room also subtracts accrued payables.</div><div>Full-plan remaining before accrual ${money(q.remaining)}. Existing compensation may remain payable when cash is insufficient, but new discretionary appointments and spending still require funding. No operating income, event effects or rival actions are assumed here.</div>${q.freeCapacity<0?'<div class="warn">Existing work may stall with this staffing allocation.</div>':''}</details>`;
   return;

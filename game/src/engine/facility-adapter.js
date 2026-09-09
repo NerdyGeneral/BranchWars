@@ -256,6 +256,11 @@ function planFacilityNetwork(g,index,plan,selectConversion=true) {
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
   let occupied=p.projects.some(project=>project.target===plan.focus&&local(project.key))||
     FacilityNetwork.pending(p).some(office=>office.market===plan.focus);
+  // Group7 also reserves the local site for already-paid renovation work.
+  // Earlier campaign planners remain unchanged; human orders stay strict.
+  if(g.financialGroupVersion===7&&p.facilityLifecycle)occupied=occupied||
+    p.facilityNetwork.offices.some(office=>office.closedCycle===null&&office.market===plan.focus&&
+      p.facilityLifecycle.records[office.id].renovation&&office.id!==plan.facilityLifecyclePolicy?.cancel);
   plan.newProjects=planInitiatives(plan).filter(key=>{
     if(!local(key))return true;
     if(occupied)return false;

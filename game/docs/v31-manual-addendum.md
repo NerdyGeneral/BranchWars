@@ -80,6 +80,18 @@ third-party insurers: this is not permission for your bank to underwrite insuran
 
 ## Friend-playtest checklist — not yet accepted
 
+Facility planning reminder: a local market cannot simultaneously host conflicting
+construction, conversion and renovation work. The new AI respects already-paid
+renovations before proposing another local initiative. Its investment preview
+also rejects a conversion that conflicts with its selected renovation; it does
+not cancel the renovation or obtain extra execution capacity.
+
+The protected-budget warning now has stronger contrast. Workforce reserve edits
+and the department form are separate controls: the common protection uses the
+higher staged value. Department form changes require **Stage limits and leader
+orders**. Check the budget strip after changing either; neither control creates
+cash or removes existing obligations.
+
 - Use the same candidate build on two different computers; start a GitHub room,
   confirm distinct bank identities/colors, committed options and readiness.
 - Submit several simultaneous turns and compare month, shared results and balance

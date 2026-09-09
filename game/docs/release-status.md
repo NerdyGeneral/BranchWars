@@ -2,6 +2,18 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Latest checkpoint: Group7 rejects conflicting renovation/conversion forecasts
+and reserves occupied renovation sites before proposing branch initiatives.
+The real month92 failure/replay regression passes; the preserved V3 Rate baseline
+also exposed a month227 branch/renovation conflict. Neither failed480 run counts
+as completion. Fresh Balanced/Rate/Regulatory480 runs now use portable
+`682d982e6f82e900539da5261adb77aaf3dbcc7d194731c3e57460e84934d943`.
+The protected-budget layout was inspected in the actual browser at month121,
+with a higher-contrast warning. Broader matrix, final Windows gate and export
+remain unfinished. Current work is local on `feat/v3.1-cash-repair`; original
+V3.1 worktree and diagnostic evidence are preserved. See the latest follow-up
+in [the stability report](v31-stability-report.md) for evidence and limits.
+
 This local candidate starts from published V3 commit
 `ee37b6865af71be20c35ac3b4f41b0519bf9d650`, on the separate
 `feat/v3.1-stability` worktree. The original development worktree, including its

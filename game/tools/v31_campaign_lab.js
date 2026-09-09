@@ -15,6 +15,7 @@ function metrics(E,g){
    creditorCash:g.companyEconomy.creditor.accounts.cash,bankCashPaid:g.companyEconomy.bankCashPaid,
    agencyCashNet:g.companyEconomy.agencyCashNet,circulation:g.companyEconomy.circulation||null},
   players:g.players.map(p=>({id:p.id,cash:p.stats.cash,capital:p.stats.capital,capitalRatio:E.capitalRatio(p),
+   doctrine:p.doctrine,primaryStrategy:p.primaryStrategy,capability:p.capability,strategy:p.strategy,products:p.products,
    deposits:p.stats.deposits,depositShare:deposits?p.stats.deposits/deposits:0,loans:p.stats.loans,
    profit:p.stats.lastProfit,emergencyDebt:p.stats.emergencyDebt,staff:p.stats.staff,allocation:p.allocation,
    morale:p.stats.morale,reputation:p.stats.reputation,attention:p.stats.attention,compliance:p.stats.compliance,
@@ -57,6 +58,7 @@ function run(){
  assert(source,'Expected a portable Branch Wars engine.');
  const context={console};vm.runInNewContext(source,context,{filename:sourcePath});const E=context.BWEngine;
  const scenario=arg('scenario')||'balanced',seed=arg('seed')||'department-A',months=Number(arg('months')||24),version=Number(arg('version')||6);
+ const difficulty=arg('difficulty')||'vp';assert(['analyst','vp','chairman'].includes(difficulty),'Unsupported AI strategy profile.');
  const name=arg('name');assert(name&&/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,100}$/.test(name),'A unique plain --name is required.');
  assert(['balanced','growth','rate','regulatory'].includes(scenario));assert(Object.hasOwn(E.SCENARIOS,scenario));
  assert(/^[\w.-]{1,80}$/.test(seed));assert(Number.isSafeInteger(months)&&months>0&&months<=480);
@@ -64,9 +66,9 @@ function run(){
  assert(!fs.existsSync(reportPath)&&!fs.existsSync(savePath),'Existing evidence must not be overwritten.');
  fs.mkdirSync(directory,{recursive:true});
  const identity={sourcePath,htmlSha256:hash(html),engineSha256:hash(source),harnessSha256:hash(fs.readFileSync(__filename))};
- const spec={scenario,seed,months,financialGroupVersion:version};
+ const spec={scenario,seed,months,financialGroupVersion:version,difficulty};
  const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:version}).options;
- const g=E.createGame({...options,financialGroupVersion:version,mode:'hotseat',scenario,seed,created:1});
+ const g=E.createGame({...options,financialGroupVersion:version,mode:'hotseat',scenario,seed,difficulty,created:1});
  assert.equal(g.financialGroupVersion,version);const participantFlags=g.players.map(p=>p.isBot);
  const timeline=[],timings=[],started=performance.now();let resolved=0,replays=0,error=null,pending=null,submittingSeat=null;
  console.log(JSON.stringify({stage:'start',identity,spec,reportPath}));
@@ -76,7 +78,7 @@ function run(){
   while(resolved<months&&!g.gameOver){
    const begin=performance.now();pending=g.players.map((p,i)=>E.chooseBot(g,i));const planned=performance.now();
    const choices=pending.map(q=>({allocation:q.allocation,hires:q.hires,specialistHires:q.specialistHires,
-    projects:q.newProjects,competitiveAction:q.competitiveAction,products:q.products,creditAllocation:q.creditAllocation,
+    projects:q.newProjects,competitiveAction:q.competitiveAction,products:q.products,creditAllocation:q.groupPolicy?.creditAllocation,
     leaderOrders:q.leaderOrders,facilityPolicy:q.facilityPolicy,facilityLifecyclePolicy:q.facilityLifecyclePolicy,
     departmentFunctionsPolicy:q.departmentFunctionsPolicy}));
    submittingSeat=0;E.submit(g,0,pending[0]);

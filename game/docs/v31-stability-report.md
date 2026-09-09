@@ -425,6 +425,58 @@ The older large month481 banks show positive commercial values. Neither finding
 justifies forcing conversions, granting staff or immediately reducing rent.
 No facility cost or workload formula was tuned in this repair.
 
+## Follow-up: local-site conflicts and actual budget layout
+
+The preserved V3 Rate480 baseline stopped after226 resolved months, on the
+second bank's month227 submission: a newly selected branch conflicted with an
+already-paid renovation in County Seat. Its original report and save remain
+under `BranchWars-v3.1/game/reports/qa/v31/v3-rich-rate-A-480.*`.
+This is a reproduced baseline defect, not a successful480-month result.
+
+The isolated cash-repair Regulatory480 candidate reached91 resolved months,
+then its month92 AI forecast combined a new renovation and a conversion at two
+offices in the same market. The genuine failing save is pinned as
+`tests/fixtures/v31-group7-regulatory91.json.gz`, SHA-256
+`d692c2e7839336b5c35a46314ab9bcc1f7ece56f95198bb72bcf926bd86bbcbf`.
+The investment review now checks combined lifecycle eligibility before forecasting
+construction/activation. It keeps the selected renovation, rejecting the conflicting
+conversion rather than cancelling work or bypassing the domain rule. The Group7
+local-project planner also respects existing renovations; older planners retain
+their prior behavior under the explicit compatibility boundary.
+
+The actual failure reproduces when only the new lifecycle guards are removed.
+The repaired full AI month, exact RNG/plan twin and half-ready replay pass.
+The earlier month58 cash regression, six-version one-month exact V3 comparison,
+funded valuation scenarios, protected-budget UI and existing facility-conflict
+tests also pass. These are scoped regression results, not final release acceptance.
+
+Current portable SHA-256:
+`682d982e6f82e900539da5261adb77aaf3dbcc7d194731c3e57460e84934d943`.
+Engine `9af035e8871fd9ae35f66603c8f54e518a67426606255f0bdfb3f823a5df063e`.
+The revised campaign harness records actual doctrine, capability/strategy levels,
+products and simultaneous credit allocations; `--difficulty` selects an existing
+AI profile, defaulting to the unchanged VP profile. It grants nothing and does
+not lock players into an invented strategy. Harness SHA-256:
+`1b64bebf6ee912d6961830cdcf82c81a9cadd0d297a33a00d3b6538476afe2d3`.
+Fresh Regulatory, Rate and Balanced480 runs are active against this immutable
+portable snapshot. Prior Growth480 remains useful diagnostic evidence, not an
+exact-current-build result. The complete matched matrix is still outstanding.
+
+Actual browser inspection on this portable imported the genuine Group7 month121
+save through Import Save and verified cycle, bank balances, the negative$25K
+protected spending room and disabled readiness. The expanded budget panel wraps
+without overlap at the observed1265-by713 viewport. Its pale warning was replaced
+with a scoped dark-amber/light-background warning and inspected again. Workforce
+navigation plus DOM observation took322ms in one concurrent desktop sample.
+This is not a paint-time distribution, whole-game UI audit or two-computer test.
+
+The department form's explicit Stage action was verified. Automated filling of
+the separate Workforce reserve field did not commit its change event: a later
+render restored its staged$600K value. Therefore the full browser reserve-edit
+interaction is not claimed as verified; the actual staging functions and shared
+budget calculation have additional isolated tests. No cash, rules or reserve
+defaults were changed by this presentation repair.
+
 ## Outstanding final gates
 
 1. Complete matched banking simulations and diagnose the candidate's remaining
