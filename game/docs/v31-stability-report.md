@@ -153,9 +153,18 @@ Legacy agency, institution and facility-lifecycle peer suites passed against the
 assembled source, retaining their explicit Group1–5 configurations. The setup
 suite passed opt-in defaults, confirmation/cancellation, stale revisions and
 modular import/export/Continue/rematch cases with the new maximum selection.
-Three 24-month candidate screens (growth, rate, regulatory / department-A) now
-run on immutable snapshot `412945e8…` with the activity-rich harness. They are
+Three 24-month candidate screens (growth, rate, regulatory / department-A)
+completed on immutable snapshot `412945e8…` with the activity-rich harness:
+all passed invariant checks and three exact half-ready replays apiece; all six
+companies remained active. Ending loan pairs were $3,121,095 / $3,083,211 (growth),
+$2,339,536 / $2,860,235 (rate), and $2,375,007 / $2,884,571 (regulatory). These are
 additional exploration, not substitutes for matched final long-campaign gates.
+
+The revised capital-reserve candidate `e12f882769361cf647bac0efed403948dcf5e358278f3e7684ee1e5cde838a6f`
+passed the recruitment refusal suite and the one-month Group1–7 boundary suite.
+Its balanced120 campaign is running as `v31-capital-reserve-balanced-A-120`.
+Other source-sensitive gates must be rerun on this later revision; prior hashes
+do not automatically certify it.
 
 ## Remaining release gates
 
