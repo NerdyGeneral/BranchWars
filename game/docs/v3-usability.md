@@ -360,3 +360,10 @@ were closed. Broader early/zoom/editor walkthroughs remain release work.
 Next: attention inbox, financial explanation/forecast/help integration, remaining
 workforce/planning polish and connected business workflows. All five batches and
 all 55 recommendations remain the goal; no entire batch or release is signed off.
+
+Frozen fourth-checkpoint verification: detached commit `07b0054` in
+`../output/v3-usability-checkpoint4`, exec session `88302`, log
+`../output/v3-usability-checkpoint4-fast.log`. The fast regression was confirmed
+running after build/reference/docs/architecture and early accounting checks.
+Keep this snapshot immutable and poll the same handle; final release acceptance
+still requires the complete finished build, not this intermediate checkpoint.
