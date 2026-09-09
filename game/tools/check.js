@@ -30,6 +30,7 @@ if (!args.includes('--full')) commands.push(...[
 'usability_people_workflows.test.js',
 'usability_navigation.test.js',
 'usability_bank_overview.test.js',
+'usability_help.test.js',
 'usability_engine_boundary.test.js',
 'v31_facility_conflicts.test.js',
 'v31_training_deferral.test.js',

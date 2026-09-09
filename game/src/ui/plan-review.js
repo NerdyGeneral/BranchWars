@@ -38,7 +38,8 @@ function navigatePlanReview(item){
  if(!target)return;
  for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
  if(item.tab==='workforce'&&item.id==='unstaged-leaders'&&$('#departmentDesk'))$('#departmentDesk').open=true;
- target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'center',behavior:'auto'});
+ if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);
+ else {target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'center',behavior:'auto'});}
 }
 function renderMonthlyPlanReview(v,review){
  const mount=$('#monthlyPlanReview');if(!mount)return;

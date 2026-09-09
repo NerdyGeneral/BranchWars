@@ -250,6 +250,9 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 /* Compact only campaign chrome; setup/lobby and business forms keep their space. */
 .shell:has(#gameScreen:not(.hidden))>.mast{padding:.5rem .9rem;margin-bottom:.4rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-mark{width:32px;height:32px;font-size:.9rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-sub,.shell:has(#gameScreen:not(.hidden))>.mast .mast-meta{display:none}#gameScreen>.panel:has(>.statusbar),#gameScreen>.panel:has(>.summary-grid){padding:.55rem .8rem;margin-bottom:.6rem}#gameScreen>.panel>.summary-grid{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.45rem}#gameScreen>.panel>.summary-grid .summary{min-height:55px;padding:.4rem .55rem}#gameScreen>.panel>.summary-grid .summary b{font-size:1rem}#gameScreen .workspace-nav{margin-bottom:.6rem}
 .plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.workspace-destinations{display:flex;align-items:center;gap:.7rem}.workspace-destinations .workspace-tabs{flex:1;min-width:0}.workspace-destinations>#gameHelpOpen{flex-shrink:0}
+.game-help-dialog{width:min(780px,calc(100vw - 2rem));max-height:calc(100dvh - 2rem);box-sizing:border-box;border:1px solid #9eafc5;border-radius:12px;background:#f7f9fc;color:#20354f;padding:1.1rem;box-shadow:0 15px 60px #142b4c55}.game-help-dialog[open]{display:flex;flex-direction:column}.game-help-dialog::backdrop{background:#12264188}.game-help-dialog .section-head{margin:0;gap:1rem}.game-help-dialog .section-head h2{font-size:1.1rem}.game-help-dialog>p{margin:.6rem 0;font-size:.9rem;line-height:1.45}.game-help-dialog>label{font-size:.9rem}.game-help-dialog>input{width:100%;box-sizing:border-box;min-height:42px;flex-shrink:0}.game-help-results{overflow:auto;min-height:80px;overscroll-behavior:contain;padding:.2rem .3rem .2rem 0}.game-help-topic{padding:.9rem;border:1px solid #c5d2e2;border-radius:8px;background:#fff;margin-bottom:.65rem}.game-help-topic h3{margin:0;font-size:1rem}.game-help-topic p{font-size:.95rem;line-height:1.55;margin:.5rem 0}.game-help-topic .micro{font-size:.82rem}.game-help-dialog :focus-visible{outline:3px solid #276fc1;outline-offset:3px}.contextual-help{margin:.3rem 0 .7rem}
+@media(max-width:700px){.workspace-destinations{flex-wrap:wrap}.workspace-destinations .workspace-tabs{flex-basis:100%}.workspace-destinations>#gameHelpOpen{width:100%}.game-help-dialog{padding:.8rem}.game-help-dialog .section-head{align-items:flex-start}.game-help-dialog .section-head h2{max-width:60%}}
 .attention-filters{display:flex;flex-wrap:wrap;gap:.5rem}.attention-filters [aria-pressed="true"]{background:#215f9f;color:#fff}.attention-list{list-style:none;padding:0;display:grid;gap:.65rem}.attention-item{display:flex;gap:1rem;align-items:center;justify-content:space-between;border:1px solid #cad6e4;border-left:4px solid #b0781c;border-radius:8px;padding:.75rem}.attention-item.is-required{border-left-color:#ba3545}.attention-item.is-upcoming{border-left-color:#307db9}.attention-kind{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:#51687f}.attention-item p{font-size:.9rem;line-height:1.5;margin:.3rem 0 0;max-width:90ch}.attention-item .btn{flex-shrink:0}.attention-clear{padding:1rem;background:#f2f7fa;border-radius:8px}.financial-overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.financial-overview-grid article{padding:.85rem;border:1px solid #cad6e4;border-radius:8px;background:#f5f8fc}.financial-overview-grid span,.financial-overview-grid b{display:block}.financial-overview-grid b{font-size:1.2rem;margin:.4rem 0}.financial-overview-grid p{font-size:.85rem;line-height:1.5;margin:0}.financial-explanation,#attentionInbox details{margin-top:.6rem}.financial-explanation summary,#attentionInbox summary,#monthlyReviewSummary{padding:.55rem 0;cursor:pointer}.financial-explanation p{max-width:100ch;font-size:.9rem;line-height:1.6}.attention-pagination{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem}
 @media(max-width:1000px){.financial-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.financial-overview-grid{grid-template-columns:1fr}.attention-item{align-items:flex-start;flex-direction:column}}
 .attention-filters .btn[aria-pressed="true"],.attention-filters .btn[aria-pressed="true"]:hover,.attention-filters .btn[aria-pressed="true"]:focus-visible{background:#215f9f;color:#fff;border-color:#215f9f}
@@ -342,7 +345,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
         <button type="button" data-workspace-group="operate" aria-pressed="false">Run the bank</button>
         <button type="button" data-workspace-group="grow" aria-pressed="false">Growth &amp; competition</button>
       </div>
-      <div id="workspaceTabs" class="workspace-tabs" role="tablist" aria-label="Bank &amp; finance workspaces">
+      <div class="workspace-destinations"><div id="workspaceTabs" class="workspace-tabs" role="tablist" aria-label="Bank &amp; finance workspaces">
         <button type="button" class="workspace-tab active" data-workspace-tab="overview">Overview<span>Position &amp; results</span></button>
         <button type="button" class="workspace-tab hidden" id="creditNav" data-workspace-tab="credit">Credit<span>Loan quality &amp; collections</span></button>
         <button type="button" id="financialGroupNav" class="workspace-tab hidden" data-workspace-tab="group">Financial Group<span>Capital &amp; subsidiaries</span></button>
@@ -355,6 +358,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
         <button type="button" class="workspace-tab" data-workspace-tab="competition" hidden>Competition<span>Actions &amp; defenses</span></button>
         <button type="button" class="workspace-tab" data-workspace-tab="intelligence" hidden>Intelligence<span>Threats &amp; scorecard</span></button>
       </div>
+      <button type="button" id="gameHelpOpen" class="btn">Help &amp; find controls</button></div>
     </nav>
     <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
     <section class="panel"><div class="readybar"><div><b>SIMULTANEOUS PLAN</b><div id="planChecklist" class="checklist muted"></div></div><div class="row"><button id="recallBtn" class="btn hidden">[ RECALL ]</button><button id="readyBtn" class="btn primary">[ MARK READY ]</button></div><span id="submitMsg" class="small muted"></span></div><details id="monthlyReviewDetails"><summary id="monthlyReviewSummary">Review this month · blockers, warnings &amp; changes</summary><div id="monthlyPlanReview" aria-label="Monthly plan review"></div></details></section>
@@ -377,7 +381,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
           <button id="operationsTab-projects" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-projects" tabindex="-1" data-operations-tab="projects">Projects &amp; hiring<span>Capacity &amp; commitments</span></button>
           <button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
         </div>
-        <p id="operationsDeskHint" class="small muted" role="status"></p>
+        <p id="operationsDeskHint" class="small muted" role="status"></p><button type="button" class="btn contextual-help" data-help-topic="planning">How monthly planning works</button>
       </div>
       <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-monthly" data-operations-panel="monthly">
           <section class="panel"><div class="event"><span class="micro muted">EXECUTIVE CALL // DECISION REQUIRED</span><strong id="eventName"></strong><div id="eventText"></div><div id="decisionGrid" class="decision-grid"></div></div></section>
@@ -420,6 +424,13 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
   <p id="featureSelectionExplanation" class="small">This selection also changes the systems below. Nothing changes until you confirm.</p>
   <ul id="featureSelectionAffected"></ul>
   <div class="row"><button id="featureSelectionCancel" type="button" class="btn">Cancel</button><button id="featureSelectionConfirm" type="button" class="btn primary">Confirm changes</button></div>
+</dialog>
+<dialog id="gameHelp" class="game-help-dialog" aria-labelledby="gameHelpTitle" aria-describedby="gameHelpDescription">
+  <header class="section-head"><h2 id="gameHelpTitle">Help &amp; find controls</h2><button id="gameHelpClose" type="button" class="btn">Close help</button></header>
+  <p id="gameHelpDescription">Start with a question or a system name. Available topics for your current workspace appear first. Disabled previews are explained, not enabled.</p>
+  <label for="gameHelpSearch">Search gameplay help</label><input id="gameHelpSearch" type="search" class="field" maxlength="200" autocomplete="off" placeholder="Try staff coverage, cash, research or connection">
+  <p id="gameHelpCount" class="small muted" role="status" aria-live="polite"></p>
+  <div id="gameHelpResults" class="game-help-results" tabindex="0" aria-label="Help topics"></div>
 </dialog>
 <script id="engine">
 (function(root){
@@ -11151,7 +11162,7 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
-function show(id){['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
 function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('')}
 const SETUP_FEATURE_IDS = Object.freeze({ financialGroupVersion: 'financialGroupPreview', campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'serviceExpansion',
@@ -11524,6 +11535,12 @@ const WORKSPACE_GROUPS=[
 ];
 let workspaceNavigationState={owner:null,campaign:null,remembered:{}};
 const workspaceNavigationBound=new WeakSet();
+function focusWorkspaceTarget(target){
+ if(!target)return;
+ const offset=typeof window!=='undefined'&&window.innerWidth>900?($('.workspace-nav')?.offsetHeight||0):0;
+ if(target.style)target.style.scrollMarginTop=(offset+16)+'px';
+ target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'start',behavior:'auto'});
+}
 function availableWorkspaces(v){
  const requirements={credit:'creditPerformance',group:'financialGroup',customers:'householdBook',products:'productPrograms',workforce:'workforce'};
  return WORKSPACE_GROUPS.flatMap(group=>group.tabs).filter(tab=>!requirements[tab]||!!v?.me?.[requirements[tab]]);
@@ -11533,10 +11550,10 @@ function selectWorkspaceGroup(id){
  if(!v||!group)return;
  reconcileWorkspaceNavigation(v);
  const available=availableWorkspaces(v),remembered=workspaceNavigationState.remembered[id];
- setWorkspaceTab(group.tabs.includes(remembered)&&available.includes(remembered)?remembered:group.tabs.find(tab=>available.includes(tab)));
- const selected=workspaceTab,owner=v.me.id,campaign=game;
+ setWorkspaceTab(group.tabs.includes(remembered)&&available.includes(remembered)?remembered:group.tabs.find(tab=>available.includes(tab)),v);
+ const selected=workspaceTab,owner=v.me.id,cycle=v.cycle,campaign=game||view,ownerSeat=seat;
  requestAnimationFrame(()=>{
-  if(workspaceTab!==selected||game!==campaign||currentView()?.me.id!==owner)return;
+  if(workspaceTab!==selected||(game||view)!==campaign||draftOwner!==owner||lastCycle!==cycle||seat!==ownerSeat)return;
   const target=selected==='strategy'?$('.game-layout'):$('[data-workspace="'+selected+'"].active');
   if(!target)return;
   target.style.scrollMarginTop=(window.innerWidth>900?$('.workspace-nav').offsetHeight+20:12)+'px';
@@ -11544,6 +11561,7 @@ function selectWorkspaceGroup(id){
  });
 }
 function reconcileWorkspaceNavigation(v){
+ if(typeof reconcileGameHelp==='function')reconcileGameHelp();
  const mount=$('#workspaceGroups');if(!mount)return;
  v=v||currentView();if(!v)return;
  // Hotseat banks do not inherit one another's navigation preferences. Nothing
@@ -11552,7 +11570,7 @@ function reconcileWorkspaceNavigation(v){
   workspaceNavigationState={owner:v.me.id,campaign:game,remembered:{}};
  }
  const available=availableWorkspaces(v);
- if(!available.includes(workspaceTab)){setWorkspaceTab('overview');return;}
+ if(!available.includes(workspaceTab)){setWorkspaceTab('overview',v);return;}
  const selected=WORKSPACE_GROUPS.find(group=>group.tabs.includes(workspaceTab));
  workspaceNavigationState.remembered[selected.id]=workspaceTab;
  const groups=$$('[data-workspace-group]');
@@ -11588,7 +11606,25 @@ function reconcileWorkspaceNavigation(v){
 function currentView(){return game?E.publicState(game,seat):view}
 function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle;if(typeof resetMonthlyChanges==='function')resetMonthlyChanges(v);if(typeof resetPeopleWorkspace==='function')resetPeopleWorkspace(v)}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
-function setWorkspaceTab(tab){reconcileOperationsWorkspace();const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));if(workspaceTab==='markets'&&draft&&currentView()){const marketView=currentView();renderFacilityNetwork(marketView);if(marketView.me.facilityLifecycle)renderFacilityLifecycle(marketView);}if(workspaceTab==='products'&&draft&&currentView())renderProductPrograms(currentView());if(workspaceTab==='credit'&&draft&&currentView())renderCollections(currentView());if(workspaceTab==='group'&&draft&&currentView())renderFinancialGroup(currentView());if(workspaceTab==='customers'&&draft&&currentView())renderHouseholds(currentView());if(workspaceTab==='workforce'&&draft&&currentView())renderWorkforce(currentView());if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation();if(workspaceTab==='overview'&&draft&&typeof renderBankOverview==='function'){const overview=currentView();if(overview)renderBankOverview(overview,monthlyPlanReview(overview));}}
+function setWorkspaceTab(tab,snapshot){
+ reconcileOperationsWorkspace();
+ const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];
+ workspaceTab=valid.includes(tab)?tab:'overview';
+ // Reuse one synchronous owner view throughout this navigation. Never cache it
+ // across turns, owners or callbacks; mature histories can be tens of MB.
+ let v=snapshot;const getView=()=>v===undefined?(v=currentView()):v;
+ $('#gameScreen').dataset.tab=workspaceTab;
+ $$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
+ $$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));
+ if(workspaceTab==='markets'&&draft&&getView()){renderFacilityNetwork(v);if(v.me.facilityLifecycle)renderFacilityLifecycle(v);}
+ if(workspaceTab==='products'&&draft&&getView())renderProductPrograms(v);
+ if(workspaceTab==='credit'&&draft&&getView())renderCollections(v);
+ if(workspaceTab==='group'&&draft&&getView())renderFinancialGroup(v);
+ if(workspaceTab==='customers'&&draft&&getView())renderHouseholds(v);
+ if(workspaceTab==='workforce'&&draft&&getView())renderWorkforce(v);
+ if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation(getView());
+ if(workspaceTab==='overview'&&draft&&typeof renderBankOverview==='function'&&getView())renderBankOverview(v,monthlyPlanReview(v));
+}
 // Lossless browser-storage envelope only. Campaign/export/wire schemas and
 // every ledger record remain unchanged. This checksum detects damage, not fraud.
 const storageCodecCache=new Map();
@@ -12871,7 +12907,7 @@ function renderPeopleOverview(v){
  const {w,f,tasks,pools}=model,short=tasks.filter(row=>row.shortfall>0),roles={service:'Retail & service',business:'Business banking',lending:'Lending',operations:'Operations & risk'},number=n=>Number(n.toFixed(3)).toLocaleString('en-US');
  const effects={offerSales:['Relationship offers','Less capacity to win additional customer products.'],commercialRelationships:['Commercial relationships','Less business and merchant acquisition capacity.'],householdSupport:['Household service','Service coverage and persistent customer goodwill can suffer.'],applicationProcessing:['Application processing','Fewer pending applications can activate; waiting customers can abandon.'],commercialDelivery:['Contract delivery','Signed service agreements receive less coverage.'],creditAdministration:['Credit administration','New lending is constrained; zero coverage pauses ordinary origination, not existing loan servicing.'],collections:['Collections','Delinquent loan servicing has less capacity.'],technology:['Technology','Platform service and disruption resilience are constrained.'],risk:['Risk & compliance','Credit controls and examination resilience are constrained.'],treasury:['Treasury','Locked-term deposit handling has less coverage.'],people:['People management','Paid training gains and management performance are constrained.']};
  const button=(key,label)=>'<button class="btn" type="button" data-people-desk="'+key+'">'+label+'</button>';
- mount.innerHTML='<header class="section-head"><div><h2>PEOPLE &amp; OPERATIONS</h2><p class="small">Who is available, which work is covered, and what needs your attention this month.</p></div></header><div class="people-summary">'+
+ mount.innerHTML='<header class="section-head"><div><h2>PEOPLE &amp; OPERATIONS</h2><p class="small">Who is available, which work is covered, and what needs your attention this month.</p></div><button type="button" class="btn" data-help-topic="coverage">How coverage works</button></header><div class="people-summary">'+
   '<div><span>Employees on payroll now</span><b>'+model.headcount+'</b><small>'+w.generalists+' generalists · '+(model.headcount-w.generalists)+' specialists. Specialists are included, not extra employees.</small></div>'+
   '<div><span>Headcount allocated</span><b>'+model.assigned+' / '+model.headcount+'</b><small>'+(model.unallocated===0?'All assigned. This does not guarantee work coverage.':number(Math.abs(model.unallocated))+(model.unallocated>0?' unassigned; allocate before submitting.':' over-allocated; reduce assignments.'))+'</small></div>'+
   '<div><span>Quoted task coverage</span><b>'+(f?short.length+' task'+(short.length===1?'':'s')+' short':'Detailed function model off')+'</b><small>'+(f?'Physical/vendor work before specialist effects and other business limits.':'Use the enabled workforce and operating forecasts; no function books were added.')+'</small></div>'+
@@ -14693,7 +14729,8 @@ function navigatePlanReview(item){
  if(!target)return;
  for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
  if(item.tab==='workforce'&&item.id==='unstaged-leaders'&&$('#departmentDesk'))$('#departmentDesk').open=true;
- target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'center',behavior:'auto'});
+ if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);
+ else {target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'center',behavior:'auto'});}
 }
 function renderMonthlyPlanReview(v,review){
  const mount=$('#monthlyPlanReview');if(!mount)return;
@@ -14870,7 +14907,7 @@ function navigateBankOverview(item){
   // The existing desk owns its form. Inspecting a location stages no order.
   setWorkspaceTab('markets');lifecycleUi.office=item.officeId;lifecycleUi.open=true;renderFacilityLifecycle(v);
  }
- if(item.peopleDesk&&v.me.workforce){setPeopleDesk(item.peopleDesk);const target=$(item.target);target?.scrollIntoView?.({block:'center',behavior:'auto'});target?.setAttribute?.('tabindex','-1');target?.focus?.({preventScroll:true});return;}
+ if(item.peopleDesk&&v.me.workforce){setPeopleDesk(item.peopleDesk);const target=$(item.target);if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);else {target?.scrollIntoView?.({block:'center',behavior:'auto'});target?.setAttribute?.('tabindex','-1');target?.focus?.({preventScroll:true});}return;}
  navigatePlanReview(item);
 }
 function renderBankOverview(v,review){
@@ -14910,6 +14947,108 @@ function renderFinancialOverview(v,f){
   (f.bridge?.available?'<p>Month '+f.bridge.cycle+': opening '+overviewDollars(f.bridge.opening)+' + operating profit '+overviewDollars(f.bridge.operatingProfit)+' + other net changes '+overviewDollars(f.bridge.otherNet)+' = closing '+overviewDollars(f.bridge.closing)+'. Net change '+overviewDollars(f.bridge.change)+'.</p>':'<p>A complete monthly earnings bridge is '+(f.bridge?'unavailable for this snapshot':'not provided by this campaign version')+'. No missing history has been reconstructed here.</p>')+'</details>'+
   (f.group?'<details class="financial-explanation" id="financialGroupDetails"><summary>Financial Group · separate parent and consolidated position</summary><p>Parent cash '+overviewDollars(f.parentCash)+' is not bank spending room. Consolidated assets '+overviewDollars(f.group.assets)+' − liabilities '+overviewDollars(f.group.liabilities)+' = equity '+overviewDollars(f.group.equity)+'. Internal investment eliminated: '+overviewDollars(f.group.eliminatedInvestment)+'.</p><p>These are balance-sheet positions, not this month’s group profit. Do not add parent investments to bank/subsidiary equity a second time. A bank dividend moves resources within the group; a parent injection arrives at month end and cannot fund earlier bank orders. Review the Financial Group desks for actual subsidiary results and explicit transfers.</p></details>':'');
  for(const id of disclosures){const element=$('#'+id);if(element)element.open=open[id];}
+}
+// Static, owner-scoped help. Searching never quotes a plan, reconstructs a
+// public view, reads rival information, or retains the campaign's large books.
+const GAME_HELP_TOPICS=[
+ {id:'planning',title:'Monthly planning and required decisions',words:'turn ready submit executive event blockers',tab:'operations',desk:'monthly',target:'#decisionGrid',text:'Choose the executive decision and review every required item in the monthly review. Optional opportunities and initiatives are not prerequisites for a turn. Mark Ready commits your plan; the month resolves only when both institutions are ready.'},
+ {id:'changes',title:'Current policy, form edits and staged orders',words:'draft save apply preview undo cancel active commitment',tab:'overview',target:'#monthlyChangesDrawer',text:'Current policy is already in effect. Unfinished form edits are not orders: use their Preview and Stage controls where provided. Staged instructions belong to this month’s shared draft. Monthly changes compares that draft with its opening plan and offers individual undo where dependencies allow. Undo cannot cancel work completed in a previous month.'},
+ {id:'funds',title:'Cash versus available spending room',words:'money budget discretionary reserve protected capital afford',tab:'overview',target:'#financialFundingDetails',text:'Bank cash is a balance, not a spending allowance. Planned commitments, protected reserves and capital constraints can make spendable funds much smaller. The shared monthly budget and financial explanation use the current draft; a subsidiary or parent balance is not automatically available to the bank.'},
+ {id:'earnings',title:'Operating profit versus retained earnings',words:'income loss revenue equity capital accounting balance sheet results',tab:'overview',target:'#financialEarningsDetails',text:'Operating profit reports a month’s operating result. Retained earnings accumulate results and other equity-affecting movements; they are not cash. Where the campaign records a complete earnings bridge, it explains opening earnings, operating profit, other net changes and closing earnings. Missing historical detail is not reconstructed.'},
+ {id:'forecasts',title:'Read the forecast without mistaking it for a result',words:'prediction estimate profit cost preview uncertainty outcome',tab:'operations',desk:'forecast',target:'#operatingPreview',text:'The operating forecast estimates the current draft under today’s economy. Rival actions, executive events and settlement conditions can change the outcome. Compare estimates with the next recorded result; do not add narrow product run rates to a whole-bank forecast that already includes them.'},
+ {id:'allocation',title:'Allocate employees to departments',words:'staff headcount pool banker retail business lending operations unassigned',tab:'operations',desk:'monthly',target:'#staffGrid',text:'Allocation divides the existing shared staff pool among departments. Assigning every employee does not prove all work is covered. Where workforce and department work are enabled, training, reserves and other commitments reduce productive time; expertise affects particular work rather than creating extra people.'},
+ {id:'coverage',title:'People: employees versus work coverage',words:'workforce staff capacity reservations quarter units shortage uncovered bottleneck service',requires:['workforce'],tab:'workforce',peopleDesk:'overview',target:'#peopleOverview',text:'People Overview separates headcount from available employee time and delivered work. Four quarter-time units equal one employee-month. Reservations and teaching time are not spare employees. Where department work is enabled, review uncovered tasks and their business consequences before deciding whether to reassign, recruit or reduce commitments.'},
+ {id:'department-work',title:'Department work priorities and uncovered demand',words:'staff service capacity dispatch task objectives shortage',requires:['workforce','departmentFunctions'],tab:'workforce',peopleDesk:'coverage',target:'#departmentPanel',text:'Work coverage compares planned delivery with task demand. Moving time toward one task can leave another uncovered. Review the task’s actual consequence and shared time limit; the priority controls do not hire people or create capacity.'},
+ {id:'recruitment',title:'Recruitment: signing cost and arrival timing',words:'hire generalist specialist salary payroll employee new banker',requires:['workforce'],tab:'workforce',peopleDesk:'recruitment',target:'#peopleRecruitment',text:'Generalists and specialists share the monthly hiring limit and spending room. The next-recruit quote is the extra signing cost, not the full future payroll. Staged recruits arrive next month; they cannot cover the work being settled now. Specialist expertise and recurring salary premiums differ from headcount.'},
+ {id:'training',title:'Training, reserves and productive time',words:'workforce expertise development skill course teaching budget preview',requires:['workforce'],tab:'workforce',peopleDesk:'development',target:'#workforcePanel',text:'Training can improve skills but consumes funding and teaching time. Compare the staged plan with the form preview, including requested and effective limits, before staging it. Department ceilings and shared funding protection can restrict spending. Moving to another desk does not turn an unfinished form into an order.'},
+ {id:'leadership',title:'Leadership, budgets and bounded delegation',words:'manager department leader compensation objectives training caps reserve automate',requires:['workforce','departmentOffice'],tab:'workforce',peopleDesk:'leadership',target:'#departmentPanel',text:'Leadership and budgets set organizational commitments and spending ceilings, not a second pool of employees or money. Review proposal changes and their whole-plan costs. Delegation works within supported limits; it does not authorize a manager to submit turns or make major strategic transactions for you.'},
+ {id:'research',title:'Research is not the same as implementation',words:'strategy capability tree unlock specialization operating model build buy license partner',tab:'strategy',target:'#strategyTree',text:'Read each capability’s requirements, current level and available choices. Research can unlock a rollout or operating-model decision; it does not mean every related product is selling. Follow through to the relevant initiative or product route, then check completion and activation. Existing campaign versions retain their own strategy rules.'},
+ {id:'projects',title:'Project progress and Operations capacity',words:'initiative stalled timing duration completion queue execution work units',tab:'operations',desk:'projects',target:'#activeProject',text:'Base work units are not a guaranteed number of calendar months. Shared Operations capacity, active commitments and campaign capabilities affect delivery. Review active progress and new initiative capacity together. Hiring for next month does not repair this month’s execution shortage.'},
+ {id:'deposit-policy',title:'Deposit strategy and rate-sensitive funding',words:'pricing interest margin growth runoff cost savings bank funding',tab:'operations',desk:'funding',target:'#depositPolicies',text:'Aggressive deposit pricing trades funding cost and rate-sensitive exposure for acquisition strength. Repricing toward margin can cause runoff. Compare your current-book funding profile with the draft forecast; attracting deposits adds a liability as well as cash, not free profit.'},
+ {id:'lending-policy',title:'Lending standards, return and delayed risk',words:'loan underwriting conservative growth credit loss risk appetite',tab:'operations',desk:'funding',target:'#lendingPolicies',text:'Lending standards change production and risk. More volume is not automatically better: loans consume funding and capital and can create future losses. The exact portfolio and credit controls depend on the campaign’s enabled systems. Use Credit when available to inspect recorded deterioration and collections.'},
+ {id:'products',title:'Product development, deployment and retirement',words:'research build buy license lifecycle maintenance offer launch catalogue catalog',requires:['productPrograms'],tab:'products',productDesk:'development',target:'#productProgramsPanel',text:'Compare in-house development with licensing, including upfront cost, shared execution needs and ongoing vendor charges. Deployment opens supported sales choices; it does not create customer demand. Retirement closes new sales but does not erase existing balances or promises. Reopening can require another paid rollout.'},
+ {id:'targeting',title:'Product sales targets by market and audience',words:'segment emphasis customers fit local product share demand',requires:['productPrograms'],tab:'products',productDesk:'targets',target:'#productProgramsPanel',text:'Local sales emphasis chooses which available offers compete for new demand. Fit is an acquisition-strength measure, not a win probability. Inspecting a product market does not change your action focus. Existing products and locked rates do not change merely because you edit sales emphasis.'},
+ {id:'pricing',title:'Product pricing and protected balances',words:'tariff basis points interest variable guarantee locked annual rate',requires:['productPrograms'],version:['productPrograms',2],tab:'products',productDesk:'pricing',target:'#productProgramsPanel',text:'Pricing compares the current tariff with the staged offer on today’s account balances. Protected guarantees are distinct from variable balances. Direct product costs exclude shared bank expenses and loan income; the complete operating forecast is elsewhere. Basis-point adjustments are not percentage-point changes.'},
+ {id:'advertising',title:'Advertising, acquisition and attribution',words:'marketing channel campaign awareness spending budget funnel conversion',requires:['productPrograms','advertising'],tab:'products',productDesk:'advertising',target:'#productProgramsPanel',text:'Advertising competes for finite outside demand; awareness is not an owned customer or deposit. Review spending, target audience and the attribution records available in this campaign. Product availability, service and acquisition capacity can constrain the response. Recorded attribution is not proof that every new account came from advertising.'},
+ {id:'offers',title:'Compete for existing customer relationships',words:'share wallet retention relationship offer cross sell',requires:['productPrograms','relationshipOffers'],tab:'products',productDesk:'relationships',target:'#productProgramsPanel',text:'Existing-customer offers compete for supported relationships already in the market. Keep the offered benefit, cost and delivery capacity in view. Winning one product relationship does not establish ownership of every part of a customer’s finances. Campaigns without this preview do not provide this desk.'},
+ {id:'onboarding',title:'Applications are not yet activated accounts',words:'pending intake queue expiry abandonment delay staff service customer deposit',requires:['productPrograms','onboarding'],tab:'products',productDesk:'onboarding',target:'#productProgramsPanel',text:'Pending applications are requests, not bank-owned customers or deposits. Activation requires eligible work and capacity; requests can expire or be abandoned. Review the queue, staffing and actual activation results before increasing intake. Do not count pending principal as available bank funding.'},
+ {id:'customers',title:'Service and retention of existing households',words:'relationships churn loyalty wallet deposits service coverage',requires:['householdBook'],tab:'customers',householdDesk:'service',target:'#householdPanel',text:'Customers shows the supported household relationships and retention controls in your campaign. Service capacity and commitments affect the existing book, not just acquisition. Review market-level exposure and the actual recorded customer effects instead of assuming influence means ownership.'},
+ {id:'credit',title:'Arrears, collections and credit history',words:'delinquency vintages cohort cure recover charge off losses loans',requires:['creditPerformance'],tab:'credit',target:'#creditPanel',text:'Follow the recorded loan portfolio and supported collections actions. Amounts entering arrears, cured, recovered and lost are different flows; subtracting only two of them is not a complete delinquency bridge. A strong current profit can coexist with deteriorating future credit quality.'},
+ {id:'facilities',title:'Facilities: local reach and operating commitments',words:'branch network office location micro retail commercial hub wealth upgrade capacity staff',requires:['facilityNetwork'],tab:'markets',target:'#facilityNetworkPanel',text:'Compare the available facility types, local capacity and operating commitments. Physical capacity is not a supply of employees. A larger location can need additional staff or department support to use its potential. Existing campaign options determine which facility types and controls are available.'},
+ {id:'maintenance',title:'Facility condition, renovation and conversion',words:'repair upkeep maintenance wear branch office upgrade closure',requires:['facilityLifecycle'],tab:'markets',target:'#facilityLifecyclePanel',text:'Inspect the location’s condition and ongoing work before staging maintenance or a conversion. These choices have costs and persistent consequences; a conversion is not an instant free upgrade. Review shared protected spending and the facility’s staffing needs along with its proposed new role.'},
+ {id:'influence',title:'Market influence is not deposit ownership',words:'map conquered territory district control share domination competition focus',tab:'markets',target:'#marketMap',text:'The map’s influence/control measure is distinct from actual customer and deposit books. Check the available market books before treating a controlled area as exclusive ownership. In the current map, selecting a district sets the plan’s focus; check that target again before staging a local action.'},
+ {id:'renewals',title:'Corporate service contracts and renewals',words:'treasury merchant pricing bid client agreement company service expiry',requires:['serviceDesk'],tab:'markets',target:'#servicePricing',text:'Review your owned agreements, service capacity, renewal timing and bids. An incumbent can defend a renewal without manually bidding in every month; new orders should be deliberate. Company ownership is separate from its banking-provider relationship.'},
+ {id:'competition',title:'Concealed actions, defenses and public intelligence',words:'rival attack raid deposit campaign poach counter target',tab:'competition',target:'#competitiveActions',text:'Choose among the actions supported by your campaign and review their target, cost and counter. Plans resolve simultaneously; a rival’s last revealed action is not their next plan. Neither this help nor the forecast reveals private rival instructions. No action is selected merely by opening this desk.'},
+ {id:'group',title:'Financial Group: parent versus bank resources',words:'subsidiary capital dividend injection cash equity consolidated transfer',requires:['financialGroup'],tab:'group',target:'#financialGroupPanel',text:'Parent, bank and subsidiary resources are separate. Group consolidation removes internal investments to avoid double-counting. Explicit transfers remain subject to safeguards and settlement timing; parent cash is not automatic bank spending room. Review each subsidiary’s supported operating results and funding needs.'},
+ {id:'agency',title:'Insurance agency is not underwriting',words:'subsidiary carrier commission insurance premium policies coverage group',requires:['financialGroup','agency'],tab:'group',groupDesk:'agency',target:'#financialGroupPanel',text:'The agency distributes third-party carrier products and earns commissions; it does not assume insurance underwriting risk. Review its own staffing, expenses, relationships and cash requirements. Agency and bank resources are not interchangeable without supported explicit transfers.'},
+ {id:'history',title:'Actual results, history and public scorecard',words:'last month debrief log trend performance intelligence milestones',tab:'intelligence',target:'#lastResolution',text:'Read recorded outcomes after resolution and compare them with your planning estimates. Available history is limited by the campaign version and retained records; absent periods are not synthesized. Public rival metrics do not include their private pending orders or customer queues.'},
+ {id:'connection',title:'Connection health, readiness and safe recovery',words:'multiplayer github lan intranet direct link reconnect acknowledgement yellow retry sync',tab:'overview',target:'#linkState',text:'A connection indicator and the two readiness states describe different things. A local click alone is not proof that a remote plan was acknowledged. Follow the current transport’s recovery message and keep one tab per player. Do not start a replacement campaign to repair an interrupted room; preserve the existing checkpoint and use supported reconnect/resume controls.'},
+ {id:'export',title:'Export, Continue and private session recovery',words:'save backup download import persistence storage token credentials',tab:'overview',target:'#exportBtn',text:'Use the supported Export control for a portable campaign snapshot when available. Continue uses this browser’s local campaign; it is not a substitute for the room’s multiplayer checkpoint. Keep credentials and private campaign files private. A download is not verified until you can reopen the intended campaign from it.'},
+ {id:'optional',title:'Optional previews and fixed campaign rules',words:'feature checkbox complexity settings prerequisites modular disabled lobby',tab:'overview',target:'#scopeName',text:'Optional systems and their dependencies are chosen before play. The host applies shared lobby settings and both players confirm readiness. Existing campaigns retain their supported rules; help cannot enable a missing preview or upgrade a save. Changing presentation is different from changing simulation rules.'}
+];
+const gameHelpBound=new WeakSet();
+let gameHelpSession=null;
+function gameHelpProfile(v){
+ const features={};
+ for(const topic of GAME_HELP_TOPICS)for(const key of topic.requires||[])features[key]=!!v.me[key];
+ return {features,productPricingVersion:v.me.productPrograms?.version||0};
+}
+function gameHelpAvailable(topic,profile){return (topic.requires||[]).every(key=>profile.features[key])&&(!topic.version||profile.productPricingVersion===topic.version[1]);}
+function searchGameHelp(query,profile,tab){
+ const terms=String(query).slice(0,200).toLocaleLowerCase('en-US').trim().split(/\s+/).filter(Boolean);
+ return GAME_HELP_TOPICS.map((topic,index)=>({topic,index,available:gameHelpAvailable(topic,profile)})).filter(({topic})=>{
+  const haystack=(topic.id+' '+topic.title+' '+topic.words+' '+topic.text).toLocaleLowerCase('en-US');return terms.every(term=>haystack.includes(term));
+ }).sort((a,b)=>Number(b.available)-Number(a.available)||Number(b.topic.tab===tab)-Number(a.topic.tab===tab)||a.index-b.index);
+}
+function gameHelpCurrent(){
+ return !!gameHelpSession&&(game||view)===gameHelpSession.campaign&&draftOwner===gameHelpSession.owner&&lastCycle===gameHelpSession.cycle&&seat===gameHelpSession.seat&&featureConnectionGeneration===gameHelpSession.connection;
+}
+function closeGameHelp(restore=true){
+ const dialog=$('#gameHelp'),session=gameHelpSession,current=gameHelpCurrent();gameHelpSession=null;
+ if(dialog?.open)dialog.close();
+ if(restore&&current){const target=session?.opener?.isConnected?session.opener:$('#gameHelpOpen');target?.focus?.({preventScroll:true});}
+}
+function renderGameHelp(){
+ if(!gameHelpCurrent()){closeGameHelp(false);return;}
+ const results=searchGameHelp($('#gameHelpSearch').value,gameHelpSession.profile,gameHelpSession.tab),mount=$('#gameHelpResults');
+ $('#gameHelpCount').textContent=results.length+' '+(results.length===1?'topic':'topics')+'. Explanations and navigation only; no orders are changed.';
+ mount.innerHTML=results.length?results.map(({topic,available})=>'<article class="game-help-topic"><h3>'+esc(topic.title)+'</h3><p>'+esc(topic.text)+'</p><p class="micro muted">'+(available?'Available in this campaign.':'Not enabled in this campaign version. This explanation does not add the system.')+'</p><button type="button" class="btn" data-help-open="'+topic.id+'" '+(available?'':'disabled')+' aria-label="Open controls: '+esc(topic.title)+'">'+(available?'Open controls':'Unavailable in this campaign')+'</button></article>').join(''):'<p>No matching topics. Try “staff”, “cash”, “research”, “applications” or “connection”. Search uses all entered words.</p>';
+ mount.scrollTop=0;
+}
+function openGameHelp(topicId,opener){
+ const v=currentView(),dialog=$('#gameHelp');if(!v||!dialog||draftOwner!==v.me.id||lastCycle!==v.cycle)return;
+ gameHelpSession={campaign:game||view,owner:v.me.id,cycle:v.cycle,seat,connection:featureConnectionGeneration,profile:gameHelpProfile(v),tab:workspaceTab,opener:opener||document.activeElement};
+ const topic=GAME_HELP_TOPICS.find(x=>x.id===topicId);$('#gameHelpSearch').value=topic?topic.title:'';
+ renderGameHelp();if(!dialog.open)dialog.showModal();$('#gameHelpSearch').focus();$('#gameHelpSearch').select();
+}
+function navigateGameHelp(id){
+ if(!gameHelpCurrent()){closeGameHelp(false);return false;}
+ const topic=GAME_HELP_TOPICS.find(x=>x.id===id);if(!topic||!gameHelpAvailable(topic,gameHelpSession.profile))return false;
+ closeGameHelp(false);
+ if(topic.productDesk)productDeskView=topic.productDesk;
+ navigateBankOverview(topic);if(topic.groupDesk)setFinancialGroupDesk(topic.groupDesk,{focus:true});return true;
+}
+function reconcileGameHelp(){
+ const dialog=$('#gameHelp'),screen=$('#gameScreen');if(!dialog||!screen)return;
+ if(gameHelpSession&&!gameHelpCurrent())closeGameHelp(false);
+ if(gameHelpBound.has(dialog))return;gameHelpBound.add(dialog);
+ $('#gameHelpOpen').addEventListener('click',event=>openGameHelp(null,event.currentTarget));
+ $('#gameHelpClose').addEventListener('click',()=>closeGameHelp());
+ $('#gameHelpSearch').addEventListener('input',renderGameHelp);
+ $('#gameHelpResults').addEventListener('click',event=>{const button=event.target.closest('[data-help-open]');if(button&&!button.disabled)navigateGameHelp(button.dataset.helpOpen);});
+ dialog.addEventListener('cancel',event=>{event.preventDefault();closeGameHelp();});
+ // Native search inputs otherwise consume the first Escape to clear their
+ // text. The dialog consistently closes in one press, without a second key.
+ dialog.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeGameHelp();return;}
+  if(event.key!=='Tab')return;
+  const controls=[...dialog.querySelectorAll('button:not(:disabled),input:not(:disabled),[tabindex="0"]')].filter(x=>!x.hidden&&x.getClientRects().length);
+  const first=controls[0],last=controls.at(-1),active=document.activeElement;
+  const next=event.shiftKey&&(active===first||!controls.includes(active))?last:!event.shiftKey&&(active===last||!controls.includes(active))?first:null;
+  if(next){event.preventDefault();next.focus();}
+ },true);
+ dialog.addEventListener('close',()=>{if(!dialog.open)gameHelpSession=null;});
+ screen.addEventListener('click',event=>{const button=event.target.closest('[data-help-topic]');if(button)openGameHelp(button.dataset.helpTopic,button);});
 }
 function projectChoiceStatus(v,key){
  if(v.me.submitted)return {eligible:false,reason:'Your plan is already locked.'};
@@ -15098,6 +15237,7 @@ function resolutionDisplayLines(v){return [...(v.resolution||[]),...initiativeFe
 function renderHistory(v){const lines=resolutionDisplayLines(v);$('#lastResolution').innerHTML=lines.length?lines.map(x=>`<div class="history-item">${esc(x)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}
 let gameOverlayReturnFocus = null;
 function openGameOverlay(id,buttonId) {
+ if(typeof closeGameHelp==='function')closeGameHelp(false);
  const overlay=$(id);
  gameOverlayReturnFocus=typeof document==='undefined'?null:document.activeElement;
  overlay.classList.remove('hidden');

@@ -124,6 +124,7 @@
       "ui/recovery.js",
       "ui/plan-review.js",
       "ui/bank-overview.js",
+      "ui/game-help.js",
       "ui/projects.js",
       "ui/results.js",
       "ui/bootstrap.js"

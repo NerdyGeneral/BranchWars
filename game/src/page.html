@@ -99,7 +99,7 @@
         <button type="button" data-workspace-group="operate" aria-pressed="false">Run the bank</button>
         <button type="button" data-workspace-group="grow" aria-pressed="false">Growth &amp; competition</button>
       </div>
-      <div id="workspaceTabs" class="workspace-tabs" role="tablist" aria-label="Bank &amp; finance workspaces">
+      <div class="workspace-destinations"><div id="workspaceTabs" class="workspace-tabs" role="tablist" aria-label="Bank &amp; finance workspaces">
         <button type="button" class="workspace-tab active" data-workspace-tab="overview">Overview<span>Position &amp; results</span></button>
         <button type="button" class="workspace-tab hidden" id="creditNav" data-workspace-tab="credit">Credit<span>Loan quality &amp; collections</span></button>
         <button type="button" id="financialGroupNav" class="workspace-tab hidden" data-workspace-tab="group">Financial Group<span>Capital &amp; subsidiaries</span></button>
@@ -112,6 +112,7 @@
         <button type="button" class="workspace-tab" data-workspace-tab="competition" hidden>Competition<span>Actions &amp; defenses</span></button>
         <button type="button" class="workspace-tab" data-workspace-tab="intelligence" hidden>Intelligence<span>Threats &amp; scorecard</span></button>
       </div>
+      <button type="button" id="gameHelpOpen" class="btn">Help &amp; find controls</button></div>
     </nav>
     <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
     <section class="panel"><div class="readybar"><div><b>SIMULTANEOUS PLAN</b><div id="planChecklist" class="checklist muted"></div></div><div class="row"><button id="recallBtn" class="btn hidden">[ RECALL ]</button><button id="readyBtn" class="btn primary">[ MARK READY ]</button></div><span id="submitMsg" class="small muted"></span></div><details id="monthlyReviewDetails"><summary id="monthlyReviewSummary">Review this month · blockers, warnings &amp; changes</summary><div id="monthlyPlanReview" aria-label="Monthly plan review"></div></details></section>
@@ -134,7 +135,7 @@
           <button id="operationsTab-projects" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-projects" tabindex="-1" data-operations-tab="projects">Projects &amp; hiring<span>Capacity &amp; commitments</span></button>
           <button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
         </div>
-        <p id="operationsDeskHint" class="small muted" role="status"></p>
+        <p id="operationsDeskHint" class="small muted" role="status"></p><button type="button" class="btn contextual-help" data-help-topic="planning">How monthly planning works</button>
       </div>
       <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-monthly" data-operations-panel="monthly">
           <section class="panel"><div class="event"><span class="micro muted">EXECUTIVE CALL // DECISION REQUIRED</span><strong id="eventName"></strong><div id="eventText"></div><div id="decisionGrid" class="decision-grid"></div></div></section>
@@ -177,6 +178,13 @@
   <p id="featureSelectionExplanation" class="small">This selection also changes the systems below. Nothing changes until you confirm.</p>
   <ul id="featureSelectionAffected"></ul>
   <div class="row"><button id="featureSelectionCancel" type="button" class="btn">Cancel</button><button id="featureSelectionConfirm" type="button" class="btn primary">Confirm changes</button></div>
+</dialog>
+<dialog id="gameHelp" class="game-help-dialog" aria-labelledby="gameHelpTitle" aria-describedby="gameHelpDescription">
+  <header class="section-head"><h2 id="gameHelpTitle">Help &amp; find controls</h2><button id="gameHelpClose" type="button" class="btn">Close help</button></header>
+  <p id="gameHelpDescription">Start with a question or a system name. Available topics for your current workspace appear first. Disabled previews are explained, not enabled.</p>
+  <label for="gameHelpSearch">Search gameplay help</label><input id="gameHelpSearch" type="search" class="field" maxlength="200" autocomplete="off" placeholder="Try staff coverage, cash, research or connection">
+  <p id="gameHelpCount" class="small muted" role="status" aria-live="polite"></p>
+  <div id="gameHelpResults" class="game-help-results" tabindex="0" aria-label="Help topics"></div>
 </dialog>
 <script id="engine">/* @engine */</script>
 <script>/* @client */</script>

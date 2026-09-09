@@ -59,7 +59,7 @@ function navigateBankOverview(item){
   // The existing desk owns its form. Inspecting a location stages no order.
   setWorkspaceTab('markets');lifecycleUi.office=item.officeId;lifecycleUi.open=true;renderFacilityLifecycle(v);
  }
- if(item.peopleDesk&&v.me.workforce){setPeopleDesk(item.peopleDesk);const target=$(item.target);target?.scrollIntoView?.({block:'center',behavior:'auto'});target?.setAttribute?.('tabindex','-1');target?.focus?.({preventScroll:true});return;}
+ if(item.peopleDesk&&v.me.workforce){setPeopleDesk(item.peopleDesk);const target=$(item.target);if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);else {target?.scrollIntoView?.({block:'center',behavior:'auto'});target?.setAttribute?.('tabindex','-1');target?.focus?.({preventScroll:true});}return;}
  navigatePlanReview(item);
 }
 function renderBankOverview(v,review){

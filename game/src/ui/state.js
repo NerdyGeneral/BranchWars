@@ -14,6 +14,6 @@ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
-function show(id){['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
 function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('')}

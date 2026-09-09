@@ -35,6 +35,7 @@ function resolutionDisplayLines(v){return [...(v.resolution||[]),...initiativeFe
 function renderHistory(v){const lines=resolutionDisplayLines(v);$('#lastResolution').innerHTML=lines.length?lines.map(x=>`<div class="history-item">${esc(x)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}
 let gameOverlayReturnFocus = null;
 function openGameOverlay(id,buttonId) {
+ if(typeof closeGameHelp==='function')closeGameHelp(false);
  const overlay=$(id);
  gameOverlayReturnFocus=typeof document==='undefined'?null:document.activeElement;
  overlay.classList.remove('hidden');

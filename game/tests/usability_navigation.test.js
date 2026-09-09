@@ -14,7 +14,7 @@ function harness(features={}){
  const mounts={'#workspaceGroups':node(),'#workspaceTabs':node(),'#gameScreen':node(),'.workspace-nav':node(),'.game-layout':node()};
  for(const panel of panels)mounts['[data-workspace="'+panel.dataset.workspace+'"].active']=panel;
  const plan=Object.freeze({decision:'a',hires:2}),v={me:{id:'owner',...features},cycle:4};
- const c={view:v,game:null,draft:plan,workspaceTab:'overview',reconcileOperationsWorkspace(){},requestAnimationFrame(fn){fn()},window:{innerWidth:1265,matchMedia:()=>({matches:true})},
+ const c={view:v,game:null,draft:plan,draftOwner:'owner',lastCycle:4,seat:0,workspaceTab:'overview',reconcileOperationsWorkspace(){},requestAnimationFrame(fn){fn()},window:{innerWidth:1265,matchMedia:()=>({matches:true})},
   renderFacilityNetwork(){},renderProductPrograms(){},renderCollections(){},renderFinancialGroup(){},renderHouseholds(){},renderWorkforce(){},
   $:key=>mounts[key]||null,$$:key=>({'[data-workspace-tab]':tabs,'[data-workspace-group]':groups,'[data-workspace]':panels}[key]||[])};
  vm.createContext(c);vm.runInContext(draftSource+'\n'+navigation,c);
@@ -41,7 +41,11 @@ for(const [group,expected]of Object.entries({customers:['markets','customers','p
 h.go('workforce');h.select('customers');h.select('operate');assert.equal(h.c.workspaceTab,'workforce','return to last visited desk in group');
 h.go('products');assert.equal(h.groups.find(x=>x.attributes['aria-pressed']==='true').dataset.workspaceGroup,'customers','contextual links select their parent group');
 assert.equal(h.c.draft,h.plan);assert.equal(JSON.stringify(h.c.view),before,'navigation changes no public state');
+ const perf=harness(all);perf.run('let navigationViewCalls=0;const actualCurrentView=currentView;currentView=function(){navigationViewCalls++;return actualCurrentView()};');
+ for(const tab of names){perf.run('navigationViewCalls=0');perf.go(tab);assert.equal(perf.run('navigationViewCalls'),1,'one synchronous view per main-tab navigation, excluding business painters');}
+ perf.run('navigationViewCalls=0');perf.select('grow');assert.equal(perf.run('navigationViewCalls'),1,'group selection and delayed scroll share one navigation view');
 h.refresh();h.refresh();
+ h.run('focusWorkspaceTarget($(\'.game-layout\'))');assert.equal(h.mounts['.game-layout'].style.scrollMarginTop,'116px');assert.equal(h.mounts['.game-layout'].scrolls.at(-1).block,'start','context headings clear sticky navigation');
 for(const button of h.groups)assert.equal(button.events.click.length,1);
 for(const button of [...h.tabs,...h.groups])assert.equal(button.events.keydown.length,1);
 let prevented=0;

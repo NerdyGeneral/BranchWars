@@ -40,6 +40,15 @@ the real handler is restored and portable/source onboarding network checks pass.
 Full finished-build verification, remaining usability work, manual and publication
 are still pending. Current candidate simulation bytes match the preserved engine.
 
+Sixth local checkpoint: 34 searchable help topics, supported-feature-aware
+destinations, one-press Escape/focus containment and sticky-safe contextual links.
+Eight new test groups pass, plus the existing targeted planning/workforce and
+transport tests. Routing now reuses one synchronous owner view; measured
+month-481 routing/public-view medians improve, with business painting explicitly
+excluded. Frozen fifth-checkpoint regression `12012` remains running, not failed
+or accepted. No new V3 artifact is published; see the ledger for exact build,
+browser-check boundaries and still-open implementation/release requirements.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

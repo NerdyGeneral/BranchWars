@@ -8,6 +8,12 @@ const WORKSPACE_GROUPS=[
 ];
 let workspaceNavigationState={owner:null,campaign:null,remembered:{}};
 const workspaceNavigationBound=new WeakSet();
+function focusWorkspaceTarget(target){
+ if(!target)return;
+ const offset=typeof window!=='undefined'&&window.innerWidth>900?($('.workspace-nav')?.offsetHeight||0):0;
+ if(target.style)target.style.scrollMarginTop=(offset+16)+'px';
+ target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'start',behavior:'auto'});
+}
 function availableWorkspaces(v){
  const requirements={credit:'creditPerformance',group:'financialGroup',customers:'householdBook',products:'productPrograms',workforce:'workforce'};
  return WORKSPACE_GROUPS.flatMap(group=>group.tabs).filter(tab=>!requirements[tab]||!!v?.me?.[requirements[tab]]);
@@ -17,10 +23,10 @@ function selectWorkspaceGroup(id){
  if(!v||!group)return;
  reconcileWorkspaceNavigation(v);
  const available=availableWorkspaces(v),remembered=workspaceNavigationState.remembered[id];
- setWorkspaceTab(group.tabs.includes(remembered)&&available.includes(remembered)?remembered:group.tabs.find(tab=>available.includes(tab)));
- const selected=workspaceTab,owner=v.me.id,campaign=game;
+ setWorkspaceTab(group.tabs.includes(remembered)&&available.includes(remembered)?remembered:group.tabs.find(tab=>available.includes(tab)),v);
+ const selected=workspaceTab,owner=v.me.id,cycle=v.cycle,campaign=game||view,ownerSeat=seat;
  requestAnimationFrame(()=>{
-  if(workspaceTab!==selected||game!==campaign||currentView()?.me.id!==owner)return;
+  if(workspaceTab!==selected||(game||view)!==campaign||draftOwner!==owner||lastCycle!==cycle||seat!==ownerSeat)return;
   const target=selected==='strategy'?$('.game-layout'):$('[data-workspace="'+selected+'"].active');
   if(!target)return;
   target.style.scrollMarginTop=(window.innerWidth>900?$('.workspace-nav').offsetHeight+20:12)+'px';
@@ -28,6 +34,7 @@ function selectWorkspaceGroup(id){
  });
 }
 function reconcileWorkspaceNavigation(v){
+ if(typeof reconcileGameHelp==='function')reconcileGameHelp();
  const mount=$('#workspaceGroups');if(!mount)return;
  v=v||currentView();if(!v)return;
  // Hotseat banks do not inherit one another's navigation preferences. Nothing
@@ -36,7 +43,7 @@ function reconcileWorkspaceNavigation(v){
   workspaceNavigationState={owner:v.me.id,campaign:game,remembered:{}};
  }
  const available=availableWorkspaces(v);
- if(!available.includes(workspaceTab)){setWorkspaceTab('overview');return;}
+ if(!available.includes(workspaceTab)){setWorkspaceTab('overview',v);return;}
  const selected=WORKSPACE_GROUPS.find(group=>group.tabs.includes(workspaceTab));
  workspaceNavigationState.remembered[selected.id]=workspaceTab;
  const groups=$$('[data-workspace-group]');

@@ -55,7 +55,7 @@ evidence; browser, release and human acceptance are separate gates.
 | 17 | Consistent current/form/staged/active lifecycle | 1 | Partial: review legend and retained unstaged Workforce status; cross-editor standardization remains |
 | 18 | Monthly changes drawer with cost/timing/dependencies | 1 | Partial: opening-draft differences, timing and whole-plan undo quote implemented; richer system-specific cost/timing labels remain |
 | 19 | Scoped undo and unfinished-form protection | 1 | Partial: guarded individual field/initiative undo plus Leadership/functions/training raw form retention; remaining editors pending |
-| 20 | Contextual navigation and search | 3 | Pending |
+| 20 | Contextual navigation and search | 3 | Implemented 34 searchable owner-scoped help topics, disabled-preview explanations and direct existing desk links; mature browser routes and native keyboard behavior checked; final integrated acceptance remains |
 | 21 | Retained screen context and appropriate scroll/focus | 1 | Partial: fresh entry/Continue opens Overview at top; remaining per-workspace context pending |
 | 22 | Precise financial measure names | 3 | Partial: owner financial overview separates current cash/equity, draft room and actual profit/earnings; remaining screen-wide copy audit open |
 | 23 | Cash-to-spendable-room explanation | 3 | Implemented existing protected quote, obligations and capital constraints with bank/parent separation; actual mature-browser comparison verified |
@@ -84,13 +84,13 @@ evidence; browser, release and human acceptance are separate gates.
 | 46 | Compact persistent interface elements | 5 | Partial: compact campaign header/KPIs and pinned two-level navigation; expanded spending removed from sticky area; overall planning chrome remains to streamline |
 | 47 | Readable hierarchy and constraints | 5 | Pending |
 | 48 | Table sorting/filtering/header/scroll usability | 5 | Pending |
-| 49 | Consistent keyboard, labels and focus | 5 | Partial: task-group/subtab keyboard controls, ARIA selection, reduced-motion scroll and stale-scroll guards; wider editor/table audit remains |
+| 49 | Consistent keyboard, labels and focus | 5 | Partial: task/subtab keyboard controls, help dialog focus containment and one-press Escape, sticky-safe contextual targets; wider editor/table audit remains |
 | 50 | Presentation detail levels independent of rules | 5 | Pending |
 | 51 | Grouped causal monthly debrief | 5 | Pending |
 | 52 | Supported trends and actual campaign history | 5 | Pending |
 | 53 | Informational watchlists and personal priorities | 5 | Pending |
-| 54 | Measured mature-campaign responsiveness | 5 | Pending |
-| 55 | Contextual help and restrained visual polish | 5 | Pending |
+| 54 | Measured mature-campaign responsiveness | 5 | Partial: one synchronous view per navigation and a reproducible month-481 routing benchmark; full renderer, sustained interactions and matched final performance gates remain |
+| 55 | Contextual help and restrained visual polish | 5 | Partial: searchable modal and inline People/planning explanations; 1265px and 640px browser inspection; wider polish and final zoom gate remain |
 
 ## Release gates (all open)
 
@@ -440,3 +440,77 @@ Frozen fifth-checkpoint verification: detached `ca0bf16` in
 reference, docs, architecture and early accounting checks. Do not edit this
 snapshot or restart a quiet live process; poll the same handle. This remains
 an intermediate regression, not finished-release acceptance.
+
+## Sixth implementation checkpoint — September 9
+
+Candidate portable SHA-256:
+`06ded73809ef63d18d0a92d38e26101cbcee01233c68655933767c804adc0c90`.
+The 143-source portable build retains the exact pinned V3.1 engine bytes.
+
+- Added **Help & find controls** beside the active workspace tabs. Its 34 topics
+  explain actual enabled systems, including shared staffing, funds, research,
+  products, onboarding, subsidiaries, multiplayer and save distinctions.
+- Search includes system identifiers as well as plain-language titles and
+  synonyms. All entered words must match; query length is bounded. Current
+  workspace topics are preferred, and missing previews remain visibly
+  unavailable rather than changing options or fabricating books.
+- Links select existing workspaces and product/People/household/group desks.
+  They do not stage actions, change targets, submit turns or expose private
+  rival information. People and monthly planning also have inline help links.
+- Dialog focus is contained, Escape closes in one press, and valid opener focus
+  is restored. Owner/month/seat/snapshot/connection guards reject stale routes.
+  Handoffs, resolution overlays and leaving gameplay dismiss help. Only minimal
+  feature availability is captured; typing does not reconstruct or quote the
+  large campaign state.
+- Contextual destination headings now clear sticky navigation. Ordinary tab
+  routing reuses one synchronous view; no view is cached across events, turns
+  or owners. Group-scroll guards no longer build another public view.
+
+Eight new help test groups pass, including every catalog prerequisite omission,
+product-pricing version boundaries, all topic identifiers, hostile/unmatched
+queries, focus/close behavior, stale callbacks, and real production destination
+painters across original and Group1–7 campaigns with unchanged plans/books.
+Navigation tests count one routing view per supported tab/group and still cover
+all 32 optional-screen combinations. Existing build, architecture, engine pin,
+Operations, overlay, People, workforce, forms, undo, plan review, financial inbox,
+setup/lobby, onboarding network and local-session tests pass. The help suite is
+included in both standard verification entry points. No legacy golden changed.
+
+Actual browser checks used the preserved month-481 campaign at 1265 x 712 and
+640 x 800. Search and People/onboarding routes worked without orders or a month
+being submitted. The browser exposed and prompted fixes for a sticky-obscured
+destination heading, native-search Escape clearing instead of closing, and
+backwards focus leaving the dialog; each correction was rechecked. No browser
+console errors were recorded. The final identifier-search addition and routing
+optimization followed those visual checks and have automated coverage; the
+finished-build full visual/zoom gate remains open. Temporary viewport overrides
+were reset and the task QA tab was closed.
+
+Reproducible routing benchmark:
+`node game/tools/measure_navigation.js --baseline 301e99c --save <preserved raw month-481 save>`.
+Save: 46,641,574 bytes, SHA-256
+`2ca8137bb6f4aab0115d4b719174b93e339b2390fed29f5273b79d7c94665d88`.
+Baseline routing source SHA-256:
+`f24d21c64a5f49d4ed2b5ebb09e0006b0392b660ba3a75a5adf3a48b45049073`.
+Both variants use the same engine/data and inert business painters. Five trials
+per action; median routing/public-view work:
+
+| Action | Before views / median | After views / median |
+| --- | --- | --- |
+| Products | 3 / 44.795 ms | 1 / 15.665 ms |
+| People | 3 / 43.730 ms | 1 / 14.918 ms |
+| Overview | 2 / 28.882 ms | 1 / 14.209 ms |
+| Customers task group | 5 / 71.994 ms | 1 / 14.458 ms |
+
+This is a bounded routing microbenchmark, **not** total browser frame time,
+full renderer latency, balance acceptance or a substitute for real play. Full
+campaign/plan hashes were unchanged. A separate 1,000-search static-help run
+took about 76 ms total; it likewise excludes browser painting.
+
+Frozen checkpoint 5 remains live at exec session `12012` in its unchanged
+`ca0bf16` worktree. It has passed through the earlier onboarding failure,
+the new fifth-checkpoint UI suites and V3.1 boundaries, and is running the long
+funded-circulation scenarios. Do not equate progress with a finished gate or
+restart this quiet live run. Remaining editor safeguards, adjacent forecasts,
+connected workflows, recovery/presentation, manual and all final publication
+requirements remain in scope; no whole batch is signed off.

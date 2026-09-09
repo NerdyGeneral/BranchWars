@@ -29,6 +29,13 @@ screen separating cash, spending room, equity and recorded earnings. Task
 coverage warnings now match People. Search/help, adjacent comparisons, remaining
 editor/workflow and resilience work, manual and exact release gates remain open.
 
+Sixth checkpoint adds 34 searchable, feature-aware help topics with existing
+desk links and inline People/planning explanations. Native dialog focus and
+sticky-safe destinations were browser checked. Navigation now constructs one
+owner view per routing action; a bounded mature-save microbenchmark records the
+improvement without claiming full renderer speed. Remaining connected workflows,
+editor/resilience work, manual and exact-final release gates remain active.
+
 ## September 9 — V3.1 stability candidate handed off locally
 
 The bounded repair goal is technically complete: paid staffing/execution plans,
