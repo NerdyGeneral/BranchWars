@@ -40,6 +40,21 @@ original source identities retained. They are not browser/client tests. New
 full Windows, actual terminal-browser and packaging checks are required for
 the changed client, followed by final balance review and local handoff.
 
+The corrected client has now also passed the actual terminal import and both
+hotseat rematch authorizations on its own packaged loopback server. The same
+36.8 MB save displayed results in1,145 ms; the1280x720 screenshot showed readable
+cards, accurate no-transfer wording and unobstructed controls. Both viewpoints
+showed the same winner. Both votes were required before returning to month1.
+This is not a benchmark percentile or physical multiplayer test.
+
+New six-file local QA ZIP: `BranchWars-v3.1-export-a1c386f.zip`, SHA-256
+`6c0331570c4109158f47f9020f875c668e95a3a6f48a29201a483df67c8e706e`.
+Each ZIP entry matches the verified package directory; served HTML is exactly
+1,466,241 bytes with the new portable hash. Both temporary endgame-test servers
+were stopped after checking their exact process identities. No publication or
+security-setting change occurred. The fresh full Windows gate is running from
+committed `a1c386f`; final matrix analysis and release handoff remain pending.
+
 ## Previous execution-capacity checkpoint — portable fcf23071
 
 ### Actual failed-save continuation: crash repaired, economic loss retained

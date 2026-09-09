@@ -13,6 +13,11 @@ required. The preceding `fcf23071...` completed184 Windows checks and the separa
 
 ### Pre-display-correction checkpoint — fcf23071
 
+The newer display-corrected candidate already has a verified six-file ZIP
+`BranchWars-v3.1-export-a1c386f.zip` and actual-package terminal import/rematch
+browser proof. Its full Windows run remains active. See the stability report
+for exact hashes, evidence limits and the unchanged-engine comparison.
+
 Current `fcf23071...` has a verified six-file local QA ZIP
 `BranchWars-v3.1-export-3671b47.zip` (SHA-256
 `864928fe3df8ec5a3c226ca31f0f7355823a39be6922dc12ce84e0be1450021b`). Exact-package
