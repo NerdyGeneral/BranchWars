@@ -16,7 +16,7 @@ for(const p of g.players){
  assert(n>=1&&n<=2,'Funded mature bank can recruit despite low morale');
  assert(p.stats.cash-E.hireCost(p,n)>=600000+6*n*18000);
  assert(p.stats.lastProfit>=2*n*18000);
- assert(E.pilotSpendingLimit(p,.10,200000+6*n*18000)>=E.hireCost(p,n));
+ assert(E.pilotSpendingLimit(p,.10,200000)>=E.hireCost(p,n));
  assert.equal(E.planHiring(rules,p,p.stats.cash),0,'Existing commitments have priority');
  for(const [field,value]of [['lastProfit',0],['emergencyDebt',100000],['cash',100000],['capital',0],['staff',22]]){
   // Adverse planner inputs only, not asserted valid saved campaigns.

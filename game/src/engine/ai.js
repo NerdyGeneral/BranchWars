@@ -22,12 +22,13 @@ function planHiring(g,p,committed){
   let count=0;
   while(count<target){
    const next=count+1,payroll=next*18000,cost=hireCost(p,next);
-   // Six months of additional gross payroll must remain funded; current bank
-   // earnings must cover twice that run-rate. No subsidiary cash or promised
-   // future receipts fund a bank hire. Final whole-plan reserve checks still run.
+   // Six months of additional gross payroll must remain in CASH; current bank
+   // earnings must cover twice that run-rate. Do not reserve future payroll a
+   // second time in capital: the whole-plan AI already retains its $200K equity
+   // cushion above 10% risk coverage. No subsidiary or future cash funds a hire.
    if(p.stats.lastProfit<payroll*2||
     p.stats.cash-committed-cost<600000+payroll*6||
-    pilotSpendingLimit(p,.10,200000+payroll*6)-committed<cost)break;
+    pilotSpendingLimit(p,.10,200000)-committed<cost)break;
    count=next;
   }
   return count;

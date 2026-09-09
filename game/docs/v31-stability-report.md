@@ -84,8 +84,8 @@ below 12 staff, then one below 22, remain provisional limits, not a free target.
 No recruitment is proposed with emergency debt, funding excess or severe capital
 standing. Current monthly bank profit must cover twice the additional $18,000
 gross monthly base payroll per hire. After recruiting, cash must cover $600,000
-plus six months of that extra payroll; 10% risk-capital coverage and $200,000 plus
-the same payroll reserve must remain. Final shared spending checks still apply.
+plus six months of that extra payroll; 10% risk-capital coverage and $200,000
+additional equity must remain. Final shared spending checks still apply.
 Actual recruitment pays the ordinary price and activates next month. Later
 specialist selection and full-plan affordability can still reduce the proposal.
 
@@ -120,9 +120,21 @@ does NOT solve staffing: ending headcounts were five / four, both had ATM-only
 networks, and the first bank ended with no cash. The result is diagnostic, not
 accepted long-run balance. Snapshot hash:
 `16c74dad777c8cd91643ebfd93cd67a6d19f39bbd8f04c6b68dd3e94c705d256`.
-Recruitment120 remains in progress; its first 60 months did not change the loan
-balances relative to this earlier candidate. Investigate the binding capital and
-cash constraints instead of claiming the recruitment heuristic is sufficient.
+Recruitment120 completed with 11 exact replays and no invariant failure, but
+ended with three / four staff, zero morale, loans $1,009,769 / $845,778 and cash
+$544,376 / $9,201,507. Only four specialist hires were staged across both banks
+in 120 months. This is another failed activity/management outcome, not success.
+Its snapshot was `d3c565e4978ad8d31d590476224eddc96442d04c0b3dcd477d814a91b1d06d3b`.
+
+The next source revision removes a duplicated future-payroll equity reserve:
+recruitment had demanded the six-month payroll runway in both cash and capital,
+while discretionary planning maintained only its ordinary $200,000 capital
+cushion. Recurring spend could therefore prevent recruitment from reaching that
+higher threshold. Keep six months of extra payroll in cash, current profit at
+twice the extra run-rate, ordinary hiring payment and the shared 10% plus $200,000
+capital protection. This calibration is not yet accepted by campaign testing;
+the AI's role priorities, morale recovery and premature ATM conversion also need
+further work. Do not call either earlier recruitment candidate successful.
 
 The assembled `412945e8…` snapshot also passed Group7 complete-client simulated
 GitHub/LAN/direct staffing handshakes, stale session rejection, owner privacy and
