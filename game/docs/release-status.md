@@ -2,6 +2,21 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Newest repair: removing research from an investment counterfactual can resume
+paid teaching and leave too few staff for retained work quotas. The genuine
+month284 crash is now reproduced and repaired without changing staff or money.
+Latest portable hash is
+`0476a166a40aa843ea7a62e9607e3d79a561e19627f3c453bbc704c6b5e29012`.
+The9298b54 full gate was cancelled for this confirmed defect, not passed. Its
+verified local ZIP is a preserved, superseded QA snapshot, not the final V3.1.
+Current regression/replay checks pass. A fresh complete-client adversarial and
+staffing network rerun also passes on this exact portable hash across GitHub,
+LAN and direct-link simulations, including reconnect fencing, sealed checkpoint
+recovery, delayed hashes, duplicate messages, incompatible peers and privacy.
+This is not a real two-computer acceptance result. Mature stress and final
+verification remain open. The earlier checkpoint paragraphs below are historical
+evidence.
+
 Latest checkpoint: Group7 rejects conflicting renovation/conversion forecasts
 and reserves occupied renovation sites before proposing branch initiatives.
 The real month92 failure/replay regression passes; the preserved V3 Rate baseline

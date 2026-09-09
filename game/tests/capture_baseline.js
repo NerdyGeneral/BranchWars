@@ -47,6 +47,8 @@ const functionChecks=['v31_version_boundary.test.js','v31_funded_origination.tes
   'department_captured_replay.test.js','department_storage_capacity.test.js','department_storage_recovery.test.js','department_long_storage.test.js'];
 institutionChecks.push(...functionChecks);
 institutionChecks.push('v31_facility_conflicts.test.js');
+institutionChecks.push('v31_training_deferral.test.js');
+files.push('tests/v31_training_deferral.test.js','tests/fixtures/v31-group7-growth283.json.gz');
 files.push('tests/v31_facility_conflicts.test.js','tests/fixtures/v31-group7-regulatory91.json.gz');
 files.push(...functionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html',
   'experiments/institution/department-functions-ui.js');

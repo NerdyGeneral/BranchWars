@@ -55,6 +55,8 @@ function facilityInvestmentFutureOwner(g,p,plan,quote){
 function facilityInvestmentReview(g,index,input,request){
  const p=g.players[index],plan=facilityInvestmentDraft(input),reject=reason=>({eligible:false,reason});
  if(!p.facilityLifecycle||!p.creditPerformance||!p.creditPortfolio)return reject('Staffed facilities and persistent credit are required.');
+ const draftAuthorized=departmentFunctionsQuote(g,p,plan);
+ if(!draftAuthorized.status.eligible)return reject('deferred: '+draftAuthorized.status.reason);
  // Compare a conversion with deferring unstarted research/new projects, not
  // with cancelling existing work, staffing, vendors or emergency defenses.
  // The returned plan makes this opportunity cost explicit to the caller.
@@ -98,7 +100,13 @@ function facilityInvestmentReview(g,index,input,request){
 function planFacilityInvestment(g,index,input){
  if(g.financialGroupVersion!==7)return input;
  const p=g.players[index];if(p.stats.lastProfit<=0||tierRank(p)>=2)return input;
- const draft=facilityInvestmentDraft(input),context=facilityContext(g,p,draft),budget=planBudget(p,draft),
+ const draft=facilityInvestmentDraft(input),draftAuthorized=departmentFunctionsQuote(g,p,draft);
+ // Deferring research can make previously paused training affordable. That
+ // reserves a real teacher and may invalidate otherwise legal work quotas.
+ // Keep the original funded plan rather than inventing capacity, cancelling
+ // training or forecasting an impossible deferred-spending alternative.
+ if(!draftAuthorized.status.eligible)return input;
+ const context=facilityContext(g,p,draft),budget=planBudget(p,draft),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
   current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
   gross=facilityInvestmentGross(current),capacity=regionalBranchMetrics(p).loanCapacity,

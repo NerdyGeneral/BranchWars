@@ -2,6 +2,13 @@
 
 ## Local V3.1 candidate — in progress, not published
 
+- Validate deferred research/project plans before facility forecasting: freed
+  funds may resume training, reserving teachers and invalidating old work quotas.
+  Reject the infeasible alternative without changing the original legal plan.
+- Add the genuine Growth month284 failure, paid-teaching explanation, pure
+  rejection, legal settlement and exact replay regression. Preserve the older
+  QA ZIP; its incomplete full gate was cancelled, not reported as a pass.
+
 - Reject mutually conflicting renovation/conversion counterfactuals before
   operating forecasts. Preserve selected work and use shared lifecycle rules.
 - Group7 AI no longer proposes new local branch projects over existing paid

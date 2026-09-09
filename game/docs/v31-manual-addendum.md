@@ -80,6 +80,13 @@ third-party insurers: this is not permission for your bank to underwrite insuran
 
 ## Friend-playtest checklist — not yet accepted
 
+Training can resume when other proposed spending is removed. A paid class may
+reserve a department leader as a teacher, reducing staff available for normal
+work that month. The repaired AI investment planner checks that interaction
+before considering a deferred-research alternative. It keeps the current legal
+plan if the alternative cannot cover its work; no free staff or cancelled
+training is assumed.
+
 Facility planning reminder: a local market cannot simultaneously host conflicting
 construction, conversion and renovation work. The new AI respects already-paid
 renovations before proposing another local initiative. Its investment preview

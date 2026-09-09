@@ -6,6 +6,30 @@ regional / Financial Group expansion. No GitHub publication is authorized.
 
 ## Starting point and version boundary
 
+### Current verification checkpoint
+
+The current training-deferral candidate is portable
+`0476a166a40aa843ea7a62e9607e3d79a561e19627f3c453bbc704c6b5e29012`,
+engine `f19db673dbc6137b779e29e2576bf7bb3b8d118734dec7cff7c4d2e588c61d34`.
+Fresh `v31_training_deferral`, adversarial-network and staffing-network tests
+pass, as do portable/reference currency, documentation and diff checks.
+The network tests exercise assembled clients across all three simulated
+transports; they do not establish physical two-computer acceptance.
+
+The repaired genuine month-284 Growth save has now resolved through month 355
+without repeating the quota crash. Both banks still have loan portfolios and
+the recovery run is continuing; this is not yet a 480-month pass.
+
+The matched published-V3 baseline now has confirmed complete reports: Growth /
+department-A / VP reaches 480 months with 41 exact replay checks, while Balanced /
+department-A / VP stops after 176 months, Rate / department-A / VP after 226,
+and Growth / department-B / Chairman after 127. All three baseline failures
+report overlapping office work. Preserve those failures: do not fix the baseline,
+extrapolate missing months, or present an unreached 480-month balance comparison.
+The corresponding current-candidate campaigns remain running. Older candidate
+reports and package hashes below are historical diagnostics, not evidence for
+this final-source candidate.
+
 Published V3: commit `ee37b6865af71be20c35ac3b4f41b0519bf9d650`, portable SHA-256
 `4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107`.
 Separate `feat/v3.1-stability` worktree; existing development, main catalog,
@@ -476,6 +500,54 @@ render restored its staged$600K value. Therefore the full browser reserve-edit
 interaction is not claimed as verified; the actual staging functions and shared
 budget calculation have additional isolated tests. No cash, rules or reserve
 defaults were changed by this presentation repair.
+
+## Follow-up: deferred research and paid teaching
+
+The older isolated Growth480 run failed after283 resolved months. At month284,
+the otherwise legal AI plan kept training paused behind research spending.
+The facility investment counterfactual removed that proposed research, making
+training affordable again. A paid teacher then consumed a service banker while
+the counterfactual retained work quotas sized for the larger physical pool.
+The current9298b54 build reproduced this same failure on the captured campaign.
+
+The new repair validates the deferred plan before either direct investment
+review or the AI's initial operating forecast. An infeasible counterfactual
+returns the original legal plan. It does not cancel training, reduce retained
+work, hire staff for free, change quotas, or grant money. The genuine fixture
+`tests/fixtures/v31-group7-growth283.json.gz` has SHA-256
+`e0886c332a22cffd3d455f4b3e48b6d7b8020b518cd706ef6114ac2d53c685b9`.
+The regression proves that teaching resumes after deferral, reproduces the
+unguarded crash, checks instruction/state purity, resolves the actual month284
+with legal plans and verifies exact half-ready replay. It passes, along with
+the month58/month92 regressions, funded valuation and six legacy-version checks.
+
+Latest portable SHA-256:
+`0476a166a40aa843ea7a62e9607e3d79a561e19627f3c453bbc704c6b5e29012`.
+Engine `f19db673dbc6137b779e29e2576bf7bb3b8d118734dec7cff7c4d2e588c61d34`.
+No balance price, staff requirement or resource rule was tuned in this repair.
+
+The9298b54 full Windows gate was deliberately stopped after reproduction of
+this defect, before source changes. Its process tree was verified and stopped;
+the separate campaign jobs were not stopped. This gate is **cancelled**, not a
+pass or completed failure report. A new final-source gate remains required.
+The local9298b54 six-file ZIP passed package/hash verification, but contains
+the reproduced late-game defect and is superseded as a release candidate.
+It remains preserved as a QA artifact; it was never published.
+
+The failed Growth diagnostic still establishes that productive alternatives to
+ATMs are possible under the existing paid economics. At month240 its leading
+bank had37 staff, commercial/retail/digital offices and$399,791 gross monthly
+originations. At month283 it had54 staff, three commercial, one retail, two
+digital and one ATM location, originating$987,463 that month. The rival had14
+staff and one ATM, originating$100,000. Both still had real capital and all six
+companies were active. The leader's89.1% deposit share is not itself a defect.
+These observations do not establish overall balance or a480-month pass; the
+smaller bank's low morale and the lack of agency opening remain visible limits.
+
+A separate repaired continuation of the genuine month284 failure toward480 is
+under way. It is labelled mature-save stress, not creation-to480 matched evidence.
+The previous snapshot's matrix remains diagnostic; final-source comparisons,
+release gates and a replacement export are still required.
 
 ## Outstanding final gates
 

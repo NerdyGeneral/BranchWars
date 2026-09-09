@@ -7,6 +7,14 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Newest stability finding: the Growth diagnostic reached283 months before an
+investment deferral resumed teaching and invalidated service quotas. The actual
+month284 failure/replay is now covered and fixed. No extra staff, forced equal
+shares or free funds were added. Mature stress on the new source is running.
+The preceding full gate was cancelled for the confirmed defect; final-source
+matrix, Windows gate and replacement export remain required. The preserved QA
+ZIP is not a final accepted release.
+
 Follow-up checkpoint: actual Regulatory month92 planning/replay now covers
 conflicting renovation and conversion proposals. Group7 local expansion also
 respects existing paid renovations. The current budget warning has been visually
