@@ -1,5 +1,15 @@
 # Release status and known issues
 
+## Active V3 usability candidate — September 9
+
+Implementation is in progress on `feat/v3-usability`, based on `c721ede`.
+The current published V3 remains the preserved V3.1 package on main catalog
+commit `fb6c424`. See the [usability implementation ledger](v3-usability.md) for all
+55 recommendations and the complete release acceptance gates. New publication
+is authorized only after those gates pass; no new candidate is published yet.
+The following handoff entries are historical evidence, not verification of this
+UI overhaul.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

@@ -23,6 +23,9 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
   ['tests/facility_catalog.test.js','--integrated'], ['tests/facility_lifecycle_legacy_compat.test.js'],
   ['tests/facility_lifecycle_integration.test.js'], ['tests/facility_conversion_lifecycle.test.js'], ['tests/facility_hub_transitions.test.js'], ['tests/facility_lifecycle_network.test.js'], ['tests/facility_lifecycle_ui.test.js'], ['tests/facility_submission.test.js']);
 if (!args.includes('--full')) commands.push(...[
+'usability_forms.test.js',
+'usability_plan_review.test.js',
+'usability_engine_boundary.test.js',
 'v31_facility_conflicts.test.js',
 'v31_training_deferral.test.js',
 'v31_execution_reserve.test.js',

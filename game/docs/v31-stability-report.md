@@ -385,9 +385,9 @@ with no skipped initiatives and a largest reported player view of 559,901 bytes.
 That suite covers its existing campaign rules; it is not the new Group7 long-run
 matrix. Authoritative reports:
 
-- [Full Windows report](../reports/baselines/N-00-2026-09-09T04-39-45-160Z.json),
+- Preserved local Full Windows report: `reports/baselines/N-00-2026-09-09T04-39-45-160Z.json`,
   SHA-256 `53454fc733d6312d01a0a39ba9157d5de9c9e350a0f4677e1d14eae2ecc39733`.
-- [Release balance report](../reports/baselines/release-balance-2026-09-09T05-33-38-548Z.json),
+- Preserved local Release balance report: `reports/baselines/release-balance-2026-09-09T05-33-38-548Z.json`,
   SHA-256 `2435aa2237bb10148bb81a91620c0d72af77eccf68eeb7a0684de0da1bf13dbe`.
 
 The four matched **department-A / VP** current-candidate runs also completed

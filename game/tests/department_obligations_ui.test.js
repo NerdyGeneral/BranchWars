@@ -24,7 +24,7 @@ function historicalUi(source){
   const end=source.indexOf('\nfunction ',start+marker.length);source=source.slice(0,start)+original+source.slice(end<0?source.length:end);
  }return source;
 }
-const actualUi=read('src/ui/dashboard.js')+'\n'+read('src/ui/projects.js'),ui=candidate?uiPatch(actualUi):actualUi,legacyUi=candidate?actualUi:historicalUi(actualUi);
+const actualUi=read('src/ui/dashboard.js')+'\n'+read('src/ui/plan-review.js')+'\n'+read('src/ui/projects.js'),ui=candidate?uiPatch(actualUi):actualUi,legacyUi=candidate?actualUi:historicalUi(actualUi);
 const engineContext={console};vm.runInNewContext(engine,engineContext);const E=engineContext.BWEngine,copy=x=>JSON.parse(JSON.stringify(x));let checks=0;
 const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options,g=E.createGame({...options,mode:'hotseat',seed:'obligations-ui',created:1});
 function quiet(world){world.event=copy(E.EVENTS.find(e=>e.key==='quiet'));}
@@ -73,11 +73,12 @@ ph.ctx.draft=copy(ordinary);ph.draw();const sealed=ph.action(paidKey).listeners.
 ph.ctx.game.players[0].submitted=null;ph.ctx.game.gameOver={reason:'test-terminal'};ph.draw();assert.equal(ph.nodes.get('#readyBtn').disabled,true);assert.equal(ph.action('none').disabled,true);checks++;
 const detached=harness(positive,ordinary);detached.draw();const replacedAction=detached.action(paidKey).listeners.click;detached.ctx.game=copy(detached.ctx.game);replacedAction();assert.equal(detached.ctx.draft.competitiveAction,'none');
 detached.draw();const wrongOwner=detached.action(paidKey).listeners.click;detached.ctx.seat=1;wrongOwner();assert.equal(detached.ctx.draft.competitiveAction,'none');checks++;
-// Legacy markup/readiness/actions remain byte-identical, including ordinary
-// cash blocking. Do not retrofit mandatory-obligation semantics into old saves.
+// Legacy budgets/actions and readiness retain their accounting semantics.
+// Submission guidance is intentionally rewritten by the V3 usability goal;
+// its new content is covered by usability_plan_review, not this old copy golden.
 for(const version of [1,2,3]){const settings=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:version}).options;
  const legacy=E.createGame({...settings,mode:'hotseat',seed:'legacy-obligation-ui:'+version,created:1}),q=E.chooseBot(legacy,0),a=harness(legacy,q),b=harness(legacy,q,legacyUi);a.draw();b.draw();
- for(const id of ['#planBudget','#competitiveBrief','#competitiveActions','#submitMsg'])assert.equal(id==='#submitMsg'?a.nodes.get(id).textContent:a.nodes.get(id).innerHTML,id==='#submitMsg'?b.nodes.get(id).textContent:b.nodes.get(id).innerHTML);
+ for(const id of ['#planBudget','#competitiveBrief','#competitiveActions'])assert.equal(a.nodes.get(id).innerHTML,b.nodes.get(id).innerHTML);
  assert.equal(a.nodes.get('#readyBtn').disabled,b.nodes.get('#readyBtn').disabled);
  a.ctx.legacyView=E.publicState(legacy,0);delete a.ctx.game;delete a.ctx.view;delete a.ctx.currentView;a.run('renderCompetitiveActions(legacyView)');checks++;}
 console.log(JSON.stringify({suite:'department-obligations-ui',checks,sourceEngineHash:createHash('sha256').update(source).digest('hex'),candidateEngineHash:createHash('sha256').update(engine).digest('hex'),scope:'Actual engine and actual budget/competition/readiness renderers; paid appointments, preserved zero-cash balance sheet, real payable accrual, optional-room controls, locked/undecided/invalid protection and legacy markup. Browser acceptance separate.'}));

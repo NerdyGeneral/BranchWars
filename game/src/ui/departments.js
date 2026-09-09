@@ -1,6 +1,26 @@
 // Owner-only Workforce desk. All economics and mandate proposals come
 // from the versioned department engine; opening or previewing this desk spends nothing.
-let departmentUiState={owner:null,open:false,revision:0,proposal:null};
+let departmentUiState={owner:null,open:false,revision:0,proposal:null,form:null};
+function departmentFormSelectors(){
+  const fields=['reserve','vendors','research','leadership','mode','staffLimit','vendorLimit','salesFloor','training','trainingTarget',...Object.keys(E.SPECIALIST_ROLES).map(role=>'training-'+role)];
+  return [...fields.map(key=>'#department-'+key),...Object.keys(E.SPECIALIST_ROLES).map(role=>'#departmentLeader-'+role)];
+}
+function departmentFormScope(v){
+  const defaults=E.defaultDepartmentPlan(v.me);
+  return {campaign:game||view,owner:v.me.id,cycle:v.cycle,policy:JSON.stringify({policy:draft.departmentPolicy||defaults.departmentPolicy,orders:draft.leaderOrders||defaults.leaderOrders})};
+}
+function pendingDepartmentForm(v){
+  const saved=departmentUiState.form;if(!saved)return null;
+  if(!v.me.departmentOffice){departmentUiState.form=null;return null;}
+  const scope=departmentFormScope(v);
+  if(v.me.submitted||v.gameOver||Object.keys(scope).some(key=>scope[key]!==saved.scope[key])){departmentUiState.form=null;return null;}
+  return saved;
+}
+function rememberDepartmentForm(v){
+  // Preserve raw strings, including unfinished/invalid numbers. This is private
+  // UI scratch state, not an accepted plan, save field or network message.
+  departmentUiState.form={scope:departmentFormScope(v),values:Object.fromEntries(departmentFormSelectors().map(selector=>[selector,$(selector).value]))};
+}
 function refreshDepartmentWorkspace(v){
   if(typeof renderWorkforce==='function'&&workspaceTab==='workforce')renderWorkforce(v);
   else renderDepartments(v);
@@ -16,7 +36,7 @@ function stageDepartmentPlan(v,policy,orders,signature=JSON.stringify(draft),cam
   try{const next=JSON.parse(JSON.stringify(draft)),now=currentView();
     next.departmentPolicy=JSON.parse(JSON.stringify(policy));next.leaderOrders=JSON.parse(JSON.stringify(orders));
     E.normalizeDepartmentPlan(now.me,next);E.departmentBudgetQuote(now.me,next);
-    draft=next;departmentUiState.proposal=null;renderReady(now);refreshDepartmentWorkspace(now);
+    draft=next;departmentUiState.proposal=null;departmentUiState.form=null;renderReady(now);refreshDepartmentWorkspace(now);
     $('#departmentInstructionStatus').textContent='Department limits and leader orders staged. No appointments or cash payments occur until the month resolves.';return true;
   }catch(error){toast(error.message);return false;}
 }
@@ -48,14 +68,16 @@ function departmentUiField(key,label,value,disabled){
   return '<label for="department-'+key+'">'+label+'<input type="number" id="department-'+key+'" min="0" step="1"'+(max===undefined?'':' max="'+max+'"')+' value="'+value+'"'+disabled+'></label>';
 }
 function renderDepartments(v){
+  if(v.me.departmentOffice)pendingDepartmentForm(v);else departmentUiState.form=null;
   if(v.me.departmentFunctions)return renderDepartmentFunctionsWorkspace(v);
   return renderDepartmentLeadership(v);
 }
 function renderDepartmentLeadership(v,navigation=''){
   const mount=$('#departmentPanel'),p=v.me;departmentUiState.revision++;
-  if(!p.departmentOffice){mount.innerHTML='';mount.classList.add('hidden');departmentUiState={owner:null,open:false,revision:departmentUiState.revision,proposal:null};return;}
+  if(!p.departmentOffice){mount.innerHTML='';mount.classList.add('hidden');departmentUiState={owner:null,open:false,revision:departmentUiState.revision,proposal:null,form:null};return;}
   mount.classList.remove('hidden');
-  if(departmentUiState.owner!==p.id)departmentUiState={owner:p.id,open:false,revision:departmentUiState.revision,proposal:null};
+  if(departmentUiState.owner!==p.id)departmentUiState={owner:p.id,open:false,revision:departmentUiState.revision,proposal:null,form:null};
+  const pending=pendingDepartmentForm(v);
   const defaults=E.defaultDepartmentPlan(p),policy=draft.departmentPolicy||defaults.departmentPolicy,orders=draft.leaderOrders||defaults.leaderOrders;
   const disabled=p.submitted||v.gameOver?' disabled':'',m=policy.mandate;
   let quoteContent;
@@ -74,6 +96,7 @@ function renderDepartmentLeadership(v,navigation=''){
     '<label for="department-training">Training proposal<select id="department-training"'+disabled+'><option value="off"'+(!m.training?' selected':'')+'>Off · preserve training instructions</option><option value="on"'+(m.training?' selected':'')+'>Prepare training within ceilings</option></select></label></div></details>'+
     '<div class="credit-controls">'+Object.keys(E.SPECIALIST_ROLES).map(role=>departmentLeaderCard(v,role,orders)).join('')+'</div>'+
     '<button type="button" class="btn" id="previewDepartments"'+disabled+'>Preview form</button> <button type="button" class="btn" id="stageDepartments"'+disabled+'>Stage limits and leader orders</button>'+
+    ' <button type="button" class="btn" id="discardDepartmentForm"'+disabled+'>Discard unstaged edits</button>'+
     '<p id="departmentInstructionStatus" class="small" role="status">Form changes are not staged until you choose Stage.</p><div id="departmentQuote" aria-live="polite">'+quoteContent+'</div>'+
     '<details><summary>Prepare a bounded operating proposal</summary><p class="small">Uses your staged mandate, not unstaged form edits. Prepare never applies a plan. Review exact changes before choosing Stage proposal. Managers cannot borrow, hire, close facilities, acquire, change products or submit a turn.</p>'+
     '<button type="button" class="btn" id="prepareDepartmentDraft"'+disabled+'>Prepare proposal from staged limits</button><div id="departmentProposal" aria-live="polite"></div></details>'+
@@ -81,6 +104,11 @@ function renderDepartmentLeadership(v,navigation=''){
       ', compensation invoices paid '+departmentUiMoney(p.departmentOffice.report.paid)+', still owed '+departmentUiMoney(p.departmentOffice.report.arrears)+'. Payment of old invoices is not a second expense.</p>':'')+
     '<p class="micro">Departments share your bank’s cash and existing staff. Leaders can accelerate paid training but take a banker away from productive work while teaching; stronger skills must justify the compensation and lost capacity.</p></section></details>';
   bindDepartments(v);
+  if(pending){
+    for(const [selector,value]of Object.entries(pending.values))$(selector).value=value;
+    $('#departmentInstructionStatus').textContent='Unstaged edits restored for this bank and month. Preview or Stage to use them; your monthly plan is unchanged.';
+    $('#departmentQuote').innerHTML='<p class="notice">Unstaged form: preview these values to refresh costs. No instructions have been applied.</p>';
+  }
 }
 function departmentUiRead(){
   const defaults=E.defaultDepartmentPlan(currentView().me),policy=JSON.parse(JSON.stringify(draft.departmentPolicy||defaults.departmentPolicy));
@@ -130,15 +158,15 @@ function bindDepartments(v){
   const current=()=>revision===departmentUiState.revision&&departmentUiCurrent(v,signature,campaign);
   $('#departmentDesk').addEventListener('toggle',()=>{if(revision===departmentUiState.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id)departmentUiState.open=!!$('#departmentDesk').open;});
   $('#stageDepartments').addEventListener('click',()=>{if(!current())return;const form=departmentUiRead();stageDepartmentPlan(v,form.policy,form.orders,signature,campaign);});
+  $('#discardDepartmentForm').addEventListener('click',()=>{if(!current())return;departmentUiState.form=null;departmentUiState.proposal=null;refreshDepartmentWorkspace(v);$('#departmentInstructionStatus').textContent='Unstaged edits discarded. Your staged monthly plan is unchanged.';});
   $('#previewDepartments').addEventListener('click',()=>{if(!current())return;try{
     const form=departmentUiRead(),next=JSON.parse(JSON.stringify(draft));next.departmentPolicy=form.policy;next.leaderOrders=form.orders;
     E.normalizeDepartmentPlan(v.me,next);$('#departmentQuote').innerHTML=departmentQuoteMarkup(E.departmentBudgetQuote(v.me,next));
     $('#departmentInstructionStatus').textContent='Preview only. Your monthly plan is unchanged.';
   }catch(error){$('#departmentInstructionStatus').textContent=error.message;toast(error.message);}});
   $('#prepareDepartmentDraft').addEventListener('click',()=>{if(current())prepareDepartmentProposal(v,signature,campaign);});
-  const fields=['reserve','vendors','research','leadership','mode','staffLimit','vendorLimit','salesFloor','training','trainingTarget',...Object.keys(E.SPECIALIST_ROLES).map(role=>'training-'+role)];
-  for(const selector of [...fields.map(key=>'#department-'+key),...Object.keys(E.SPECIALIST_ROLES).map(role=>'#departmentLeader-'+role)])$(selector).addEventListener('change',()=>{
-    if(!current())return;departmentUiState.proposal=null;$('#departmentProposal').innerHTML='';
+  for(const selector of departmentFormSelectors())for(const event of ['input','change'])$(selector).addEventListener(event,()=>{
+    if(!current())return;rememberDepartmentForm(v);departmentUiState.proposal=null;$('#departmentProposal').innerHTML='';
     $('#departmentQuote').innerHTML='<p class="notice">Form changed. Preview or stage the updated limits and orders.</p>';
     $('#departmentInstructionStatus').textContent='Form changed; the staged plan remains unchanged.';
   });

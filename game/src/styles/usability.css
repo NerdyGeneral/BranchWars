@@ -1,0 +1,9 @@
+.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.plan-review-heading span{font-size:.85rem;color:var(--muted)}
+.plan-review-list{list-style:none;padding:0;margin:.6rem 0;display:grid;gap:.5rem}
+.plan-review-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem;border:1px solid #c5d2e2;border-left:4px solid #b86c12;border-radius:8px;background:#fff}
+.plan-review-item.is-blocker{border-left-color:#bd3541}
+.plan-review-item p{font-size:.9rem;line-height:1.45;margin:.3rem 0 0;max-width:80ch}
+.plan-review-item .btn{flex-shrink:0}
+#monthlyPlanReview details{margin-top:.55rem}#monthlyPlanReview summary{cursor:pointer;font-size:.9rem;line-height:1.4;padding:.45rem 0}
+@media(max-width:700px){.plan-review-item{align-items:stretch;flex-direction:column}.plan-review-item .btn{align-self:flex-start}}

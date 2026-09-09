@@ -8,7 +8,7 @@ const DepartmentFunctionsUI=(()=>{
  const taskNames={offerSales:'Relationship offers',commercialRelationships:'Commercial relationships',householdSupport:'Household service',applicationProcessing:'Application processing',commercialDelivery:'Contract delivery',creditAdministration:'Credit administration',collections:'Collections',technology:'Technology operations',risk:'Risk and compliance',treasury:'Treasury operations',people:'People management'};
  const consumers={offerSales:'Share-of-wallet offers',commercialRelationships:'Business and merchant acquisition',householdSupport:'Household service and retention',applicationProcessing:'Pending application activation',commercialDelivery:'Signed service agreements',creditAdministration:'New loan origination',collections:'Delinquency servicing',technology:'Service platforms and disruption resilience',risk:'Credit controls and examination resilience',treasury:'Locked-term deposit handling',people:'Paid training gains and management performance'};
  function create({functions:D,quotePolicy,getSnapshot,onAdopt,onChanged=()=>{},onRedraw=null,onError=()=>{}}){
-  let state={stamp:null,identity:null,selected:null,form:null,mandate:null,proposal:null,reviewed:false,formDirty:false,notice:'',revision:0};
+  let state={stamp:null,identity:null,selected:null,form:null,mandate:null,proposal:null,reviewed:false,formDirty:false,inputs:{},notice:'',revision:0};
   function capture(){
    const snapshot=getSnapshot(),view=snapshot.view,p=view?.me;
    const stamp=stable({owner:p,cycle:view?.cycle,ended:view?.gameOver,economy:view?.economy,regions:view?.regions,territories:view?.territories,opportunities:view?.opportunities,
@@ -16,9 +16,13 @@ const DepartmentFunctionsUI=(()=>{
    return {snapshot,stamp,identity:snapshot.identity,p,locked:!!(view?.gameOver||p?.submitted||snapshot.lockedReason)};
   }
   function sync(current){
-   if(current.stamp!==state.stamp||current.identity!==state.identity)state={stamp:current.stamp,identity:current.identity,selected:D.IDS.includes(state.selected)?state.selected:D.IDS[0],
-    form:current.p?.departmentFunctions?clone(current.snapshot.policy||D.defaultPlan(current.p)):null,mandate:current.snapshot.mandate?clone(current.snapshot.mandate):null,
-    proposal:null,reviewed:false,formDirty:false,notice:'Review changes before adopting them into your plan.',revision:state.revision+1};
+   if(current.stamp!==state.stamp||current.identity!==state.identity){
+    const policy=current.p?.departmentFunctions?clone(current.snapshot.policy||D.defaultPlan(current.p)):null;
+    const keep=!current.locked&&state.identity===current.identity&&state.owner===current.p?.id&&state.cycle===current.snapshot.view?.cycle&&state.policyStamp===stable(policy);
+    state={stamp:current.stamp,identity:current.identity,owner:current.p?.id,cycle:current.snapshot.view?.cycle,policyStamp:stable(policy),selected:D.IDS.includes(state.selected)?state.selected:D.IDS[0],
+     form:keep?state.form:policy,mandate:keep?state.mandate:current.snapshot.mandate?clone(current.snapshot.mandate):null,
+     proposal:null,reviewed:false,formDirty:keep&&state.formDirty,inputs:keep?state.inputs:{},notice:keep?'Shared plan changed. Your unstaged values are retained; preview again before adoption.':'Review changes before adopting them into your plan.',revision:state.revision+1};
+   }
   }
   function expected(current){return {identity:current.identity,stamp:current.stamp,ownerId:current.p.id,cycle:current.snapshot.view.cycle,revision:state.revision};}
   function guard(token,write=true){
@@ -33,6 +37,7 @@ const DepartmentFunctionsUI=(()=>{
   function preview(policy,token){
    const current=guard(token);if(!current)return false;
    try{const result=review(current,policy);state.form=clone(result.quote.policy);state.proposal=null;state.reviewed=true;state.formDirty=false;
+    for(const id of Object.keys(state.inputs))if(id==='df-vendor'||id.startsWith('df-staff-'))delete state.inputs[id];
     state.notice=result.quote.eligible?'Preview only. Review the shared staff and monthly cost before Adopt.':result.quote.reason;state.revision++;return true;
    }catch(error){state.reviewed=false;state.proposal=null;state.notice=error.message;state.revision++;onError(error.message);return false;}
   }
@@ -52,14 +57,14 @@ const DepartmentFunctionsUI=(()=>{
     if(state.proposal){const confirmed=D.propose(current.p,state.form,checked.built.context,state.mandate);if(!confirmed.eligible||stable(confirmed.policy)!==stable(policy))throw Error('The allocation proposal changed. Prepare it again.');}
     const request={policy:clone(policy),proposalMandate:state.proposal?clone(state.mandate):null,expected:expected(current)};
     if(onAdopt(request)!==true)throw Error('The current draft did not accept these instructions. Refresh and review again.');
-    state.stamp=null;state.proposal=null;state.reviewed=false;state.revision++;
+    state.stamp=null;state.policyStamp=null;state.proposal=null;state.reviewed=false;state.inputs={};state.revision++;
     try{onChanged();}catch(error){onError('Instructions were staged, but the desk could not refresh: '+error.message);}return true;
    }catch(error){state.notice=error.message;onError(error.message);return false;}
   }
   function cancel(token){const current=guard(token);if(!current)return false;state.form=clone(current.snapshot.policy||D.defaultPlan(current.p));state.mandate=current.snapshot.mandate?clone(current.snapshot.mandate):null;
-   state.proposal=null;state.reviewed=false;state.formDirty=false;state.notice='Preview discarded. Your existing plan and bank are unchanged.';state.revision++;return true;}
+   state.proposal=null;state.reviewed=false;state.formDirty=false;state.inputs={};state.notice='Preview discarded. Your existing plan and bank are unchanged.';state.revision++;return true;}
   function select(id,token){if(!guard(token,false)||!D.IDS.includes(id))return false;if(state.formDirty){onError('Preview or discard edited function values before switching functions.');return false;}state.selected=id;state.revision++;return true;}
-  function field(id,label,value,max,disabled){return '<div class="df-field"><label id="'+id+'-label" for="'+id+'">'+esc(label)+'</label><input id="'+id+'" aria-labelledby="'+id+'-label" type="number" min="0" step="1" max="'+max+'" value="'+esc(value)+'"'+(disabled?' disabled':'')+'></div>';}
+  function field(id,label,value,max,disabled){return '<div class="df-field"><label id="'+id+'-label" for="'+id+'">'+esc(label)+'</label><input id="'+id+'" aria-labelledby="'+id+'-label" type="number" min="0" step="1" max="'+max+'" value="'+esc(Object.hasOwn(state.inputs,id)?state.inputs[id]:value)+'"'+(disabled?' disabled':'')+'></div>';}
   function completed(p){
    const saved=p.departmentFunctionDelivery,ordered=p.departmentFunctions.report,report=saved?.report;
    if(!report||!ordered)return '<details id="df-completed"><summary>Last completed month</summary><p class="small">No completed department month yet.</p></details>';
@@ -88,7 +93,7 @@ const DepartmentFunctionsUI=(()=>{
     field('df-vendor','Vendor work units',state.form.vendors[selected],built.context.vendorSupply[selected],locked)+'</div><p class="micro">Vendor rate '+dollars(definition.vendorRate)+'/unit/month; '+built.context.vendorSupply[selected]+' units of authored supplier capacity available. Idle ordered vendor capacity is still charged.</p><button class="btn" type="button" id="df-preview"'+disabled+'>Preview function changes</button></section>';
    const m=state.mandate,limits=m?'<details><summary>Prepare a bounded staffing proposal</summary><p class="small">Limits apply to this review. Preserve residual staff for facilities/sales; no hires, borrowing or major strategic decisions are made.</p><p class="small" id="df-priority-list">'+m.priorities.map((id,i)=>(i+1)+'. '+esc(D.FUNCTIONS[id].name)).join(' → ')+'</p><div class="df-field"><label id="df-priority-label" for="df-priority">Change proposal priority</label><select id="df-priority" aria-labelledby="df-priority-label"'+disabled+'>'+m.priorities.map(id=>'<option value="'+id+'">'+esc(D.FUNCTIONS[id].name)+'</option>').join('')+'</select></div><button class="btn" type="button" id="df-up"'+disabled+'>Move priority up</button> <button class="btn" type="button" id="df-down"'+disabled+'>Move priority down</button><div class="credit-controls">'+field('df-max-staff','Maximum NEW quarters in this proposal',m.maxAdditionalQuarters,D.RULES.maxQuarters,locked)+field('df-max-vendor','TOTAL vendor envelope ($/month)',m.maxVendorExpense,D.RULES.maxCash,locked)+D.ROLES.map(r=>field('df-floor-'+r,roles[r]+' residual floor',m.floorQuarters[r],D.RULES.maxQuarters,locked)).join('')+'</div><button class="btn" type="button" id="df-prepare"'+disabled+'>Prepare proposal from reviewed form</button></details>':'<p class="notice">A proposal needs explicit priority, staff-floor and spending limits.</p>';
    const proposal=state.proposal?'<section class="credit-policy" aria-label="Allocation proposal review"><h4>Review proposed changes</h4><p class="small">'+state.proposal.additionalQuarters+' new staff quarters · '+dollars(state.proposal.additionalVendorExpense)+' added vendor cost · '+dollars(state.proposal.totalVendorExpense)+' total vendor cost/month.</p><ul>'+state.proposal.changes.map(c=>'<li>'+esc(D.FUNCTIONS[c.id].name)+' · '+esc(c.kind==='staff'?roles[c.role]:'Vendor')+': '+c.from+' → '+c.to+(c.kind==='vendor'?' · '+dollars(c.expense):'')+'. '+esc(c.reason)+'</li>').join('')+'</ul>'+state.proposal.reasons.map(reason=>'<p class="micro">'+esc(reason)+'</p>').join('')+'</section>':'';
-   const canAdopt=state.reviewed&&q.eligible&&(!state.proposal||state.proposal.eligible)&&!locked;
+   const canAdopt=state.reviewed&&!state.formDirty&&q.eligible&&(!state.proposal||state.proposal.eligible)&&!locked;
    return '<details class="department-functions-desk" open><summary>DEPARTMENT FUNCTIONS · '+esc(current.p.name)+'</summary><section class="credit-policy group-credit-policy">'+
     (locked?'<p class="notice" role="status">'+(current.snapshot.lockedReason||(current.snapshot.view.gameOver?'Campaign ended.':'Plan submitted.'))+' Instructions are locked; inspection remains available.</p>':'')+summary+history+pursuitStatus+matrix+pool+editor+limits+proposal+
     '<p id="df-status" class="'+(q.eligible?'small':'bad')+'" role="status">'+esc(q.eligible?state.notice:q.reason)+'</p><button class="btn" type="button" id="df-adopt"'+(canAdopt?'':' disabled')+'>'+(state.proposal?'Adopt reviewed proposal into draft':'Adopt reviewed function changes')+'</button> <button class="btn" type="button" id="df-cancel"'+disabled+'>Discard preview</button><p class="micro">Adopt changes only the planning draft. It cannot submit the turn, borrow, hire, close facilities, acquire businesses or pay vendors. Cash moves only in the engine’s later settlement.</p></section></details>';
@@ -110,7 +115,7 @@ const DepartmentFunctionsUI=(()=>{
    // DOM edits invalidate adoption immediately. Do not silently adopt an older
    // quote while a changed amount remains visible in the editor.
    const inputs=[...D.FUNCTIONS[state.selected].roles.map(r=>'df-staff-'+r),'df-vendor',...(state.mandate?['df-max-staff','df-max-vendor',...D.ROLES.map(r=>'df-floor-'+r)]:[])];
-   for(const id of inputs)listen(id,'input',()=>{if(!guard(token))return;state.reviewed=false;state.proposal=null;if(id==='df-vendor'||id.startsWith('df-staff-'))state.formDirty=true;find('df-adopt').disabled=true;find('df-status').textContent='Inputs changed. The displayed comparison is the last review; preview function edits or prepare updated limits before adoption.';});
+   for(const id of inputs)listen(id,'input',()=>{if(!guard(token))return;state.inputs[id]=find(id).value;state.reviewed=false;state.proposal=null;if(id==='df-vendor'||id.startsWith('df-staff-'))state.formDirty=true;state.notice='Inputs changed. Unstaged values retained. The displayed comparison is the last review; preview function edits or prepare updated limits before adoption.';find('df-adopt').disabled=true;find('df-status').textContent=state.notice;});
   }
   return Object.freeze({render:renderDepartmentFunctionsController,bind,preview,prepare,adopt,cancel,select,token:()=>{const c=capture();sync(c);return expected(c);}});
  }

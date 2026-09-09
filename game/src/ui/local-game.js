@@ -35,5 +35,13 @@ function importSave(file) {
   reader.readAsText(file);
 }
 function exportSave(){if(p2pRole==='guest'){toast('Only the multiplayer host can export the authoritative save.');return}if(!game)return;const blob=new Blob([JSON.stringify(game,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Branch_Wars_Cycle_${game.cycle}_Save.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function enterGame(suppressReplay=false){show('#gameScreen');const v=currentView();if(suppressReplay&&v)lastResolutionId=v.resolutionId||0;render()}
+function enterGame(suppressReplay=false){
+ show('#gameScreen');const v=currentView();if(suppressReplay&&v)lastResolutionId=v.resolutionId||0;render();
+ if(suppressReplay&&v){
+  setWorkspaceTab('overview');
+  const campaign=game||view,owner=v.me.id;
+  const resetScroll=()=>{if((game||view)===campaign&&currentView()?.me.id===owner&&workspaceTab==='overview')window.scrollTo?.({top:0,left:0,behavior:'auto'});};
+  if(typeof requestAnimationFrame==='function')requestAnimationFrame(resetScroll);else resetScroll();
+ }
+}
 function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();game=null;view=null;p2pRole='';draft=null;draftOwner='';lastCycle=0;lastResolutionId=0;show('#startScreen');updateContinue()}

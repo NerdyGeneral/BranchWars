@@ -1,5 +1,14 @@
 # Unified blueprint and expansion roadmap
 
+## September 9 — Active V3 usability overhaul
+
+The current user goal authorizes all five usability batches and publication to
+the existing V3 catalog after verification. The [55-item implementation ledger](v3-usability.md)
+records baseline preservation, remaining scope, provisional decisions and gates.
+The prior local-candidate publication restrictions below describe historical
+work; this goal supplies new, scoped publication authority. National Empire and
+underwriting remain deferred. No completed usability batch is claimed yet.
+
 ## September 9 — V3.1 stability candidate handed off locally
 
 The bounded repair goal is technically complete: paid staffing/execution plans,

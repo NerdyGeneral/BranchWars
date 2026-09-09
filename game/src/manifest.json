@@ -120,6 +120,7 @@
       "ui/advertising.js",
       "ui/regional-growth.js",
       "ui/recovery.js",
+      "ui/plan-review.js",
       "ui/projects.js",
       "ui/results.js",
       "ui/bootstrap.js"
@@ -144,6 +145,7 @@
     "styles/product-programs.css",
     "styles/regional-growth.css",
     "styles/features.css",
-    "styles/operations-workspace.css"
+    "styles/operations-workspace.css",
+    "styles/usability.css"
   ]
 }
