@@ -129,6 +129,9 @@ staff/service constraints without inventing bankers or silently changing mandate
   checkpoints. Confirm no duplicated turn, spending or lost committed plan.
 - Save/export, close both clients, reload the room and continue. Keep the original
   export as a recovery copy.
+- During the opening, watch maturing loans, staffing coverage and morale. Record
+  whether replacing repaid lending offers understandable choices or feels stalled;
+  later growth does not by itself establish a satisfying opening.
 - Play a mature campaign and record planning/turn-resolution delays, unclear
   bottlenecks, dominant strategies and whether competition remains enjoyable.
 - Type a different Workforce bank-wide reserve, leave the field, and confirm

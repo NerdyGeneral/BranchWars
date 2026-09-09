@@ -55,6 +55,28 @@ candidate endpoints above must not be described as measured improvements over
 nonexistent baseline endpoints. The matched 24/120-month comparisons remain
 available. Corporate failures persist in every completed candidate case.
 
+### Opening pace remains a human balance consideration
+
+In these four completed B-profile campaigns, month24 loans are $2.70M-$3.74M per
+bank, down from the $9.50M opening book. Reported scheduled principal repayments
+total $7.52M-$7.77M, while new originations total only $0.97M-$2.23M. The existing
+credit initializer divides opening principal among 12/24/36/48-month remaining
+terms; repayments reduce loans and return cash through the accounting model.
+These flows are not unexplained asset deletion, but replacing the maturing book
+is still slow. They are component metrics, not a complete asset-change bridge:
+credit recovery, write-offs and other portfolio transactions remain separate.
+
+Month24 morale ranges from8 to41 and staffing from6 to9 in this profile. Later
+recovery therefore must not be presented as a uniformly healthy opening. The
+provisional AI hire guard requires positive earnings, two times incremental
+payroll coverage, six months of incremental payroll in cash, no emergency debt
+or funding excess, and capital headroom. That is a deliberately funded safety policy, not
+a guarantee of optimal growth. Players can make their own funded staffing and
+product choices; these AI guards do not remove their existing options. No opening
+loan terms, hiring costs, loss rates or safety limits were changed at this review.
+Opening pacing and whether the tradeoffs feel rewarding remain on the human
+balance checklist alongside late-game concentration and subsidiary viability.
+
 Evidence: `reports/qa/v31/v31-execution-*-B-chairman-480.json`; exact-source
 comparison inventory `reports/local/v31-execution-matrix-chairman-review.json`.
 The engine identity and display-only client boundary below still apply. The
