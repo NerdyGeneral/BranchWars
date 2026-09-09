@@ -1,5 +1,22 @@
 # Release status and known issues
 
+## V3.1 local candidate — September 9 final handoff
+
+Scoped implementation and automated verification are complete: exact65F client
+passes185 Windows checks and the separate16-case standard release suite; all
+eight matched Group7 cases reach480 months (3,840 months /328 exact replays).
+The verified six-file ZIP is `BranchWars-v3.1-export-a1c386f.zip` in the parent
+workspace. Actual46.6MB save import, Workforce and Forecast inspection passed.
+See the [final stability report](v31-stability-report.md) for identities, baseline
+comparisons, economic caveats, performance and transport coverage.
+
+**Not published.** Physical two-computer GitHub acceptance and human-fun review
+remain outstanding; use the [manual/checklist](v31-manual-addendum.md). Early
+portfolio contraction, thin margins, subsidiary failures and dominant deposit
+positions remain documented balance considerations, not concealed test passes.
+The wider blueprint is unfinished; national expansion and underwriting remain
+deferred. The prior checkpoint text below is historical, not current run status.
+
 ## Active V3.1 stability goal — September 8, 2026
 
 September 9 verification update: all four final-engine `department-B` / Chairman

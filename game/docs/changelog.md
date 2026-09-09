@@ -1,6 +1,17 @@
 # Changelog
 
-## Local V3.1 candidate — in progress, not published
+## Local V3.1 candidate — technically verified, not published
+
+- Final September9 verification:185/185 full Windows checks; separate16-case
+  release suite;8 matched480-month campaigns,3,840 months and328 exact replays.
+  Published V3 comparison failures are preserved, not extrapolated.
+- Verify actual packaged46.6MB cycle481 import, Workforce and Forecast layouts;
+  retain separate terminal/rematch and two-browser LAN evidence. Complete the
+  before/after report, manual addendum and physical two-computer checklist.
+- Local ZIP `BranchWars-v3.1-export-a1c386f.zip` is the final65F candidate.
+  No GitHub publication. Remaining human acceptance and balance caveats are
+  explicit in [release status](release-status.md). Historical pending-test notes
+  below describe development checkpoints, not unfinished current test runs.
 
 - Correct actual-browser terminal-result wording for accounting pilots: a win
   through receivership does not grant the failed bank's assets or franchise.

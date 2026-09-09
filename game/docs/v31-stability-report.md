@@ -1,8 +1,130 @@
-# V3.1 long-campaign stability — working evidence
+# V3.1 long-campaign stability — final local candidate report
 
-September 8, 2026. **Not a final debug report or release certification.**
-This report follows the bounded local V3.1 goal, not completion of the broader
-regional / Financial Group expansion. No GitHub publication is authorized.
+September 9, 2026. **Scoped technical verification complete; human acceptance outstanding.**
+This completes the bounded local V3.1 stability candidate, not the wider regional /
+Financial Group blueprint. No GitHub publication, national expansion or insurance
+underwriting is included. Historical checkpoints below are retained as evidence;
+their running/pending language is superseded by this final summary.
+
+## Final result and deliverables
+
+- Playable ZIP: sibling `BranchWars-v3.1-export-a1c386f.zip`, six allowlisted files,
+  SHA-256 `6c0331570c4109158f47f9020f875c668e95a3a6f48a29201a483df67c8e706e`.
+- Exact final portable SHA-256:
+  `65f469e82f2d747f12334caf84a1079ea4eade2406cfa9635239e2049416644e`.
+- Full Windows gate: **185/185**, including build/reference, legacy/optional rules,
+  deterministic replay, accounting, saves/lifecycle, current network regressions
+  and Windows LAN. Separate standard release balance: **16 cases / 1,920 months**.
+- Matched Group7 matrix: **8/8 through month 480**, **3,840 months**, **328 exact
+  half-ready replays**, no reported software/invariant failure, all nonterminal.
+  All four economies have A/VP and B/Chairman policy profiles and 24/120/480
+  observations. These are hotseat AI-policy experiments, not solo handicap tests.
+- Published V3 baseline: four campaigns reached 480; four stopped at real
+  construction-conflict errors (Balanced A176, Growth B127, Rate A226,
+  Regulatory B226). All eight have comparable 24/120 horizons; missing baseline
+  480 endpoints are unavailable, never extrapolated or repaired to make a comparison.
+- Final inventories: `reports/local/v31-final-completion-audit.json` and
+  `reports/local/v31-final-eight-case-analysis.json`. Raw runs are preserved in
+  `reports/qa/v31/`. The analysis includes staffing, morale, loan flows, losses,
+  facility mix, corporate cash/failure, subsidiary economics and concentration.
+- Player instructions and physical two-computer checklist:
+  [V3.1 manual addendum](v31-manual-addendum.md). Published V2/V3 and manuals remain unchanged.
+
+The matrix used the pinned FCF client with the **identical final engine**
+`cc229f83d09b769461497646daa64ce68e0c63a364b68ab6b175fa712db40633`.
+Every portable byte outside `renderFinal` is exactly equal. The final 65F client
+has its own full gate, package and actual-browser checks. No legacy goldens were
+regenerated to hide drift. Current gameplay changes are bounded to new Group7 /
+save9.6 campaigns; historical campaign behavior and opt-in choices are preserved.
+
+### Final 480-month activity
+
+Paired amounts list bank 1 / bank 2. Originations are actual final-12-month flows,
+not net portfolio growth. Share means share of the **two player banks' deposits**,
+not of the entire economy including outside banks.
+
+| Economy / profile | Loans | Final-year originations | Staff | Active firms / 6 | Largest player share |
+| --- | --- | --- | --- | --- | --- |
+| Balanced A | $35.89M / $53.02M | $18.47M / $19.22M | 50 / 40 | 1 | 51.9% |
+| Balanced B | $38.43M / $3.33M | $11.74M / $1.20M | 80 / 22 | 1 | 97.5% |
+| Growth A | $39.25M / $30.08M | $15.66M / $10.72M | 64 / 35 | 3 | 88.9% |
+| Growth B | $26.61M / $39.27M | $12.99M / $9.80M | 33 / 61 | 5 | 92.2% |
+| Rate A | $39.81M / $15.41M | $9.60M / $6.54M | 73 / 26 | 1 | 92.1% |
+| Rate B | $18.02M / $32.72M | $7.37M / $10.68M | 19 / 61 | 2 | 84.6% |
+| Regulatory A | $11.70M / $30.27M | $3.93M / $10.82M | 30 / 58 | 1 | 84.8% |
+| Regulatory B | $42.24M / $7.43M | $14.75M / $5.20M | 77 / 22 | 1 | 95.4% |
+
+Fifteen of sixteen ending bank networks contain a non-ATM facility. Balanced B's
+small rival retains one ATM; the repair does not force uneconomic expansion.
+For Regulatory A, V3 ended with $7.67M/$8.80M loans, $1.20M each in final-year
+originations and nine ATMs each. The candidate has five/ten mixed sites and
+$3.93M/$10.82M originations. Its longest zero-origination runs fall from 31/60
+to 15/17 months. At month120 its staff are 13/12 versus V3's 4/3, and loans
+$1.94M/$0.95M versus $0.15M/$0.11M. One company survives rather than none;
+five still fail with recorded liquidation, recoveries and writeoffs.
+
+Regulatory A circulation has cumulatively returned $12.05M from the recorded
+external/provider pool and spent $3.86M from creditor cash. These are funded
+transfers, not income grants or an inexhaustible outside pool. Detailed circulation
+and conservation regressions remain part of the exact final gate.
+
+### Balance judgment and remaining risks
+
+The candidate materially improves productive banking and removes reproduced
+invalid AI-plan failures. It does **not** prove every strategy is equally strong,
+every seed is safe, or every month is enjoyable. No further tuning was introduced
+after the final engine matrix began.
+
+- **Opening pace:** original $9.5M loan books amortize quickly through staggered
+  12–48-month opening vintages. Current month24 loans are only $2.43M–$3.74M.
+  Returned principal is cash, not disappearing assets, but replacement lending
+  and morale can still feel slow. Early ATM convergence remains common.
+- **Uneven gains:** Growth A bank2 has fewer loans/staff at120 than V3;
+  Regulatory B has weaker month24 lending. Larger ending portfolios do not
+  establish improvement for every seat, horizon or chosen strategy.
+- **Competition:** Balanced A bank1 recovers from 3.81% deposit share at318 to
+  48.14% at480. Balanced B still ends at 97.5% dominance. Both outcomes are
+  permitted; this is evidence of one comeback, not a catch-up guarantee.
+- **Cash is not equity:** Growth A's leader holds $313.24M cash but only $4.29M
+  capital (10.20%) and reports $4,690 final-month operating profit. Balanced B's
+  leader reports a final-month loss. Retained-earnings changes also include
+  events/investment outside operating profit; do not confuse these measures.
+- **Failure remains real:** agencies can be unopened, active but loss-making,
+  or failed. Commission less operating expense excludes setup/recruitment and
+  is not full group ROI. Every candidate campaign loses at least one company.
+  The separate actual distressed month318 save reaches receivership at461,
+  despite its leader's large deposits/cash; it is not a fresh480 matrix pass.
+- **Scale limits:** tested saves are large, and the raw import ceiling remains
+  64 MiB. This is tested 480-month coverage, not a promise of unlimited storage,
+  instantaneous resolution or performance on every friend's computer.
+
+### Actual browser, performance and multiplayer scope
+
+The computer-use workflow tested the **actual packaged game**, not screenshots
+generated from a mock. The largest completed endpoint at inspection was the
+46,641,574-byte Balanced A raw save. Normal file-chooser import showed cycle481
+in **3,029 ms**; Workforce opened in **618 ms**, Forecast in **590 ms**. These are
+single observed end-to-end tool timings, not percentiles. A screenshot at947×1252
+showed readable wrapped cards and bounded workload-table scrolling. Accounts
+displayed $0K reconciliation difference; no captured console errors/warnings.
+No mature turn was submitted in this check. Evidence:
+`reports/local/v31-final-mature-browser-observation.json`.
+
+Separate prior actual-browser evidence covers mature reserve editing, staffing
+proposal/adoption, terminal import and two-seat rematch, plus a two-browser
+localhost LAN turn with distinct colors and shared-settings readiness reset.
+Pure forecast-copy regression command timings improved roughly16% in two
+single samples; these are **not browser or live multiplayer timings**.
+
+Full-client simulations cover GitHub/LAN/P2P: stale sessions and delayed views,
+duplicate commit/reveal, recall races, incompatible peers, malformed books and
+settings, sealed-checkpoint reload with a fresh handshake, and owner privacy.
+Mature compressed checkpoint/5 MiB quota tests protect prior records on failure
+and preserve retry state. **No fresh live GitHub two-computer session has been
+performed. Zero multiplayer bugs cannot be guaranteed.** The friend checklist
+is the remaining acceptance gate before publication or broad release claims.
+
+## Historical implementation and verification checkpoints
 
 ## September 9 partial final matrix — four of eight cases complete
 

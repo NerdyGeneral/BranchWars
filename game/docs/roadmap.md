@@ -1,5 +1,19 @@
 # Unified blueprint and expansion roadmap
 
+## September 9 — V3.1 stability candidate handed off locally
+
+The bounded repair goal is technically complete: paid staffing/execution plans,
+funded circulation, existing facility/product viability, reserve/forecast/save
+and related transport/UI checks. Exact final gates:185 Windows checks,16 standard
+release cases,8 matched480-month cases and328 exact replays. A46.6MB completed
+candidate save also passed actual packaged-browser inspection. See the
+[final report](v31-stability-report.md) and [friend checklist](v31-manual-addendum.md).
+
+Next gate is real two-computer acceptance and player feedback on opening pace,
+long-run competition and operational clarity. Publication needs separate approval.
+Do not treat this goal as completion of the remaining content blueprint or add
+National Empire/underwriting to this release. The checkpoints below are historical.
+
 Current batch authority: approved **V3.1 long-campaign stability** goal,
 September 8, 2026. The wider approved regional / Financial Group blueprint below
 remains the expansion roadmap, not the completion criterion for this batch.
