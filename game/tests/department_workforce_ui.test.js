@@ -13,10 +13,12 @@ for(const plan of plans){plan.investments={};plan.newProjects=[];plan.newProject
  plan.facilityPolicy={convert:null,cancel:null};plan.competitiveAction='none';plan.groupPolicy.bankDividend=0;plan.groupPolicy.bankSupport=0;}
 Object.assign(plans[0],{allocation:copy(p.allocation),contractBid:null,opportunity:null});
 plans[0].leaderOrders.business='mentor';plans[0].workforcePolicy.training.business=20000;
-const nodes=new Map();ctx.$=selector=>{if(!nodes.has(selector))nodes.set(selector,{innerHTML:'',value:'',classList:{toggle(){}},addEventListener(){}});return nodes.get(selector);};
+const nodes=new Map();ctx.$=selector=>{if(!nodes.has(selector))nodes.set(selector,{innerHTML:'',value:'',dataset:{},setAttribute(){},focus(){},classList:{toggle(){}},addEventListener(){}});return nodes.get(selector);};
 ctx.E=E;ctx.game=game;ctx.view=E.publicState(game,0);ctx.draft=copy(plans[0]);ctx.workspaceTab='workforce';
+ctx.featureConnectionGeneration=0;ctx.linkSession=null;ctx.gh={active:false};ctx.lan={active:false};ctx.currentView=()=>ctx.view;ctx.draftOwner=ctx.view.me.id;ctx.lastCycle=ctx.view.cycle;
 ctx.esc=x=>String(x);ctx.money=x=>'$'+Math.round(x).toLocaleString('en-US');
 for(const name of ['renderDepartments','renderHouseholds','renderCollections','renderFinancialGroup','setWorkspaceTab','renderReady','renderProjects','toast'])ctx[name]=()=>{};
+vm.runInContext(fs.readFileSync(path.join(root,'src/ui/people-workspace.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(root,'src/ui/workforce.js'),'utf8'),ctx);
 const draw=()=>{vm.runInContext("selectedWorkforceRole='business';renderWorkforce(view)",ctx);return nodes.get('#workforcePanel').innerHTML;};
 let checks=0;

@@ -247,6 +247,8 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 @media(max-width:480px){.operations-tabs{gap:6px}.operations-tabs>button{padding:9px;font-size:.8rem}.operations-tabs>button span{font-size:.68rem}.operations-navigation .section-head{display:block}#operationsDecisionShortcut{margin-top:8px;width:100%}}
 </style>
 <style id="usability-ui">.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.people-tabs{display:flex;flex-wrap:wrap;gap:.5rem}.people-tabs [aria-selected="true"]{background:#e7f1ff;border-color:#2878e0;color:#124e8f}.people-tabs button:focus-visible{outline:3px solid #2878e0;outline-offset:3px}.people-recruit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0}#peopleWorkspace [hidden]{display:none!important}#peopleWorkspace .department-functions-nav{display:none}#peopleWorkspace>div[role="tabpanel"]{min-width:0}#workforceFormPreview table{width:100%}
+@media(max-width:700px){.people-recruit-grid{grid-template-columns:1fr}}
 .people-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.people-summary>div{border:1px solid #c5d2e2;border-radius:8px;padding:.8rem;background:#f5f8fc}.people-summary span,.people-summary small{display:block}.people-summary b{display:block;font-size:1.25rem;margin:.35rem 0}.people-summary small{color:var(--muted);line-height:1.45}.people-shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}#peopleOverview details{margin:.8rem 0}#peopleOverview .table-scroll{overflow:auto}#peopleOverview summary{cursor:pointer;padding:.5rem 0}#peopleOverview h3{margin:1rem 0 .5rem}
 @media(max-width:900px){.people-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.people-summary{grid-template-columns:1fr}}
 .plan-review-heading span{font-size:.85rem;color:var(--muted)}
@@ -333,7 +335,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
     <section class="panel workspace-view" data-workspace="products"><div id="productProgramsPanel"></div></section>
     <section class="panel workspace-view" data-workspace="credit"><div id="creditPanel"></div></section>
     <section class="panel workspace-view" data-workspace="group"><div id="financialGroupPanel"></div></section>
-    <section class="panel workspace-view" data-workspace="workforce"><div id="peopleOverview"></div><div id="departmentPanel" class="hidden"></div><div id="workforcePanel"></div></section>
+    <section class="panel workspace-view" id="peopleWorkspace" data-workspace="workforce"><div id="peopleNavigation"></div><div id="peopleOverview"></div><div id="peopleRecruitment"></div><div id="departmentPanel" class="hidden"></div><div id="workforcePanel"></div></section>
     <section class="panel workspace-view active" data-workspace="overview"><div class="macro-grid"><div class="macro-cell"><span>ECONOMIC REGIME</span><b id="macroName"></b><div id="macroText" class="micro muted"></div></div><div class="macro-cell"><span>POLICY RATE</span><b id="macroRate"></b></div><div class="macro-cell"><span>LOAN DEMAND</span><b id="macroDemand"></b></div><div class="macro-cell"><span>DEPOSIT PRESSURE</span><b id="macroDeposits"></b></div><div class="macro-cell"><span>CREDIT RISK</span><b id="macroCredit"></b></div></div></section>
     <section class="panel workspace-view active hidden" id="recoveryWorkspace" data-workspace="overview"><div id="bankRecoveryMount"></div></section>
     <section class="panel workspace-view active" data-workspace="overview"><div class="section-head"><div><h2>EXECUTIVE OVERVIEW</h2><span class="small muted">Enterprise momentum, balance-sheet pressure, and operating identity at a glance.</span></div><span id="scoreGap" class="small"></span></div><div class="situation-grid"><div class="intel-card chart-card"><h3>ENTERPRISE VALUE · CAMPAIGN TREND</h3><div id="trendChart"></div><div id="operatingReport" class="operating-preview"></div></div><div class="intel-stack"><div id="portfolioIntel" class="intel-card"></div><div id="doctrineIntel" class="intel-card"></div></div></div></section>
@@ -11484,7 +11486,7 @@ function reconcileOperationsWorkspace(){
  setOperationsDesk(operationsDesk);
 }
 function currentView(){return game?E.publicState(game,seat):view}
-function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle;if(typeof resetMonthlyChanges==='function')resetMonthlyChanges(v)}
+function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle;if(typeof resetMonthlyChanges==='function')resetMonthlyChanges(v);if(typeof resetPeopleWorkspace==='function')resetPeopleWorkspace(v)}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
 function setWorkspaceTab(tab){reconcileOperationsWorkspace();const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));if(workspaceTab==='markets'&&draft&&currentView()){const marketView=currentView();renderFacilityNetwork(marketView);if(marketView.me.facilityLifecycle)renderFacilityLifecycle(marketView);}if(workspaceTab==='products'&&draft&&currentView())renderProductPrograms(currentView());if(workspaceTab==='credit'&&draft&&currentView())renderCollections(currentView());if(workspaceTab==='group'&&draft&&currentView())renderFinancialGroup(currentView());if(workspaceTab==='customers'&&draft&&currentView())renderHouseholds(currentView());if(workspaceTab==='workforce'&&draft&&currentView())renderWorkforce(currentView())}
 // Lossless browser-storage envelope only. Campaign/export/wire schemas and
@@ -12533,22 +12535,144 @@ function renderDepartmentScorecard(v){
 }
 const relationshipPipelineUI=renderPipeline;
 renderPipeline=function(v){const dossier=$('#clientDossiers')?.open,score=$('#departmentScorecard')?.open;relationshipPipelineUI(v);renderRelationshipDossiers(v);renderDepartmentScorecard(v);if(dossier&&$('#clientDossiers'))$('#clientDossiers').open=true;if(score&&$('#departmentScorecard'))$('#departmentScorecard').open=true};
-let selectedWorkforceRole = 'service';
-function stageSpecialistHire(v, role, step) {
-  if (!draft || v.me.submitted || !v.me.workforce) return false;
-  const candidate = JSON.parse(JSON.stringify(draft));
-  candidate.specialistHires = { ...E.emptySpecialistOrders(), ...candidate.specialistHires };
-  candidate.specialistHires[role] = Math.max(0, candidate.specialistHires[role] + step);
-  try {
-    E.normalizeWorkforcePlan(v.me, candidate);
-    if (step > 0 && E.planBudget(v.me, candidate).remaining < 0) throw Error('The combined plan exceeds cash or capital limits.');
-    draft = candidate;
-    renderProjects(v); renderReady(v);
-    return true;
-  } catch (e) { toast(e.message); return false; }
+// Presentation-only workforce navigation and instruction previews. These objects
+// stay out of saves and multiplayer payloads; settlement remains in the engine.
+let peopleWorkspaceState={owner:null,campaign:null,desk:'overview'};
+let workforceFormState=null;
+const PEOPLE_DESKS={overview:'Overview',coverage:'Work coverage',recruitment:'Recruitment',development:'Development',leadership:'Leadership & budgets'};
+function resetPeopleWorkspace(v){
+ if(peopleWorkspaceState.owner!==v.me.id||peopleWorkspaceState.campaign!==(game||view))peopleWorkspaceState={owner:v.me.id,campaign:game||view,desk:'overview'};
+ workforceFormState=null;
 }
-function stageWorkforcePolicy(v, role, budget, reserve) {
-  if (!draft || v.me.submitted || !v.me.workforce) return false;
+function peopleDesks(v){return Object.keys(PEOPLE_DESKS).filter(key=>key!=='coverage'||v.me.departmentFunctions).filter(key=>key!=='leadership'||v.me.departmentOffice);}
+function workforceEditToken(v){return {campaign:game||view,owner:v.me.id,cycle:v.cycle,stamp:JSON.stringify(draft),connection:featureConnectionGeneration,link:linkSession,repository:gh,lan};}
+function workforceEditCurrent(token){
+ const v=currentView();return !!(token&&v?.me.workforce&&draft&&draftOwner===v.me.id&&lastCycle===v.cycle&&!v.me.submitted&&!v.gameOver&&!(gh.active&&gh.paused)&&
+ token.campaign===(game||view)&&token.owner===v.me.id&&token.cycle===v.cycle&&token.stamp===JSON.stringify(draft)&&token.connection===featureConnectionGeneration&&token.link===linkSession&&token.repository===gh&&token.lan===lan);
+}
+function setPeopleDesk(key,{focus=false}={}){
+ const v=currentView();if(!v?.me.workforce)return;
+ const keys=peopleDesks(v);peopleWorkspaceState={owner:v.me.id,campaign:game||view,desk:keys.includes(key)?key:'overview'};
+ if(v.me.departmentFunctions){
+  // Initialize owner/session identity before choosing the new desk.
+  departmentFunctionsIdentity();
+  if(departmentFunctionsLive.owner!==v.me.id)renderDepartments(v);
+  if(['coverage','leadership'].includes(peopleWorkspaceState.desk)){departmentFunctionsLive.tab=key==='coverage'?'functions':'leadership';renderDepartments(v);}
+ }
+ if(key==='leadership')departmentUiState.open=true;
+ if(workspaceTab!=='workforce')setWorkspaceTab('workforce');else renderWorkforce(v);
+ if(focus)$('#people-tab-'+peopleWorkspaceState.desk)?.focus();
+}
+function renderPeopleWorkspace(v){
+ const nav=$('#peopleNavigation'),mount=$('#peopleWorkspace');if(!nav||!mount||!v.me.workforce)return;
+ const keys=peopleDesks(v);
+ if(peopleWorkspaceState.owner!==v.me.id||!keys.includes(peopleWorkspaceState.desk))peopleWorkspaceState={owner:v.me.id,campaign:game||view,desk:'overview'};
+ const desk=peopleWorkspaceState.desk;
+ mount.dataset.peopleDesk=desk;
+ nav.innerHTML='<div role="tablist" aria-label="People and Operations desks" class="people-tabs">'+keys.map(key=>'<button type="button" id="people-tab-'+key+'" class="btn" role="tab" aria-selected="'+(key===desk)+'" tabindex="'+(key===desk?'0':'-1')+'" data-people-tab="'+key+'">'+PEOPLE_DESKS[key]+'</button>').join('')+'</div><p class="micro">One shared monthly plan. Changing desks never submits orders. Training and leadership forms require explicit staging.</p>';
+ $('#peopleOverview').hidden=desk!=='overview';$('#peopleRecruitment').hidden=desk!=='recruitment';$('#workforcePanel').hidden=desk!=='development';$('#departmentPanel').hidden=!['coverage','leadership'].includes(desk);
+ const panels={overview:'peopleOverview',recruitment:'peopleRecruitment',development:'workforcePanel',coverage:'departmentPanel',leadership:'departmentPanel'};
+ for(const key of keys){$('#people-tab-'+key)?.setAttribute?.('aria-controls',panels[key]);const panel=$('#'+panels[key]);panel?.setAttribute?.('role','tabpanel');if(key===desk)panel?.setAttribute?.('aria-labelledby','people-tab-'+key);}
+ const identity=game||view,owner=v.me.id,cycle=v.cycle;
+ const current=()=>{const now=currentView();return (game||view)===identity&&now?.me.id===owner&&now?.cycle===cycle;};
+ for(const key of keys){const button=$('#people-tab-'+key);button.addEventListener('click',()=>{if(current())setPeopleDesk(key,{focus:true});});button.addEventListener('keydown',event=>{
+  if(!current())return;let target,index=keys.indexOf(key);
+  if(['ArrowRight','ArrowDown'].includes(event.key))target=keys[(index+1)%keys.length];else if(['ArrowLeft','ArrowUp'].includes(event.key))target=keys[(index+keys.length-1)%keys.length];else if(event.key==='Home')target=keys[0];else if(event.key==='End')target=keys.at(-1);else return;
+  event.preventDefault();setPeopleDesk(target,{focus:true});
+ });}
+ if(desk==='leadership'&&$('#departmentDesk'))$('#departmentDesk').open=true;
+ if(desk==='recruitment')renderPeopleRecruitment(v);
+}
+function recruitmentOption(v,role,step){
+ const next=JSON.parse(JSON.stringify(draft));
+ if(role==='generalist')next.hires=(next.hires||0)+step;
+ else{if(!E.SPECIALIST_ROLES[role])throw Error('Unknown specialist role.');next.specialistHires={...E.emptySpecialistOrders(),...next.specialistHires};next.specialistHires[role]+=step;}
+ E.normalizeWorkforcePlan(v.me,next);
+ const before=E.planBudget(v.me,draft),after=E.planBudget(v.me,next);
+ return {next,before,after,extraSigning:after.recruiting-before.recruiting,reason:step>0&&after.remaining<0?'The combined plan exceeds cash or capital limits.':''};
+}
+function stagePeopleHire(role,step,token){
+ if(!workforceEditCurrent(token)){toast('The plan or connection changed, or orders are locked. Review recruitment again.');return false;}
+ const v=currentView();let next;
+ try{if(![-1,1].includes(step))throw Error('Choose one recruit at a time.');const option=recruitmentOption(v,role,step);if(option.reason)throw Error(option.reason);next=option.next;
+ }catch(error){toast(error.message);return false;}
+ draft=next;
+ try{renderProjects(v);renderReady(v);$('#people-hire-'+role+'-'+(step>0?'more':'less'))?.focus();}catch(error){toast('Recruitment was staged, but the screen could not refresh: '+error.message);}
+ return true;
+}
+function renderPeopleRecruitment(v){
+ const mount=$('#peopleRecruitment');if(!mount||!v.me.workforce)return;
+ const token=workforceEditToken(v),locked=!workforceEditCurrent(token),cash=n=>'$'+Math.round(n).toLocaleString('en-US');
+ let quote;try{quote=E.planBudget(v.me,draft);}catch(error){mount.innerHTML='<p class="bad">Recruitment quote unavailable: '+esc(error.message)+'</p>';return;}
+ const cards=['generalist',...Object.keys(E.SPECIALIST_ROLES)].map(role=>{
+  const definition=E.SPECIALIST_ROLES[role],name=definition?.name||'Generalist bankers',count=role==='generalist'?(draft.hires||0):(draft.specialistHires?.[role]||0);
+  let plus,reason='';try{plus=recruitmentOption(v,role,1);reason=plus.reason;}catch(error){reason=error.message;}
+  const premium=definition?.payroll||0;
+  return '<article class="workforce-card"><h3>'+esc(name)+'</h3><p class="small">'+esc(definition?.effect||'Flexible base capacity in any department; no specialist skill bonus or salary premium.')+'</p><p><b>'+count+' staged</b> · arriving next month</p><p class="small">Next recruit: '+(plus?'<b>'+cash(plus.extraSigning)+'</b> added signing cost':'quote blocked')+'</p><p class="micro">Recurring contractual base pay $18,000/month'+(premium?' + '+cash(premium)+' specialty premium':'')+'. Existing efficiency discounts affect base payroll. '+(definition?'Enters at skill 20; joining can dilute the department average.':'No training specialization required.')+'</p><button class="btn" type="button" id="people-hire-'+role+'-less" aria-label="Remove one '+esc(name)+' recruit" '+(locked||!count?'disabled':'')+'>−</button> <button class="btn" type="button" id="people-hire-'+role+'-more" '+(locked||reason?'disabled':'')+'>Stage one '+esc(name)+' recruit</button><p class="micro '+(reason?'bad':'muted')+'">'+esc(locked?'Plan locked or connection paused.':reason||'Optional. Uses the shared hiring limit and spending room.')+'</p></article>';
+ }).join('');
+ mount.innerHTML='<h2>RECRUITMENT</h2><p class="small">Generalists and specialists belong to one employee pool. Compare their jobs and costs here; assigning existing employees is a separate instruction.</p><div class="people-summary"><div><span>Shared monthly recruitment</span><b>'+E.planHires(draft)+' / '+E.hireLimit(v.me)+'</b><small>All five recruit types use the same limit.</small></div><div><span>Combined signing cost</span><b>'+cash(quote.recruiting)+'</b><small>Included in the monthly plan budget—not another charge.</small></div><div><span>First productive month</span><b>'+(v.cycle+1)+'</b><small>No new recruit repairs current-month work coverage.</small></div></div><div class="people-recruit-grid">'+cards+'</div><p class="small">Recruitment can dilute morale and permanently increases payroll. Stage only changes this draft. Monthly changes provides individual undo; cash is charged when recruitment settles.</p><button class="btn" id="peopleRecruitmentAllocation" type="button">Review existing employee allocation</button>';
+ for(const role of ['generalist',...Object.keys(E.SPECIALIST_ROLES)])for(const [suffix,step]of [['less',-1],['more',1]])$('#people-hire-'+role+'-'+suffix).addEventListener('click',()=>stagePeopleHire(role,step,token));
+ $('#peopleRecruitmentAllocation').addEventListener('click',()=>{if(workforceEditCurrent(token))navigatePlanReview({tab:'operations',desk:'monthly',target:'#staffGrid'});});
+}
+function workforceForm(v){
+ const policyStamp=JSON.stringify(draft.workforcePolicy),campaign=game||view,owner=v.me.id,cycle=v.cycle;
+ if(!workforceFormState||workforceFormState.campaign!==campaign||workforceFormState.owner!==owner||workforceFormState.cycle!==cycle||workforceFormState.policyStamp!==policyStamp||v.me.submitted||v.gameOver){
+  workforceFormState={campaign,owner,cycle,policyStamp,values:{},reserve:String(draft.workforcePolicy.reserve),dirty:false,preview:null,notice:''};
+ }
+ return workforceFormState;
+}
+function workforceFormPlan(v){
+ const form=workforceForm(v),next=JSON.parse(JSON.stringify(draft));
+ const numeric=raw=>{if(String(raw).trim()==='')throw Error('Enter a number; a blank field is not zero.');return Number(raw);};
+ next.workforcePolicy.reserve=numeric(form.reserve);
+ for(const [role,value]of Object.entries(form.values))next.workforcePolicy.training[role]=numeric(value);
+ E.normalizeWorkforcePlan(v.me,next);return next;
+}
+function previewWorkforceForm(v,token){
+ if(!workforceEditCurrent(token))return false;
+ try{const form=workforceForm(v),next=workforceFormPlan(v),before=E.workforceReview(v.me,draft,v.economy),after=E.workforceReview(v.me,next,v.economy);
+  const departments=v.me.departmentOffice?E.departmentBudgetQuote(v.me,next):null;
+  form.preview={token,next,before,after,departments};form.notice='Preview only. Review costs, effective limits and teaching time before staging.';return true;
+ }catch(error){const form=workforceForm(v);form.preview=null;form.notice=error.message;return false;}
+}
+function stageWorkforceForm(v){
+ const form=workforceForm(v),preview=form.preview;
+ if(!preview||!workforceEditCurrent(preview.token)){form.preview=null;form.notice='Preview is stale or the plan is locked. Preview the current form again.';return false;}
+ let next;
+ try{next=workforceFormPlan(v);if(JSON.stringify(next)!==JSON.stringify(preview.next))throw Error('The form changed. Preview it again.');
+  E.workforceReview(v.me,next,v.economy);
+ }catch(error){form.notice=error.message;form.preview=null;return false;}
+ draft=next;workforceFormState=null;
+ try{renderProjects(v);renderReady(v);}catch(error){toast('Training was staged, but the screen could not refresh: '+error.message);}
+ return true;
+}
+function workforceTrainingPreviewHtml(v,form){
+ const preview=form.preview;if(!preview)return '<p class="small">No reviewed form quote. Current draft values remain authoritative.</p>';
+ const {before,after,departments}=preview,cash=n=>'$'+Math.round(n).toLocaleString('en-US');
+ return '<h3>Training comparison · staged plan → form preview</h3><p class="small">Bank-wide forecast training '+cash(before.training.total)+' → '+cash(after.training.total)+'/month. '+(after.training.paused?'All training is paused by shared cash/capital protection.':'Quoted classes remain subject to actual settlement funding and business conditions.')+'</p><div class="table-scroll" tabindex="0" aria-label="Training before and after"><table class="regional-table"><thead><tr><th>Department</th><th>Requested ceiling</th><th>Department ceiling</th><th>Quoted spend before → after</th><th>Projected skill after</th><th>Teaching time</th></tr></thead><tbody>'+after.rows.map(row=>{
+  const old=before.rows.find(x=>x.role===row.role),department=departments?.rows.find(x=>x.role===row.role),cap=preview.next.departmentPolicy?.envelopes.training[row.role];
+  return '<tr><th>'+esc(row.name)+'</th><td>'+cash(row.budget)+'</td><td>'+(cap===undefined?'Not enabled':cash(cap))+'</td><td>'+cash(old.trainingSpend)+' → '+cash(row.trainingSpend)+'</td><td>'+row.skill+' → '+row.nextSkill+'</td><td>'+(department?.teaching?'One current banker reserved':'No paid leader teaching')+'</td></tr>';
+ }).join('')+'</tbody></table></div><p class="micro">The lower applicable ceiling limits training; a ceiling alone does not spend cash. Eligibility, skill cap, compensated leaders, shared funding and the higher protected reserve also apply. New recruits do not train this month. Skill figures precede recruit dilution and later consequences.</p>';
+}
+function bindWorkforceForm(v,row){
+ const form=workforceForm(v),token=workforceEditToken(v);
+ if(form.preview&&!workforceEditCurrent(form.preview.token)){form.preview=null;form.notice='The shared plan changed. Unstaged fields are retained; preview again.';}
+ $('#workforceBudget').value=Object.hasOwn(form.values,row.role)?form.values[row.role]:String(draft.workforcePolicy.training[row.role]);$('#workforceReserve').value=form.reserve;
+ const status=$('#workforceFormStatus');status.textContent=form.notice||(form.dirty?'Unstaged training edits. Preview and stage, or discard.':'Showing staged policy. Editing a field does not apply it.');
+ $('#workforceFormPreview').innerHTML=workforceTrainingPreviewHtml(v,form);
+ $('#stageWorkforceForm').disabled=!form.preview||!workforceEditCurrent(token);
+ const remember=()=>{if(!workforceEditCurrent(token))return;form.values[row.role]=$('#workforceBudget').value;form.reserve=$('#workforceReserve').value;form.dirty=true;form.preview=null;form.notice='Unstaged training edits. Preview before staging.';status.textContent=form.notice;$('#stageWorkforceForm').disabled=true;$('#workforceFormPreview').innerHTML='<p class="small">Form changed; old quote invalidated.</p>';};
+ for(const id of ['#workforceBudget','#workforceReserve'])for(const event of ['input','change'])$(id).addEventListener(event,remember);
+ $('#previewWorkforceForm').addEventListener('click',()=>{if(!workforceEditCurrent(token))return;previewWorkforceForm(v,token);renderWorkforce(v);$('#stageWorkforceForm').focus();});
+ $('#stageWorkforceForm').addEventListener('click',()=>{if(workforceEditCurrent(token)){const applied=stageWorkforceForm(currentView());renderWorkforce(currentView());if(applied){$('#workforceFormStatus').textContent='Training instructions staged. Cash and skill change only during monthly resolution.';$('#previewWorkforceForm').focus();}}});
+ $('#discardWorkforceForm').addEventListener('click',()=>{if(workforceEditCurrent(token)){workforceFormState=null;renderWorkforce(currentView());$('#workforceFormStatus').textContent='Unstaged training edits discarded; staged policies unchanged.';}});
+}
+let selectedWorkforceRole = 'service';
+function stageSpecialistHire(v, role, step,token=workforceEditToken(v)) {
+  return stagePeopleHire(role,step,token);
+}
+function stageWorkforcePolicy(v, role, budget, reserve,token=workforceEditToken(v)) {
+  if (!workforceEditCurrent(token)) return false;
   const candidate = JSON.parse(JSON.stringify(draft));
   candidate.workforcePolicy = JSON.parse(JSON.stringify(candidate.workforcePolicy || v.me.workforce.policy));
   candidate.workforcePolicy.training[role] = budget;
@@ -12561,7 +12685,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
-  if(workspaceTab==='workforce')renderPeopleOverview(v);
+  if(workspaceTab==='workforce'){renderPeopleOverview(v);renderPeopleWorkspace(v);}
   if (!v.me.departmentOffice || workspaceTab === 'workforce') renderDepartments(v);
   renderHouseholds(v);
   renderCollections(v);
@@ -12587,10 +12711,7 @@ function renderWorkforce(v) {
   }
   catch (e) { $('#workforcePanel').innerHTML = '<p class="bad">' + esc(e.message) + '</p>'; return; }
   const row = review.rows.find(r => r.role === selectedWorkforceRole) || review.rows[0];
-  const disabled = v.me.submitted ? 'disabled' : '';
-  const candidate = JSON.parse(JSON.stringify(draft));
-  candidate.specialistHires[row.role]++;
-  const addBlocked = E.planHires(candidate) > E.hireLimit(v.me) || E.planBudget(v.me, candidate).remaining < 0;
+  const disabled = v.me.submitted || v.gameOver || gh.active&&gh.paused ? 'disabled' : '';
   const actual = v.me.operatingReport, forecast = review.forecast;
   const morale = v.financialGroupVersion===7?E.operatingWorkloadMorale(v.me,Object.fromEntries(review.rows.map(r=>[r.role,(r.productive??r.assigned)+r.bonus]))):null;
   const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + (v.me.departmentOffice?' / '+r.productive:'') + '</td><td>' +
@@ -12611,7 +12732,7 @@ function renderWorkforce(v) {
         <p class="small">${v.me.departmentOffice?`${row.assigned} assigned · ${row.teaching?'1 reserved for paid teaching':'0 reserved for teaching'} · ${row.productive} productive bankers. ${row.active} of ${row.count} qualified bankers producing. Forecast effective capacity: <b>${row.productive} + ${row.bonus.toFixed(2)}</b>.`:`${row.active} of ${row.count} qualified bankers working in this department. Current effective capacity: <b>${row.assigned} + ${row.bonus.toFixed(2)}</b>.`}</p>
         <div class="workforce-skill" role="meter" aria-label="${esc(row.name)} skill" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${row.skill}"><span style="width:${row.skill}%"></span></div>
         <p class="micro">Skill ${row.skill}/100 → <b>${row.nextSkill}/100</b> after forecast training, before new recruits. Recruits enter at skill 20 and dilute the team average; they do not train or produce this month.</p>
-        <div class="hire-row"><button type="button" class="stepper" id="specialistLess" aria-label="Remove one ${esc(row.name)} recruit" ${disabled || (!row.hires ? 'disabled' : '')}>−</button><b>${row.hires} staged</b><button type="button" class="stepper" id="specialistMore" aria-label="Recruit one ${esc(row.name)} specialist" ${disabled || (addBlocked ? 'disabled' : '')}>+</button></div>
+        <p class="small">${row.hires} recruits staged for this specialty. Compare all five recruit types and their shared limit in Recruitment.</p><button type="button" class="btn" id="workforceRecruitment">Open recruitment</button>
         <p class="micro">Each hire costs the normal size-adjusted recruiting fee <b>plus ${money(row.premium)}</b>. Ongoing pay: $18K base plus ${money(E.SPECIALIST_ROLES[row.role].payroll)} premium/month. Existing efficiency discounts affect base pay, not specialist premiums.</p>
       </section>
       <section class="workforce-card"><h3>RECURRING TRAINING MANDATE</h3>
@@ -12621,15 +12742,14 @@ function renderWorkforce(v) {
         <p class="micro ${review.training.paused ? 'bad' : 'muted'}">Training is reserved alongside the full plan and included in operating expenses—do not count it twice. If the combined training bill breaches the protected cash reserve or capital limit, every department pauses together. Events and rival actions can change actual affordability.</p>
       </section>
     </div>
+    <section class="workforce-card"><p class="small" id="workforceFormStatus" role="status"></p><button class="btn" type="button" id="previewWorkforceForm" ${disabled}>Preview training changes</button> <button class="btn" type="button" id="stageWorkforceForm" disabled>Stage reviewed training</button> <button class="btn" type="button" id="discardWorkforceForm" ${disabled}>Discard unstaged training</button><div id="workforceFormPreview"></div></section>
     <div class="workforce-results"><h3>ECONOMICS &amp; TIMING</h3><p class="small">Current draft bank operating profit: <b>${money(forecast.profit - (forecast.fundingLoss || 0))}</b>, including existing specialist premiums and affordable training. This excludes executive events, rival moves, new project completions and recruiting expenditure. No immediate benefit from new hires or this month's training.</p>
     <p class="micro">${actual ? 'Last completed month ' + actual.cycle + ': specialist premiums ' + money(actual.specialistPayroll || 0) + '; paid training ' + money(actual.workforceTraining || 0) + (actual.workforceTrainingPaused ? ' — reserve protection paused training.' : '.') : 'Paid training and realized premiums appear after the first completed month.'}</p>
     <details><summary>How expertise changes capacity</summary><p class="micro">Each qualified specialist assigned to their own department contributes 0.10 + 0.003 × skill effective bankers (0.16 at entry, capped at 0.40). Retail expertise also improves workload coverage and therefore persistent goodwill. Relationship bankers support sales or service contracts according to the staff reservation. Credit analysts increase originations, not guaranteed profits. Risk expertise improves credit controls and project capacity. Generalists remain cheaper and fully flexible; training never upgrades every department at once.</p></details></div>`;
-  $('#workforceDepartment').addEventListener('change', e => { selectedWorkforceRole = e.target.value; renderWorkforce(v); });
-  $('#specialistLess').addEventListener('click', () => stageSpecialistHire(v, row.role, -1));
-  $('#specialistMore').addEventListener('click', () => stageSpecialistHire(v, row.role, 1));
-  const policy = () => stageWorkforcePolicy(v, row.role, Number($('#workforceBudget').value), Number($('#workforceReserve').value));
-  $('#workforceBudget').addEventListener('change', policy);
-  $('#workforceReserve').addEventListener('change', policy);
+  const token=workforceEditToken(v);
+  $('#workforceDepartment').addEventListener('change', e => { if(!workforceEditCurrent(token))return;selectedWorkforceRole = e.target.value; renderWorkforce(currentView()); });
+  $('#workforceRecruitment').addEventListener('click',()=>{if(currentView()?.me.id===v.me.id)setPeopleDesk('recruitment',{focus:true});});
+  bindWorkforceForm(v,row);
 }
 
 // One read-only people overview, using the same physical reservations and
@@ -12667,7 +12787,8 @@ function renderPeopleOverview(v){
   const control=event.target.closest?.('[data-people-desk]');if(!control||!mount.contains(control))return;
   const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;
   const key=control.dataset.peopleDesk;
-  if(key==='allocation'||key==='recruitment'){navigatePlanReview({tab:'operations',desk:key==='allocation'?'monthly':'projects',target:key==='allocation'?'#staffGrid':'#hiringPanel'});return;}
+  if(key==='allocation'){navigatePlanReview({tab:'operations',desk:'monthly',target:'#staffGrid'});return;}
+  if(['recruitment','development','leadership','functions'].includes(key)){setPeopleDesk(key==='functions'?'coverage':key,{focus:true});return;}
   if(key==='leadership'&&now.me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(now);}
   if(key==='functions'&&now.me.departmentFunctions){departmentFunctionsLive.tab='functions';renderDepartments(now);}
   const target=$(key==='development'?'#workforcePanel':now.me.departmentOffice?'#departmentPanel':'#workforcePanel');
@@ -12720,12 +12841,12 @@ function departmentQuoteMarkup(quote){
   const l=quote.leadership;
   return '<div class="credit-summary"><div><span>Proposed leadership expense</span><b>'+departmentUiMoney(l.total)+'</b><small>Salary '+departmentUiMoney(l.salary)+' · appointments '+departmentUiMoney(l.appointments)+' · demotion/replacement '+departmentUiMoney(l.severance)+'.</small></div>'+
     '<div><span>Quoted paid training</span><b>'+departmentUiMoney(quote.training.total)+'</b><small>'+(quote.training.paused?'Training paused by funding/reserve limits.':'Quoted instruction costs; envelopes alone do not purchase training.')+'</small></div>'+
-    '<div><span>Cash after quoted compensation</span><b>'+departmentUiMoney(quote.projectedCash)+'</b><small>Not a full-month bank forecast. Common discretionary reserve: '+departmentUiMoney(quote.reserve)+'.</small></div></div>'+
+    '<div><span>Cash after quoted compensation</span><b>'+departmentUiMoney(quote.projectedCash)+'</b><small>Not a full-month bank forecast. Department reserve (the effective shared reserve may be higher): '+departmentUiMoney(quote.reserve)+'.</small></div></div>'+
     '<p class="small">'+(quote.paused?'Compensation remains unpaid: affected leaders cannot teach. Existing liabilities are not erased by cutting an envelope.':'This compensation preview has no remaining arrears; teaching still requires eligible staff and funded classes.')+'</p>'+
-    '<div class="table-scroll" tabindex="0" aria-label="Department training and staff opportunity cost"><table class="regional-table"><thead><tr><th>Department</th><th>Assigned / productive staff</th><th>Class spend / skill gain</th><th>Leadership teaching</th><th>Unpaid after compensation</th></tr></thead><tbody>'+
+    '<div class="table-scroll" tabindex="0" aria-label="Department training and staff opportunity cost"><table class="regional-table"><thead><tr><th>Department</th><th>Assigned / productive staff</th><th>Class spend / teaching potential</th><th>Leadership teaching</th><th>Unpaid after compensation</th></tr></thead><tbody>'+
     quote.rows.map(row=>'<tr><th>'+esc(departmentUiRole(row.role))+'</th><td>'+row.staff+' / '+quote.productiveAllocation[row.role]+'</td><td>'+departmentUiMoney(quote.training.paused?0:row.training?.spend||0)+' / '+(quote.training.paused?0:row.training?.gain||0)+'</td><td>'+
       (row.teaching&&!quote.training.paused?'One assigned banker reserved for teaching':'No leadership teaching')+'</td><td>'+departmentUiMoney(row.arrears)+'</td></tr>').join('')+'</tbody></table></div>'+
-    '<p class="micro">Teaching needs an existing leader, eligible colleagues, paid compensation and funded training. The teaching banker is unavailable for productive sales/service work during that class. Skill benefits require actual settlement, not a preview. Ordinary workforce pay and training are not charged again here.</p>';
+    '<p class="micro">Teaching needs an existing leader, eligible colleagues, paid compensation and funded training. The teaching banker is unavailable for productive sales/service work during that class. These skill figures are teaching potential before task-delivery limits. Development shows the operating forecast after those limits; actual skill benefits require settlement, not a preview. Ordinary workforce pay and training are not charged again here.</p>';
 }
 function departmentLeaderCard(v,role,orders){
   const office=v.me.departmentOffice,leader=office.leaders[role],profile=leader?E.DEPARTMENT_LEADERS[leader.profile]:null,locked=v.me.submitted||v.gameOver;
@@ -12788,7 +12909,7 @@ function renderDepartmentLeadership(v,navigation=''){
 }
 function departmentUiRead(){
   const defaults=E.defaultDepartmentPlan(currentView().me),policy=JSON.parse(JSON.stringify(draft.departmentPolicy||defaults.departmentPolicy));
-  const n=key=>Number($('#department-'+key).value);
+  const n=key=>{const raw=$('#department-'+key).value;if(String(raw).trim()==='')throw Error('Enter a number for '+key+'; a blank field is not zero.');return Number(raw);};
   policy.reserve=n('reserve');for(const key of ['vendors','research','leadership'])policy.envelopes[key]=n(key);
   const orders={};for(const role of Object.keys(E.SPECIALIST_ROLES)){policy.envelopes.training[role]=n('training-'+role);const raw=$('#departmentLeader-'+role).value;orders[role]=raw==='retain'?null:raw;}
   policy.mandate={mode:$('#department-mode').value,staffLimit:n('staffLimit'),vendorLimit:n('vendorLimit'),salesFloor:n('salesFloor'),training:$('#department-training').value==='on',trainingTarget:n('trainingTarget')};
@@ -12811,7 +12932,7 @@ function prepareDepartmentProposal(v,signature=JSON.stringify(draft),campaign=ga
     E.normalizeDepartmentPlan(v.me,next);E.departmentBudgetQuote(v.me,next);
     departmentUiState.proposal={signature,campaign,owner:v.me.id,cycle:v.cycle,next};
     $('#departmentProposal').innerHTML='<p class="small">'+(changes.length?changes.length+' instruction groups proposed. Your plan is unchanged.':'No changes proposed under the current mandate.')+'</p>'+
-      changes.map(change=>'<details><summary>'+esc(change.key)+' · exact instruction changes</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(JSON.stringify({before:change.before,after:change.after},null,2))+'</pre></details>').join('')+
+      departmentProposalComparison(v,changes,next)+
       '<p class="micro">'+(prepared.notes||[]).map(esc).join(' · ')+'</p>'+
       (changes.length?'<button type="button" class="btn" id="stageDepartmentProposal">Stage reviewed proposal</button>':'');
     const proposal=departmentUiState.proposal;
@@ -12821,6 +12942,16 @@ function prepareDepartmentProposal(v,signature=JSON.stringify(draft),campaign=ga
     });
     return true;
   }catch(error){departmentUiState.proposal=null;toast(error.message);return false;}
+}
+function departmentProposalComparison(v,changes,next){
+  const rows=[],labels={servicePolicy:'Commercial delivery',investments:'Research funding',workforcePolicy:'Training policy',staff:'Reserved delivery employees',outsourcing:'Vendor work units',reserve:'Protected cash reserve',training:'Monthly training ceiling',service:'Retail & service',business:'Business banking',lending:'Lending',operations:'Operations & risk',network:'Branch network',digital:'Digital platform',commercial:'Commercial banking',acquisition:'Acquisitions'};
+  const visit=(before,after,path)=>{if(JSON.stringify(before)===JSON.stringify(after))return;if(before&&after&&typeof before==='object'&&typeof after==='object'&&!Array.isArray(before)&&!Array.isArray(after)){for(const key of new Set([...Object.keys(before),...Object.keys(after)]))visit(before[key],after[key],[...path,key]);return;}
+    const moneyField=path[0]==='investments'||path[0]==='workforcePolicy',format=value=>value===undefined?'Not set':moneyField&&typeof value==='number'?departmentUiMoney(value):String(value);
+    rows.push('<tr><th>'+esc(path.map(key=>labels[key]||key).join(' · '))+'</th><td>'+esc(format(before))+'</td><td>'+esc(format(after))+'</td></tr>');};
+  for(const change of changes)visit(change.before,change.after,[change.key]);
+  if(!rows.length)return '';
+  const before=E.planBudget(v.me,draft),after=E.planBudget(v.me,next);
+  return '<h4>Before / after · exact instruction changes</h4><div class="table-scroll" tabindex="0" aria-label="Department proposal comparison"><table class="regional-table"><thead><tr><th>Instruction</th><th>Staged plan</th><th>Proposed plan</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div><p class="small">Whole-plan quoted commitments: '+departmentUiMoney(before.total)+' → '+departmentUiMoney(after.total)+'. This is not a second charge or a forecast of every cash flow. More delivery time leaves less for commercial sales and other shared work; additional vendor orders cost money even when unused.</p><p class="micro">Only the listed service, research and training instructions may change. The proposal cannot borrow, hire, close facilities, acquire, appoint leaders, change products or submit your turn.</p>';
 }
 function stageDepartmentProposal(v){
   const proposal=departmentUiState.proposal;
@@ -12833,7 +12964,7 @@ function bindDepartments(v){
   const signature=JSON.stringify(draft),campaign=game||view,revision=departmentUiState.revision;
   const current=()=>revision===departmentUiState.revision&&departmentUiCurrent(v,signature,campaign);
   $('#departmentDesk').addEventListener('toggle',()=>{if(revision===departmentUiState.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id)departmentUiState.open=!!$('#departmentDesk').open;});
-  $('#stageDepartments').addEventListener('click',()=>{if(!current())return;const form=departmentUiRead();stageDepartmentPlan(v,form.policy,form.orders,signature,campaign);});
+  $('#stageDepartments').addEventListener('click',()=>{if(!current())return;try{const form=departmentUiRead();stageDepartmentPlan(v,form.policy,form.orders,signature,campaign);}catch(error){$('#departmentInstructionStatus').textContent=error.message;toast(error.message);}});
   $('#discardDepartmentForm').addEventListener('click',()=>{if(!current())return;departmentUiState.form=null;departmentUiState.proposal=null;refreshDepartmentWorkspace(v);$('#departmentInstructionStatus').textContent='Unstaged edits discarded. Your staged monthly plan is unchanged.';});
   $('#previewDepartments').addEventListener('click',()=>{if(!current())return;try{
     const form=departmentUiRead(),next=JSON.parse(JSON.stringify(draft));next.departmentPolicy=form.policy;next.leaderOrders=form.orders;
@@ -14451,12 +14582,13 @@ function monthlyPlanReview(v,plan=draft){
  if(plan.opportunity&&!v.opportunities?.some(o=>o.id===plan.opportunity))add('opportunity','Review expired opportunity','This opportunity is no longer available. Choose another pursuit or clear it.','markets',null,'#pipeline');
  if(E.planHires(plan)>E.hireLimit(p))add('hires','Reduce combined recruitment','Generalists and specialists share the '+E.hireLimit(p)+'-banker monthly limit.','operations','projects','#hiringPanel');
  if(typeof pendingDepartmentForm==='function'&&pendingDepartmentForm(v))warnings.push({id:'unstaged-leaders',title:'Leadership form has unstaged edits',text:'These entries are not in your monthly plan. Preview and stage them, or explicitly discard them.',tab:'workforce',target:'#departmentPanel'});
+ if(p.workforce&&typeof workforceForm==='function'&&workforceForm(v).dirty)warnings.push({id:'unstaged-training',title:'Training form has unstaged edits',text:'Training and reserve entries are not yet in your monthly plan. Preview and stage them, or discard them.',tab:'workforce',target:'#workforcePanel'});
  return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
 }
 function navigatePlanReview(item){
  setWorkspaceTab(item.tab);
  if(item.desk)setOperationsDesk(item.desk);
- if(item.tab==='workforce'&&item.id==='unstaged-leaders'&&currentView().me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(currentView());}
+ if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership');
  const target=$(item.target)||$('[data-workspace="'+item.tab+'"]');
  if(!target)return;
  for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
@@ -14696,7 +14828,8 @@ function renderProjects(v){
  const committedSpend=E.planBudget(v.me,draft).total;
 
  const nextHireUnaffordable=E.planBudget(v.me,{...draft,hires:(draft.hires||0)+1}).remaining<0;
- $('#hiringPanel').innerHTML=`<b>${v.me.workforce?'GENERALIST RECRUITING':'RECRUITING'}</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||E.planHires(draft)>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} combined signing cost · generalist payroll +${money(draft.hires*18000)}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
+ $('#hiringPanel').innerHTML=v.me.workforce?'<b>SHARED RECRUITMENT</b><p class="small">'+E.planHires(draft)+' / '+hireMax+' bankers staged · '+money(hireBill)+' combined signing cost. Arrive next month; no production this month.</p><button type="button" class="btn" id="openPeopleRecruitment">Compare generalist and specialist recruitment</button>':`<b>${v.me.workforce?'GENERALIST RECRUITING':'RECRUITING'}</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||E.planHires(draft)>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} combined signing cost · generalist payroll +${money(draft.hires*18000)}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
+ if(v.me.workforce){const owner=v.me.id,cycle=v.cycle,campaign=game||view;$('#openPeopleRecruitment').addEventListener('click',()=>{const now=currentView();if((game||view)===campaign&&now?.me.id===owner&&now?.cycle===cycle)setPeopleDesk('recruitment',{focus:true});});}
  $$('[data-fund]').forEach(b=>b.addEventListener('click',()=>{if(stageStrategyFunding(v,b.dataset.fund,Number(b.dataset.fundStep))){renderProjects(v);renderReady(v)}}));
  $$('[data-hire]').forEach(b=>b.addEventListener('click',()=>{if(v.me.submitted)return;const step=Number(b.dataset.hire);draft.hires=Math.max(0,Math.min(hireMax-E.specialistHireCount(draft),(draft.hires||0)+step));renderProjects(v);renderReady(v)}));
  renderCampaignBuff(v);renderWorkforce(v)

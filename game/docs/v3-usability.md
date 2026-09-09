@@ -36,25 +36,25 @@ evidence; browser, release and human acceptance are separate gates.
 
 | ID | Recommendation / required outcome | Batch | Status / evidence |
 |---|---|---|---|
-| 01 | Unified People & Operations overview | 2 | Partial: shared summary and shortcuts implemented; consolidated editing workflow remains |
+| 01 | Unified People & Operations overview | 2 | Implemented five-desk workspace; mature browser and production navigation tests; final integration review open |
 | 02 | Headcount allocation distinct from work coverage | 2 | Implemented: independent task-delivery and headcount measures; automated and mature browser evidence |
 | 03 | Shared staff/time reservation explanation | 2 | Implemented initial role reconciliation table; remaining time explicitly precedes facilities/sales |
 | 04 | Understandable staff units with exact detail | 2 | Partial: quarter-work explanation and exact-source task values; detailed editor wording remains |
 | 05 | Consequence-first staffing shortages | 2 | Implemented initial task shortage table with business consequences; final integrated review open |
 | 06 | Compare shortage remedies and displaced work | 2 | Partial: explicit remedy tradeoffs; numerical before/after remedy comparison remains |
-| 07 | Unified generalist/specialist recruitment | 2 | Pending |
-| 08 | Staffing arrival/availability timeline | 2 | Pending |
-| 09 | Training costs, benefits and timing | 2 | Pending |
-| 10 | Training pauses and effective budget limits | 2 | Pending |
-| 11 | Readable leader cards and replacement consequences | 2 | Pending |
-| 12 | Readable bounded delegation proposals | 2 | Pending |
+| 07 | Unified generalist/specialist recruitment | 2 | Implemented shared five-type desk, actual incremental signing costs/limit, Operations shortcut and guarded staging |
+| 08 | Staffing arrival/availability timeline | 2 | Partial: explicit arrival month and teaching reservations; integrated multi-source availability timeline remains |
+| 09 | Training costs, benefits and timing | 2 | Implemented retained form plus actual before/after spend/skill/teaching preview and explicit Stage/Discard |
+| 10 | Training pauses and effective budget limits | 2 | Implemented requested vs department ceilings, protection/eligibility explanations and lower-ceiling regression; final all-scenario UI review open |
+| 11 | Readable leader cards and replacement consequences | 2 | Partial: dedicated reachable desk and clarified pre-delivery teaching/department-reserve scope; card density and per-choice comparisons remain |
+| 12 | Readable bounded delegation proposals | 2 | Implemented named before/after instruction table and whole-plan cost comparison; allowed fields/authority unchanged |
 | 13 | Task-oriented grouped navigation | 3 | Pending |
 | 14 | Attention inbox and healthy-system status | 3 | Pending |
 | 15 | All submission blockers with direct links | 1 | Partial: independent readiness/quote blockers and links implemented; deeper per-subsystem validator enumeration remains |
 | 16 | Required decisions separated from opportunities | 1 | Implemented initial review; `usability_plan_review.test.js`, early/mature browser; final integration gate open |
 | 17 | Consistent current/form/staged/active lifecycle | 1 | Partial: review legend and retained unstaged Workforce status; cross-editor standardization remains |
 | 18 | Monthly changes drawer with cost/timing/dependencies | 1 | Partial: opening-draft differences, timing and whole-plan undo quote implemented; richer system-specific cost/timing labels remain |
-| 19 | Scoped undo and unfinished-form protection | 1 | Partial: guarded individual field/initiative undo with dependent conflicts, plus Leadership/functions form retention; remaining editors pending |
+| 19 | Scoped undo and unfinished-form protection | 1 | Partial: guarded individual field/initiative undo plus Leadership/functions/training raw form retention; remaining editors pending |
 | 20 | Contextual navigation and search | 3 | Pending |
 | 21 | Retained screen context and appropriate scroll/focus | 1 | Partial: fresh entry/Continue opens Overview at top; remaining per-workspace context pending |
 | 22 | Precise financial measure names | 3 | Pending |
@@ -234,3 +234,70 @@ proposal comparisons), remaining form consistency and richer per-order labels;
 then grouped navigation/attention, connected workflows and full release gates.
 No batch or release is declared complete. Manual, final balance/performance,
 transport release validation, packaging and GitHub publication remain pending.
+
+## Third implementation checkpoint — unified recruitment and explicit development
+
+Candidate portable SHA-256:
+`4cc4c6256d30f8c0d73800a14aa814a3007d7b7f8711f67b71f36e8b3cd62f04`.
+The engine remains exactly `cc229f83d09b769461497646daa64ce68e0c63a364b68ab6b175fa712db40633`.
+
+- Workforce has Overview, Work coverage, Recruitment, Development, and Leadership
+  desks. Only the selected desk is displayed. Unavailable systems do not gain
+  dummy controls: standalone workforce has three desks; older department rules
+  omit function coverage. Owner/campaign changes reset the presentation context.
+- Recruitment combines generalists and all four specialist roles. Incremental
+  signing costs come from engine plan-budget differences, with the shared limit,
+  current headcount, next productive month, salary premiums and explicit blocked
+  reasons. Operations links here instead of retaining a second generalist editor.
+- Training ceilings and reserves are now raw unstaged forms. Input alone does
+  not alter the plan. Preview compares actual quoted expense, projected skill,
+  teaching time, and department ceilings; Stage applies the reviewed policy and
+  Discard retains the previously staged policy. Blank values are not zero.
+  Related-policy/month/owner changes invalidate forms; unrelated plan edits keep
+  raw fields but invalidate the old quote. Paused/reconnected/sealed write tokens
+  cannot apply. These are private in-memory forms, not durable recovery yet.
+- Leadership/delegation use readable before/after instruction rows, not raw JSON.
+  Allowed service/research/training fields and strategic prohibitions remain
+  unchanged. Leadership teaching potential and department reserve are now labeled
+  separately from delivery-adjusted skill and the effective shared reserve.
+- If a post-staging redraw throws, recruiting/training report that staging
+  succeeded and the screen needs recovery; they no longer falsely claim the
+  accepted order was rejected. No settlement or bank resource is changed by UI.
+
+Eleven new production workflow groups pass, covering optional standalone/Group
+rules, keyboard navigation, hiring limits and marginal costs, stale/paused/sealed
+guards, retained blank training fields, actual lower department ceilings, explicit
+staging, redraw failures, and one recruitment destination. Existing department UI,
+workforce (5), forms (7), live functions (16), monthly review (7), changes (10),
+obligations (12), protected-budget, Operations workspace, architecture and exact
+engine-boundary checks passed during this checkpoint. The isolated workforce
+harness now loads the real new adapter and supplies its DOM/session bindings;
+its accounting/teaching assertions are unchanged.
+
+Browser on the D50B precursor: mature Continue completed despite a three-second
+input observation timeout (re-observation confirmed month 481; no repeated click).
+All five desks were reachable with unrelated panels absent. One retail recruit
+staged a $262,222 signing commitment without advancing the month or headcount.
+A $20,000 raw training ceiling survived Recruitment -> Development; Preview
+quoted $14,000 class spend and one teaching banker. Explicit Stage updated the
+shared budget, productive Retail staff 12 -> 11, and projected skill 20 -> 21.
+No turn was submitted. The subsequent 4CC4 build adds redraw-result protection
+and the leadership scope clarifications; these pass targeted automated checks
+but still need final rebuilt browser acceptance.
+
+The rolling fast regression started against D50B in exec session `76479`, with
+output `../output/v3-usability-workflows-fast.log`. It ended with exit 1 in
+`feature_setup.test.js`: the persistence harness extracted only the first line
+of the now-multiline `enterGame`. Extraction now includes the complete real
+handler. The affected suite passes against both portable bytes and source;
+local transition and network lifecycle regressions also pass after the repair.
+Earlier engine/accounting/corporate/compatibility gates in the run passed.
+This was **not** an exact-final-build release gate: later small UI fixes changed
+source during it. Future lengthy checkpoint runs should use a detached snapshot,
+so subsequent implementation cannot change their input. The finished release
+still needs its own full Windows run against frozen final bytes.
+
+Still open: live unsaved-form warnings at submission, general navigation/focus
+polish (including recruitment grammar), cross-editor preservation, numeric remedy
+comparisons, compact leadership cards and the remaining batches. The overall
+game/manual/package/publication goal is active; no usability batch is signed off.

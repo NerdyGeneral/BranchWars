@@ -27,6 +27,7 @@ if (!args.includes('--full')) commands.push(...[
 'usability_plan_review.test.js',
 'usability_changes.test.js',
 'usability_people.test.js',
+'usability_people_workflows.test.js',
 'usability_engine_boundary.test.js',
 'v31_facility_conflicts.test.js',
 'v31_training_deferral.test.js',

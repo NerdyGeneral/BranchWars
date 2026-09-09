@@ -14,6 +14,11 @@ overview separating headcount from task coverage. Workforce consolidation,
 remaining usability batches and publication gates remain active; see the ledger
 for specific implemented/partial statuses and verification boundaries.
 
+Third checkpoint consolidates Workforce into five task desks and recruitment into
+one shared editor. Development now requires preview/stage/discard, and delegation
+proposals show named before/after changes. Remaining workforce polish, general
+navigation/financial clarity, connected workflows and release gates stay in scope.
+
 ## September 9 — V3.1 stability candidate handed off locally
 
 The bounded repair goal is technically complete: paid staffing/execution plans,

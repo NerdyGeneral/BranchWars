@@ -103,6 +103,7 @@
       "ui/dashboard.js",
       "ui/services.js",
       "ui/management.js",
+      "ui/people-workspace.js",
       "ui/workforce.js",
       "ui/departments.js",
       "ui/department-functions.js",

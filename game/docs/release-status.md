@@ -16,6 +16,15 @@ pass; selected existing gates and early/mature browser workflows pass. The origi
 baseline fast gate also completed successfully. These are incremental results,
 not a final full Windows/balance/manual/publication acceptance claim.
 
+Third local checkpoint: five workforce desks, unified recruitment, explicit
+training preview/stage/discard and readable bounded proposals. Eleven additional
+workflow groups and selected existing gates pass; mature browser workflows were
+exercised before the final small copy/redraw refinements. The rolling fast run
+stopped on an outdated single-line entry-handler extraction in a persistence
+harness; that harness is repaired and its portable/source cases pass. This is
+not a completed full gate. Exact final Windows, balance/performance, manual and
+GitHub publication requirements remain open.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

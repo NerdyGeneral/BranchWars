@@ -1,19 +1,9 @@
 let selectedWorkforceRole = 'service';
-function stageSpecialistHire(v, role, step) {
-  if (!draft || v.me.submitted || !v.me.workforce) return false;
-  const candidate = JSON.parse(JSON.stringify(draft));
-  candidate.specialistHires = { ...E.emptySpecialistOrders(), ...candidate.specialistHires };
-  candidate.specialistHires[role] = Math.max(0, candidate.specialistHires[role] + step);
-  try {
-    E.normalizeWorkforcePlan(v.me, candidate);
-    if (step > 0 && E.planBudget(v.me, candidate).remaining < 0) throw Error('The combined plan exceeds cash or capital limits.');
-    draft = candidate;
-    renderProjects(v); renderReady(v);
-    return true;
-  } catch (e) { toast(e.message); return false; }
+function stageSpecialistHire(v, role, step,token=workforceEditToken(v)) {
+  return stagePeopleHire(role,step,token);
 }
-function stageWorkforcePolicy(v, role, budget, reserve) {
-  if (!draft || v.me.submitted || !v.me.workforce) return false;
+function stageWorkforcePolicy(v, role, budget, reserve,token=workforceEditToken(v)) {
+  if (!workforceEditCurrent(token)) return false;
   const candidate = JSON.parse(JSON.stringify(draft));
   candidate.workforcePolicy = JSON.parse(JSON.stringify(candidate.workforcePolicy || v.me.workforce.policy));
   candidate.workforcePolicy.training[role] = budget;
@@ -26,7 +16,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
-  if(workspaceTab==='workforce')renderPeopleOverview(v);
+  if(workspaceTab==='workforce'){renderPeopleOverview(v);renderPeopleWorkspace(v);}
   if (!v.me.departmentOffice || workspaceTab === 'workforce') renderDepartments(v);
   renderHouseholds(v);
   renderCollections(v);
@@ -52,10 +42,7 @@ function renderWorkforce(v) {
   }
   catch (e) { $('#workforcePanel').innerHTML = '<p class="bad">' + esc(e.message) + '</p>'; return; }
   const row = review.rows.find(r => r.role === selectedWorkforceRole) || review.rows[0];
-  const disabled = v.me.submitted ? 'disabled' : '';
-  const candidate = JSON.parse(JSON.stringify(draft));
-  candidate.specialistHires[row.role]++;
-  const addBlocked = E.planHires(candidate) > E.hireLimit(v.me) || E.planBudget(v.me, candidate).remaining < 0;
+  const disabled = v.me.submitted || v.gameOver || gh.active&&gh.paused ? 'disabled' : '';
   const actual = v.me.operatingReport, forecast = review.forecast;
   const morale = v.financialGroupVersion===7?E.operatingWorkloadMorale(v.me,Object.fromEntries(review.rows.map(r=>[r.role,(r.productive??r.assigned)+r.bonus]))):null;
   const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + (v.me.departmentOffice?' / '+r.productive:'') + '</td><td>' +
@@ -76,7 +63,7 @@ function renderWorkforce(v) {
         <p class="small">${v.me.departmentOffice?`${row.assigned} assigned · ${row.teaching?'1 reserved for paid teaching':'0 reserved for teaching'} · ${row.productive} productive bankers. ${row.active} of ${row.count} qualified bankers producing. Forecast effective capacity: <b>${row.productive} + ${row.bonus.toFixed(2)}</b>.`:`${row.active} of ${row.count} qualified bankers working in this department. Current effective capacity: <b>${row.assigned} + ${row.bonus.toFixed(2)}</b>.`}</p>
         <div class="workforce-skill" role="meter" aria-label="${esc(row.name)} skill" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${row.skill}"><span style="width:${row.skill}%"></span></div>
         <p class="micro">Skill ${row.skill}/100 → <b>${row.nextSkill}/100</b> after forecast training, before new recruits. Recruits enter at skill 20 and dilute the team average; they do not train or produce this month.</p>
-        <div class="hire-row"><button type="button" class="stepper" id="specialistLess" aria-label="Remove one ${esc(row.name)} recruit" ${disabled || (!row.hires ? 'disabled' : '')}>−</button><b>${row.hires} staged</b><button type="button" class="stepper" id="specialistMore" aria-label="Recruit one ${esc(row.name)} specialist" ${disabled || (addBlocked ? 'disabled' : '')}>+</button></div>
+        <p class="small">${row.hires} recruits staged for this specialty. Compare all five recruit types and their shared limit in Recruitment.</p><button type="button" class="btn" id="workforceRecruitment">Open recruitment</button>
         <p class="micro">Each hire costs the normal size-adjusted recruiting fee <b>plus ${money(row.premium)}</b>. Ongoing pay: $18K base plus ${money(E.SPECIALIST_ROLES[row.role].payroll)} premium/month. Existing efficiency discounts affect base pay, not specialist premiums.</p>
       </section>
       <section class="workforce-card"><h3>RECURRING TRAINING MANDATE</h3>
@@ -86,15 +73,14 @@ function renderWorkforce(v) {
         <p class="micro ${review.training.paused ? 'bad' : 'muted'}">Training is reserved alongside the full plan and included in operating expenses—do not count it twice. If the combined training bill breaches the protected cash reserve or capital limit, every department pauses together. Events and rival actions can change actual affordability.</p>
       </section>
     </div>
+    <section class="workforce-card"><p class="small" id="workforceFormStatus" role="status"></p><button class="btn" type="button" id="previewWorkforceForm" ${disabled}>Preview training changes</button> <button class="btn" type="button" id="stageWorkforceForm" disabled>Stage reviewed training</button> <button class="btn" type="button" id="discardWorkforceForm" ${disabled}>Discard unstaged training</button><div id="workforceFormPreview"></div></section>
     <div class="workforce-results"><h3>ECONOMICS &amp; TIMING</h3><p class="small">Current draft bank operating profit: <b>${money(forecast.profit - (forecast.fundingLoss || 0))}</b>, including existing specialist premiums and affordable training. This excludes executive events, rival moves, new project completions and recruiting expenditure. No immediate benefit from new hires or this month's training.</p>
     <p class="micro">${actual ? 'Last completed month ' + actual.cycle + ': specialist premiums ' + money(actual.specialistPayroll || 0) + '; paid training ' + money(actual.workforceTraining || 0) + (actual.workforceTrainingPaused ? ' — reserve protection paused training.' : '.') : 'Paid training and realized premiums appear after the first completed month.'}</p>
     <details><summary>How expertise changes capacity</summary><p class="micro">Each qualified specialist assigned to their own department contributes 0.10 + 0.003 × skill effective bankers (0.16 at entry, capped at 0.40). Retail expertise also improves workload coverage and therefore persistent goodwill. Relationship bankers support sales or service contracts according to the staff reservation. Credit analysts increase originations, not guaranteed profits. Risk expertise improves credit controls and project capacity. Generalists remain cheaper and fully flexible; training never upgrades every department at once.</p></details></div>`;
-  $('#workforceDepartment').addEventListener('change', e => { selectedWorkforceRole = e.target.value; renderWorkforce(v); });
-  $('#specialistLess').addEventListener('click', () => stageSpecialistHire(v, row.role, -1));
-  $('#specialistMore').addEventListener('click', () => stageSpecialistHire(v, row.role, 1));
-  const policy = () => stageWorkforcePolicy(v, row.role, Number($('#workforceBudget').value), Number($('#workforceReserve').value));
-  $('#workforceBudget').addEventListener('change', policy);
-  $('#workforceReserve').addEventListener('change', policy);
+  const token=workforceEditToken(v);
+  $('#workforceDepartment').addEventListener('change', e => { if(!workforceEditCurrent(token))return;selectedWorkforceRole = e.target.value; renderWorkforce(currentView()); });
+  $('#workforceRecruitment').addEventListener('click',()=>{if(currentView()?.me.id===v.me.id)setPeopleDesk('recruitment',{focus:true});});
+  bindWorkforceForm(v,row);
 }
 
 // One read-only people overview, using the same physical reservations and
@@ -132,7 +118,8 @@ function renderPeopleOverview(v){
   const control=event.target.closest?.('[data-people-desk]');if(!control||!mount.contains(control))return;
   const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;
   const key=control.dataset.peopleDesk;
-  if(key==='allocation'||key==='recruitment'){navigatePlanReview({tab:'operations',desk:key==='allocation'?'monthly':'projects',target:key==='allocation'?'#staffGrid':'#hiringPanel'});return;}
+  if(key==='allocation'){navigatePlanReview({tab:'operations',desk:'monthly',target:'#staffGrid'});return;}
+  if(['recruitment','development','leadership','functions'].includes(key)){setPeopleDesk(key==='functions'?'coverage':key,{focus:true});return;}
   if(key==='leadership'&&now.me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(now);}
   if(key==='functions'&&now.me.departmentFunctions){departmentFunctionsLive.tab='functions';renderDepartments(now);}
   const target=$(key==='development'?'#workforcePanel':now.me.departmentOffice?'#departmentPanel':'#workforcePanel');

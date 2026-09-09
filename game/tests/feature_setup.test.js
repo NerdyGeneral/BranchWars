@@ -169,8 +169,13 @@ function storageHarness() {
   // Restore the real tested artifact/source-assembly handlers that the network
   // harness normally stubs. Only browser I/O and final painting are simulated.
   for (const name of ['saveLocal', 'enterGame']) {
-    const body = runtimeHtml.match(new RegExp('^function ' + name + '\\([^\\n]*$', 'm'));
-    assert(body, 'real handler exists: ' + name); peer.run(body[0]);
+    if(name==='enterGame'){
+      const start=runtimeHtml.indexOf('function enterGame('),end=runtimeHtml.indexOf('function leaveGame(',start);
+      assert(start>=0&&end>start,'complete real entry handler exists');peer.run(runtimeHtml.slice(start,end));
+    }else{
+      const body = runtimeHtml.match(new RegExp('^function ' + name + '\\([^\\n]*$', 'm'));
+      assert(body, 'real handler exists: ' + name); peer.run(body[0]);
+    }
   }
   for (const id of ['#continueBtn', '#startScreen', '#connectScreen', '#lobbyScreen', '#gameScreen', '#gameOver', '#privacyScreen']) {
     const element = peer.c.document.querySelector(id), classes = new Set(['hidden']);

@@ -27,12 +27,13 @@ function monthlyPlanReview(v,plan=draft){
  if(plan.opportunity&&!v.opportunities?.some(o=>o.id===plan.opportunity))add('opportunity','Review expired opportunity','This opportunity is no longer available. Choose another pursuit or clear it.','markets',null,'#pipeline');
  if(E.planHires(plan)>E.hireLimit(p))add('hires','Reduce combined recruitment','Generalists and specialists share the '+E.hireLimit(p)+'-banker monthly limit.','operations','projects','#hiringPanel');
  if(typeof pendingDepartmentForm==='function'&&pendingDepartmentForm(v))warnings.push({id:'unstaged-leaders',title:'Leadership form has unstaged edits',text:'These entries are not in your monthly plan. Preview and stage them, or explicitly discard them.',tab:'workforce',target:'#departmentPanel'});
+ if(p.workforce&&typeof workforceForm==='function'&&workforceForm(v).dirty)warnings.push({id:'unstaged-training',title:'Training form has unstaged edits',text:'Training and reserve entries are not yet in your monthly plan. Preview and stage them, or discard them.',tab:'workforce',target:'#workforcePanel'});
  return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
 }
 function navigatePlanReview(item){
  setWorkspaceTab(item.tab);
  if(item.desk)setOperationsDesk(item.desk);
- if(item.tab==='workforce'&&item.id==='unstaged-leaders'&&currentView().me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(currentView());}
+ if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership');
  const target=$(item.target)||$('[data-workspace="'+item.tab+'"]');
  if(!target)return;
  for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
