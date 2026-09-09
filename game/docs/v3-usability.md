@@ -301,3 +301,11 @@ Still open: live unsaved-form warnings at submission, general navigation/focus
 polish (including recruitment grammar), cross-editor preservation, numeric remedy
 comparisons, compact leadership cards and the remaining batches. The overall
 game/manual/package/publication goal is active; no usability batch is signed off.
+
+Frozen checkpoint follow-up: commit `e371ec3` has a detached verification worktree
+at `../output/v3-usability-checkpoint3` (relative to the implementation root).
+Its fast gate was started in exec session `74151`; the log is
+`../output/v3-usability-checkpoint3-fast.log`. The run was confirmed live after
+build/reference/docs/architecture and early accounting gates passed. Do not edit
+this detached snapshot; poll its process/handle before interpreting a quiet log.
+It is a checkpoint test, not the eventual finished-release acceptance gate.
