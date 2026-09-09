@@ -11,6 +11,16 @@ new campaigns. Old campaigns retain their historical rules. Both multiplayer
 participants need support for the selected rules; an older V3 peer cannot join
 this new group configuration. Existing options remain opt-in.
 
+## Difficulty and comparison limits
+
+Solo **Chairman's Office** retains an existing `+1.5` addition to the AI bank's
+market-strength calculation. This is strength, not1.5 percentage points of share
+or a cash/staff grant. Regional VPs does not have that bot-only term. V3.1 has
+not changed this existing difficulty behavior or added free resources to repair
+the AI. The matched balance lab runs both banks as hotseat participants with
+ordinary AI instructions, excluding bot-seat bonuses; its Chairman policy
+profile is therefore not a complete solo-Chairman acceptance test.
+
 ## Staffing is an investment, not an instant bonus
 
 Recruiting costs cash now. New bankers arrive next month and add recurring pay.

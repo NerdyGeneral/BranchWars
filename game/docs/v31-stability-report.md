@@ -57,6 +57,17 @@ available. Corporate failures persist in every completed candidate case.
 
 ### Opening pace remains a human balance consideration
 
+The matched lab is **hotseat with both seats driven through ordinary AI plans**,
+not a normal solo-versus-bot campaign. Both `isBot` flags remain false and are
+asserted unchanged each month. VP/Chairman select decision-policy profiles.
+The current solo Chairman difficulty still has the preserved `+1.5` bot-only
+market-strength term in `simulateMarkets`; it is not a grant of cash, workers or
+free facilities, but it is a competitive handicap. It is absent from these
+matched runs. Do not describe the comparison as solo-Chairman balance acceptance
+or as proof that every difficulty has identical competitive rules. This repair
+does not depend on that term to restore productive banking, and adds no such
+bonus. Existing difficulty behavior remains unchanged; the manual discloses it.
+
 In these four completed B-profile campaigns, month24 loans are $2.70M-$3.74M per
 bank, down from the $9.50M opening book. Reported scheduled principal repayments
 total $7.52M-$7.77M, while new originations total only $0.97M-$2.23M. The existing
