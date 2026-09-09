@@ -35,6 +35,12 @@ Those first two runs used the first harness revision (no per-month gross lending
 flow fields); retain them as supplemental evidence, and use the extended harness
 for matched final comparisons. Do not mix harness revisions without disclosure.
 
+Fresh V3 baseline completed: balanced / `department-A` / 120 months, 11 exact
+half-ready replays, no invariant failure, both banks and all six companies still
+active. Ending loans reproduced the earlier $505,036 / $746,347 portfolios with
+five employees each. Report: `reports/qa/v31/v3-balanced-department-A-120.json`.
+This reproduces weak banking activity despite successful technical checks.
+
 Targeted checks passed against assembled candidate
 `d93c719157c9ee8014af46ce5b32f9b48edd2155affa7e5ba3fa104104cab23e`:
 
