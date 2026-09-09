@@ -113,6 +113,29 @@ function facilityContext(g,p,plan) {
     freeExecution:budget.freeCapacity+(order?FacilityNetwork.RULES.capacity:0),
     occupiedMarkets:[...occupiedMarkets,...(p.facilityLifecycle?p.facilityNetwork.offices.filter(o=>p.facilityLifecycle.records[o.id].renovation&&o.id!==plan.facilityLifecyclePolicy?.cancel).map(o=>o.market):[])],restriction};
 }
+// Group7 AI-only future operating estimate. Human/current-plan conversion
+// quotes deliberately retain the selected staff instructions. The AI can also
+// consider the ordinary allocation it could select after activation, using
+// only CURRENT post-servicing, post-teaching staff; never hypothetical hires.
+function facilityAiConversionMetrics(g,p,plan,budget=planBudget(p,plan)) {
+  const retained=facilityConversionMetrics(g,p,plan,budget);
+  if(g.financialGroupVersion!==7||!p.facilityLifecycle)return retained;
+  let staged;
+  return (ignored,office)=>{
+    const current=FacilityNetwork.office(p,office.id);
+    if(!current||current.model===office.model)return retained(p,office);
+    staged=staged||facilityLifecyclePlanningContext(g,p,plan,budget);
+    const owner=departmentFunctionCopy(staged.owner),target=FacilityNetwork.office(owner,office.id),
+      policy=departmentFunctionCopy(plan.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p));
+    for(const [id,settings]of Object.entries(policy.offices))Object.assign(owner.facilityLifecycle.records[id],departmentFunctionCopy(settings));
+    target.model=office.model;target.conversion=null;
+    facilityLifecycleConvertedOffice(owner,office.id);
+    for(const [id,settings]of Object.entries(policy.offices))settings.hubId=owner.facilityLifecycle.records[id].hubId;
+    const proposal=facilityStaffAllocation(owner,policy,staged.context),
+      row=proposal.metrics.rows.find(r=>r.officeId===office.id);
+    return {expense:row.upkeep,...row.capacity};
+  };
+}
 function facilityInstructionQuote(g,p,plan) {
   const context=facilityContext(g,p,plan);
   let attempted=null;
@@ -200,7 +223,10 @@ function effectiveFacilityTotals(p) {
 // Planning-only clone. Settlement remains in prepareFacilityInstructions; a
 // forecast must neither charge the live bank nor promise undisrupted capacity.
 function facilityProspectiveOwner(p,plan) {
-  if(!p.facilityNetwork)return p;
+  // All callers immediately create a private department-prepared owner. Avoid
+  // serializing the entire mature bank twice when no conversion/cancel exists.
+  // Active instructions still require the isolated transaction below.
+  if(!p.facilityNetwork||(!plan.facilityPolicy?.cancel&&!plan.facilityPolicy?.convert))return p;
   const q=JSON.parse(JSON.stringify(p)),policy=plan.facilityPolicy;
   if(policy?.cancel){const office=FacilityNetwork.office(q,policy.cancel);if(office?.conversion)office.conversion=null;}
   if(policy?.convert){
@@ -238,6 +264,7 @@ function planFacilityNetwork(g,index,plan) {
   plan.newProject=plan.newProjects[0]||null;
   if(p.stats.lastProfit<=0)return plan;
   const context=facilityContext(g,p,plan),review=aiCashPlanningReview(g,index,plan);
+  if(g.financialGroupVersion===7&&p.facilityLifecycle)context.officeMetrics=facilityAiConversionMetrics(g,p,plan);
   context.freeCash=Math.min(context.freeCash,Math.max(0,review.limit-planBudget(p,plan).total));
   context.score=q=>{
     // Payback from actual current deposit/loan production constraints, not a free

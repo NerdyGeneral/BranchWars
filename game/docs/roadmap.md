@@ -7,6 +7,13 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Current V3.1 checkpoint: real month120 regression now covers a funded hire
+surviving the complete AI pipeline and ordinary settlement, not just a hiring
+helper. Workload-preserving reassignment and post-obligation conversion staffing
+estimates are in source. Long-run activity/payback, final matched campaigns,
+exact-build transport/browser/full-release checks and packaging remain open.
+The fresh V3 Regulatory480 run reproduced the ATM-only/failed-company baseline.
+
 ## V3 delivery checkpoint
 
 V3 packages the current Group6/save9.5 regional preview; it does not close the

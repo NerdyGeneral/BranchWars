@@ -11,8 +11,17 @@
   accepted; early candidates still show weak staffing and ATM-only networks.
 - Explain workload-driven morale in Workforce using the shared engine formula;
   show aggregate funded circulation in the corporate panel.
+- Preserve funded Group7 hires through the later pilot budget pass; under
+  staffing distress, postpone unstarted projects and non-emergency actions before
+  replacement hiring. Keep cash/payroll/capital safeguards and real costs.
+- Add bounded one-person workload recovery proposals protecting current work,
+  plus AI-only post-conversion staffing estimates from existing physical staff.
+  These are candidate heuristics; long-run balance is not yet accepted.
 - Add preserved-state recruitment regression, circulation conservation/failure,
   compatibility, owner UI purity and Group7 simulated transport tests.
+- Avoid a redundant mature-bank copy on no-conversion forecast paths; paired
+  mature-state AI/RNG/quote/settlement checks preserve exact behavior. Browser
+  performance and the final-build full suite remain outstanding.
 - See [working evidence](v31-stability-report.md) and
   [draft manual addendum](v31-manual-addendum.md). No final ZIP or publication yet.
 

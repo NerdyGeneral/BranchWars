@@ -72,6 +72,7 @@
       "engine/department-delivery.js",
       "engine/department-provider.js",
       "engine/department-runtime.js",
+      "engine/staffing-recovery.js",
       "engine/migration.js",
       "engine/operation-coordinator.js",
       "engine/project-coordinator.js",

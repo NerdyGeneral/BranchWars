@@ -159,7 +159,11 @@ function planPilotReserve(g,index,plan){
  if(plan.competitiveAction==='takeoverDefense')plan.competitiveAction='none';
  let available=limit-(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  if(available<0){plan.competitiveAction='none';available=limit}
- plan.hires=0;
+ // The historical pilot pass discarded the baseline planner's funded hires
+ // before allocating its entire capital budget to new projects. Group7 keeps
+ // a priced workforce reserve through this pass; no future recruit works now.
+ plan.hires=g.financialGroupVersion===7?Math.min(planHiring(g,p,limit-available),hireLimit(p),Math.floor(Math.max(0,forecast.profit)/36000)):0;
+ available-=hireCost(p,plan.hires);
  const projects=[];
  if(!(p.branches[plan.focus]||0)&&!p.projects.some(x=>x.key==='branch')&&!projectBarred(p,'branch')&&projectCost(p,PROJECTS.branch)<=available&&usedCapacity(p,[PROJECTS.branch])<=executionCapacity(p,plan.allocation)){
   projects.push('branch');available-=projectCost(p,PROJECTS.branch);
@@ -167,7 +171,7 @@ function planPilotReserve(g,index,plan){
  plan.newProjects=projects;
  plan.newProject=projects[0]||null;
  for(const key of Object.keys(plan.investments||{})){const amount=Math.min(plan.investments[key],Math.floor(available));plan.investments[key]=amount>=1000?amount:0;available-=plan.investments[key]}
- if(forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
+ if(g.financialGroupVersion!==7&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
  return plan;
 }
 function validateAccountingSave(g){

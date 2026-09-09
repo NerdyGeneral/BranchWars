@@ -29,6 +29,21 @@ purchase finite administrative work to free existing lending time, but only if
 the shared forecast retains protected customer and control work. Neither action
 creates deposits, borrowers or free employees.
 
+When its staffing or morale is distressed, the new AI prioritizes affordable
+replacement hiring over discretionary new projects and competitive spending.
+Emergency strategic defenses remain available. It may also move one existing
+banker toward Retail or Operations if the fully funded plan improves workload
+morale without reducing existing task coverage, office output or lending.
+This is management behavior, not an automatic morale reward or guaranteed rescue.
+
+## Conversion estimates depend on who can operate the office
+
+An ATM and a commercial office need different staff. The new AI can consider
+reassigning currently available staff after conversion; it cannot count future
+hires, reuse staff already committed to servicing, or skip the construction bill.
+Your conversion quote still reflects the operating instructions you selected.
+Review the destination's staffing needs as well as its cost and capacity.
+
 ## The corporate economy recirculates funded cash
 
 Outside carriers, service providers and the existing corporate creditor can spend

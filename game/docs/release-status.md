@@ -25,6 +25,17 @@ lending quarter-work units; it uses the existing protected-task, funding and
 capital guard. Funded corporate circulation, provisional paid AI recruitment
 recovery, and owner workload explanations are now implemented in source. Their
 targeted tests pass; full-bank balance and facility viability remain unfinished.
+The 120-month capital-reserve adjustment failed to improve staffing. Subsequent
+traces exposed a later planner clearing recruitment and spending scarce capital
+on retention before hiring. New Group7 priority/reassignment fixes now pass an
+actual mature-save paid-hire/replay regression; their long campaign is still
+running. AI-only future conversion staffing estimates also correct a measured
+ATM upgrade blind spot without granting employees or bypassing affordability.
+The fresh V3 Regulatory480 baseline reproduced six failed firms and ATM-only
+networks; neither it nor the new narrow tests certifies the candidate's balance.
+Profiling also identified a redundant no-conversion forecast copy; removing it
+passed an exact mature-state AI/RNG/quote/settlement comparison. This is not a
+substitute for actual browser latency or the final Windows/build/package gate.
 Separate diagnostic portable snapshots exist; no final release has been rebuilt
 or published. See [V3.1 evidence](v31-stability-report.md) for exact scope and
 [draft manual addendum](v31-manual-addendum.md) for player-facing changes.

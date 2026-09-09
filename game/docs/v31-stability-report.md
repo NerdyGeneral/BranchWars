@@ -166,6 +166,103 @@ Its balanced120 campaign is running as `v31-capital-reserve-balanced-A-120`.
 Other source-sensitive gates must be rerun on this later revision; prior hashes
 do not automatically certify it.
 
+## Staffing pipeline and facility diagnosis checkpoint
+
+The capital-reserve120 run has now completed: 120 months, 11 exact half-ready
+replays, no invariant failure, 954.96 seconds. Its final staffing, morale and
+loan amounts are IDENTICAL to the failed preceding recruitment candidate:
+three/four employees, both morale zero, loans $1,009,769 / $845,778. Removing
+the duplicated capital reserve alone did not solve the planner's priorities.
+
+Tracing the actual saved month120 identified two further causes:
+
+- The later `planPilotReserve` unconditionally cleared the baseline planner's
+  hires, allocated projects/research first, and only reconsidered one hire from
+  the remainder. Reserving recruitment in the baseline AI was not sufficient.
+- The second bank's $9,201,507 cash was not its spendable equity budget. Its
+  protected allowance was $194,362; a $100,000 retention package preceded a
+  $119,778 hire. Final cleanup also removed hires before unstarted projects.
+
+Group7 now keeps ordinary priced hiring through the pilot-reserve pass, capped
+by hiring limits, cash runway, capital and both previous/forecast profit. When
+staff are below eight or morale below45, discretionary competitive actions must
+leave that hiring allowance intact; takeover/liquidity emergency protection is
+exempt. Reserve cleanup postpones unstarted projects and non-emergency actions
+before cancelling funded hires. Existing projects, accounting, actual payroll,
+human submission rules and Group1–6 behavior are unchanged. These thresholds are
+provisional AI priorities, not bonuses or required staffing floors.
+
+The new full-pipeline regression pins the real Group7 month120 checkpoint
+(`63087e6e…`): the second bank selects and receives one paid employee in ordinary
+month121 settlement with no emergency debt; the first bank, with only $544,376
+cash, does not hire. Half-ready resume reproduces the exact settlement. This is
+stronger than testing `planHiring` alone, but not long-campaign acceptance.
+
+A separate recovery proposal can move one existing employee toward Retail or
+Operations when workload-driven morale improves. It must retain all existing
+task coverage, paid teaching, office output, funded originations, capital and
+liquidity protection, with a bounded forecast-profit sacrifice (at most $20,000
+or 10% of positive profit, whichever is smaller). It evaluates at most four
+alternatives, consumes no RNG and creates no staff. Actual Group7 month24 gives
+one accepted and one refused case, plus exact normal settlement/replay. The
+recovery-only balanced120 run remains diagnostic and separate from the later
+recruitment-priority changes.
+
+Snapshot `cefe2faa9b44ce95938d59ecbcf226a5554ed2d32426670101de519b79c6e0ff`
+(engine `aa0c0b27cb4814df2672306dd8443a8e33f43a86fe1fa30850b24d92282907f8`)
+passed the preserved Group1–6 one-month boundary suite, both staffing regressions
+and Group7 save/replay checks. Its immutable `v31-staffing-priority-balanced-A-120`
+campaign is running. It predates the following facility-planning correction.
+
+Read-only `tools/v31_facility_diagnostic.js` measured a real month24 ATM bank:
+retained instructions predict zero commercial-office loan capacity, while its
+actual unreserved lending/operations staff can support $282,166 of capacity.
+The conversion was still unaffordable; this is not permission to build it. New
+Group7 AI conversion estimates can now consider the ordinary allocator after
+activation, using only current physical staff left after servicing, teaching and
+other departments. Human retained-instruction quotes, licensing, construction
+costs, execution limits and cash eligibility are unchanged. No actual staff move
+or conversion occurs during the estimate. The capacity regression and exact
+Group1–6 boundary suite pass on portable `ae6035b4db8745088d279a69fd6769c5dac4108b18c1e0e70bd749a3ba125a20`
+(engine `d991a89e35ca787eaa892898e3e1ab7c24b623ecbcf6dc5c17507b9ed1898626`).
+The old short-horizon conversion payback score still needs investigation:
+correcting the destination capacity alone does not establish viable networks.
+
+On the same `ae6035b4…` snapshot, Group7 full-client staffing transport checks
+passed all three simulated transports (four resolved months and six preserved
+Group5 cases). The separate adversarial suite passed eight months across
+GitHub/LAN/direct, including asynchronous duplicate commitments, stale/reordered
+messages, recall fencing, wrong hashes, sealed checkpoint recovery, privacy and
+mixed-version refusal. Source hashes matched at suite opening/closing. The
+Growth / department-A / 24-month screen also passed invariants and three exact
+replays (173.39 seconds): both banks had nine employees, morale28/30, loans
+$3,195,398 / $3,386,238, and retail/ATM offices respectively. These remain
+short-horizon, simulated-client observations, not full balance/release acceptance.
+
+A CPU profile of real Group7 month120 planning on `d991a89e…` attributed 15.6%
+of sampled self-time to `facilityProspectiveOwner`, which cloned whole banks
+even without conversion instructions. All four callers immediately clone again
+in department preparation. The no-op path now returns the input to that existing
+isolation boundary; real conversion/cancellation still makes its private copy.
+An exact comparison against the identical engine with only this optimization
+disabled passed both mature AI plans/RNG, operating/department forecasts, normal
+month121 settlement and unchanged input checks. One paired timing sample was
+4,046.8→3,664.8ms and 5,128.0→4,176.6ms; concurrent campaigns and fresh-VM effects
+mean this is not a stable speedup claim or browser measurement. Candidate
+portable `9a54e0ed90d6edb9184a1a00f4799845d8a12c112dedfecc8cb3f4a7e5ec8a72`,
+engine `9007daacaf5b536843080e1f97197aaf0675b56e4a1a332d96dd9e60d1459876`,
+also passed the Group1–6 exact one-month and Group7 boundary suite. Earlier
+transport results predate this optimization and do not certify the final build.
+
+The fresh published-V3 Regulatory / department-A / 480-month baseline completed:
+41 exact half-ready replays, no invariant error, unchanged source, 4,797.49
+seconds. All six firms failed in months383–384; both banks ended with nine ATMs,
+42 employees, failed agencies, loans $7,674,827 / $8,797,226 and cash
+$102,666,468 / $77,919,582. This reproduces the reported long-game activity
+problems, not desirable balance. Baseline harness `8daffb937…` predates the richer
+morale/gross-origination fields, so final matched comparisons still require the
+same activity-rich harness. Published portable and V2/V3 artifacts remain intact.
+
 ## Remaining release gates
 
 1. Complete matched banking simulations and diagnose the candidate's remaining

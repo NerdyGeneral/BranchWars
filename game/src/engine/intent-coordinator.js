@@ -48,7 +48,8 @@ function chooseOpenBotCore(g, index) {
   if([5,6,7].includes(g.financialGroupVersion))plan=planFacilityLifecycle(g,index,planFinalCashReserve(g,index,plan));
   if([6,7].includes(g.financialGroupVersion)){
     plan=planDepartmentFunctions(g,index,planFinalCashReserve(g,index,plan));
-    return planFinalCashReserve(g,index,plan);
+    plan=planFinalCashReserve(g,index,plan);
+    return g.financialGroupVersion===7?staffingRecoveryReview(g,index,plan).plan:plan;
   }
   return [1,2,3,4,5,6,7].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }
@@ -123,6 +124,15 @@ function planFinalCashReserve(g, index, input) {
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
   if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
   if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;
+  if(g.financialGroupVersion===7&&staffingRecoveryPriority(p)&&planHires(plan)>0){
+    // Unstarted expansion is discretionary; funded replacement staffing has
+    // priority when the existing institution is understaffed or demoralized.
+    // Never cancel work already in progress or strip a live emergency defense.
+    plan.newProjects=[...planInitiatives(plan)];
+    while(plan.newProjects.length&&excess())plan.newProjects.pop();
+    plan.newProject=plan.newProjects[0]||null;
+    if(excess()&&!staffingProtectedDefense(g,index,plan.competitiveAction))plan.competitiveAction='none';
+  }
   if (excess()) { plan.hires = 0; if (plan.specialistHires) for (const role of Object.keys(plan.specialistHires)) plan.specialistHires[role] = 0; }
   plan.newProjects = [...planInitiatives(plan)];
   while (plan.newProjects.length && excess()) plan.newProjects.pop();
