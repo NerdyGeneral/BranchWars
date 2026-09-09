@@ -22,6 +22,10 @@
 - Avoid a redundant mature-bank copy on no-conversion forecast paths; paired
   mature-state AI/RNG/quote/settlement checks preserve exact behavior. Browser
   performance and the final-build full suite remain outstanding.
+- Add provisional Group7 facility capital budgeting after actual department
+  staffing: 60-month credit/runoff/loss and funded cash/equity scenarios, two
+  shortlisted models, actual costs and capital accumulation without free offices.
+  This defers only unstarted research/projects; legacy AI is unchanged.
 - See [working evidence](v31-stability-report.md) and
   [draft manual addendum](v31-manual-addendum.md). No final ZIP or publication yet.
 

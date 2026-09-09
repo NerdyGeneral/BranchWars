@@ -44,6 +44,15 @@ hires, reuse staff already committed to servicing, or skip the construction bill
 Your conversion quote still reflects the operating instructions you selected.
 Review the destination's staffing needs as well as its cost and capacity.
 
+The AI now evaluates sustained loan income rather than rent savings alone. Its
+five-year scenario includes repayment, credit deterioration/losses, construction
+disruption, upkeep and funding/capital limits. It assumes today's economy and
+staffing; the real campaign can change. A bank may postpone unstarted research
+or projects to accumulate capital for a worthwhile conversion. Large cash
+balances alone do not mean an investment is affordable: deposits are liabilities,
+and the bank still needs its own capital. No projected income is credited to the
+real bank and no office is created until the ordinary paid construction process.
+
 ## The corporate economy recirculates funded cash
 
 Outside carriers, service providers and the existing corporate creditor can spend

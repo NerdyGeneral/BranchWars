@@ -13,6 +13,9 @@ helper. Workload-preserving reassignment and post-obligation conversion staffing
 estimates are in source. Long-run activity/payback, final matched campaigns,
 exact-build transport/browser/full-release checks and packaging remain open.
 The fresh V3 Regulatory480 run reproduced the ATM-only/failed-company baseline.
+Hiring-priority120 improved headcount but did not solve low morale or productive
+lending. Group7 facility capital budgeting is now under 120/480-month testing;
+it uses funded credit cash-flow scenarios and does not force particular models.
 
 ## V3 delivery checkpoint
 

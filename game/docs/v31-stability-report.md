@@ -263,7 +263,73 @@ problems, not desirable balance. Baseline harness `8daffb937…` predates the ri
 morale/gross-origination fields, so final matched comparisons still require the
 same activity-rich harness. Published portable and V2/V3 artifacts remain intact.
 
-## Remaining release gates
+## Facility capital-budgeting candidate
+
+The recovery-only balanced120 run (`25b575e2…`) completed with 11 exact replays,
+no invariant failures, 1,492.20 seconds, but ended with three employees and zero
+morale at both banks. Loans were $1,129,223 / $760,813 and both networks were
+ATM-only. Moving one employee alone was not sufficient.
+
+The later full-pipeline hiring-priority run (`cefe2faa…`) completed with 11 exact
+replays, no invariant failures and 1,603.96 seconds. Both banks ended with ten
+employees, versus three/four in the earlier candidate. One agency was active.
+However, morale was only17/9, both banks had two ATMs, and final monthly loan
+originations were $0 / $84,535; loans were $1,359,055 / $1,442,481. Cash was
+$11,441,447 / $5,887,079 and capital $540,216 / $791,774. This is measurable
+staffing improvement, NOT accepted overall banking activity or balance.
+
+Read-only mature-bank diagnostics confirmed that the V3 Regulatory480 banks
+could physically operate commercial offices using their actual unreserved staff.
+Conversion quotes retaining ATM instructions showed zero loan capacity; actual
+funded operating scenarios increased monthly originations from $100,000 to
+$457,352 / $409,579. Immediate profit declined because rent precedes the new
+loan book's interest income. Neither bank could yet pay the conversion while
+retaining the stricter AI capital cushion, despite their large deposit-funded
+cash balances. This is why both funding AND multi-period earnings matter.
+
+The new Group7 final planner compares up to two distinct destination models
+using a provisional 60-month frozen-economy capital-budgeting scenario. It runs
+after staffing and department commitments, rather than pricing offices before
+their work has been reserved. Existing office reconciliation remains in its
+historical position; Group1–6 retain their earlier conversion decisions.
+
+The scenario reuses credit aging, arrears/cures/losses, terms and amortization.
+New projected originations are capped by actual scenario cash and 10% capital
+plus the existing $200K buffer. It reserves the entire current budget up front
+(conservative for recurring items), keeps at least $600K and the selected
+liquidity-policy deposit buffer, and never adds borrowing. Principal repayment
+returns cash but is not earnings. Non-credit earnings, economic conditions,
+staff and collections are frozen at the current operating forecast; no future
+deposit/customer growth, hiring or business windfalls are assumed. This remains
+a conditional financial scenario, NOT a prediction or new real loan book.
+
+Construction uses two disrupted months and one actual conversion price. Current
+and activated operating forecasts must retain positive profit and protected
+funding/capital; the projected stream may not breach cash or 10% capital. A
+positive-value but not yet protected-budget-affordable choice defers unstarted
+research/new projects to accumulate capital. It creates no saved queue, payment
+or office. Existing projects, hires, vendor obligations and emergency defenses
+are not cancelled. Negative-value alternatives keep the original plan.
+
+On the preserved mature banks, the commercial scenarios were positive while
+costlier digital offices with unchanged lending were negative; neither commercial
+conversion was incorrectly marked affordable. A regression checks 480 projected
+months of cash/principal/equity identities, pure owner state, no rival funding,
+no phantom wealth license, legacy no-op and actual Group7 month25 replay. It does
+not establish that every future facility choice is optimal or that five years
+of frozen non-credit earnings will occur in live play.
+
+Portable `3bb531bd1fd70ffa5f716eec2ad6ab83f1e8c65fe7fa2c8fd96fc6f64f673cfc`,
+engine `e97e0da985645a9a3f5a30337db6150fe41a84d0c257818f2a31110d59aceb8f`,
+passed the new investment and existing staffing-priority/capacity regressions,
+plus the exact Group1–6 one-month and Group7 version-boundary suite. Immutable
+balanced120 and Regulatory480 campaigns are running on this snapshot. The
+development portable/reference will now be rebuilt for a complete Windows gate;
+the original V3 portable is preserved separately, as are published V2/V3 packages.
+All previous full-client transport results predate this planner and require a
+current-build rerun. Browser testing, matched final balance and packaging remain.
+
+## Outstanding final gates
 
 1. Complete matched banking simulations and diagnose the candidate's remaining
    morale, activity, facility and product behavior; retain failures and tune from

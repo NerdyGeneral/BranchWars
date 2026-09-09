@@ -3,10 +3,13 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const copy=x=>JSON.parse(JSON.stringify(x)),hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const html=require('../tools/build_game').assemble().html,code=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 function load(source){const c={console};vm.runInNewContext(source.replace('root.BWEngine={','root.BWEngine={staffingRecoveryReview,staffingRecoveryMorale,withCorporateForecast,'),c);return c.BWEngine;}
-const E=load(code),gate='return g.financialGroupVersion===7?staffingRecoveryReview(g,index,plan).plan:plan;';
-assert(code.includes(gate));const B=load(code.replace(gate,'return plan;'));
-// The comparison disables only the new planner in memory. It does not change
-// any saved version, book or engine file, or claim to be a published baseline.
+const gate='if(g.financialGroupVersion===7)plan=staffingRecoveryReview(g,index,plan).plan;',
+ facilityGate='return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;';
+assert(code.includes(gate)&&code.includes(facilityGate));
+// Isolate the staffing hook BEFORE the subsequent capital-budgeting stage in
+// both engines. The full production pipeline is covered by staffing_priority
+// and facility_investment; settlement here still uses the actual engine rules.
+const scoped=code.replace(facilityGate,'return plan;'),E=load(scoped),B=load(scoped.replace(gate,''));
 const raw=fs.readFileSync(path.join(__dirname,'fixtures/v31-group7-growth24.json.gz'));
 assert.equal(hash(raw),'a1e9ce1a09e8fa4717d46b5e18b829d5d5ec706cf59e915f0fd3036240c9c7e7');
 const capture=JSON.parse(zlib.gunzipSync(raw)),original=capture.game;

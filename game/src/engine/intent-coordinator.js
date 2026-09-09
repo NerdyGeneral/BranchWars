@@ -41,7 +41,7 @@ function chooseOpenBotCore(g, index) {
   plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
   plan=planFinancialGroup(g,index,plan);
   plan=planAgency(g,index,plan);
-  plan=planFacilityNetwork(g,index,plan);
+  plan=planFacilityNetwork(g,index,plan,g.financialGroupVersion!==7);
   plan=planDepartments(g,index,plan);
   // A changed loan mix can change the loss reserve after the earlier pricing
   // pass. Recheck only new group campaigns; old AI order remains byte-exact.
@@ -49,7 +49,8 @@ function chooseOpenBotCore(g, index) {
   if([6,7].includes(g.financialGroupVersion)){
     plan=planDepartmentFunctions(g,index,planFinalCashReserve(g,index,plan));
     plan=planFinalCashReserve(g,index,plan);
-    return g.financialGroupVersion===7?staffingRecoveryReview(g,index,plan).plan:plan;
+    if(g.financialGroupVersion===7)plan=staffingRecoveryReview(g,index,plan).plan;
+    return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;
   }
   return [1,2,3,4,5,6,7].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }

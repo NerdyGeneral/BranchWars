@@ -246,7 +246,7 @@ function effectiveFacilityBranches(p,market) {
   return p.facilityNetwork.offices.filter(o=>o.closedCycle===null&&(!market||o.market===market))
     .reduce((n,o)=>n+(o.conversion?FacilityNetwork.RULES.disruption:1),0);
 }
-function planFacilityNetwork(g,index,plan) {
+function planFacilityNetwork(g,index,plan,selectConversion=true) {
   const p=g.players[index];if(!p.facilityNetwork)return plan;
   plan.facilityPolicy=defaultFacilityPolicy();
   // Older initiative planners see branch projects but not identified-office
@@ -262,7 +262,7 @@ function planFacilityNetwork(g,index,plan) {
     occupied=true;return true;
   });
   plan.newProject=plan.newProjects[0]||null;
-  if(p.stats.lastProfit<=0)return plan;
+  if(p.stats.lastProfit<=0||!selectConversion)return plan;
   const context=facilityContext(g,p,plan),review=aiCashPlanningReview(g,index,plan);
   if(g.financialGroupVersion===7&&p.facilityLifecycle)context.officeMetrics=facilityAiConversionMetrics(g,p,plan);
   context.freeCash=Math.min(context.freeCash,Math.max(0,review.limit-planBudget(p,plan).total));

@@ -36,6 +36,12 @@ networks; neither it nor the new narrow tests certifies the candidate's balance.
 Profiling also identified a redundant no-conversion forecast copy; removing it
 passed an exact mature-state AI/RNG/quote/settlement comparison. This is not a
 substitute for actual browser latency or the final Windows/build/package gate.
+Hiring-priority120 has finished with ten staff at each bank, but morale and
+productive lending remain weak. A new Group7 final capital-budgeting planner
+assesses funded 60-month facility/credit scenarios and can defer unstarted
+research/projects to save for a worthwhile conversion. Its mature-state resource
+identities, refusal cases and Group7 replay pass; balanced120/Regulatory480 are
+running. A full current-development-build Windows check is next, not yet passed.
 Separate diagnostic portable snapshots exist; no final release has been rebuilt
 or published. See [V3.1 evidence](v31-stability-report.md) for exact scope and
 [draft manual addendum](v31-manual-addendum.md) for player-facing changes.
