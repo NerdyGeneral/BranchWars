@@ -101,6 +101,13 @@ cash or removes existing obligations.
 
 ## Friend-playtest checklist — not yet accepted
 
+If a carried office plan exceeds the current staff pool, open **Markets → Office
+condition & staffing → Prepare staffing proposal**. Review the changed site
+allocations and their capacity effects, then choose **Stage settings and renovation
+order**. Preparing alone does not change the plan. With no renovation selected,
+staging staffing does not start or pay for a renovation. This can resolve changed
+staff/service constraints without inventing bankers or silently changing mandates.
+
 - Use the same candidate build on two different computers; start a GitHub room,
   confirm distinct bank identities/colors, committed options and readiness.
 - Submit several simultaneous turns and compare month, shared results and balance
@@ -119,6 +126,7 @@ cash or removes existing obligations.
 - Record build hash, mode, month and reproduction steps for any problem. Never
   include repository tokens in screenshots, reports or shared saves.
 
-The current candidate has passed targeted three-transport simulations and
-limited mature-save browser inspection. Full release checks and long-run balance
-review remain separate gates; neither replaces this human checklist.
+The current candidate has passed the full Windows gate, targeted three-transport
+simulations, mature-save browser inspection and one actual two-browser localhost
+LAN turn. The second matched long-run balance profile is still running. None of
+these checks replaces this physical two-computer and human-fun checklist.

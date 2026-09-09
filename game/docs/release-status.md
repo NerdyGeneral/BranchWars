@@ -2,6 +2,22 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+September 9 update: the exact `0476a166...` build passed the full Windows gate
+(**183 checks**, unchanged source, repeated seeded output, Windows LAN) and the
+additional **16-campaign / 1,920-month** release-balance suite. All four current
+department-A/VP Group7 campaigns completed 480 months with 41 exact replays each.
+The second matched seed/Chairman profile remains running; final balance acceptance
+is therefore still open. The full results and limitations are at the top of the
+[V3.1 stability report](v31-stability-report.md).
+
+The repaired genuine month-284 campaign also completed its 197-month continuation
+to month480. Its unmodified 40 MB Group7 save was inspected in the actual browser,
+including clearing a carried staffing conflict by reviewing/staging an existing
+proposal and opening reconciled forecasts. An actual exported-package localhost
+LAN room passed two-browser lobby/readiness/identity checks and a simultaneous
+turn. Real two-computer acceptance remains outstanding. Historical paragraphs
+below describe earlier checkpoints, not unresolved current gate failures.
+
 Local checkpoint `b2309cd` now has a replacement six-file QA package:
 `BranchWars-v3.1-export-b2309cd.zip`, SHA-256
 `9031b7818b3c2c7fbf2b0dbf814b4f61665405085e4ee6461dd04c7c923ac3bc`.

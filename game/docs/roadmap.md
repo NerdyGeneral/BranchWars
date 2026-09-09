@@ -7,6 +7,15 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+September 9 current-source gate: 183 full Windows checks and the separate
+16-campaign release-balance suite pass. All four first-seed Group7 campaigns have
+reached480 months with exact replay checks; the second seed/profile is still
+running. Mature Group7 browser, reviewed office-staffing recovery and packaged
+two-browser localhost LAN lobby/turn checks are complete. Remaining: the second
+matched-seed balance assessment and final consolidated handoff. Real two-computer
+and human enjoyment remain separate acceptance, not an automatic test result.
+The chronology below retains earlier checkpoint status for provenance.
+
 Local checkpoint `b2309cd`: the current six-file QA ZIP is packaged and each
 archive entry is verified. Exact-build adversarial/staffing transport simulations
 pass, as does the additional genuine Balanced month-282 deferral regression.

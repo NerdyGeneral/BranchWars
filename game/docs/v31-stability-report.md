@@ -4,6 +4,89 @@ September 8, 2026. **Not a final debug report or release certification.**
 This report follows the bounded local V3.1 goal, not completion of the broader
 regional / Financial Group expansion. No GitHub publication is authorized.
 
+## September 9 verification results — current portable 0476a166
+
+The exact current build passed `node tools/check.js --full`: all **183** captured
+checks, unchanged source hashes, repeatable balance output and the Windows LAN
+test. The subsequent release-balance suite passed **16 campaigns / 1,920 months**,
+with no skipped initiatives and a largest reported player view of 559,901 bytes.
+That suite covers its existing campaign rules; it is not the new Group7 long-run
+matrix. Authoritative reports:
+
+- [Full Windows report](../reports/baselines/N-00-2026-09-09T04-39-45-160Z.json),
+  SHA-256 `53454fc733d6312d01a0a39ba9157d5de9c9e350a0f4677e1d14eae2ecc39733`.
+- [Release balance report](../reports/baselines/release-balance-2026-09-09T05-33-38-548Z.json),
+  SHA-256 `2435aa2237bb10148bb81a91620c0d72af77eccf68eeb7a0684de0da1bf13dbe`.
+
+The four matched **department-A / VP** current-candidate runs also completed
+480 months each, each with 41 exact half-ready replays: **1,920 Group7 months and
+164 replay checks**. Department-B / Chairman comparisons are still running.
+Do not substitute the default release suite for those cases.
+
+| Economy, seed A | V3 loans at month 120, bank 1 / bank 2 | V3.1 loans at month 120 | V3.1 loans at month 480 | Surviving companies at 480 |
+|---|---:|---:|---:|---:|
+| Balanced | $0.51M / $0.75M | $1.77M / $1.78M | $35.89M / $53.02M | 1 of 6 |
+| Growth | $1.26M / $1.92M | $5.16M / $1.10M | $39.25M / $30.08M | 3 of 6 |
+| Rate Shock | $0.65M / $0.65M | $1.10M / $1.40M | $39.81M / $15.41M | 1 of 6 |
+| Regulatory | $0.15M / $0.11M | $1.94M / $0.95M | $11.70M / $30.27M | 1 of 6 |
+
+Month-120 staffing improved from V3's 5/5 to 14/16 in Balanced, 5/5 to 11/14 in
+Rate Shock, and 4/3 to 13/12 in Regulatory. Growth is mixed: 6/13 became 15/11,
+and the second bank has a smaller loan book at that horizon. These are measured
+outcomes, not a claim that every bank improves every month. At month 480 every
+candidate bank has at least one staffed non-ATM facility and is still originating
+loans. Final-year originations range from $3.93M to $19.22M per bank across the
+four cases. The comparable V3 Growth/Regulatory final-year figures were
+$1.20M–$1.49M, with ATM-only networks and no surviving companies.
+
+Published V3 Balanced/Rate failed after 176/226 months, so their month-480 balance
+cells remain unavailable. Growth and Rate candidate leaders hold 88.9% and 92.1%
+of combined-player deposits. That is legitimate dominance, not an automatic
+balance failure: their smaller rivals still originate $10.72M/$6.54M in the final
+year. Rate's smaller bank closes with only $438K cash and its agency failed;
+company and subsidiary failures remain real. Large cash holdings at other banks
+are primarily deposit funding, not equity that may safely be lent without limit.
+These samples demonstrate improved activity, not human enjoyment or a guaranteed
+comeback. Final verdict still requires the second matched seed/profile.
+
+### Completed mature-save stress and real browser checks
+
+The genuine Growth month-284 failure continued to month 480 on current0476:
+197 additional months, 17 exact half-ready replays, no error. Its ending loans
+were $31.69M/$20.27M, staffing 50/42, morale 95/97 and capital ratios 11.28%/11.63%.
+The smaller bank recovered from 10.9% to 31.5% deposit share. Three companies
+failed; one agency remained active and one failed. This recovery started from a
+failed-run snapshot and is **not** the from-creation Growth result above.
+
+The unmodified resulting Group7/save9.6 campaign was exported as a 40,244,856-byte
+browser fixture (SHA-256
+`9de02edf10f9a9336c82083c5cd35d7ba9430ba699e16b0a93bf3291d475bb48`). Actual browser
+import to visible cycle481 took 2,794 ms; Workforce navigation 326 ms, office
+staffing proposal 313 ms, Operations 320 ms, and Forecast & books 309 ms. These
+are single action-to-observation samples under concurrent simulation load.
+
+The imported draft correctly blocked carried office staffing that exceeded the
+current shared pool. Markets > Office condition & staffing > Prepare staffing
+proposal produced an eligible one-office adjustment without adopting it. Stage
+then cleared the blocker. After a no-spend executive response, Mark ready was
+enabled. The forecast showed reconciled assets/liabilities/equity, three persistent
+loan families and current/draft operating results. No turn was submitted in this
+mature browser sequence; engine settlement/replay has separate evidence.
+
+The exported package was also exercised through its actual PowerShell LAN server
+in **LoopbackOnly** mode with two real browser tabs. Setup Cancel preserved
+unchecked options; Confirm enabled the declared Financial Group prerequisites
+and explicit six-market override. Both lobbies showed green Connected status and
+distinct blue/red bank identities. Guest settings were read-only; identity editing
+was locked while ready. A guest identity edit propagated and reset both ready
+flags. Both reconfirmed, the host started, and one complete simultaneous turn
+resolved to cycle2 with byte-for-byte identical visible result text. Guest export
+remained disabled. The temporary test server was then stopped; no firewall change
+or GitHub access occurred. This is not physical two-computer acceptance.
+
+The sections below retain the chronological development evidence. Statements that
+an earlier build or gate was running are historical, not the current result.
+
 ## Starting point and version boundary
 
 ### Current verification checkpoint
