@@ -6,10 +6,10 @@ function resolveMonthlySteps(g) {
   // Paying a renovation must not reserve its cost again during conversion.
   // Retain the owner snapshot too: the metrics provider stages staff lazily,
   // and must not observe already-created renovation work against this budget.
-  const openingOfficeContexts=[5,6].includes(g.financialGroupVersion)
+  const openingOfficeContexts=[5,6,7].includes(g.financialGroupVersion)
     ?g.players.map((p,i)=>facilityContext(g,JSON.parse(JSON.stringify(p)),plans[i])):null;
-  const openingLifecycleContexts=g.financialGroupVersion===6?g.players.map((p,i)=>facilityLifecyclePlanningContext(g,p,plans[i]).context):null;
-  if(g.financialGroupVersion===6)L.push(...recordLedgerStage(g,'prepareDepartmentFunctions','departments.functions',()=>prepareDepartmentFunctions(g,plans)));
+  const openingLifecycleContexts=[6,7].includes(g.financialGroupVersion)?g.players.map((p,i)=>facilityLifecyclePlanningContext(g,p,plans[i]).context):null;
+  if([6,7].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'prepareDepartmentFunctions','departments.functions',()=>prepareDepartmentFunctions(g,plans)));
   L.push(...prepareFacilityLifecycle(g,plans,openingLifecycleContexts));
   L.push(...prepareFacilityInstructions(g,plans,openingOfficeContexts));
   g.players.forEach((p, i) => {
@@ -42,7 +42,7 @@ function resolveMonthlySteps(g) {
     if (aid) L.push(aid);
   });
   L.push(...resolveCompetitiveActions(g, plans));
-  if(g.financialGroupVersion===6){
+  if([6,7].includes(g.financialGroupVersion)){
     L.push(...recordLedgerStage(g,'settleDepartmentLeadership','departments.leadership',()=>settleDepartmentLeadership(g,plans)));
     recordLedgerStage(g,'deliverDepartmentFunctions','departments.dispatch',()=>deliverDepartmentFunctions(g));
   }
@@ -113,10 +113,10 @@ function resolveMonthlySteps(g) {
     [g.players[1].id]: Math.round((baseScore(g, 1) - before[1]) * 10) / 10
   };
   L.push(...settleRegionalGrowthWithLedger(g));
-  if([3,4,5,6].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'settleAgency','group.agency',()=>settleAgency(g,plans)));
+  if([3,4,5,6,7].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'settleAgency','group.agency',()=>settleAgency(g,plans)));
   L.push(...recordLedgerStage(g,'settleGroupCapital','group.capital',()=>settleGroupCapital(g,plans)));
   for(const p of g.players)finishProductPricingReview(g,p);
-  if(g.financialGroupVersion===6)L.push(...recordLedgerStage(g,'finishDepartmentFunctions','departments.delivery',()=>finishDepartmentFunctions(g)));
+  if([6,7].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'finishDepartmentFunctions','departments.delivery',()=>finishDepartmentFunctions(g)));
   const ending = evaluateStrategicEnd(g);
   if (ending) L.push(ending);
   g.resolution = L;

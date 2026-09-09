@@ -8,7 +8,7 @@ function createBankEarningsBridgeUi(engine){
   function reviewProjectedBankEarningsBridge(v){
     const b=v?.earningsBridge;
     if(!b)return engine.review(v);
-    if(v.financialGroupVersion!==6||b.version!==1||b.ownerId!==v.me?.id||b.resolutionId!==v.resolutionId)
+    if(![6,7].includes(v.financialGroupVersion)||b.version!==1||b.ownerId!==v.me?.id||b.resolutionId!==v.resolutionId)
       return unavailable('The owner earnings summary does not match this snapshot.');
     if(b.available===false)return unavailable('Complete monthly earnings history is unavailable. No opening balance has been reconstructed.');
     if(b.available!==true||!['cycle','opening','operatingProfit','otherNet','change','closing'].every(k=>int(b[k]))||
@@ -18,7 +18,7 @@ function createBankEarningsBridgeUi(engine){
     return b;
   }
   function renderBankEarningsBridgeDetails(v){
-    if(v?.financialGroupVersion!==6||!v.me?.accounting)return '';
+    if(![6,7].includes(v?.financialGroupVersion)||!v.me?.accounting)return '';
     const b=reviewProjectedBankEarningsBridge(v);
     if(!b.available)return '<details class="earnings-bridge regional-economics"><summary>Bank retained earnings · bridge unavailable</summary><p>'+escape(b.reason)+'</p></details>';
     const rows=[['Opening bank retained earnings',b.opening],['Reported operating profit',b.operatingProfit],['Other net changes',b.otherNet],['Closing bank retained earnings',b.closing]];

@@ -8,7 +8,7 @@ const FacilitySettlement=(()=>{
   // that range, so reconciliation must not round away a one-dollar difference.
   function facilitySettlementCash(g){return g.players.reduce((n,p)=>n+BigInt(p.accounting.accounts.cash),0n)+BigInt(g.facilityEconomy.supplier.accounts.cash);}
   function facilitySettlementInitialize(g){
-    if(![5,6].includes(g.financialGroupVersion))return copy(g);
+    if(![5,6,7].includes(g.financialGroupVersion))return copy(g);
     if(g.facilityEconomy||g.players.some(p=>p.facilityLifecycle))throw Error('Facility lifecycle initializes only in an explicit new campaign.');
     const next=copy(g);
     next.facilityEconomy={version:1,month:0,supplier:GroupAccounting.opening('facility:suppliers'),renovationPaid:0,maintenancePaid:0};
@@ -92,7 +92,7 @@ const FacilitySettlement=(()=>{
   }
   function facilitySettlementValidate(g){
     const world=g.facilityEconomy;
-    if(![5,6].includes(g.financialGroupVersion)){if(world!==undefined||g.players.some(p=>p.facilityLifecycle!==undefined))throw Error('Unversioned facility lifecycle.');return;}
+    if(![5,6,7].includes(g.financialGroupVersion)){if(world!==undefined||g.players.some(p=>p.facilityLifecycle!==undefined))throw Error('Unversioned facility lifecycle.');return;}
     if(!world||Object.keys(world).sort().join()!=='maintenancePaid,month,renovationPaid,supplier,version'||world.version!==1||
         !whole(world.month)||!whole(world.renovationPaid)||!whole(world.maintenancePaid)||world.month!==g.cycle-(g.gameOver?0:1))throw Error('Invalid facility economy boundary.');
     GroupAccounting.validate(world.supplier);

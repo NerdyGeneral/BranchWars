@@ -46,7 +46,7 @@ function departmentFunctionDraftCost(p,draft={}){
   return DepartmentFunctions.IDS.reduce((n,id)=>n+policy.vendors[id]*DepartmentFunctions.FUNCTIONS[id].vendorRate,0);
 }
 function initializeDepartmentFunctions(g){
-  if(g.financialGroupVersion!==6)return;
+  if(![6,7].includes(g.financialGroupVersion))return;
   g.departmentFunctionEconomy=DepartmentProvider.initialize(g.cycle);
   for(const p of g.players){p.departmentFunctions=DepartmentFunctions.initialize(p,g.cycle,true).departmentFunctions;p.departmentFunctionDelivery=null;}
 }
@@ -155,7 +155,7 @@ function authorizeDepartmentOpportunityAward(p,o){
   work.awarded=true;return true;
 }
 function prepareDepartmentFunctions(g,plans){
-  if(g.financialGroupVersion!==6)return [];
+  if(![6,7].includes(g.financialGroupVersion))return [];
   const quotes=g.players.map((p,i)=>departmentFunctionsQuote(g,p,plans[i]));
   for(const q of quotes)if(!q.status.eligible)throw Error(q.status.reason);
   const result=DepartmentProvider.settle(g.departmentFunctionEconomy,g.players,quotes.map(q=>q.policy),quotes.map(q=>q.context));
@@ -167,7 +167,7 @@ function prepareDepartmentFunctions(g,plans){
   return []; // Exact orders and payments remain in owner-only books/reports.
 }
 function deliverDepartmentFunctions(g){
-  if(g.financialGroupVersion!==6)return;
+  if(![6,7].includes(g.financialGroupVersion))return;
   for(const p of g.players){
     const authorizedOpening=p._departmentFunctionOpening;if(!authorizedOpening)throw Error('Opening department authorization missing.');
     const actual={headcount:p.stats.staff,physicalQuarters:departmentFunctionPhysical(p),paidVendorQuarters:p.departmentFunctions.policy.vendors},
@@ -182,7 +182,7 @@ function deliverDepartmentFunctions(g){
   }
 }
 function finishDepartmentFunctions(g){
-  if(g.financialGroupVersion!==6)return [];
+  if(![6,7].includes(g.financialGroupVersion))return [];
   for(const p of g.players){
     addDepartmentFunctionOperatingReport(p);
     delete p._departmentFunctionExecution;delete p._departmentFunctionExpertise;delete p._departmentFunctionOpening;delete p._departmentFunctionPaidCycle;
@@ -249,7 +249,7 @@ function validateDepartmentFunctionOwner(p,month){
   }
 }
 function validateStoredDepartmentFunctionPolicies(g){
-  if(g.financialGroupVersion!==6)return;
+  if(![6,7].includes(g.financialGroupVersion))return;
   for(const p of g.players){
     if(p.submitted)DepartmentFunctions.validatePolicy(p.submitted.departmentFunctionsPolicy);
     if(p.departmentFunctions?.lastCycle>=p.departmentFunctions?.startedCycle)DepartmentFunctions.validatePolicy(g.lastPlans?.[p.id]?.departmentFunctionsPolicy);
@@ -257,7 +257,7 @@ function validateStoredDepartmentFunctionPolicies(g){
 }
 function validateDepartmentFunctionsSave(g){
   for(const p of g.players)for(const key of ['_departmentFunctionExecution','_departmentFunctionExpertise','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p[key]!==undefined)throw Error('Unsettled department function transient.');
-  if(g.financialGroupVersion!==6){
+  if(![6,7].includes(g.financialGroupVersion)){
     if(g.departmentFunctionEconomy!==undefined||g.players.some(p=>p.departmentFunctions!==undefined||p.departmentFunctionDelivery!==undefined||p.submitted?.departmentFunctionsPolicy!==undefined)||Object.values(g.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function state.');return;
   }
   const month=g.cycle-(g.gameOver?0:1);DepartmentProvider.validate(g.departmentFunctionEconomy);
@@ -279,7 +279,7 @@ function validateDepartmentFunctionsSave(g){
   }
 }
 function projectDepartmentFunctions(g,out,index){
-  if(g.financialGroupVersion!==6)return;
+  if(![6,7].includes(g.financialGroupVersion))return;
   const p=g.players[index];out.me.departmentFunctions=departmentFunctionCopy(p.departmentFunctions);out.me.departmentFunctionDelivery=departmentFunctionCopy(p.departmentFunctionDelivery);
   delete out.rival.departmentFunctions;delete out.rival.departmentFunctionDelivery;
   if(out.lastPlans?.[out.rival.id])delete out.lastPlans[out.rival.id].departmentFunctionsPolicy;
@@ -287,7 +287,7 @@ function projectDepartmentFunctions(g,out,index){
 function validateDepartmentFunctionsView(v){
   for(const p of [v.me,v.rival])for(const key of ['_departmentFunctionExecution','_departmentFunctionExpertise','_departmentFunctionOpening','_departmentFunctionPaidCycle','_departmentFunctionsRaw','_departmentFunctionForecastExpense'])if(p?.[key]!==undefined)throw Error('Unsettled department function transient exposed.');
   if(v.departmentFunctionEconomy!==undefined||v.rival?.departmentFunctions!==undefined||v.rival?.departmentFunctionDelivery!==undefined||v.lastPlans?.[v.rival?.id]?.departmentFunctionsPolicy!==undefined)throw Error('Private department function data exposed.');
-  if(v.financialGroupVersion!==6){if(v.me?.departmentFunctions!==undefined||v.me?.departmentFunctionDelivery!==undefined||v.me?.submitted?.departmentFunctionsPolicy!==undefined||Object.values(v.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function view.');return;}
+  if(![6,7].includes(v.financialGroupVersion)){if(v.me?.departmentFunctions!==undefined||v.me?.departmentFunctionDelivery!==undefined||v.me?.submitted?.departmentFunctionsPolicy!==undefined||Object.values(v.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function view.');return;}
   validateDepartmentFunctionOwner(v.me,v.cycle-(v.gameOver?0:1));
   if(v.me.departmentFunctions.lastCycle>=v.me.departmentFunctions.startedCycle)DepartmentFunctions.validatePolicy(v.lastPlans?.[v.me.id]?.departmentFunctionsPolicy);
   if(v.me.submitted&&typeof v.me.submitted==='object')DepartmentFunctions.validatePolicy(v.me.submitted.departmentFunctionsPolicy);
@@ -309,7 +309,7 @@ function planDepartmentFunctionsCore(g,index,plan,originationFloor=false){
   // A healthy bank can propose reserving two existing lending quarter-units for
   // funded originations. This does not override protected work: the wrapper
   // accepts it only after comparing actual, fully budgeted delivery outcomes.
-  if(originationFloor&&g.financialGroupVersion===6&&tierRank(p)<2&&p.stats.emergencyDebt===0&&
+  if(originationFloor&&[6,7].includes(g.financialGroupVersion)&&tierRank(p)<2&&p.stats.emergencyDebt===0&&
     fundingPosition(p).excess===0&&g.economy.demand>0&&quote.context.freeCash>=250000)
     floorQuarters.lending=Math.max(floorQuarters.lending,Math.min(2,quote.remainingPools.lending));
   const mandate={priorities:['risk','credit','technology','treasury','people','onboarding','collections','relationships'],maxAdditionalQuarters:400,
@@ -368,7 +368,7 @@ function departmentOriginationFloorAcceptance(g,p,beforePlan,afterPlan){
 function planDepartmentFunctions(g,index,plan){
   // Historical campaigns retain the original call path, with no copied inputs
   // or additional forecasting/RNG. No policy or saved map is added here.
-  if(g.financialGroupVersion!==6)return planDepartmentFunctionsCore(g,index,plan);
+  if(![6,7].includes(g.financialGroupVersion))return planDepartmentFunctionsCore(g,index,plan);
   const input=departmentFunctionCopy(plan),baseline=planDepartmentFunctionsCore(g,index,plan),p=g.players[index],
     quote=departmentFunctionsQuote(g,p,baseline);
   if(!quote.status.eligible||quote.remainingPools.lending>=2||tierRank(p)>=2||p.stats.emergencyDebt||
@@ -376,8 +376,31 @@ function planDepartmentFunctions(g,index,plan){
   try{
     const candidate=planDepartmentFunctionsCore(g,index,input,true),
       decision=withCorporateForecast(g,()=>departmentOriginationFloorAcceptance(g,p,baseline,candidate));
-    return decision.accepted?decision.plan:baseline;
+    if(decision.accepted)return decision.plan;
+    return g.financialGroupVersion===7?planFundedOriginationWork(g,index,baseline,quote):baseline;
   }catch{return baseline;}
+}
+// V3.1 only: buy the SAME administrative work from its real, finite provider
+// rather than permanently starving originations to preserve that work. This
+// changes a proposed order, not staffing, workload, borrower demand or cash.
+// The existing guard checks all task coverage, cash, capital, funding and actual
+// funded origination after the final reserve pass. It may reject the investment.
+function planFundedOriginationWork(g,index,baseline,quote){
+  const p=g.players[index],candidate=departmentFunctionCopy(baseline);
+  let needed=Math.max(0,2-quote.remainingPools.lending),released=0;
+  for(const id of DepartmentFunctions.IDS){
+    const policy=candidate.departmentFunctionsPolicy;
+    const count=Math.min(needed-released,policy.quotas[id].lending,
+      DepartmentProvider.ENTITLEMENT-policy.vendors[id]);
+    if(count<=0)continue;
+    policy.quotas[id].lending-=count;policy.vendors[id]+=count;released+=count;
+  }
+  if(!released)return baseline;
+  const expense=departmentFunctionDraftCost(p,candidate);
+  // A bounded recurring purchase, not permission to consume all idle cash.
+  if(expense>Math.min(50000,Math.floor(quote.context.freeCash*.05)))return baseline;
+  const decision=withCorporateForecast(g,()=>departmentOriginationFloorAcceptance(g,p,baseline,candidate));
+  return decision.accepted?decision.plan:baseline;
 }
 function prepareDepartmentFunctionForecast(p,plan){
   if(!p.departmentFunctions)return p;

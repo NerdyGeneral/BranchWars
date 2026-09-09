@@ -1,5 +1,72 @@
 # Release status and known issues
 
+## Active V3.1 stability goal — September 8, 2026
+
+This local candidate starts from published V3 commit
+`ee37b6865af71be20c35ac3b4f41b0519bf9d650`, on the separate
+`feat/v3.1-stability` worktree. The original development worktree, including its
+untracked experiments, is untouched. Main remains the separate preserved-game
+catalog at `263ba69b71e01dc0f9c5cb01b57877e2ef8ff02f` (clean at inspection).
+No publication, merge, tag replacement or branch deletion is authorized.
+
+The current batch is **not** the entire 48-row expansion: repair AI productive
+staffing/lending, funded corporate cash circulation and viable existing
+facility/product strategies, plus their reliability/usability defects. Existing
+campaign options and historical rules must survive; new economic behavior needs
+an explicit version boundary. National Empire, underwriting and further business
+systems remain outside this batch. Earlier active-goal paragraphs below are
+historical and do not expand this scope.
+
+Status: **first source candidate, not release acceptance**. Group7/save9.6 now
+preserves the existing unchecked Financial Group selection while placing new
+planning rules behind a new version. Groups1-6 keep their prior rules. The first
+change proposes finite, paid administrative outsourcing to release at most two
+lending quarter-work units; it uses the existing protected-task, funding and
+capital guard. Corporate circulation and wider staffing/facility viability are
+still unfinished. No portable release has been rebuilt or published yet.
+
+`tools/v31_campaign_lab.js` runs an explicitly identified
+portable engine, records per-month banking and corporate activity, validates
+accounting/privacy, checks half-ready replay, and writes exclusive diagnostic
+reports plus compressed checkpoints. Initial 120-month balanced and 480-month
+Regulatory runs use unchanged V3 Group6/save9.5 bytes. Further matched runs across
+all four economies are required; these two cases alone cannot certify balance.
+Those first two runs used the first harness revision (no per-month gross lending
+flow fields); retain them as supplemental evidence, and use the extended harness
+for matched final comparisons. Do not mix harness revisions without disclosure.
+
+Targeted checks passed against assembled candidate
+`d93c719157c9ee8014af46ce5b32f9b48edd2155affa7e5ba3fa104104cab23e`:
+
+- Exact published-V3 Group1-6 creation, AI/RNG, one-month settlement, half-ready
+  migration and owner-private views. This is not full legacy characterization.
+- Group7/save9.6 creation, old-peer refusal, staffing-evidence requirement,
+  wrong-save-version refusal, half-ready replay and rematch.
+- Funded-work proposals on archived real Group6 states: one accepted improvement,
+  five unchanged refusals, pure forecasts, preserved task coverage, zero-budget
+  and exhausted-vendor refusal. Direct helper probes are not save upgrades.
+- In the archived balanced month120 second bank, a separate counterfactual
+  raised gross forecast lending from $0 to $100,000 for $5,600 more vendor expense
+  and $1,049 less current-month profit. This is an investment tradeoff, not proof
+  of better long-run returns. Its lifetime economics still require paired runs.
+
+Provisional limits: at most two released quarter-work units per month; total
+function vendors capped at the lesser of $50,000 or 5% of quoted free cash for
+this extra proposal. Existing supplier entitlements and all guard checks remain.
+
+Protected V3 identities rechecked at start:
+
+- Portable: `4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107`.
+- ZIP: `85dae43104c4c68f106b371b6ead8891a453bd08a4198162133a493e3a7ab28f`.
+- Manual PDF: `b577325f9c4fd34a2e73a3feda41acd47dc4e0ecd7b2b3c3dfec568cb5b9e1ed`.
+
+Final V3.1 handoff requires a separate playable ZIP, matched before/after report,
+changelog, manual addendum, updated roadmap/status, unresolved assumptions and a
+friend-playtest checklist. Exact final Windows/build/package gates, legacy
+compatibility, all three simulated transports and mature-save browser timings
+remain pending. Real two-computer acceptance stays separately outstanding until
+performed; no automated test establishes that multiplayer has no bugs.
+
 ## V3 snapshot and publication authorization — September 8, 2026
 
 The user separately authorized publication of the current **V3** snapshot, its

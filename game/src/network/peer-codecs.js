@@ -57,7 +57,7 @@ function resetFeaturePeer(){
 }
 function currentFeatureSource(){return game||lobby&&lobby.settings||p2pConfig||{}}
 function departmentPeerStatus(settings=currentFeatureSource()){
- if(settings?.financialGroupVersion!==6&&!(p2pRole==='guest'&&hostStaffingEvidence?.required))return {compatible:true,pending:false,reason:''};
+ if(![6,7].includes(settings?.financialGroupVersion)&&!(p2pRole==='guest'&&hostStaffingEvidence?.required))return {compatible:true,pending:false,reason:''};
  if(p2pRole==='host')return peerFeatureStatus(settings);
  if(!hostStaffingEvidence||hostStaffingEvidence.generation!==featureConnectionGeneration||hostStaffingEvidence.challenge!==incomingTurnChallenge)
   return {compatible:false,pending:true,reason:'Waiting for a fresh department-staffing handshake from the host.'};
@@ -72,8 +72,8 @@ function receiveDepartmentPeer(settings){
  // A refused lobby is not adopted. Remember only its required handshake so a
  // reachable repository file cannot subsequently repaint this refusal green.
  if(p2pRole==='guest'){
-  if(!hostStaffingEvidence&&settings?.financialGroupVersion===6)hostStaffingEvidence={generation:featureConnectionGeneration};
-  if(hostStaffingEvidence)hostStaffingEvidence.required=settings?.financialGroupVersion===6;
+  if(!hostStaffingEvidence&&[6,7].includes(settings?.financialGroupVersion))hostStaffingEvidence={generation:featureConnectionGeneration};
+  if(hostStaffingEvidence)hostStaffingEvidence.required=[6,7].includes(settings?.financialGroupVersion);
  }
  const status=departmentPeerStatus(settings);
  if(status.compatible)return true;
@@ -135,7 +135,7 @@ function capturePeerFeatures(message){
  // A modern guest's unsolicited hello deliberately speaks V2. Ask once before
  // deciding Group 3 is unsupported; an actual V2 guest then replies 2 and fails.
  if(!featureChallenge&&message.featureChallenge===undefined&&
-    [3,4,5,6].includes(currentFeatureSource().financialGroupVersion)&&caps.financialGroupSupported===2)
+    [3,4,5,6,7].includes(currentFeatureSource().financialGroupVersion)&&caps.financialGroupSupported===2)
   return {compatible:false,pending:true,reason:'Confirming Financial Group support with the other computer.'};
  return peerFeatureStatus();
 }

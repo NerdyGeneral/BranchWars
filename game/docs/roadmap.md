@@ -1,9 +1,9 @@
 # Unified blueprint and expansion roadmap
 
-Current authority: approved regional banking / optional Financial Group completion
-goal, September 8, 2026. This supersedes the completed stabilization-only stop
-boundary. The subsequent V3 snapshot request separately authorizes publication
-of that snapshot, not unrestricted publication of later work.
+Current batch authority: approved **V3.1 long-campaign stability** goal,
+September 8, 2026. The wider approved regional / Financial Group blueprint below
+remains the expansion roadmap, not the completion criterion for this batch.
+The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
@@ -26,15 +26,27 @@ two-computer acceptance are separate gates, not automatic consequences of tests.
 
 ## Current delivery boundary
 
-Implement and verify the 48 stable requirements below as a playable regional
-release candidate. Preserve their full original acceptance scope, not merely
-labels, passive bonuses, data structures or isolated tests. Continue safe approved
-work after each subsystem; local checkpoint commits are authorized. The V3
-snapshot is separately approved for publication; later releases still require
-approval. The [preserved original matrix](archive/release-status-pre-stabilization-2026-09-07.md)
-and [unified blueprint](archive/unified-blueprint-v7-original.md) retain detailed
-contracts. Historical stop/approval/publication statements are superseded by the
-current goal.
+Complete V3.1's four scoped priorities before further expansion:
+
+| V3.1 requirement | Current evidence / remaining gate |
+|---|---|
+| Protect source and released versions | Separate worktree from V3 tag; original dirty worktree untouched; published portable/ZIP/manual hashes rechecked |
+| AI productive staffing and lending | Baseline runs and actual saved-campaign counterfactual diagnosis in progress; implementation and adverse cases pending |
+| Funded corporate circulation | Trace finite payer/outflow boundaries; implement reconciled new-version circulation without immortal companies or free money |
+| Existing facility/product viability | Diagnose ATM convergence, idle cash and declining lending; preserve legitimate dominance and differentiated strategies |
+| Supporting UI/reliability | Actual browser bottleneck visibility, mature-save latency and all-transport lifecycle/compatibility/privacy tests pending |
+| Final candidate acceptance | Matched short/120/480-month four-economy evidence, unchanged legacy expectations, full Windows/build/package gate, local ZIP/report/addendum/checklist pending |
+
+Local checkpoint commits are allowed. GitHub publication/merges/deletion require
+separate approval. Record provisional tuning decisions and continue independent
+safe work when a nonblocking question arises. A physical friend playtest is a
+separate human acceptance gate, not something simulation can mark complete.
+
+After this batch, resume the 48 stable expansion requirements below without
+reducing their original acceptance scope to labels, bonuses or isolated tests.
+The [preserved original matrix](archive/release-status-pre-stabilization-2026-09-07.md)
+and [unified blueprint](archive/unified-blueprint-v7-original.md) retain the wider
+contracts. National Empire and underwriting remain deferred.
 
 N-00 preservation baseline: game, releases and untracked game files are backed up
 at `C:/Users/xande/Downloads/Branch_Wars_Release_Checkpoints/20260908-regional-completion-start`.

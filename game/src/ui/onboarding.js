@@ -24,7 +24,7 @@ function onboardingLive(v) {
  return live && live.me.id === v.me.id ? live : null;
 }
 function onboardingDraftPreview(v) {
- if(v.financialGroupVersion===6){
+ if([6,7].includes(v.financialGroupVersion)){
   const prepared=E.departmentCustomerPreview(v.me,v,draft);
   return {p:prepared.owner,policy:prepared.plan.onboardingPolicy,quote:prepared.onboarding,staffing:prepared.staffing.onboarding};
  }
@@ -61,7 +61,7 @@ function onboardingPendingContent(v) {
   return '<li><b>' + esc(target) + '</b><span>' + integer(row.count) + ' pending requests · $' + row.principal.toLocaleString() + ' requested principal; not deposits</span><span>Generated M' + esc(row.createdCycle) + ' · eligible M' + esc(row.eligibleCycle) + '–M' + esc(row.expiresCycle - 1) + ' · expires M' + esc(row.expiresCycle) + '</span><span>Source-month awareness: ' + (row.awareness / 100).toFixed(1) + '%. A recorded targeting input, not measured causal lift or a promise of activation.</span></li>';
  }).join('') + '</ul></details>';
 }
-function onboardingUiLocked(v){return v.me.submitted||v.gameOver||v.financialGroupVersion===6&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
+function onboardingUiLocked(v){return v.me.submitted||v.gameOver||[6,7].includes(v.financialGroupVersion)&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
 function onboardingPolicyControls(v,p,policy){
  const disabled=onboardingUiLocked(v)?'disabled':'';
  const select=(field,label,options)=>'<label for="onboarding-'+field+'">'+label+'<select id="onboarding-'+field+'" '+disabled+'>'+options.map(([value,name,closed])=>'<option value="'+esc(value)+'" '+(String(policy[field])===String(value)?'selected':'')+' '+(closed?'disabled':'')+'>'+esc(name)+'</option>').join('')+'</select></label>';
@@ -93,7 +93,7 @@ function onboardingContent(v) {
   prepared = onboardingDraftPreview(v);
   quote = prepared.quote||E.onboardingReview(prepared.p, v, prepared.policy);
  } catch (error) {
-  if(v.financialGroupVersion!==6)return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice">Draft quote unavailable: ' + esc(error.message) + '</p>' + actual + '</section>';
+  if(![6,7].includes(v.financialGroupVersion))return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice">Draft quote unavailable: ' + esc(error.message) + '</p>' + actual + '</section>';
   const repair='<div class="onboarding-controls">'+onboardingPolicyControls(v,v.me,draft.onboardingPolicy||v.me.onboarding.policy)+'</div><p class="micro">You can pause onboarding here while repairing shared staffing or budget instructions. Existing orders are unchanged; Ready remains blocked until the whole plan is valid.</p>';
   return '<section class="onboarding-desk"><h3>APPLICATIONS &amp; ONBOARDING</h3>' + caveat + '<p class="notice" role="status">Draft quote unavailable: ' + esc(error.message) + '</p>' + repair + onboardingPendingContent(v) + actual + '</section>';
  }
@@ -134,19 +134,19 @@ function onboardingContent(v) {
 function stageOnboarding(v, field, value, sourceKey = onboardingSourceKey(v),campaign=game||view) {
  const live = onboardingLive(v);
  if (!live || !draft || !live.me.onboarding || live.me.submitted || live.gameOver || !['market', 'segment', 'product', 'share'].includes(field) || sourceKey !== onboardingSourceKey(live)) return false;
- if(live.financialGroupVersion===6&&(campaign!==(game||view)||draftOwner!==live.me.id||lastCycle!==live.cycle||gh.active&&gh.paused))return false;
+ if([6,7].includes(live.financialGroupVersion)&&(campaign!==(game||view)||draftOwner!==live.me.id||lastCycle!==live.cycle||gh.active&&gh.paused))return false;
  try {
   const next = JSON.parse(JSON.stringify(draft));
   next.onboardingPolicy = { ...(next.onboardingPolicy || live.me.onboarding.policy), [field]: field === 'share' ? Number(value) : value };
   E.normalizeProductProgramPlan(live.me, next); E.normalizeAdvertisingPlan(live.me, next);
   E.normalizeRelationshipOfferPlan(live.me, next); E.normalizeOnboardingPlan(live.me, next);
-  const pauseRepair=live.financialGroupVersion===6&&field==='share'&&next.onboardingPolicy.share===0&&(draft.onboardingPolicy||live.me.onboarding.policy).share>0;
+  const pauseRepair=[6,7].includes(live.financialGroupVersion)&&field==='share'&&next.onboardingPolicy.share===0&&(draft.onboardingPolicy||live.me.onboarding.policy).share>0;
   const status = pauseRepair?{eligible:true}:E.projectPlanStatus(live.me, next);
   const decrease = pauseRepair || field === 'share' && next.onboardingPolicy.share < (draft.onboardingPolicy || live.me.onboarding.policy).share && E.onboardingBudget(live.me, next) <= E.onboardingBudget(live.me, draft);
   if (!status.eligible && !decrease) throw Error(status.reason);
-  if(live.financialGroupVersion===6&&!pauseRepair)E.departmentCustomerPreview(live.me,live,next);
+  if([6,7].includes(live.financialGroupVersion)&&!pauseRepair)E.departmentCustomerPreview(live.me,live,next);
   const fresh = onboardingLive(live);
-  if (!fresh || fresh.me.submitted || fresh.gameOver || sourceKey !== onboardingSourceKey(fresh)||live.financialGroupVersion===6&&campaign!==(game||view)) return false;
+  if (!fresh || fresh.me.submitted || fresh.gameOver || sourceKey !== onboardingSourceKey(fresh)||[6,7].includes(live.financialGroupVersion)&&campaign!==(game||view)) return false;
   draft = next; renderProducts(fresh); renderProjects(fresh); renderReady(fresh); return true;
  } catch (error) { toast(error.message); const fresh = onboardingLive(live); if (fresh) renderProductPrograms(fresh); return false; }
 }

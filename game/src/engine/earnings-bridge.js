@@ -61,7 +61,7 @@ const BankEarningsBridge = (() => {
   // validation, before UI history byte pruning; no journal reconstruction,
   // new saved book, or resource/earnings calculation is introduced here.
   function projectBankEarningsBridge(g,seat){
-    if(g?.financialGroupVersion!==6)return null;
+    if(![6,7].includes(g?.financialGroupVersion))return null;
     const p=g.players?.[seat];
     if(!p?.accounting)return null;
     const ownerEvents=Array.isArray(g.eventLedger)?g.eventLedger.filter(e=>e?.target===p.id):[];

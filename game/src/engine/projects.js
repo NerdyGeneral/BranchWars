@@ -4,7 +4,7 @@ function consequences(g,p){const L=[];const resilience=p.upgrades.technology+p.u
 function applyProjectEffects(g,p,project){
  const def=project&&PROJECTS[project.key];if(!def)return '';
  if(def.institutionOnlyVersion===5){
-  if(![5,6].includes(g.financialGroupVersion)||facilityProjectIssue(p,project.key))throw Error('Unsupported institutional facility completion.');
+  if(![5,6,7].includes(g.financialGroupVersion)||facilityProjectIssue(p,project.key))throw Error('Unsupported institutional facility completion.');
   const target=project.target;
   if(p.branches[target]>=3)return p.name+' could not complete '+def.name+': market capacity is full; paid construction is not refunded.';
   const office=FacilityNetwork.open(p,target,def.facility,g.cycle);

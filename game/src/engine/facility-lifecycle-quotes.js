@@ -159,7 +159,7 @@ function lifecycleInstructionQuote(v,p,draft={}) {
  }catch(error){return {...empty,status:{eligible:false,reason:error.message}};}
 }
 function facilityLifecycleStaffProposal(v,p,draft={}) {
- if(v.financialGroupVersion===6){
+ if([6,7].includes(v.financialGroupVersion)){
   const staged=facilityLifecyclePlanningContext(v,p,draft),current=draft.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p),proposal=facilityStaffAllocation(staged.owner,current,staged.context);
   return {policy:proposal.policy,availableStaffQuarters:staged.context.availableStaffQuarters,unused:proposal.unused,
    notes:['Productive quarter-FTE bundles only; existing maintenance, hub links and work orders are retained. No bankers are hired.']};

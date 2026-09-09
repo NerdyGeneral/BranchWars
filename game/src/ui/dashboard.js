@@ -73,7 +73,7 @@ function departmentForecastIssue(v,plan=draft){
 }
 function departmentForecastNotice(reason){return '<p class="small bad" role="status">Forecast unavailable: '+esc(reason)+'. Review Functions & workload and your staffing allocation. No orders have been changed.</p>';}
 function renderOperatingPreview(v){
- if(v.financialGroupVersion===6)renderActualBankOperatingResult(v);
+ if([6,7].includes(v.financialGroupVersion))renderActualBankOperatingResult(v);
  const basePlan={allocation:v.me.allocation,products:v.me.products,depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital};
  const issue=departmentForecastIssue(v,draft)||departmentForecastIssue(v,basePlan);
  if(issue){$('#operatingPreview').innerHTML=renderBalanceSheet(v)+departmentForecastNotice(issue);return;}
@@ -91,7 +91,7 @@ function renderOperatingPreview(v){
 function renderActualBankOperatingResult(v){
  const actual=v.me.operatingReport;
  $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${[['Income before funding',actual.depositIncome+actual.loanIncome+actual.commercialIncome+actual.otherIncome],['Funding expense',-actual.fundingCost],['Payroll & facilities',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment],['Operating profit',actual.profit]].map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${money(value)}</b></div>`).join('')}</div><p class="micro muted">Operating stage only. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
- if(v.financialGroupVersion===6&&typeof renderBankEarningsBridge==='function')$('#operatingReport').innerHTML+=renderBankEarningsBridge(v);
+ if([6,7].includes(v.financialGroupVersion)&&typeof renderBankEarningsBridge==='function')$('#operatingReport').innerHTML+=renderBankEarningsBridge(v);
 }
 
 function renderPlanBudget(v){

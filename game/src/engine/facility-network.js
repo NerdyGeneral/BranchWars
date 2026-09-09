@@ -23,7 +23,7 @@ const FacilityNetwork = (() => {
   function facilityDomainPublishMirrors(p){Object.assign(p,facilityDomainMirrors(p));}
   function facilityDomainInitialize(g,enabled){
     if(enabled!==true)return g;
-    const version=[5,6].includes(g.financialGroupVersion)?CATALOG_VERSION:VERSION,models=version===CATALOG_VERSION?ALL_MODELS:MODELS;
+    const version=[5,6,7].includes(g.financialGroupVersion)?CATALOG_VERSION:VERSION,models=version===CATALOG_VERSION?ALL_MODELS:MODELS;
     const staged=[];
     for(const p of g.players){
       if(p.facilityNetwork)throw Error('Facility identities are already initialized.');
