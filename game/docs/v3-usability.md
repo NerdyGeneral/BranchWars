@@ -433,3 +433,10 @@ Still open: searchable/contextual help, screen-wide forecast/precision labels,
 financial decision-adjacent comparisons, remaining batch 1/2 editor safeguards,
 connected business workflows, presentation/recovery/performance work, the matching
 manual and all exact-final release/publication gates. No whole batch is signed off.
+
+Frozen fifth-checkpoint verification: detached `ca0bf16` in
+`../output/v3-usability-checkpoint5`; fast-gate exec session `12012`, log
+`../output/v3-usability-checkpoint5-fast.log`. Confirmed live after build,
+reference, docs, architecture and early accounting checks. Do not edit this
+snapshot or restart a quiet live process; poll the same handle. This remains
+an intermediate regression, not finished-release acceptance.
