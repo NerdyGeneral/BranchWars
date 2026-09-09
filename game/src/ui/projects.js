@@ -145,4 +145,5 @@ function renderReady(v){
   review.blockers.length?review.blockers[0].text:'Required decisions complete. Review optional warnings, then mark ready; the month waits for both institutions.';
  $('#submitMsg').className='small '+(review.blockers.length?'bad':'muted');
  renderMonthlyPlanReview(v,review);
+ if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation(v);
 }

@@ -7,7 +7,6 @@
 .credit-controls{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .group-credit-policy .credit-controls label,#financialGroupPanel .credit-controls label{display:grid;gap:8px;min-width:0}
 .group-credit-policy select,#financialGroupPanel input{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
-.workspace-nav:has(#financialGroupNav:not(.hidden)){position:static}
 .workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(6,minmax(0,1fr))}
 @media(max-width:1100px){.workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:720px){.workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}

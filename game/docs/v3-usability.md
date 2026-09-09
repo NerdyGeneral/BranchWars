@@ -48,7 +48,7 @@ evidence; browser, release and human acceptance are separate gates.
 | 10 | Training pauses and effective budget limits | 2 | Implemented requested vs department ceilings, protection/eligibility explanations and lower-ceiling regression; final all-scenario UI review open |
 | 11 | Readable leader cards and replacement consequences | 2 | Partial: dedicated reachable desk and clarified pre-delivery teaching/department-reserve scope; card density and per-choice comparisons remain |
 | 12 | Readable bounded delegation proposals | 2 | Implemented named before/after instruction table and whole-plan cost comparison; allowed fields/authority unchanged |
-| 13 | Task-oriented grouped navigation | 3 | Pending |
+| 13 | Task-oriented grouped navigation | 3 | Implemented four task groups, retained 11 mounts, contextual/remembered selection; 32 visibility combinations and mature browser verified; final laptop/zoom integration gate open |
 | 14 | Attention inbox and healthy-system status | 3 | Pending |
 | 15 | All submission blockers with direct links | 1 | Partial: independent readiness/quote blockers and links implemented; deeper per-subsystem validator enumeration remains |
 | 16 | Required decisions separated from opportunities | 1 | Implemented initial review; `usability_plan_review.test.js`, early/mature browser; final integration gate open |
@@ -81,10 +81,10 @@ evidence; browser, release and human acceptance are separate gates.
 | 43 | Separate repository/peer/ack health indicators | 5 | Pending |
 | 44 | Actual turn-delivery progress and recovery guidance | 5 | Pending |
 | 45 | Understandable lobby/setup complexity | 5 | Pending |
-| 46 | Compact persistent interface elements | 5 | Pending |
+| 46 | Compact persistent interface elements | 5 | Partial: compact campaign header/KPIs and pinned two-level navigation; expanded spending removed from sticky area; overall planning chrome remains to streamline |
 | 47 | Readable hierarchy and constraints | 5 | Pending |
 | 48 | Table sorting/filtering/header/scroll usability | 5 | Pending |
-| 49 | Consistent keyboard, labels and focus | 5 | Pending |
+| 49 | Consistent keyboard, labels and focus | 5 | Partial: task-group/subtab keyboard controls, ARIA selection, reduced-motion scroll and stale-scroll guards; wider editor/table audit remains |
 | 50 | Presentation detail levels independent of rules | 5 | Pending |
 | 51 | Grouped causal monthly debrief | 5 | Pending |
 | 52 | Supported trends and actual campaign history | 5 | Pending |
@@ -309,3 +309,54 @@ Its fast gate was started in exec session `74151`; the log is
 build/reference/docs/architecture and early accounting gates passed. Do not edit
 this detached snapshot; poll its process/handle before interpreting a quiet log.
 It is a checkpoint test, not the eventual finished-release acceptance gate.
+
+## Fourth checkpoint — task-group navigation and compact chrome
+
+Portable SHA-256:
+`4ddf27dbb0995e35c095b776ca355d283dd3309d5bd86e71678ac964950508c0`.
+There are 141 source files. The pinned engine digest remains unchanged; no
+economic formulas, state fields, defaults or transport payloads were edited.
+
+- Eleven workspace destinations now sit under four tasks: Bank & finance,
+  Customers & markets, Run the bank, Growth & competition. Only the selected
+  group's one-to-three supported destinations are shown. Existing control IDs
+  and form mounts remain, including for older campaigns without previews.
+- Returning to a group restores its last selected destination; contextual links
+  reveal the appropriate parent group. Preferences reset between hotseat owners.
+  Main groups support arrow/Home/End focus, while secondary tabs use roving
+  keyboard selection. Group selection scrolls to content below the menu, honors
+  reduced motion and rejects delayed scrolls after a different selection/owner.
+- Campaign-only brand/header/KPI spacing is reduced. Detailed shared spending
+  stays available but is no longer part of the sticky menu. Old Financial Group
+  and Products rules that disabled sticky navigation were removed after actual
+  browser inspection exposed their conflict with the new compact menu.
+- New `usability_navigation.test.js` exercises all 32 optional-screen visibility
+  combinations, unique retained mounts, keyboard/ARIA behavior, owner reset,
+  draft/view purity, binding once, delayed scroll and reduced motion. It is in
+  both gate entry points.
+
+The frozen `74151` run is **terminal exit 1** at `project-rules.test.js` after
+earlier company, compatibility, network, packaging and quick paired tests passed.
+That isolated project UI harness had not loaded the new `monthlyPlanReview`
+dependency. It now executes the real shared review; its 1,296 independent legacy
+comparisons remain unchanged and pass. The shared simulated-browser harness also
+now provides DOM attribute storage used by the new accessible navigation. No
+legacy golden was regenerated, and no validation assertion was removed.
+
+Targeted passes: navigation, project rules, Strategy release UI, retained forms,
+monthly review and undo, workforce workflows, protected spending, Operations
+workspace, build/architecture, exact engine boundary, repository resilience
+(12 relay turns, nine lost responses), local transitions and network lifecycle.
+These do not replace the full exact-final Windows gate.
+
+Actual browser inspection at 1265 x 712 used the preserved month-481/50-employee
+campaign. Continue completed despite the known three-second input-observation
+timeout; it was re-observed rather than clicked again. Four groups and supported
+subtabs rendered correctly. The rebuilt sticky menu stayed visible above
+Operations after scrolling, with executive choices in view; People remained
+reachable with all five desks. No orders were submitted and all task QA tabs
+were closed. Broader early/zoom/editor walkthroughs remain release work.
+
+Next: attention inbox, financial explanation/forecast/help integration, remaining
+workforce/planning polish and connected business workflows. All five batches and
+all 55 recommendations remain the goal; no entire batch or release is signed off.

@@ -128,10 +128,13 @@ const node = selector => {
 };
 const c = {E, draft: copy(base), esc: String, money: String, toast() {}, capacityLine: () => '',
   renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {}, renderWorkforce() {}, renderProductPrograms() {},
-  renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {},
+  renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {}, renderMonthlyPlanReview() {},
   unassigned: () => 0, planReady: () => true,
   $: node, $$: selector => selector === '[data-project]' ? [{dataset: {project: 'branch'}, addEventListener: (_, f) => callbacks.push(f)}] : []};
-vm.runInNewContext(source.slice(source.indexOf('function projectChoiceStatus('), source.indexOf('function renderDetails(')) +
+// Ready now shares the real planning review. Load that dependency rather than
+// replacing its project/budget validation with a passing stub.
+vm.runInNewContext(source.slice(source.indexOf('function monthlyPlanReview('), source.indexOf('function navigatePlanReview(')) +
+  source.slice(source.indexOf('function projectChoiceStatus('), source.indexOf('function renderDetails(')) +
   ';globalThis.choice=projectChoiceStatus;globalThis.toggle=toggleInitiative;globalThis.draw=renderProjects;globalThis.ready=renderReady;', c);
 c.draw(v); assert(sinks.get('#projectGrid').innerHTML.includes('data-project="branch"'));
 same(c.choice(v, 'branch').quote, E.projectPlanStatus(v.me, {...base, newProjects: ['branch'], newProject: 'branch'}).quote);

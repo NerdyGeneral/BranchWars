@@ -148,7 +148,6 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .credit-controls{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .group-credit-policy .credit-controls label,#financialGroupPanel .credit-controls label{display:grid;gap:8px;min-width:0}
 .group-credit-policy select,#financialGroupPanel input{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
-.workspace-nav:has(#financialGroupNav:not(.hidden)){position:static}
 .workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(6,minmax(0,1fr))}
 @media(max-width:1100px){.workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:720px){.workspace-nav:has(#financialGroupNav:not(.hidden)) .workspace-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -163,7 +162,6 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 @media(max-width:720px){.workspace-tabs:has(#creditNav:not(.hidden)){grid-template-columns:repeat(2,minmax(0,1fr))}.credit-summary,.credit-controls{grid-template-columns:1fr}}
 </style>
 <style id="product-programs-ui">.product-desk-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}.product-desk-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}.product-desk-summary>div{background:#f3f7fb;border:1px solid #d1deed;border-radius:10px;padding:14px;min-width:0}.product-desk-summary small,.product-desk-summary b{display:block}.product-desk-summary b{margin-top:7px;color:#163752}.product-development-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.product-development-card{border:1px solid #ccdbea;border-radius:12px;padding:20px;min-width:0}.product-route{display:block;width:100%;text-align:left;background:#f8fafc;border:1px solid #becfe1;border-radius:8px;margin:10px 0;padding:12px;color:#19344c}.product-route span,.product-route small{display:block;margin-top:5px}.product-route.selected{outline:2px solid #2878e0;background:#eaf3ff}.product-route:disabled{opacity:.65;cursor:not-allowed}.product-market-picker{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:16px 0}.product-market-picker select,.product-target-table select{padding:9px;border:1px solid #b4c9dd;border-radius:6px;background:white;color:#18324b;max-width:100%}.product-target-table{min-width:650px}.product-target-overview{margin-top:18px}.product-target-overview summary{cursor:pointer}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:1100px){.workspace-nav:has(#productProgramsNav:not(.hidden)){position:static}}
 @media(max-width:760px){.product-development-grid,.product-desk-summary{grid-template-columns:1fr}.product-development-card{padding:14px}.product-desk-tabs .btn{flex:1 1 180px}}
 .advertising-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
 .advertising-controls label{display:flex;flex-direction:column;gap:6px;font-size:13px}
@@ -246,7 +244,12 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 @media(max-width:950px){.operations-two-column{grid-template-columns:1fr}.operations-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.operations-navigation .section-head{align-items:flex-start;flex-wrap:wrap}}
 @media(max-width:480px){.operations-tabs{gap:6px}.operations-tabs>button{padding:9px;font-size:.8rem}.operations-tabs>button span{font-size:.68rem}.operations-navigation .section-head{display:block}#operationsDecisionShortcut{margin-top:8px;width:100%}}
 </style>
-<style id="usability-ui">.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+<style id="usability-ui">.workspace-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;margin-bottom:.45rem}.workspace-groups button{font:inherit;font-weight:700;line-height:1.3;border:1px solid #bbcadd;border-radius:7px;background:#f5f8fc;color:#354960;padding:.5rem .65rem;min-width:0}.workspace-groups button.active{background:#215f9f;border-color:#215f9f;color:#fff}.workspace-nav #workspaceTabs{display:flex;flex-wrap:wrap;gap:.4rem}.workspace-nav #workspaceTabs .workspace-tab{min-height:0;padding:.4rem .65rem;font-size:.85rem;flex:0 1 auto}.workspace-nav #workspaceTabs .workspace-tab span{font-size:.75rem;color:#536b85}.workspace-nav [hidden]{display:none!important}.workspace-nav button:focus-visible{outline:3px solid #124d91;outline-offset:3px}.plan-budget-panel{padding:.6rem 1rem}.plan-budget-panel .plan-budget{margin:0}
+@media(max-width:700px){.workspace-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-nav #workspaceTabs .workspace-tab{flex:1 1 130px}}
+@media(min-width:901px){#gameScreen .workspace-nav{position:sticky;top:8px}}
+/* Compact only campaign chrome; setup/lobby and business forms keep their space. */
+.shell:has(#gameScreen:not(.hidden))>.mast{padding:.5rem .9rem;margin-bottom:.4rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-mark{width:32px;height:32px;font-size:.9rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-sub,.shell:has(#gameScreen:not(.hidden))>.mast .mast-meta{display:none}#gameScreen>.panel:has(>.statusbar),#gameScreen>.panel:has(>.summary-grid){padding:.55rem .8rem;margin-bottom:.6rem}#gameScreen>.panel>.summary-grid{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.45rem}#gameScreen>.panel>.summary-grid .summary{min-height:55px;padding:.4rem .55rem}#gameScreen>.panel>.summary-grid .summary b{font-size:1rem}#gameScreen .workspace-nav{margin-bottom:.6rem}
+.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
 .people-tabs{display:flex;flex-wrap:wrap;gap:.5rem}.people-tabs [aria-selected="true"]{background:#e7f1ff;border-color:#2878e0;color:#124e8f}.people-tabs button:focus-visible{outline:3px solid #2878e0;outline-offset:3px}.people-recruit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0}#peopleWorkspace [hidden]{display:none!important}#peopleWorkspace .department-functions-nav{display:none}#peopleWorkspace>div[role="tabpanel"]{min-width:0}#workforceFormPreview table{width:100%}
 @media(max-width:700px){.people-recruit-grid{grid-template-columns:1fr}}
 .people-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.people-summary>div{border:1px solid #c5d2e2;border-radius:8px;padding:.8rem;background:#f5f8fc}.people-summary span,.people-summary small{display:block}.people-summary b{display:block;font-size:1.25rem;margin:.35rem 0}.people-summary small{color:var(--muted);line-height:1.45}.people-shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}#peopleOverview details{margin:.8rem 0}#peopleOverview .table-scroll{overflow:auto}#peopleOverview summary{cursor:pointer;padding:.5rem 0}#peopleOverview h3{margin:1rem 0 .5rem}
@@ -329,7 +332,28 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
     <div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div>
     <section class="panel"><div class="statusbar"><div><span class="kicker">EXECUTIVE COMMAND CENTER</span><br><span class="small"><span id="modeBadge" class="modebadge"></span> // CYCLE <b id="cycleNo"></b>/<span id="maxCycles"></span> // <span id="scopeName" class="blue"></span></span></div><div class="row"><span id="readyState" class="small"></span><span id="linkState" class="connection good"></span><button id="relinkBtn" class="btn hidden">[ NEW LINK CODE ]</button><button id="exportBtn" class="btn">[ EXPORT ]</button><button id="exitBtn" class="btn danger">[ EXIT ]</button></div></div></section>
     <section class="panel"><div class="summary-grid"><div class="summary"><span>ENTERPRISE VALUE</span><b id="myScore"></b></div><div class="summary"><span>MARKETS</span><b id="myMarkets"></b></div><div class="summary"><span>DEPOSITS</span><b id="myDeposits"></b></div><div class="summary"><span>LOANS</span><b id="myLoans"></b></div><div class="summary"><span>CASH</span><b id="myCash"></b></div><div class="summary"><span>LAST PROFIT</span><b id="myProfit"></b></div><div class="summary"><span>RISK / HEAT</span><b id="myRisk"></b></div><div class="summary"><span>CAPITAL RATIO</span><b id="myCapital"></b><span id="myTier" class="micro"></span></div></div></section>
-    <nav class="panel workspace-nav" aria-label="Command center workspace"><div class="workspace-tabs"><button type="button" class="workspace-tab active" data-workspace-tab="overview">OVERVIEW<span>Enterprise position</span></button><button type="button" class="workspace-tab" data-workspace-tab="markets">MARKETS<span>Map and opportunities</span></button><button type="button" class="workspace-tab hidden" id="householdNav" data-workspace-tab="customers" role="tab" aria-selected="false">CUSTOMERS<span>Ownership and retention</span></button><button type="button" class="workspace-tab hidden" id="creditNav" data-workspace-tab="credit">CREDIT<span>Loan quality &amp; collections</span></button><button type="button" id="financialGroupNav" class="workspace-tab hidden" data-workspace-tab="group">GROUP<span>Capital allocation</span></button><button type="button" id="productProgramsNav" class="workspace-tab hidden" data-workspace-tab="products">PRODUCTS<span>Develop, target &amp; retire</span></button><button type="button" class="workspace-tab" data-workspace-tab="operations">OPERATIONS<span>Monthly plan</span></button><button type="button" id="workforceNav" class="workspace-tab hidden" data-workspace-tab="workforce">WORKFORCE<span>Specialists &amp; training</span></button><button type="button" class="workspace-tab" data-workspace-tab="competition">COMPETITION<span>Attacks and counters</span></button><button type="button" class="workspace-tab" data-workspace-tab="strategy">STRATEGY<span>Research and initiatives</span></button><button type="button" class="workspace-tab" data-workspace-tab="intelligence">INTELLIGENCE<span>Threats and scorecard</span></button></div><div id="planBudget" class="plan-budget" aria-live="polite"></div></nav>
+    <nav class="panel workspace-nav" aria-label="Command center workspace">
+      <div id="workspaceGroups" class="workspace-groups" role="group" aria-label="Management tasks">
+        <button type="button" data-workspace-group="bank" aria-pressed="true">Bank &amp; finance</button>
+        <button type="button" data-workspace-group="customers" aria-pressed="false">Customers &amp; markets</button>
+        <button type="button" data-workspace-group="operate" aria-pressed="false">Run the bank</button>
+        <button type="button" data-workspace-group="grow" aria-pressed="false">Growth &amp; competition</button>
+      </div>
+      <div id="workspaceTabs" class="workspace-tabs" role="tablist" aria-label="Bank &amp; finance workspaces">
+        <button type="button" class="workspace-tab active" data-workspace-tab="overview">Overview<span>Position &amp; results</span></button>
+        <button type="button" class="workspace-tab hidden" id="creditNav" data-workspace-tab="credit">Credit<span>Loan quality &amp; collections</span></button>
+        <button type="button" id="financialGroupNav" class="workspace-tab hidden" data-workspace-tab="group">Financial Group<span>Capital &amp; subsidiaries</span></button>
+        <button type="button" class="workspace-tab" data-workspace-tab="markets" hidden>Markets<span>Map &amp; facilities</span></button>
+        <button type="button" class="workspace-tab hidden" id="householdNav" data-workspace-tab="customers" hidden>Customers<span>Relationships &amp; retention</span></button>
+        <button type="button" id="productProgramsNav" class="workspace-tab hidden" data-workspace-tab="products" hidden>Products<span>Develop, target &amp; retire</span></button>
+        <button type="button" class="workspace-tab" data-workspace-tab="operations" hidden>Operations<span>Plan, funding &amp; projects</span></button>
+        <button type="button" id="workforceNav" class="workspace-tab hidden" data-workspace-tab="workforce" hidden>People<span>Coverage, hiring &amp; leadership</span></button>
+        <button type="button" class="workspace-tab" data-workspace-tab="strategy" hidden>Strategy<span>Research &amp; implementation</span></button>
+        <button type="button" class="workspace-tab" data-workspace-tab="competition" hidden>Competition<span>Actions &amp; defenses</span></button>
+        <button type="button" class="workspace-tab" data-workspace-tab="intelligence" hidden>Intelligence<span>Threats &amp; scorecard</span></button>
+      </div>
+    </nav>
+    <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
     <section class="panel"><div class="readybar"><div><b>SIMULTANEOUS PLAN</b><div id="planChecklist" class="checklist muted"></div></div><div class="row"><button id="recallBtn" class="btn hidden">[ RECALL ]</button><button id="readyBtn" class="btn primary">[ MARK READY ]</button></div><span id="submitMsg" class="small muted"></span></div><div id="monthlyPlanReview" aria-label="Monthly plan review"></div></section>
     <section class="panel workspace-view" data-workspace="customers"><div id="householdPanel"></div></section>
     <section class="panel workspace-view" data-workspace="products"><div id="productProgramsPanel"></div></section>
@@ -11485,10 +11509,81 @@ function reconcileOperationsWorkspace(){
  const shortcut=$('#operationsDecisionShortcut');if(shortcut&&!operationsBoundControls.has(shortcut)){operationsBoundControls.add(shortcut);shortcut.addEventListener('click',()=>{setOperationsDesk('monthly');$('#decisionGrid')?.querySelector?.('button:not(:disabled)')?.focus()})}
  setOperationsDesk(operationsDesk);
 }
+// Presentation-only navigation. Existing workspace mounts and draft controls
+// stay alive; changing a task group must never recreate their forms.
+const WORKSPACE_GROUPS=[
+ {id:'bank',label:'Bank & finance',tabs:['overview','credit','group']},
+ {id:'customers',label:'Customers & markets',tabs:['markets','customers','products']},
+ {id:'operate',label:'Run the bank',tabs:['operations','workforce']},
+ {id:'grow',label:'Growth & competition',tabs:['strategy','competition','intelligence']}
+];
+let workspaceNavigationState={owner:null,campaign:null,remembered:{}};
+const workspaceNavigationBound=new WeakSet();
+function availableWorkspaces(v){
+ const requirements={credit:'creditPerformance',group:'financialGroup',customers:'householdBook',products:'productPrograms',workforce:'workforce'};
+ return WORKSPACE_GROUPS.flatMap(group=>group.tabs).filter(tab=>!requirements[tab]||!!v?.me?.[requirements[tab]]);
+}
+function selectWorkspaceGroup(id){
+ const v=currentView(),group=WORKSPACE_GROUPS.find(x=>x.id===id);
+ if(!v||!group)return;
+ reconcileWorkspaceNavigation(v);
+ const available=availableWorkspaces(v),remembered=workspaceNavigationState.remembered[id];
+ setWorkspaceTab(group.tabs.includes(remembered)&&available.includes(remembered)?remembered:group.tabs.find(tab=>available.includes(tab)));
+ const selected=workspaceTab,owner=v.me.id,campaign=game;
+ requestAnimationFrame(()=>{
+  if(workspaceTab!==selected||game!==campaign||currentView()?.me.id!==owner)return;
+  const target=selected==='strategy'?$('.game-layout'):$('[data-workspace="'+selected+'"].active');
+  if(!target)return;
+  target.style.scrollMarginTop=(window.innerWidth>900?$('.workspace-nav').offsetHeight+20:12)+'px';
+  target.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+ });
+}
+function reconcileWorkspaceNavigation(v){
+ const mount=$('#workspaceGroups');if(!mount)return;
+ v=v||currentView();if(!v)return;
+ // Hotseat banks do not inherit one another's navigation preferences. Nothing
+ // here is added to public views, saves, or outgoing plans.
+ if(workspaceNavigationState.owner!==v.me.id||workspaceNavigationState.campaign!==game){
+  workspaceNavigationState={owner:v.me.id,campaign:game,remembered:{}};
+ }
+ const available=availableWorkspaces(v);
+ if(!available.includes(workspaceTab)){setWorkspaceTab('overview');return;}
+ const selected=WORKSPACE_GROUPS.find(group=>group.tabs.includes(workspaceTab));
+ workspaceNavigationState.remembered[selected.id]=workspaceTab;
+ const groups=$$('[data-workspace-group]');
+ groups.forEach(button=>{
+  const active=button.dataset.workspaceGroup===selected.id;
+  button.setAttribute('aria-pressed',String(active));button.classList.toggle('active',active);
+  if(workspaceNavigationBound.has(button))return;
+  workspaceNavigationBound.add(button);
+  button.addEventListener('click',()=>selectWorkspaceGroup(button.dataset.workspaceGroup));
+  button.addEventListener('keydown',event=>{
+   if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+   event.preventDefault();const at=groups.indexOf(button),next=event.key==='Home'?0:event.key==='End'?groups.length-1:(at+(event.key==='ArrowRight'?1:-1)+groups.length)%groups.length;
+   groups[next].focus(); // Focus only: Enter/Space chooses the group.
+  });
+ });
+ const tabs=$$('[data-workspace-tab]');
+ tabs.forEach(button=>{
+  const tab=button.dataset.workspaceTab,visible=selected.tabs.includes(tab)&&available.includes(tab),active=tab===workspaceTab;
+  button.hidden=!visible;button.classList.toggle('hidden',!available.includes(tab));
+  button.setAttribute('role','tab');button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;
+  if(workspaceNavigationBound.has(button))return;
+  workspaceNavigationBound.add(button);
+  button.addEventListener('keydown',event=>{
+   if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+   event.preventDefault();const shown=tabs.filter(x=>!x.hidden),at=shown.indexOf(button);
+   if(at<0)return;
+   const next=event.key==='Home'?0:event.key==='End'?shown.length-1:(at+(event.key==='ArrowRight'?1:-1)+shown.length)%shown.length;
+   setWorkspaceTab(shown[next].dataset.workspaceTab);shown[next].focus();
+  });
+ });
+ $('#workspaceTabs')?.setAttribute('aria-label',selected.label+' workspaces');
+}
 function currentView(){return game?E.publicState(game,seat):view}
 function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle;if(typeof resetMonthlyChanges==='function')resetMonthlyChanges(v);if(typeof resetPeopleWorkspace==='function')resetPeopleWorkspace(v)}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
-function setWorkspaceTab(tab){reconcileOperationsWorkspace();const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));if(workspaceTab==='markets'&&draft&&currentView()){const marketView=currentView();renderFacilityNetwork(marketView);if(marketView.me.facilityLifecycle)renderFacilityLifecycle(marketView);}if(workspaceTab==='products'&&draft&&currentView())renderProductPrograms(currentView());if(workspaceTab==='credit'&&draft&&currentView())renderCollections(currentView());if(workspaceTab==='group'&&draft&&currentView())renderFinancialGroup(currentView());if(workspaceTab==='customers'&&draft&&currentView())renderHouseholds(currentView());if(workspaceTab==='workforce'&&draft&&currentView())renderWorkforce(currentView())}
+function setWorkspaceTab(tab){reconcileOperationsWorkspace();const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));if(workspaceTab==='markets'&&draft&&currentView()){const marketView=currentView();renderFacilityNetwork(marketView);if(marketView.me.facilityLifecycle)renderFacilityLifecycle(marketView);}if(workspaceTab==='products'&&draft&&currentView())renderProductPrograms(currentView());if(workspaceTab==='credit'&&draft&&currentView())renderCollections(currentView());if(workspaceTab==='group'&&draft&&currentView())renderFinancialGroup(currentView());if(workspaceTab==='customers'&&draft&&currentView())renderHouseholds(currentView());if(workspaceTab==='workforce'&&draft&&currentView())renderWorkforce(currentView());if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation()}
 // Lossless browser-storage envelope only. Campaign/export/wire schemas and
 // every ledger record remain unchanged. This checksum detects damage, not fraud.
 const storageCodecCache=new Map();
@@ -14854,6 +14949,7 @@ function renderReady(v){
   review.blockers.length?review.blockers[0].text:'Required decisions complete. Review optional warnings, then mark ready; the month waits for both institutions.';
  $('#submitMsg').className='small '+(review.blockers.length?'bad':'muted');
  renderMonthlyPlanReview(v,review);
+ if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation(v);
 }
 function renderDetails(v){$('#myName').textContent=v.me.name;$('#rivalName').textContent=v.rival.name;const rows=[['Enterprise Value','score'],['Capital Ratio','capitalRatio'],['Regulatory Standing','capitalTier'],['Markets Controlled','controlled'],['Regulatory Capital','capital'],['Deposits','deposits'],['Loans','loans'],['Customers','customers'],['Business Relationships','business'],['Merchant Clients','merchant'],['Wealth Relationships','wealth'],['Digital Adoption','digital'],['Reputation','reputation'],['Staff','staff'],['Cumulative Earnings','earnings'],['Credit Losses','chargeoffs']];$('#scoreRows').innerHTML=rows.map(([label,k])=>{const pick=(side)=>k==='score'?side.score:k==='controlled'?side.controlled:k==='capitalRatio'?side.capitalRatio:k==='capitalTier'?side.capitalTier.short:side.stats[k],a=pick(v.me),b=pick(v.rival),fmt=['deposits','loans','earnings','chargeoffs','capital'].includes(k)?money:k==='score'?x=>Number(x).toFixed(1):k==='capitalRatio'?x=>`${Number(x).toFixed(1)}%`:k==='capitalTier'?x=>String(x):integer;return`<tr><td>${esc(label)}</td><td><b>${esc(fmt(a))}</b></td><td><b>${esc(fmt(b))}</b></td></tr>`}).join('');const s=v.me.stats,u=v.me.upgrades,primary=v.me.primaryStrategy?v.strategyBranches[v.me.primaryStrategy].name:'UNCOMMITTED';$('#internalStats').innerHTML=`Reads as <b>${esc(v.me.doctrine.name)}</b> // Primary Strategy <b>${esc(primary)}</b> // Morale <b>${s.morale}</b> // Risk <b>${s.compliance}</b> // Attention <b>${s.attention}</b> // Influence <b>${s.influence}</b> // Momentum <b>${s.momentum}</b> // Legacy Tech <b>${u.technology}</b> // Legacy Training <b>${u.training}</b> // Legacy Analytics <b>${u.analytics}</b> // Legacy Wealth <b>${u.wealth}</b> // Legacy Ops <b>${u.operations}</b> // Board Concessions <b>${v.me.boardConcessions}</b> // Status <b>${esc(v.me.corporateStatus)}</b>`;const m=v.me.mandate;$('#mandateName').textContent=`${m.name} // +${m.bonus} POINTS`;$('#mandateDesc').textContent=m.desc;$('#mandateProgress').textContent=(m.achieved?'ACHIEVED // ':'PROGRESS // ')+m.progress;$('#mandateProgress').className='small '+(m.achieved?'good':'');$('#milestones').innerHTML=Object.entries(v.milestoneDefinitions).map(([k,d])=>`<div class="milestone ${v.me.milestones[k]?'done':''}"><b>${v.me.milestones[k]?'✓':'○'} ${esc(d.name)}</b><div class="micro">${esc(d.desc)}</div></div>`).join('');$('#log').innerHTML=v.log.map(x=>`<div class="history-item"><span class="history-kind">CYCLE ${x.cycle} / ${esc(x.kind)}</span>${esc(x.text)}</div>`).join('')}
 const renderDetailsCore=renderDetails;renderDetails=function(v){renderDetailsCore(v);const productNames=Object.entries(v.me.products).map(([line,key])=>v.productPortfolios[line].options[key].name),specialties=Object.entries(v.me.specializations).map(([branch,key])=>v.strategySpecializations[branch][key].name);$('#internalStats').insertAdjacentHTML('beforeend',`<br>Products <b>${productNames.map(esc).join(' · ')}</b> // Facilities <b>${v.me.facilities.retail} full-service · ${v.me.facilities.commercial} commercial · ${v.me.facilities.digital} digital advisory</b>${specialties.length?` // Specializations <b>${specialties.map(esc).join(' · ')}</b>`:''}`)};

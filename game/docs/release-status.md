@@ -25,6 +25,13 @@ harness; that harness is repaired and its portable/source cases pass. This is
 not a completed full gate. Exact final Windows, balance/performance, manual and
 GitHub publication requirements remain open.
 
+Fourth local checkpoint: four task groups retain all eleven destinations, with
+remembered/contextual selection, keyboard controls and compact sticky navigation.
+Thirty-two optional-screen visibility combinations and mature browser scrolling
+pass. Frozen checkpoint 3 ended at an outdated project-UI dependency harness;
+the real planning review is now loaded and all 1,296 legacy comparisons pass.
+This is progress evidence, not full-release acceptance or a new publication.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

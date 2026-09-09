@@ -10,7 +10,8 @@ function harness(side='host'){
  const storage=new Map(),elements=new Map(),timers=new Map();let timerId=0;
  function elementFor(selector){
   if(elements.has(selector))return elements.get(selector);
-  const el={id:selector.startsWith('#')?selector.slice(1):'',value:'',textContent:'',checked:false,disabled:false,dataset:{},listeners:{},
+  const el={id:selector.startsWith('#')?selector.slice(1):'',value:'',textContent:'',checked:false,disabled:false,dataset:{},listeners:{},attributes:{},
+   setAttribute(key,value){this.attributes[key]=String(value)},getAttribute(key){return this.attributes[key]??null},
    focus(){},querySelector:s=>elementFor(s),
    addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},
    classList:{add(){},remove(){},toggle(){},contains(){return false}}};

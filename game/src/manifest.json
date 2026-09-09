@@ -90,6 +90,7 @@
       "ui/features.js",
       "ui/lobby.js",
       "ui/operations-workspace.js",
+      "ui/workspace-navigation.js",
       "ui/draft.js",
       "persistence/storage-codec.js",
       "persistence/saves.js",
