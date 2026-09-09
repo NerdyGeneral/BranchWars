@@ -2,6 +2,14 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Current `fcf23071...` has a verified six-file local QA ZIP
+`BranchWars-v3.1-export-3671b47.zip` (SHA-256
+`864928fe3df8ec5a3c226ca31f0f7355823a39be6922dc12ce84e0be1450021b`). Exact-package
+mature-save/browser and actual two-browser localhost LAN setup/turn checks pass.
+Custom color propagation, pending-settings start blocking and readiness resets
+were observed. New full Windows and eight-case480-month runs remain in progress;
+the package is not yet final acceptance. See the current stability report.
+
 Latest September 9 finding: the completed `0476a166...` matrix has seven
 480-month passes and one genuine Balanced/department-B/Chairman failure after
 317 months. Paid Operations training reduced final execution capacity from 3.8

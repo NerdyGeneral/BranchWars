@@ -6,6 +6,41 @@ regional / Financial Group expansion. No GitHub publication is authorized.
 
 ## September 9 execution-capacity repair — current portable fcf23071
 
+### Exact-build browser and package checkpoint
+
+The local `BranchWars-v3.1-export-3671b47.zip` is packaged and verified, SHA-256
+`864928fe3df8ec5a3c226ca31f0f7355823a39be6922dc12ce84e0be1450021b`. Every one of
+its six archive entries matches the verified allowlist/manifest directory. The
+actual exported PowerShell server served the exact 1,465,208-byte portable file.
+This is still QA: the new full Windows gate and eight-case matrix are running.
+
+The same genuine 40 MB Group7 month480 save imported to visible cycle481 in
+2,903 ms; Workforce opened in320 ms, a staffing proposal in324 ms, and Forecast
+& books in306 ms. These are individual concurrent-desktop observations, not
+percentiles. The carried staffing conflict cleared only after reviewing/staging
+the one-office proposal. A no-spend executive choice enabled Ready; no mature
+turn was submitted. Accounts displayed assets minus liabilities minus equity
+of $0K. The inspected Workforce form and Operations desks were readable without
+observed overlap at1265x713.
+
+The reserve control was also tested with ordinary keyboard input, not just
+programmatic fill: typing850000 and leaving the field updated the shared label
+to $850K; restoring600000 returned it to $600K. Earlier fill-only observations
+did not establish a committed change and are not evidence of a game defect.
+
+Two actual browser clients on the packaged localhost LAN server successfully
+configured Financial Group, propagated a custom purple guest identity, showed
+green Connected status and correct YOU/RIVAL identities, and enforced host-only
+settings. Both-ready identities were locked. An unapplied host economy change
+blocked Start; applying it reset both confirmations and updated the guest.
+After fresh confirmations, one simultaneous turn reached cycle2 on both clients.
+Their2,698-character result text matched exactly; guest authoritative Export
+remained disabled. The temporary loopback server was then stopped. No firewall
+or persistent execution-policy change, GitHub access or physical two-computer
+test occurred. Reconnect/adversarial coverage remains a separate automated gate.
+
+### Reproduced execution defect and new-source verification
+
 All eight `0476a166...` cases have now finished: seven passed 480 months, while
 Balanced/department-B/Chairman failed at month318 after 317 completed months.
 The combined evidence is 3,677 resolved months and 314 exact half-ready replays,
