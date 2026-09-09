@@ -4,6 +4,48 @@ September 8, 2026. **Not a final debug report or release certification.**
 This report follows the bounded local V3.1 goal, not completion of the broader
 regional / Financial Group expansion. No GitHub publication is authorized.
 
+## September 9 partial final matrix — four of eight cases complete
+
+All four `department-B` / Chairman cases have now completed 480 months each on
+the exact final engine: **1,920 months and 164 exact half-ready replays**, without
+software or invariant failure. The four `department-A` / VP cases and the new
+65f469e8 full Windows gate are still running. This is interim evidence, not final
+candidate acceptance. No code or balance values changed in response to it.
+
+| Economy, profile B | Loans at month 480, bank 1 / bank 2 | Originations in final 12 months | Active companies | Largest player deposit share |
+| --- | --- | --- | --- | --- |
+| Balanced | $38.43M / $3.33M | $11.74M / $1.20M | 1 | 97.5% |
+| Growth | $26.61M / $39.27M | $12.99M / $9.80M | 5 | 92.2% |
+| Rate shock | $18.02M / $32.72M | $7.37M / $10.68M | 2 | 84.6% |
+| Regulatory | $42.24M / $7.43M | $14.75M / $5.20M | 1 | 95.4% |
+
+The directly comparable Rate-shock V3 baseline ended with $8.81M / $4.48M loans,
+$1.20M each in final-year originations, and ATM-only networks of 11 / 6 sites.
+The candidate has mixed commercial, retail, digital and ATM networks. Its longest
+zero-origination runs are 8 / 12 months versus 17 / 68 in that baseline. This
+supports improved productive activity, not guaranteed lending or equal outcomes.
+
+Balanced is deliberately not presented as an uncomplicated success story. Its
+97.5%-share leader has $222.39M cash but only $4.01M capital (9.74%) and loses
+$88,061 in the final month. The smaller rival has 22 staff, one ATM and $3.33M
+loans, but earns $201,844 that month. Cash and deposit share are not equity or
+profitability. The leader's active agency has earned $2.338M commission against
+$2.405M operating expense over the campaign, before setup and recruitment. Other
+cases include failed or unopened agencies; subsidiary activity is not a free
+percentage bonus or a requirement to open an uneconomic business.
+
+Growth and Regulatory V3 baselines stopped on real construction-conflict errors
+after months 127 and 226. Their month-480 comparisons are unavailable; the
+candidate endpoints above must not be described as measured improvements over
+nonexistent baseline endpoints. The matched 24/120-month comparisons remain
+available. Corporate failures persist in every completed candidate case.
+
+Evidence: `reports/qa/v31/v31-execution-*-B-chairman-480.json`; exact-source
+comparison inventory `reports/local/v31-execution-matrix-chairman-review.json`.
+The engine identity and display-only client boundary below still apply. The
+fresh four-case VP results, integrated balance review and final release report
+remain required. A physical friend session remains unverified.
+
 ## September 9 terminal display correction — current portable 65f469e8
 
 The `fcf23071...` build completed all **184** captured Windows checks with no

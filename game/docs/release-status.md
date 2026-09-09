@@ -2,6 +2,12 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+September 9 verification update: all four final-engine `department-B` / Chairman
+campaigns pass 480 months each (1,920 months / 164 exact replays). All four second
+profile campaigns and the new 65f469e8 full Windows gate remain running. Actual
+lending, facilities, agency losses and deposit concentration are recorded in the
+[stability report](v31-stability-report.md); this is not final balance acceptance.
+
 Latest September 9 candidate: `65f469e8...` corrects a browser-observed terminal
 message that incorrectly claimed a free franchise transfer. Accounting-pilot
 receivership and funding-resolution copy now describe the actual rules. The

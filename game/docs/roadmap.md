@@ -7,6 +7,12 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Verification checkpoint: the first final-engine profile now passes all four
+economies through month480, with164 exact replays. The second profile and final
+65f469e8 Windows gate remain running. No blueprint feature, economic parameter,
+or campaign option changed at this checkpoint. Integrated balance review and
+the local handoff are still required; see the [stability report](v31-stability-report.md).
+
 Latest follow-up: actual terminal-save import and hotseat rematch worked, but
 exposed incorrect free-franchise wording. The current `65f469e8...` client fixes
 that display and explains funding resolution. Every byte outside `renderFinal`,
