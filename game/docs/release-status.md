@@ -17,13 +17,17 @@ an explicit version boundary. National Empire, underwriting and further business
 systems remain outside this batch. Earlier active-goal paragraphs below are
 historical and do not expand this scope.
 
-Status: **first source candidate, not release acceptance**. Group7/save9.6 now
+Status: **source candidate in active balance testing, not release acceptance**. Group7/save9.6 now
 preserves the existing unchecked Financial Group selection while placing new
 planning rules behind a new version. Groups1-6 keep their prior rules. The first
 change proposes finite, paid administrative outsourcing to release at most two
 lending quarter-work units; it uses the existing protected-task, funding and
-capital guard. Corporate circulation and wider staffing/facility viability are
-still unfinished. No portable release has been rebuilt or published yet.
+capital guard. Funded corporate circulation, provisional paid AI recruitment
+recovery, and owner workload explanations are now implemented in source. Their
+targeted tests pass; full-bank balance and facility viability remain unfinished.
+Separate diagnostic portable snapshots exist; no final release has been rebuilt
+or published. See [V3.1 evidence](v31-stability-report.md) for exact scope and
+[draft manual addendum](v31-manual-addendum.md) for player-facing changes.
 
 `tools/v31_campaign_lab.js` runs an explicitly identified
 portable engine, records per-month banking and corporate activity, validates

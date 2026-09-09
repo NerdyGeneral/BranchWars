@@ -31,8 +31,8 @@ Complete V3.1's four scoped priorities before further expansion:
 | V3.1 requirement | Current evidence / remaining gate |
 |---|---|
 | Protect source and released versions | Separate worktree from V3 tag; original dirty worktree untouched; published portable/ZIP/manual hashes rechecked |
-| AI productive staffing and lending | Baseline runs and actual saved-campaign counterfactual diagnosis in progress; implementation and adverse cases pending |
-| Funded corporate circulation | Trace finite payer/outflow boundaries; implement reconciled new-version circulation without immortal companies or free money |
+| AI productive staffing and lending | Paid origination outsourcing and recruitment-before-discretionary-spend candidates implemented; actual month120 recruitment/refusal tests pass; matched long-campaign behavior and durable morale recovery still pending |
+| Funded corporate circulation | Group7 paired supplier/carrier cash spending implemented; 3,840 pure company-domain months pass conservation and failure checks; full-bank four-economy comparison still pending |
 | Existing facility/product viability | Diagnose ATM convergence, idle cash and declining lending; preserve legitimate dominance and differentiated strategies |
 | Supporting UI/reliability | Actual browser bottleneck visibility, mature-save latency and all-transport lifecycle/compatibility/privacy tests pending |
 | Final candidate acceptance | Matched short/120/480-month four-economy evidence, unchanged legacy expectations, full Windows/build/package gate, local ZIP/report/addendum/checklist pending |

@@ -93,10 +93,11 @@ const FacilitySettlement=(()=>{
   function facilitySettlementValidate(g){
     const world=g.facilityEconomy;
     if(![5,6,7].includes(g.financialGroupVersion)){if(world!==undefined||g.players.some(p=>p.facilityLifecycle!==undefined))throw Error('Unversioned facility lifecycle.');return;}
-    if(!world||Object.keys(world).sort().join()!=='maintenancePaid,month,renovationPaid,supplier,version'||world.version!==1||
+    if(!world||Object.keys(world).sort().join()!==(g.financialGroupVersion===7?'circulated,maintenancePaid,month,renovationPaid,supplier,version':'maintenancePaid,month,renovationPaid,supplier,version')||world.version!==(g.financialGroupVersion===7?2:1)||
         !whole(world.month)||!whole(world.renovationPaid)||!whole(world.maintenancePaid)||world.month!==g.cycle-(g.gameOver?0:1))throw Error('Invalid facility economy boundary.');
     GroupAccounting.validate(world.supplier);
-    const total=world.renovationPaid+world.maintenancePaid;
+    const total=world.renovationPaid+world.maintenancePaid-(g.financialGroupVersion===7?world.circulated:0);
+    if(g.financialGroupVersion===7&&!whole(world.circulated))throw Error('Invalid facility circulation.');
     if(!whole(total)||world.supplier.entityId!=='facility:suppliers'||world.supplier.accounts.cash!==total||world.supplier.accounts.equity!==total||
         world.supplier.retainedEarnings!==total||Object.entries(world.supplier.accounts).some(([k,n])=>!['cash','equity'].includes(k)&&n!==0))
       throw Error('Facility suppliers disagree with actual bank payments.');

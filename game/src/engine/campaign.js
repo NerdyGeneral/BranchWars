@@ -73,6 +73,7 @@ function createGame(o){
  initializeDepartments(g);
  initializeFacilityLifecycle(g);
  if([6,7].includes(g.financialGroupVersion))initializeDepartmentFunctions(g);
+ initializeCorporateCirculation(g);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;

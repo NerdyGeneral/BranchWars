@@ -124,7 +124,8 @@ function validateCorporateSave(g){
     return;
   }
   CompanyFinance.validate(g.companyEconomy);
-  if(g.companyEconomy.version!==([3,4,5,6,7].includes(g.financialGroupVersion)?3:2))throw Error('Company rules do not match the campaign.');
+  if(g.companyEconomy.version!==(g.financialGroupVersion===7?4:[3,4,5,6].includes(g.financialGroupVersion)?3:2))throw Error('Company rules do not match the campaign.');
+  validateCorporateCirculation(g);
   const month=g.gameOver?g.cycle:g.cycle-1;
   if(g.companyEconomy.month!==month)throw Error('Corporate settlement month does not match the campaign.');
   for(const [i,c]of g.serviceAgreements.entries()){
@@ -151,7 +152,7 @@ function validateCorporateView(view){
   if(!companyStatement||Object.keys(companyStatement).sort().join()!=='services,world'||!Array.isArray(companyStatement.services)||companyStatement.services.length!==6)
     throw Error('Missing public company statements.');
   CompanyFinance.validate(companyStatement.world);
-  if(companyStatement.world.version!==([3,4,5,6,7].includes(view.financialGroupVersion)?3:2))throw Error('Company view rules do not match the campaign.');
+  if(companyStatement.world.version!==(view.financialGroupVersion===7?4:[3,4,5,6].includes(view.financialGroupVersion)?3:2))throw Error('Company view rules do not match the campaign.');
   if(!Array.isArray(view.serviceAgreements)||view.serviceAgreements.length!==6)throw Error('Missing company service roster.');
   for(const [i,c]of companyStatement.world.companies.entries()){
     const contract=view.serviceAgreements[i];

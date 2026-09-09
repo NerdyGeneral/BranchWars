@@ -13,10 +13,12 @@ const DepartmentProvider=(()=>{
     return {version:1,startedCycle:cycle,month:cycle-1,paid:0,supplier:GroupAccounting.opening(ID),report:null};
   }
   function providerValidate(book){
-    if(!exact(book,['version','startedCycle','month','paid','supplier','report'])||book.version!==1||
+    if(!exact(book,['version','startedCycle','month','paid','supplier','report',...(book?.version===2?['circulated']:[])])||![1,2].includes(book.version)||
       !whole(book.startedCycle)||book.startedCycle<1||!whole(book.month)||book.month<book.startedCycle-1||!whole(book.paid))throw Error('Invalid department provider book.');
     GroupAccounting.validate(book.supplier);
-    if(book.supplier.entityId!==ID||book.supplier.accounts.cash!==book.paid||book.supplier.accounts.equity!==book.paid||book.supplier.retainedEarnings!==book.paid||
+    const net=book.paid-(book.version===2?book.circulated:0);
+    if(!whole(net)||book.version===2&&!whole(book.circulated))throw Error('Invalid provider circulation.');
+    if(book.supplier.entityId!==ID||book.supplier.accounts.cash!==net||book.supplier.accounts.equity!==net||book.supplier.retainedEarnings!==net||
       Object.entries(book.supplier.accounts).some(([key,value])=>!['cash','equity'].includes(key)&&value!==0))throw Error('Department provider receipts do not reconcile.');
     if(book.month===book.startedCycle-1){if(book.report!==null||book.paid!==0)throw Error('Unsettled provider has receipts.');return true;}
     const r=book.report;

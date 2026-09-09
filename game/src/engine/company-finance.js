@@ -9,11 +9,18 @@ const CompanyFinance = (() => {
     Object.keys(x).sort().join() === [...keys].sort().join();
   const sensitivity = [1.3, 1.2, .4, 1.1, 1, .8];
   function companyValidate(world) {
-    if (!exact(world, ['version','month','outside','creditor','companies','openingCash','recoveredAssets','bankCashPaid','bankFlows',...(world?.version===3?['agencyCashNet']:[])]) ||
-        ![2,3].includes(world.version) || (world.version===3&&!Number.isSafeInteger(world.agencyCashNet)) || !whole(world.month) || !whole(world.openingCash) ||
+    if (!exact(world, ['version','month','outside','creditor','companies','openingCash','recoveredAssets','bankCashPaid','bankFlows',...([3,4].includes(world?.version)?['agencyCashNet']:[]),...(world?.version===4?['circulation']:[])]) ||
+        ![2,3,4].includes(world.version) || ([3,4].includes(world.version)&&!Number.isSafeInteger(world.agencyCashNet)) || !whole(world.month) || !whole(world.openingCash) ||
         !whole(world.recoveredAssets) ||
         !Array.isArray(world.companies) || world.companies.length !== 6) throw Error('Invalid corporate economy.');
     GroupAccounting.validate(world.outside); GroupAccounting.validate(world.creditor);
+    if(world.version===4){
+      const r=world.circulation;
+      if(!exact(r,['version','month','externalReturned','creditorSpent','lastExternal','lastCreditor'])||r.version!==1||
+        ['month','externalReturned','creditorSpent','lastExternal','lastCreditor'].some(k=>!whole(r[k]))||
+        r.month>world.month||r.month<Math.max(0,world.month-1)||r.lastExternal>r.externalReturned||r.lastCreditor>r.creditorSpent||
+        r.month===0&&(r.externalReturned||r.creditorSpent||r.lastExternal||r.lastCreditor))throw Error('Invalid funded corporate circulation.');
+    }
     if (world.outside.entityId !== 'corporate:outside' || world.creditor.entityId !== 'corporate:creditors')
       throw Error('Invalid corporate counterparty.');
     const ids = new Set();
@@ -30,7 +37,7 @@ const CompanyFinance = (() => {
           !whole(c.baseFee) || !c.baseFee || c.baseFee>100000 || c.principalDue !== c.baseFee / 2 ||
           !whole(c.interestArrears) || !whole(c.principalArrears)||!Array.isArray(c.bankArrears)||
           c.bankArrears.length!==2||c.bankArrears.some(n=>!whole(n)))
-        throw Error('Invalid corporate profile.');
+      throw Error('Invalid corporate profile.');
       ids.add(c.market); GroupAccounting.validate(c.book);
       if (c.book.entityId !== c.id || c.book.accounts.investments ||
           c.book.accounts.custodyAssets || c.book.accounts.businessAssets !== (c.resolution ? 0 : 72*c.baseFee))
@@ -51,13 +58,13 @@ const CompanyFinance = (() => {
       const r=c.report;
       if (r !== null) {
         const fields=['month','salesRequested','sales','operatingCost','operatingPaid','interest','interestPaid',
-          'principalDue','principalPaid','serviceDue','servicePaid','profit','resolutionEarnings','dividend','arrears','cashLimited',...(world.version===3?['agencyExpense']:[])];
+          'principalDue','principalPaid','serviceDue','servicePaid','profit','resolutionEarnings','dividend','arrears','cashLimited',...([3,4].includes(world.version)?['agencyExpense']:[])];
         if (!exact(r,fields) || r.month!==world.month || typeof r.cashLimited!=='boolean' ||
             fields.filter(k=>!['cashLimited','profit','resolutionEarnings'].includes(k)).some(k=>!whole(r[k])) ||
             !Number.isSafeInteger(r.profit) || !Number.isSafeInteger(r.resolutionEarnings) || r.sales>r.salesRequested ||
             r.operatingPaid>r.operatingCost || r.interestPaid>r.interest ||
             r.principalPaid>r.principalDue || r.servicePaid>r.serviceDue ||
-            r.profit!==r.sales-r.operatingCost-r.interest-r.serviceDue+r.resolutionEarnings-(world.version===3?r.agencyExpense:0) ||
+            r.profit!==r.sales-r.operatingCost-r.interest-r.serviceDue+r.resolutionEarnings-([3,4].includes(world.version)?r.agencyExpense:0) ||
             r.resolutionEarnings!==(c.resolution?.month===world.month?
               -c.resolution.assetLoss+c.resolution.creditorWriteoff+c.resolution.supplierWriteoff+c.resolution.bankWriteoff.reduce((a,b)=>a+b,0):0) ||
             r.arrears!==c.book.accounts.payables) throw Error('Invalid corporate report.');
@@ -73,7 +80,7 @@ const CompanyFinance = (() => {
     for (const book of [world.outside,world.creditor]) if (book.accounts.debt || book.accounts.payables ||
       book.accounts.investments || book.accounts.custodyAssets) throw Error('Unsupported corporate counterparty account.');
     const cash = [world.outside,world.creditor,...world.companies.map(c=>c.book)].reduce((n,b)=>n+b.accounts.cash,0);
-    if (cash+world.bankCashPaid[0]+world.bankCashPaid[1]+(world.version===3?world.agencyCashNet:0) !== world.openingCash) throw Error('Corporate cash is not conserved.');
+    if (cash+world.bankCashPaid[0]+world.bankCashPaid[1]+([3,4].includes(world.version)?world.agencyCashNet:0) - (world.version===4?world.circulation.externalReturned:0) !== world.openingCash) throw Error('Corporate cash is not conserved.');
     return {cash,debt,payable,companies:6};
   }
   function companyOpening(profiles) {
@@ -213,7 +220,7 @@ const CompanyFinance = (() => {
       if(c.resolution){
         c.report={month:world.month,salesRequested:0,sales:0,operatingCost:0,operatingPaid:0,
           interest:0,interestPaid:0,principalDue:0,principalPaid:0,serviceDue:0,servicePaid:0,
-          profit:0,resolutionEarnings:0,dividend:0,arrears:0,cashLimited:false,...(world.version===3?{agencyExpense:0}:{})};
+          profit:0,resolutionEarnings:0,dividend:0,arrears:0,cashLimited:false,...([3,4].includes(world.version)?{agencyExpense:0}:{})};
         continue;
       }
       // Old supplier invoices have priority. Settlement creates no second cost.
@@ -274,7 +281,7 @@ const CompanyFinance = (() => {
       }
       c.report={month:world.month,salesRequested:requests[i],sales:paid[i],operatingCost,operatingPaid,
         interest,interestPaid,principalDue,principalPaid,serviceDue,servicePaid,profit,resolutionEarnings:0,dividend,arrears:c.book.accounts.payables,
-        ...(world.version===3?{agencyExpense:0}:{}),cashLimited:paid[i]<requests[i]||operatingPaid<operatingCost||interestPaid<interest||
+        ...([3,4].includes(world.version)?{agencyExpense:0}:{}),cashLimited:paid[i]<requests[i]||operatingPaid<operatingCost||interestPaid<interest||
           principalPaid<principalDue||servicePaid<serviceDue};
     }
     // Provisional credit stop: three normal operating months of unpaid bills
@@ -298,7 +305,7 @@ const CompanyFinance = (() => {
   }
   function payAgencyPremium(input,index,carrier,amount) {
     companyValidate(input);GroupAccounting.validate(carrier);
-    if(input.version!==3||!Number.isInteger(index)||index<0||index>=6||!whole(amount))
+    if(![3,4].includes(input.version)||!Number.isInteger(index)||index<0||index>=6||!whole(amount))
       throw Error('Invalid company insurance payment.');
     const world=clone(input),company=world.companies[index];
     if(company.resolution||!company.report||company.book.accounts.cash<amount)

@@ -18,7 +18,7 @@ assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0
 groupSetup.run('cancelFeatureSelectionConfirmation()');
 assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0);
 groupSetup.changeFeature('#financialGroupPreview',true);assert(groupSetup.confirmFeatures());
-assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),6,'New selections opt into conserved departmental workloads; existing saves retain their version.');
+assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),7,'New selections opt into Group7 stability rules; existing saves retain their version.');
 assert.equal(groupSetup.run('readSetupFeatureOptions().onboardingVersion'),1);
 assert.equal(groupSetup.run('readSetupFeatureOptions().productProgramsVersion'),2);
 groupSetup.changeFeature('#onboardingPreview',false);assert(groupSetup.run('featureSelectionPending()'));

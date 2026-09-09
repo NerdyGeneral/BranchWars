@@ -386,14 +386,15 @@ function validateDepartmentSave(g) {
     return;
   }
   const e=g.departmentEconomy,month=g.gameOver?g.cycle:g.cycle-1;
-  if(!departmentExact(e,['version','month','supplier','paid'])||e.version!==1||e.month!==month||!departmentWhole(e.paid))throw Error('Invalid department counterparties.');
+  if(!departmentExact(e,['version','month','supplier','paid',...(g.financialGroupVersion===7?['circulated']:[])])||e.version!==(g.financialGroupVersion===7?2:1)||e.month!==month||!departmentWhole(e.paid))throw Error('Invalid department counterparties.');
+  const circulated=g.financialGroupVersion===7?e.circulated:0;if(!departmentWhole(circulated))throw Error('Invalid department circulation.');
   GroupAccounting.validate(e.supplier);
   if(e.supplier.entityId!=='department:providers'||['investments','debt','payables','custodyAssets','custodyLiabilities'].some(k=>e.supplier.accounts[k]))throw Error('Invalid department supplier accounts.');
   for(const p of g.players) {
     validateDepartmentPlayer(p,month);
     if(p.submitted)normalizeDepartmentPlan(p,departmentCopy(p.submitted));
   }
-  if(e.supplier.accounts.cash!==e.paid||e.paid!==g.players.reduce((n,p)=>n+p.departmentOffice.paid,0)||
+  if(e.supplier.accounts.cash+circulated!==e.paid||e.paid!==g.players.reduce((n,p)=>n+p.departmentOffice.paid,0)||
       e.supplier.accounts.businessAssets!==g.players.reduce((n,p)=>n+p.accounting.accounts.payables,0))throw Error('Department cash and claims do not reconcile.');
 }
 function projectDepartments(g,out,index) {

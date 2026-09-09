@@ -11,10 +11,12 @@ function loader(document){
  const owner=new Module(harnessFile,module);owner.filename=harnessFile;owner.paths=module.paths;owner.candidateDocument=document;owner._compile(text,harnessFile);return owner.exports.harness;
 }
 const modern=loader(html),legacy=loader(old),E=modern().c.window.BWEngine;
+const campaignVersion=process.argv.includes('--v31')?7:6;
+if(campaignVersion===7)assert.equal(E.campaignCapabilities().financialGroupSupported,7);
 assert.equal(E.campaignCapabilities().departmentStaffingSupported,2);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,6);
 assert.equal(legacy().c.window.BWEngine.campaignCapabilities().departmentStaffingSupported,undefined);
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);
-function pair(transport,version=6,oldSide=null){
+function pair(transport,version=campaignVersion,oldSide=null){
  const host=(oldSide==='host'?legacy:modern)('host'),guest=(oldSide==='guest'?legacy:modern)('guest'),queue=[],frames=[];
  for(const [i,p]of [host,guest].entries()){
   p.c.enqueue=m=>{queue.push([i,copy(m)]);frames.push([i,copy(m)]);};
@@ -109,6 +111,6 @@ async function main(){
  const oldReports=oldGame.players.map(p=>[p.relationshipOffers.report,p.onboarding.report,p.departmentFunctionDelivery]);
  const migrated=E.migrateCampaign(oldGame);same(migrated.players.map(p=>[p.relationshipOffers.report,p.onboarding.report,p.departmentFunctionDelivery]),oldReports,'Legacy evidence was rewritten');
  const local=modern();local.c.rules=rules;assert.doesNotThrow(()=>local.run("validateIncomingFeatureRules(rules,'lobby')"));
- console.log(JSON.stringify({status:'PASS',transports:3,mixedGroup5Cases:mixed,months,candidateSha256:hash(html),reference,scope:'Simulated complete clients, not physical multiplayer acceptance'}));
+ console.log(JSON.stringify({status:'PASS',campaignVersion,transports:3,mixedGroup5Cases:mixed,months,candidateSha256:hash(html),reference,scope:'Simulated complete clients, not physical multiplayer acceptance'}));
 }
 main().catch(e=>{console.error(e);process.exitCode=1});

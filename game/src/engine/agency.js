@@ -301,10 +301,12 @@ function validateAgencySave(g) {
     return;
   }
   const e = g.agencyEconomy, month = g.gameOver ? g.cycle : g.cycle - 1;
-  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss']) ||
-      e.version !== 1 || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
+  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss',...(g.financialGroupVersion===7?['circulated']:[])]) ||
+      e.version !== (g.financialGroupVersion===7?2:1) || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
       ['premiumPaid','commissionPaid','operatingPaid','creditorLoss'].some(k => !agencyWhole(e[k])))
     throw Error('Invalid agency economy.');
+  const circulated=g.financialGroupVersion===7?e.circulated:{carrier:0,supplier:0};
+  if(!agencyExact(circulated,['carrier','supplier'])||Object.values(circulated).some(n=>!agencyWhole(n)))throw Error('Invalid agency circulation.');
   GroupAccounting.validate(e.carrier); GroupAccounting.validate(e.supplier);
   if (e.carrier.entityId !== 'agency:carriers' || e.supplier.entityId !== 'agency:suppliers' ||
       ['businessAssets','investments','debt','payables','custodyAssets','custodyLiabilities'].some(k => e.carrier.accounts[k]) ||
@@ -320,9 +322,9 @@ function validateAgencySave(g) {
     if (p.agency.report?.cycle !== (month || undefined) && !(month === 0 && p.agency.report === null))
       throw Error('Stale agency report.');
   }
-  if (cash !== e.parentCashNet + e.premiumPaid || e.supplier.accounts.businessAssets !== claims ||
-      e.carrier.accounts.cash !== e.premiumPaid - e.commissionPaid ||
-      e.supplier.accounts.cash !== e.operatingPaid || g.companyEconomy.agencyCashNet !== e.premiumPaid)
+  if (cash + circulated.carrier + circulated.supplier !== e.parentCashNet + e.premiumPaid || e.supplier.accounts.businessAssets !== claims ||
+      e.carrier.accounts.cash + circulated.carrier !== e.premiumPaid - e.commissionPaid ||
+      e.supplier.accounts.cash + circulated.supplier !== e.operatingPaid || g.companyEconomy.agencyCashNet !== e.premiumPaid)
     throw Error('Agency cash and counterparty resources do not reconcile.');
 }
 function projectAgency(g, out, index) {

@@ -1,5 +1,21 @@
 # Changelog
 
+## Local V3.1 candidate — in progress, not published
+
+- Preserve Group1–6 campaigns; new optional Financial Group campaigns use
+  Group7/save9.6, with explicit peer compatibility and no automatic save upgrade.
+- Add funded outside-provider cash circulation through paired accounting books.
+  Provider payments can support future company demand; firms still can fail.
+- Prototype paid administrative outsourcing and affordable AI recruitment before
+  discretionary research/project spending. Long-campaign viability is not yet
+  accepted; early candidates still show weak staffing and ATM-only networks.
+- Explain workload-driven morale in Workforce using the shared engine formula;
+  show aggregate funded circulation in the corporate panel.
+- Add preserved-state recruitment regression, circulation conservation/failure,
+  compatibility, owner UI purity and Group7 simulated transport tests.
+- See [working evidence](v31-stability-report.md) and
+  [draft manual addendum](v31-manual-addendum.md). No final ZIP or publication yet.
+
 ## V3 Regional Command snapshot — September 8, 2026
 
 - Staffed, separately funded commercial insurance agency with actual costs,

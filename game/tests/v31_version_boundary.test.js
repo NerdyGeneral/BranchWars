@@ -39,6 +39,9 @@ for(const version of [1,2,3,4,5,6]){
 const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:7}).options;
 const g=E.createGame({...options,mode:'hotseat',seed:'v31-new',created:1});
 assert.equal(g.financialGroupVersion,7);assert.equal(g.version,'9.6');E.validatePilot(g);E.validateLedger(g);
+assert.equal(g.companyEconomy.version,4);assert.equal(g.departmentFunctionEconomy.version,2);
+const mismatchedProvider=copy(g);mismatchedProvider.departmentFunctionEconomy.version=1;
+delete mismatchedProvider.departmentFunctionEconomy.circulated;assert.throws(()=>E.validatePilot(mismatchedProvider));
 const rules=E.campaignRules(g,{context:'game'}),caps=E.campaignCapabilities();
 assert.equal(caps.financialGroupSupported,7);assert.equal(E.peerRulesIssue(rules,caps),null);
 assert(E.peerRulesIssue(rules,{...caps,financialGroupSupported:6}),'Published V3 peer must reject Group7');
@@ -50,6 +53,10 @@ E.submit(g,1,plan[1]);E.submit(restored,1,copy(plan[1]));
 assert.deepEqual(copy(E.migrateCampaign(copy(g))),copy(E.migrateCampaign(copy(restored))));
 E.validatePilot(g);E.validateLedger(g);
 assert.equal(E.publicState(g,1).financialGroupVersion,7);
+assert.equal(g.companyEconomy.circulation.month,1);
+const returned=g.agencyEconomy.circulated.carrier+g.agencyEconomy.circulated.supplier+g.facilityEconomy.circulated+g.departmentEconomy.circulated+g.departmentFunctionEconomy.circulated;
+assert.equal(g.companyEconomy.circulation.externalReturned,returned);
+const forged=copy(g);forged.departmentFunctionEconomy.circulated++;assert.throws(()=>E.validatePilot(forged));
 // Terminal flag is a unit-test entry condition, not a claimed earned victory.
 const rematch=copy(g);rematch.gameOver=true;rematch.rematchVotes=[];E.rematch(rematch,0);E.rematch(rematch,1);
 assert.equal(rematch.financialGroupVersion,7);assert.equal(rematch.version,'9.6');E.validatePilot(rematch);

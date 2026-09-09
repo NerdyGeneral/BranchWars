@@ -56,6 +56,7 @@ function renderWorkforce(v) {
   candidate.specialistHires[row.role]++;
   const addBlocked = E.planHires(candidate) > E.hireLimit(v.me) || E.planBudget(v.me, candidate).remaining < 0;
   const actual = v.me.operatingReport, forecast = review.forecast;
+  const morale = v.financialGroupVersion===7?E.operatingWorkloadMorale(v.me,Object.fromEntries(review.rows.map(r=>[r.role,(r.productive??r.assigned)+r.bonus]))):null;
   const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + (v.me.departmentOffice?' / '+r.productive:'') + '</td><td>' +
     (r.count ? r.skill + '/100' : 'Not hired') + '</td><td>+' + r.bonus.toFixed(2) + '</td><td>' + money(r.payroll) + '</td></tr>').join('');
   $('#workforcePanel').innerHTML = `
@@ -66,6 +67,7 @@ function renderWorkforce(v) {
       <div><span>Combined recruiting</span><b>${E.planHires(draft)}/6 bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
     </div>
     <div class="table-scroll"><table class="regional-table"><thead><tr><th>Specialty</th><th>${v.me.departmentOffice?'Qualified / assigned / productive staff':'Qualified / assigned staff'}</th><th>Skill</th><th>Effective staff bonus</th><th>Salary premium/month</th></tr></thead><tbody>${table}</tbody></table></div>
+    ${morale?`<div id="workforceMorale" class="workforce-card"><h3>WORKLOAD &amp; RETENTION</h3><p class="small">Morale: <b>${v.me.stats.morale}/100</b>. Draft workload-only change: <b>${morale.change>0?'+':''}${morale.change.toFixed(2)}/month</b>, before the 0–100 bounds, executive events, rival actions and consequences.</p><p class="micro">Base recovery ${morale.base}; Retail workload penalty ${morale.serviceShortfall.toFixed(2)}; Operations penalty ${morale.operationsShortfall.toFixed(2)}. Productive staff and specialist expertise count; a paid teacher is unavailable. Low morale does not prohibit hiring. Recruits cost cash, add recurring payroll and arrive next month. At 5 morale or less, a bank with more than five employees can lose a banker during consequences.</p></div>`:''}
     <p class="micro muted">Qualified specialists are part of total headcount, not additional bankers. A specialist outside their own department works as a generalist: no cross-department skill bonus. Business expertise is split between sales and reserved delivery; it is never counted twice.</p>
     <div class="workforce-grid">
       <section class="workforce-card"><label for="workforceDepartment">DEPARTMENT</label><select id="workforceDepartment">${review.rows.map(r => '<option value="' + r.role + '" ' + (r.role === row.role ? 'selected' : '') + '>' + esc(r.name) + '</option>').join('')}</select>

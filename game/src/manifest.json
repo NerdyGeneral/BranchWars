@@ -54,6 +54,7 @@
       "engine/accounting.js",
       "engine/group-accounting.js",
       "engine/company-finance.js",
+      "engine/corporate-circulation.js",
       "engine/financial-group.js",
       "engine/corporate-income.js",
       "engine/agency.js",

@@ -14,7 +14,8 @@ function loadHarness(document){
  owner._compile(text,harnessFile);return owner.exports.harness;
 }
 const modern=loadHarness(html),legacy=loadHarness(oldHtml),E=modern().c.window.BWEngine;
-assert.equal(E.campaignCapabilities().financialGroupSupported,6);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,5);
+const campaignVersion=process.argv.includes('--v31')?7:6,saveVersion=campaignVersion===7?'9.6':'9.5';
+assert.equal(E.campaignCapabilities().financialGroupSupported,7);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,5);
 console.log(JSON.stringify({suite:'department-functions-network',phase:'opening',candidateSha256,reference}));
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);
 function changedPath(a,b,path='game'){
@@ -23,7 +24,7 @@ function changedPath(a,b,path='game'){
  for(const key of new Set([...Object.keys(a),...Object.keys(b)])){const found=changedPath(a[key],b[key],path+'.'+key);if(found)return found;}
  return {path,reason:'Object key ordering only'};
 }
-function peers(transport,rules=6,oldSide=null){
+function peers(transport,rules=campaignVersion,oldSide=null){
  const host=(oldSide==='host'?legacy:modern)('host'),guest=(oldSide==='guest'?legacy:modern)('guest'),queue=[],frames=[];
  for(const [i,p]of [host,guest].entries()){
   p.c.enqueue=m=>{queue.push([i,copy(m)]);frames.push([i,copy(m)]);};
@@ -41,7 +42,7 @@ async function start(pair){
  assert(pair.host.state().game&&pair.guest.state().view,'Lobby start failed: '+JSON.stringify(pair.frames.filter(([,m])=>m.type==='error')));
 }
 function privateState(pair){
- const g=pair.host.state().game,v=pair.guest.state().view;assert.equal(g.version,'9.5');assert.equal(v.version,'9.5');assert.equal(v.financialGroupVersion,6);
+ const g=pair.host.state().game,v=pair.guest.state().view;assert.equal(g.version,saveVersion);assert.equal(v.version,saveVersion);assert.equal(v.financialGroupVersion,campaignVersion);
  E.validatePilot(g);E.validateLedger(g);E.validateFinancialGroupView(v);pair.guest.run("validateIncomingFeatureRules(view,'view')");
  same(v.me.departmentFunctions,g.players[1].departmentFunctions,'Owner receives only its function book');
  same(v.me.departmentFunctionDelivery,g.players[1].departmentFunctionDelivery,'Owner receives its causal delivery');
@@ -77,7 +78,7 @@ async function reload(pair){
  for(const [i,p]of [pair.host,pair.guest].entries()){
   p.run('ghCheckpoint()');const raw=p.storage.get('branchWarsGhResume');assert(!raw.includes('PRIVATE_TEST_TOKEN'));
   const saved=p.run("(()=>{const s=JSON.parse(sessionStorage.getItem('branchWarsGhResume'));for(const k of ['connection','game','view'])s[k]=unpackStorageValue(s[k]);return s;})()");
-  assert.equal((saved.game||saved.view).version,'9.5');assert.equal(saved.featurePeerCapabilities,undefined);assert.equal(saved.featurePeerFresh,undefined);
+  assert.equal((saved.game||saved.view).version,saveVersion);assert.equal(saved.featurePeerCapabilities,undefined);assert.equal(saved.featurePeerFresh,undefined);
   if(i===1){assert.equal(saved.view.rival.departmentFunctions,undefined);assert.equal(saved.view.departmentFunctionEconomy,undefined);}
   const target=restored[i];target.storage.set('branchWarsGhResume',raw);target.c.document.querySelector('#ghToken').value='PRIVATE_TEST_TOKEN';
   target.c.enqueue=m=>{queue.push([i,copy(m)]);frames.push([i,copy(m)]);};
@@ -101,14 +102,14 @@ async function malformedCheckpoint(pair){
 async function boundaries(){
  let mixed=0;
  for(const transport of ['gh','lan','p2p']){
-  const refused=peers(transport,6,'guest');refused.guest.run('send(makeFeatureHello())');await refused.drain();
+  const refused=peers(transport,campaignVersion,'guest');refused.guest.run('send(makeFeatureHello())');await refused.drain();
   assert.equal(refused.host.state().game,null);assert.equal(refused.host.state().lobby,null);assert.equal(refused.guest.state().view,null);
   assert(refused.frames.some(([,m])=>m.type==='error'&&/Financial Group/i.test(m.message)));
   assert(refused.frames.every(([,m])=>m.type!=='state'),'Old Group5 client received unsupported Group6 state');
   for(const side of ['host','guest']){const p=peers(transport,5,side);await open(p);await start(p);assert.equal(p.host.state().game.version,'9.4');assert.equal(p.guest.state().view.me.departmentFunctions,undefined);mixed++;}
   const p=peers(transport,5);await open(p);p.host.run('editLobbyIdentity(true)');await p.drain();p.guest.run('editLobbyIdentity(true)');await p.drain();const revision=p.host.state().lobby.revision;
-  p.host.run("stageLobbyFeatures(E.previewFeatureSelection(lobby.settings,{field:'financialGroupVersion',value:6}).options,lobby.revision);applyLobbySettings()");await p.drain();
-  assert.equal(p.host.state().lobby.revision,revision+1);assert(p.host.state().lobby.players.every(x=>!x.ready));assert.equal(p.guest.state().lobby.settings.financialGroupVersion,6);await start(p);privateState(p);
+  p.host.run("stageLobbyFeatures(E.previewFeatureSelection(lobby.settings,{field:'financialGroupVersion',value:"+campaignVersion+"}).options,lobby.revision);applyLobbySettings()");await p.drain();
+  assert.equal(p.host.state().lobby.revision,revision+1);assert(p.host.state().lobby.players.every(x=>!x.ready));assert.equal(p.guest.state().lobby.settings.financialGroupVersion,campaignVersion);await start(p);privateState(p);
  }
  return mixed;
 }
@@ -260,7 +261,7 @@ async function activePairs(){
  let months=0;
  for(const transport of ['gh','lan','p2p']){
   let p=peers(transport);await open(p);await start(p);privateState(p);
-  const hello=copy(p.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);assert.equal(hello.financialGroupSupported,6);
+  const hello=copy(p.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);assert.equal(hello.financialGroupSupported,7);
   const input=plans(p);
   missingStoredPolicyChecks(p,input);
   for(const mutate of [q=>{q.departmentFunctionsPolicy.vendors.credit=17;},q=>{q.departmentFunctionsPolicy.quotas.credit.service=1;},q=>{delete q.departmentFunctionsPolicy.vendors;}]){
@@ -293,7 +294,7 @@ async function activePairs(){
    same(p.host.state().game.players.map(x=>[x.departmentFunctions,x.departmentFunctionDelivery]),JSON.parse(before).players.map(x=>[x.departmentFunctions,x.departmentFunctionDelivery]),'Function books changed on reload');
    assert.equal(hash(JSON.stringify(p.host.state().game)),hash(JSON.stringify(expected)),'Checkpoint drift: '+JSON.stringify(changedPath(expected,p.host.state().game)));
   }
-  console.log('PASS Group6 '+transport+' paid functions, old-peer refusal, privacy, malformed metadata and reconnect');
+  console.log('PASS Group'+campaignVersion+' '+transport+' paid functions, old-peer refusal, privacy, malformed metadata and reconnect');
  }
  return months;
 }
@@ -306,5 +307,5 @@ async function activePairs(){
  const months=5+(asyncOnly?0:await activePairs());
  const end=portable?fs.readFileSync(path.join(root,'BRANCH_WARS.html'),'utf8'):require('../tools/build_game').assemble().html;
  console.log(JSON.stringify({suite:'department-functions-network',phase:'closing',candidateSha256,endCandidateSha256:hash(end)}));
- console.log(JSON.stringify({status:'PASS',focus:asyncOnly?'GitHub asynchronous and checkpoint only':'full',transports:asyncOnly?1:3,mixedGroup5Cases,months,candidateSha256,endCandidateSha256:hash(end),sourceUnchanged:end===html,reference,scope:'Actual captured Group6/frozenGroup5 clients; simulated transports, not physical multiplayer acceptance. Source drift is reported separately and requires a final-build rerun.'}));
+ console.log(JSON.stringify({status:'PASS',campaignVersion,focus:asyncOnly?'GitHub asynchronous and checkpoint only':'full',transports:asyncOnly?1:3,mixedGroup5Cases,months,candidateSha256,endCandidateSha256:hash(end),sourceUnchanged:end===html,reference,scope:'Actual assembled current clients and frozen Group5 clients; simulated transports, not physical multiplayer acceptance. Source drift is reported separately and requires a final-build rerun.'}));
 })().catch(error=>{console.error(error);process.exitCode=1});

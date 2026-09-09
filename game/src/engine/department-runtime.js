@@ -261,6 +261,7 @@ function validateDepartmentFunctionsSave(g){
     if(g.departmentFunctionEconomy!==undefined||g.players.some(p=>p.departmentFunctions!==undefined||p.departmentFunctionDelivery!==undefined||p.submitted?.departmentFunctionsPolicy!==undefined)||Object.values(g.lastPlans||{}).some(p=>p.departmentFunctionsPolicy!==undefined))throw Error('Unversioned department function state.');return;
   }
   const month=g.cycle-(g.gameOver?0:1);DepartmentProvider.validate(g.departmentFunctionEconomy);
+  if(g.departmentFunctionEconomy.version!==(g.financialGroupVersion===7?2:1))throw Error('Department provider rules do not match the campaign.');
   if(g.departmentFunctionEconomy.month!==month||g.departmentFunctionEconomy.paid!==g.players.reduce((n,p)=>n+p.departmentFunctions.paid,0))throw Error('Department provider does not reconcile.');
   if(g.departmentFunctionEconomy.report)for(const row of g.departmentFunctionEconomy.report.owners){
     const owner=g.players.find(p=>p.id===row.id),report=owner?.departmentFunctions.report;

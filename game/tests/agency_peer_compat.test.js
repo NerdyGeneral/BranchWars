@@ -18,7 +18,7 @@ oldModule._compile(oldHarnessText,harnessFile);
 const oldHarness=oldModule.exports.harness,{harness:modernHarness}=require('./github_resilience.test.js');
 const oldEngine=oldHarness().c.window.BWEngine,newEngine=modernHarness().c.window.BWEngine;
 assert.equal(oldEngine.campaignCapabilities().financialGroupSupported,2);
-assert.equal(newEngine.campaignCapabilities().financialGroupSupported,6);
+assert.equal(newEngine.campaignCapabilities().financialGroupSupported,7);
 for(const rules of [1,2]){
  const options=oldEngine.previewFeatureSelection({}, {field:'financialGroupVersion',value:rules}).options;
  const contract=oldEngine.campaignRules(options,{context:'lobby'});
@@ -91,8 +91,8 @@ async function modernBoundaries(){
   assert.equal(pair.host.state().game.version,'9.2');
   const hellos=pair.frames.filter(([i,m])=>i===1&&m.type==='hello').map(([,m])=>m);
   assert.equal(hellos[0].financialGroupSupported,2);
-  assert(hellos.some(m=>m.financialGroupSupported===6&&m.featureChallenge));
-  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===6));
+  assert(hellos.some(m=>m.financialGroupSupported===7&&m.featureChallenge));
+  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===7));
   const before=JSON.stringify(pair.host.state().game),caps=copy(pair.host.run('featurePeerCapabilities'));
   pair.host.c.bootstrap=copy(hellos[0]);pair.host.run('handleMessage(bootstrap)');await pair.drain();
   assert.deepEqual(copy(pair.host.run('featurePeerCapabilities')),caps,'Late bootstrap replaced confirmed modern capability');

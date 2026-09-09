@@ -39,7 +39,7 @@ const institutionChecks=['accounting_payables.test.js','facility_network.test.js
 institutionChecks.push('department_ai_affordability.test.js','department_obligations.test.js','department_obligations_ui.test.js');
 institutionChecks.push('facility_lifecycle_legacy_compat.test.js','facility_lifecycle_integration.test.js','facility_conversion_lifecycle.test.js','facility_hub_transitions.test.js','facility_lifecycle_network.test.js','facility_lifecycle_ui.test.js','facility_submission.test.js');
 files.push(...institutionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html');
-const functionChecks=['v31_version_boundary.test.js','v31_funded_origination.test.js','department_functions.test.js','department_provider.test.js','department_function_context.test.js',
+const functionChecks=['v31_version_boundary.test.js','v31_funded_origination.test.js','v31_circulation.test.js','v31_recruitment.test.js','v31_stability_ui.test.js','v31_staffing_network.test.js','v31_adversarial_network.test.js','department_functions.test.js','department_provider.test.js','department_function_context.test.js',
   'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',
   'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','facility_staff_planning.test.js','doctrine_resume.test.js','department_planning_contract.test.js','department_runtime.test.js',
   'department_group5_compat.test.js','department_functions_network.test.js',
@@ -49,6 +49,7 @@ institutionChecks.push(...functionChecks);
 files.push(...functionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_facility_group5_ba759abc.html',
   'experiments/institution/department-functions-ui.js');
 files.push('tests/fixtures/department-matrix192-second.json.gz',
+  'tests/fixtures/v31-v3-balanced120.json.gz',
   'reports/reference-builds/BRANCH_WARS_departments_group6_57cc519e.html','tools/package_department_fixture.js');
 files.push('tests/fixtures/department-captured-regressions.json.gz','tools/package_department_regressions.js');
 files.push('tests/fixtures/department-regulatory480.json.gz','tools/package_department_long_fixture.js');

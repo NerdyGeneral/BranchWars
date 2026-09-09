@@ -95,6 +95,9 @@ function corporateCompanyPanel(v) {
   const world=v.me.companySnapshot.world,r=v.me.corporate.report;
   return '<section class="credit-policy" id="corporateCompanyStatements"><h3>CORPORATE CLIENTS · OPERATING COMPANIES</h3>'+
     '<p class="small">These companies pay for commercial services from their own finite cash. Winning a banking mandate does not buy ownership. Company shares and takeovers are not available yet.</p>'+
+    (world.circulation?'<div id="corporateCirculationSummary" class="notice"><strong>FUNDED LOCAL CIRCULATION</strong><p class="small">Outside customer cash: '+money(world.outside.accounts.cash)+
+      '. Last month’s local spending by outside counterparties: '+money(world.circulation.lastExternal+world.circulation.lastCreditor)+
+      '.</p><p class="micro">Third-party carriers, paid suppliers and outside creditors spend 2% of existing cash locally each month. The money funds future company sales through this finite pool; it does not create bank deposits, guarantee sales or rescue insolvent firms. Rival staffing and supplier books remain private.</p></div>':'')+
     '<div class="credit-summary"><div><span>Your unpaid company invoices</span><b>'+money(v.me.accounting.accounts.receivables)+'</b><small>Assets at risk, not spendable cash.</small></div>'+
     '<div><span>Last month: fees billed / paid</span><b>'+money(r?.billed||0)+' / '+money(r?.cash||0)+'</b><small>Unpaid billing increases receivables.</small></div>'+
     '<div><span>Old invoices collected / written off</span><b>'+money(r?.recovered||0)+' / '+money(r?.writtenOff||0)+'</b><small>Collection is cash, not new profit. Write-offs reduce bank earnings and capital.</small></div></div>'+
