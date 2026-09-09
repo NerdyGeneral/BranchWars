@@ -17,7 +17,7 @@ function monthlyPlanReview(v,plan=draft){
  if(lifecycle&&!lifecycle.status.eligible)add('facilities','Resolve office staffing or funding',lifecycle.status.reason,'markets',null,'#facilityLifecyclePanel');
  const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
  if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
- if(functions?.rows){const uncovered=functions.rows.filter(row=>row.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>E.DepartmentFunctions.FUNCTIONS[row.id].name+': '+row.shortfall+' quarter-work units uncovered').join(' · '),tab:'workforce',target:'#departmentPanel'});}
+ if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Number(row.planned.shortfall.toFixed(3))+' quarter-work units uncovered').join(' · ')+'. Four physical units equal one employee-month; this is task delivery, not unused headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
  const action=check('action-quote','Review competitive action','competition',null,'#competitiveActions',()=>E.competitiveActionStatus(p,plan.competitiveAction||'none'));
  if(action&&!action.eligible)add('action','Competitive action unavailable',action.reason,'competition',null,'#competitiveActions');
  if(plan.contractBid){
@@ -33,7 +33,7 @@ function monthlyPlanReview(v,plan=draft){
 function navigatePlanReview(item){
  setWorkspaceTab(item.tab);
  if(item.desk)setOperationsDesk(item.desk);
- if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership');
+ if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.peopleDesk||(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership'));
  const target=$(item.target)||$('[data-workspace="'+item.tab+'"]');
  if(!target)return;
  for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
@@ -43,6 +43,8 @@ function navigatePlanReview(item){
 function renderMonthlyPlanReview(v,review){
  const mount=$('#monthlyPlanReview');if(!mount)return;
  const locked=v.me.submitted||v.gameOver,items=[...review.blockers,...review.warnings];
+ const summary=$('#monthlyReviewSummary');
+ if(summary)summary.textContent='Review this month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
  const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Go to '+esc(item.tab)+'</button></li>').join('');
  mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
   (locked?'<p class="small">Inspection is available. Orders cannot change while locked; use Recall when available.</p>':review.blockers.length?'<ul class="plan-review-list">'+list(review.blockers,'is-blocker')+'</ul>':'<p class="small">No listed submission blockers. Headcount allocation is separate from service coverage; check warnings before locking.</p>')+

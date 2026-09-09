@@ -32,6 +32,14 @@ pass. Frozen checkpoint 3 ended at an outdated project-UI dependency harness;
 the real planning review is now loaded and all 1,296 legacy comparisons pass.
 This is progress evidence, not full-release acceptance or a new publication.
 
+Fifth local checkpoint: owner-only paged attention inbox, scoped financial
+explanations, shared task-shortage warnings and compact monthly review disclosure.
+Ten new test groups and a mature browser walkthrough pass. Frozen checkpoint 4
+reached another multiline-entry extraction failure in the onboarding test harness;
+the real handler is restored and portable/source onboarding network checks pass.
+Full finished-build verification, remaining usability work, manual and publication
+are still pending. Current candidate simulation bytes match the preserved engine.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

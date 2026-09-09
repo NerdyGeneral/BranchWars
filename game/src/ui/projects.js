@@ -146,4 +146,5 @@ function renderReady(v){
  $('#submitMsg').className='small '+(review.blockers.length?'bad':'muted');
  renderMonthlyPlanReview(v,review);
  if(typeof reconcileWorkspaceNavigation==='function')reconcileWorkspaceNavigation(v);
+ if(typeof renderBankOverview==='function')renderBankOverview(v,review);
 }

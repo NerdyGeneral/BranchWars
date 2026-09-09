@@ -24,6 +24,11 @@ reduces campaign chrome. Optional-screen visibility, keyboard/owner behavior and
 mature browser scrolling are checked. Attention inbox, financial/help workflows,
 remaining batches and final publication gates are still in progress.
 
+Fifth checkpoint adds the owner attention inbox and a financial explanation
+screen separating cash, spending room, equity and recorded earnings. Task
+coverage warnings now match People. Search/help, adjacent comparisons, remaining
+editor/workflow and resilience work, manual and exact release gates remain open.
+
 ## September 9 — V3.1 stability candidate handed off locally
 
 The bounded repair goal is technically complete: paid staffing/execution plans,

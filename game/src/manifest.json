@@ -123,6 +123,7 @@
       "ui/regional-growth.js",
       "ui/recovery.js",
       "ui/plan-review.js",
+      "ui/bank-overview.js",
       "ui/projects.js",
       "ui/results.js",
       "ui/bootstrap.js"

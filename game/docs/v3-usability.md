@@ -49,7 +49,7 @@ evidence; browser, release and human acceptance are separate gates.
 | 11 | Readable leader cards and replacement consequences | 2 | Partial: dedicated reachable desk and clarified pre-delivery teaching/department-reserve scope; card density and per-choice comparisons remain |
 | 12 | Readable bounded delegation proposals | 2 | Implemented named before/after instruction table and whole-plan cost comparison; allowed fields/authority unchanged |
 | 13 | Task-oriented grouped navigation | 3 | Implemented four task groups, retained 11 mounts, contextual/remembered selection; 32 visibility combinations and mature browser verified; final laptop/zoom integration gate open |
-| 14 | Attention inbox and healthy-system status | 3 | Pending |
+| 14 | Attention inbox and healthy-system status | 3 | Implemented initial owner-only Required/Watch/Upcoming inbox, pagination, source-specific conditions and explicit no-listed-issues limits; additional stalled-work/debrief integrations remain |
 | 15 | All submission blockers with direct links | 1 | Partial: independent readiness/quote blockers and links implemented; deeper per-subsystem validator enumeration remains |
 | 16 | Required decisions separated from opportunities | 1 | Implemented initial review; `usability_plan_review.test.js`, early/mature browser; final integration gate open |
 | 17 | Consistent current/form/staged/active lifecycle | 1 | Partial: review legend and retained unstaged Workforce status; cross-editor standardization remains |
@@ -57,12 +57,12 @@ evidence; browser, release and human acceptance are separate gates.
 | 19 | Scoped undo and unfinished-form protection | 1 | Partial: guarded individual field/initiative undo plus Leadership/functions/training raw form retention; remaining editors pending |
 | 20 | Contextual navigation and search | 3 | Pending |
 | 21 | Retained screen context and appropriate scroll/focus | 1 | Partial: fresh entry/Continue opens Overview at top; remaining per-workspace context pending |
-| 22 | Precise financial measure names | 3 | Pending |
-| 23 | Cash-to-spendable-room explanation | 3 | Pending |
+| 22 | Precise financial measure names | 3 | Partial: owner financial overview separates current cash/equity, draft room and actual profit/earnings; remaining screen-wide copy audit open |
+| 23 | Cash-to-spendable-room explanation | 3 | Implemented existing protected quote, obligations and capital constraints with bank/parent separation; actual mature-browser comparison verified |
 | 24 | Decision-adjacent forecast comparisons | 3 | Pending |
 | 25 | Consistent forecast scope and timing | 3 | Pending |
-| 26 | Metric causes / why changed | 3 | Pending |
-| 27 | Intentional numerical precision | 3 | Pending |
+| 26 | Metric causes / why changed | 3 | Partial: recorded monthly earnings bridge and scoped deposit/credit movements; no fabricated causal history; wider metric drilldowns remain |
+| 27 | Intentional numerical precision | 3 | Partial: new financial/inbox money uses whole dollars and unavailable rather than false zero; legacy screen-wide precision pass remains |
 | 28 | Explicit map metric layers | 4 | Pending |
 | 29 | Inspection separate from action targeting | 4 | Pending |
 | 30 | Mature-market contestability presentation | 4 | Pending |
@@ -367,3 +367,69 @@ Frozen fourth-checkpoint verification: detached commit `07b0054` in
 running after build/reference/docs/architecture and early accounting checks.
 Keep this snapshot immutable and poll the same handle; final release acceptance
 still requires the complete finished build, not this intermediate checkpoint.
+
+## Fifth checkpoint — owner attention and financial explanations
+
+Portable SHA-256:
+`2ef121c2e5ce8c248d982a442c3512837bc34ff42b6f6f622b01fac7439213e2`.
+142 source files; the pinned simulation digest is still unchanged.
+
+- Overview now has an owner-only attention inbox: Required, Watch and Upcoming
+  filters, ten-item pages and context-specific Review links. Checks include
+  existing submission blockers/form warnings, capital distress, unpaid
+  obligations, recorded operating/earnings losses, consecutive deposit snapshots,
+  quoted task/execution shortages, owned service renewals/misses, expiring
+  applications, recorded arrears/cures and authored critical office condition.
+  No alerts are inferred from rival private plans or unrecorded history. A clear
+  filtered list explicitly does not promise safety or future profitability.
+- The financial overview separates bank cash, quoted optional spending room,
+  bank equity and the last recorded operating profit. Expandable explanations
+  cover obligations, reserves, capital room, retained earnings and the separate
+  parent/consolidated position. Existing quotes and accounting checks are used;
+  missing actual results are unavailable, not an invented zero-profit month.
+- Group totals are labeled balance-sheet positions, not group monthly profit.
+  The existing valid owner earnings bridge is shown when supported; unsupported
+  versions do not acquire a new book or reconstructed history.
+- Monthly plan details collapse behind a count-bearing review summary. The
+  required decision/ready status remains visible. The shared coverage warning
+  was corrected to read dispatched task shortfalls, not aggregate quota spare
+  capacity. People and the monthly review now agree; the inbox does not duplicate
+  the same coverage warning.
+- Financial disclosures stay open across inbox filter redraws. Browser QA found
+  and fixed selected-filter white-on-white hover text. Navigation links are
+  owner/month/snapshot guarded and stage no orders.
+
+Ten new production model/workflow test groups pass across original and Group1–7
+versions: exact quotes, no book/plan mutation, task warnings, owned renewal
+privacy, pending-vs-owned requests, stage-specific losses, nonconsecutive-history
+refusal, authored facility thresholds, pagination, a real simultaneous resolution,
+bank/group reconciliation, hostile text escaping and guarded navigation callbacks.
+The suite is included in both gate entry points. Existing planning, undo, forms,
+People, workforce workflows, Operations, navigation, earnings bridge (9), protected
+budget, balance-sheet UI (10), architecture and exact simulation-boundary tests
+also pass. Onboarding network checks pass against both source and portable bytes.
+
+Frozen checkpoint 4 (`88302`) is **terminal exit 1** in
+`onboarding_network.test.js`: another isolated persistence harness extracted only
+the first line of the multiline entry handler. It now restores the complete real
+handler from the tested artifact. The complete onboarding network cases pass,
+including visible Continue, half-ready hotseat privacy, three negotiated transports
+and private queues. Searches found only the two affected entry restoration loops;
+the feature-setup loop was already repaired. No frozen golden was regenerated or
+old comparison removed. This is not a completed full regression/release gate.
+
+Browser inspection at 1265 x 712 used the preserved month-481 campaign. The
+inbox showed one required executive call, one task shortage, one owned Treasury
+renewal and recorded credit-flow pressure. Upcoming filtering worked; its Review
+link opened actual renewal pricing with no staged bid or turn submission.
+Verified actual figures: bank cash $93,884,537; optional room $1,178,150; equity
+$4,215,396; month-480 operating profit $65,870. The retained earnings bridge showed
+opening $1,913,615 + profit $65,870 + other net -$64,089 = closing $1,915,396
+(net +$1,781). The disclosure stayed expanded across filtering and selected text
+was readable. Final post-browser changes only normalize shortage-label case and
+the singular warning suffix; targeted tests pass. All task QA tabs were closed.
+
+Still open: searchable/contextual help, screen-wide forecast/precision labels,
+financial decision-adjacent comparisons, remaining batch 1/2 editor safeguards,
+connected business workflows, presentation/recovery/performance work, the matching
+manual and all exact-final release/publication gates. No whole batch is signed off.

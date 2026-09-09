@@ -27,8 +27,13 @@ function localStorageHarness() {
   // The network harness stubs these two functions. Restore their actual bodies
   // from the tested artifact, never from a possibly newer source file.
   for(const name of ['saveLocal','enterGame']) {
-    const body=runtimeHtml.match(new RegExp('^function '+name+'\\([^\\n]*$', 'm'));
-    assert(body,'Missing real '+name+' function');h.run(body[0]);
+    if(name==='enterGame'){
+      const start=runtimeHtml.indexOf('function enterGame('),end=runtimeHtml.indexOf('function leaveGame(',start);
+      assert(start>=0&&end>start,'Missing complete real entry handler');h.run(runtimeHtml.slice(start,end));
+    }else{
+      const body=runtimeHtml.match(new RegExp('^function '+name+'\\([^\\n]*$', 'm'));
+      assert(body,'Missing real '+name+' function');h.run(body[0]);
+    }
   }
   for(const id of ['#continueBtn','#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver','#privacyScreen']) {
     const el=h.c.document.querySelector(id),classes=new Set(['hidden']);
