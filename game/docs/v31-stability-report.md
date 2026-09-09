@@ -39,6 +39,16 @@ remained disabled. The temporary loopback server was then stopped. No firewall
 or persistent execution-policy change, GitHub access or physical two-computer
 test occurred. Reconnect/adversarial coverage remains a separate automated gate.
 
+The same genuine Group7 month480 save also passed the current complete-client
+storage/recovery helper under a5MiB quota adapter. Its40,244,856-byte source used
+964,096 UTF-16 bytes for autosave and1,418,774 bytes for the host checkpoint with
+a pending retry. The actual old raw-save path exceeded the quota; current
+save/load and checkpoint/resume round-tripped exactly, preserved the retry queue,
+and demanded a fresh peer handshake. Corrupt checksums were refused, and failed
+writes retained the previous record with a warning. This32.638-second command
+test is not browser latency or live GitHub acceptance. The64MiB raw-text safety
+ceiling remains; unbounded future campaign size is not promised.
+
 ### Reproduced execution defect and new-source verification
 
 All eight `0476a166...` cases have now finished: seven passed 480 months, while

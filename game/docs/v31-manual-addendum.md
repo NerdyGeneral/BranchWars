@@ -132,7 +132,9 @@ staff/service constraints without inventing bankers or silently changing mandate
 - Record build hash, mode, month and reproduction steps for any problem. Never
   include repository tokens in screenshots, reports or shared saves.
 
-The current candidate has passed the full Windows gate, targeted three-transport
-simulations, mature-save browser inspection and one actual two-browser localhost
-LAN turn. The second matched long-run balance profile is still running. None of
-these checks replaces this physical two-computer and human-fun checklist.
+The current execution-capacity repair has passed mature-save browser inspection,
+ordinary keyboard reserve editing and one actual packaged two-browser localhost
+LAN turn, including a custom purple bank and shared-settings readiness reset.
+Its full Windows gate and eight matched long-run campaigns are still running.
+The prior build's full Windows pass does not certify changed engine bytes. None
+of these checks replaces this physical two-computer and human-fun checklist.
