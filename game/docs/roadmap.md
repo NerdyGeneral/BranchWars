@@ -7,6 +7,14 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Local checkpoint `b2309cd`: the current six-file QA ZIP is packaged and each
+archive entry is verified. Exact-build adversarial/staffing transport simulations
+pass, as does the additional genuine Balanced month-282 deferral regression.
+The 52 MB legacy month-480 campaign has been imported, resumed and navigated in
+the actual current browser build. Full Windows and matched current-source
+campaign gates are still running; the final Group7 mature browser check, final
+balance assessment and human playtest remain open. No GitHub publication occurred.
+
 Newest stability finding: the Growth diagnostic reached283 months before an
 investment deferral resumed teaching and invalidated service quotas. The actual
 month284 failure/replay is now covered and fixed. No extra staff, forced equal

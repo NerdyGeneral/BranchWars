@@ -8,6 +8,39 @@ regional / Financial Group expansion. No GitHub publication is authorized.
 
 ### Current verification checkpoint
 
+Local repair commit: `b2309cd`. Replacement QA ZIP:
+`BranchWars-v3.1-export-b2309cd.zip`, SHA-256
+`9031b7818b3c2c7fbf2b0dbf814b4f61665405085e4ee6461dd04c7c923ac3bc`.
+The six ZIP entries were compared by byte size and SHA-256 with the allowlisted,
+manifest-verified package directory. The full Windows gate remains running.
+
+Actual browser measurements on this candidate, under concurrent simulation load:
+
+| Existing mature save / action | Candidate | Published V3 |
+|---|---:|---:|
+| Group6, 480 months, 52 MB: import to visible cycle 481 | 2,817 ms | Timing unavailable; observation timed out, then the same tab was confirmed loaded |
+| Same save: Workforce click and DOM snapshot | 329 ms | 327 ms |
+| Same save: Continue to visible cycle 481 | 2,931 ms | Not sampled in this checkpoint |
+| Group7, 120 months: Workforce click and DOM snapshot | 321 ms | Not applicable to V3 Group6 rules |
+
+These are individual action-to-observation samples, not browser paint percentiles
+or proof of a performance improvement. Both legacy imports showed the expected
+$7.67M loans and 13.3% capital ratio. Current candidate screenshots at 1265 by 713
+showed readable workload cards, navigation and the expanded protected-budget
+warning without observed overlap. A browser `fill` changed the Workforce reserve
+input visibly but did not establish that its change handler executed after the
+following click. Keep manual typing/change verification on the friend checklist;
+do not report that synthetic-input limitation as a proven game defect or a fix.
+The explicit staging functions have separate automated coverage. No game state,
+browser storage or DOM was injected to produce these browser observations.
+
+The additional actual Balanced month-282 failure is also checked against both
+frozen builds. Old `682d982e...` fails with insufficient Operations quota capacity;
+current `0476a166...` plans and settles the full month with exact half-ready replay.
+This is the same research-deferral/training interaction in a different department,
+not a second rule or balance adjustment. The diagnostic save is hash-pinned as
+`6e3f5b2bee013d92a4b8a1423b0de674247a8c3aae70fc245c546bafe6a86024`.
+
 The current training-deferral candidate is portable
 `0476a166a40aa843ea7a62e9607e3d79a561e19627f3c453bbc704c6b5e29012`,
 engine `f19db673dbc6137b779e29e2576bf7bb3b8d118734dec7cff7c4d2e588c61d34`.

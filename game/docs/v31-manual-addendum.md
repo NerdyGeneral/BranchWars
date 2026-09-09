@@ -78,7 +78,7 @@ The corporate panel reports aggregate funded circulation. Supplier books and
 bank-private operating instructions remain private. Agency carriers remain
 third-party insurers: this is not permission for your bank to underwrite insurance.
 
-## Friend-playtest checklist — not yet accepted
+## Training and facility work can compete for capacity
 
 Training can resume when other proposed spending is removed. A paid class may
 reserve a department leader as a teacher, reducing staff available for normal
@@ -99,6 +99,8 @@ higher staged value. Department form changes require **Stage limits and leader
 orders**. Check the budget strip after changing either; neither control creates
 cash or removes existing obligations.
 
+## Friend-playtest checklist — not yet accepted
+
 - Use the same candidate build on two different computers; start a GitHub room,
   confirm distinct bank identities/colors, committed options and readiness.
 - Submit several simultaneous turns and compare month, shared results and balance
@@ -109,8 +111,14 @@ cash or removes existing obligations.
   export as a recovery copy.
 - Play a mature campaign and record planning/turn-resolution delays, unclear
   bottlenecks, dominant strategies and whether competition remains enjoyable.
+- Type a different Workforce bank-wide reserve, leave the field, and confirm
+  the draft retains it. Then review the separately staged department reserve.
+  The budget strip should use the higher reserve, not their sum. Report if an
+  edit disappears or the budget does not update; do not lower reserves just to
+  make a risky plan appear affordable.
 - Record build hash, mode, month and reproduction steps for any problem. Never
   include repository tokens in screenshots, reports or shared saves.
 
-Automated transport checks and browser inspection remain required before the
-candidate handoff. This checklist does not imply they have already passed.
+The current candidate has passed targeted three-transport simulations and
+limited mature-save browser inspection. Full release checks and long-run balance
+review remain separate gates; neither replaces this human checklist.

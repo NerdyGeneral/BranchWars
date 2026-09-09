@@ -2,6 +2,24 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Local checkpoint `b2309cd` now has a replacement six-file QA package:
+`BranchWars-v3.1-export-b2309cd.zip`, SHA-256
+`9031b7818b3c2c7fbf2b0dbf814b4f61665405085e4ee6461dd04c7c923ac3bc`.
+Every ZIP entry matches the verified package directory and manifest. This is
+still a local QA candidate, not final acceptance or GitHub publication.
+The full Windows gate is running on portable `0476a166...`; its initial metadata
+captured the staged repair before the local commit, while the portable and tested
+source bytes remained unchanged. The result must independently confirm that
+source stability before it can count as a pass.
+
+Actual browser QA on the current build imported the 52 MB legacy month-480 save
+to a visible cycle-481 campaign in 2,817 ms; Continue took 2,931 ms. Workforce
+navigation took 329 ms versus 327 ms in unchanged V3 using the same save. These
+single concurrent-desktop samples do not establish a speedup or percentile.
+The current Group7 month-120 protected-budget warning and mature Workforce
+panels were visually readable without overlap in the inspected viewport.
+Final Group7 long-run browser inspection and human two-computer play remain open.
+
 Newest repair: removing research from an investment counterfactual can resume
 paid teaching and leave too few staff for retained work quotas. The genuine
 month284 crash is now reproduced and repaired without changing staff or money.
