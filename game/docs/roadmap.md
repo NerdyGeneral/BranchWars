@@ -8,8 +8,9 @@ The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
 Verification checkpoint: the first final-engine profile now passes all four
-economies through month480, with164 exact replays. The second profile and final
-65f469e8 Windows gate remain running. No blueprint feature, economic parameter,
+economies through month480, with164 exact replays. The second profile remains
+running. The exact65f469e8 full command passes185 captured Windows checks and
+the separate16-campaign standard release suite. No blueprint feature, economic parameter,
 or campaign option changed at this checkpoint. Integrated balance review and
 the local handoff are still required; see the [stability report](v31-stability-report.md).
 
@@ -17,8 +18,8 @@ Latest follow-up: actual terminal-save import and hotseat rematch worked, but
 exposed incorrect free-franchise wording. The current `65f469e8...` client fixes
 that display and explains funding resolution. Every byte outside `renderFinal`,
 including the simulation engine, is unchanged; the existing matched engine runs
-remain valid. New full-client/browser/package verification is required before
-handoff. The earlier `fcf23071...` now has184 passing Windows checks and a passing
+remain valid. New full-client/browser/package verification now passes; the
+second-profile review and handoff remain open. The earlier `fcf23071...` has184 passing Windows checks and a passing
 16-campaign release suite. No expansion or publication was added.
 
 ### Previous client checkpoint — fcf23071

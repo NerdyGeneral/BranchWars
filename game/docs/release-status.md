@@ -4,7 +4,9 @@
 
 September 9 verification update: all four final-engine `department-B` / Chairman
 campaigns pass 480 months each (1,920 months / 164 exact replays). All four second
-profile campaigns and the new 65f469e8 full Windows gate remain running. Actual
+profile campaigns remain running. The exact65f469e8 full command now passes185
+captured Windows checks and the separate16-case/1,920-month standard release
+suite; package identities are reverified. Actual
 lending, facilities, agency losses and deposit concentration are recorded in the
 [stability report](v31-stability-report.md); this is not final balance acceptance.
 
@@ -13,8 +15,8 @@ message that incorrectly claimed a free franchise transfer. Accounting-pilot
 receivership and funding-resolution copy now describe the actual rules. The
 new regression passes; old non-pilot wording is preserved. No simulation byte
 changed. The pure-engine matrix continues on identical final engine bytes.
-Fresh full-client Windows/browser/package checks and the matrix review remain
-required. The preceding `fcf23071...` completed184 Windows checks and the separate
+Full-client Windows/browser/package checks now pass; the matrix review and final
+handoff remain required. The preceding `fcf23071...` completed184 Windows checks and the separate
 16-campaign release suite; those are earlier-client evidence, not final approval.
 
 ### Pre-display-correction checkpoint — fcf23071

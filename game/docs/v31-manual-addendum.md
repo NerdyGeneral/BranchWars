@@ -142,6 +142,8 @@ staff/service constraints without inventing bankers or silently changing mandate
 The current execution-capacity repair has passed mature-save browser inspection,
 ordinary keyboard reserve editing and one actual packaged two-browser localhost
 LAN turn, including a custom purple bank and shared-settings readiness reset.
-Its full Windows gate and eight matched long-run campaigns are still running.
-The prior build's full Windows pass does not certify changed engine bytes. None
-of these checks replaces this physical two-computer and human-fun checklist.
+The exact65f469e8 client now passes185 captured Windows checks and the separate
+standard release-balance suite. Four of eight matched long-run campaigns are
+complete; the other four and final balance review remain pending. The current
+terminal import/rematch also confirms the no-free-franchise ending. None of
+these checks replaces this physical two-computer and human-fun checklist.

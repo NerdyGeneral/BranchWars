@@ -8,9 +8,24 @@ regional / Financial Group expansion. No GitHub publication is authorized.
 
 All four `department-B` / Chairman cases have now completed 480 months each on
 the exact final engine: **1,920 months and 164 exact half-ready replays**, without
-software or invariant failure. The four `department-A` / VP cases and the new
-65f469e8 full Windows gate are still running. This is interim evidence, not final
-candidate acceptance. No code or balance values changed in response to it.
+software or invariant failure. The four `department-A` / VP cases are still
+running. This is interim matrix evidence, not final candidate acceptance. No
+code or balance values changed in response to it.
+
+The **exact 65f469e8 client** has now passed the complete Windows command:
+185/185 captured checks, unchanged source, repeated balance output, captured Git
+metadata, Windows LAN, current Group7 staffing/adversarial transports, and the
+new terminal-copy regression. Report:
+`reports/baselines/N-00-2026-09-09T11-08-22-328Z.json`, SHA-256
+`29dd4f4479dd44de39e6a416cbed3e94bd9d7d1785dc138da81d8c15dd9e0352`.
+The separate standard release-balance suite passes 16 cases / 1,920 months,
+with no skipped or cancelled initiatives and maximum view559,901 bytes. Report:
+`reports/baselines/release-balance-2026-09-09T12-00-32-492Z.json`, SHA-256
+`c3c69c1b83c8983f5f3703c5fed55d6b3862e0f82e55ab21006f01021e249e8d`.
+Those standard campaign rules are not the Group7 matched long-campaign matrix;
+the suite is a separate regression gate, not a substitute for its pending cases.
+The full command exited0. The current package/ZIP identities were reverified by
+`reports/local/v31-completion-audit-65f469e8-windows-passed.json`.
 
 | Economy, profile B | Loans at month 480, bank 1 / bank 2 | Originations in final 12 months | Active companies | Largest player deposit share |
 | --- | --- | --- | --- | --- |
@@ -867,7 +882,7 @@ under way. It is labelled mature-save stress, not creation-to480 matched evidenc
 The previous snapshot's matrix remains diagnostic; final-source comparisons,
 release gates and a replacement export are still required.
 
-## Completion audit — current fcf23071, not a release signoff
+## Completion audit — current 65f469e8, not a release signoff
 
 The chronology above preserves old evidence, including superseded failures and
 passes. Only exact-current-build evidence can close the remaining release gates.
@@ -875,16 +890,16 @@ passes. Only exact-current-build evidence can close the remaining release gates.
 | Goal requirement | Evidence and current disposition |
 |---|---|
 | Production V3 starting point; preserved published releases | Published V3 archive and portable are hash-pinned by `v31_version_boundary.test.js`. Work remains in a separate repair worktree. No publication is authorized. |
-| Reproduce before repairing; protect servicing and controls | Actual month58/92/284/318 failures have saved fixtures and targeted regressions. Staffing, funded origination and investment tests cover protected work and real costs. Final full-suite result is still pending. |
+| Reproduce before repairing; protect servicing and controls | Actual month58/92/284/318 failures have saved fixtures and targeted regressions. Staffing, funded origination and investment tests cover protected work and real costs; all pass in the exact-client185-check Windows report. |
 | Funded corporate circulation; real company failures | `v31_circulation.test.js` traces actual premium/provider cash, refuses double settlement and checks total cash at every month. Full-bank matrix validates the live books. Recovery to receivership shows companies can still fail; final matrix assessment remains open. |
 | Credible existing facility/product strategies | The matched harness records loan vintages, originations/runoff/losses, staffing, office mix, capital, cash and subsidiaries. No forced equal shares or survival. All eight current case reports and the final comparison are still required. |
-| Four economies, matched seeds and AI profiles, 24/120/480 | Eight published-V3 baseline reports are retained, including four early software failures. Current two-profile queues cover all four economies; failed or terminal horizons will be unavailable, never extrapolated. |
-| Legacy behavior, optional selections, saves and rematches | Published Group1–6 exact one-month comparisons supplement unchanged legacy goldens/save continuations. Feature and lifecycle suites are included in the current full Windows gate; do not treat the boundary smoke as full compatibility proof. |
-| Determinism and accounting/resource conservation | Monthly full-bank validators and periodic exact half-ready replays run in each matrix case. The separate actual318 recovery completed144 settlements/13 replays to legal receivership. Final aggregate evidence remains pending. |
-| Multiplayer reconnect, readiness, stale/duplicate packets, malformed settings and privacy | Current Group7 wrappers run actual complete clients through GitHub, LAN and direct-link simulations. Underlying tests cover delayed digests, stale sessions, duplicate commits, sealed-checkpoint recovery and private-book rejection. Require the final runner results, not merely test presence. |
+| Four economies, matched seeds and AI profiles, 24/120/480 | Eight published-V3 baseline reports are retained, including four early software failures. All four current B/Chairman cases reach480; four A/VP cases remain live. Failed or terminal horizons are unavailable, never extrapolated. |
+| Legacy behavior, optional selections, saves and rematches | Published Group1–6 exact one-month comparisons supplement unchanged legacy goldens/save continuations. Feature and lifecycle suites pass in the current full Windows gate; the boundary smoke alone is not full compatibility proof. |
+| Determinism and accounting/resource conservation | Monthly full-bank validators and periodic exact half-ready replays run in each matrix case. Four completed cases provide1,920months/164replays. The separate actual318 recovery completed144 settlements/13 replays to legal receivership. Final eight-case aggregate evidence remains pending. |
+| Multiplayer reconnect, readiness, stale/duplicate packets, malformed settings and privacy | Current Group7 wrappers pass in the exact-client Windows report, using complete clients through GitHub, LAN and direct-link simulations. Reviewed tests cover delayed digests, stale sessions, duplicate commits, sealed-checkpoint recovery and private-book rejection. This does not cover every possible transport failure or physical two-computer acceptance. |
 | Mature saves and browser responsiveness | Exact-package40MB Group7 import, Workforce, staffing proposal and Forecast observed in the browser. Separate5MiB-quota storage test verifies exact local/checkpoint recovery, corruption rejection and prior-save preservation. Timings are individual observations, not percentiles. |
 | Usable setup/lobby and related controls | Actual two-browser packaged LAN room: distinct custom colors, green connection, host authority, pending-settings start block, readiness reset and identical resolved turn. Ordinary keyboard reserve changes and reviewed office staffing were also observed. |
-| Exact final Windows/build/reference/packaging | Current full Windows runner is live; old183-check pass is superseded. Current six-file QA ZIP and every entry are verified against the allowlist/manifest. Recheck identity at final handoff. |
+| Exact final Windows/build/reference/packaging | Exact65f469e8 full command passes:185captured checks and separate16-case/1,920-month release suite. Current six-file QA ZIP, directory and every entry match the verified identities. Recheck identity at final handoff; matrix and consolidated balance review remain open. |
 | Deliverable documents and local playable candidate | QA ZIP, changelog, roadmap/status and manual addendum exist. Final consolidated before/after report, evidence review and candidate handoff remain unfinished. |
 | Two-computer acceptance and enjoyable competition | Explicitly outstanding; friend checklist is in the manual addendum. Simulated transports and localhost browser play do not establish this. The goal permits this human acceptance to remain outstanding at technical handoff. |
 
