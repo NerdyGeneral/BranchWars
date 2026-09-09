@@ -49,6 +49,8 @@ institutionChecks.push(...functionChecks);
 institutionChecks.push('v31_facility_conflicts.test.js');
 institutionChecks.push('v31_training_deferral.test.js');
 institutionChecks.push('v31_execution_reserve.test.js');
+institutionChecks.push('v31_final_results.test.js');
+files.push('tests/v31_final_results.test.js');
 files.push('tests/v31_execution_reserve.test.js','tests/fixtures/v31-group7-balanced317.json.gz');
 files.push('tests/v31_training_deferral.test.js','tests/fixtures/v31-group7-growth283.json.gz');
 files.push('tests/v31_facility_conflicts.test.js','tests/fixtures/v31-group7-regulatory91.json.gz');

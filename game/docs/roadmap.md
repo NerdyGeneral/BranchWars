@@ -7,6 +7,16 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Latest follow-up: actual terminal-save import and hotseat rematch worked, but
+exposed incorrect free-franchise wording. The current `65f469e8...` client fixes
+that display and explains funding resolution. Every byte outside `renderFinal`,
+including the simulation engine, is unchanged; the existing matched engine runs
+remain valid. New full-client/browser/package verification is required before
+handoff. The earlier `fcf23071...` now has184 passing Windows checks and a passing
+16-campaign release suite. No expansion or publication was added.
+
+### Previous client checkpoint — fcf23071
+
 Currentfcf browser/package checkpoint is complete: genuine mature import,
 keyboard reserve staging, reviewed office-staffing correction and actual packaged
 two-browser LAN identity/settings/turn checks. A versioned six-file QA ZIP exists.

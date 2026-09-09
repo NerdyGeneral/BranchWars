@@ -2,6 +2,17 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Latest September 9 candidate: `65f469e8...` corrects a browser-observed terminal
+message that incorrectly claimed a free franchise transfer. Accounting-pilot
+receivership and funding-resolution copy now describe the actual rules. The
+new regression passes; old non-pilot wording is preserved. No simulation byte
+changed. The pure-engine matrix continues on identical final engine bytes.
+Fresh full-client Windows/browser/package checks and the matrix review remain
+required. The preceding `fcf23071...` completed184 Windows checks and the separate
+16-campaign release suite; those are earlier-client evidence, not final approval.
+
+### Pre-display-correction checkpoint — fcf23071
+
 Current `fcf23071...` has a verified six-file local QA ZIP
 `BranchWars-v3.1-export-3671b47.zip` (SHA-256
 `864928fe3df8ec5a3c226ca31f0f7355823a39be6922dc12ce84e0be1450021b`). Exact-package

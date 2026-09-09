@@ -4,7 +4,43 @@ September 8, 2026. **Not a final debug report or release certification.**
 This report follows the bounded local V3.1 goal, not completion of the broader
 regional / Financial Group expansion. No GitHub publication is authorized.
 
-## September 9 execution-capacity repair — current portable fcf23071
+## September 9 terminal display correction — current portable 65f469e8
+
+The `fcf23071...` build completed all **184** captured Windows checks with no
+failures, unchanged source, exact repeated balance output and Windows LAN passing.
+Its separate release-balance suite also passed **16 campaigns / 1,920 months**.
+Full report: `reports/baselines/N-00-2026-09-09T10-13-19-574Z.json`, SHA-256
+`bac57add978e386826dc93c8a83bd8b7909995d28a46b9c780186635f931d4f1`.
+These results do not certify the subsequently corrected display bytes.
+
+An additional actual-browser check imported the genuine month461 receivership
+save (36,813,286 bytes) in 1,164 ms, displayed both final cards, and completed the
+two separate hotseat rematch authorizations. It returned to month1 with the same
+bank names, six-market pilot and Group/Products/Workforce navigation. The timing
+is one concurrent-load observation. An initially incorrect test-file wrapper
+was rejected; the normal raw exported-game shape imported successfully.
+
+This check exposed a misleading legacy sentence: the winner "ASSUMED THE
+FRANCHISE," although the accounting pilot awards no free assets. The result
+screen now states who won the banking rivalry and explicitly says no free assets
+or franchise are transferred. Funding-covenant resolution also receives its
+specific three-month explanation instead of the generic market-war ending.
+Legacy non-pilot wording and rematch controls are retained. The new display test
+fails before the fix and passes after it, covering both viewpoints, single/both
+failures, funding resolution, legacy text and rendering purity.
+
+Current portable SHA-256:
+`65f469e82f2d747f12334caf84a1079ea4eade2406cfa9635239e2049416644e`.
+The engine remains exactly
+`cc229f83d09b769461497646daa64ce68e0c63a364b68ab6b175fa712db40633`.
+`reports/local/v31-display-boundary-evidence.json` proves **every portable byte
+outside `renderFinal` is identical** to `fcf23071...`. The ongoing pure-engine
+campaign queues therefore still execute the exact final simulation, with their
+original source identities retained. They are not browser/client tests. New
+full Windows, actual terminal-browser and packaging checks are required for
+the changed client, followed by final balance review and local handoff.
+
+## Previous execution-capacity checkpoint — portable fcf23071
 
 ### Actual failed-save continuation: crash repaired, economic loss retained
 

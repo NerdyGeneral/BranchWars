@@ -2,6 +2,13 @@
 
 ## Local V3.1 candidate — in progress, not published
 
+- Correct actual-browser terminal-result wording for accounting pilots: a win
+  through receivership does not grant the failed bank's assets or franchise.
+  Explain funding-covenant resolution separately. Preserve legacy non-pilot copy,
+  final cards and rematch behavior. This is display-only; engine bytes and balance
+  values are unchanged. Add before/after display regression and real terminal
+  import/two-seat rematch evidence.
+
 - Reproduce the real Balanced/Chairman month318 failure: paid teaching reduces
   execution after early project selection. Group7 now defers excess unstarted
   initiatives using final shared capacity, then recomputes funded quotas.

@@ -61,6 +61,13 @@ real bank and no office is created until the ordinary paid construction process.
 
 ## Cash in the vault is not all available to spend
 
+Accounting-pilot receivership awards the surviving bank a victory, not a free
+transfer of the failed bank's assets or franchise. Three consecutive months
+above the emergency funding limit can also cause funding resolution. The final
+cards describe both institutions; a higher displayed enterprise value does not
+overrule a solvency failure. You can lose with the larger deposit book and a
+large cash balance if operating losses exhaust your own capital.
+
 With facility lifecycle enabled, the shared budget strip now includes your
 protected cash reserve. The higher of Workforce's bank-wide reserve and
 Leadership & budgets' common discretionary reserve applies; the two are not
