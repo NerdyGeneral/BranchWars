@@ -19,8 +19,9 @@ catalog is authorized only after release gates pass.
   `output/v3-usability-baseline-20260909/source-working-tree.tar`.
   Archive SHA-256: `3cf353dd333793d80595b5333ead668271f8a8b395728692e8f7064a9cd5dbf4`.
 - Complete baseline Git history also preserved in verified `source-history.bundle`.
-- Fresh baseline fast gate running against the unchanged original tree; its log
-  is in that same private baseline directory. Result not yet accepted.
+- Fresh baseline fast gate completed successfully against the unchanged original
+  tree. Its log is in that same private baseline directory. This is baseline
+  evidence, not the candidate's final full Windows release gate.
 - Existing main default game and V2 are intentionally retained. Only V3 catalog
   entries/artifacts and related documentation will be updated at publication.
 - Manual sources: `manual/build_v3_manual.py`, `manual/build_v31_manual.py`,
@@ -35,12 +36,12 @@ evidence; browser, release and human acceptance are separate gates.
 
 | ID | Recommendation / required outcome | Batch | Status / evidence |
 |---|---|---|---|
-| 01 | Unified People & Operations overview | 2 | Pending |
-| 02 | Headcount allocation distinct from work coverage | 2 | Pending |
-| 03 | Shared staff/time reservation explanation | 2 | Pending |
-| 04 | Understandable staff units with exact detail | 2 | Pending |
-| 05 | Consequence-first staffing shortages | 2 | Pending |
-| 06 | Compare shortage remedies and displaced work | 2 | Pending |
+| 01 | Unified People & Operations overview | 2 | Partial: shared summary and shortcuts implemented; consolidated editing workflow remains |
+| 02 | Headcount allocation distinct from work coverage | 2 | Implemented: independent task-delivery and headcount measures; automated and mature browser evidence |
+| 03 | Shared staff/time reservation explanation | 2 | Implemented initial role reconciliation table; remaining time explicitly precedes facilities/sales |
+| 04 | Understandable staff units with exact detail | 2 | Partial: quarter-work explanation and exact-source task values; detailed editor wording remains |
+| 05 | Consequence-first staffing shortages | 2 | Implemented initial task shortage table with business consequences; final integrated review open |
+| 06 | Compare shortage remedies and displaced work | 2 | Partial: explicit remedy tradeoffs; numerical before/after remedy comparison remains |
 | 07 | Unified generalist/specialist recruitment | 2 | Pending |
 | 08 | Staffing arrival/availability timeline | 2 | Pending |
 | 09 | Training costs, benefits and timing | 2 | Pending |
@@ -52,8 +53,8 @@ evidence; browser, release and human acceptance are separate gates.
 | 15 | All submission blockers with direct links | 1 | Partial: independent readiness/quote blockers and links implemented; deeper per-subsystem validator enumeration remains |
 | 16 | Required decisions separated from opportunities | 1 | Implemented initial review; `usability_plan_review.test.js`, early/mature browser; final integration gate open |
 | 17 | Consistent current/form/staged/active lifecycle | 1 | Partial: review legend and retained unstaged Workforce status; cross-editor standardization remains |
-| 18 | Monthly changes drawer with cost/timing/dependencies | 1 | Pending |
-| 19 | Scoped undo and unfinished-form protection | 1 | Partial: Leadership/functions raw fields retained and explicit discard tested; plan-level undo and remaining editors pending |
+| 18 | Monthly changes drawer with cost/timing/dependencies | 1 | Partial: opening-draft differences, timing and whole-plan undo quote implemented; richer system-specific cost/timing labels remain |
+| 19 | Scoped undo and unfinished-form protection | 1 | Partial: guarded individual field/initiative undo with dependent conflicts, plus Leadership/functions form retention; remaining editors pending |
 | 20 | Contextual navigation and search | 3 | Pending |
 | 21 | Retained screen context and appropriate scroll/focus | 1 | Partial: fresh entry/Continue opens Overview at top; remaining per-workspace context pending |
 | 22 | Precise financial measure names | 3 | Pending |
@@ -180,7 +181,56 @@ exist in a clean worktree; report hashes and findings are retained.
 4. Continue the remaining four batches and release gates; the full 55-item
    scope is still the completion criterion.
 
-The original baseline fast gate is still running in execution session `43117`
-against the preserved original tree. Revalidate that handle or inspect the
-baseline log/process before starting another baseline run; do not infer a stop
-from a quiet log. No finished baseline result is claimed yet.
+The original baseline fast gate in execution session `43117` completed with
+exit code 0 and `Fast checks passed (not full release acceptance).` The completed
+handle was polled directly; no duplicate baseline run was started.
+
+## Second implementation checkpoint — monthly changes and People overview
+
+Candidate portable SHA-256:
+`91345ed581567ebf9279f1c38f26dbbb1f07a98306ba179a3de214e6b5433945`.
+The exact engine digest remains the unchanged baseline above.
+
+- The monthly drawer compares staged instructions with the opening draft after
+  bounded management defaults, not with an invented copy of last month's rules.
+  No opening-draft metadata enters saves or public/transport views.
+- Individual nested fields, research allocations and individual initiatives can
+  be reviewed and undone. The legacy initiative alias follows the remaining list.
+  Other orders are preserved. New review conflicts appear before confirmation;
+  cancellation changes nothing, and stale/locked/owner/month/session proposals
+  cannot apply. Costs are explicitly whole-plan quotes, not fabricated per-order
+  charges. Confirmation/cancellation restore keyboard focus.
+- People & Operations summarizes actual employees, headcount assignment, exact
+  task coverage and next-month recruitment from current canonical quotes. Its
+  role-time table reconciles assigned, teaching, retained, extra and fractional
+  reservations. Remaining time is not labeled idle or available twice.
+- Household service, credit administration and other shortage rows explain the
+  affected business. Remedy options describe displacement, costs and timing,
+  without hiring, outsourcing or changing the player's plan automatically.
+- The older function desk now calls its measure **Aggregate quota shortfall**:
+  zero grouped quota shortfall does not establish coverage for every task.
+  The mature browser exposed this distinction (50/50 employees assigned, zero
+  grouped quota shortfall, household physical task coverage 48/53.170).
+- The recruitment summary now reads the shared engine limit instead of hardcoding
+  six in the presentation. No limit or economic formula changed.
+
+Verification: 10 new change/undo groups and 7 new People groups pass against the
+assembled production client/engine. Existing forms (7), plan review (7), live
+functions (16), department workforce (5), obligations (12), local transitions,
+network lifecycle, architecture and reference checks pass. Normalization occurs
+on a clone, including partial drafts; rendering does not repair the real draft.
+The isolated workforce harness gained the actual game binding required by its
+new navigation guard; no existing economic assertions or goldens were removed.
+
+Actual loopback browser: early decision -> drawer -> dependency review -> Cancel
+retains response -> Confirm restores required decision and disables Ready. A
+preserved 46.6 MB month-481 save imports and opens the new People overview with
+50 employees, 30 generalists/20 specialists, and task-level shortages. No turn
+was submitted. The final grammar/aggregate label clarification was subsequently
+rebuilt and tested; final all-screen visual acceptance remains open.
+
+Next: finish workforce consolidation (hiring, training/leadership and bounded
+proposal comparisons), remaining form consistency and richer per-order labels;
+then grouped navigation/attention, connected workflows and full release gates.
+No batch or release is declared complete. Manual, final balance/performance,
+transport release validation, packaging and GitHub publication remain pending.

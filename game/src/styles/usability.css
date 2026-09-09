@@ -1,9 +1,13 @@
 .plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.people-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.people-summary>div{border:1px solid #c5d2e2;border-radius:8px;padding:.8rem;background:#f5f8fc}.people-summary span,.people-summary small{display:block}.people-summary b{display:block;font-size:1.25rem;margin:.35rem 0}.people-summary small{color:var(--muted);line-height:1.45}.people-shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}#peopleOverview details{margin:.8rem 0}#peopleOverview .table-scroll{overflow:auto}#peopleOverview summary{cursor:pointer;padding:.5rem 0}#peopleOverview h3{margin:1rem 0 .5rem}
+@media(max-width:900px){.people-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.people-summary{grid-template-columns:1fr}}
 .plan-review-heading span{font-size:.85rem;color:var(--muted)}
 .plan-review-list{list-style:none;padding:0;margin:.6rem 0;display:grid;gap:.5rem}
 .plan-review-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem;border:1px solid #c5d2e2;border-left:4px solid #b86c12;border-radius:8px;background:#fff}
 .plan-review-item.is-blocker{border-left-color:#bd3541}
 .plan-review-item p{font-size:.9rem;line-height:1.45;margin:.3rem 0 0;max-width:80ch}
 .plan-review-item .btn{flex-shrink:0}
+.plan-change-list{padding-left:1.4rem;display:grid;gap:.5rem}.plan-change-list li{display:flex;gap:1rem;align-items:start;justify-content:space-between;border-bottom:1px solid #ccd6e3;padding:.6rem 0}.plan-change-list p{margin:.3rem 0;overflow-wrap:anywhere}.plan-change-list .btn{flex-shrink:0}.monthly-undo-confirm{border:2px solid #af741d;border-radius:8px;padding:1rem;margin:.75rem 0;background:#fffaf0}
+@media(max-width:700px){.plan-change-list li{flex-direction:column}.plan-change-list .btn{align-self:flex-start}}
 #monthlyPlanReview details{margin-top:.55rem}#monthlyPlanReview summary{cursor:pointer;font-size:.9rem;line-height:1.4;padding:.45rem 0}
 @media(max-width:700px){.plan-review-item{align-items:stretch;flex-direction:column}.plan-review-item .btn{align-self:flex-start}}

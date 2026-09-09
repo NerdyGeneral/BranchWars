@@ -14,7 +14,7 @@ for(const plan of plans){plan.investments={};plan.newProjects=[];plan.newProject
 Object.assign(plans[0],{allocation:copy(p.allocation),contractBid:null,opportunity:null});
 plans[0].leaderOrders.business='mentor';plans[0].workforcePolicy.training.business=20000;
 const nodes=new Map();ctx.$=selector=>{if(!nodes.has(selector))nodes.set(selector,{innerHTML:'',value:'',classList:{toggle(){}},addEventListener(){}});return nodes.get(selector);};
-ctx.E=E;ctx.view=E.publicState(game,0);ctx.draft=copy(plans[0]);ctx.workspaceTab='workforce';
+ctx.E=E;ctx.game=game;ctx.view=E.publicState(game,0);ctx.draft=copy(plans[0]);ctx.workspaceTab='workforce';
 ctx.esc=x=>String(x);ctx.money=x=>'$'+Math.round(x).toLocaleString('en-US');
 for(const name of ['renderDepartments','renderHouseholds','renderCollections','renderFinancialGroup','setWorkspaceTab','renderReady','renderProjects','toast'])ctx[name]=()=>{};
 vm.runInContext(fs.readFileSync(path.join(root,'src/ui/workforce.js'),'utf8'),ctx);

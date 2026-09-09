@@ -10,6 +10,12 @@ is authorized only after those gates pass; no new candidate is published yet.
 The following handoff entries are historical evidence, not verification of this
 UI overhaul.
 
+Second local checkpoint: monthly changes with guarded undo, explicit dependency
+conflicts, and a People & Operations coverage overview. Seventeen new test groups
+pass; selected existing gates and early/mature browser workflows pass. The original
+baseline fast gate also completed successfully. These are incremental results,
+not a final full Windows/balance/manual/publication acceptance claim.
+
 ## V3.1 local candidate — September 9 final handoff
 
 Scoped implementation and automated verification are complete: exact65F client

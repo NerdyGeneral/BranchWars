@@ -26,6 +26,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
+  if(workspaceTab==='workforce')renderPeopleOverview(v);
   if (!v.me.departmentOffice || workspaceTab === 'workforce') renderDepartments(v);
   renderHouseholds(v);
   renderCollections(v);
@@ -64,7 +65,7 @@ function renderWorkforce(v) {
     <div class="workforce-summary">
       <div><span>Existing salary premiums</span><b>${money(review.payroll)}/month</b><small>In addition to base payroll; paid even if reassigned.</small></div>
       <div><span>Forecast training spend</span><b>${money(review.training.total)}/month</b><small>${review.training.paused ? 'All department training paused by cash/capital protection.' : 'Only existing specialists below 100 skill can train.'}</small></div>
-      <div><span>Combined recruiting</span><b>${E.planHires(draft)}/6 bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
+      <div><span>Combined recruiting</span><b>${E.planHires(draft)}/${E.hireLimit(v.me)} bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
     </div>
     <div class="table-scroll"><table class="regional-table"><thead><tr><th>Specialty</th><th>${v.me.departmentOffice?'Qualified / assigned / productive staff':'Qualified / assigned staff'}</th><th>Skill</th><th>Effective staff bonus</th><th>Salary premium/month</th></tr></thead><tbody>${table}</tbody></table></div>
     ${morale?`<div id="workforceMorale" class="workforce-card"><h3>WORKLOAD &amp; RETENTION</h3><p class="small">Morale: <b>${v.me.stats.morale}/100</b>. Draft workload-only change: <b>${morale.change>0?'+':''}${morale.change.toFixed(2)}/month</b>, before the 0–100 bounds, executive events, rival actions and consequences.</p><p class="micro">Base recovery ${morale.base}; Retail workload penalty ${morale.serviceShortfall.toFixed(2)}; Operations penalty ${morale.operationsShortfall.toFixed(2)}. Productive staff and specialist expertise count; a paid teacher is unavailable. Low morale does not prohibit hiring. Recruits cost cash, add recurring payroll and arrive next month. At 5 morale or less, a bank with more than five employees can lose a banker during consequences.</p></div>`:''}
@@ -94,4 +95,47 @@ function renderWorkforce(v) {
   const policy = () => stageWorkforcePolicy(v, row.role, Number($('#workforceBudget').value), Number($('#workforceReserve').value));
   $('#workforceBudget').addEventListener('change', policy);
   $('#workforceReserve').addEventListener('change', policy);
+}
+
+// One read-only people overview, using the same physical reservations and
+// delivery quotes as the detailed desks. No inferred customers or profit.
+function peopleOverviewModel(v,plan=draft){
+ if(!v.me.workforce)return null;
+ plan=JSON.parse(JSON.stringify(plan));
+ E.normalizeWorkforcePlan(v.me,plan);
+ const w={generalists:v.me.stats.staff-Object.values(v.me.workforce.departments).reduce((sum,row)=>sum+row.count,0),quote:E.planBudget(v.me,plan)},f=v.me.departmentFunctions?E.departmentFunctionsQuote(v,v.me,plan):null;
+ const assigned=Object.values(plan.allocation).reduce((sum,n)=>sum+n,0);
+ const tasks=f?.delivery?.rows.map(row=>({id:row.id,workload:row.workload,served:row.planned.served,shortfall:row.planned.shortfall}))||[];
+ const pools=f?Object.keys(f.attribution.assignedQuarters).map(role=>({role,assigned:f.attribution.assignedQuarters[role],teaching:f.attribution.paidTeacherQuarters[role],retained:Object.values(f.attribution.exactRetainedQuarters).reduce((n,row)=>n+row[role],0),extra:f.allocatedPools[role],rounding:f.attribution.residualRoundingHold[role],remaining:f.remainingPools[role]-f.overcommittedPools[role]})):[];
+ return {w,f,tasks,pools,assigned,unallocated:v.me.stats.staff-assigned,headcount:v.me.stats.staff,hires:E.planHires(plan),hireLimit:E.hireLimit(v.me)};
+}
+function renderPeopleOverview(v){
+ const mount=$('#peopleOverview');if(!mount)return;
+ let model;try{model=peopleOverviewModel(v);}catch(error){mount.innerHTML='<p class="bad" role="status">People overview unavailable: '+esc(error.message)+'. Review your workforce instructions; no orders were changed.</p>';return;}
+ if(!model){mount.innerHTML='';return;}
+ const {w,f,tasks,pools}=model,short=tasks.filter(row=>row.shortfall>0),roles={service:'Retail & service',business:'Business banking',lending:'Lending',operations:'Operations & risk'},number=n=>Number(n.toFixed(3)).toLocaleString('en-US');
+ const effects={offerSales:['Relationship offers','Less capacity to win additional customer products.'],commercialRelationships:['Commercial relationships','Less business and merchant acquisition capacity.'],householdSupport:['Household service','Service coverage and persistent customer goodwill can suffer.'],applicationProcessing:['Application processing','Fewer pending applications can activate; waiting customers can abandon.'],commercialDelivery:['Contract delivery','Signed service agreements receive less coverage.'],creditAdministration:['Credit administration','New lending is constrained; zero coverage pauses ordinary origination, not existing loan servicing.'],collections:['Collections','Delinquent loan servicing has less capacity.'],technology:['Technology','Platform service and disruption resilience are constrained.'],risk:['Risk & compliance','Credit controls and examination resilience are constrained.'],treasury:['Treasury','Locked-term deposit handling has less coverage.'],people:['People management','Paid training gains and management performance are constrained.']};
+ const button=(key,label)=>'<button class="btn" type="button" data-people-desk="'+key+'">'+label+'</button>';
+ mount.innerHTML='<header class="section-head"><div><h2>PEOPLE &amp; OPERATIONS</h2><p class="small">Who is available, which work is covered, and what needs your attention this month.</p></div></header><div class="people-summary">'+
+  '<div><span>Employees on payroll now</span><b>'+model.headcount+'</b><small>'+w.generalists+' generalists · '+(model.headcount-w.generalists)+' specialists. Specialists are included, not extra employees.</small></div>'+
+  '<div><span>Headcount allocated</span><b>'+model.assigned+' / '+model.headcount+'</b><small>'+(model.unallocated===0?'All assigned. This does not guarantee work coverage.':number(Math.abs(model.unallocated))+(model.unallocated>0?' unassigned; allocate before submitting.':' over-allocated; reduce assignments.'))+'</small></div>'+
+  '<div><span>Quoted task coverage</span><b>'+(f?short.length+' task'+(short.length===1?'':'s')+' short':'Detailed function model off')+'</b><small>'+(f?'Physical/vendor work before specialist effects and other business limits.':'Use the enabled workforce and operating forecasts; no function books were added.')+'</small></div>'+
+  '<div><span>Recruits arriving next month</span><b>'+model.hires+' / '+model.hireLimit+' limit</b><small>'+money(w.quote.recruiting)+' combined signing cost. No new-hire production this month.</small></div></div>'+
+  '<nav class="people-shortcuts" aria-label="People management shortcuts">'+button('allocation','Allocate employees')+button('functions','Review work coverage')+button('recruitment','Hire generalists')+button('development','Specialists & training')+button('leadership','Leaders & budgets')+'</nav>'+
+  (f?'<section><h3>'+(short.length?'Work at risk this month':'Quoted tasks have coverage')+'</h3><p class="small">'+(short.length?'Start with the work you want to protect. More employees alone will not help unless their time is assigned to that task.':'Coverage is a capacity estimate, not guaranteed revenue or a guarantee against disruption.')+'</p>'+
+  (short.length?'<div class="table-scroll" tabindex="0" aria-label="Work shortages and business consequences"><table class="regional-table"><thead><tr><th>Work</th><th>Covered / required</th><th>Uncovered</th><th>Why it matters</th></tr></thead><tbody>'+short.map(row=>'<tr><th>'+esc(effects[row.id]?.[0]||row.id)+'</th><td>'+number(row.served)+' / '+number(row.workload)+'</td><td>'+number(row.shortfall)+'</td><td>'+esc(effects[row.id]?.[1]||'Task delivery has less capacity.')+'</td></tr>').join('')+'</tbody></table></div>':'')+
+  '<p class="micro">Units above are quarter-work units: four physical units equal one employee-month. Vendors supply task work, not employees. Fractions preserve the engine’s exact task forecast; display rounds to three decimals.</p>'+
+  '<details><summary>Where the shared employee time goes</summary><p class="small">Reservations use the same employee pool. Time retained for existing work is not available again for new quotas. Remaining below is before facility/sales use—not idle staff. Specialist expertise can improve output but cannot be spent as another physical employee.</p><div class="table-scroll" tabindex="0" aria-label="Shared employee time accounting"><table class="regional-table"><thead><tr><th>Department</th><th>Assigned</th><th>Teaching</th><th>Retained work</th><th>Extra function work</th><th>Fraction held</th><th>Remaining before facilities/sales</th></tr></thead><tbody>'+pools.map(row=>'<tr><th>'+roles[row.role]+'</th>'+['assigned','teaching','retained','extra','rounding','remaining'].map(key=>'<td>'+number(row[key])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div><p class="micro">Assigned − teaching − retained − extra − held fraction = remaining. Negative remaining is an overcommitment, not additional capacity.</p></details></section>':'')+
+  '<details><summary>Choose a remedy—not an automatic best plan</summary><ul class="small"><li>Reassign available time: no new hire required, but the work losing that time may deteriorate.</li><li>Order permitted vendor capacity: helps the supported task this month if paid; recurring costs and supplier limits apply.</li><li>Recruit: shared hiring limit, signing cost and permanent payroll; arrivals cannot repair this month’s shortage.</li><li>Train or improve leadership: consumes budget and sometimes teaching time now; qualified staff gain capability later.</li><li>Reduce optional demand or defer expansion: preserves capacity, at the cost of growth or commitments. Existing obligations do not disappear.</li></ul><p class="small">Use the detailed desks to compare and stage your choice. This overview never borrows, hires, closes facilities or submits a turn for you.</p></details><hr>';
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle;
+ mount.onclick=event=>{
+  const control=event.target.closest?.('[data-people-desk]');if(!control||!mount.contains(control))return;
+  const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;
+  const key=control.dataset.peopleDesk;
+  if(key==='allocation'||key==='recruitment'){navigatePlanReview({tab:'operations',desk:key==='allocation'?'monthly':'projects',target:key==='allocation'?'#staffGrid':'#hiringPanel'});return;}
+  if(key==='leadership'&&now.me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(now);}
+  if(key==='functions'&&now.me.departmentFunctions){departmentFunctionsLive.tab='functions';renderDepartments(now);}
+  const target=$(key==='development'?'#workforcePanel':now.me.departmentOffice?'#departmentPanel':'#workforcePanel');
+  if(target){for(const detail of target.querySelectorAll?.('details')||[])if(detail.id==='departmentDesk')detail.open=true;target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'start',behavior:'auto'});}
+ };
 }

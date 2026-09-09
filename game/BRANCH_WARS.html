@@ -247,12 +247,16 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 @media(max-width:480px){.operations-tabs{gap:6px}.operations-tabs>button{padding:9px;font-size:.8rem}.operations-tabs>button span{font-size:.68rem}.operations-navigation .section-head{display:block}#operationsDecisionShortcut{margin-top:8px;width:100%}}
 </style>
 <style id="usability-ui">.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.people-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.people-summary>div{border:1px solid #c5d2e2;border-radius:8px;padding:.8rem;background:#f5f8fc}.people-summary span,.people-summary small{display:block}.people-summary b{display:block;font-size:1.25rem;margin:.35rem 0}.people-summary small{color:var(--muted);line-height:1.45}.people-shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}#peopleOverview details{margin:.8rem 0}#peopleOverview .table-scroll{overflow:auto}#peopleOverview summary{cursor:pointer;padding:.5rem 0}#peopleOverview h3{margin:1rem 0 .5rem}
+@media(max-width:900px){.people-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.people-summary{grid-template-columns:1fr}}
 .plan-review-heading span{font-size:.85rem;color:var(--muted)}
 .plan-review-list{list-style:none;padding:0;margin:.6rem 0;display:grid;gap:.5rem}
 .plan-review-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem;border:1px solid #c5d2e2;border-left:4px solid #b86c12;border-radius:8px;background:#fff}
 .plan-review-item.is-blocker{border-left-color:#bd3541}
 .plan-review-item p{font-size:.9rem;line-height:1.45;margin:.3rem 0 0;max-width:80ch}
 .plan-review-item .btn{flex-shrink:0}
+.plan-change-list{padding-left:1.4rem;display:grid;gap:.5rem}.plan-change-list li{display:flex;gap:1rem;align-items:start;justify-content:space-between;border-bottom:1px solid #ccd6e3;padding:.6rem 0}.plan-change-list p{margin:.3rem 0;overflow-wrap:anywhere}.plan-change-list .btn{flex-shrink:0}.monthly-undo-confirm{border:2px solid #af741d;border-radius:8px;padding:1rem;margin:.75rem 0;background:#fffaf0}
+@media(max-width:700px){.plan-change-list li{flex-direction:column}.plan-change-list .btn{align-self:flex-start}}
 #monthlyPlanReview details{margin-top:.55rem}#monthlyPlanReview summary{cursor:pointer;font-size:.9rem;line-height:1.4;padding:.45rem 0}
 @media(max-width:700px){.plan-review-item{align-items:stretch;flex-direction:column}.plan-review-item .btn{align-self:flex-start}}
 </style>
@@ -329,7 +333,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
     <section class="panel workspace-view" data-workspace="products"><div id="productProgramsPanel"></div></section>
     <section class="panel workspace-view" data-workspace="credit"><div id="creditPanel"></div></section>
     <section class="panel workspace-view" data-workspace="group"><div id="financialGroupPanel"></div></section>
-    <section class="panel workspace-view" data-workspace="workforce"><div id="departmentPanel" class="hidden"></div><div id="workforcePanel"></div></section>
+    <section class="panel workspace-view" data-workspace="workforce"><div id="peopleOverview"></div><div id="departmentPanel" class="hidden"></div><div id="workforcePanel"></div></section>
     <section class="panel workspace-view active" data-workspace="overview"><div class="macro-grid"><div class="macro-cell"><span>ECONOMIC REGIME</span><b id="macroName"></b><div id="macroText" class="micro muted"></div></div><div class="macro-cell"><span>POLICY RATE</span><b id="macroRate"></b></div><div class="macro-cell"><span>LOAN DEMAND</span><b id="macroDemand"></b></div><div class="macro-cell"><span>DEPOSIT PRESSURE</span><b id="macroDeposits"></b></div><div class="macro-cell"><span>CREDIT RISK</span><b id="macroCredit"></b></div></div></section>
     <section class="panel workspace-view active hidden" id="recoveryWorkspace" data-workspace="overview"><div id="bankRecoveryMount"></div></section>
     <section class="panel workspace-view active" data-workspace="overview"><div class="section-head"><div><h2>EXECUTIVE OVERVIEW</h2><span class="small muted">Enterprise momentum, balance-sheet pressure, and operating identity at a glance.</span></div><span id="scoreGap" class="small"></span></div><div class="situation-grid"><div class="intel-card chart-card"><h3>ENTERPRISE VALUE · CAMPAIGN TREND</h3><div id="trendChart"></div><div id="operatingReport" class="operating-preview"></div></div><div class="intel-stack"><div id="portfolioIntel" class="intel-card"></div><div id="doctrineIntel" class="intel-card"></div></div></div></section>
@@ -11480,7 +11484,7 @@ function reconcileOperationsWorkspace(){
  setOperationsDesk(operationsDesk);
 }
 function currentView(){return game?E.publicState(game,seat):view}
-function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle}
+function newDraft(v){draft={...(v.me.departmentFunctions?{departmentFunctionsPolicy:E.defaultDepartmentFunctionsPolicy(v.me)}:{}),...(v.me.facilityLifecycle?{facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(v.me)}:{}),...(v.me.facilityNetwork?{facilityPolicy:E.defaultFacilityPolicy(v.me)}:{}),...(v.me.departmentOffice?E.defaultDepartmentPlan(v.me):{}),...(v.me.agency?{agencyPolicy:E.defaultAgencyPlan(v.me)}:{}),...(v.me.financialGroup?{groupPolicy:E.defaultGroupPlan(v.me)}:{}),...(v.me.onboarding?{onboardingPolicy:{...v.me.onboarding.policy}}:{}),...(v.me.relationshipOffers?{relationshipOfferPolicy:{...v.me.relationshipOffers.policy}}:{}),...(v.me.advertising?{advertisingPolicy:{...v.me.advertising.policy}}:{}),...(v.me.productPrograms?{productProgramPolicy:E.productProgramPolicy(v.me)}:{}),...(v.me.creditPerformance?{collectionsPolicy:JSON.parse(JSON.stringify(v.me.creditPerformance.policy))}:{}),...(v.me.householdBook?{householdPolicy:JSON.parse(JSON.stringify(v.me.householdBook.policy))}:{}),...(v.me.workforce?{specialistHires:E.emptySpecialistOrders(),workforcePolicy:JSON.parse(JSON.stringify(v.me.workforce.policy))}:{}),contractBid:null,contractExit:null,...(v.me.serviceDesk?{servicePolicy:JSON.parse(JSON.stringify(v.me.serviceDesk.policy))}:{}),...(v.me.retailLifecycle?{retailMix:{...v.me.retailLifecycle.mix}}:{}),...(v.me.termFunding?{termPolicy:{...v.me.termFunding.policy}}:{}),focus:v.me.focus,allocation:{...v.me.allocation},depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital,products:{...v.me.products},specializations:{...v.me.specializations},opportunity:null,newProject:null,newProjects:[],investments:{},hires:0,capitalAction:false,competitiveAction:'none',decision:null};if(v.me.management){draft.management=JSON.parse(JSON.stringify(v.me.management));const prepared=E.managementPlan(v.me,draft,v.economy);draft=prepared.plan;managementNotes=prepared.notes}draftOwner=v.me.id;lastCycle=v.cycle;if(typeof resetMonthlyChanges==='function')resetMonthlyChanges(v)}
 function ensureDraft(v){if(!draft||draftOwner!==v.me.id||lastCycle!==v.cycle)newDraft(v)}
 function setWorkspaceTab(tab){reconcileOperationsWorkspace();const valid=['overview','markets','customers','credit','group','products','operations','workforce','competition','strategy','intelligence'];workspaceTab=valid.includes(tab)?tab:'overview';$('#gameScreen').dataset.tab=workspaceTab;$$('[data-workspace-tab]').forEach(b=>{const on=b.dataset.workspaceTab===workspaceTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});$$('[data-workspace]').forEach(x=>x.classList.toggle('active',x.dataset.workspace===workspaceTab));if(workspaceTab==='markets'&&draft&&currentView()){const marketView=currentView();renderFacilityNetwork(marketView);if(marketView.me.facilityLifecycle)renderFacilityLifecycle(marketView);}if(workspaceTab==='products'&&draft&&currentView())renderProductPrograms(currentView());if(workspaceTab==='credit'&&draft&&currentView())renderCollections(currentView());if(workspaceTab==='group'&&draft&&currentView())renderFinancialGroup(currentView());if(workspaceTab==='customers'&&draft&&currentView())renderHouseholds(currentView());if(workspaceTab==='workforce'&&draft&&currentView())renderWorkforce(currentView())}
 // Lossless browser-storage envelope only. Campaign/export/wire schemas and
@@ -12557,6 +12561,7 @@ function stageWorkforcePolicy(v, role, budget, reserve) {
   } catch (e) { toast(e.message); renderWorkforce(v); return false; }
 }
 function renderWorkforce(v) {
+  if(workspaceTab==='workforce')renderPeopleOverview(v);
   if (!v.me.departmentOffice || workspaceTab === 'workforce') renderDepartments(v);
   renderHouseholds(v);
   renderCollections(v);
@@ -12595,7 +12600,7 @@ function renderWorkforce(v) {
     <div class="workforce-summary">
       <div><span>Existing salary premiums</span><b>${money(review.payroll)}/month</b><small>In addition to base payroll; paid even if reassigned.</small></div>
       <div><span>Forecast training spend</span><b>${money(review.training.total)}/month</b><small>${review.training.paused ? 'All department training paused by cash/capital protection.' : 'Only existing specialists below 100 skill can train.'}</small></div>
-      <div><span>Combined recruiting</span><b>${E.planHires(draft)}/6 bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
+      <div><span>Combined recruiting</span><b>${E.planHires(draft)}/${E.hireLimit(v.me)} bankers · ${money(review.quote.recruiting)}</b><small>Generalists and specialists share this limit. Recruits arrive next month.</small></div>
     </div>
     <div class="table-scroll"><table class="regional-table"><thead><tr><th>Specialty</th><th>${v.me.departmentOffice?'Qualified / assigned / productive staff':'Qualified / assigned staff'}</th><th>Skill</th><th>Effective staff bonus</th><th>Salary premium/month</th></tr></thead><tbody>${table}</tbody></table></div>
     ${morale?`<div id="workforceMorale" class="workforce-card"><h3>WORKLOAD &amp; RETENTION</h3><p class="small">Morale: <b>${v.me.stats.morale}/100</b>. Draft workload-only change: <b>${morale.change>0?'+':''}${morale.change.toFixed(2)}/month</b>, before the 0–100 bounds, executive events, rival actions and consequences.</p><p class="micro">Base recovery ${morale.base}; Retail workload penalty ${morale.serviceShortfall.toFixed(2)}; Operations penalty ${morale.operationsShortfall.toFixed(2)}. Productive staff and specialist expertise count; a paid teacher is unavailable. Low morale does not prohibit hiring. Recruits cost cash, add recurring payroll and arrive next month. At 5 morale or less, a bank with more than five employees can lose a banker during consequences.</p></div>`:''}
@@ -12625,6 +12630,49 @@ function renderWorkforce(v) {
   const policy = () => stageWorkforcePolicy(v, row.role, Number($('#workforceBudget').value), Number($('#workforceReserve').value));
   $('#workforceBudget').addEventListener('change', policy);
   $('#workforceReserve').addEventListener('change', policy);
+}
+
+// One read-only people overview, using the same physical reservations and
+// delivery quotes as the detailed desks. No inferred customers or profit.
+function peopleOverviewModel(v,plan=draft){
+ if(!v.me.workforce)return null;
+ plan=JSON.parse(JSON.stringify(plan));
+ E.normalizeWorkforcePlan(v.me,plan);
+ const w={generalists:v.me.stats.staff-Object.values(v.me.workforce.departments).reduce((sum,row)=>sum+row.count,0),quote:E.planBudget(v.me,plan)},f=v.me.departmentFunctions?E.departmentFunctionsQuote(v,v.me,plan):null;
+ const assigned=Object.values(plan.allocation).reduce((sum,n)=>sum+n,0);
+ const tasks=f?.delivery?.rows.map(row=>({id:row.id,workload:row.workload,served:row.planned.served,shortfall:row.planned.shortfall}))||[];
+ const pools=f?Object.keys(f.attribution.assignedQuarters).map(role=>({role,assigned:f.attribution.assignedQuarters[role],teaching:f.attribution.paidTeacherQuarters[role],retained:Object.values(f.attribution.exactRetainedQuarters).reduce((n,row)=>n+row[role],0),extra:f.allocatedPools[role],rounding:f.attribution.residualRoundingHold[role],remaining:f.remainingPools[role]-f.overcommittedPools[role]})):[];
+ return {w,f,tasks,pools,assigned,unallocated:v.me.stats.staff-assigned,headcount:v.me.stats.staff,hires:E.planHires(plan),hireLimit:E.hireLimit(v.me)};
+}
+function renderPeopleOverview(v){
+ const mount=$('#peopleOverview');if(!mount)return;
+ let model;try{model=peopleOverviewModel(v);}catch(error){mount.innerHTML='<p class="bad" role="status">People overview unavailable: '+esc(error.message)+'. Review your workforce instructions; no orders were changed.</p>';return;}
+ if(!model){mount.innerHTML='';return;}
+ const {w,f,tasks,pools}=model,short=tasks.filter(row=>row.shortfall>0),roles={service:'Retail & service',business:'Business banking',lending:'Lending',operations:'Operations & risk'},number=n=>Number(n.toFixed(3)).toLocaleString('en-US');
+ const effects={offerSales:['Relationship offers','Less capacity to win additional customer products.'],commercialRelationships:['Commercial relationships','Less business and merchant acquisition capacity.'],householdSupport:['Household service','Service coverage and persistent customer goodwill can suffer.'],applicationProcessing:['Application processing','Fewer pending applications can activate; waiting customers can abandon.'],commercialDelivery:['Contract delivery','Signed service agreements receive less coverage.'],creditAdministration:['Credit administration','New lending is constrained; zero coverage pauses ordinary origination, not existing loan servicing.'],collections:['Collections','Delinquent loan servicing has less capacity.'],technology:['Technology','Platform service and disruption resilience are constrained.'],risk:['Risk & compliance','Credit controls and examination resilience are constrained.'],treasury:['Treasury','Locked-term deposit handling has less coverage.'],people:['People management','Paid training gains and management performance are constrained.']};
+ const button=(key,label)=>'<button class="btn" type="button" data-people-desk="'+key+'">'+label+'</button>';
+ mount.innerHTML='<header class="section-head"><div><h2>PEOPLE &amp; OPERATIONS</h2><p class="small">Who is available, which work is covered, and what needs your attention this month.</p></div></header><div class="people-summary">'+
+  '<div><span>Employees on payroll now</span><b>'+model.headcount+'</b><small>'+w.generalists+' generalists · '+(model.headcount-w.generalists)+' specialists. Specialists are included, not extra employees.</small></div>'+
+  '<div><span>Headcount allocated</span><b>'+model.assigned+' / '+model.headcount+'</b><small>'+(model.unallocated===0?'All assigned. This does not guarantee work coverage.':number(Math.abs(model.unallocated))+(model.unallocated>0?' unassigned; allocate before submitting.':' over-allocated; reduce assignments.'))+'</small></div>'+
+  '<div><span>Quoted task coverage</span><b>'+(f?short.length+' task'+(short.length===1?'':'s')+' short':'Detailed function model off')+'</b><small>'+(f?'Physical/vendor work before specialist effects and other business limits.':'Use the enabled workforce and operating forecasts; no function books were added.')+'</small></div>'+
+  '<div><span>Recruits arriving next month</span><b>'+model.hires+' / '+model.hireLimit+' limit</b><small>'+money(w.quote.recruiting)+' combined signing cost. No new-hire production this month.</small></div></div>'+
+  '<nav class="people-shortcuts" aria-label="People management shortcuts">'+button('allocation','Allocate employees')+button('functions','Review work coverage')+button('recruitment','Hire generalists')+button('development','Specialists & training')+button('leadership','Leaders & budgets')+'</nav>'+
+  (f?'<section><h3>'+(short.length?'Work at risk this month':'Quoted tasks have coverage')+'</h3><p class="small">'+(short.length?'Start with the work you want to protect. More employees alone will not help unless their time is assigned to that task.':'Coverage is a capacity estimate, not guaranteed revenue or a guarantee against disruption.')+'</p>'+
+  (short.length?'<div class="table-scroll" tabindex="0" aria-label="Work shortages and business consequences"><table class="regional-table"><thead><tr><th>Work</th><th>Covered / required</th><th>Uncovered</th><th>Why it matters</th></tr></thead><tbody>'+short.map(row=>'<tr><th>'+esc(effects[row.id]?.[0]||row.id)+'</th><td>'+number(row.served)+' / '+number(row.workload)+'</td><td>'+number(row.shortfall)+'</td><td>'+esc(effects[row.id]?.[1]||'Task delivery has less capacity.')+'</td></tr>').join('')+'</tbody></table></div>':'')+
+  '<p class="micro">Units above are quarter-work units: four physical units equal one employee-month. Vendors supply task work, not employees. Fractions preserve the engine’s exact task forecast; display rounds to three decimals.</p>'+
+  '<details><summary>Where the shared employee time goes</summary><p class="small">Reservations use the same employee pool. Time retained for existing work is not available again for new quotas. Remaining below is before facility/sales use—not idle staff. Specialist expertise can improve output but cannot be spent as another physical employee.</p><div class="table-scroll" tabindex="0" aria-label="Shared employee time accounting"><table class="regional-table"><thead><tr><th>Department</th><th>Assigned</th><th>Teaching</th><th>Retained work</th><th>Extra function work</th><th>Fraction held</th><th>Remaining before facilities/sales</th></tr></thead><tbody>'+pools.map(row=>'<tr><th>'+roles[row.role]+'</th>'+['assigned','teaching','retained','extra','rounding','remaining'].map(key=>'<td>'+number(row[key])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div><p class="micro">Assigned − teaching − retained − extra − held fraction = remaining. Negative remaining is an overcommitment, not additional capacity.</p></details></section>':'')+
+  '<details><summary>Choose a remedy—not an automatic best plan</summary><ul class="small"><li>Reassign available time: no new hire required, but the work losing that time may deteriorate.</li><li>Order permitted vendor capacity: helps the supported task this month if paid; recurring costs and supplier limits apply.</li><li>Recruit: shared hiring limit, signing cost and permanent payroll; arrivals cannot repair this month’s shortage.</li><li>Train or improve leadership: consumes budget and sometimes teaching time now; qualified staff gain capability later.</li><li>Reduce optional demand or defer expansion: preserves capacity, at the cost of growth or commitments. Existing obligations do not disappear.</li></ul><p class="small">Use the detailed desks to compare and stage your choice. This overview never borrows, hires, closes facilities or submits a turn for you.</p></details><hr>';
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle;
+ mount.onclick=event=>{
+  const control=event.target.closest?.('[data-people-desk]');if(!control||!mount.contains(control))return;
+  const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;
+  const key=control.dataset.peopleDesk;
+  if(key==='allocation'||key==='recruitment'){navigatePlanReview({tab:'operations',desk:key==='allocation'?'monthly':'projects',target:key==='allocation'?'#staffGrid':'#hiringPanel'});return;}
+  if(key==='leadership'&&now.me.departmentFunctions){departmentFunctionsLive.tab='leadership';renderDepartments(now);}
+  if(key==='functions'&&now.me.departmentFunctions){departmentFunctionsLive.tab='functions';renderDepartments(now);}
+  const target=$(key==='development'?'#workforcePanel':now.me.departmentOffice?'#departmentPanel':'#workforcePanel');
+  if(target){for(const detail of target.querySelectorAll?.('details')||[])if(detail.id==='departmentDesk')detail.open=true;target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'start',behavior:'auto'});}
+ };
 }
 // Owner-only Workforce desk. All economics and mandate proposals come
 // from the versioned department engine; opening or previewing this desk spends nothing.
@@ -12885,7 +12933,7 @@ const DepartmentFunctionsUI=(()=>{
    const pursuit=built.opportunity,selectedPursuit=current.snapshot.view.opportunities?.find(o=>o.id===current.snapshot.plan.opportunity);
    const pursuitStatus=pursuit?'<div id="df-opportunity" class="notice" role="status"><b>Selected pursuit: '+esc(selectedPursuit?.name||'Pipeline opportunity')+'</b><p class="small">'+esc(D.FUNCTIONS[pursuit.function].name)+' · '+time(pursuit.required)+' quarter-work units required / '+time(pursuit.available)+' unused units quoted. <b>'+(pursuit.eligible?'Capacity available (forecast).':'Pursuit paused.')+'</b> '+esc(pursuit.reason)+'</p><p class="micro">Only work left after ordinary tasks can support this pursuit. Quoted vendor work must be paid at settlement; capacity never guarantees a win. The selected opportunity remains in your draft.</p></div>':'';
    const summary='<div class="credit-summary"><div><span>Estimated monthly workload</span><b>'+q.rows.reduce((n,r)=>n+r.workload,0)+' quarter-work units</b><small>One banker = four quarters; workload is an estimate, not a customer count.</small></div>'+
-    '<div><span>Uncovered work</span><b>'+q.rows.reduce((n,r)=>n+r.shortfall,0)+'</b><small>Adding capacity does not promise revenue or create customers.</small></div><div><span>Quoted vendor expense / month</span><b>'+dollars(q.vendorExpense)+'</b><small>Function-order budget BEFORE these orders: '+dollars(built.context.freeCash)+' (after other shared commitments and reserves). Remaining AFTER quoted function vendors: '+dollars(built.context.freeCash-q.vendorExpense)+'. No charge for previews.</small></div></div>';
+    '<div><span>Aggregate quota shortfall</span><b>'+q.rows.reduce((n,r)=>n+r.shortfall,0)+'</b><small>Zero means the grouped quotas are covered, not every task. Check task-level coverage in People & Operations; capacity is not guaranteed revenue.</small></div><div><span>Quoted vendor expense / month</span><b>'+dollars(q.vendorExpense)+'</b><small>Function-order budget BEFORE these orders: '+dollars(built.context.freeCash)+' (after other shared commitments and reserves). Remaining AFTER quoted function vendors: '+dollars(built.context.freeCash-q.vendorExpense)+'. No charge for previews.</small></div></div>';
    const matrix='<div class="table-scroll" tabindex="0" aria-label="Eight department function workloads" style="max-height:280px;max-width:100%;overflow:auto"><table class="regional-table"><thead><tr><th>Function</th><th>Workload</th><th>Retained / extra staff</th><th>Vendor</th><th>Shortfall</th><th>Monthly vendor cost</th></tr></thead><tbody>'+q.rows.map(r=>'<tr><th>'+esc(D.FUNCTIONS[r.id].name)+'</th><td>'+r.workload+'</td><td>'+r.retained+' / '+r.allocated+'</td><td>'+r.vendor+'</td><td>'+r.shortfall+'</td><td>'+dollars(r.vendorExpense)+'</td></tr>').join('')+'</tbody></table></div>';
    const pool='<details><summary>Shared staff, teaching and protected time</summary><p class="micro">Retained reservations already belong to existing service/collection work. Extra quotas use only remaining physical time. Specialist productivity is not another employee. Planning rounds workloads up and retained capacity down; exact retained fractions still serve their original tasks. Only the residual fraction below is unavailable for new quarter-time orders.</p>'+D.ROLES.map(r=>'<p class="small"><b>'+esc(roles[r])+'</b>: '+a.assignedQuarters[r]+' assigned quarters − '+a.paidTeacherQuarters[r]+' teaching − '+time(D.IDS.reduce((n,id)=>n+a.exactRetainedQuarters[id][r],0))+' retained − '+q.allocatedPools[r]+' extra − '+time(a.residualRoundingHold[r])+' residual fractional-time hold = '+(q.remainingPools[r]-q.overcommittedPools[r])+' remaining for facilities/sales.'+(q.overcommittedPools[r]?' '+q.overcommittedPools[r]+' quarters overcommitted; no extra bankers are available.':'')+'</p>').join('')+'</details>';
    const tasks=built.dispatch?.rows.filter(task=>task.department===selected)||[];
@@ -14422,9 +14470,110 @@ function renderMonthlyPlanReview(v,review){
  mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
   (locked?'<p class="small">Inspection is available. Orders cannot change while locked; use Recall when available.</p>':review.blockers.length?'<ul class="plan-review-list">'+list(review.blockers,'is-blocker')+'</ul>':'<p class="small">No listed submission blockers. Headcount allocation is separate from service coverage; check warnings before locking.</p>')+
   (review.warnings.length?'<details><summary>'+review.warnings.length+' planning warning'+(review.warnings.length===1?'':'s')+' · review tradeoffs</summary><ul class="plan-review-list">'+list(review.warnings,'is-warning')+'</ul></details>':'')+
-  '<details><summary>Optional opportunities · no action required</summary><p class="small">Hiring, research, new projects, relationship pursuits and special competitive actions are optional. Existing recurring commitments remain active until you change them. A quiet month is a valid choice.</p></details>';
+  '<details><summary>Optional opportunities · no action required</summary><p class="small">Hiring, research, new projects, relationship pursuits and special competitive actions are optional. Existing recurring commitments remain active until you change them. A quiet month is a valid choice.</p></details><div id="monthlyChanges"></div>';
+ renderMonthlyChanges(v);
  const campaign=game||view,owner=v.me.id,cycle=v.cycle;
  $$('[data-plan-review]').forEach(button=>button.addEventListener('click',()=>{const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;const item=items[Number(button.dataset.planReview)];if(item)navigatePlanReview(item);}));
+}
+
+// Owner-only UI baseline: never serialized into a campaign or sent to a peer.
+// Captured after management has prepared the opening draft, so delegated
+// defaults are not mislabeled as manual edits. Undo means restore that draft.
+let monthlyChangesState={generation:0,baseline:null,owner:null,cycle:null,proposal:null,open:false,message:''};
+function resetMonthlyChanges(v){
+ monthlyChangesState={generation:monthlyChangesState.generation+1,baseline:JSON.parse(JSON.stringify(draft)),owner:v.me.id,cycle:v.cycle,proposal:null,open:false,message:''};
+}
+function monthlyChangeRows(v){
+ const state=monthlyChangesState;
+ if(!state.baseline||state.owner!==v.me.id||state.cycle!==v.cycle)return [];
+ const rows=[],walk=(before,after,path)=>{
+  if(JSON.stringify(before)===JSON.stringify(after))return;
+  if(path.length===1&&path[0]==='newProjects'&&Array.isArray(before)&&Array.isArray(after)){
+   for(const key of new Set([...before,...after]))if(before.includes(key)!==after.includes(key))rows.push({path:['newProjects',key],before:before.includes(key),after:after.includes(key),initiative:true});
+   return;
+  }
+  if(before&&after&&typeof before==='object'&&typeof after==='object'&&!Array.isArray(before)&&!Array.isArray(after)){
+   for(const key of new Set([...Object.keys(before),...Object.keys(after)]))walk(before[key],after[key],[...path,key]);
+  }else rows.push({path,before,after});
+ };
+ walk(state.baseline,draft,[]);
+ // newProject is a compatibility alias for the first newProjects entry.
+ return rows.filter(row=>row.path[0]!=='newProject');
+}
+function monthlyChangeName(path){
+ const names={allocation:'Staff allocation',hires:'Generalist recruitment',specialistHires:'Specialist recruitment',investments:'Research funding',newProjects:'New initiatives',focus:'Action target',decision:'Executive response',competitiveAction:'Competitive action',capitalAction:'Emergency board request',departmentFunctionsPolicy:'Department delivery',facilityLifecyclePolicy:'Facility instructions',departmentPolicy:'Department budgets',leaderOrders:'Leader instructions',workforcePolicy:'Workforce policy',specializations:'Operating model',products:'Product settings',contractBid:'Service bid',contractExit:'Contract exit',opportunity:'Relationship pursuit'};
+ const words=value=>String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
+ return path.map((part,i)=>i===0?(names[part]||words(part)):words(part)).join(' · ');
+}
+function monthlyChangeValue(v,value,path){
+ if(value===undefined||value===null||value==='none'||value==='')return 'None';
+ if(typeof value==='boolean')return value?'Requested':'Not requested';
+ if(Array.isArray(value))return value.length?value.map(x=>monthlyChangeValue(v,x,path)).join(', '):'None';
+ if(typeof value==='object')return Object.entries(value).map(([k,x])=>monthlyChangeName([k])+': '+monthlyChangeValue(v,x,path)).join('; ');
+ if(path[0]==='focus')return v.territories[value]?.name||String(value);
+ if(path[0]==='newProjects')return v.projects[value]?.name||String(value);
+ if(path[0]==='decision')return 'Response '+String(value).toUpperCase();
+ if(path[0]==='investments')return '$'+Number(value).toLocaleString('en-US');
+ return String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
+}
+function monthlyChangeTiming(path){
+ switch(path[0]){
+  case 'hires':case 'specialistHires':return 'Reports next month; recurring payroll follows. Shared recruitment limit applies.';
+  case 'investments':return 'Funding settles this month; completed capability benefits begin next month.';
+  case 'newProjects':return 'Starts at resolution if eligible; completion depends on project workload and execution capacity.';
+  case 'specializations':return 'Becomes permanent at resolution when its capability prerequisite is met.';
+  case 'focus':return 'Changes the target used by market-dependent instructions. Review those orders together.';
+  case 'allocation':return 'Shared employee pool this month; delivery, training and facility work also reserve capacity.';
+  default:return 'Staged, not yet active. Resolution applies eligibility checks; existing commitments are not cancelled by editing this draft.';
+ }
+}
+function monthlyUndoIsCurrent(v,proposal){
+ return !!proposal&&(game||view)===proposal.campaign&&monthlyChangesState.generation===proposal.generation&&v?.me.id===proposal.owner&&v?.cycle===proposal.cycle&&!v.me.submitted&&!v.gameOver&&JSON.stringify(draft)===proposal.stamp;
+}
+function proposeMonthlyUndo(v,index){
+ v=currentView();if(!v)return null;
+ if(v.me.submitted||v.gameOver)return null;
+ const row=monthlyChangeRows(v)[index];if(!row)return null;
+ const next=JSON.parse(JSON.stringify(draft));let parent=next;
+ if(row.initiative){const key=row.path[1];next.newProjects=next.newProjects.filter(x=>x!==key);if(row.before)next.newProjects.push(key);}
+ else{
+  for(const part of row.path.slice(0,-1)){if(!parent||typeof parent!=='object')return null;parent=parent[part];}
+  const key=row.path.at(-1);if(row.before===undefined)delete parent[key];else parent[key]=JSON.parse(JSON.stringify(row.before));
+ }
+ if(row.path[0]==='newProjects')next.newProject=next.newProjects[0]||null;
+ const before=monthlyPlanReview(v,draft),after=monthlyPlanReview(v,next);
+ const previous=new Set(before.blockers.map(x=>x.id+'|'+x.text));
+ const conflicts=after.blockers.filter(x=>!previous.has(x.id+'|'+x.text));
+ const proposal={campaign:game||view,generation:monthlyChangesState.generation,owner:v.me.id,cycle:v.cycle,stamp:JSON.stringify(draft),row,next,conflicts,before:before.quote,after:after.quote};
+ monthlyChangesState.proposal=proposal;monthlyChangesState.open=true;monthlyChangesState.message='';return proposal;
+}
+function applyMonthlyUndo(v){
+ v=currentView();
+ const proposal=monthlyChangesState.proposal;
+ if(!monthlyUndoIsCurrent(v,proposal)){monthlyChangesState.proposal=null;monthlyChangesState.message='The plan or session changed. Review a fresh undo proposal.';return false;}
+ draft=JSON.parse(JSON.stringify(proposal.next));monthlyChangesState.proposal=null;
+ monthlyChangesState.message='Restored '+monthlyChangeName(proposal.row.path)+'. Other instructions were retained; review any remaining blockers.';return true;
+}
+function renderMonthlyChanges(v){
+ const mount=$('#monthlyChanges');if(!mount)return;
+ const state=monthlyChangesState,rows=monthlyChangeRows(v),locked=v.me.submitted||v.gameOver;
+ if(state.proposal&&!monthlyUndoIsCurrent(v,state.proposal)){state.proposal=null;state.message='The plan or session changed. Review a fresh undo proposal.';}
+ const proposal=state.proposal;
+ const quoteText=quote=>quote?'$'+Math.round(quote.total).toLocaleString('en-US'):'Unavailable';
+ mount.innerHTML='<details id="monthlyChangesDrawer" '+(state.open?'open':'')+'><summary>Monthly changes · '+rows.length+' edited instruction'+(rows.length===1?'':'s')+'</summary><p class="small">Compared with your opening draft, including delegated defaults. Undo restores that opening value, not necessarily last month’s policy. Unstaged form entries are excluded. Recurring commitments remain active.</p>'+
+  (rows.length?'<ol class="plan-change-list">'+rows.map((row,index)=>'<li><div><b>'+esc(monthlyChangeName(row.path))+'</b><p>'+esc(monthlyChangeValue(v,row.before,row.path))+' → <strong>'+esc(monthlyChangeValue(v,row.after,row.path))+'</strong></p><p class="micro">'+esc(monthlyChangeTiming(row.path))+'</p></div><button type="button" class="btn" data-monthly-undo="'+index+'" '+(locked?'disabled':'')+'>Review undo</button></li>').join('')+'</ol>':'<p class="small">No edits relative to the opening draft. Optional action is not required.</p>')+
+  (proposal?'<section class="monthly-undo-confirm" role="group" aria-label="Confirm instruction undo"><b>Restore '+esc(monthlyChangeName(proposal.row.path))+'?</b><p class="small">Whole-plan quoted commitments: '+quoteText(proposal.before)+' → '+quoteText(proposal.after)+'. This is not a per-order price or a forecast of every cash flow.</p>'+(proposal.conflicts.length?'<p class="bad">Undo introduces these submission conflicts. Other orders will not be removed:</p><ul>'+proposal.conflicts.map(x=>'<li>'+esc(x.text)+'</li>').join('')+'</ul>':'<p class="small">No additional conflicts found by the monthly review. Final eligibility checks still apply.</p>')+'<button class="btn" type="button" data-monthly-confirm>Confirm undo</button> <button class="btn" type="button" data-monthly-cancel>Cancel</button></section>':'')+
+  '<p role="status" class="small">'+esc(state.message)+'</p></details>';
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle,stamp=JSON.stringify(draft),generation=state.generation;
+ const fresh=()=>{const now=currentView();return (game||view)===campaign&&now?.me.id===owner&&now?.cycle===cycle&&monthlyChangesState.generation===generation&&JSON.stringify(draft)===stamp&&!now.me.submitted&&!now.gameOver?now:null;};
+ $('#monthlyChangesDrawer')?.addEventListener('toggle',event=>{if(monthlyChangesState.generation===generation)monthlyChangesState.open=event.target.open;});
+ mount.onclick=event=>{
+  const button=event.target.closest?.('button');if(!button||!mount.contains(button))return;
+  const now=fresh();if(!now)return;
+  if(button.hasAttribute('data-monthly-undo')){proposeMonthlyUndo(now,Number(button.dataset.monthlyUndo));renderMonthlyChanges(now);mount.querySelector('[data-monthly-confirm]')?.focus();}
+  else if(button.hasAttribute('data-monthly-cancel')){const path=state.proposal?.row.path;state.proposal=null;state.message='Undo cancelled. Your staged plan is unchanged.';renderMonthlyChanges(now);const index=monthlyChangeRows(now).findIndex(row=>JSON.stringify(row.path)===JSON.stringify(path));mount.querySelector('[data-monthly-undo="'+index+'"]')?.focus();}
+  else if(button.hasAttribute('data-monthly-confirm')&&applyMonthlyUndo(now)){render();$('#monthlyChangesDrawer')?.querySelector('summary')?.focus();}
+ };
 }
 function projectChoiceStatus(v,key){
  if(v.me.submitted)return {eligible:false,reason:'Your plan is already locked.'};

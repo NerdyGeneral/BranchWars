@@ -9,6 +9,11 @@ The prior local-candidate publication restrictions below describe historical
 work; this goal supplies new, scoped publication authority. National Empire and
 underwriting remain deferred. No completed usability batch is claimed yet.
 
+Second checkpoint adds guarded monthly instruction undo and a People & Operations
+overview separating headcount from task coverage. Workforce consolidation,
+remaining usability batches and publication gates remain active; see the ledger
+for specific implemented/partial statuses and verification boundaries.
+
 ## September 9 — V3.1 stability candidate handed off locally
 
 The bounded repair goal is technically complete: paid staffing/execution plans,

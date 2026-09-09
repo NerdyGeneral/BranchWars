@@ -25,6 +25,8 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
 if (!args.includes('--full')) commands.push(...[
 'usability_forms.test.js',
 'usability_plan_review.test.js',
+'usability_changes.test.js',
+'usability_people.test.js',
 'usability_engine_boundary.test.js',
 'v31_facility_conflicts.test.js',
 'v31_training_deferral.test.js',
