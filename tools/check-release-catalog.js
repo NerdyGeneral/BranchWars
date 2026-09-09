@@ -30,7 +30,10 @@ for(const version of catalog.versions){
  const dir=path.join(release,version.id);assert.deepEqual(fs.readdirSync(dir).sort(),inventory);
  const manifest=JSON.parse(fs.readFileSync(path.join(dir,'manifest.json')));assert.equal(manifest.schemaVersion,1);assert.equal(manifest.hashAlgorithm,'sha256');
  assert.deepEqual(manifest.files.map(f=>f.name).sort(),inventory.filter(n=>n!=='manifest.json'));
- const zipped=zipEntries(fs.readFileSync(path.join(release,version.zip)));
+ // Original V2/V3 archives use a wrapper folder; the verified V3.1 archive is
+ // flat. Pin the expected shape per edition instead of accepting arbitrary paths.
+ const zipDepth=version.zipDepth??2;assert([1,2].includes(zipDepth),'Unsupported package layout');
+ const zipped=zipEntries(fs.readFileSync(path.join(release,version.zip)),inventory,zipDepth);
  for(const name of inventory)assert.deepEqual(zipped.get(name),fs.readFileSync(path.join(dir,name)),version.id+' ZIP mismatch: '+name);
  for(const f of manifest.files){const bytes=fs.readFileSync(path.join(dir,f.name));assert.equal(bytes.length,f.bytes);assert.equal(hash(bytes),f.sha256);}
  assert.equal(hash(fs.readFileSync(path.join(dir,'BRANCH_WARS.html'))),version.portableSha256);

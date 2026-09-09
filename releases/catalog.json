@@ -5,15 +5,29 @@
     "normalizedGameSha256": "0155cf7b9610bc0b4000c272b798d8cd783096fdd849a23f62642f9edecacb10"
   },
   "versions": [
-    {"id":"v2","source":"8338e98b0c20cbd6feb85e343497d09271f815b8","zip":"branch-wars-v2.zip","portableSha256":"1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47"},
-    {"id":"v3","source":"ee37b6865af71be20c35ac3b4f41b0519bf9d650","zip":"branch-wars-v3.zip","portableSha256":"4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107"}
+    {
+      "id": "v2",
+      "source": "8338e98b0c20cbd6feb85e343497d09271f815b8",
+      "zip": "branch-wars-v2.zip",
+      "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47"
+    },
+    {
+      "id": "v3",
+      "source": "c721ede4245016853f35c30761d9ff35971b154f",
+      "zip": "branch-wars-v3.zip",
+      "portableSha256": "65f469e82f2d747f12334caf84a1079ea4eade2406cfa9635239e2049416644e",
+      "distributionVersion": "3.1",
+      "zipDepth": 1,
+      "financialGroupVersion": 7,
+      "saveVersion": "9.6"
+    }
   ],
   "artifacts": {
-    "branch-wars-v2.zip":"fa27654866dcc4cac1f5f5d6f111d35ab7991628a0ca7f3ca7cb06bbf3c778f6",
-    "branch-wars-v3.zip":"85dae43104c4c68f106b371b6ead8891a453bd08a4198162133a493e3a7ab28f",
-    "branch-wars-v3-manual.pdf":"b577325f9c4fd34a2e73a3feda41acd47dc4e0ecd7b2b3c3dfec568cb5b9e1ed",
-    "branch-wars-v3-manual.zip":"6ac635e00065b3d61df9998761b87bb12ddda0739a88592b1e4d0c62daecf7d2",
-    "v2-player-guide.md":"c369b304fc8705d1e6543c047c4b12337c3aeb8ec32ebdcaf9a2767406a6be1d",
-    "v3-release-report.md":"0c19173412113b0725a0bd3ae93553ae4a7c804f67a074a07b47c03988670e11"
+    "branch-wars-v2.zip": "fa27654866dcc4cac1f5f5d6f111d35ab7991628a0ca7f3ca7cb06bbf3c778f6",
+    "branch-wars-v3.zip": "6c0331570c4109158f47f9020f875c668e95a3a6f48a29201a483df67c8e706e",
+    "branch-wars-v3-manual.pdf": "0e4335caccbe6e345a6ca814e8c8929807082140ee31e02e52fd70d5bf797be8",
+    "branch-wars-v3-manual.zip": "ec53987bf3835996bb1ce7179cb33e4f2620f7d8221fd03667bd79c864428d80",
+    "v2-player-guide.md": "c369b304fc8705d1e6543c047c4b12337c3aeb8ec32ebdcaf9a2767406a6be1d",
+    "v3-release-report.md": "392b772d2ba3f0ae6355e8890c56daa1a973be2002f1bfa33c0feb536f0d44ed"
   }
 }

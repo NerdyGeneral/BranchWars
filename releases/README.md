@@ -15,31 +15,42 @@ expansion merely to make a release available. Each package below is separate.
 - [Original V2 technical evidence](https://github.com/NerdyGeneral/BranchWars/blob/8338e98b0c20cbd6feb85e343497d09271f815b8/game/docs/release-status.md).
   That evidence is historical, not a fresh full gameplay audit in this catalog task.
 
-## V3 — Regional Command / Financial Group preview
+## V3 — V3.1 long-campaign stability update / Financial Group preview
 
 - [Download ZIP](branch-wars-v3.zip), [unpacked player files](v3/README.txt),
-  [download the complete 45-page field manual](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf),
+  [download the complete 51-page field manual](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf),
   [manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip),
-  [eight-hour changes and debug/balance report](v3-release-report.md).
-- New Financial Group campaigns: rules 6 / save 9.5. Existing rules stay fixed.
-- Exact source: [immutable v3.0.0 tag](https://github.com/NerdyGeneral/BranchWars/tree/v3.0.0),
-  commit `ee37b6865af71be20c35ac3b4f41b0519bf9d650`.
-- 167 Windows regression suites and 1,920 release-balance months passed for this
-  exact runtime before publication. Additional same-engine Group6 tests are
-  detailed in the report. No new gameplay changes were made for this catalog.
-- Remaining limits include AI origination, ATM-heavy networks, late corporate
-  cash circulation, and real two-computer acceptance. National Empire and
-  underwriting remain deferred.
+  [current changes and debug/balance report](v3-release-report.md).
+- New Financial Group campaigns: rules 7 / save 9.6. Existing rules stay fixed;
+  both friends need the same supported build. Export before updating.
+- Exact current source: [V3.1 checkpoint c721ede](https://github.com/NerdyGeneral/BranchWars/tree/c721ede4245016853f35c30761d9ff35971b154f).
+- The game ZIP is byte-for-byte the tested V3.1 candidate: 185 Windows checks,
+  eight matched 480-month campaigns / 328 exact replays, and a separate 16-case
+  standard release-balance suite. Real two-computer GitHub acceptance remains
+  outstanding; these checks do not guarantee zero bugs or enjoyable balance.
+- Repairs address paid staffing/execution conflicts, productive lending,
+  funded corporate circulation, facility investment forecasts, reserves and
+  related save/network/UI behavior. See the report for before/after evidence.
+- The PDF places six current revision pages before the full original 45-page
+  guide. All 74 original index links remain valid. Older latest-Group6 references
+  belong to the original section; current revision instructions supersede them.
+- [Original V3 package and guide](https://github.com/NerdyGeneral/BranchWars/tree/263ba69b71e01dc0f9c5cb01b57877e2ef8ff02f/releases)
+  remain recoverable at the previous immutable catalog commit. The
+  [v3.0.0 tag](https://github.com/NerdyGeneral/BranchWars/tree/v3.0.0) is unchanged.
+- Remaining limits include opening pace, thin margins, large save sizes and
+  human multiplayer/fun acceptance. Deposit dominance remains legitimate.
+  National Empire and underwriting remain deferred.
 
 ## Multiplayer and saves
 
 ### Opening the manual
 
-The full PDF is 45 pages. The [GitHub preview](branch-wars-v3-manual.pdf) initially
+The full PDF is 51 pages. The [GitHub preview](branch-wars-v3-manual.pdf) initially
 renders five and uses a **More Pages** button to load the rest. This is not a
 five-page upload. Use the full download link above to open the manual in your
 PDF reader, or extract the ZIP fallback if the embedded preview fails.
-Both downloads contain the same verified PDF, with no content removed or changed.
+Both downloads contain the same verified updated PDF. No original handbook page
+has been removed; six clearly marked revision pages are prepended.
 
 ### Keeping your campaign
 

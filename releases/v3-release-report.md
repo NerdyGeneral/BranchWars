@@ -1,4 +1,88 @@
-# V3 release report
+# V3 download - V3.1 stability update
+
+## September 9, 2026: current distribution
+
+The V3 download now contains the verified V3.1 long-campaign stability candidate.
+The default main game, V2, original V3 tag and historical source remain unchanged.
+The user authorized this publication after the local stability goal completed.
+Publication is not real two-computer or human balance acceptance.
+
+- [Game ZIP](branch-wars-v3.zip), [unpacked game](v3/README.txt).
+- [Updated 51-page PDF](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf)
+  and [identical PDF in a ZIP](branch-wars-v3-manual.zip).
+- [Exact V3.1 source](https://github.com/NerdyGeneral/BranchWars/tree/c721ede4245016853f35c30761d9ff35971b154f),
+  [complete before/after report](https://github.com/NerdyGeneral/BranchWars/blob/c721ede4245016853f35c30761d9ff35971b154f/game/docs/v31-stability-report.md),
+  [manual addendum and friend checklist](https://github.com/NerdyGeneral/BranchWars/blob/c721ede4245016853f35c30761d9ff35971b154f/game/docs/v31-manual-addendum.md).
+  Those source documents describe the completed local pre-publication gate;
+  their historical publication restrictions are superseded only for this upload.
+- [Original V3 download/guide](https://github.com/NerdyGeneral/BranchWars/tree/263ba69b71e01dc0f9c5cb01b57877e2ef8ff02f/releases)
+  remain available for rollback. Export your campaign before updating.
+
+### Changed behavior
+
+New optional Financial Group campaigns use Group 7 / save 9.6. Existing campaigns
+keep their historical rules; importing does not automatically apply new economics.
+Both players need compatible builds, and an original V3 peer cannot join a new
+Group 7 campaign. Existing campaign options and opt-in defaults remain.
+
+AI repairs preserve paid servicing, controls, teaching and construction while
+removing invalid project/facility conflicts and unnecessary productive-work
+starvation. Hiring costs cash and future payroll. Five-year facility comparisons
+account for actual staffing, loan repayment/risk, upkeep and capital/funding.
+The corporate economy recirculates actual provider/creditor cash into finite
+outside demand; companies can still fail. Shared reserve displays, forecasts,
+save/network compatibility and terminal victory wording are corrected. Receivership
+does not grant the winner free assets or a franchise.
+
+### Verification and honest limits
+
+- Exact final client: **185/185 Windows checks**, including legacy/optional rules,
+  build/reference, accounting, replay, save/lifecycle and current transport tests.
+- Matched current Group 7 runs: **8/8 through 480 months**, **3,840 months** and
+  **328 exact half-ready replays**, across four economies and two seeds/profiles.
+  Published V3 has four valid 480-month endpoints; four other baselines stopped on real
+  construction-conflict errors. Their missing endpoints were not extrapolated.
+- Separate standard release suite: **16 cases / 1,920 months**; not a substitute
+  for the Group 7 matrix. Policy tests use hotseat AI plans, not solo handicaps.
+- Actual packaged 46.6 MB save import: 3,029 ms; Workforce 618 ms; Forecast 590 ms in
+  single browser observations. Accounts displayed zero reconciliation difference.
+  These are not guaranteed timings or performance percentiles.
+- Simulated GitHub/LAN/P2P tests cover stale/duplicate messages, reconnect/session
+  protections, fresh handshake, incompatible peers, sealed checkpoint reload,
+  readiness and private information. Actual two-browser localhost LAN and
+  terminal/rematch tests are separate. **A fresh physical two-computer GitHub
+  session remains unverified. Multiplayer cannot be promised bug-free.**
+- The updated PDF has six revision pages plus the complete original 45 pages.
+  All 51 pages rendered with no detected text-boundary defects; all 74 original
+  command-index destinations were verified after insertion. A PDF-library merge
+  warning was investigated: link counts and destination offsets all matched.
+
+Productive activity and facility variety improve, but not every bank/horizon
+does better. Fifteen of sixteen ending bank networks contain a non-ATM site.
+Balanced A recovers from 3.81% to 48.14% player deposit share; Balanced B ends with
+a 97.5% leader. Shares exclude outside banks. Thin margins, early portfolio
+contraction/low morale, failed agencies and large saves remain playtest concerns.
+The raw save limit remains 64 MiB. National Empire, underwriting and the broader
+unfinished blueprint are not part of this release.
+
+### Exact downloads
+
+Game ZIP SHA-256:
+`6c0331570c4109158f47f9020f875c668e95a3a6f48a29201a483df67c8e706e`
+
+Portable HTML SHA-256:
+`65f469e82f2d747f12334caf84a1079ea4eade2406cfa9635239e2049416644e`
+
+Updated manual SHA-256:
+`0e4335caccbe6e345a6ca814e8c8929807082140ee31e02e52fd70d5bf797be8`
+
+[catalog.json](catalog.json) pins all current package/guide hashes. No private
+saves, raw campaign dumps or credentials are included in the player download.
+
+## Historical original V3 release report (September 8)
+
+The following assessment applies to the original Group 6 / save 9.5 snapshot,
+not the current V3.1 runtime. It is retained without relabeling its test results.
 
 ## Release assessment
 

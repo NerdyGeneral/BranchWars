@@ -12,14 +12,17 @@ packages; extract a ZIP and use the launcher inside its own folder.
 |---|---|---|
 | Current main game (preserved) | Root launchers below / [game](game/BRANCH_WARS.html) | [Main player guide](game/docs/player-guide.md) |
 | V2 — Company Banking, stabilization RC1 | [Download V2 ZIP](releases/branch-wars-v2.zip) / [V2 files](releases/v2/README.txt) | [V2 player guide](releases/v2-player-guide.md) |
-| V3 — Regional Command / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [Download full 45-page PDF](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf) / [Manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip) |
+| V3 — V3.1 long-campaign stability update / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [Download full 51-page PDF](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf) / [Manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip) |
 
-The manual download contains all 45 pages. [GitHub's PDF preview](releases/branch-wars-v3-manual.pdf)
+The updated manual contains six V3.1 revision pages followed by all 45 original
+V3 handbook pages. Read the revision first: new Financial Group games use
+Group 7 / save 9.6; old campaigns are not automatically upgraded.
+[GitHub's PDF preview](releases/branch-wars-v3-manual.pdf)
 initially shows five pages and requires **More Pages** to continue. If the preview
 is blank or incomplete, use the full download or extract the manual ZIP above.
 
 See the [version catalog and source links](releases/README.md) and
-[V3 changes, debug and balance review](releases/v3-release-report.md).
+[V3.1 changes, debug and balance review](releases/v3-release-report.md).
 Export your campaign before changing editions or browser addresses. Both friends
 must use the same package. A newer preview is not a guarantee of perfect balance
 or two-computer acceptance, and older executables may refuse newer saves.
