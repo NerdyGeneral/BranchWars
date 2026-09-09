@@ -10,6 +10,12 @@ Custom color propagation, pending-settings start blocking and readiness resets
 were observed. New full Windows and eight-case480-month runs remain in progress;
 the package is not yet final acceptance. See the current stability report.
 
+The real month318 failed-save continuation has now ended without a software
+exception after144 additional settlements and13 exact replays. It reaches
+receivership at month461, not480: the deposit-share leader loses despite abundant
+cash, while its smaller rival rebuilds lending and survives. This is technical
+recovery evidence, not a full-length balance pass; the fresh matrix remains open.
+
 Latest September 9 finding: the completed `0476a166...` matrix has seven
 480-month passes and one genuine Balanced/department-B/Chairman failure after
 317 months. Paid Operations training reduced final execution capacity from 3.8

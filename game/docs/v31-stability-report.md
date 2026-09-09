@@ -6,6 +6,34 @@ regional / Financial Group expansion. No GitHub publication is authorized.
 
 ## September 9 execution-capacity repair — current portable fcf23071
 
+### Actual failed-save continuation: crash repaired, economic loss retained
+
+The genuine half-ready month318 snapshot now completes 144 additional monthly
+settlements and 13 exact half-ready replays without an exception or accounting
+validation failure. It ends in ordinary receivership at month461, not month480.
+The recovery report's `PASS` means technical execution passed until the legal
+terminal state; it does **not** mean a completed480-month run or balance approval.
+The accepted host instruction was preserved, only the originally failed guest
+instruction was replanned, and subsequent turns used ordinary AI for both banks.
+
+The bank that began this continuation with95.5% of player deposits ultimately
+fails with88.1% share, $234.38M cash and negative$59,620 capital. Cash is not
+equity. Its final operating report has approximately$1.613M gross income against
+$1.580M operating expense, $137,456 funding cost and $5,200 credit losses, yielding
+a$109,383 operating loss. All six companies have resolved by then. This is not a
+case of forced equalization or of successful circulation making companies immortal.
+The smaller rival grows from8 to34 staff and from$1.10M to$14.47M loans, finishes
+with13.6% capital and wins. The losing bank still has72 staff and a mixed physical
+network, so productive capacity alone does not establish a profitable franchise.
+
+Evidence: `reports/local/v31-execution-balanced318-480.json` and its matching
+saved endpoint, portable `fcf23071...`, unchanged source; endpoint save SHA-256
+`91a01875a5c9f2a5f0712a406f85e8b8d1ac8d71dc9e0b17e620327c7ce7dc8e`.
+This is a recovery of an already-distressed historical path, not a substitute for
+the fresh eight-case comparison. Sustained overhead, capital erosion and loss of
+corporate income remain explicit balance-review considerations. No survival grant
+or additional numerical adjustment has been made in response to this outcome.
+
 ### Exact-build browser and package checkpoint
 
 The local `BranchWars-v3.1-export-3671b47.zip` is packaged and verified, SHA-256
@@ -746,18 +774,27 @@ under way. It is labelled mature-save stress, not creation-to480 matched evidenc
 The previous snapshot's matrix remains diagnostic; final-source comparisons,
 release gates and a replacement export are still required.
 
-## Outstanding final gates
+## Completion audit — current fcf23071, not a release signoff
 
-1. Complete matched banking simulations and diagnose the candidate's remaining
-   morale, activity, facility and product behavior; retain failures and tune from
-   measured outcomes, not guaranteed survival or equal shares.
-2. Repeat the final exact candidate across all four game economies, matched seeds
-   and strategies, short/120/480 months, with consistent activity-rich harnesses.
-3. Full legacy, optional-feature and deterministic replay/save/rematch checks.
-4. GitHub/LAN/direct simulated lifecycle, stale/duplicate/reconnect, readiness,
-   incompatible peer, checkpoint and privacy tests against the new version.
-5. Actual setup/lobby/workforce/facility UI and mature-save browser latency.
-6. Full Windows/build/reference/ZIP checks; local export, final report/changelog,
-   manual addendum and updated status.
-7. Separate real two-computer friend playtest, still human acceptance. Neither
-   passing simulations nor a localhost two-seat session proves this requirement.
+The chronology above preserves old evidence, including superseded failures and
+passes. Only exact-current-build evidence can close the remaining release gates.
+
+| Goal requirement | Evidence and current disposition |
+|---|---|
+| Production V3 starting point; preserved published releases | Published V3 archive and portable are hash-pinned by `v31_version_boundary.test.js`. Work remains in a separate repair worktree. No publication is authorized. |
+| Reproduce before repairing; protect servicing and controls | Actual month58/92/284/318 failures have saved fixtures and targeted regressions. Staffing, funded origination and investment tests cover protected work and real costs. Final full-suite result is still pending. |
+| Funded corporate circulation; real company failures | `v31_circulation.test.js` traces actual premium/provider cash, refuses double settlement and checks total cash at every month. Full-bank matrix validates the live books. Recovery to receivership shows companies can still fail; final matrix assessment remains open. |
+| Credible existing facility/product strategies | The matched harness records loan vintages, originations/runoff/losses, staffing, office mix, capital, cash and subsidiaries. No forced equal shares or survival. All eight current case reports and the final comparison are still required. |
+| Four economies, matched seeds and AI profiles, 24/120/480 | Eight published-V3 baseline reports are retained, including four early software failures. Current two-profile queues cover all four economies; failed or terminal horizons will be unavailable, never extrapolated. |
+| Legacy behavior, optional selections, saves and rematches | Published Group1–6 exact one-month comparisons supplement unchanged legacy goldens/save continuations. Feature and lifecycle suites are included in the current full Windows gate; do not treat the boundary smoke as full compatibility proof. |
+| Determinism and accounting/resource conservation | Monthly full-bank validators and periodic exact half-ready replays run in each matrix case. The separate actual318 recovery completed144 settlements/13 replays to legal receivership. Final aggregate evidence remains pending. |
+| Multiplayer reconnect, readiness, stale/duplicate packets, malformed settings and privacy | Current Group7 wrappers run actual complete clients through GitHub, LAN and direct-link simulations. Underlying tests cover delayed digests, stale sessions, duplicate commits, sealed-checkpoint recovery and private-book rejection. Require the final runner results, not merely test presence. |
+| Mature saves and browser responsiveness | Exact-package40MB Group7 import, Workforce, staffing proposal and Forecast observed in the browser. Separate5MiB-quota storage test verifies exact local/checkpoint recovery, corruption rejection and prior-save preservation. Timings are individual observations, not percentiles. |
+| Usable setup/lobby and related controls | Actual two-browser packaged LAN room: distinct custom colors, green connection, host authority, pending-settings start block, readiness reset and identical resolved turn. Ordinary keyboard reserve changes and reviewed office staffing were also observed. |
+| Exact final Windows/build/reference/packaging | Current full Windows runner is live; old183-check pass is superseded. Current six-file QA ZIP and every entry are verified against the allowlist/manifest. Recheck identity at final handoff. |
+| Deliverable documents and local playable candidate | QA ZIP, changelog, roadmap/status and manual addendum exist. Final consolidated before/after report, evidence review and candidate handoff remain unfinished. |
+| Two-computer acceptance and enjoyable competition | Explicitly outstanding; friend checklist is in the manual addendum. Simulated transports and localhost browser play do not establish this. The goal permits this human acceptance to remain outstanding at technical handoff. |
+
+Final acceptance must review these evidence scopes, not merely count green
+tests. National Empire, underwriting, additional business systems and broader
+feature independence remain outside this stability batch.

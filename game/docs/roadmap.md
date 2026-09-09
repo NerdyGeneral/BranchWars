@@ -14,6 +14,13 @@ Full Windows and both matched480 profiles per economy remain running; finishing
 those evidence reviews is still required before final local handoff. Physical
 two-computer and fun acceptance remain separate. No publication occurred.
 
+The actual month318 recovery now advances144 further settlements with13 exact
+replays to an ordinary month461 receivership. The former deposit-share leader
+loses while its smaller rival rebuilds productive banking. This closes that
+saved-path software interruption, not the fresh480-month balance matrix. The
+stability report now maps each scoped goal requirement to its evidence and
+remaining acceptance work; the broader expansion blueprint is unchanged.
+
 Latest September 9 gate finding: the completed prior matrix has seven480 passes
 and a Balanced/Chairman execution-capacity failure at month318. The actual saved
 failure is now pinned and repaired by deferring excess unstarted initiatives
