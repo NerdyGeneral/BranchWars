@@ -17,6 +17,12 @@ Recruiting costs cash now. New bankers arrive next month and add recurring pay.
 Low morale does not prevent you from hiring, but an unhappy, understaffed bank
 can continue losing employees. Training and teaching also consume real capacity.
 
+Execution capacity is checked after paid teaching and departmental assignments,
+not just against your total Operations headcount. The new AI postpones excess
+unstarted initiatives when its final plan cannot execute them. Paid construction
+is retained and follows normal progress/stall rules; no extra workers appear.
+Human plans still need your own staffing or initiative adjustment before Ready.
+
 The Workforce page's workload estimate separates normal morale recovery from
 Retail and Operations workload penalties. It is not a guarantee of next month's
 morale: executive calls, rivals, consequences and the 0–100 bounds still apply.

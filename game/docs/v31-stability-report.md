@@ -4,7 +4,43 @@ September 8, 2026. **Not a final debug report or release certification.**
 This report follows the bounded local V3.1 goal, not completion of the broader
 regional / Financial Group expansion. No GitHub publication is authorized.
 
-## September 9 verification results — current portable 0476a166
+## September 9 execution-capacity repair — current portable fcf23071
+
+All eight `0476a166...` cases have now finished: seven passed 480 months, while
+Balanced/department-B/Chairman failed at month318 after 317 completed months.
+The combined evidence is 3,677 resolved months and 314 exact half-ready replays,
+not an eight-case pass. All eight baseline runs also finished; four failed before
+480, so those endpoint comparisons remain unavailable rather than extrapolated.
+
+The actual failure snapshot is preserved as
+`tests/fixtures/v31-group7-balanced317.json.gz`, SHA-256
+`135cd0a1b51ce4592cb21b8ae7e249acf8328bbe75adac6d4739325d97463efd`.
+The failed pending instruction and the unrepaired complete AI both reproduce
+the execution-capacity rejection. Stage tracing locates the reduction at paid
+specialist training: early capacity 3.8 becomes 1.5 with the same headcount.
+An existing paid branch consumes 1.5, while marketing and remediation add 2.0.
+This is an AI planning defect, not permission to accept an invalid human order.
+
+Group7 now rechecks final project eligibility after departmental staffing. If
+the failure is execution capacity, it removes the last unstarted initiative,
+rebuilds real work quotas and the protected budget, and repeats only while new
+initiatives remain over capacity. It never cancels paid work, creates staff or
+money, disables training, or alters legacy rules. Already-eligible plans return
+unchanged. The pinned regression verifies unchanged world/input, retained
+training/allocation/research, no loss of protected task coverage, ordinary
+settlement to cycle319, exact half-ready replay and deterministic full AI.
+Submitted invalid instructions still fail validation instead of silent repair.
+
+New portable SHA-256:
+`fcf230715f2e5c45c7bcb3fa8a08dbb0da21e93151f344f37f71740ffa4ddb54`.
+Engine SHA-256:
+`cc229f83d09b769461497646daa64ce68e0c63a364b68ab6b175fa712db40633`.
+The month284 training-deferral regression also passes on these bytes. Fresh
+matched eight-case stress, full Windows verification and final browser/package
+checks remain required. Earlier ZIPs and reports are preserved, not certified
+as the repaired final build. No numerical balance tuning was added in this fix.
+
+## Previous September 9 verification results — portable 0476a166
 
 The exact current build passed `node tools/check.js --full`: all **183** captured
 checks, unchanged source hashes, repeatable balance output and the Windows LAN

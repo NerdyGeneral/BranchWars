@@ -25,6 +25,7 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
 if (!args.includes('--full')) commands.push(...[
 'v31_facility_conflicts.test.js',
 'v31_training_deferral.test.js',
+'v31_execution_reserve.test.js',
 'v31_version_boundary.test.js','v31_funded_origination.test.js','v31_circulation.test.js','v31_recruitment.test.js','v31_staffing_recovery.test.js','v31_staffing_priority.test.js','v31_facility_planning.test.js','v31_facility_investment.test.js','v31_facility_cash.test.js','v31_budget_ui.test.js','v31_forecast_copy.test.js','v31_stability_ui.test.js','v31_staffing_network.test.js','v31_adversarial_network.test.js',
   'department_functions.test.js','department_provider.test.js','department_function_context.test.js',
   'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',

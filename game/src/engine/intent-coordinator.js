@@ -49,10 +49,27 @@ function chooseOpenBotCore(g, index) {
   if([6,7].includes(g.financialGroupVersion)){
     plan=planDepartmentFunctions(g,index,planFinalCashReserve(g,index,plan));
     plan=planFinalCashReserve(g,index,plan);
+    if(g.financialGroupVersion===7)plan=planExecutionReserve(g,index,plan);
     if(g.financialGroupVersion===7)plan=staffingRecoveryReview(g,index,plan).plan;
     return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;
   }
   return [1,2,3,4,5,6,7].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
+}
+function planExecutionReserve(g,index,input){
+  if(g.financialGroupVersion!==7)return input;
+  const p=g.players[index];let plan=input;
+  // Early project selection precedes paid teaching and departmental dispatch.
+  // Final physical capacity, not early headcount, must fund NEW initiatives.
+  // Existing paid work may stall under ordinary rules; never cancel it here.
+  while(planInitiatives(plan).length&&projectPlanStatus(p,plan).code==='capacity'){
+    plan=departmentFunctionCopy(plan);
+    plan.newProjects=[...planInitiatives(plan)];plan.newProjects.pop();
+    plan.newProject=plan.newProjects[0]||null;
+    // Releasing project cash can resume teaching. Rebuild real work quotas
+    // before forecasting, then recheck the funded capacity after reserve cuts.
+    plan=planFinalCashReserve(g,index,planDepartmentFunctions(g,index,plan));
+  }
+  return plan;
 }
 function aiCashPlanningReview(g, index, plan) {
   if (![1, 2].includes(g.productProgramsVersion)) return null;

@@ -2,6 +2,22 @@
 
 ## Active V3.1 stability goal — September 8, 2026
 
+Latest September 9 finding: the completed `0476a166...` matrix has seven
+480-month passes and one genuine Balanced/department-B/Chairman failure after
+317 months. Paid Operations training reduced final execution capacity from 3.8
+to 1.5, but the AI retained two unstarted initiatives alongside a paid branch.
+This prevents final acceptance of that build and its preserved QA ZIP.
+
+The new candidate `fcf230715f2e5c45c7bcb3fa8a08dbb0da21e93151f344f37f71740ffa4ddb54`
+rechecks Group7 final execution, defers only excess unstarted initiatives, and
+rebuilds funded function quotas after released spending. The actual half-ready
+month318 regression, protected work and exact replay pass. Legacy plans and
+already-feasible plans retain their existing path. A fresh eight-case matrix
+and full Windows gate are required for these changed bytes; the earlier full
+183-check pass below does not certify this repair. No GitHub publication.
+
+### Previous checkpoint evidence (superseded by the finding above)
+
 September 9 update: the exact `0476a166...` build passed the full Windows gate
 (**183 checks**, unchanged source, repeated seeded output, Windows LAN) and the
 additional **16-campaign / 1,920-month** release-balance suite. All four current

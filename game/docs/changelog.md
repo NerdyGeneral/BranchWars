@@ -2,6 +2,13 @@
 
 ## Local V3.1 candidate — in progress, not published
 
+- Reproduce the real Balanced/Chairman month318 failure: paid teaching reduces
+  execution after early project selection. Group7 now defers excess unstarted
+  initiatives using final shared capacity, then recomputes funded quotas.
+  Preserve existing paid work, training, resources and legacy behavior. Add
+  actual half-ready fixture, protected-delivery, ordinary settlement and exact
+  replay regression. Earlier seven480 passes do not certify this changed build.
+
 - Validate deferred research/project plans before facility forecasting: freed
   funds may resume training, reserving teachers and invalidating old work quotas.
   Reject the infeasible alternative without changing the original legal plan.

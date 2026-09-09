@@ -7,6 +7,17 @@ The previous V3 publication approval does not authorize publishing V3.1.
 The identity is deep, open-ended banking rivalry with optional complexity.
 National Empire and insurance underwriting remain deferred.
 
+Latest September 9 gate finding: the completed prior matrix has seven480 passes
+and a Balanced/Chairman execution-capacity failure at month318. The actual saved
+failure is now pinned and repaired by deferring excess unstarted initiatives
+after funded teaching, with protected work and exact replay verified. Current
+portable is `fcf23071...`; fresh eight-case stress and full Windows verification
+must precede final package/browser/handoff acceptance. No new content, campaign
+options, price tuning or publication was introduced. Broader blueprint status
+is unchanged. Details: [stability report](v31-stability-report.md).
+
+### Earlier stability checkpoints (historical, not the current gate result)
+
 September 9 current-source gate: 183 full Windows checks and the separate
 16-campaign release-balance suite pass. All four first-seed Group7 campaigns have
 reached480 months with exact replay checks; the second seed/profile is still
