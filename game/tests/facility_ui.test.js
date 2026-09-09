@@ -99,9 +99,13 @@ assert.match(integrated.elements.get('#facilityNetworkPanel').innerHTML,/OFFICE 
 const integratedGame=integrated.run('JSON.stringify(game)');
 assert(integrated.run("stageFacilityPolicy(currentView(),{convert:{officeId:currentView().me.facilityNetwork.offices[0].id,model:'digital'},cancel:null})"));
 assert.equal(integrated.run('JSON.stringify(game)'),integratedGame);
-assert.equal(integrated.run("E.CAMPAIGN_FEATURES.find(f=>f.field==='financialGroupVersion').setupVersion"),6,'The integrated opt-in setup selects Group 6; historical campaign versions are retained.');
+assert.equal(integrated.run("E.CAMPAIGN_FEATURES.find(f=>f.field==='financialGroupVersion').setupVersion"),7,'The integrated opt-in setup selects Group 7; historical campaign versions are retained.');
 integrated.run("const priorOptions=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;const priorCampaign=E.createGame({...priorOptions,mode:'hotseat',seed:'facility-historical-five',created:1});const priorRestored=E.migrateCampaign(JSON.parse(JSON.stringify(priorCampaign)));");
 assert.equal(integrated.run('priorRestored.financialGroupVersion'),5,'Continuing a historical Group 5 campaign must not upgrade its rules.');
 assert.equal(integrated.run('priorRestored.version'),'9.4');
 assert(integrated.run('priorRestored.players.every(p=>!p.departmentFunctions)'),'Historical Group 5 does not initialize Group 6 departments.');
+integrated.run("const priorSixOptions=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:6}).options;const priorSix=E.createGame({...priorSixOptions,mode:'hotseat',seed:'facility-historical-six',created:1});const restoredSix=E.migrateCampaign(JSON.parse(JSON.stringify(priorSix)));");
+assert.equal(integrated.run('restoredSix.financialGroupVersion'),6,'Historical Group 6 must not gain Group 7 rules.');
+assert.equal(integrated.run('restoredSix.version'),'9.5');
+assert.equal(integrated.run('restoredSix.departmentFunctionEconomy.version'),1,'Historical vendor accounting remains unchanged.');
 console.log('Facility UI source PASS: real Group 4 creation/public-view/default draft/Markets hook, pure metrics/staging, no-refund cancellation, stale/sealed/replaced/owner guards and legacy hiding. Settlement, transport and browser acceptance remain separate.');

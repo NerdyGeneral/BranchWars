@@ -12,6 +12,15 @@ const baseline = 'eea1d0068f5f4a9a963f93d5c12cccf9d1e803ef';
 const patchPath = path.join(game, 'experiments/institution/accounting-payables.patch');
 const clone = value => JSON.parse(JSON.stringify(value));
 const equal = (a, b) => assert.deepEqual(clone(a), clone(b));
+const patchTargets = new Set(['src/engine/accounting.js','src/engine/group-accounting.js','src/engine/accounting-adapter.js','src/engine/financial-group.js']);
+function patchTarget(relative) {
+  assert(patchTargets.has(relative), 'Only the four authored game-relative patch targets are supported');
+  const target = path.resolve(game, relative);
+  assert(target.startsWith(game + path.sep), 'Patch target must stay inside game');
+  return target;
+}
+for (const invalid of ['../accounting.js','/tmp/accounting.js','C:/outside/accounting.js','src/engine/../../accounting.js','src/engine/other.js'])
+  assert.throws(() => patchTarget(invalid), /authored game-relative/);
 const sources = new Map();
 const original = new Map();
 const lines = fs.readFileSync(patchPath, 'utf8').replace(/\r\n/g, '\n').trimEnd().split('\n');
@@ -21,8 +30,7 @@ let target;
 for (let i = 0; i < lines.length;) {
   const line = lines[i++];
   if (line.startsWith('*** Update File: ')) {
-    target = path.resolve(line.slice(17));
-    assert.ok(target.startsWith(game + path.sep), 'Patch target must stay inside game');
+    target = patchTarget(line.slice(17));
     const relative = path.relative(repo,target).split(path.sep).join('/');
     const source = execFileSync('git',['-c','safe.directory='+repo,'show',baseline+':'+relative],{cwd:repo,encoding:'utf8'}).replace(/\r\n/g, '\n');
     original.set(path.basename(target), source);

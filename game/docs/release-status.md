@@ -46,6 +46,29 @@ Separate diagnostic portable snapshots exist; no final release has been rebuilt
 or published. See [V3.1 evidence](v31-stability-report.md) for exact scope and
 [draft manual addendum](v31-manual-addendum.md) for player-facing changes.
 
+Latest checkpoint supersedes the running-campaign notes above: balanced120
+finished with staff14/16 and$100K final originations each, but ATM-only networks.
+Regulatory failed while planning month58. A cash-guard repair and protected-budget
+display correction are now integrated in separate `feat/v3.1-cash-repair` from
+`b1fa331`, preserving the original worktree's full gate. Actual
+failure/replay, UI purity and six-version one-month compatibility tests pass on
+portable `864a8ebbbd1ba25f2e9c3ac5db5b0aef1c7b685e97bfb49e8e87e211cf3096fb`.
+Repaired Regulatory480/Growth480 and V3 Rate480 are active; V3 Growth120 finished.
+Neither that older full gate nor the sampled pre-repair browser checks certifies
+this updated build. Integration/browser/transport/full-package checks remain.
+
+The original full gate has now finished: 177/179 checks passed; Windows LAN,
+source immutability and balance reproduction passed. Its two failures were a
+stale setup-version assertion and nonportable absolute accounting-fixture paths.
+Both are repaired and pass targeted tests without changing historical code
+expectations or relaxing path containment. That failed report is retained; the
+updated candidate still requires its own complete final gate.
+
+The integrated portable's two complete-client Group7 transport suites now pass
+GitHub/LAN/direct staffing and adversarial lifecycle checks with unchanged
+opening/closing hashes. Real two-computer acceptance, the corrected browser
+layout and full final Windows/package gate remain separate requirements.
+
 `tools/v31_campaign_lab.js` runs an explicitly identified
 portable engine, records per-month banking and corporate activity, validates
 accounting/privacy, checks half-ready replay, and writes exclusive diagnostic

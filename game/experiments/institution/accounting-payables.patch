@@ -1,5 +1,5 @@
 *** Begin Patch
-*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/accounting.js
+*** Update File: src/engine/accounting.js
 @@
 - const bookKeys=b=>b.version===2?[...keys,'receivables']:keys;
 + const bookKeys=b=>b.version===3?[...keys,'receivables','payables']:b.version===2?[...keys,'receivables']:keys;
@@ -42,7 +42,7 @@
 +  next.journalBase=stateOf(next);check(next);return next;
 + }
 + return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables,withPayables});
-*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/group-accounting.js
+*** Update File: src/engine/group-accounting.js
 @@
 -  function capitalizeBank(bank, parent, amount) {
 +  // Paired external service claims. businessAssets here records the provider's
@@ -84,7 +84,7 @@
 @@
 -    servicePayment, settlePayable, capitalizeBank, bankDividend, consolidate, historyLimit });
 +    servicePayment, settlePayable, bankServiceInvoice, settleBankPayable, writeOffBankPayable, capitalizeBank, bankDividend, consolidate, historyLimit });
-*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/accounting-adapter.js
+*** Update File: src/engine/accounting-adapter.js
 @@
 - const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve));
 + const duePayables=p.accounting.version===3?p.accounting.accounts.payables:0;
@@ -92,7 +92,7 @@
 @@
 -function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash,Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
 +function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-(p.accounting.version===3?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
-*** Update File: C:/Users/xande/Downloads/Branch_Wars_Executive_Command_v6_No_Server/BranchWars-mainAFTRWORK9.3.26/BranchWars-main/game/src/engine/financial-group.js
+*** Update File: src/engine/financial-group.js
 @@
 -  const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
 +  const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);

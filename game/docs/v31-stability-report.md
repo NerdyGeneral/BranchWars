@@ -329,6 +329,102 @@ the original V3 portable is preserved separately, as are published V2/V3 package
 All previous full-client transport results predate this planner and require a
 current-build rerun. Browser testing, matched final balance and packaging remain.
 
+## Integrated cash-guard and budget-display repair
+
+The original `b1fa331` full Windows regression run completed: 177/179 checks
+passed, with source unchanged, reproducible balance output and Windows LAN
+passing. Repairs were integrated independently on local `feat/v3.1-cash-repair`,
+starting from that exact commit, so neither the live gate nor its source hashes
+were invalidated. These changes have not been published or merged onto main.
+
+Its two failures were a stale Group6 setup expectation and an accounting fixture
+patch containing absolute paths into the original worktree. The setup check now
+expects the approved new Group7 selection and explicitly verifies that old
+Group5/6 saves retain their versions. The diagnostic patch uses four authored
+game-relative targets with a strict allowlist and traversal/absolute-path refusal;
+the original historical source hunks and immutable baseline remain unchanged.
+Both formerly failing suites pass on the repair branch, including thirteen exact
+accounting/payables checks. The old report is
+`N-00-2026-09-09T01-46-47-380Z.json` in the original V3.1 baseline directory.
+It remains a failed pre-repair gate, not a final-candidate pass.
+
+The capital-budgeting balanced120 campaign completed with eleven exact replays
+and no invariant failure in 1,072.87 seconds. Ending staff14/16, morale91/55,
+loans$1,767,713/$1,776,314; both banks originated$100,000 in the final month.
+All six companies remained active. However, one/three ATMs were the entire
+ending networks; all five selected conversions during the run were to ATMs.
+This improves staffing and lending over earlier probes, not facility acceptance.
+
+The same source failed in Regulatory while planning month58, after57 successful
+settlements and five exact replays. A conversion passed the facility's basic
+cash check but consumed cash already protected for department vendor work.
+The AI tried to forecast an invalid counterfactual and threw. Existing bank cash
+was$711,686, vendors$2,400, and protected vendor room$108,926; several proposed
+conversions cost more than that room. Their rejection is correct; crashing is not.
+
+The repair validates department instructions before construction/activation
+forecasts and before/after counterfactual staffing. It rejects an ineligible
+investment without canceling vendors, lowering reserves, inventing financing or
+catching unrelated exceptions. An exact captured month57 fixture reproduces
+the prior crash with only these guards removed, then verifies actual repaired
+AI plans, pure refusal, month58 settlement and half-ready replay. A separate
+isolated probe passed twelve successive settlements/replays beyond the failure.
+That probe reached near-zero cash at one bank; survival is not being guaranteed.
+
+Actual browser inspection also reproduced a contradictory budget display at
+month121: raw spending room$519,376 while readiness correctly rejected$25,000
+of optional commitments behind a$600,000 protected reserve. The header now uses
+the existing shared protected-budget helper, names the higher Workforce/department
+reserve and shows the deficit plus the relevant policy controls. Nothing silently
+lowers reserves. A test verifies the real fixture, explicit lower-reserve draft,
+matching lifecycle eligibility, pure rendering and earlier-campaign presentation.
+
+Integrated portable SHA-256:
+`864a8ebbbd1ba25f2e9c3ac5db5b0aef1c7b685e97bfb49e8e87e211cf3096fb`.
+Engine `81e4777e4f7fafbbb6c9e352dde230101ca1afc40e9a12565010c1044ad8d786`.
+Removing only the new pure budget-helper export yields engine
+`84de8b33321485c5779340a9380df77fe61194da39a36d45d4c47d65363c3bdd`,
+the exact isolated engine currently under Regulatory480/Growth480 testing.
+Those runs predate this UI correction and are not final-build acceptance.
+The integrated month58 and budget-UI regressions pass, as does the six-version
+one-month exact V3 comparison and Group7 creation/replay/rematch boundary check.
+Broader gates must still pass against this integrated candidate.
+
+Current-build complete-client simulated transport suites also pass: Group7
+staffing across GitHub/LAN/direct (four months) and adversarial lifecycle across
+all three (eight months), with six mixed historical-Group5 cases in each suite.
+They cover paid functions, old-peer refusal, malformed metadata, owner privacy,
+reconnect fencing, duplicate/recall ordering, delayed digest races and sealed
+GitHub checkpoint recovery. Opening/closing portable hashes both match
+`864a8ebbbd1ba25f2e9c3ac5db5b0aef1c7b685e97bfb49e8e87e211cf3096fb`.
+This is stronger than a packet-only mock, but still not physical multiplayer
+acceptance or proof of every possible long campaign.
+
+### Browser and further baseline evidence
+
+On the pre-repair `3bb531bd…` portable in the actual local browser, setup
+confirmation/cancellation and the six-market override worked. Genuine Group7
+month121 and preserved Group6 month481 saves loaded. The latter export was
+52,227,013 bytes: a fresh-tab import reached the correct DOM in2,661ms and
+Continue in2,833ms. Mature navigation/previews measured317–530ms including
+action and DOM observation; sampled browser error/warning logs were empty.
+These are individual desktop samples with other tests running, not statistical
+paint-time benchmarks or real two-computer acceptance. The corrected budget
+layout and exact final build still need browser verification.
+
+The activity-rich V3 Growth120 baseline completed with eleven exact replays in
+872.17seconds: staff6/13, morale8/32, loans$1,263,591/$1,920,419, final gross
+originations0/0, one ATM each, agency active/unopened and six operating companies.
+The V3 Rate480 baseline and repaired Regulatory480/Growth480 runs remain active.
+
+Read-only capital-budgeting scenarios on the actual candidate month121 banks
+show only1/4 available lending quarters and one Operations quarter each. A
+commercial office adds no originations for Bank0 and increases Bank1 from
+$100,000 to$193,873/month, but added costs leave both scenarios negative-value.
+The older large month481 banks show positive commercial values. Neither finding
+justifies forcing conversions, granting staff or immediately reducing rent.
+No facility cost or workload formula was tuned in this repair.
+
 ## Outstanding final gates
 
 1. Complete matched banking simulations and diagnose the candidate's remaining

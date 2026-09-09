@@ -53,6 +53,20 @@ balances alone do not mean an investment is affordable: deposits are liabilities
 and the bank still needs its own capital. No projected income is credited to the
 real bank and no office is created until the ordinary paid construction process.
 
+## Cash in the vault is not all available to spend
+
+With facility lifecycle enabled, the shared budget strip now includes your
+protected cash reserve. The higher of Workforce's bank-wide reserve and
+Leadership & budgets' common discretionary reserve applies; the two are not
+added together. Existing obligations and capital limits also constrain spending.
+
+A negative spending remainder means the current optional orders exceed that
+protected envelope. Reduce optional commitments or explicitly review both
+reserve controls. Lowering a reserve makes existing cash available to the plan;
+it does not create cash or remove risk, and no reserve is changed automatically.
+Forecast profit is not cash you can already spend. A proposed facility investment
+must also leave its existing department/vendor orders funded.
+
 ## The corporate economy recirculates funded cash
 
 Outside carriers, service providers and the existing corporate creditor can spend

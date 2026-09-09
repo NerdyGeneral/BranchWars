@@ -47,6 +47,8 @@ function facilityInvestmentFutureOwner(g,p,plan,quote){
  facilityLifecycleConvertedOffice(owner,quote.officeId);
  owner.accounting=AccountingPrototype.post(owner.accounting,'forecast.conversion',{cash:-quote.cost,equity:-quote.cost},-quote.cost);syncAccounts(owner);
  future.facilityPolicy=defaultFacilityPolicy();
+ const authorized=departmentFunctionsQuote(g,owner,future);
+ if(!authorized.status.eligible)return {owner,plan:future,status:authorized.status};
  future.facilityLifecyclePolicy=facilityLifecycleStaffProposal(g,owner,future).policy;
  return {owner,plan:future};
 }
@@ -59,8 +61,17 @@ function facilityInvestmentReview(g,index,input,request){
  const context=facilityContext(g,p,plan),quote=FacilityNetwork.quote(p,request,context);
  if(!quote.eligible)return {...reject(quote.reason),quote};
  const budget=planBudget(p,plan),review=aiCashPlanningReview(g,index,plan),ready=quote.cost<=review.limit-budget.total;
+ const duringPlan={...plan,facilityPolicy:{convert:{...request},cancel:null}};
+ for(const [stage,draft]of [['current',plan],['construction',duringPlan]]){
+  const authorized=departmentFunctionsQuote(g,p,draft);
+  if(!authorized.status.eligible)return {...reject(stage+': '+authorized.status.reason),quote};
+ }
+ const future=facilityInvestmentFutureOwner(g,p,plan,quote);
+ if(future.status&&!future.status.eligible)return {...reject('activation: '+future.status.reason),quote};
+ const authorized=departmentFunctionsQuote(g,future.owner,future.plan);
+ if(!authorized.status.eligible)return {...reject('activation: '+authorized.status.reason),quote};
  const forecast=(owner,draft)=>operatingPreview({...owner,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
-  before=forecast(p,plan),duringPlan={...plan,facilityPolicy:{convert:{...request},cancel:null}},during=forecast(p,duringPlan),future=facilityInvestmentFutureOwner(g,p,plan,quote),after=forecast(future.owner,future.plan);
+  before=forecast(p,plan),during=forecast(p,duringPlan),after=forecast(future.owner,future.plan);
  for(const report of [during,after])if(report.capitalRatio<10||report.profit-(report.fundingLoss||0)<=0||
   (report.fundingLoss||0)>(before.fundingLoss||0)||(report.emergencyDebt||0)>(before.emergencyDebt||0))
   return {...reject('Construction or activation weakens protected funding/capital or produces an operating loss.'),quote,before,during,after};

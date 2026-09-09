@@ -26,6 +26,15 @@
   staffing: 60-month credit/runoff/loss and funded cash/equity scenarios, two
   shortlisted models, actual costs and capital accumulation without free offices.
   This defers only unstarted research/projects; legacy AI is unchanged.
+- Reject facility-investment scenarios that would leave existing department
+  vendor work unaffordable before forecasting construction or activation;
+  regress the actual captured month58 crash and ordinary save/replay.
+- Make the budget strip use the same protected cash reserve as readiness;
+  identify the reserve/shortfall and existing policy controls without lowering
+  player reserves or changing cash, capital, obligations or legacy rules.
+- Make the historical accounting fixture portable across worktrees using a
+  strict four-file relative-path allowlist; retain its exact historical code
+  hunks. Update the new-setup assertion to Group7 while testing old Group5/6 saves.
 - See [working evidence](v31-stability-report.md) and
   [draft manual addendum](v31-manual-addendum.md). No final ZIP or publication yet.
 

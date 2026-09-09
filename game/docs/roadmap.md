@@ -17,6 +17,18 @@ Hiring-priority120 improved headcount but did not solve low morale or productive
 lending. Group7 facility capital budgeting is now under 120/480-month testing;
 it uses funded credit cash-flow scenarios and does not force particular models.
 
+Latest integrated repair: construction/activation forecasts now reject
+unaffordable department commitments instead of crashing. The real month58
+failure/replay regression and protected-cash UI tests pass. The budget strip
+now uses the same common reserve as readiness. These changes are on a separate
+local repair worktree while the older full regression run remains frozen.
+That older run finished at177/179 with Windows LAN passing. Its stale setup
+expectation and worktree-specific accounting-fixture paths were repaired with
+historical-save and strict path-boundary coverage; both suites now pass locally.
+Balanced120 improved staffing14/16 and final originations$100K each but still
+ended ATM-only. Matched longer campaigns, final-build gates and the local ZIP
+remain required; the broader blueprint is not declared complete.
+
 ## V3 delivery checkpoint
 
 V3 packages the current Group6/save9.5 regional preview; it does not close the
