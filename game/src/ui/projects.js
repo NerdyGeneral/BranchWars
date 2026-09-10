@@ -19,10 +19,25 @@ function toggleInitiative(key,v){
  draft.newProject=draft.newProjects[0]||null;
 }
 function capacityLine(budget,load,free){const pct=budget>0?Math.min(100,Math.round(load/budget*100)):0;const cls=free<0?'hot':free<1?'watch':'';return`<div class="capacity-readout ${cls}"><div class="micro"><b>EXECUTION CAPACITY</b> ${load.toFixed(1)} / ${budget.toFixed(1)} committed · <b>${free.toFixed(1)} free</b></div><div class="capacity-bar"><span style="width:${pct}%"></span></div><div class="micro muted">Your executive team carries 1.5 on its own; each Operations &amp; Risk banker adds 2.0 and operations infrastructure adds more. Move bankers into Operations to run more at once.</div></div>`}
+// Lifecycle campaigns register a new office with zero staff quarters, and unstaffed
+// throughput is zero, so the engine's pooled before/after delta reports that every
+// model delivers no capacity on completion. Staffing is a separate Markets decision,
+// so quote the office's own catalogue rating instead — the same figure pre-lifecycle
+// campaigns already show. Presentation only: the reviewed engine is not touched.
+function ratedOfficeCapacity(p,key,target){
+ const def=E.PROJECTS[key],profile=E.REGIONAL_MARKETS?.[target];
+ if(!p.facilityLifecycle||def?.kind!=='branch'||!profile)return null;
+ const rated=E.FacilityLifecycle?.CATALOG?.[def.facility]?.capacity;
+ if(!rated)return null;
+ return {depositCapacity:Math.round(rated.depositCapacity*profile.deposits),
+  loanCapacity:Math.round(rated.loanCapacity*profile.loans)};
+}
 function renderProjectEffect(p,key,target){
  const effect=E.regionalProjectPreview(p,key,target);if(!effect)return '';
- const signed=n=>(n>=0?'+':'')+money(n);
- return '<div class="micro">ON COMPLETION · facility cost '+signed(effect.expense)+'/month · deposit capacity '+signed(effect.depositCapacity)+' · loan capacity '+signed(effect.loanCapacity)+'<br>Before bank-wide efficiency; capacity is not guaranteed sales.</div>';
+ const signed=n=>(n>=0?'+':'')+money(n),rated=ratedOfficeCapacity(p,key,target);
+ const deposit=rated?rated.depositCapacity:effect.depositCapacity,loan=rated?rated.loanCapacity:effect.loanCapacity;
+ return '<div class="micro">ON COMPLETION · facility cost '+signed(effect.expense)+'/month · deposit capacity '+signed(deposit)+' · loan capacity '+signed(loan)+
+  '<br>'+(rated?'This office\'s rated capacity once staffed and established. Assign its staff on Markets. ':'')+'Before bank-wide efficiency; capacity is not guaranteed sales.</div>';
 }
 let strategyModelProposal=null;
 // Presentation corrections only: the original content remains part of saved views.

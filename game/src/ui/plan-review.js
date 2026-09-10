@@ -8,7 +8,7 @@ function monthlyPlanReview(v,plan=draft){
  const p=v.me,assigned=Object.values(plan.allocation||{}).reduce((n,x)=>n+Number(x||0),0),unallocated=p.stats.staff-assigned;
  if(!plan.focus||!v.territories[plan.focus])add('focus','Choose a focus market','Select an open market for market-dependent orders.','markets',null,'#marketMap');
  if(!['a','b'].includes(plan.decision))add('decision','Answer the executive call','Choose a response before submitting this month.','operations','monthly','#decisionGrid');
- if(unallocated!==0||Object.values(plan.allocation||{}).some(x=>!Number.isInteger(x)||x<0))add('allocation','Allocate your employees',unallocated>0?unallocated+' employees remain unallocated.':unallocated<0?Math.abs(unallocated)+' employees are over-allocated.':'Staff allocations must be non-negative whole numbers.','operations','monthly','#staffGrid');
+ if(unallocated!==0||Object.values(plan.allocation||{}).some(x=>!Number.isInteger(x)||x<0))add('allocation','Allocate your employees',unallocated>0?unallocated+' employee'+(unallocated===1?'':'s')+' remain'+(unallocated===1?'s':'')+' unallocated.':unallocated<0?Math.abs(unallocated)+' employee'+(Math.abs(unallocated)===1?' is':'s are')+' over-allocated.':'Staff allocations must be non-negative whole numbers.','operations','monthly','#staffGrid');
  const project=check('project-quote','Review project instructions','operations','projects','#projectGrid',()=>E.projectPlanStatus(p,plan));
  const quote=project?.quote||check('budget-quote','Review shared spending','operations','forecast','#planBudget',()=>E.planBudget(p,plan));
  if(quote&&(quote.discretionaryRemaining??quote.remaining)<0)add('budget','Reduce optional commitments','Optional spending exceeds available cash or capital room by '+cash(-(quote.discretionaryRemaining??quote.remaining))+'. Existing obligations remain owed.','operations','projects','#planBudget');
@@ -17,7 +17,23 @@ function monthlyPlanReview(v,plan=draft){
  if(lifecycle&&!lifecycle.status.eligible)add('facilities','Resolve office staffing or funding',lifecycle.status.reason,'markets',null,'#facilityLifecyclePanel');
  const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
  if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
- if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Number(row.planned.shortfall.toFixed(3))+' quarter-work units uncovered').join(' · ')+'. Four physical units equal one employee-month; this is task delivery, not unused headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
+ if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Math.max(1,Math.round(row.planned.shortfall))+' quarter-work units uncovered'+(Math.abs(row.planned.shortfall-Math.round(row.planned.shortfall))>=.05?' (exactly '+Number(row.planned.shortfall.toFixed(2))+')':'')).join(' · ')+'. Four units are one employee-month of work; this is delivery capacity, not spare headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
+
+ // A market closes after a run of cycles below 12% share, and the last cycle of
+ // that run is the one worth interrupting the plan for.
+ const exitLimit=v.regionalEconomyVersion===1?6:3;
+ const failing=Object.entries(v.territories||{}).filter(([,t])=>((t.exitStreak&&t.exitStreak[0])||0)>=exitLimit-1&&!(t.exited&&t.exited[0]));
+ if(failing.length)warnings.push({id:'market-exit',title:'A market closes next cycle unless its share recovers',
+  text:failing.map(([,t])=>t.name+' is at '+t.shares[0].toFixed(1)+'% share, '+((t.exitStreak&&t.exitStreak[0])||0)+' of '+exitLimit+
+   ' cycles below the 12% line').join(' · ')+'. Service upgrades, deposit defense or a focus change can still hold it.',
+  tab:'markets',desk:null,target:'#marketMap'});
+ // Incumbent agreements are contested automatically, but a seat with no Business
+ // banker cannot win any of them, including the ones it already holds.
+ const held=(v.serviceAgreements||[]).filter(c=>c.owner===p.id);
+ if(held.length&&(plan.allocation?.business||0)<1)warnings.push({id:'bid-incumbent',
+  title:'No Business banker: your service agreements cannot be defended',
+  text:held.length+' agreement'+(held.length===1?'':'s')+' renew automatically only while at least one Business banker is assigned. With none, every contest is forfeited, including renewals you currently hold.',
+  tab:'operations',desk:'monthly',target:'#staffGrid'});
  const action=check('action-quote','Review competitive action','competition',null,'#competitiveActions',()=>E.competitiveActionStatus(p,plan.competitiveAction||'none'));
  if(action&&!action.eligible)add('action','Competitive action unavailable',action.reason,'competition',null,'#competitiveActions');
  if(plan.contractBid){

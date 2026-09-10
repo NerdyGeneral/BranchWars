@@ -8,10 +8,24 @@ const launcher=path.join(folder,'OPEN_BRANCH_WARS.bat'),stub=path.join(folder,'p
 try{
  const source=fs.readFileSync(path.join(__dirname,'../OPEN_BRANCH_WARS.bat'),'utf8');
  assert(source.includes('start "" "%GAMEURL%"'),'Expected generated URL launch path');
+ // The stub below answers without parsing its arguments, so execution alone cannot
+ // prove the PowerShell command is well formed. Inside double quotes cmd does not
+ // treat "^" as an escape, so a caret-escaped pipe reaches PowerShell literally and
+ // fails to parse, silently losing address detection. Check the source directly.
+ // Match only cmd metacharacter escapes, so a PowerShell regex anchor such as '^192\.'
+ // stays legal inside a quoted argument.
+ for(const line of source.split(/\r?\n/))
+  for(const segment of line.match(/"[^"]*"/g)||[])
+   assert(!/\^[|&<>()]/.test(segment),'Caret-escaped cmd metacharacter inside a quoted PowerShell argument reaches PowerShell literally: '+segment.trim());
  fs.writeFileSync(launcher,source.replace(/^\s*start "" /gm,'echo OPEN_URL '));
  fs.writeFileSync(stub,'@echo off\r\nif "%AUDIT_CASE%"=="no-address" exit /b 0\r\nif not defined GAMEFILE (echo 192.0.2.10& exit /b 0)\r\nif "%AUDIT_CASE%"=="uri-failure" exit /b 0\r\necho file:///C:/fixture/Bank%%20Name/BRANCH_WARS.html#lanip=192.0.2.10\r\n');
  for(const test of ['normal','no-address','uri-failure']){
   const env={...process.env,AUDIT_CASE:test};delete env.GAMEURL;delete env.GAMEFILE;delete env.LANIP;
+  // Resolve the stub through PATH, not the working directory. Machines that set
+  // NoDefaultCurrentDirectoryInExePath drop the implicit current-directory search,
+  // which previously let the real PowerShell run and masked a launcher defect.
+  const pathKey=Object.keys(env).find(name=>name.toUpperCase()==='PATH')||'PATH';
+  env[pathKey]=folder+path.delimiter+(env[pathKey]||'');
   const result=spawnSync(process.env.ComSpec||'cmd.exe',['/d','/s','/c','""'+launcher+'""'],{cwd:os.tmpdir(),env,encoding:'utf8',windowsHide:true,windowsVerbatimArguments:true});
   assert.ifError(result.error);assert.equal(result.status,0,result.stderr);
   const opened=result.stdout.split(/\r?\n/).filter(line=>line.startsWith('OPEN_URL '));

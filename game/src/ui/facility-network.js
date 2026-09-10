@@ -62,6 +62,13 @@ function facilitySelectionContent(v,office){
     '<button type="button" class="btn" id="stageFacilityConversion"'+(sealed||!review.status.eligible?' disabled':'')+'>Stage office conversion</button>'+
     '<p class="micro">Selecting an office or model only compares a proposal. Stage replaces any other unsubmitted facility instruction; it never cancels an already operating project for free. Work can stall if shared execution capacity is unavailable.</p>';
 }
+// The canonical office id is "<bank>:office:<serial>" and means nothing to a
+// player. Show the serial and the month it opened instead; the id stays the
+// value of the inspect selector, which is where it is actually needed.
+function facilityUiOfficeLabel(office){
+ const serial=String(office.id||'').split(':office:')[1];
+ return 'Office '+(serial?'#'+serial:'')+(office.openedCycle?' · opened month '+office.openedCycle:'');
+}
 function renderFacilityNetwork(v){
   facilityNetworkRenderRevision++;
   const mount=$('#facilityNetworkPanel'),p=v.me;
@@ -78,14 +85,14 @@ function renderFacilityNetwork(v){
     'Convert '+policy.convert.officeId+' to '+facilityUiModel(policy.convert.model):'No new facility order staged.';
   const rows=offices.map(o=>{
     const metrics=E.facilityOfficeMetrics(p,o,draft),work=o.conversion;
-    return '<tr><th>'+esc(v.territories[o.market]?.name||o.market)+'<br><small>'+esc(o.id)+'</small></th><td>'+esc(facilityUiModel(o.model))+'</td><td>'+facilityUiMoney(metrics.expense)+'/month</td>'+
-      '<td>'+facilityUiMoney(metrics.depositCapacity)+' / '+facilityUiMoney(metrics.loanCapacity)+'</td><td>'+
+    return '<tr><th>'+esc(v.territories[o.market]?.name||o.market)+'<br><small>'+esc(facilityUiOfficeLabel(o))+'</small></th><td>'+esc(facilityUiModel(o.model))+'</td><td>'+facilityUiMoney(metrics.expense)+'/month</td>'+
+      '<td>'+facilityUiMoney(metrics.depositCapacity)+'</td><td>'+facilityUiMoney(metrics.loanCapacity)+'</td><td>'+
       (work?esc(facilityUiModel(work.model))+' · '+Number(work.work).toLocaleString()+'/'+E.FacilityNetwork.RULES.work+
         (work.readyCycle===null?' work':' · activates month '+integer(work.readyCycle)):'Operating · '+integer(o.conversions)+' prior conversions')+'</td></tr>';
   }).join('');
   mount.innerHTML='<details id="facilityNetworkDesk"'+(facilityNetworkSelection.open?' open':'')+'><summary>OFFICE NETWORK · '+integer(offices.length)+' operating · '+integer(offices.filter(o=>o.conversion).length)+' converting</summary>'+
     '<section class="credit-policy group-credit-policy"><p class="small">Manage identified existing offices. Conversion changes one site, not every branch in a market. No office is created by opening this desk.</p>'+
-    (offices.length?'<div class="table-scroll" tabindex="0" style="max-height:320px;overflow:auto" aria-label="Owned office network"><table class="regional-table"><thead><tr><th>Market / office ID</th><th>Current model</th><th>Upkeep</th><th>Deposit / loan capacity</th><th>Progress</th></tr></thead><tbody>'+rows+'</tbody></table></div>':
+    (offices.length?'<div class="table-scroll" tabindex="0" style="max-height:320px;overflow:auto" aria-label="Owned office network"><table class="regional-table"><thead><tr><th>Market / office</th><th>Current model</th><th>Upkeep</th><th>Deposit capacity</th><th>Loan capacity</th><th>Progress</th></tr></thead><tbody>'+rows+'</tbody></table></div>':
       '<p class="notice">No operating offices. Open a site through the normal funded project workflow before considering conversion.</p>')+
     '<p class="notice" id="facilityInstructionStatus" role="status">'+esc(staged)+'</p>'+
     (hasOrder?'<button type="button" class="btn" id="clearFacilityInstruction"'+(p.submitted||v.gameOver?' disabled':'')+'>Clear unsubmitted facility order</button>':'')+

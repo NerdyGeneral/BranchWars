@@ -11,7 +11,7 @@ let lobby=null,lobbyPending=null,lobbyDirty=false,lobbySettingsDirty=false;
 // Capability acknowledgements are connection-local, never saved campaign rules.
 let featureConnectionGeneration=0,featurePeerCapabilities=null,featurePeerGeneration=-1,featurePeerFresh=false,featureChallenge='';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>{const v=Number(n)||0,sign=v<0?'−':'';return sign+'$'+(Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(2)+'M':Math.round(Math.abs(v)/1000)+'K')};
+const money=n=>{const v=Number(n)||0,a=Math.abs(v),sign=v<0?'−':'';return sign+'$'+(a>=1e6?(a/1e6).toFixed(2)+'M':a>=1000?Math.round(a/1000)+'K':String(Math.round(a)))};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
 function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}

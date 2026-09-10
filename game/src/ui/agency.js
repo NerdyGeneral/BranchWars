@@ -61,7 +61,7 @@ function agencyResultsMarkup(v){
     return '<tr><th>'+esc(profile.name)+(c.resolution?'<br><small>Company closed</small>':'')+'</th>'+products.map(([key,product])=>{
       const relationship=p.agencySnapshot.relationships.find(r=>r.companyId===c.id&&r.product===key),owner=relationship.owner===p.id?'Your agency':relationship.owner===v.rival.id?v.rival.name+' agency':'Outside providers';
       const premium=Math.round(c.baseFee*product.premiumRate),commission=Math.floor(premium*product.commissionRate);
-      return '<td>'+esc(owner)+'<br><small>'+(c.resolution?'Company closed · unavailable':relationship.owner===null?'Available to contest':integer(relationship.remaining)+' months to renewal')+
+      return '<td>'+esc(owner)+'<br><small>'+(c.resolution?'Company closed · unavailable':relationship.owner===null?'Available to contest':integer(relationship.remaining)+' month'+(relationship.remaining===1?'':'s')+' to renewal')+
         '</small><br><small>'+agencyDollars(premium)+' premium · '+agencyDollars(commission)+' commission/month · '+integer(product.load)+' service units</small></td>';
     }).join('')+'</tr>';
   }).join('');

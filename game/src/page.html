@@ -89,9 +89,14 @@
   </section>
 
   <main id="gameScreen" class="hidden">
-    <div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div>
-    <section class="panel"><div class="statusbar"><div><span class="kicker">EXECUTIVE COMMAND CENTER</span><br><span class="small"><span id="modeBadge" class="modebadge"></span> // CYCLE <b id="cycleNo"></b>/<span id="maxCycles"></span> // <span id="scopeName" class="blue"></span></span></div><div class="row"><span id="readyState" class="small"></span><span id="linkState" class="connection good"></span><button id="relinkBtn" class="btn hidden">[ NEW LINK CODE ]</button><button id="exportBtn" class="btn">[ EXPORT ]</button><button id="exitBtn" class="btn danger">[ EXIT ]</button></div></div></section>
-    <section class="panel"><div class="summary-grid"><div class="summary"><span>ENTERPRISE VALUE</span><b id="myScore"></b></div><div class="summary"><span>MARKETS</span><b id="myMarkets"></b></div><div class="summary"><span>DEPOSITS</span><b id="myDeposits"></b></div><div class="summary"><span>LOANS</span><b id="myLoans"></b></div><div class="summary"><span>CASH</span><b id="myCash"></b></div><div class="summary"><span>LAST PROFIT</span><b id="myProfit"></b></div><div class="summary"><span>RISK / HEAT</span><b id="myRisk"></b></div><div class="summary"><span>CAPITAL RATIO</span><b id="myCapital"></b><span id="myTier" class="micro"></span></div></div></section>
+    <section class="panel command-bar" aria-label="Campaign status and headline figures">
+      <div class="command-bar-row">
+        <div class="command-bar-status"><span class="kicker">EXECUTIVE COMMAND CENTER</span><span class="small"><span id="modeBadge" class="modebadge"></span> // CYCLE <b id="cycleNo"></b>/<span id="maxCycles"></span> // <span id="scopeName" class="blue"></span></span><div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div></div>
+        <div class="summary-grid headline-grid"><div class="summary"><span>VALUE</span><b id="myScore"></b></div><div class="summary"><span>CAPITAL</span><b id="myCapital"></b><span id="myTier" class="micro"></span></div><div class="summary"><span>CASH</span><b id="myCash"></b></div></div>
+        <div class="row command-bar-actions"><span id="readyState" class="small"></span><span id="linkState" class="connection good"></span><button id="relinkBtn" class="btn hidden">[ NEW LINK CODE ]</button><button id="exportBtn" class="btn">[ EXPORT ]</button><button id="exitBtn" class="btn danger">[ EXIT ]</button></div>
+        <details class="summary-more"><summary>More figures</summary><div class="summary-grid"><div class="summary"><span>MARKETS</span><b id="myMarkets"></b></div><div class="summary"><span>DEPOSITS</span><b id="myDeposits"></b></div><div class="summary"><span>LOANS</span><b id="myLoans"></b></div><div class="summary"><span>LAST PROFIT</span><b id="myProfit"></b></div><div class="summary"><span>RISK / HEAT</span><b id="myRisk"></b></div></div></details>
+      </div>
+    </section>
     <nav class="panel workspace-nav" aria-label="Command center workspace">
       <div id="workspaceGroups" class="workspace-groups" role="group" aria-label="Management tasks">
         <button type="button" data-workspace-group="bank" aria-pressed="true">Bank &amp; finance</button>
@@ -114,7 +119,6 @@
       </div>
       <button type="button" id="gameHelpOpen" class="btn">Help &amp; find controls</button></div>
     </nav>
-    <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
     <section class="panel"><div class="readybar"><div><b>SIMULTANEOUS PLAN</b><div id="planChecklist" class="checklist muted"></div></div><div class="row"><button id="recallBtn" class="btn hidden">[ RECALL ]</button><button id="readyBtn" class="btn primary">[ MARK READY ]</button></div><span id="submitMsg" class="small muted"></span></div><details id="monthlyReviewDetails"><summary id="monthlyReviewSummary">Review this month · blockers, warnings &amp; changes</summary><div id="monthlyPlanReview" aria-label="Monthly plan review"></div></details></section>
     <section class="panel workspace-view" data-workspace="customers"><div id="householdPanel"></div></section>
     <section class="panel workspace-view" data-workspace="products"><div id="productProgramsPanel"></div></section>
@@ -127,6 +131,7 @@
     <section class="panel workspace-view active hidden" id="recoveryWorkspace" data-workspace="overview"><div id="bankRecoveryMount"></div></section>
     <section class="panel workspace-view active" data-workspace="overview"><div class="section-head"><div><h2>EXECUTIVE OVERVIEW</h2><span class="small muted">Enterprise momentum, balance-sheet pressure, and operating identity at a glance.</span></div><span id="scoreGap" class="small"></span></div><div class="situation-grid"><div class="intel-card chart-card"><h3>ENTERPRISE VALUE · CAMPAIGN TREND</h3><div id="trendChart"></div><div id="operatingReport" class="operating-preview"></div></div><div class="intel-stack"><div id="portfolioIntel" class="intel-card"></div><div id="doctrineIntel" class="intel-card"></div></div></div></section>
     <section id="operationsWorkspace" class="workspace-view operations-workspace" data-workspace="operations" aria-label="Operations workspaces">
+      <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
       <div class="panel operations-navigation">
         <div class="section-head"><div><h2>OPERATIONS</h2><p class="small muted">One shared monthly draft. Moving between these desks never submits or resets your plan.</p></div><button id="operationsDecisionShortcut" type="button" class="btn">Review executive decision</button></div>
         <div class="operations-tabs" role="tablist" aria-label="Operations desks">
@@ -154,9 +159,9 @@
     </section>
     <div class="game-layout">
       <div>
+        <section class="panel workspace-view" data-workspace="markets"><div class="section-head"><div><h2>LIVE OPPORTUNITY PIPELINE</h2><span class="small muted">Optionally prioritize one relationship. Both institutions may compete for the same opportunity.</span></div></div><div id="pipeline" class="pipeline"></div></section>
         <section class="panel workspace-view" data-workspace="markets"><div class="section-head"><div><h2 id="marketTitle">THE CITY</h2><span class="small muted">Choose a district to focus on. Buildings show market value; district color shows who holds influence.</span></div><span id="unlockText" class="small blue"></span></div><div id="facilityNetworkPanel" class="hidden"></div><div id="facilityLifecyclePanel" class="hidden"></div><div id="marketMap" class="map"></div></section>
         <section class="panel workspace-view hidden" id="regionalGrowthWorkspace" data-workspace="markets"><div id="regionalGrowthMount"></div></section>
-        <section class="panel workspace-view" data-workspace="markets"><div class="section-head"><div><h2>LIVE OPPORTUNITY PIPELINE</h2><span class="small muted">Optionally prioritize one relationship. Both institutions may compete for the same opportunity.</span></div></div><div id="pipeline" class="pipeline"></div></section>
         <section class="panel workspace-view" data-workspace="strategy"><div class="section-head"><div><h2>ENTERPRISE STRATEGY TREE</h2><span class="small muted">Compare all five capabilities, stage affordable research, and choose permanent operating models. Research unlocks options; deployment and activation remain separate.</span></div></div><div id="strategySummary" class="strategy-summary small"></div><div id="strategyTree" class="strategy-tree"></div></section>
         <section class="panel workspace-view" data-workspace="intelligence"><div class="kicker">MARKET INTELLIGENCE</div><div id="threatBoard" class="threat-board"></div><div class="rule"></div><div id="lastResolution" class="history"></div></section>
         <section class="panel workspace-view" data-workspace="intelligence"><details><summary>[ COMPLETE SCORECARD, CAREER MILESTONES &amp; CORPORATE WIRE ]</summary><div style="margin-top:9px"><table class="scoreboard"><thead><tr><th>PUBLIC METRIC</th><th id="myName"></th><th id="rivalName"></th></tr></thead><tbody id="scoreRows"></tbody></table><div id="internalStats" class="notice"></div><div class="mandate"><span class="micro muted">CONFIDENTIAL EXECUTIVE MANDATE</span><strong id="mandateName"></strong><div id="mandateDesc" class="small"></div><div id="mandateProgress" class="small"></div></div><div class="kicker" style="margin-top:10px">CAREER MILESTONES // +25 VALUE EACH</div><div id="milestones" class="milestones"></div><div id="log" class="history" style="margin-top:10px"></div></div></details></section>
