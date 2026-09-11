@@ -14995,6 +14995,12 @@ function renderMonthlyPlanReview(v,review){
  const mount=$('#monthlyPlanReview');if(!mount)return;
  const locked=v.me.submitted||v.gameOver,items=[...review.blockers,...review.warnings];
  const summary=$('#monthlyReviewSummary');
+ const box=$('#monthlyReviewDetails');
+ if(box){
+  const blocking=!locked&&review.blockers.length>0;
+  if(blocking&&box.dataset.autoOpened!==String(v.cycle)){box.open=true;box.dataset.autoOpened=String(v.cycle);}
+  if(!blocking)delete box.dataset.autoOpened;
+ }
  if(summary)summary.textContent='Review this month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
  const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Go to '+esc(item.tab)+'</button></li>').join('');
  mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
