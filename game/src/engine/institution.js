@@ -11,6 +11,16 @@ const CAPABILITY_CAP_PER_CYCLE=250000;
 function capabilitySpend(p,key){return Math.max(0,Number(p.capability&&p.capability[key])||0)}
 function leadCapability(p){let best=null,bestShare=0,tied=false;for(const k of Object.keys(STRATEGY_BRANCHES)){const tiers=CAPABILITY_TIERS[k],share=capabilitySpend(p,k)/tiers[tiers.length-1];if(share>bestShare+1e-9){best=k;bestShare=share;tied=false}else if(Math.abs(share-bestShare)<=1e-9&&share>0)tied=true}return bestShare>0&&!tied?best:null}
 function strategyLevel(p,key){const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
+// Fractional capability for continuous effects only. Book version4 is the
+// Group8 marker; every earlier group keeps whole levels and is untouched.
+// Gates, unlocks, node lookups and specialization triggers all stay on
+// strategyLevel, so nothing becomes reachable earlier than it was.
+function strategyProgress(p,key){
+ const level=strategyLevel(p,key),tiers=CAPABILITY_TIERS[key];
+ if(p.accounting?.version!==4||!tiers||level>=tiers.length)return level;
+ const floor=level?tiers[level-1]:0,next=tiers[level],spent=capabilitySpend(p,key);
+ return next>floor?level+Math.max(0,Math.min(1,(spent-floor)/(next-floor))):level;
+}
 function capabilityNextCost(p,key){const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
 function capabilityBenefit(p,branch){const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
 function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of Object.keys(STRATEGY_BRANCHES)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=STRATEGY_BRANCHES[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${STRATEGY_BRANCHES[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key];if(pick&&STRATEGY_SPECIALIZATIONS[key]&&STRATEGY_SPECIALIZATIONS[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${STRATEGY_SPECIALIZATIONS[key][pick].name} operating model in ${STRATEGY_BRANCHES[key].name}.`)}}}return L}
@@ -144,8 +154,8 @@ function projectCost(p,def,focus=p.focus,premium=1){
   cost=node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0;
  }else{
   cost=def.cost;
-  if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
-  if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
+  if(def.kind==='branch')cost*=1-strategyProgress(p,'network')*.08;
+  if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
   if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
  }
