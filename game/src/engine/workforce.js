@@ -253,7 +253,7 @@ function validateWorkforceSave(g) {
       if (amounts.some(k => !Number.isSafeInteger(report[k]) || report[k] < 0) || ![0, 1].includes(report.workforceTrainingPaused) ||
           report.workforceTraining > report.workforceTrainingRequested || (report.workforceTrainingPaused && report.workforceTraining !== 0) ||
           Object.keys(SPECIALIST_ROLES).reduce((n, k) => n + report['trainingSpend_' + k], 0) !== report.workforceTraining ||
-          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5,6,7].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
+          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5,6,7,8].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
             !Number.isFinite(report['specialistBonus_' + k]) || report['specialistBonus_' + k] < 0)) throw Error('Invalid workforce operating report');
     }
     if (p.submitted) {

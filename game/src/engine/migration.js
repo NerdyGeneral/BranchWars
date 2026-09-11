@@ -119,7 +119,7 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5','9.6'].includes(g.version))validateCampaignRules(g,'game');
+ if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7'].includes(g.version))validateCampaignRules(g,'game');
  else {
  if(g.onboardingVersion!==undefined&&g.version!=='8.13')throw Error('Onboarding requires a v8.13 save.');
  if(g.relationshipOffersVersion!==undefined&&g.version!==(g.onboardingVersion===1?'8.13':'8.12'))throw Error('Relationship offers requires a v8.12 save.');

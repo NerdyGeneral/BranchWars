@@ -9,7 +9,7 @@ function staffingProtectedDefense(g,index,key){
 }
 function staffingActionAffordable(g,index,key){
  const p=g.players[index];
- if(g.financialGroupVersion!==7||!staffingRecoveryPriority(p)||staffingProtectedDefense(g,index,key))return true;
+ if(![7,8].includes(g.financialGroupVersion)||!staffingRecoveryPriority(p)||staffingProtectedDefense(g,index,key))return true;
  const hires=planHiring(g,p,0);
  return !hires||pilotSpendingLimit(p,.10,200000)-COMPETITIVE_ACTIONS[key].cost>=hireCost(p,hires);
 }

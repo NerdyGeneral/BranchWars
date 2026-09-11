@@ -34,7 +34,7 @@ function handleMessage(m){
     else{send({type:'error',code:'feature_rules_unsupported',message:status.reason});setConnection(status.status||status.reason,'bad')}
     if(lobby){renderLobby();if(p2pRole==='host')publishLobby()}return
    }
-   if([6,7].includes(currentFeatureSource().financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
+   if([6,7,8].includes(currentFeatureSource().financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
    if(!game){try{openLobby(m)}catch(e){setConnection('LOBBY REFUSED // '+e.message,'bad');send({type:'error',code:'lobby_required',message:e.message})}return}
    linkReady=true;stopHandshake();syncPeers();return
   }

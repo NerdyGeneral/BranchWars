@@ -44,7 +44,7 @@ function renderWorkforce(v) {
   const row = review.rows.find(r => r.role === selectedWorkforceRole) || review.rows[0];
   const disabled = v.me.submitted || v.gameOver || gh.active&&gh.paused ? 'disabled' : '';
   const actual = v.me.operatingReport, forecast = review.forecast;
-  const morale = v.financialGroupVersion===7?E.operatingWorkloadMorale(v.me,Object.fromEntries(review.rows.map(r=>[r.role,(r.productive??r.assigned)+r.bonus]))):null;
+  const morale = [7,8].includes(v.financialGroupVersion)?E.operatingWorkloadMorale(v.me,Object.fromEntries(review.rows.map(r=>[r.role,(r.productive??r.assigned)+r.bonus]))):null;
   const table = review.rows.map(r => '<tr><th>' + esc(r.name) + '</th><td>' + r.count + ' / ' + r.assigned + (v.me.departmentOffice?' / '+r.productive:'') + '</td><td>' +
     (r.count ? r.skill + '/100' : 'Not hired') + '</td><td>+' + r.bonus.toFixed(2) + '</td><td>' + money(r.payroll) + '</td></tr>').join('');
   $('#workforcePanel').innerHTML = `

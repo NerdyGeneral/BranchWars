@@ -98,7 +98,7 @@ function facilityInvestmentReview(g,index,input,request){
   assumption:'Frozen economy, staff, collections and non-credit operating earnings; projected loans capped by cash and 10% capital plus buffers. No borrowing, future hiring or deposit/customer growth. Unstarted research/projects deferred. Principal repayment is not profit; this is not a future earnings guarantee.'};
 }
 function planFacilityInvestment(g,index,input){
- if(g.financialGroupVersion!==7)return input;
+ if(![7,8].includes(g.financialGroupVersion))return input;
  const p=g.players[index];if(p.stats.lastProfit<=0||tierRank(p)>=2)return input;
  const draft=facilityInvestmentDraft(input),draftAuthorized=departmentFunctionsQuote(g,p,draft);
  // Deferring research can make previously paused training affordable. That

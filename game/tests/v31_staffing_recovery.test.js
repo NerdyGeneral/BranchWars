@@ -3,8 +3,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const copy=x=>JSON.parse(JSON.stringify(x)),hash=x=>crypto.createHash('sha256').update(x).digest('hex');
 const html=require('../tools/build_game').assemble().html,code=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 function load(source){const c={console};vm.runInNewContext(source.replace('root.BWEngine={','root.BWEngine={staffingRecoveryReview,staffingRecoveryMorale,withCorporateForecast,'),c);return c.BWEngine;}
-const gate='if(g.financialGroupVersion===7)plan=staffingRecoveryReview(g,index,plan).plan;',
- facilityGate='return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;';
+const gate='if([7,8].includes(g.financialGroupVersion))plan=staffingRecoveryReview(g,index,plan).plan;',
+ facilityGate='return [7,8].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;';
 assert(code.includes(gate)&&code.includes(facilityGate));
 // Isolate the staffing hook BEFORE the subsequent capital-budgeting stage in
 // both engines. The full production pipeline is covered by staffing_priority

@@ -12,7 +12,7 @@ function loader(document){
 }
 const modern=loader(html),legacy=loader(old),E=modern().c.window.BWEngine;
 const campaignVersion=process.argv.includes('--v31')?7:6;
-if(campaignVersion===7)assert.equal(E.campaignCapabilities().financialGroupSupported,7);
+if(campaignVersion===7)assert.equal(E.campaignCapabilities().financialGroupSupported,8);
 assert.equal(E.campaignCapabilities().departmentStaffingSupported,2);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,6);
 assert.equal(legacy().c.window.BWEngine.campaignCapabilities().departmentStaffingSupported,undefined);
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);

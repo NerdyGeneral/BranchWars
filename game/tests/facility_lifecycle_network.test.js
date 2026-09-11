@@ -15,7 +15,7 @@ function loadHarness(document){
  owner._compile(text,harnessFile);return owner.exports.harness;
 }
 const modern=loadHarness(html),legacy=loadHarness(oldHtml),E=modern().c.window.BWEngine;
-assert.equal(E.campaignCapabilities().financialGroupSupported,7);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,4);
+assert.equal(E.campaignCapabilities().financialGroupSupported,8);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,4);
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);
 function peers(transport,version=5,oldSide=null){
  const host=(oldSide==='host'?legacy:modern)('host'),guest=(oldSide==='guest'?legacy:modern)('guest'),queue=[],frames=[];
@@ -119,7 +119,7 @@ async function activePairs(){
  for(const transport of ['gh','lan','p2p']){
   let pair=peers(transport);await open(pair);await start(pair);privateState(pair);
   const oldHello=copy(pair.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);
-  assert.equal(oldHello.financialGroupSupported,7);
+  assert.equal(oldHello.financialGroupSupported,8);
   const opening=copy(pair.host.state().game);await submit(pair,plans(pair),transport);months++;
   assert.equal(pair.host.state().game.cycle,2);privateState(pair);
   for(const [i,p]of pair.host.state().game.players.entries()){

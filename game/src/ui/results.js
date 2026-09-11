@@ -58,7 +58,7 @@ function validateFacilitySubmission(v,plan){
  // A disabled button is not a submission boundary. Reuse the same pure engine
  // reviews before sealing a guest plan; the host still validates authoritatively.
  // Older campaigns retain their established submission behavior.
- if(![5,6,7].includes(v?.financialGroupVersion))return;
+ if(![5,6,7,8].includes(v?.financialGroupVersion))return;
  if(v.gameOver)throw Error('This campaign has ended. Facility orders are locked.');
  if(v.me.submitted)throw Error('This plan is already submitted. Recall it before making changes.');
  const projects=E.projectPlanStatus(v.me,plan);

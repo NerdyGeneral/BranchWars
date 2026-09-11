@@ -8,7 +8,7 @@ assert.equal(hash(bytes),'135cd0a1b51ce4592cb21b8ae7e249acf8328bbe75adac6d473932
 const saved=JSON.parse(zlib.gunzipSync(bytes)),g=copy(saved.game),input=copy(saved.pending[1]);
 E.validatePilot(g);E.validateLedger(g);assert.equal(g.cycle,318);
 assert.throws(()=>E.submit(copy(g),1,copy(input)),/needs 2.5 execution capacity but staffs only 1.5/,'Never silently repair submitted human/network instructions');
-const boundary='    if(g.financialGroupVersion===7)plan=planExecutionReserve(g,index,plan);\n';assert(source.includes(boundary));
+const boundary='    if([7,8].includes(g.financialGroupVersion))plan=planExecutionReserve(g,index,plan);\n';assert(source.includes(boundary));
 const old=make(source.replace(boundary,'')),oldWorld=copy(g),oldPlan=old.chooseBot(oldWorld,1);
 assert.equal(old.projectPlanStatus(oldWorld.players[1],oldPlan).code,'capacity','Unrepaired complete AI reproduces the actual capacity failure');
 const before=JSON.stringify(g),instructions=JSON.stringify(input),fixed=E.withCorporateForecast(g,()=>E.planExecutionReserve(g,1,input));

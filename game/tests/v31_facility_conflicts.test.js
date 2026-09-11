@@ -9,7 +9,7 @@ const saved=JSON.parse(zlib.gunzipSync(bytes)).game;
 E.validatePilot(saved);E.validateLedger(saved);assert.equal(saved.cycle,92);assert.equal(saved.financialGroupVersion,7);
 // Capture the exact otherwise legal draft just before the failing investment
 // review. No grants, campaign migration, or replacement random decisions.
-const boundary='return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;';
+const boundary='return [7,8].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;';
 assert(source.includes(boundary));const P=make(source.replace(boundary,'return plan;'));
 const prior=copy(saved),plan=P.chooseBot(prior,0),p=prior.players[0];
 assert(E.lifecycleInstructionQuote(prior,p,plan).status.eligible);

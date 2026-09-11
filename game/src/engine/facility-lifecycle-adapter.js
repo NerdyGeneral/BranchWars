@@ -19,7 +19,7 @@ function facilityLifecycleLiveContext(p,cycle) {
     nearby:(a,b)=>a===b||!!FACILITY_LIFECYCLE_NEIGHBORS[a]?.includes(b),modelTerms:facilityLifecycleModelTerms};
 }
 function initializeFacilityLifecycle(g) {
-  if(![5,6,7].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8].includes(g.financialGroupVersion))return;
   facilityLifecycleCommit(g,FacilitySettlement.initialize(g));
   for(const p of g.players){
     const proposal=FacilityLifecycle.allocateStaff(p,facilityLifecycleStaff(p));
@@ -75,7 +75,7 @@ function normalizeFacilityLifecyclePlan(g,p,plan) {
   plan.facilityLifecyclePolicy=result.policy;
 }
 function prepareFacilityLifecycle(g,plans,openingContexts=null) {
-  if(![5,6,7].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'prepareFacilityLifecycle','facilities.lifecycle',()=>{
     const result=FacilitySettlement.prepare(g,plans,(world,p,plan)=>openingContexts?openingContexts[g.players.findIndex(x=>x.id===p.id)]:facilityLifecyclePlanningContext(world,p,plan).context);
     facilityLifecycleCommit(g,result.game);
@@ -83,7 +83,7 @@ function prepareFacilityLifecycle(g,plans,openingContexts=null) {
   });
 }
 function advanceFacilityLifecycle(g) {
-  if(![5,6,7].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'advanceFacilityLifecycle','facilities.renovation',()=>{
     const alreadyAdvanced=new Set(g.players.filter(p=>p.facilityLifecycle.lastAdvancedCycle===g.cycle).map(p=>p.id));
     const result=FacilitySettlement.advance(g,(_,p)=>facilityLifecycleLiveContext(p,g.cycle));
@@ -94,7 +94,7 @@ function advanceFacilityLifecycle(g) {
   });
 }
 function settleFacilityLifecycle(g,plans) {
-  if(![5,6,7].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'settleFacilityLifecycle','facilities.maintenance',()=>{
     const result=FacilitySettlement.settle(g,(_,p)=>{
       const context=facilityLifecycleLiveContext(p,g.cycle),plan=plans[g.players.findIndex(x=>x.id===p.id)];
@@ -112,7 +112,7 @@ function settleFacilityLifecycle(g,plans) {
   });
 }
 function activateFacilityLifecycle(g) {
-  if(![5,6,7].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8].includes(g.financialGroupVersion))return;
   recordLedgerStage(g,'activateFacilityLifecycle','facilities.renewal',()=>{
     const result=FacilitySettlement.activate(g);facilityLifecycleCommit(g,result.game);
     for(const e of result.events)addLog(g,e.officeId+' renovation activated; condition restored.','FACILITY');
@@ -124,7 +124,7 @@ function validateFacilityLifecycleSave(g) {
     if(p.facilityLifecycle)validateFacilityLifecycleBoundary(p,g.cycle,g.gameOver);
     if(p.submitted)normalizeFacilityLifecyclePlan(g,p,JSON.parse(JSON.stringify(p.submitted)));
   }
-  if(![5,6,7].includes(g.financialGroupVersion)&&Object.values(g.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))
+  if(![5,6,7,8].includes(g.financialGroupVersion)&&Object.values(g.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))
     throw Error('Unversioned saved lifecycle orders.');
 }
 function validateFacilityLifecycleBoundary(p,cycle,gameOver) {
@@ -140,7 +140,7 @@ function validateFacilityLifecycleBoundary(p,cycle,gameOver) {
   }
 }
 function projectFacilityLifecycle(g,out,index) {
-  if(![5,6,7].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8].includes(g.financialGroupVersion))return;
   out.me.facilityLifecycle=JSON.parse(JSON.stringify(g.players[index].facilityLifecycle));
   delete out.rival.facilityLifecycle;
   if(out.lastPlans?.[out.rival.id])delete out.lastPlans[out.rival.id].facilityLifecyclePolicy;
@@ -148,7 +148,7 @@ function projectFacilityLifecycle(g,out,index) {
 function validateFacilityLifecycleView(v) {
   if(v.facilityEconomy!==undefined||v.rival?.facilityLifecycle!==undefined||v.lastPlans?.[v.rival?.id]?.facilityLifecyclePolicy!==undefined)
     throw Error('Private facility lifecycle data exposed.');
-  if(![5,6,7].includes(v.financialGroupVersion)){
+  if(![5,6,7,8].includes(v.financialGroupVersion)){
     if(v.me?.facilityLifecycle!==undefined||v.me?.submitted?.facilityLifecyclePolicy!==undefined||
       Object.values(v.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))throw Error('Unversioned facility lifecycle view.');
     return;

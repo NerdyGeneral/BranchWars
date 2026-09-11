@@ -15,7 +15,7 @@ function loadHarness(document){
 }
 const modern=loadHarness(html),legacy=loadHarness(oldHtml),E=modern().c.window.BWEngine;
 const campaignVersion=process.argv.includes('--v31')?7:6,saveVersion=campaignVersion===7?'9.6':'9.5';
-assert.equal(E.campaignCapabilities().financialGroupSupported,7);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,5);
+assert.equal(E.campaignCapabilities().financialGroupSupported,8);assert.equal(legacy().c.window.BWEngine.campaignCapabilities().financialGroupSupported,5);
 console.log(JSON.stringify({suite:'department-functions-network',phase:'opening',candidateSha256,reference}));
 const same=(a,b,label)=>assert.deepEqual(copy(a),copy(b),label);
 function changedPath(a,b,path='game'){
@@ -261,7 +261,7 @@ async function activePairs(){
  let months=0;
  for(const transport of ['gh','lan','p2p']){
   let p=peers(transport);await open(p);await start(p);privateState(p);
-  const hello=copy(p.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);assert.equal(hello.financialGroupSupported,7);
+  const hello=copy(p.frames.find(([i,m])=>i===1&&m.type==='hello'&&m.featureChallenge)[1]);assert.equal(hello.financialGroupSupported,8);
   const input=plans(p);
   missingStoredPolicyChecks(p,input);
   for(const mutate of [q=>{q.departmentFunctionsPolicy.vendors.credit=17;},q=>{q.departmentFunctionsPolicy.quotas.credit.service=1;},q=>{delete q.departmentFunctionsPolicy.vendors;}]){

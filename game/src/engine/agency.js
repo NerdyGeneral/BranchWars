@@ -22,7 +22,7 @@ function agencyRelationships(companies) {
   })));
 }
 function initializeAgency(g) {
-  if (![3,4,5,6,7].includes(g.financialGroupVersion)) return;
+  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return;
   if (!g.companyEconomy || g.agencyEconomy) throw Error('Agency requires an initialized company economy.');
   if (g.companyEconomy.version !== 3) throw Error('Agency requires versioned corporate premium accounting.');
   g.agencyEconomy = { version: 1, month: 0, carrier: GroupAccounting.opening('agency:carriers'),
@@ -182,7 +182,7 @@ function agencyCandidateScore(p, company, relationship, incumbent) {
     (incumbent ? 8 + relationship.quality : 0);
 }
 function settleAgency(g, plans) {
-  if (![3,4,5,6,7].includes(g.financialGroupVersion)) return [];
+  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return [];
   const e = g.agencyEconomy;
   if (e.month !== g.cycle - 1 || g.companyEconomy.month !== g.cycle)
     throw Error('Agency settlement must occur once after company operations.');
@@ -295,17 +295,17 @@ function validateAgencyRelationships(relationships, companies, ids) {
     throw Error('Invalid insurance relationship.');
 }
 function validateAgencySave(g) {
-  if (![3,4,5,6,7].includes(g.financialGroupVersion)) {
+  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) {
     if (g.agencyEconomy !== undefined || g.players.some(p => p.agency !== undefined || p.submitted?.agencyPolicy !== undefined))
       throw Error('Unversioned insurance agency.');
     return;
   }
   const e = g.agencyEconomy, month = g.gameOver ? g.cycle : g.cycle - 1;
-  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss',...(g.financialGroupVersion===7?['circulated']:[])]) ||
-      e.version !== (g.financialGroupVersion===7?2:1) || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
+  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss',...([7,8].includes(g.financialGroupVersion)?['circulated']:[])]) ||
+      e.version !== ([7,8].includes(g.financialGroupVersion)?2:1) || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
       ['premiumPaid','commissionPaid','operatingPaid','creditorLoss'].some(k => !agencyWhole(e[k])))
     throw Error('Invalid agency economy.');
-  const circulated=g.financialGroupVersion===7?e.circulated:{carrier:0,supplier:0};
+  const circulated=[7,8].includes(g.financialGroupVersion)?e.circulated:{carrier:0,supplier:0};
   if(!agencyExact(circulated,['carrier','supplier'])||Object.values(circulated).some(n=>!agencyWhole(n)))throw Error('Invalid agency circulation.');
   GroupAccounting.validate(e.carrier); GroupAccounting.validate(e.supplier);
   if (e.carrier.entityId !== 'agency:carriers' || e.supplier.entityId !== 'agency:suppliers' ||
@@ -328,7 +328,7 @@ function validateAgencySave(g) {
     throw Error('Agency cash and counterparty resources do not reconcile.');
 }
 function projectAgency(g, out, index) {
-  if (![3,4,5,6,7].includes(g.financialGroupVersion)) return;
+  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return;
   const p = g.players[index], rival = g.players[1-index];
   out.me.agency = agencyCopy(p.agency);
   out.me.agencySnapshot = { version: 1, month: g.agencyEconomy.month, relationships: agencyCopy(g.agencyEconomy.relationships) };
@@ -336,7 +336,7 @@ function projectAgency(g, out, index) {
   if (out.lastPlans?.[rival.id]) delete out.lastPlans[rival.id].agencyPolicy;
 }
 function validateAgencyView(view) {
-  if (![3,4,5,6,7].includes(view.financialGroupVersion)) {
+  if (![3,4,5,6,7,8].includes(view.financialGroupVersion)) {
     if (view.agencyEconomy !== undefined || view.me?.agency !== undefined || view.me?.agencySnapshot !== undefined || view.rival?.agency !== undefined || view.rival?.agencySnapshot !== undefined)
       throw Error('Unversioned insurance agency view.');
     return;
@@ -350,7 +350,7 @@ function validateAgencyView(view) {
     throw Error('Private insurance agency information exposed.');
 }
 function planAgency(g, index, plan) {
-  if (![3,4,5,6,7].includes(g.financialGroupVersion)) return plan;
+  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return plan;
   const p = g.players[index], a = p.agency, s = defaultAgencyPlan(p);
   const free = p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0);
   const open = g.companyEconomy.companies.filter(c => !c.resolution);

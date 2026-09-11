@@ -1,4 +1,4 @@
-// Group7 only. Previously every dollar received by these outside providers was
+// Group7 and later. Previously every dollar received by these outside providers was
 // permanently warehoused. They now spend 1/50 of actual closing CASH on local
 // household/supplier goods and services. The recipient is the EXISTING outside
 // corporate customer pool, not a new company, bank deposit or shareholder gift.
@@ -10,7 +10,7 @@ const CorporateCirculation=(()=>{
  const copy=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
  function opening(world){
   CompanyFinance.validate(world);
-  if(world.version!==3||world.month!==0)throw Error('Circulation rules require a new Group7 campaign.');
+  if(world.version!==3||world.month!==0)throw Error('Circulation rules require a new Group7 or later campaign.');
   const next=copy(world);next.version=4;
   next.circulation={version:1,month:0,externalReturned:0,creditorSpent:0,lastExternal:0,lastCreditor:0};
   CompanyFinance.validate(next);return next;
@@ -46,13 +46,13 @@ const CorporateCirculation=(()=>{
  return Object.freeze({IDS,opening,step});
 })();
 function initializeCorporateCirculation(g){
- if(g.financialGroupVersion!==7)return;
+ if(![7,8].includes(g.financialGroupVersion))return;
  g.companyEconomy=CorporateCirculation.opening(g.companyEconomy);
  g.agencyEconomy.version=2;g.agencyEconomy.circulated={carrier:0,supplier:0};
  for(const key of ['facilityEconomy','departmentEconomy','departmentFunctionEconomy']){g[key].version=2;g[key].circulated=0;}
 }
 function validateCorporateCirculation(g){
- if(g.financialGroupVersion!==7)return;
+ if(![7,8].includes(g.financialGroupVersion))return;
  const e=g.agencyEconomy,others=['facilityEconomy','departmentEconomy','departmentFunctionEconomy'].map(k=>g[k]);
  const counters=[e?.circulated?.carrier,e?.circulated?.supplier,...others.map(x=>x?.circulated)];
  if(e?.version!==2||others.some(x=>x?.version!==2)||counters.some(n=>!Number.isSafeInteger(n)||n<0)||
@@ -61,7 +61,7 @@ function validateCorporateCirculation(g){
   throw Error('Corporate receipts do not match funded counterparty spending.');
 }
 function settleCorporateCirculation(g){
- if(g.financialGroupVersion!==7)return [];
+ if(![7,8].includes(g.financialGroupVersion))return [];
  const result=CorporateCirculation.step(g.companyEconomy,[g.agencyEconomy.carrier,g.agencyEconomy.supplier,
   g.facilityEconomy.supplier,g.departmentEconomy.supplier,g.departmentFunctionEconomy.supplier]);
  const next={...g,companyEconomy:result.world,agencyEconomy:{...g.agencyEconomy,carrier:result.sources[0],supplier:result.sources[1],

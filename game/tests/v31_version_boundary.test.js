@@ -43,11 +43,11 @@ assert.equal(g.companyEconomy.version,4);assert.equal(g.departmentFunctionEconom
 const mismatchedProvider=copy(g);mismatchedProvider.departmentFunctionEconomy.version=1;
 delete mismatchedProvider.departmentFunctionEconomy.circulated;assert.throws(()=>E.validatePilot(mismatchedProvider));
 const rules=E.campaignRules(g,{context:'game'}),caps=E.campaignCapabilities();
-assert.equal(caps.financialGroupSupported,7);assert.equal(E.peerRulesIssue(rules,caps),null);
+assert.equal(caps.financialGroupSupported,8);assert.equal(E.peerRulesIssue(rules,caps),null);
 assert(E.peerRulesIssue(rules,{...caps,financialGroupSupported:6}),'Published V3 peer must reject Group7');
 assert(E.peerRulesIssue(rules,{...caps,departmentStaffingSupported:1}),'Frozen staffing evidence still required');
 const malformed=copy(g);malformed.version='9.5';assert.throws(()=>E.validatePilot(malformed));
-assert.throws(()=>E.createGame({...options,financialGroupVersion:8}));
+assert.throws(()=>E.createGame({...options,financialGroupVersion:9}));
 const plan=g.players.map((_,i)=>E.chooseBot(g,i));E.submit(g,0,plan[0]);const restored=E.migrateCampaign(copy(g));
 E.submit(g,1,plan[1]);E.submit(restored,1,copy(plan[1]));
 assert.deepEqual(copy(E.migrateCampaign(copy(g))),copy(E.migrateCampaign(copy(restored))));

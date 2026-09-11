@@ -130,7 +130,7 @@ function receiveLobby(message){
  if(lobby&&next.revision<lobby.revision)return;
  if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
  lobby=JSON.parse(JSON.stringify(next));linkReady=true;stopHandshake();ghCheckpoint();renderLobby();
- if([6,7].includes(next.settings.financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
+ if([6,7,8].includes(next.settings.financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
 }
 function renderLobbyControls(){
  if(!lobby)return;

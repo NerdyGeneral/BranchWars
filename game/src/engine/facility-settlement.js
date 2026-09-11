@@ -8,7 +8,7 @@ const FacilitySettlement=(()=>{
   // that range, so reconciliation must not round away a one-dollar difference.
   function facilitySettlementCash(g){return g.players.reduce((n,p)=>n+BigInt(p.accounting.accounts.cash),0n)+BigInt(g.facilityEconomy.supplier.accounts.cash);}
   function facilitySettlementInitialize(g){
-    if(![5,6,7].includes(g.financialGroupVersion))return copy(g);
+    if(![5,6,7,8].includes(g.financialGroupVersion))return copy(g);
     if(g.facilityEconomy||g.players.some(p=>p.facilityLifecycle))throw Error('Facility lifecycle initializes only in an explicit new campaign.');
     const next=copy(g);
     next.facilityEconomy={version:1,month:0,supplier:GroupAccounting.opening('facility:suppliers'),renovationPaid:0,maintenancePaid:0};
@@ -92,12 +92,12 @@ const FacilitySettlement=(()=>{
   }
   function facilitySettlementValidate(g){
     const world=g.facilityEconomy;
-    if(![5,6,7].includes(g.financialGroupVersion)){if(world!==undefined||g.players.some(p=>p.facilityLifecycle!==undefined))throw Error('Unversioned facility lifecycle.');return;}
-    if(!world||Object.keys(world).sort().join()!==(g.financialGroupVersion===7?'circulated,maintenancePaid,month,renovationPaid,supplier,version':'maintenancePaid,month,renovationPaid,supplier,version')||world.version!==(g.financialGroupVersion===7?2:1)||
+    if(![5,6,7,8].includes(g.financialGroupVersion)){if(world!==undefined||g.players.some(p=>p.facilityLifecycle!==undefined))throw Error('Unversioned facility lifecycle.');return;}
+    if(!world||Object.keys(world).sort().join()!==([7,8].includes(g.financialGroupVersion)?'circulated,maintenancePaid,month,renovationPaid,supplier,version':'maintenancePaid,month,renovationPaid,supplier,version')||world.version!==([7,8].includes(g.financialGroupVersion)?2:1)||
         !whole(world.month)||!whole(world.renovationPaid)||!whole(world.maintenancePaid)||world.month!==g.cycle-(g.gameOver?0:1))throw Error('Invalid facility economy boundary.');
     GroupAccounting.validate(world.supplier);
-    const total=world.renovationPaid+world.maintenancePaid-(g.financialGroupVersion===7?world.circulated:0);
-    if(g.financialGroupVersion===7&&!whole(world.circulated))throw Error('Invalid facility circulation.');
+    const total=world.renovationPaid+world.maintenancePaid-([7,8].includes(g.financialGroupVersion)?world.circulated:0);
+    if([7,8].includes(g.financialGroupVersion)&&!whole(world.circulated))throw Error('Invalid facility circulation.');
     if(!whole(total)||world.supplier.entityId!=='facility:suppliers'||world.supplier.accounts.cash!==total||world.supplier.accounts.equity!==total||
         world.supplier.retainedEarnings!==total||Object.entries(world.supplier.accounts).some(([k,n])=>!['cash','equity'].includes(k)&&n!==0))
       throw Error('Facility suppliers disagree with actual bank payments.');

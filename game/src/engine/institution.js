@@ -137,7 +137,7 @@ function fundingStep(p,plan,key,step){
 }
 function strategyCostMultiplier(){return 1}
 function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
-function projectCost(p,def){
+function projectCost(p,def,focus=p.focus,premium=1){
  let cost;
  if(def.strategy){
   const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
@@ -150,13 +150,25 @@ function projectCost(p,def){
   cost=Math.max(0,Math.round(cost));
  }
  // Local entry pricing applies after the existing whole-dollar rounding.
- return regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):cost;
+ const local=regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[focus]||{entry:1}).entry):cost;
+ return premium===1?local:Math.max(0,Math.round(local*premium));
+}
+// Group8 prices re-entry instead of forbidding it: a market the rival has taken
+// outright costs close to double, one barely lost costs barely more. Every other
+// group returns 1 and is charged exactly what it was before.
+function marketReentryPremium(g,p,focus){
+ if(!g||g.financialGroupVersion!==8)return 1;
+ const territory=g&&g.territories&&g.territories[focus];if(!territory)return 1;
+ const index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
+ if(index<0||!territory.exited||!territory.exited[index])return 1;
+ const rival=Math.max(0,Math.min(100,Number(territory.shares&&territory.shares[1-index])||0));
+ return 1+rival/100;
 }
 function projectDefinition(key){return Object.prototype.hasOwnProperty.call(PROJECTS,key)?PROJECTS[key]:null}
-function projectTerms(p,key,focus=p.focus){
+function projectTerms(p,key,focus=p.focus,premium=1){
  const def=projectDefinition(key);if(!def)return null;
  const owner=focus===p.focus?p:{...p,focus};
- return {key,cost:projectCost(owner,def),cycles:projectCycles(owner,def),capacity:projectCapacity(def),
+ return {key,cost:projectCost(owner,def,focus,premium),cycles:projectCycles(owner,def),capacity:projectCapacity(def),
   barred:projectBarred(owner,key),running:p.projects.some(x=>x.key===key),
   retired:!!def.legacy,atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
   branchFull:!!(def.kind==='branch'&&p.branches[focus]>=3)};
@@ -198,11 +210,11 @@ function projectTargetIssue(g,p,def,focus){
  if(!def.target)return '';
  const territory=g.territories[focus],index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
  if(!territory||!unlocked(g,territory))return 'Choose an open focus market.';
- if(territory.exited&&territory.exited[index])return 'Your institution permanently exited that market. Choose an operating market.';
+ if(territory.exited&&territory.exited[index]&&g.financialGroupVersion!==8)return 'Your institution permanently exited that market. Choose an operating market.';
  return '';
 }
 function projectStartStatus(g,p,key){
- const terms=projectTerms(p,key),def=PROJECTS[key];
+ const terms=projectTerms(p,key,p.focus,marketReentryPremium(g,p,p.focus)),def=PROJECTS[key];
  const fail=code=>({eligible:false,code,terms});
  if(!terms)return fail('unknown');
  if(usedCapacity(p,[def])>executionCapacity(p))return fail('capacity');

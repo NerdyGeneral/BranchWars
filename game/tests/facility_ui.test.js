@@ -99,7 +99,7 @@ assert.match(integrated.elements.get('#facilityNetworkPanel').innerHTML,/OFFICE 
 const integratedGame=integrated.run('JSON.stringify(game)');
 assert(integrated.run("stageFacilityPolicy(currentView(),{convert:{officeId:currentView().me.facilityNetwork.offices[0].id,model:'digital'},cancel:null})"));
 assert.equal(integrated.run('JSON.stringify(game)'),integratedGame);
-assert.equal(integrated.run("E.CAMPAIGN_FEATURES.find(f=>f.field==='financialGroupVersion').setupVersion"),7,'The integrated opt-in setup selects Group 7; historical campaign versions are retained.');
+assert.equal(integrated.run("E.CAMPAIGN_FEATURES.find(f=>f.field==='financialGroupVersion').setupVersion"),8,'The integrated opt-in setup selects Group 8; historical campaign versions are retained.');
 integrated.run("const priorOptions=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;const priorCampaign=E.createGame({...priorOptions,mode:'hotseat',seed:'facility-historical-five',created:1});const priorRestored=E.migrateCampaign(JSON.parse(JSON.stringify(priorCampaign)));");
 assert.equal(integrated.run('priorRestored.financialGroupVersion'),5,'Continuing a historical Group 5 campaign must not upgrade its rules.');
 assert.equal(integrated.run('priorRestored.version'),'9.4');

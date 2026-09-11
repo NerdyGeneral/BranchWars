@@ -71,11 +71,24 @@ const regionalExits=resolveMarketExits;
 resolveMarketExits=function(g){
  if(g.regionalEconomyVersion!==1)return regionalExits(g);
  const lines=[];
+ // Group8 lets a full withdrawal stand, so total market domination can resolve.
+ // Every earlier group clears the flag each cycle and can never reach that end.
+ const enduring=g.financialGroupVersion===8;
  for(const [key,t]of activeTerritories(g))for(let i=0;i<2;i++){
-  const p=g.players[i];t.exited=[false,false];
-  t.exitStreak[i]=p.branches[key]>0&&t.shares[i]<12&&!(t.reentryUntil&&t.reentryUntil[i]>=g.cycle)?t.exitStreak[i]+1:0;
+  const p=g.players[i];t.exited=enduring&&Array.isArray(t.exited)?t.exited:[false,false];
+  const rival=g.players[1-i],protectedNow=t.reentryUntil&&t.reentryUntil[i]>=g.cycle;
+  const ceded=enduring&&!p.branches[key]&&rival.branches[key]>0;
+  t.exitStreak[i]=(p.branches[key]>0||ceded)&&t.shares[i]<12&&!protectedNow?t.exitStreak[i]+1:0;
   if(t.exitStreak[i]===3)lines.push(p.name+' has a vulnerable office in '+t.name+': three more cycles below 12% share will close one office. Service upgrades and deposit defense can help.');
-  if(t.exitStreak[i]>=6&&closeRegionalOffice(p,key,g.cycle)){t.exitStreak[i]=0;delta(p,'reputation',-3);lines.push(p.name+' withdrew one office from '+t.name+'. Remaining offices and paid re-entry are preserved.')}
+  if(t.exitStreak[i]>=6&&ceded&&!t.exited[i]){
+   t.exitStreak[i]=0;t.exited[i]=true;delta(p,'reputation',-2);
+   lines.push(p.name+' has conceded '+t.name+': no offices and under 12% share for six cycles. Paid re-entry stays open.');
+  }
+  else if(t.exitStreak[i]>=6&&closeRegionalOffice(p,key,g.cycle)){
+   t.exitStreak[i]=0;delta(p,'reputation',-3);
+   if(enduring&&!p.branches[key]){t.exited[i]=true;lines.push(p.name+' has left '+t.name+' entirely. Paid re-entry stays open while a rival holds the market.')}
+   else lines.push(p.name+' withdrew one office from '+t.name+'. Remaining offices and paid re-entry are preserved.')
+  }
  }
  return lines;
 };

@@ -2,6 +2,124 @@
 
 ## Local V3.1 candidate — technically verified, not published
 
+### Group8 endings — reachable, but the campaign does not reach them
+
+- **Group8 only.** Market exits now persist instead of being cleared every
+  cycle, `buyoutPressure` and `consolidationStalemate` accumulate, and
+  `evaluateStrategicEnd` keeps receivership on pilot terms (no free franchise)
+  before deferring to the base rules for domination and hostile buyout.
+  Groups1-7 still zero the counters every cycle and can only end in
+  receivership, exactly as before.
+- **Re-entry is priced, not forbidden.** The "permanently exited that market"
+  refusal is lifted for Group8 and replaced with a premium scaled by rival
+  share: `1 + rivalShare/100`. Buying back into a market a rival holds at 95%
+  costs $1,255,800 against $644,000 normally. Completing the branch project
+  clears the exit flag, so domination can be broken. The AI budgets the same
+  premium it will be charged, so a bot can save for re-entry rather than being
+  cancelled at execution.
+- `projectCost(p,def,focus,premium)` gained explicit focus and premium
+  arguments, both defaulting to the old behaviour. This also fixed a latent
+  bug: `src/ui/dashboard.js` already passed a third `market` argument that the
+  function ignored, so the quoted re-entry cost used the player's current focus
+  rather than the market being quoted.
+
+#### Measured over 24 campaigns per arm, 40 cycles each
+
+| | market exits | re-entries | endings |
+|---|---|---|---|
+| Group8 | **55** | 0 | 0 |
+| Group7 (control) | 0 | 0 | 0 |
+
+A second Group8 arm at 60 cycles, after the act progression was opened, held
+the same shape over its first six campaigns (15 exits, 0 re-entries, 0 endings)
+and was stopped as redundant: the ending count cannot move while the capex loop
+below prevents any bank from building a second office.
+
+Consistent across all four scenarios (balanced14, growth17, rate12,
+regulatory12 exits per six campaigns), 0 errors in either arm. The exit
+mechanism works and is cleanly confined to Group8. **No ending fired in either
+arm**, for the Act-gate reason recorded below; re-entry measured zero because a
+bot that never builds never re-buys, not because the path is broken — the
+clearing sits on the live branch-completion route and was verified directly.
+
+Verification: `node tools/check.js` green, `node tools/check.js --full` green
+("Full checks passed"), all seven compatibility fixtures pass unregenerated and
+no file under `tests/fixtures/` changed.
+
+#### Decisions taken
+
+- **Ceding an uncontested market counts as an exit.** Approved: no branches and
+  no customers is being out of a market.
+- **Dominance earns no franchise dividend, and that is now deliberate.** Taking
+  a market already hands over its customers through `pushShare`; a separate
+  per-cycle dividend would pay twice for the same win. The goal's taper was
+  moot because `franchiseDividends` returns `[]` for every Group1-8 campaign,
+  so the $1.58M/cycle figure never applied to a modern campaign at all.
+- **Group8 runs the real three-act progression.** The pilot overrode both
+  `campaignAct` and `updateCampaignAct` to freeze every campaign in a single
+  act ("Only institutional failure ends this pilot"). Act III gates every
+  buyout path, so no ending but receivership was reachable by design.
+  Groups1-7 stay frozen.
+
+#### Two structural blockers found, one fixed, one not
+
+- **The exit counter almost never started.** It required `branches[key]>0` —
+  you could only exit a market you owned an office in and were then crushed in.
+  Players hold offices in one or two of six markets, so in a 60-cycle campaign
+  the streak never left 0 even with a rival pinned at the 5% share floor. In
+  Group8, ceding counts too: rival operating, you not, under 12% for six
+  cycles. Measured effect in a real campaign: **0 market exits before, 3 after.**
+- **The campaign never leaves Act I, so no buyout can fire.** Act III gates
+  every buyout path and needs strategy>=5, three controlled markets, or $36M
+  deposits. Over 60 cycles the bots' deposits *fell* from $24M to $17M and each
+  built two offices. Total domination has the same problem from the other side:
+  it needs one player operating in all six markets, which the bots never reach.
+  **This is an economy and AI-growth problem, not an endings problem, and it is
+  outside this goal.** The endings are now mechanically reachable; AI-vs-AI
+  campaigns still will not reach them.
+
+### Group8 / save9.7 — rules boundary registered (feat/v3-economy)
+
+- Register `financialGroupVersion:8`, stamped save `9.7`, as an opt-in rules
+  boundary that is a functional clone of Group7. Nothing about Groups1-7
+  changes; the new group exists so later economy work has somewhere to land
+  that older campaigns can never be dragged into.
+- Every open-ended version gate that topped out at7 now also admits8
+  (`[..,7].includes(x)`, `x===7`, `x!==7` across31 source files). Closed
+  windows that deliberately exclude7 — `[2,3]`, `[4,5]`, `[3,4,5,6]` — were
+  left alone, so Group8 inherits exactly Group7's behaviour and none of the
+  superseded rules.
+- `relationships.js` pairs each save-version string with its group number, so
+  it gained a separate `9.7`/Group8 clause rather than a widened gate.
+- Peer handshake advertises `financialGroupSupported:8`. The capability is
+  range-checked, so a Group7 campaign against a peer advertising7 still
+  links; a Group8 campaign against that peer is refused rather than
+  downgraded.
+- **Engine digest moved, sanctioned:**
+  `cc229f83…` → `f6fc59bd…` in `tests/usability_engine_boundary.test.js`.
+  Registering a new boundary necessarily re-hashes the assembled engine. This
+  is the intended boundary move, not drift.
+- Seven kinds of assertion encoded the old Group7 ceiling, across twelve test
+  files: the assembled engine digest; the advertised peer capability; the
+  `hello`/`hello_request` wire frames; the setup checkbox default
+  (`feature_setup`, `facility_ui`); the creation ceiling (`v31_version_boundary`,
+  which now refuses Group9); and four `v31_*` tests that pin the **literal
+  engine source text** of a gate, such as
+  `if(g.financialGroupVersion===7)plan=planExecutionReserve(...)`. Those four
+  did their job — they caught the rewrite — but they make any future gate
+  refactor a multi-file edit, which is worth knowing before a Group9.
+- Two copy defects were fixed because Group8 made them wrong rather than merely
+  terse: `corporate-circulation.js` told the player a malformed save
+  "requires a new Group7 campaign" when Group8 reaches the same guard.
+- **Trajectory identity proved at depth.** Group7 and Group8 on the same seed,
+  4 scenarios x 3 seeds, full serialised game state hashed every turn with only
+  the version stamps normalised: 12/12 byte-identical over 36 turns per
+  campaign, 0 divergent, 0 errors.
+- **No fixture was regenerated.** `behavior-golden`, `group_foundation_compat`,
+  `institution_legacy_compat`, `agency_legacy_compat`, `department_group5_compat`
+  and `facility_lifecycle_legacy_compat` all pass against their existing bytes,
+  which is the evidence that version isolation held.
+
 - Final September9 verification:185/185 full Windows checks; separate16-case
   release suite;8 matched480-month campaigns,3,840 months and328 exact replays.
   Published V3 comparison failures are preserved, not extrapolated.

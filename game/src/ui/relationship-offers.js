@@ -9,7 +9,7 @@ function relationshipOfferReason(reason) {
   ready: 'Eligible balances and available capacity support this quote.'
  }[reason] || reason;
 }
-function relationshipOfferUiLocked(v){return v.me.submitted||v.gameOver||[6,7].includes(v.financialGroupVersion)&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
+function relationshipOfferUiLocked(v){return v.me.submitted||v.gameOver||[6,7,8].includes(v.financialGroupVersion)&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
 function relationshipOfferRepairControls(v){
  const p=v.me,policy=draft.relationshipOfferPolicy||p.relationshipOffers.policy,disabled=relationshipOfferUiLocked(v)?'disabled':'';
  const select=(field,label,options)=>'<label for="relationshipOffer-'+field+'">'+label+'<select id="relationshipOffer-'+field+'" '+disabled+'>'+options.map(([value,name])=>'<option value="'+esc(value)+'" '+(String(policy[field])===String(value)?'selected':'')+'>'+esc(name)+'</option>').join('')+'</select></label>';
@@ -19,7 +19,7 @@ function relationshipOfferRepairControls(v){
   select('share','Share of Retail sales time',E.RELATIONSHIP_OFFER_SHARES.map(n=>[n,n?n+'% to existing customers':'Paused · 0%']));
 }
 function relationshipOfferContent(v,productPreview){
- if(![6,7].includes(v.financialGroupVersion))return relationshipOfferDeskBody(v,productPreview);
+ if(![6,7,8].includes(v.financialGroupVersion))return relationshipOfferDeskBody(v,productPreview);
  try{return relationshipOfferDeskBody(v,productPreview,v.gameOver?{owner:v.me,plan:draft,relationshipOffers:null}:E.departmentCustomerPreview(v.me,v,draft));}
  catch(error){
   const last=v.me.relationshipOffers.report;
@@ -86,7 +86,7 @@ function relationshipOfferDeskBody(v, productPreview, prepared=null) {
 function relationshipOfferViewStamp(v){return JSON.stringify([v.version,v.cycle,v.resolutionId,v.gameOver,v.me,draft]);}
 function stageRelationshipOffer(v, field, value, sourceKey=relationshipOfferViewStamp(v),campaign=game||view) {
  if (!draft || v.me.submitted || v.gameOver || !v.me.relationshipOffers || !['market', 'segment', 'product', 'share'].includes(field)) return false;
- if([6,7].includes(v.financialGroupVersion)){
+ if([6,7,8].includes(v.financialGroupVersion)){
   const live=currentView();
   if(!live||campaign!==(game||view)||live.me.id!==v.me.id||live.me.submitted||live.gameOver||draftOwner!==live.me.id||lastCycle!==live.cycle||gh.active&&gh.paused||sourceKey!==relationshipOfferViewStamp(live))return false;
   try{

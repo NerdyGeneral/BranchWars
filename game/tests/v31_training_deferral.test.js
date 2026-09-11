@@ -9,7 +9,7 @@ const saved=JSON.parse(zlib.gunzipSync(bytes)).game;E.validatePilot(saved);E.val
 const guard=' if(!draftAuthorized.status.eligible)return input;\n';assert(source.includes(guard));
 const B=make(source.replace(guard,''));
 assert.throws(()=>B.chooseBot(copy(saved),1),/Function quotas exceed remaining service staff/,'The actual late-game failure must reproduce without the guard');
-const boundary='return g.financialGroupVersion===7?planFacilityInvestment(g,index,plan):plan;';assert(source.includes(boundary));
+const boundary='return [7,8].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;';assert(source.includes(boundary));
 const P=make(source.replace(boundary,'return plan;')),world=copy(saved),plan=P.chooseBot(world,1),p=world.players[1],deferred=E.facilityInvestmentDraft(plan);
 const ordinary=E.departmentFunctionsQuote(world,p,plan),afterDeferral=E.departmentFunctionsQuote(world,p,deferred);
 assert(ordinary.status.eligible,ordinary.status.reason);assert.equal(afterDeferral.status.eligible,false);

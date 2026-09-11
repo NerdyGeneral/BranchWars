@@ -1,8 +1,8 @@
 let accountingSuppressed=false,accountingSource='transaction';
 function pilot(g){return g.campaignRulesVersion===1}
 const pilotAct=campaignAct,pilotUpdateAct=updateCampaignAct;
-campaignAct=function(g){return pilot(g)?{key:'rivalry',roman:'PILOT',name:'REGIONAL RIVALRY',pressure:1.2,depositCap:.035,text:'Six markets in two regions. Retreat is reversible. Only institutional failure ends this pilot; scores never trigger a buyout.'}:pilotAct(g)};
-updateCampaignAct=function(g){return pilot(g)?'':pilotUpdateAct(g)};
+campaignAct=function(g){return pilot(g)&&g.financialGroupVersion!==8?{key:'rivalry',roman:'PILOT',name:'REGIONAL RIVALRY',pressure:1.2,depositCap:.035,text:'Six markets in two regions. Retreat is reversible. Only institutional failure ends this pilot; scores never trigger a buyout.'}:pilotAct(g)};
+updateCampaignAct=function(g){return pilot(g)&&g.financialGroupVersion!==8?'':pilotUpdateAct(g)};
 function syncAccounts(p){const a=p.accounting.accounts;Object.assign(p.stats,{cash:a.cash,loans:a.loans,deposits:a.deposits,emergencyDebt:a.emergencyDebt,capital:a.equity,earnings:p.accounting.retainedEarnings})}
 function bookPost(p,type,amount){p.accounting=AccountingPrototype.transact(p.accounting,type,amount);syncAccounts(p)}
 function provideCash(p,amount,reservedLoans=0){
@@ -111,9 +111,13 @@ franchiseDividends=function(g){return pilot(g)?[]:pilotDividends(g)};
 const pilotEnd=evaluateStrategicEnd;
 evaluateStrategicEnd=function(g){
  if(!pilot(g))return pilotEnd(g);
- g.buyoutPressure=[0,0];g.consolidationStalemate=0;
+ // Group8 keeps receivership on pilot terms below, then defers to the base
+ // rules for domination and hostile buyout. Earlier groups still zero the
+ // pressure counters every cycle, so only receivership can ever end them.
+ const contested=g.financialGroupVersion===8;
+ if(!contested){g.buyoutPressure=[0,0];g.consolidationStalemate=0;}
  const failed=g.players.filter(p=>(p.distress||0)>=RECEIVERSHIP_CYCLES);
- if(!failed.length)return '';
+ if(!failed.length)return contested?pilotEnd(g):'';
  g.gameOver=true;g.endReason='receivership';g.winnerId=failed.length===2?null:g.players.find(p=>p!==failed[0]).id;g.failedId=failed.length===1?failed[0].id:null;
  return 'RECEIVERSHIP // '+failed.map(p=>p.name).join(' and ')+' failed. Assets remain in resolution; no free franchise is awarded.';
 };
@@ -162,7 +166,7 @@ function planPilotReserve(g,index,plan){
  // The historical pilot pass discarded the baseline planner's funded hires
  // before allocating its entire capital budget to new projects. Group7 keeps
  // a priced workforce reserve through this pass; no future recruit works now.
- plan.hires=g.financialGroupVersion===7?Math.min(planHiring(g,p,limit-available),hireLimit(p),Math.floor(Math.max(0,forecast.profit)/36000)):0;
+ plan.hires=[7,8].includes(g.financialGroupVersion)?Math.min(planHiring(g,p,limit-available),hireLimit(p),Math.floor(Math.max(0,forecast.profit)/36000)):0;
  available-=hireCost(p,plan.hires);
  const projects=[];
  if(!(p.branches[plan.focus]||0)&&!p.projects.some(x=>x.key==='branch')&&!projectBarred(p,'branch')&&projectCost(p,PROJECTS.branch)<=available&&usedCapacity(p,[PROJECTS.branch])<=executionCapacity(p,plan.allocation)){
@@ -171,7 +175,7 @@ function planPilotReserve(g,index,plan){
  plan.newProjects=projects;
  plan.newProject=projects[0]||null;
  for(const key of Object.keys(plan.investments||{})){const amount=Math.min(plan.investments[key],Math.floor(available));plan.investments[key]=amount>=1000?amount:0;available-=plan.investments[key]}
- if(g.financialGroupVersion!==7&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
+ if(![7,8].includes(g.financialGroupVersion)&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
  return plan;
 }
 function validateAccountingSave(g){
@@ -181,7 +185,7 @@ function validateAccountingSave(g){
  for(const [key,t]of Object.entries(g.territories))if(!g.regions[t.region]||!g.regions[t.region].markets.includes(key)||t.exited.some(Boolean))throw Error('Invalid pilot market');
  for(const p of g.players){
   if(!p.accounting||p.accounting.journal.length>192)throw Error('Invalid pilot accounts');
-  if(p.accounting.version!==([4,5,6,7].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
+  if(p.accounting.version!==([4,5,6,7,8].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
   const checked=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
   const a=checked.accounts;
   for(const [stat,account]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))if(p.stats[stat]!==a[account])throw Error('Bank statistics disagree with accounts');

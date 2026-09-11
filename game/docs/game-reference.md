@@ -362,7 +362,7 @@ capability tiers.
 | licenseHighYield | License High-Yield Savings | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 
 ```js
-function projectCost(p,def){
+function projectCost(p,def,focus=p.focus,premium=1){
  let cost;
  if(def.strategy){
   const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
@@ -375,7 +375,8 @@ function projectCost(p,def){
   cost=Math.max(0,Math.round(cost));
  }
  // Local entry pricing applies after the existing whole-dollar rounding.
- return regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[p.focus]||{entry:1}).entry):cost;
+ const local=regionalOperations(p)&&def.kind==='branch'?Math.round(cost*(REGIONAL_MARKETS[focus]||{entry:1}).entry):cost;
+ return premium===1?local:Math.max(0,Math.round(local*premium));
 }
 ```
 

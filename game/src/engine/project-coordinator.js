@@ -165,6 +165,7 @@ function completeProjectSettlement(g, p, project) {
         const territory = g.territories[project.target],
           index = g.players.indexOf(p);
         territory.exitStreak[index] = 0;
+        if (Array.isArray(territory.exited)) territory.exited[index] = false;
         territory.reentryUntil = territory.reentryUntil || [0, 0];
         territory.reentryUntil[index] = g.cycle + 4;
         if (territory.shares[index] < 15) {
