@@ -117,7 +117,8 @@ const FacilityLifecycle = (() => {
       lifecycleValidateStaff(r.staffQuarters);
       if(!whole(r.conditionBp)||r.conditionBp>10000||!whole(r.rampMonths)||r.rampMonths>4||!Object.hasOwn(modes,r.maintenance))throw Error('Invalid facility operating inputs.');
       const effectiveStaffQuarters=Object.fromEntries(ROLES.map(role=>[role,r.staffQuarters[role]*Math.min(1,requested[role]?pool[role]/requested[role]:1)]));
-      const ratio=role=>def.staffQuarters[role]?Math.min(1,effectiveStaffQuarters[role]/def.staffQuarters[role]):1;
+      const soften=p?.accounting?.version===4,
+        ratio=role=>def.staffQuarters[role]?(n=>soften?.25+.75*n:n)(Math.min(1,effectiveStaffQuarters[role]/def.staffQuarters[role])):1;
       const ops=ratio('operations'),condition=r.conditionBp<=RULES.criticalCondition?0:.25+.75*r.conditionBp/10000;
       const ramp=Math.min(1,(r.rampMonths+1)/RULES.rampMonths),disruption=(o.conversion||r.renovation)?RULES.renovationDisruption:1;
       const factor=condition*ramp*disruption*ops;
