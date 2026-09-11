@@ -8807,7 +8807,7 @@ function facilityStaffAllocation(owner, policy, context) {
  let metricCalls=0,localMetricCalls=0;const measure=()=>{metricCalls++;return L.metrics(measuredOwner,context);};
  const baseline=measure(),baselinePolicy=copy(next),remaining=copy(original.unused),released=[];
  const productive=row=>keys.some(key=>row.capacity[key]>0)||row.supportSent>0;
- function facilityStaffPrune(rows){let changed=false;for(const row of rows){const order=next.offices[row.officeId];if(owner?.accounting?.version===4||productive(row)||!Object.values(order.staffQuarters).some(Boolean))continue;
+ function facilityStaffPrune(rows){let changed=false;for(const row of rows){const order=next.offices[row.officeId];if(productive(row)||!Object.values(order.staffQuarters).some(Boolean))continue;
    for(const role of roles){remaining[role]+=order.staffQuarters[role];order.staffQuarters[role]=0;}
    measuredOwner.facilityLifecycle.records[row.officeId].staffQuarters=copy(order.staffQuarters);if(!released.includes(row.officeId))released.push(row.officeId);changed=true;}return changed;}
  facilityStaffPrune(baseline.rows);
