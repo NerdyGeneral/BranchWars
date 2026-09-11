@@ -2,6 +2,42 @@
 
 ## Local V3.1 candidate — technically verified, not published
 
+### Group8 accounting book version4 — premises capitalised
+
+- Buying an office moved cash straight out of equity: `delta(p,'cash',n)` posted
+  `{cash:n,equity:n}` for every outflow, so a $644,000 branch destroyed $644,000
+  of capital. Premises are an asset, not an expense.
+- Group8 campaigns now open accounting book **version4**, adding a `premises`
+  account alongside receivables and payables. `kind==='branch'` purchases are
+  sourced as `capitalisePremises` and post `{cash:-x,premises:+x}` with no
+  earnings effect. Research and remediation stay expensed, because they are
+  expenses. Groups1-7 keep book version3 untouched.
+- Follows the existing `withPayables` idiom exactly: `withPremises` is an
+  explicit new-campaign boundary that never repairs or upgrades an imported
+  book.
+
+**Proven, and it changed nothing.** With capital injected so the planner's
+headroom clears a branch, both groups expand 1 -> 5 offices in 14 cycles, and
+Group8 ends holding **$1,933,340** of premises where Group7 holds $0. But the
+capital and headroom curves of an ordinary campaign are byte-for-byte what they
+were before the fix, because a bank that cannot afford its first expansion never
+incurs capex to mis-account. The capex defect was real; it was not the binding
+constraint.
+
+**The binding constraint, measured.** Over 30 cycles a bank's equity falls
+$1,800,000 -> $829,390 while operations *earn* $1,141,712. The drains are
+discretionary: `applyInvestments` -$817,608, `startProject` -$520,000,
+`transaction` -$220,000, `credit.resolution` -$149,480, `applyHiring` -$127,111,
+`resolveCompetitiveActions` -$100,000. Deposits and loans shrink throughout, so
+that spending returns nothing. **Investment spending does not pay for itself** -
+that is the compounding failure behind both the flat loan ceiling and the
+unreachable endings, and it is the next goal.
+
+**Note for human play.** `pilotSpendingLimit` is AI self-restraint, not a rule:
+`projectStartStatus` gates a human only on `p.stats.cash < terms.cost`. A human
+starts with $2,400,000 against a $644,000 office, so two humans can expand and
+reach the Group8 endings even though the bots will not.
+
 ### Group8 endings — reachable, but the campaign does not reach them
 
 - **Group8 only.** Market exits now persist instead of being cleared every

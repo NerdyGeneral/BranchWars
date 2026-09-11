@@ -48,7 +48,8 @@ function initializeDepartments(g) {
   if(![4,5,6,7,8].includes(g.financialGroupVersion))return;
   g.departmentEconomy={version:1,month:0,supplier:GroupAccounting.opening('department:providers'),paid:0};
   for(const p of g.players) {
-    if(p.accounting.version!==3)p.accounting=AccountingPrototype.withPayables(p.accounting);
+    if(g.financialGroupVersion===8)p.accounting=AccountingPrototype.withPremises(p.accounting);
+    else if(p.accounting.version!==3)p.accounting=AccountingPrototype.withPayables(p.accounting);
     syncAccounts(p);
     p.departmentOffice={version:1,lastCycle:0,sequence:0,policy:defaultDepartmentPolicy(),
       leaders:Object.fromEntries(departmentRoles().map(k=>[k,null])),
@@ -348,7 +349,7 @@ function validateDepartmentPlayer(p,month) {
       Object.values(d.arrears).some(n=>!departmentWhole(n)) || !Array.isArray(d.history)||d.history.length>24 || p._departmentTeaching!==undefined||p._departmentTraining!==undefined)
     throw Error('Invalid persistent department office.');
   validateDepartmentPolicy(d.policy);
-  if(p.accounting.version!==3||p.accounting.accounts.payables!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
+  if(![3,4].includes(p.accounting.version)||p.accounting.accounts.payables!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
     throw Error('Department liabilities disagree with bank accounts.');
   const ids=new Set();
   for(const leader of Object.values(d.leaders))if(leader!==null) {

@@ -23,7 +23,9 @@ delta=function(p,k,n){
  n=Math.round(n);if(!Number.isSafeInteger(n))throw Error('Invalid financial movement');if(!n)return;
  if(k==='capital'||k==='earnings'){if(k==='capital'&&['applyCapitalRequest','legacyCapital'].includes(accountingSource))return;throw Error('Unmapped equity movement in '+accountingSource)}
  if(k==='cash'){
-  if(n<0){provideCash(p,-n);p.accounting=AccountingPrototype.post(p.accounting,accountingSource,{cash:n,equity:n},n)}
+  if(n<0){provideCash(p,-n);
+   const capex=p.accounting.version===4&&accountingSource==='capitalisePremises';
+   p.accounting=AccountingPrototype.post(p.accounting,accountingSource,capex?{cash:n,premises:-n}:{cash:n,equity:n},capex?0:n)}
   else {const capital=['applyCapitalRequest','awardMilestones','legacyCapital'].includes(accountingSource);p.accounting=AccountingPrototype.post(p.accounting,accountingSource,{cash:n,equity:n},capital?0:n)}
  }else if(k==='deposits'){
   if(n<0){n=-Math.min(-n,p.stats.deposits);provideCash(p,-n)}
@@ -36,7 +38,11 @@ delta=function(p,k,n){
 };
 function sourced(name,fn){return function(...args){const prev=accountingSource;accountingSource=name;try{return fn(...args)}finally{accountingSource=prev}}}
 applyDecision=sourced('applyDecision',applyDecision);applyCapitalRequest=sourced('applyCapitalRequest',applyCapitalRequest);
-resolveCompetitiveActions=sourced('resolveCompetitiveActions',resolveCompetitiveActions);startProject=sourced('startProject',startProject);
+resolveCompetitiveActions=sourced('resolveCompetitiveActions',resolveCompetitiveActions);startProject=(function(inner){return function(g,p,key,specializations){
+ const def=PROJECTS[key],prev=accountingSource;
+ accountingSource=(p.accounting?.version===4&&def&&def.kind==='branch')?'capitalisePremises':'startProject';
+ try{return inner(g,p,key,specializations)}finally{accountingSource=prev}
+};})(startProject);
 awardOpportunity=sourced('awardOpportunity',awardOpportunity);consequences=sourced('consequences',consequences);
 applyInvestments=sourced('applyInvestments',applyInvestments);applyHiring=sourced('applyHiring',applyHiring);awardMilestones=sourced('awardMilestones',awardMilestones);
 
@@ -100,7 +106,7 @@ settleFunding=function(g,p,outflow){
  if(!p.accounting)return pilotSettle(g,p,outflow);
  if(outflow)throw Error('Pilot deposit outflows must settle at transfer');
  const reserve=Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[p.policies.capital]||.05));
- const duePayables=p.accounting.version===3?p.accounting.accounts.payables:0;
+ const duePayables=[3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0;
  const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve-duePayables));
  if(amount){bookPost(p,'repayDebt',amount);return[p.name+' repaid $'+amount.toLocaleString()+' of emergency debt.']}return [];
 };
@@ -154,7 +160,7 @@ function initializeRegionalPilot(g,o){
 }
 
 
-function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-(p.accounting.version===3?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
+function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-([3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
 
 
 function planPilotReserve(g,index,plan){
@@ -185,7 +191,7 @@ function validateAccountingSave(g){
  for(const [key,t]of Object.entries(g.territories))if(!g.regions[t.region]||!g.regions[t.region].markets.includes(key)||t.exited.some(Boolean))throw Error('Invalid pilot market');
  for(const p of g.players){
   if(!p.accounting||p.accounting.journal.length>192)throw Error('Invalid pilot accounts');
-  if(p.accounting.version!==([4,5,6,7,8].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
+  if(p.accounting.version!==(g.financialGroupVersion===8?4:[4,5,6,7].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
   const checked=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
   const a=checked.accounts;
   for(const [stat,account]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))if(p.stats[stat]!==a[account])throw Error('Bank statistics disagree with accounts');

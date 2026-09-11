@@ -144,7 +144,7 @@ const DepartmentFunctions = (() => {
     if(!report.eligible)throw Error(report.reason);
     const next=copy(p);let supplier=payment?.supplier===undefined?null:copy(payment.supplier);
     if(report.vendorExpense){
-      if(typeof payment?.pay!=='function'||!supplier||next.accounting?.version!==3)throw Error('Funded paired vendor payment adapter required.');
+      if(typeof payment?.pay!=='function'||!supplier||![3,4].includes(next.accounting?.version))throw Error('Funded paired vendor payment adapter required.');
       AccountingPrototype.check(next.accounting);GroupAccounting.validate(supplier);
       if(next.accounting.accounts.cash<report.vendorExpense)throw Error('Vendor payment exceeds actual bank cash.');
       const beforeBank=copy(next.accounting),beforeSupplier=copy(supplier),result=payment.pay(copy(beforeBank),copy(beforeSupplier),report.vendorExpense,next.id,'department.functions');

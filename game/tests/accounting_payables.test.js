@@ -178,7 +178,10 @@ test('Strict v3 schema and balance validation reject inconsistent books and vers
     b=>{b.accounts.payables=.1;},b=>{b.accounts.cash=Number.MAX_SAFE_INTEGER;}]) {
     const book=A.opening(3);mutate(book);assert.throws(()=>A.check(book));assert.throws(()=>A.withPayables(book));
   }
-  for(const version of [0,4,'3',null])assert.throws(()=>A.opening(version));
+  // Version4 (premises) is a real book now, so the invalid sentinel moves up.
+  // Mutating a v3 book's version to 4 must still throw: its account set is wrong.
+  for(const version of [0,5,'3',null])assert.throws(()=>A.opening(version));
+  A.check(A.opening(4));
 });
 test('Compacted v3 journal replays invoices and settlements without re-expensing', () => {
   let bank=A.opening(3);

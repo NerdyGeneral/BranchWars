@@ -1819,7 +1819,9 @@ delta=function(p,k,n){
  n=Math.round(n);if(!Number.isSafeInteger(n))throw Error('Invalid financial movement');if(!n)return;
  if(k==='capital'||k==='earnings'){if(k==='capital'&&['applyCapitalRequest','legacyCapital'].includes(accountingSource))return;throw Error('Unmapped equity movement in '+accountingSource)}
  if(k==='cash'){
-  if(n<0){provideCash(p,-n);p.accounting=AccountingPrototype.post(p.accounting,accountingSource,{cash:n,equity:n},n)}
+  if(n<0){provideCash(p,-n);
+   const capex=p.accounting.version===4&&accountingSource==='capitalisePremises';
+   p.accounting=AccountingPrototype.post(p.accounting,accountingSource,capex?{cash:n,premises:-n}:{cash:n,equity:n},capex?0:n)}
   else {const capital=['applyCapitalRequest','awardMilestones','legacyCapital'].includes(accountingSource);p.accounting=AccountingPrototype.post(p.accounting,accountingSource,{cash:n,equity:n},capital?0:n)}
  }else if(k==='deposits'){
   if(n<0){n=-Math.min(-n,p.stats.deposits);provideCash(p,-n)}
@@ -1832,7 +1834,11 @@ delta=function(p,k,n){
 };
 function sourced(name,fn){return function(...args){const prev=accountingSource;accountingSource=name;try{return fn(...args)}finally{accountingSource=prev}}}
 applyDecision=sourced('applyDecision',applyDecision);applyCapitalRequest=sourced('applyCapitalRequest',applyCapitalRequest);
-resolveCompetitiveActions=sourced('resolveCompetitiveActions',resolveCompetitiveActions);startProject=sourced('startProject',startProject);
+resolveCompetitiveActions=sourced('resolveCompetitiveActions',resolveCompetitiveActions);startProject=(function(inner){return function(g,p,key,specializations){
+ const def=PROJECTS[key],prev=accountingSource;
+ accountingSource=(p.accounting?.version===4&&def&&def.kind==='branch')?'capitalisePremises':'startProject';
+ try{return inner(g,p,key,specializations)}finally{accountingSource=prev}
+};})(startProject);
 awardOpportunity=sourced('awardOpportunity',awardOpportunity);consequences=sourced('consequences',consequences);
 applyInvestments=sourced('applyInvestments',applyInvestments);applyHiring=sourced('applyHiring',applyHiring);awardMilestones=sourced('awardMilestones',awardMilestones);
 
@@ -1896,7 +1902,7 @@ settleFunding=function(g,p,outflow){
  if(!p.accounting)return pilotSettle(g,p,outflow);
  if(outflow)throw Error('Pilot deposit outflows must settle at transfer');
  const reserve=Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[p.policies.capital]||.05));
- const duePayables=p.accounting.version===3?p.accounting.accounts.payables:0;
+ const duePayables=[3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0;
  const amount=Math.min(p.stats.emergencyDebt,Math.max(0,p.stats.cash-reserve-duePayables));
  if(amount){bookPost(p,'repayDebt',amount);return[p.name+' repaid $'+amount.toLocaleString()+' of emergency debt.']}return [];
 };
@@ -1950,7 +1956,7 @@ function initializeRegionalPilot(g,o){
 }
 
 
-function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-(p.accounting.version===3?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
+function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max(0,Math.min(p.stats.cash-([3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0),Math.floor(p.stats.capital-riskAssets(p)*buffer-reserve))):p.stats.cash}
 
 
 function planPilotReserve(g,index,plan){
@@ -1981,7 +1987,7 @@ function validateAccountingSave(g){
  for(const [key,t]of Object.entries(g.territories))if(!g.regions[t.region]||!g.regions[t.region].markets.includes(key)||t.exited.some(Boolean))throw Error('Invalid pilot market');
  for(const p of g.players){
   if(!p.accounting||p.accounting.journal.length>192)throw Error('Invalid pilot accounts');
-  if(p.accounting.version!==([4,5,6,7,8].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
+  if(p.accounting.version!==(g.financialGroupVersion===8?4:[4,5,6,7].includes(g.financialGroupVersion)?3:[2,3].includes(g.financialGroupVersion)?2:1))throw Error('Invalid accounting book');
   const checked=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
   const a=checked.accounts;
   for(const [stat,account]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))if(p.stats[stat]!==a[account])throw Error('Bank statistics disagree with accounts');
@@ -5964,21 +5970,21 @@ evaluateStrategicEnd=ledgerStage('evaluateStrategicEnd','campaign.ending',evalua
 const AccountingPrototype=(()=>{
  const keys=['cash','loans','securities','deposits','emergencyDebt','equity'];
  const assets=['cash','loans','securities'],liabilities=['deposits','emergencyDebt'];
- const bookKeys=b=>b.version===3?[...keys,'receivables','payables']:b.version===2?[...keys,'receivables']:keys;
+ const bookKeys=b=>b.version===4?[...keys,'receivables','payables','premises']:b.version===3?[...keys,'receivables','payables']:b.version===2?[...keys,'receivables']:keys;
  const copy=x=>JSON.parse(JSON.stringify(x));
  const dollar=(n,signed=false)=>{if(!Number.isSafeInteger(n)||(!signed&&n<0))throw new Error('Invalid accounting amount');return n};
  function check(b){
-  if(!b||![1,2,3].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
-  if(b.version===3&&Object.keys(b).sort().join()!==['version','accounts','retainedEarnings','sequence','journal',...(Object.hasOwn(b,'journalBase')?['journalBase']:[])].sort().join())throw new Error('Invalid payable accounting fields');
+  if(!b||![1,2,3,4].includes(b.version)||!b.accounts||Object.keys(b.accounts).length!==bookKeys(b).length)throw new Error('Invalid accounting book');
+  if([3,4].includes(b.version)&&Object.keys(b).sort().join()!==['version','accounts','retainedEarnings','sequence','journal',...(Object.hasOwn(b,'journalBase')?['journalBase']:[])].sort().join())throw new Error('Invalid payable accounting fields');
   for(const k of bookKeys(b))dollar(b.accounts[k],k==='equity');
   dollar(b.retainedEarnings,true);dollar(b.sequence);
-  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+([2,3].includes(b.version)?b.accounts.receivables:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0)+(b.version===3?b.accounts.payables:0);
+  const a=assets.reduce((n,k)=>n+b.accounts[k],0)+([2,3,4].includes(b.version)?b.accounts.receivables:0)+(b.version===4?b.accounts.premises:0),l=liabilities.reduce((n,k)=>n+b.accounts[k],0)+([3,4].includes(b.version)?b.accounts.payables:0);
   if(!Number.isSafeInteger(a)||!Number.isSafeInteger(l)||!Number.isSafeInteger(l+b.accounts.equity)||a!==l+b.accounts.equity)throw new Error('Unbalanced accounting book');
   if(!Array.isArray(b.journal))throw new Error('Invalid accounting journal');
   return {assets:a,liabilities:l,equity:b.accounts.equity,residual:0};
  }
  function opening(version=1){
-  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...([2,3].includes(version)?{receivables:0}:{}),...(version===3?{payables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
+  const b={version,accounts:{cash:2400000,loans:9500000,securities:13900000,deposits:24000000,emergencyDebt:0,equity:1800000,...([2,3,4].includes(version)?{receivables:0}:{}),...(version===4?{premises:0}:{}),...([3,4].includes(version)?{payables:0}:{})},retainedEarnings:0,sequence:0,journal:[]};
   check(b);return b;
  }
  // Signed account changes, not debit/credit labels. Every entry balances before commit.
@@ -6002,11 +6008,13 @@ const AccountingPrototype=(()=>{
    ...([2,3].includes(book.version)?{invoice:{receivables:amount,equity:amount},
      collectInvoice:{cash:amount,receivables:-amount},
      writeOffInvoice:{receivables:-amount,equity:-amount}}:{}),
-   ...(book.version===3?{incurPayable:{payables:amount,equity:-amount},
+   ...(book.version===4?{capitalise:{cash:-amount,premises:amount},
+     depreciate:{premises:-amount,equity:-amount}}:{}),
+   ...([3,4].includes(book.version)?{incurPayable:{payables:amount,equity:-amount},
      settlePayable:{cash:-amount,payables:-amount}}:{})
   };
   if(!Object.hasOwn(entries,type))throw new Error('Unknown accounting transaction');
-  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice','incurPayable'].includes(type)?-amount:0;
+  const earnings=['income','invoice'].includes(type)?amount:['expense','chargeoff','writeOffInvoice','incurPayable','depreciate'].includes(type)?-amount:0;
   return post(book,type,entries[type],earnings);
  }
  function sell(book,asset,face,haircutBps){
@@ -6140,7 +6148,7 @@ const AccountingPrototype=(()=>{
   return {format:'bw-accounting-'+book.version,checkpoint,entries:copy(book.journal.slice(cut)),closing:stateOf(book)};
  }
  function restore(snapshotValue){
-  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2','bw-accounting-3'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
+  if(!snapshotValue||Object.keys(snapshotValue).sort().join(',')!=='checkpoint,closing,entries,format'||!['bw-accounting-1','bw-accounting-2','bw-accounting-3','bw-accounting-4'].includes(snapshotValue.format)||!Array.isArray(snapshotValue.entries)||snapshotValue.entries.length>256)throw new Error('Invalid accounting snapshot');
   const version=Number(snapshotValue.format.slice(-1));
   let b=fromState(snapshotValue.checkpoint,version);const end=fromState(snapshotValue.closing,version);
   for(const entry of snapshotValue.entries)b=replayEntry(b,entry);
@@ -6155,12 +6163,18 @@ const AccountingPrototype=(()=>{
   next.journalBase=stateOf(next);check(next);return next;
  }
  // Explicit new-campaign boundary; never repair or upgrade an imported book.
+ function withPremises(book){
+  const validated=restore(snapshot(book));if(validated.version===4)return validated;
+  const based=validated.version===3?validated:withPayables(validated);
+  const next={...based,version:4,accounts:{...based.accounts,premises:0},journal:[]};
+  next.journalBase=stateOf(next);check(next);return next;
+ }
  function withPayables(book){
   const validated=restore(snapshot(book));if(validated.version===3)return validated;
   const next={...validated,version:3,accounts:{...validated.accounts,...(validated.version===1?{receivables:0}:{}),payables:0},journal:[]};
   next.journalBase=stateOf(next);check(next);return next;
  }
- return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables,withPayables});
+ return Object.freeze({opening,check,post,transact,sell,funded,transfer,operations,fromOperatingReport,activity,opportunity,franchise,acquisition,gameAcquisition,activities,planSpending,snapshot,restore,withReceivables,withPayables,withPremises});
 })();
 // Save repair is engine-owned. Validate the cloned save before legacy defaults.
 // Repair helpers mutate their argument; migrateCampaign gives them a private clone.
@@ -6771,10 +6785,10 @@ function groupCapitalQuote(p) {
   if (!p.financialGroup) return null;
   const minimumCapital = Math.ceil(riskAssets(p)*GROUP_SAFEGUARDS.capitalRatio);
   const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
-  const duePayables = p.accounting.version===3?p.accounting.accounts.payables:0;
+  const duePayables = [3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0;
   const restricted = p.stats.emergencyDebt>0 || p.capitalRestriction>0 || tierRank(p)>=2 ||
     (p.fundingCovenant && (p.fundingCovenant.streak>0||fundingPosition(p).excess>0));
-  return { minimumCapital, minimumCash, restricted,...(p.accounting.version===3?{duePayables}:{}),
+  return { minimumCapital, minimumCash, restricted,...([3,4].includes(p.accounting.version)?{duePayables}:{}),
     dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash-duePayables,p.stats.capital-minimumCapital)),
     supportLimit: p.financialGroup.parent.accounts.cash };
 }
@@ -6886,7 +6900,7 @@ function validateFinancialGroupView(view) {
   validateDepartmentView(view);
   validateFacilityLifecycleView(view);
   validateDepartmentFunctionsView(view);
-  if(view.me?.accounting&&view.me.accounting.version!==([4,5,6,7,8].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
+  if(view.me?.accounting&&view.me.accounting.version!==(view.financialGroupVersion===8?4:[4,5,6,7].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
     throw Error('Unsupported bank accounting view for the current campaign rules.');
   if(![1,2,3,4,5,6,7,8].includes(view.financialGroupVersion)) {
     if(view.me?.financialGroup!==undefined||view.me?.creditPortfolio!==undefined||view.rival?.groupSummary!==undefined)
@@ -7086,7 +7100,7 @@ function finishCorporateEconomy(g){
 function validateCorporatePlayer(p,world,month,groupVersion){
   const c=p.corporate;
   if(!c||Object.keys(c).sort().join()!=='index,report,version'||c.version!==1||![0,1].includes(c.index))throw Error('Invalid corporate banking book.');
-  if(p.accounting.version!==([4,5,6,7,8].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0))
+  if(p.accounting.version!==(groupVersion===8?4:[4,5,6,7].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0))
     throw Error('Bank receivables disagree with company liabilities.');
   if(month===0){if(c.report!==null)throw Error('Unexpected opening company receipts.');}
   else{
@@ -8104,7 +8118,8 @@ function initializeDepartments(g) {
   if(![4,5,6,7,8].includes(g.financialGroupVersion))return;
   g.departmentEconomy={version:1,month:0,supplier:GroupAccounting.opening('department:providers'),paid:0};
   for(const p of g.players) {
-    if(p.accounting.version!==3)p.accounting=AccountingPrototype.withPayables(p.accounting);
+    if(g.financialGroupVersion===8)p.accounting=AccountingPrototype.withPremises(p.accounting);
+    else if(p.accounting.version!==3)p.accounting=AccountingPrototype.withPayables(p.accounting);
     syncAccounts(p);
     p.departmentOffice={version:1,lastCycle:0,sequence:0,policy:defaultDepartmentPolicy(),
       leaders:Object.fromEntries(departmentRoles().map(k=>[k,null])),
@@ -8404,7 +8419,7 @@ function validateDepartmentPlayer(p,month) {
       Object.values(d.arrears).some(n=>!departmentWhole(n)) || !Array.isArray(d.history)||d.history.length>24 || p._departmentTeaching!==undefined||p._departmentTraining!==undefined)
     throw Error('Invalid persistent department office.');
   validateDepartmentPolicy(d.policy);
-  if(p.accounting.version!==3||p.accounting.accounts.payables!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
+  if(![3,4].includes(p.accounting.version)||p.accounting.accounts.payables!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
     throw Error('Department liabilities disagree with bank accounts.');
   const ids=new Set();
   for(const leader of Object.values(d.leaders))if(leader!==null) {
@@ -9453,7 +9468,7 @@ const DepartmentFunctions = (() => {
     if(!report.eligible)throw Error(report.reason);
     const next=copy(p);let supplier=payment?.supplier===undefined?null:copy(payment.supplier);
     if(report.vendorExpense){
-      if(typeof payment?.pay!=='function'||!supplier||next.accounting?.version!==3)throw Error('Funded paired vendor payment adapter required.');
+      if(typeof payment?.pay!=='function'||!supplier||![3,4].includes(next.accounting?.version))throw Error('Funded paired vendor payment adapter required.');
       AccountingPrototype.check(next.accounting);GroupAccounting.validate(supplier);
       if(next.accounting.accounts.cash<report.vendorExpense)throw Error('Vendor payment exceeds actual bank cash.');
       const beforeBank=copy(next.accounting),beforeSupplier=copy(supplier),result=payment.pay(copy(beforeBank),copy(beforeSupplier),report.vendorExpense,next.id,'department.functions');

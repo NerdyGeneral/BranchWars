@@ -20,10 +20,10 @@ function groupCapitalQuote(p) {
   if (!p.financialGroup) return null;
   const minimumCapital = Math.ceil(riskAssets(p)*GROUP_SAFEGUARDS.capitalRatio);
   const minimumCash = Math.ceil(p.stats.deposits*GROUP_SAFEGUARDS.depositCash);
-  const duePayables = p.accounting.version===3?p.accounting.accounts.payables:0;
+  const duePayables = [3,4].includes(p.accounting.version)?p.accounting.accounts.payables:0;
   const restricted = p.stats.emergencyDebt>0 || p.capitalRestriction>0 || tierRank(p)>=2 ||
     (p.fundingCovenant && (p.fundingCovenant.streak>0||fundingPosition(p).excess>0));
-  return { minimumCapital, minimumCash, restricted,...(p.accounting.version===3?{duePayables}:{}),
+  return { minimumCapital, minimumCash, restricted,...([3,4].includes(p.accounting.version)?{duePayables}:{}),
     dividendLimit: restricted?0:Math.max(0,Math.min(p.accounting.retainedEarnings,p.stats.cash-minimumCash-duePayables,p.stats.capital-minimumCapital)),
     supportLimit: p.financialGroup.parent.accounts.cash };
 }
@@ -135,7 +135,7 @@ function validateFinancialGroupView(view) {
   validateDepartmentView(view);
   validateFacilityLifecycleView(view);
   validateDepartmentFunctionsView(view);
-  if(view.me?.accounting&&view.me.accounting.version!==([4,5,6,7,8].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
+  if(view.me?.accounting&&view.me.accounting.version!==(view.financialGroupVersion===8?4:[4,5,6,7].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
     throw Error('Unsupported bank accounting view for the current campaign rules.');
   if(![1,2,3,4,5,6,7,8].includes(view.financialGroupVersion)) {
     if(view.me?.financialGroup!==undefined||view.me?.creditPortfolio!==undefined||view.rival?.groupSummary!==undefined)
