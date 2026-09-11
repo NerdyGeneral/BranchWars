@@ -2,6 +2,31 @@
 // authored proximity and licenses; UI only compares and stages complete plans.
 let lifecycleUi={owner:null,campaign:null,cycle:null,signature:null,office:null,open:false,form:null,revision:0,notice:''};
 function lifecycleMoney(n){return '$'+Math.round(Number(n)||0).toLocaleString();}
+// An office staffed below its model reference produces reduced capacity, and an
+// office with an unstaffed required role produces none at all. Say so in front
+// of the collapsed detail rather than inside it.
+function lifecycleStarvationNotes(v,offices,measured){
+  const p=v.me,notes=[];
+  for(const o of offices){
+    const design=E.FacilityLifecycle.CATALOG[o.model]?.staffQuarters||{},
+      record=p.facilityLifecycle.records[o.id],row=measured.find(x=>x.officeId===o.id);
+    if(!record)continue;
+    const short=E.FacilityLifecycle.ROLES.filter(role=>(design[role]||0)>0&&(record.staffQuarters[role]||0)<design[role]);
+    if(!short.length)continue;
+    const dead=E.FacilityLifecycle.ROLES.some(role=>(design[role]||0)>0&&!(record.staffQuarters[role]||0));
+    const capacity=row?row.capacity:null;
+    const noLoans=capacity?!(capacity.loanCapacity>0):dead;
+    const noDeposits=capacity?!(capacity.depositCapacity>0):dead;
+    const where=esc((v.territories[o.market]?.name||o.market)+' \u00b7 '+(E.FacilityLifecycle.CATALOG[o.model]?.name||o.model));
+    const detail=short.map(role=>esc(lifecycleRole(role))+' '+Number(record.staffQuarters[role]||0)+'/'+Number(design[role])).join(' \u00b7 ');
+    const effect=noLoans&&noDeposits?'This office is producing <b>no deposit or lending capacity</b>.'
+      :noLoans?'This office is producing <b>no lending capacity</b>.'
+      :noDeposits?'This office is producing <b>no deposit capacity</b>.'
+      :'This office is producing reduced capacity.';
+    notes.push('<li><b>'+where+'</b> \u2014 '+detail+'<br>'+effect+'</li>');
+  }
+  return notes;
+}
 function lifecycleRole(role){return E.ROLES[role]?.name||(role==='wealth'?'Wealth advisory':role);}
 function lifecycleFresh(v,signature,campaign){const now=currentView();return !!(now?.me?.facilityLifecycle&&draft&&
   (game||view)===campaign&&now.me.id===v.me.id&&now.cycle===v.cycle&&draftOwner===now.me.id&&lastCycle===now.cycle&&
@@ -80,7 +105,9 @@ function renderFacilityLifecycle(v){
   const rows=offices.map(o=>{const r=p.facilityLifecycle.records[o.id],m=measured.find(x=>x.officeId===o.id),wear=p.facilityLifecycle.report?.rows.find(x=>x.officeId===o.id)?.wear;
     return '<tr><th>'+esc(E.FacilityLifecycle.CATALOG[o.model].name)+'<br><small>'+esc(o.id)+'</small></th><td>'+Number(r.conditionBp/100).toFixed(1)+'%<br><small>'+(wear===undefined?'No settled wear yet':Number(wear/100).toFixed(2)+' points wear last month')+'</small></td><td>'+(m?Math.round(m.ramp*100)+'%':'—')+'</td><td>'+(m?lifecycleMoney(m.upkeep)+' + '+lifecycleMoney(m.maintenance):'Unavailable')+'</td><td>'+ (r.renovation?'Renovating '+Number(r.renovation.work)+'/'+E.FacilityLifecycle.RULES.renovationWork:o.conversion?'Converting':'Operating')+'</td></tr>';}).join('');
   const order=office?lifecycleUi.form.offices[office.id]:null,hubIds=office?review.nearbyHubIds?.[office.id]||[]:[];
+  const starved=lifecycleStarvationNotes(v,offices,measured);
   mount.innerHTML='<details id="facilityLifecycleDesk"'+(lifecycleUi.open?' open':'')+'><summary>OFFICE CONDITION &amp; STAFFING · '+integer(offices.length)+' operating site'+(offices.length===1?'':'s')+'</summary><section class="credit-policy group-credit-policy">'+
+    (starved.length?'<p class="notice" role="status"><b>UNDERSTAFFED OFFICES</b></p><ul class="small">'+starved.join('')+'</ul>':'')+
     '<p class="small">Each location uses the same bank staff, cash and identified office record. Paid maintenance slows wear; a renovation restores condition only after its work completes.</p>'+
     (v.gameOver?'<p class="notice" role="status">Campaign ended. Office records remain available for inspection; lifecycle orders are locked.</p>':p.submitted?'<p class="notice" role="status">Plan submitted. You can inspect offices, but lifecycle orders are locked until the next planning month.</p>':'')+
     '<div class="table-scroll" tabindex="0" style="max-height:250px;max-width:100%;overflow:auto" aria-label="Office condition and operating cost"><table class="regional-table"><thead><tr><th>Office</th><th>Condition / wear</th><th>Ramp</th><th>Upkeep + maintenance</th><th>Work</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+

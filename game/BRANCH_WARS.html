@@ -12708,6 +12708,14 @@ function departmentForecastIssue(v,plan=draft){
  return quote.status.eligible?'':quote.status.reason;
 }
 function departmentForecastNotice(reason){return '<p class="small bad" role="status">Forecast unavailable: '+esc(reason)+'. Review Functions & workload and your staffing allocation. No orders have been changed.</p>';}
+function loanBookNotice(v){
+ const r=v.me.operatingReport;if(!r||!Number.isFinite(r.loanGrowth)||r.loanGrowth>=0)return '';
+ let capacity=null;try{capacity=E.regionalBranchMetrics(v.me).loanCapacity;}catch(e){capacity=null;}
+ const shrink=money(Math.abs(Math.round(r.loanGrowth)));
+ return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Repayments exceeded new lending by '+shrink+' last month'
+  +(Number.isFinite(capacity)?'; local origination capacity is '+money(Math.round(capacity))+' against a book of '+money(Math.round(v.me.stats.loans)):'')
+  +'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>';
+}
 function renderOperatingPreview(v){
  if([6,7,8].includes(v.financialGroupVersion))renderActualBankOperatingResult(v);
  const basePlan={allocation:v.me.allocation,products:v.me.products,depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital};
@@ -12720,7 +12728,7 @@ function renderOperatingPreview(v){
  if(v.me.onboarding)rows.push(['Onboarding activation expense','onboardingCost'],['Deposits from activated applications (included above)','onboardingDeposits']);
  if(v.me.fundingCovenant)rows.push(['Debt after operations (before treasury repayment)','emergencyDebt'],['Covenant excess after operations','fundingExcess']);
  const signed=n=>(n<0?'−':n>0?'+':'')+money(Math.abs(n));
- $('#operatingPreview').innerHTML=`${renderBalanceSheet(v)}${renderFundingCovenant(v)}${renderDepositProducts(v)}${renderCreditBook(v)}<h3>OPERATING PREVIEW</h3><p class="micro muted">${v.campaignRulesVersion===1?'ACCOUNTING PILOT · Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'FUNDING RULES 2 · Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included below. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'LEGACY FUNDING RULES · This saved campaign retains its original capital and funding mechanics.'}</p><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Pilot forecasts include funding sales needed for their own projected flows.</p><table class="forecast-table"><thead><tr><th>Per cycle</th><th>Current plan</th><th>Your draft</th><th>Change</th></tr></thead><tbody>${rows.map(([label,key])=>`<tr><td>${label}</td><td>${money(before[key])}</td><td>${money(after[key])}</td><td>${signed(after[key]-before[key])}</td></tr>`).join('')}</tbody></table><p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash.</p>`;
+ $('#operatingPreview').innerHTML=`${renderBalanceSheet(v)}${loanBookNotice(v)}${renderFundingCovenant(v)}${renderDepositProducts(v)}${renderCreditBook(v)}<h3>OPERATING PREVIEW</h3><p class="micro muted">${v.campaignRulesVersion===1?'ACCOUNTING PILOT · Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'FUNDING RULES 2 · Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included below. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'LEGACY FUNDING RULES · This saved campaign retains its original capital and funding mechanics.'}</p><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Pilot forecasts include funding sales needed for their own projected flows.</p><table class="forecast-table"><thead><tr><th>Per cycle</th><th>Current plan</th><th>Your draft</th><th>Change</th></tr></thead><tbody>${rows.map(([label,key])=>`<tr><td>${label}</td><td>${money(before[key])}</td><td>${money(after[key])}</td><td>${signed(after[key]-before[key])}</td></tr>`).join('')}</tbody></table><p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash.</p>`;
  renderBankRecovery(v);
  renderActualBankOperatingResult(v);
 }
@@ -13636,6 +13644,31 @@ function bindFacilityNetwork(v,office){
 // authored proximity and licenses; UI only compares and stages complete plans.
 let lifecycleUi={owner:null,campaign:null,cycle:null,signature:null,office:null,open:false,form:null,revision:0,notice:''};
 function lifecycleMoney(n){return '$'+Math.round(Number(n)||0).toLocaleString();}
+// An office staffed below its model reference produces reduced capacity, and an
+// office with an unstaffed required role produces none at all. Say so in front
+// of the collapsed detail rather than inside it.
+function lifecycleStarvationNotes(v,offices,measured){
+  const p=v.me,notes=[];
+  for(const o of offices){
+    const design=E.FacilityLifecycle.CATALOG[o.model]?.staffQuarters||{},
+      record=p.facilityLifecycle.records[o.id],row=measured.find(x=>x.officeId===o.id);
+    if(!record)continue;
+    const short=E.FacilityLifecycle.ROLES.filter(role=>(design[role]||0)>0&&(record.staffQuarters[role]||0)<design[role]);
+    if(!short.length)continue;
+    const dead=E.FacilityLifecycle.ROLES.some(role=>(design[role]||0)>0&&!(record.staffQuarters[role]||0));
+    const capacity=row?row.capacity:null;
+    const noLoans=capacity?!(capacity.loanCapacity>0):dead;
+    const noDeposits=capacity?!(capacity.depositCapacity>0):dead;
+    const where=esc((v.territories[o.market]?.name||o.market)+' \u00b7 '+(E.FacilityLifecycle.CATALOG[o.model]?.name||o.model));
+    const detail=short.map(role=>esc(lifecycleRole(role))+' '+Number(record.staffQuarters[role]||0)+'/'+Number(design[role])).join(' \u00b7 ');
+    const effect=noLoans&&noDeposits?'This office is producing <b>no deposit or lending capacity</b>.'
+      :noLoans?'This office is producing <b>no lending capacity</b>.'
+      :noDeposits?'This office is producing <b>no deposit capacity</b>.'
+      :'This office is producing reduced capacity.';
+    notes.push('<li><b>'+where+'</b> \u2014 '+detail+'<br>'+effect+'</li>');
+  }
+  return notes;
+}
 function lifecycleRole(role){return E.ROLES[role]?.name||(role==='wealth'?'Wealth advisory':role);}
 function lifecycleFresh(v,signature,campaign){const now=currentView();return !!(now?.me?.facilityLifecycle&&draft&&
   (game||view)===campaign&&now.me.id===v.me.id&&now.cycle===v.cycle&&draftOwner===now.me.id&&lastCycle===now.cycle&&
@@ -13714,7 +13747,9 @@ function renderFacilityLifecycle(v){
   const rows=offices.map(o=>{const r=p.facilityLifecycle.records[o.id],m=measured.find(x=>x.officeId===o.id),wear=p.facilityLifecycle.report?.rows.find(x=>x.officeId===o.id)?.wear;
     return '<tr><th>'+esc(E.FacilityLifecycle.CATALOG[o.model].name)+'<br><small>'+esc(o.id)+'</small></th><td>'+Number(r.conditionBp/100).toFixed(1)+'%<br><small>'+(wear===undefined?'No settled wear yet':Number(wear/100).toFixed(2)+' points wear last month')+'</small></td><td>'+(m?Math.round(m.ramp*100)+'%':'—')+'</td><td>'+(m?lifecycleMoney(m.upkeep)+' + '+lifecycleMoney(m.maintenance):'Unavailable')+'</td><td>'+ (r.renovation?'Renovating '+Number(r.renovation.work)+'/'+E.FacilityLifecycle.RULES.renovationWork:o.conversion?'Converting':'Operating')+'</td></tr>';}).join('');
   const order=office?lifecycleUi.form.offices[office.id]:null,hubIds=office?review.nearbyHubIds?.[office.id]||[]:[];
+  const starved=lifecycleStarvationNotes(v,offices,measured);
   mount.innerHTML='<details id="facilityLifecycleDesk"'+(lifecycleUi.open?' open':'')+'><summary>OFFICE CONDITION &amp; STAFFING · '+integer(offices.length)+' operating site'+(offices.length===1?'':'s')+'</summary><section class="credit-policy group-credit-policy">'+
+    (starved.length?'<p class="notice" role="status"><b>UNDERSTAFFED OFFICES</b></p><ul class="small">'+starved.join('')+'</ul>':'')+
     '<p class="small">Each location uses the same bank staff, cash and identified office record. Paid maintenance slows wear; a renovation restores condition only after its work completes.</p>'+
     (v.gameOver?'<p class="notice" role="status">Campaign ended. Office records remain available for inspection; lifecycle orders are locked.</p>':p.submitted?'<p class="notice" role="status">Plan submitted. You can inspect offices, but lifecycle orders are locked until the next planning month.</p>':'')+
     '<div class="table-scroll" tabindex="0" style="max-height:250px;max-width:100%;overflow:auto" aria-label="Office condition and operating cost"><table class="regional-table"><thead><tr><th>Office</th><th>Condition / wear</th><th>Ramp</th><th>Upkeep + maintenance</th><th>Work</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
