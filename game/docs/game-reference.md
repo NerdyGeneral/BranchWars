@@ -369,8 +369,8 @@ function projectCost(p,def,focus=p.focus,premium=1){
   cost=node?Math.round(node.cost*strategyCostMultiplier(p,def.strategy)):0;
  }else{
   cost=def.cost;
-  if(def.kind==='branch')cost*=1-strategyLevel(p,'network')*.08;
-  if(def.kind==='acquisition')cost*=1-strategyLevel(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
+  if(def.kind==='branch')cost*=1-strategyProgress(p,'network')*.08;
+  if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
   if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
  }
