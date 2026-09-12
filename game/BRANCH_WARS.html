@@ -11404,7 +11404,12 @@ function renderFeatureSelection(options, settings = {}) {
   return `<div class="feature-selection-summary small" role="status" aria-live="polite">${esc(featureSelectionSummary(options))}</div>` +
     `<details class="feature-selection-details" data-feature-prefix="${esc(prefix)}"${(settings.expanded ?? featureSelectionExpansion[prefix]) ? ' open' : ''}><summary>Optional systems · ${descriptors.filter(feature => feature.enabled).length} selected</summary>` +
     `<p class="micro muted">Choose the complexity you want. Prerequisite changes are shown for confirmation; existing saves keep their rules. Preview balance is not accepted as final.</p>` +
-    pilot + descriptors.filter(feature => feature.field !== 'featureRulesVersion').map(row).join('') + '</details>' +
+    `<div class="feature-modes" role="group" aria-label="Campaign complexity">` +
+    `<button type="button" class="btn" data-feature-mode="core"${settings.disabled ? ' disabled' : ''}>Core rules</button>` +
+    `<button type="button" class="btn" data-feature-mode="expanded"${settings.disabled ? ' disabled' : ''}>Expanded rules</button>` +
+    `<p class="micro muted">Core is the original campaign. Expanded adds every optional system; they depend on one another, so they arrive together.</p></div>` +
+    `<div hidden data-feature-fields>` +
+    pilot + descriptors.filter(feature => feature.field !== 'featureRulesVersion').map(row).join('') + '</div></details>' +
     '<div class="feature-selection-status small bad" role="alert"></div>';
 }
 function featureSelectionError(container, binding, message) {
@@ -11454,6 +11459,15 @@ function bindFeatureSelection(container, binding) {
     const prefix = event.target?.dataset?.featurePrefix;
     if (typeof prefix === 'string') featureSelectionExpansion[prefix] = !!event.target.open;
   }, true);
+  element.addEventListener('click', event => {
+    const mode = event.target?.dataset?.featureMode;
+    if (!mode) return;
+    const field = mode === 'core' ? 'campaignRulesVersion' : 'financialGroupVersion';
+    const input = element.querySelector(`[data-feature-field="${field}"]`);
+    if (!input || input.disabled) return;
+    input.checked = mode !== 'core';
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
   element.addEventListener('change', event => {
     const control = event.target, field = control?.dataset?.featureField;
     if (!field) return;
