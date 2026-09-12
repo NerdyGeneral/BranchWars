@@ -10,7 +10,7 @@ function advertisingDeskContent(v, productPreview) {
  if(p.onboarding){p._relationshipOfferBudget=budget.relationshipOffers||0;p._onboardingBudget=budget.onboarding||0;}
  const quote=E.advertisingPreview(p,v,q),last=v.me.advertising.report,disabled=v.me.submitted?'disabled':'';
  const select=(key,label,options)=>'<label>'+label+'<select data-advertising-field="'+key+'" '+disabled+'>'+options.map(([value,text,unavailable])=>'<option value="'+value+'" '+(String(q[key])===String(value)?'selected':'')+' '+(unavailable?'disabled':'')+'>'+esc(text)+'</option>').join('')+'</select></label>';
- const controls=select('market','Campaign market',Object.entries(v.territories).map(([k,t])=>[k,t.name]))+
+ const controls=select('market','Campaign market',marketEntries(v).map(([k,t])=>[k,t.name]))+
   select('segment','Customer audience',Object.entries(E.CUSTOMER_SEGMENTS).map(([k,s])=>[k,s.name]))+
   select('product','Advertised offer',Object.entries(v.productPortfolios.retail.options).map(([k,d])=>[k,d.name+(draft.productProgramPolicy.markets[q.market][q.segment][k]?'':' · sales closed'),!draft.productProgramPolicy.markets[q.market][q.segment][k]]))+
   select('budget','Monthly budget',E.ADVERTISING_BUDGETS.filter(n=>!n).map(n=>[n,'Paused · $0']));

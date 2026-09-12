@@ -13,6 +13,15 @@ let featureConnectionGeneration=0,featurePeerCapabilities=null,featurePeerGenera
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>{const v=Number(n)||0,a=Math.abs(v),sign=v<0?'−':'';return sign+'$'+(a>=1e6?(a/1e6).toFixed(2)+'M':a>=1000?Math.round(a/1000)+'K':String(Math.round(a)))};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
+// One order for every market list and table. Authored key order tells the
+// player nothing, and market control decides campaigns, so lead with the
+// markets that need a decision: withdrawn, then at risk, then by prize.
+// The city map itself stays spatial; only lists are ordered.
+function marketEntries(v){
+  const rank=t=>(t.exited&&t.exited[0]?0:((t.exitStreak&&t.exitStreak[0])||0)>0?1:t.unlocked?2:3);
+  return Object.entries(v&&v.territories||{}).sort(([ak,a],[bk,b])=>
+    rank(a)-rank(b)||(b.value||0)-(a.value||0)||String(a.name||ak).localeCompare(String(b.name||bk)));
+}
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
 function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}

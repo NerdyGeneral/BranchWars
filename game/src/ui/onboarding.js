@@ -65,7 +65,7 @@ function onboardingUiLocked(v){return v.me.submitted||v.gameOver||[6,7,8].includ
 function onboardingPolicyControls(v,p,policy){
  const disabled=onboardingUiLocked(v)?'disabled':'';
  const select=(field,label,options)=>'<label for="onboarding-'+field+'">'+label+'<select id="onboarding-'+field+'" '+disabled+'>'+options.map(([value,name,closed])=>'<option value="'+esc(value)+'" '+(String(policy[field])===String(value)?'selected':'')+' '+(closed?'disabled':'')+'>'+esc(name)+'</option>').join('')+'</select></label>';
- return select('market','New application market',Object.entries(v.territories).map(([key,item])=>[key,item.name]))+
+ return select('market','New application market',marketEntries(v).map(([key,item])=>[key,item.name]))+
   select('segment','New application segment',Object.entries(E.CUSTOMER_SEGMENTS).map(([key,item])=>[key,item.name]))+
   select('product','New application product',Object.entries(v.productPortfolios.retail.options).map(([key,item])=>{const open=p.productPrograms.markets[policy.market]?.[policy.segment]?.[key];return [key,item.name+(open?'':' · sales closed'),!open];}))+
   select('share','Share of remaining Retail sales time',[0,25,50].map(n=>[n,n?n+'% to onboarding':'Paused · 0%']));
@@ -107,7 +107,7 @@ function onboardingContent(v) {
   stat('Reserved / remaining Retail time',quote.assignedStaff.toFixed(2)+' / '+quote.salesStaff.toFixed(2),'Effective bankers after retention and existing-customer offers');
  const select = (field, label, options) => '<label for="onboarding-' + field + '">' + label + '<select id="onboarding-' + field + '" ' + disabled + '>' +
   options.map(([value, name, closed]) => '<option value="' + esc(value) + '" ' + (String(policy[field]) === String(value) ? 'selected' : '') + ' ' + (closed ? 'disabled' : '') + '>' + esc(name) + '</option>').join('') + '</select></label>';
- const controls = select('market', 'New application market', Object.entries(v.territories).map(([key, item]) => [key, item.name])) +
+ const controls = select('market', 'New application market', marketEntries(v).map(([key, item]) => [key, item.name])) +
   select('segment', 'New application segment', Object.entries(E.CUSTOMER_SEGMENTS).map(([key, item]) => [key, item.name])) +
   select('product', 'New application product', Object.entries(v.productPortfolios.retail.options).map(([key, item]) => [key, item.name + (p.productPrograms.markets[policy.market][policy.segment][key] ? '' : ' · sales closed'), !p.productPrograms.markets[policy.market][policy.segment][key]])) +
   select('share', 'Share of remaining Retail sales time', [0, 25, 50].map(n => [n, n ? n + '% to onboarding' : 'Paused · 0%']));

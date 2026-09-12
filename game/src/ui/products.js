@@ -12,7 +12,7 @@ function renderCustomerNeeds(v){
  const issue=departmentForecastIssue(v);
  if(issue){$('#pipeline').insertAdjacentHTML('beforeend',departmentForecastNotice(issue));return;}
  const p={...v.me,allocation:draft.allocation,retailLifecycle:{...v.me.retailLifecycle,mix:draft.retailMix}},forecast=E.operatingPreview(p,draft,v.economy),actual=v.me.operatingReport;
- const rows=Object.entries(v.territories).map(([key,t])=>{
+ const rows=marketEntries(v).map(([key,t])=>{
   const d=E.customerDemand(p,v,key),m=v.me.marketSnapshot.markets[key],outside=m.community.deposits+m.union.deposits;
   const fits=Object.keys(E.RETAIL_PLATFORM).map(product=>{const one={essential:0,rewards:0,highYield:0,[product]:4};return (E.customerDemand(p,v,key,one).fit*100).toFixed(0)+'%'});
   return '<tr><th>'+esc(t.name)+'</th><td>'+d.segments.map(s=>esc(s.name)+': '+(s.share*100).toFixed(0)+'%').join('<br>')+'</td><td>'+fits.join(' / ')+'</td><td>'+(d.fit*100).toFixed(0)+'%</td><td>'+money(outside)+'</td></tr>';
@@ -26,7 +26,7 @@ function renderCustomerRelationships(v){
  if(!v.me.customerRelationships)return;
  // The ownership campaign has a dedicated Customers view with its own formula.
  if(v.me.householdBook)return;
- const p=v.me,rows=Object.entries(v.territories).map(([key,t])=>{
+ const p=v.me,rows=marketEntries(v).map(([key,t])=>{
   const review=E.customerRelationshipReview(p,key,draft.allocation);
   return '<tr><th>'+esc(t.name)+'</th>'+review.map(r=>'<td>'+r.current+' → '+r.next+'<br><span class="micro">'+(r.change>=0?'+':'')+r.change+' / month</span></td>').join('')+'<td>'+E.customerRelationshipPressure(p,key).toFixed(2)+'</td></tr>';
  }).join('');
