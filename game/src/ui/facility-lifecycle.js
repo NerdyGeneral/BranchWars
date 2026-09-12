@@ -107,6 +107,7 @@ function renderFacilityLifecycle(v){
   const order=office?lifecycleUi.form.offices[office.id]:null,hubIds=office?review.nearbyHubIds?.[office.id]||[]:[];
   const starved=lifecycleStarvationNotes(v,offices,measured);
   mount.innerHTML='<details id="facilityLifecycleDesk"'+(lifecycleUi.open?' open':'')+'><summary>OFFICE CONDITION &amp; STAFFING · '+integer(offices.length)+' operating site'+(offices.length===1?'':'s')+'</summary><section class="credit-policy group-credit-policy">'+
+    '<p class="small"><button type="button" class="btn" id="openOfficeConstruction">Open a new office in Projects &amp; construction</button></p>'+
     (starved.length?'<p class="notice" role="status"><b>UNDERSTAFFED OFFICES</b></p><ul class="small">'+starved.join('')+'</ul>':'')+
     '<p class="small">Each location uses the same bank staff, cash and identified office record. Paid maintenance slows wear; a renovation restores condition only after its work completes.</p>'+
     (v.gameOver?'<p class="notice" role="status">Campaign ended. Office records remain available for inspection; lifecycle orders are locked.</p>':p.submitted?'<p class="notice" role="status">Plan submitted. You can inspect offices, but lifecycle orders are locked until the next planning month.</p>':'')+
@@ -128,6 +129,12 @@ function renderFacilityLifecycle(v){
 }
 function bindFacilityLifecycle(v,office){
   const signature=JSON.stringify(draft),campaign=game||view,revision=lifecycleUi.revision;
+  const construct=$('#openOfficeConstruction');
+  if(construct)construct.addEventListener('click',()=>{
+    if(revision!==lifecycleUi.revision||(game||view)!==campaign)return;
+    setWorkspaceTab('operations');
+    if(typeof setOperationsDesk==='function')setOperationsDesk('projects',{focus:true});
+  });
   const sameView=()=>revision===lifecycleUi.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id&&currentView()?.cycle===v.cycle&&JSON.stringify(draft)===signature;
   const fresh=()=>{if(revision===lifecycleUi.revision&&lifecycleFresh(v,signature,campaign))return true;toast('The lifecycle view or plan changed. Reopen the current desk.');return false;};
   $('#facilityLifecycleDesk').addEventListener('toggle',()=>{if(revision===lifecycleUi.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id)lifecycleUi.open=!!$('#facilityLifecycleDesk').open;});
