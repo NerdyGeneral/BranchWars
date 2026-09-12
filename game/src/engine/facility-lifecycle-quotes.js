@@ -16,7 +16,8 @@ function facilityLifecycleModelTerms(p,office,descriptor=FacilityLifecycle.CATAL
   // RAW metrics: FacilityLifecycle owns the single conversion/renovation factor.
   const raw=facilityRawOfficeMetrics(p,office);
   return {cost:facilityNewOfficeCost(p,office.market,office.model),upkeep:Math.round(raw.expense),
-   capacity:{depositCapacity:raw.depositCapacity,loanCapacity:raw.loanCapacity,serviceCapacity:raw.serviceCapacity,advisoryCapacity:0}};
+   capacity:{depositCapacity:raw.depositCapacity,loanCapacity:raw.loanCapacity,serviceCapacity:raw.serviceCapacity,
+    advisoryCapacity:p.accounting?.version===4?(raw.advisoryCapacity||0):0}};
  }
  // New-model prices use the same branch strategy/operations/entry pricing path.
  // These catalog quotes do not grant construction permission or create offices.

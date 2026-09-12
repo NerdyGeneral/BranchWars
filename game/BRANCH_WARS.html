@@ -1397,7 +1397,9 @@ function operatingPreview(p,plan,economy){
  return projectOperatingForecast(finishOperatingForecast(prepareOperatingForecast(p,plan),economy));
 }
 function deleverage(g,p){if(tierRank(p)<2||p.stats.loans<250000)return'';const sold=Math.round(p.stats.loans*.03),haircut=Math.round(sold*.07);delta(p,'loans',-sold);delta(p,'cash',sold-haircut);delta(p,'capital',-haircut);return`${p.name} sold $${sold.toLocaleString()} of loans under its consent order at a $${haircut.toLocaleString()} loss.`}
-function opportunityPower(p,o){const a=p.allocation,branch=p.branches[o.market]||0,focus=p.focus===o.market?4:0,dept=p.departmentFunctions?(departmentOpportunityQuote(p,o).available||0)/4:a[o.dept]||0,policy=o.type==='deposit'||o.type==='wealth'?p.policies.deposit==='aggressive'?2:0:o.type==='loan'&&p.policies.lending==='growth'?2:0,strategy=(['business','loan','payroll','public'].includes(o.type)?strategyLevel(p,'commercial')*.8:strategyLevel(p,'digital')*.45);return dept*2.4+branch*3+focus+policy+p.stats.reputation/22+p.stats.morale/35+p.upgrades.training+p.upgrades.analytics*1.5+strategy}
+function opportunityPower(p,o){const a=p.allocation,branch=p.branches[o.market]||0,focus=p.focus===o.market?4:0,dept=p.departmentFunctions?(departmentOpportunityQuote(p,o).available||0)/4:a[o.dept]||0,policy=o.type==='deposit'||o.type==='wealth'?p.policies.deposit==='aggressive'?2:0:o.type==='loan'&&p.policies.lending==='growth'?2:0,strategy=(['business','loan','payroll','public'].includes(o.type)?strategyLevel(p,'commercial')*.8:strategyLevel(p,'digital')*.45);const advisory=o.type==='wealth'&&p.accounting?.version===4?(p.facilityNetwork?.offices||[])
+  .filter(x=>x.closedCycle===null&&x.market===o.market&&['wealth','financialCenter'].includes(x.model)).length*3:0;
+ return dept*2.4+branch*3+focus+policy+p.stats.reputation/22+p.stats.morale/35+p.upgrades.training+p.upgrades.analytics*1.5+strategy+advisory}
 function bankColor(value,seat=0){return typeof value==='string'&&/^#[0-9a-f]{6}$/i.test(value)?value.toLowerCase():seat===1?'#e1505c':'#2878e0'}
 function resolveDepartmentOpportunities(g,plans){
  const lines=[],chosen=plans.map((plan,i)=>{
@@ -2062,7 +2064,10 @@ Object.assign(PROJECTS,{
 function facilityProjectIssue(p,key){
  const def=PROJECTS[key];if(def?.institutionOnlyVersion!==5)return '';
  if(p.facilityNetwork?.version!==2)return 'Requires a new Group5 facility-lifecycle campaign.';
- if(def.facility==='wealth')return 'A licensed operating wealth subsidiary is required; an insurance agency is not a wealth license.';
+ if(def.facility==='wealth'){
+  if(p.accounting?.version!==4)return 'A licensed operating wealth subsidiary is required; an insurance agency is not a wealth license.';
+  if(!(p.branches[p.focus]>0))return 'Open a wealth office where you already operate: an existing office in the focus market is required.';
+ }
  return '';
 }
 function regionalProjectPreview(p,key,target){
@@ -8859,7 +8864,8 @@ function facilityLifecycleModelTerms(p,office,descriptor=FacilityLifecycle.CATAL
   // RAW metrics: FacilityLifecycle owns the single conversion/renovation factor.
   const raw=facilityRawOfficeMetrics(p,office);
   return {cost:facilityNewOfficeCost(p,office.market,office.model),upkeep:Math.round(raw.expense),
-   capacity:{depositCapacity:raw.depositCapacity,loanCapacity:raw.loanCapacity,serviceCapacity:raw.serviceCapacity,advisoryCapacity:0}};
+   capacity:{depositCapacity:raw.depositCapacity,loanCapacity:raw.loanCapacity,serviceCapacity:raw.serviceCapacity,
+    advisoryCapacity:p.accounting?.version===4?(raw.advisoryCapacity||0):0}};
  }
  // New-model prices use the same branch strategy/operations/entry pricing path.
  // These catalog quotes do not grant construction permission or create offices.
@@ -9130,10 +9136,17 @@ function facilityLifecycleCommit(g,next) {
   for(let i=0;i<g.players.length;i++)Object.assign(g.players[i],next.players[i]);
   g.facilityEconomy=next.facilityEconomy;
 }
+// A wealth office is its own licence: operate one and advisory services are
+// available, including the capacity a financial centre already carries.
+function facilityWealthLicensed(p) {
+  return p?.accounting?.version === 4 && (p.facilityNetwork?.offices || [])
+    .some(office => office.model === 'wealth' && office.closedCycle === null);
+}
 function facilityLifecycleStaff(p) {
   const productive=p.departmentOffice?departmentProductiveAllocation(p):p.allocation;
   const physical={service:householdSalesStaff(p,productive.service),business:departmentFunctionResidual(p,'business',commercialSalesStaff(p)),
-    lending:creditSalesStaff(p,productive.lending),operations:departmentFunctionResidual(p,'operations',productive.operations),wealth:0};
+    lending:creditSalesStaff(p,productive.lending),operations:departmentFunctionResidual(p,'operations',productive.operations),
+    wealth:p.accounting?.version===4?departmentFunctionResidual(p,'business',commercialSalesStaff(p)):0};
   if(!p.serviceDesk)physical.business=Math.max(0,physical.business-(p.serviceContracts?.length||0));
   return Object.fromEntries(FacilityLifecycle.ROLES.map(role=>[role,Math.min(400,Math.max(0,Math.floor(physical[role]*4)))]));
 }
@@ -9141,7 +9154,7 @@ function facilityLifecycleLiveContext(p,cycle) {
   return {cycle:cycle||p.facilityLifecycle.lastActivatedCycle,freeCash:Math.max(0,p.stats.cash),
     freeExecution:Math.max(0,executionCapacity(p)-(p._facilityExecutionUsed||0)),
     workRate:1+departmentFunctionResidual(p,'operations',departmentProductiveAllocation(p).operations)*.08+(p.doctrine==='efficiency'?.1:0),
-    availableStaffQuarters:facilityLifecycleStaff(p),wealthLicensed:()=>false,
+    availableStaffQuarters:facilityLifecycleStaff(p),wealthLicensed:facilityWealthLicensed,
     nearby:(a,b)=>a===b||!!FACILITY_LIFECYCLE_NEIGHBORS[a]?.includes(b),modelTerms:facilityLifecycleModelTerms};
 }
 function initializeFacilityLifecycle(g) {
@@ -9180,7 +9193,8 @@ function facilityLifecycleRegionalMetrics(p,original) {
     const offices=measured.rows.filter(o=>o.market===row.key);
     return {...row,expense:offices.reduce((n,o)=>n+o.upkeep,0),
       depositCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.depositCapacity,0)),
-      loanCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.loanCapacity,0))};
+      loanCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.loanCapacity,0)),
+      advisoryCapacity:Math.round(offices.reduce((n,o)=>n+(o.capacity.advisoryCapacity||0),0))};
   });
   // Retain the existing central online capacity; local offices replace, rather
   // than add to, the old unstaffed local throughput.

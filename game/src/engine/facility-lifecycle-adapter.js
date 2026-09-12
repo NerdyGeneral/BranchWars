@@ -4,10 +4,17 @@ function facilityLifecycleCommit(g,next) {
   for(let i=0;i<g.players.length;i++)Object.assign(g.players[i],next.players[i]);
   g.facilityEconomy=next.facilityEconomy;
 }
+// A wealth office is its own licence: operate one and advisory services are
+// available, including the capacity a financial centre already carries.
+function facilityWealthLicensed(p) {
+  return p?.accounting?.version === 4 && (p.facilityNetwork?.offices || [])
+    .some(office => office.model === 'wealth' && office.closedCycle === null);
+}
 function facilityLifecycleStaff(p) {
   const productive=p.departmentOffice?departmentProductiveAllocation(p):p.allocation;
   const physical={service:householdSalesStaff(p,productive.service),business:departmentFunctionResidual(p,'business',commercialSalesStaff(p)),
-    lending:creditSalesStaff(p,productive.lending),operations:departmentFunctionResidual(p,'operations',productive.operations),wealth:0};
+    lending:creditSalesStaff(p,productive.lending),operations:departmentFunctionResidual(p,'operations',productive.operations),
+    wealth:p.accounting?.version===4?departmentFunctionResidual(p,'business',commercialSalesStaff(p)):0};
   if(!p.serviceDesk)physical.business=Math.max(0,physical.business-(p.serviceContracts?.length||0));
   return Object.fromEntries(FacilityLifecycle.ROLES.map(role=>[role,Math.min(400,Math.max(0,Math.floor(physical[role]*4)))]));
 }
@@ -15,7 +22,7 @@ function facilityLifecycleLiveContext(p,cycle) {
   return {cycle:cycle||p.facilityLifecycle.lastActivatedCycle,freeCash:Math.max(0,p.stats.cash),
     freeExecution:Math.max(0,executionCapacity(p)-(p._facilityExecutionUsed||0)),
     workRate:1+departmentFunctionResidual(p,'operations',departmentProductiveAllocation(p).operations)*.08+(p.doctrine==='efficiency'?.1:0),
-    availableStaffQuarters:facilityLifecycleStaff(p),wealthLicensed:()=>false,
+    availableStaffQuarters:facilityLifecycleStaff(p),wealthLicensed:facilityWealthLicensed,
     nearby:(a,b)=>a===b||!!FACILITY_LIFECYCLE_NEIGHBORS[a]?.includes(b),modelTerms:facilityLifecycleModelTerms};
 }
 function initializeFacilityLifecycle(g) {
@@ -54,7 +61,8 @@ function facilityLifecycleRegionalMetrics(p,original) {
     const offices=measured.rows.filter(o=>o.market===row.key);
     return {...row,expense:offices.reduce((n,o)=>n+o.upkeep,0),
       depositCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.depositCapacity,0)),
-      loanCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.loanCapacity,0))};
+      loanCapacity:Math.round(offices.reduce((n,o)=>n+o.capacity.loanCapacity,0)),
+      advisoryCapacity:Math.round(offices.reduce((n,o)=>n+(o.capacity.advisoryCapacity||0),0))};
   });
   // Retain the existing central online capacity; local offices replace, rather
   // than add to, the old unstaffed local throughput.

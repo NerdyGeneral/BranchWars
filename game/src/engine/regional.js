@@ -42,7 +42,10 @@ Object.assign(PROJECTS,{
 function facilityProjectIssue(p,key){
  const def=PROJECTS[key];if(def?.institutionOnlyVersion!==5)return '';
  if(p.facilityNetwork?.version!==2)return 'Requires a new Group5 facility-lifecycle campaign.';
- if(def.facility==='wealth')return 'A licensed operating wealth subsidiary is required; an insurance agency is not a wealth license.';
+ if(def.facility==='wealth'){
+  if(p.accounting?.version!==4)return 'A licensed operating wealth subsidiary is required; an insurance agency is not a wealth license.';
+  if(!(p.branches[p.focus]>0))return 'Open a wealth office where you already operate: an existing office in the focus market is required.';
+ }
  return '';
 }
 function regionalProjectPreview(p,key,target){
