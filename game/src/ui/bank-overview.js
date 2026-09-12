@@ -16,7 +16,6 @@ function bankFinancialOverview(v,review){
 }
 function bankAttentionItems(v,review,financial){
  const p=v.me,rows=[],add=(id,kind,title,text,tab,target,extra={})=>rows.push({id,kind,title,text,tab,target,...extra});
- if(!p.submitted&&!v.gameOver)for(const row of review.blockers)add(row.id,'required',row.title,row.text,row.tab,row.target,{desk:row.desk});
  for(const row of review.warnings)add(row.id,'watch',row.title,row.text,row.tab,row.target,{desk:row.desk,peopleDesk:row.peopleDesk});
  if(p.capitalTier?.key!=='strong'&&p.capitalTier)add('capital','watch',p.capitalTier.name,
   'Current bank capital ratio '+Number(p.capitalRatio).toFixed(1)+'%. '+(p.capitalTier.text||'Review funding, capital and exposure before expanding.'),'operations','#operatingPreview',{desk:'forecast'});
@@ -67,7 +66,7 @@ function renderBankOverview(v,review){
  if(workspaceTab!=='overview')return;
  if(bankOverviewState.owner!==v.me.id||bankOverviewState.campaign!==game)bankOverviewState={owner:v.me.id,campaign:game,filter:'all',page:0};
  const financial=bankFinancialOverview(v,review),items=bankAttentionItems(v,review,financial),selected=bankOverviewState.filter;
- const filters=[['all','All'],['required','Required'],['watch','Watch'],['upcoming','Upcoming']];
+ const filters=[['all','All'],['watch','Watch'],['upcoming','Upcoming']];
  const shown=selected==='all'?items:items.filter(row=>row.kind===selected);
  const pages=Math.max(1,Math.ceil(shown.length/10));bankOverviewState.page=Math.min(bankOverviewState.page,pages-1);
  const start=bankOverviewState.page*10,visible=shown.slice(start,start+10);

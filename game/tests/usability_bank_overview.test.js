@@ -15,7 +15,11 @@ test('supported versions render actual money without writing books or constructi
   assert.match(h.elements.get('#bankFinancialOverview').innerHTML,/WHAT THE NUMBERS MEAN/);
   assert.match(h.elements.get('#bankFinancialOverview').innerHTML,/Unavailable/,'opening operating result is not a fictitious zero');
   assert.equal(h.run('overviewFixture().f.cash'),h.run('currentView().me.stats.cash'));
-  assert(h.run('overviewItems().some(x=>x.id===\'decision\')'));
+  // Required decisions belong to Review this month, beside the button they
+  // gate. Rendering them here too gave one decision two homes and two
+  // disagreeing counts.
+  assert(!h.run('overviewItems().some(x=>x.id===\'decision\')'));
+  assert(h.run('overviewItems().every(x=>x.kind!==\'required\')'));
   if(!version)assert(!h.run('overviewItems().some(x=>/applications|condition-|task-coverage/.test(x.id))'));
  }
 });
@@ -54,10 +58,16 @@ test('physical critical condition uses the authored threshold and ignores closed
  h.run('office.closedCycle=officeView.cycle;');assert(!h.run('bankAttentionItems(officeView,officeReview,officeFinance).some(x=>x.id===\'condition-\'+office.id)'));
 });
 test('filters and pagination retain every alert without rebuilding a business form',()=>{
- const h=fresh();h.run(`const {v:manyView,r:manyReview,f:manyFinance}=overviewFixture();manyReview.blockers=Array.from({length:26},(_,i)=>({id:'need-'+i,title:'Required '+i,text:'Review only',tab:'operations',target:'#staffGrid'}));
- bankOverviewState={owner:manyView.me.id,campaign:game,filter:'required',page:0};renderBankOverview(manyView,manyReview);`);
- assert.equal((h.elements.get('#attentionInbox').innerHTML.match(/data-attention-open=/g)||[]).length,10);assert.match(h.elements.get('#attentionInbox').innerHTML,/of 26/);
- h.run('bankOverviewState.page=2;renderBankOverview(manyView,manyReview);');assert.equal((h.elements.get('#attentionInbox').innerHTML.match(/data-attention-open=/g)||[]).length,6);
+ const h=fresh();h.run(`const {v:manyView,r:manyReview,f:manyFinance}=overviewFixture();manyReview.warnings=Array.from({length:26},(_,i)=>({id:'need-'+i,title:'Required '+i,text:'Review only',tab:'operations',target:'#staffGrid'}));
+ bankOverviewState={owner:manyView.me.id,campaign:game,filter:'watch',page:0};renderBankOverview(manyView,manyReview);`);
+ // The inbox carries real watch items besides the 26 injected here, so the
+ // totals are derived rather than hardcoded; the subject is paging, not the count.
+ const watchTotal=h.run("bankAttentionItems(manyView,manyReview,manyFinance).filter(x=>x.kind==='watch').length");
+ assert(watchTotal>=26,'fixture should dominate the watch list');
+ assert.equal((h.elements.get('#attentionInbox').innerHTML.match(/data-attention-open=/g)||[]).length,10);
+ assert.match(h.elements.get('#attentionInbox').innerHTML,new RegExp('of '+watchTotal));
+ h.run('bankOverviewState.page=2;renderBankOverview(manyView,manyReview);');
+ assert.equal((h.elements.get('#attentionInbox').innerHTML.match(/data-attention-open=/g)||[]).length,Math.min(10,watchTotal-20));
  h.run('manyView.me.id=\'different-owner\';renderBankOverview(manyView,manyReview);');assert.equal(h.run('bankOverviewState.filter'),'all');assert.equal(h.run('bankOverviewState.page'),0);
 });
 test('completed actuals and bank/group positions reconcile after real resolution',()=>{
@@ -86,8 +96,15 @@ test('real filter/review callbacks navigate without staging and reject stale own
  };
  const before=bytes(h);render(h);
  sets.get('[data-attention-filter]').find(x=>x.dataset.attentionFilter==='watch').listeners.click();assert.equal(h.run('bankOverviewState.filter'),'watch');assert.equal(bytes(h),before);
- sets.get('[data-attention-filter]').find(x=>x.dataset.attentionFilter==='required').listeners.click();
- const stale=sets.get('[data-attention-open]')[0];stale.listeners.click();assert.equal(h.run('workspaceTab'),'operations');assert.equal(bytes(h),before,'reviewing a reminder stages no orders');
+ sets.get('[data-attention-filter]').find(x=>x.dataset.attentionFilter==='all').listeners.click();
+ // The destination depends on which item happens to lead the list, which is not
+ // the subject here: the callback must navigate somewhere real and stage nothing.
+ const stale=sets.get('[data-attention-open]')[0];
+ h.run("workspaceTab='overview';");stale.listeners.click();
+ const landed=h.run('workspaceTab');
+ assert.notEqual(landed,'overview','a reminder navigates to its own desk');
+ assert(typeof landed==='string'&&landed.length>0);
+ assert.equal(bytes(h),before,'reviewing a reminder stages no orders');
  h.run('workspaceTab=\'overview\';seat=1;newDraft(currentView());');const other=bytes(h);stale.listeners.click();assert.equal(h.run('workspaceTab'),'overview');assert.equal(bytes(h),other);
 });
 console.log(JSON.stringify({suite:'usability-bank-overview',checks,scope:'Production owner-only attention and financial models; version omissions, quote/accounting purity, finite money, stage labels, recorded history, dispatch, renewals, applications, facility thresholds, pagination and escaping. Final browser/release acceptance remains separate.'}));

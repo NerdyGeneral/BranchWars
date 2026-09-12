@@ -14,7 +14,16 @@ test('all independent required decisions appear together without rewriting the p
  assert.equal(h.elements.get('#readyBtn').disabled,true);assert.match(h.elements.get('#operatingPreview').innerHTML,/Choose a valid focus market/);
  const html=h.elements.get('#monthlyPlanReview').innerHTML;
  assert.match(html,/Choose a focus market/);assert.match(html,/Answer the executive call/);assert.match(html,/Allocate your employees/);
- assert.match(html,/Optional opportunities · no action required/);
+ // Optional sections are suppressed while required work is outstanding: none of
+ // them can be acted on until the blockers clear, and they cost roughly 105px of
+ // the open review, which is space the workspace needs. They must come back as
+ // soon as the plan is submittable, so both directions are pinned here.
+ assert.doesNotMatch(html,/Optional opportunities · no action required/);
+ assert.doesNotMatch(html,/planning warning/);
+ const quiet=fresh();quiet.run("draft.decision='b';renderReady(currentView());");
+ const cleared=quiet.elements.get('#monthlyPlanReview').innerHTML;
+ assert.equal(quiet.elements.get('#readyBtn').disabled,false);
+ assert.match(cleared,/Optional opportunities · no action required/);
 });
 test('physical function conflict, spending and unanswered call are all reported',()=>{
  const h=fresh();h.run('draft.departmentFunctionsPolicy.quotas.people.operations=400;draft.hires=6;draft.investments.operations=250000;draft.workforcePolicy.reserve=10000000;');
