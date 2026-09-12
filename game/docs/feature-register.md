@@ -76,11 +76,64 @@ Strategy branches never pass **level 2**; 4 of 5 specialization branches are cho
 
 Three findings stand out:
 
-1. **No campaign ever ends.** None of the 3 terminal conditions fires in 48 cycles.
-2. **The bank is always `strong`.** It never enters `watch`, `consent`, `critical` or
-   `failing`, so the whole distress and receivership path — including
-   `RECEIVERSHIP_CYCLES` and the capital-request board action — is unexercised.
-3. **28 of 33 project types are never built.**
+1. **No campaign ends within 48 months**, and the bank never leaves tier `strong`, so
+   the distress path is unexercised at this horizon. Longer-horizon evidence already in
+   the repo shows this is rarity, not impossibility — see below before concluding
+   anything.
+2. **28 of 33 project types are never built.**
+
+### Why no campaign ends, and why the bank is always healthy
+
+These two findings are the same finding. The capital tiers are gated on the capital
+ratio:
+
+| tier | min ratio | effect |
+|---|---|---|
+| `strong` | **8** | no restrictions |
+| `watch` | 6 | branch and acquisition projects suspended |
+| `consent` | 4 | deposit growth capped, loan book must shrink each cycle |
+| `critical` | 2 | all new projects barred |
+| `failing` | — | 3 consecutive cycles forces receivership |
+
+The post-spending capital reserve in `pilotSpendingLimit` (`accounting-adapter.js:163`)
+uses a buffer of **`.08`** — the same number as the `strong` floor. Any plan that would
+take the bank below an 8% ratio is refused, so **the bank is mechanically prevented from
+ever leaving `strong`.** Measured ratio never leaves 12.0-14.7%. The AI is stricter
+still: `planPilotReserve` uses a `.10` buffer.
+
+Every terminal condition depends on the tiers moving:
+
+- `distress` increments only in tier `failing` (`projects.js`), and `RECEIVERSHIP_CYCLES`
+  is 3, so `receivership` needs three consecutive cycles below a 2% ratio.
+- `distressedBuyout` requires the target at `consent` or worse (`targetRank>=2`).
+- `settledBuyout` and `mandatedAuction` additionally require `settled` — act three plus
+  *every* open market exited by someone.
+- `domination` requires one player to have exited every unlocked market.
+
+**These are rare, not unreachable — do not read the 0/3 above as "impossible".** The
+reserve gates only *discretionary* spending; it does nothing about involuntary erosion
+from operating losses, chargeoffs, funding losses and event costs, which is how the bank
+actually reaches the distress tiers. `docs/release-status.md` records the project's own
+longer-horizon evidence:
+
+| evidence | endings |
+|---|---|
+| 4 scenarios x 24 months | no early endings |
+| 63 short runs to 120 months | **1 receivership, at month 98** |
+| 8 long runs to 480 months | none reached a terminal condition |
+| one month318 failed-save continuation | receivership at month 461 |
+
+So the honest reading is: **terminal conditions occur at roughly 1 in 63 over 120
+months and never in 48**, and no `domination` or `buyout` is recorded anywhere in that
+evidence. Campaigns here are open-ended by design (`maxCycles: null`, and long campaigns
+are an explicit design goal), so a 48-month sample is a short campaign and this register
+row says little about the intended horizon.
+
+What does stand is narrower and still worth knowing: the reserve's buffer and the
+`strong` floor are the same 8%, so **no voluntary plan can ever spend the bank out of
+`strong`** — every tier transition must come from losses the player did not choose. That
+is a design decision to put to the owner rather than a bug: it means the downside of the
+game is never something you can walk into, only something that happens to you.
 
 **Caveat, and it matters.** Both seats are AI. The AI is independently known not to
 build or buy upgrades, so the `PROJECTS` and `CAPITAL_TIERS` rows are a ceiling on *AI*
