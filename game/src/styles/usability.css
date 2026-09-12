@@ -45,6 +45,10 @@
 .command-bar .summary-more{margin-top:.3rem}
 .command-bar .summary-more>summary{cursor:pointer;font-size:.72rem;color:var(--muted);padding:.1rem 0}
 .command-bar .summary-more .summary-grid{grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.45rem;margin-top:.3rem}
+/* base.css sets display:grid on .summary-grid, which outranks the user-agent
+   rule that hides a closed <details>. Without this the collapsed disclosure
+   still lays out 419px of tiles over the nav and the plan review. */
+details:not([open])>.summary-grid{display:none}
 /* Task groups and destinations share one compact band. */
 @media(min-width:901px){
  .workspace-nav{padding:.4rem .7rem}
