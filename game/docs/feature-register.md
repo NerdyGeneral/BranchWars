@@ -52,6 +52,56 @@ view (for example `$('#eventName').textContent = v.event.name`), so a key legiti
 never appears in UI source. Per-key visibility needs DOM-level checking against a
 rendered workspace, which Phase 3 does.
 
+## Version gates — healthier than assumed
+
+Measured across `src/engine` and `src/ui`: **44 files** carry `.includes(...)` version
+gates. Open-ended gates (top at 8) number **136**:
+
+| gate | sites |
+|---|---|
+| `[6,7,8]` | 40 |
+| `[7,8]` | 34 |
+| `[5,6,7,8]` | 24 |
+| `[3,4,5,6,7,8]` | 11 |
+| `[4,5,6,7,8]` | 10 |
+| `[2,3,4,5,6,7,8]` | 9 |
+| `[1,2,3,4,5,6,7,8]` | 8 |
+
+The apparently risky family is the closed windows that exclude 8 — `[4,5,6,7]` x3,
+`[3,4,5,6]` x2, `[4,5]` x1. **All are correct.** Every one is a version-to-book mapping
+whose chain handles 8 in an earlier ternary arm, for example
+`accounting-adapter.js:194`:
+
+```js
+p.accounting.version !== (g.financialGroupVersion===8 ? 4 : [4,5,6,7].includes(...) ? 3 : ...)
+```
+
+Same shape at `corporate-income.js:111`, `:127`, `:155` and `financial-group.js:138`.
+`monthly.js:55`'s `[4,5]` is a legacy settlement path with its `[6,7,8]` counterpart
+directly above. And `ui/lobby.js:9`'s `[1,3,5]` is **hex colour parsing, not a gate** — a
+naive array-literal grep produces false positives, so count gates by
+`.includes(groupVersion)` rather than by literal shape.
+
+So the debt is not the 136 sites; it is the **pattern**. The mapping from campaign group
+to book version is expressed as ternary chains of array literals scattered over 5 files.
+Adding a Group 9 means editing every chain, and nothing fails loudly if one is missed —
+which is exactly how a gate hid behind a renamed parameter (`groupVersion` rather than
+`g.financialGroupVersion`) and survived a grep earlier in this work. **The fix is one
+table mapping group version to each book version, consulted everywhere**, not 136 edits.
+
+Earlier working notes cited "153 sites across 37 files"; the measured figures are 136
+open-ended sites across 44 gate-carrying files. Use these.
+
+## Commercial deposits and loans — not already solved
+
+Phase 5 assumed `feat/segment-deposits` might hold the design. It does not. That branch
+is already an **ancestor** of this one (`8999aa0`), and `segmentDepositsVersion` is among
+the 14 systems Expanded enables. What it adds is a `segment` field on deposit cohorts
+over `CUSTOMER_SEGMENTS` — `everyday`, `connected`, `reserve` — which are **retail
+household segments**. `business` and `merchant` still have no deposit or loan flow: they
+feed only `commercialIncome` as `s.business*760 + s.merchant*650`. Commercial operating
+balances and commercial borrowing are new work.
+
 ## Reachability
 
 6 campaigns, 288 cycles, both seats driven by `chooseBot`.
