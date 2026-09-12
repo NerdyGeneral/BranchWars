@@ -16,8 +16,7 @@ const profiles=[
  {name:'offers',flags:{advertisingVersion:1,regionalGrowthVersion:1,relationshipOffersVersion:1}},
  {name:'onboarding',flags:{advertisingVersion:1,regionalGrowthVersion:1,relationshipOffersVersion:1,onboardingVersion:1}}
 ];
-for(const advertisingVersion of [0,1])for(const regionalGrowthVersion of [0,1])
- profiles.push({name:'modular-'+advertisingVersion+regionalGrowthVersion,flags:{featureRulesVersion:1,advertisingVersion,regionalGrowthVersion}});
+// Modular profiles removed with the retired pilot; the chain profiles remain.
 const args=process.argv.slice(2),modes=['--quick','--matrix','--long','--stress','--cycling'];
 assert(args.length===1&&modes.includes(args[0]),'Use one of '+modes.join(', '));
 const cases=[];

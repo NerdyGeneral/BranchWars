@@ -21,7 +21,7 @@ files.push('tests/project-rules.test.js');
 files.push('tests/campaign-lifecycle.test.js');
 files.push('tests/multiplayer_lobby.test.js');
 files.push('tests/network_lifecycle.test.js','tests/local_session_transition.test.js','tests/strategy_release_ui.test.js','tests/operations_workspace.test.js','tests/game_overlay.test.js','tests/decision_quote.test.js','tests/initiative_feedback.test.js','tests/paired_release_balance.test.js','tests/package_release.test.js','tools/package_release.js');
-files.push('tests/features.test.js','tests/feature_setup.test.js','tests/feature_lobby.test.js','tests/feature_network.test.js','tests/modular_features.test.js');
+files.push('tests/features.test.js','tests/feature_setup.test.js','tests/feature_lobby.test.js','tests/feature_network.test.js');
 files.push('tests/runtime-stages.test.js');
 files.push('tests/recovery_planning.test.js','tests/recovery_ui.test.js','tests/github_recovery_acceptance.test.js');
 files.push('tests/households.test.js');
@@ -107,7 +107,7 @@ report.tests.push(run('reference-eol.test.js', process.execPath, ['tests/referen
 report.tests.push(run('project-rules.test.js', process.execPath, ['tests/project-rules.test.js']));
 report.tests.push(run('campaign-lifecycle.test.js', process.execPath, ['tests/campaign-lifecycle.test.js']));
 report.tests.push(run('multiplayer_lobby.test.js', process.execPath, ['tests/multiplayer_lobby.test.js']));
-for(const file of ['features.test.js','feature_setup.test.js','feature_lobby.test.js','feature_network.test.js','modular_features.test.js'])
+for(const file of ['features.test.js','feature_setup.test.js','feature_lobby.test.js','feature_network.test.js'])
   report.tests.push(run(file, process.execPath, ['tests/'+file]));
 report.tests.push(run('runtime-stages.test.js', process.execPath, ['tests/runtime-stages.test.js']));
 report.tests.push(run('households.test.js', process.execPath, ['tests/households.test.js']));

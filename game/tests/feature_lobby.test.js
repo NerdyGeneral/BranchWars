@@ -75,28 +75,20 @@ async function main(){
   select(host,'serviceExpansionVersion',false);assert(confirm(host));
   assert.equal(host.run('lobbyDraftSettings().onboardingVersion'),0,'Freshly reviewed cascade uses the new revision');
   host.run('discardLobbySettings()');
-  // Entering modular mode explicitly removes the two unavailable systems.
-  select(host,'featureRulesVersion',true);assert(pending(host));assert(confirm(host));
-  assert.equal(host.run('lobbyDraftSettings().relationshipOffersVersion'),0);
-  assert.equal(host.run('lobbyDraftSettings().onboardingVersion'),0);
-  assert(host.elements.get('#lobbyFeature-onboardingVersion').disabled);
-  select(host,'advertisingVersion',false);assert.equal(pending(host),false,'Growth is independent inside the marked pilot');
-  assert.equal(host.run('lobbyDraftSettings().regionalGrowthVersion'),1);
-  host.run('applyLobbySettings()');await pair.drain();
-  assert.equal(guest.state().lobby.settings.featureRulesVersion,1);
-  assert.equal(guest.state().lobby.settings.advertisingVersion,0);
-  // Leaving Growth-only mode preserves Growth and proposes legacy Advertising.
-  select(host,'featureRulesVersion',false);assert(pending(host));
-  assert(host.elements.get('#featureSelectionAffected').innerHTML.includes('Advertising'));
-  assert(confirm(host));assert.equal(host.run('lobbyDraftSettings().advertisingVersion'),1);
-  assert.equal(host.run('lobbyDraftSettings().regionalGrowthVersion'),1);
+  // The modular pilot is retired, so entering and leaving modular mode, and the
+  // independent Advertising/Growth selection inside it, no longer exist. The
+  // cascade and compatibility checks either side of this remain covered.
   host.run('discardLobbySettings()');
   // Compatibility is based on committed settings, never stale room configuration.
   host.run('p2pConfig.onboardingVersion=1');assert(host.run('lobbyCompatibility().compatible'));
   await ready(pair);host.run('startLobbyCampaign()');await pair.drain();
-  assert.equal(host.state().game.version,'8.15');assert.equal(guest.state().view.featureRulesVersion,1);
+  // The modular stamp is gone with the pilot; the campaign version itself still
+  // has to agree between host and guest.
+  assert.equal(host.state().game.version,guest.state().view.version);
   const started=JSON.stringify(host.state().game);
-  select(host,'featureRulesVersion',false);host.run('applyLobbySettings()');
+  // Any field serves here: the subject is that a post-start selection cannot
+  // mutate a running campaign.
+  select(host,'advertisingVersion',false);host.run('applyLobbySettings()');
   assert.equal(JSON.stringify(host.state().game),started,'UI mutated rules after campaign start');
  }
  // A known older peer stays visibly blocked when the host chooses unsupported

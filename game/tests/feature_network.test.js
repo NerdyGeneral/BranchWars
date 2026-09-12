@@ -234,7 +234,7 @@ async function markedCheckpointResume(overrides={}){
 }
 async function pricingPairs(){
  const profiles=[{}, {advertisingVersion:1,regionalGrowthVersion:1,relationshipOffersVersion:1,onboardingVersion:1}];
- for(const advertisingVersion of [0,1])for(const regionalGrowthVersion of [0,1])profiles.push({featureRulesVersion:1,advertisingVersion,regionalGrowthVersion});
+ // Modular profiles removed with the retired pilot; the chain profiles remain.
  for(const transport of ['gh','lan','p2p'])for(const profile of profiles){
   const settings={...base,...profile,productProgramsVersion:2},pair=peers(transport,settings),{host,guest}=pair;
   await start(pair);assert.equal(host.state().game.version,'8.15');assert(host.run('featurePeerFresh'));

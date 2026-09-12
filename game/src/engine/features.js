@@ -1,6 +1,10 @@
 // Campaign rules are derived from the existing version scalars. This catalog
 // owns compatibility and setup choices, not simulation order or private books.
-const MODULAR_FEATURE_RULES_AVAILABLE = true;
+// Retired. Modular selection was a pilot for a capability the engine does not
+// have: the campaign features are a strict chain, so they cannot be chosen
+// independently. Setup offers Core and Expanded instead. Existing 8.14 saves
+// still load through campaignVersion and migration below.
+const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
   ['financialGroupVersion', 'financialGroupSupported', 8, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
   ['financialGroupVersion', 'departmentStaffingSupported', 2, 6, 'Frozen department staffing evidence', 'DEPARTMENT STAFFING'],
@@ -85,7 +89,7 @@ function campaignVersion(source) {
   if (source.financialGroupVersion===3) return '9.2';
   if ([1,2].includes(source.financialGroupVersion)) return source.financialGroupVersion===2?'9.1':'9.0';
   if (source.productProgramsVersion === 2) return '8.15';
-  if (MODULAR_FEATURE_RULES_AVAILABLE && source.featureRulesVersion === 1) return '8.14';
+  if (source.featureRulesVersion === 1) return '8.14';
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {

@@ -18,8 +18,9 @@ function valid(g) { E.validatePilot(g); E.validateLedger(g); E.validateCampaignR
 const profiles = [{}, { advertisingVersion: 1 }, { advertisingVersion: 1, regionalGrowthVersion: 1 },
   { advertisingVersion: 1, regionalGrowthVersion: 1, relationshipOffersVersion: 1 },
   { advertisingVersion: 1, regionalGrowthVersion: 1, relationshipOffersVersion: 1, onboardingVersion: 1 }];
-for (const advertisingVersion of [0, 1]) for (const regionalGrowthVersion of [0, 1])
-  profiles.push({ featureRulesVersion: 1, advertisingVersion, regionalGrowthVersion });
+// The modular pilot is retired, so these four combinations can no longer be
+// created. The five profiles above still cover pricing along the real feature
+// chain, which is this suite's subject.
 let months = 0;
 for (const profile of profiles) {
   const g = fresh(profile); valid(g); assert.equal(g.version, '8.15');
@@ -73,7 +74,7 @@ for (const damage of [
 }
 assert.throws(() => fresh({ productProgramsVersion: 3 }), /version/);
 assert.throws(() => fresh({ segmentDepositsVersion: 0 }), /requires/);
-assert.throws(() => fresh({ featureRulesVersion: 1, advertisingVersion: 1, regionalGrowthVersion: 1, relationshipOffersVersion: 1 }), /not supported/);
+assert.throws(() => fresh({ featureRulesVersion: 1, advertisingVersion: 1, regionalGrowthVersion: 1, relationshipOffersVersion: 1 }), /not supported|Unsupported modular/);
 // A forged set of thousands of distinct same-month guarantees used to fill the
 // loose legacy limit and become unsaveable after one organic intake. New priced
 // books enforce the two issuing banks' quote provenance before adoption, without

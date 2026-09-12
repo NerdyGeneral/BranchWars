@@ -18,7 +18,9 @@ assert.equal(E.peerRulesIssue(E.validateCampaignRules(created,'game'),E.campaign
 const oldCaps={...E.campaignCapabilities()};delete oldCaps.financialGroupSupported;
 assert.equal(E.peerRulesIssue(E.validateCampaignRules(created,'game'),oldCaps).field,'financialGroupVersion');checks++;
 assert.throws(()=>fresh({productProgramsVersion:1}),/requires/);
-assert.throws(()=>fresh({featureRulesVersion:1}),/not supported|matching/);checks++;
+// Still refused, for a new reason: the modular pilot is retired, so the version
+// itself is rejected rather than the Financial Group combination.
+assert.throws(()=>fresh({featureRulesVersion:1}),/not supported|matching|Unsupported modular/);checks++;
 for(const damage of [
  g=>delete g.financialGroupVersion,g=>g.financialGroupVersion=2,g=>g.version='8.15',
  g=>g.players[0].financialGroup.parent.accounts.cash++,

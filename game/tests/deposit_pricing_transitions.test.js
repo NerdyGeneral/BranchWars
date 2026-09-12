@@ -16,7 +16,8 @@ const plan=p=>({focus:p.focus,allocation:{...p.allocation},decision:'b',depositP
 function valid(g){E.validatePilot(g);E.validateLedger(g);E.validateCampaignRules(g,'game');for(let i=0;i<2;i++)E.validateProductPricingView(E.publicState(g,i));}
 function turn(g){const requests=g.players.map(plan);requests[0].productProgramPolicy.pricingBp.essential=g.cycle%2?25:-25;
  E.submit(g,0,requests[0]);E.submit(g,1,requests[1]);valid(g);}
-const variants=[{}, {featureRulesVersion:1,advertisingVersion:0,regionalGrowthVersion:1},
+// The modular variant is gone with the pilot.
+const variants=[{},
  {advertisingVersion:1,regionalGrowthVersion:1,relationshipOffersVersion:1,onboardingVersion:1}];
 let months=0,bookMonths=0,transfers=0,maxCohorts=0;
 for(const variant of variants)for(const seat of [0,1])for(const locked of [false,true]){
