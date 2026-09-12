@@ -354,6 +354,11 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .command-bar-row>.summary-more{flex:0 0 auto;margin:0}
 .command-bar-row>.summary-more[open]{flex-basis:100%;margin-top:.3rem}
 .command-bar-row>.summary-more:not([open])>summary{white-space:nowrap}
+/* The open disclosure asks for a full row of its own, which only works while the
+   row wraps. Above 1100px the row is nowrap, so flex-basis:100% with no shrink
+   crushed the seat/status block and the headline figures to zero width and ran
+   the tiles outside the panel. Let the row wrap for as long as it is open. */
+@media(min-width:1100px){.command-bar-row:has(>.summary-more[open]){flex-wrap:wrap}}
 /* Bank names identify the seats and must stay readable; the planning/connection
    text is the part that may shorten when the row is tight. */
 @media(min-width:901px){

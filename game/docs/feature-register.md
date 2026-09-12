@@ -148,17 +148,24 @@ before deleting anything.
 Measured in a real browser at 1280x720, 900x720 and 700x720; the repo's own
 `tools/measure_navigation.js` stubs `offsetHeight`, so it cannot see layout.
 
-**Chrome before content** (top of viewport to bottom of the workspace nav):
+**Chrome before content** — top of viewport to the bottom of the workspace nav, in a
+running Group 8 Expanded campaign. The masthead correctly hides itself in-game at every
+size, so this is command bar plus workspace nav.
 
-| viewport | command bar ends | nav ends |
-|---|---|---|
-| 1280x720 | 70px | **149px** |
-| 900x720 | 209px | **319px** |
-| 700x720 | 209px | **398px** |
+| viewport | command bar | nav | chrome total | content left | % chrome |
+|---|---|---|---|---|---|
+| 1280x720 | 62 | 75 | 149 | 571 | 21% |
+| 1024x768 | 108 | 75 | 196 | 572 | 25% |
+| 900x720 | **187** | 104 | **319** | 401 | **44%** |
+| 700x720 | 187 | **183** | **398** | 322 | **55%** |
 
-The command bar triples in height once it wraps below ~1050px, so the narrow-viewport
-chrome cost is 319-398px of a 720px screen. Recorded for Phase 3; the earlier
-700px -> 247px pass measured the shell at one width only.
+**At 700px wide the player sees 322px of content out of 720 — 55% of the screen is
+chrome.** Two compounding causes: the command bar wraps below ~1050px and triples
+(62 -> 187), and the workspace nav more than doubles (75 -> 183) as its 4-column group
+grid drops to 2 columns at <=700px and the destination tabs wrap onto their own rows.
+
+No horizontal overflow at any width. The earlier 700px -> 247px pass measured the shell
+at one width only, which is why this went unseen. This is the main Phase 3 target.
 
 ### How to measure overlap here, and how not to
 
@@ -196,8 +203,15 @@ workspace, closed disclosures excluded, with an opened control as positive contr
 | `credit` | 59 | 0 |
 | `group` | 44 | 0 |
 | `markets` | 85 | 0 |
+| `customers` | 53 | 0 |
+| `products` | 44 | 0 |
 | `operations` | 58 | 0 |
+| `workforce` | 42 | 0 |
 | `strategy` | 74 | 0 |
+| `competition` | 44 | 0 |
+| `intelligence` | 22 | 0 |
+
+All **11 of 11** workspaces: zero covered controls.
 
 Horizontal overflow is negative at every workspace (no page-level overflow). The sticky
 workspace nav (`position:sticky`, `top:8px`, `z-index:18`) covers **0** controls at any
