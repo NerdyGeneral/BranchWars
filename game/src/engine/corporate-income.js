@@ -43,7 +43,8 @@ function settleCorporateEconomy(g){
       const book=result.banks.find(b=>b.id===p.id).book,next=CompanyCreditBank.apply(p,result.world,book);
       next._companyCreditPayment=CompanyCreditBank.movements(p.accounting,book);return next;
     });
-    g.companyEconomy=result.world;g.players=players;
+    const located=refreshCompanyCreditDeposits({...g,companyEconomy:result.world,players});
+    commitCompanyCreditState(g,located);
   }else g.companyEconomy=CompanyFinance.step(g.companyEconomy,{demand:g.economy.demand,services:corporateServiceInstructions(g)});
   g.players.forEach((p,i)=>p._corporatePayment={cycle:g.cycle,consumed:false,...g.companyEconomy.bankFlows[i]});
   return [];
@@ -66,8 +67,11 @@ function prepareCompanyCreditOperatingForecast(g,p){
   const statement=p.companySnapshot||corporateForecastContext;
   if(!statement)throw Error('A public company statement is required for this forecast.');
   const result=CompanyCreditBank.forecast(p,statement.world,{demand:g.economy.demand,services:corporatePreviewInstructions(p,statement)});
-  Object.assign(p,result.owner);
+  const market=g.marketEconomy||marketContext?.marketEconomy||p.marketSnapshot,
+    located=refreshCompanyCreditOwnerDeposits(result.owner,result.world,market);
+  Object.assign(p,located.owner);if(located.marketEconomy)p.marketSnapshot=located.marketEconomy;
   p._companyCreditPayment=result.flow;p._corporateCreditPreview=result.world.bankFlows[p.corporate.index];
+  return {marketEconomy:located.marketEconomy};
 }
 function corporateIncomeFlow(g,p,preview){
   if(!p.corporate)return null;
@@ -143,7 +147,7 @@ function finishCorporateEconomy(g){
 function validateCorporatePlayer(p,world,month,groupVersion){
   const c=p.corporate;
   if(!c||Object.keys(c).sort().join()!=='index,report,version'||c.version!==1||![0,1].includes(c.index))throw Error('Invalid corporate banking book.');
-  if(p.accounting.version!==([8,9,10].includes(groupVersion)?4:[4,5,6,7].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0))
+  if(p.accounting.version!==([8,9,10].includes(groupVersion)?4:[4,5,6,7].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0)+(p.companyCredit?.claims.reduce((n,x)=>n+x.interestDue,0)||0))
     throw Error('Bank receivables disagree with company liabilities.');
   if(month===0){if(c.report!==null)throw Error('Unexpected opening company receipts.');}
   else{
@@ -153,14 +157,14 @@ function validateCorporatePlayer(p,world,month,groupVersion){
   }
 }
 function validateCorporateSave(g){
-  if(g.companyCreditVersion!==undefined||g.players.some(p=>p.companyCredit!==undefined))throw Error('Named-company campaign credit is not enabled in this build.');
+  validateCompanyCreditCampaign(g);
   if(![2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)){
     if(g.companyEconomy!==undefined||g.players.some(p=>p.corporate!==undefined)||
       (g.serviceAgreements||[]).some(c=>c.companyClosed!==undefined))throw Error('Unversioned company economy.');
     return;
   }
   CompanyFinance.validate(g.companyEconomy);
-  if(g.companyEconomy.version!==(g.companySharesVersion===1?6:g.investmentAssetsVersion===1?5:[7,8,9,10].includes(g.financialGroupVersion)?4:[3,4,5,6].includes(g.financialGroupVersion)?3:2))throw Error('Company rules do not match the campaign.');
+  if(g.companyEconomy.version!==(g.companyCreditVersion===1?7:g.companySharesVersion===1?6:g.investmentAssetsVersion===1?5:[7,8,9,10].includes(g.financialGroupVersion)?4:[3,4,5,6].includes(g.financialGroupVersion)?3:2))throw Error('Company rules do not match the campaign.');
   validateCorporateCirculation(g);
   const month=g.gameOver?g.cycle:g.cycle-1;
   if(g.companyEconomy.month!==month)throw Error('Corporate settlement month does not match the campaign.');
@@ -179,9 +183,10 @@ function projectCorporateEconomy(g,out,index){
   out.me.corporate=JSON.parse(JSON.stringify(g.players[index].corporate));
   out.me.companySnapshot=corporateStatement(g);
   delete out.rival.corporate;delete out.rival.companySnapshot;
+  projectCompanyCredit(g,out,index);
 }
 function validateCorporateView(view){
-  if(view.companyCreditVersion!==undefined||view.me?.companyCredit!==undefined||view.rival?.companyCredit!==undefined)throw Error('Named-company campaign credit is not enabled in this view.');
+  validateCompanyCreditView(view);
   if(![2,3,4,5,6,7,8,9,10].includes(view.financialGroupVersion)){
     if(view.me?.corporate!==undefined||view.me?.companySnapshot!==undefined||view.rival?.corporate!==undefined||view.rival?.companySnapshot!==undefined)throw Error('Unversioned corporate view.');return;
   }
@@ -189,7 +194,7 @@ function validateCorporateView(view){
   if(!companyStatement||Object.keys(companyStatement).sort().join()!=='services,world'||!Array.isArray(companyStatement.services)||companyStatement.services.length!==6)
     throw Error('Missing public company statements.');
   CompanyFinance.validate(companyStatement.world);
-  if(companyStatement.world.version!==(view.companySharesVersion===1?6:view.investmentAssetsVersion===1?5:[7,8,9,10].includes(view.financialGroupVersion)?4:[3,4,5,6].includes(view.financialGroupVersion)?3:2))throw Error('Company view rules do not match the campaign.');
+  if(companyStatement.world.version!==(view.companyCreditVersion===1?7:view.companySharesVersion===1?6:view.investmentAssetsVersion===1?5:[7,8,9,10].includes(view.financialGroupVersion)?4:[3,4,5,6].includes(view.financialGroupVersion)?3:2))throw Error('Company view rules do not match the campaign.');
   if(!Array.isArray(view.serviceAgreements)||view.serviceAgreements.length!==6)throw Error('Missing company service roster.');
   for(const [i,c]of companyStatement.world.companies.entries()){
     const contract=view.serviceAgreements[i];

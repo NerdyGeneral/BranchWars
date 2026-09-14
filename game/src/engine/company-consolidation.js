@@ -24,17 +24,20 @@ const CompanyConsolidation=(()=>{
   if(!base||base.assets!==base.liabilities+base.equity||base.residual!==0||!Array.isArray(entries)||entries.length>6)throw Error('Invalid starting group totals.');
   const result={...base,ownerEquity:base.equity,noncontrollingEquity:0,controlledBasisEliminated:0,internalBalancesEliminated:0,companyGoodwill:0,companyEarningsAdjustment:0,controlledCompanies:[]},seen=new Set();
   for(const entry of entries){
-   if(!exact(entry,['issuer','shares','basis','book','acquisition','internalDeposits','internalFees'])||typeof entry.issuer!=='string'||!entry.issuer||seen.has(entry.issuer))throw Error('Invalid controlled company worksheet.');seen.add(entry.issuer);
+   const credit=entry?.internalCredit,keys=['issuer','shares','basis','book','acquisition','internalDeposits','internalFees',...(credit===undefined?[]:['internalCredit'])];
+   if(!exact(entry,keys)||typeof entry.issuer!=='string'||!entry.issuer||seen.has(entry.issuer))throw Error('Invalid controlled company worksheet.');seen.add(entry.issuer);
+   if(credit!==undefined&&(!exact(credit,['version','principal','interest'])||credit.version!==1))throw Error('Invalid internal company-credit worksheet.');
+   const principal=credit===undefined?0:credit.principal,interest=credit===undefined?0:credit.interest;integer(principal);integer(interest);
    integer(entry.shares);integer(entry.basis);integer(entry.internalDeposits);integer(entry.internalFees);
    if(entry.shares<=50000||entry.shares>100000)throw Error('Only controlling stakes are consolidated.');
    const totals=GroupAccounting.validate(entry.book),a=entry.acquisition,c=contribution(a,entry.book,entry.shares);
-   if(entry.internalDeposits>entry.book.accounts.cash||entry.internalFees>entry.book.accounts.payables)throw Error('Internal balances exceed company assets or obligations.');
-   const ownedNetAssets=fraction(totals.equity,entry.shares,100000),outsideEquity=totals.equity-ownedNetAssets,elimination=entry.internalDeposits+entry.internalFees;
+   if(entry.internalDeposits>entry.book.accounts.cash||entry.internalFees+interest>entry.book.accounts.payables||principal>entry.book.accounts.debt)throw Error('Internal balances exceed company assets or obligations.');
+   const ownedNetAssets=fraction(totals.equity,entry.shares,100000),outsideEquity=totals.equity-ownedNetAssets,elimination=entry.internalDeposits+entry.internalFees+principal+interest;
    result.assets+=totals.assets+c.goodwill-entry.basis-elimination;
    result.liabilities+=totals.liabilities-elimination;
    result.equity+=totals.equity+c.goodwill-entry.basis;
    result.noncontrollingEquity+=outsideEquity;result.controlledBasisEliminated+=entry.basis;result.internalBalancesEliminated+=elimination;result.companyGoodwill+=c.goodwill;result.companyEarningsAdjustment+=c.earnings;
-   result.controlledCompanies.push({issuer:entry.issuer,shares:entry.shares,assets:totals.assets,liabilities:totals.liabilities,netAssets:totals.equity,ownedNetAssets,outsideEquity,costBasis:entry.basis,goodwill:c.goodwill,internalDeposits:entry.internalDeposits,internalFees:entry.internalFees,earningsAdjustment:c.earnings});
+   result.controlledCompanies.push({issuer:entry.issuer,shares:entry.shares,assets:totals.assets,liabilities:totals.liabilities,netAssets:totals.equity,ownedNetAssets,outsideEquity,costBasis:entry.basis,goodwill:c.goodwill,internalDeposits:entry.internalDeposits,internalFees:entry.internalFees,...(credit?{internalCredit:{version:1,principal,interest}}:{}),earningsAdjustment:c.earnings});
   }
   result.ownerEquity=result.equity-result.noncontrollingEquity;result.retainedEarnings+=result.companyEarningsAdjustment;
   result.eliminatedInvestment+=result.controlledBasisEliminated;result.operatingAssets=result.assets-result.custodyAssets;result.residual=result.assets-result.liabilities-result.equity;
@@ -59,7 +62,8 @@ function companyConsolidatedSummary(g,p){
  if(g.companyConsolidationVersion!==1)return base;
  const companies=companyControlCompanies(g),entries=[];
  for(const c of companies){const position=p.companyShares.positions[c.id];if(position.shares<=50000||c.resolution)continue;
-  entries.push({issuer:c.id,shares:position.shares,basis:position.basis,book:c.book,acquisition:p.companyConsolidation.acquisitions[c.id],internalDeposits:p.commercialAccounts.accounts[c.id]?.balance||0,internalFees:c.bankArrears[p.corporate.index]});
+  const claim=p.companyCredit?.claims.find(n=>n.companyId===c.id);
+  entries.push({issuer:c.id,shares:position.shares,basis:position.basis,book:c.book,acquisition:p.companyConsolidation.acquisitions[c.id],internalDeposits:p.commercialAccounts.accounts[c.id]?.balance||0,internalFees:c.bankArrears[p.corporate.index],...(p.companyCredit?{internalCredit:{version:1,principal:claim?.principal||0,interest:claim?.interestDue||0}}:{})});
  }
  return CompanyConsolidation.summarize(base,entries);
 }

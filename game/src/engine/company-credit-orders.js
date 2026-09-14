@@ -1,5 +1,5 @@
-// One reviewed queue for named-company advances. Campaign/UI dispatch remains
-// gated until the ordered corporate cash and reporting adapter is complete.
+// One reviewed queue for named-company advances. The explicit 9.28 coordinator
+// uses it before spending, shared by the customer inspector and rival strategy.
 const COMPANY_CREDIT_ORDER_FIELDS=Object.freeze(['companyId','principal','months','annualRateBp','appetite','product']);
 function companyCreditOrders(input){
  if(!Array.isArray(input)||input.length>6)throw Error('Choose at most six existing company loan offers.');
@@ -50,6 +50,32 @@ function companyCreditOrderReview(v,p,draft,orders=[]){
  try{return prepareCompanyCreditOrders(v,p,draft,orders).review;}
  catch(error){return {eligible:false,reason:error.message};}
 }
+// Owner-only conditional comparison: never manufacture a rival bank ledger or
+// pretend hidden offers are known. Principal is cash exchanged for an asset,
+// not an expense or a second subtraction from the shared spending budget.
+function companyCreditPlanForecast(v,p,draft,orders=draft.companyCreditOrders||[]){
+ const review=prepareCompanyCreditOrders(v,p,draft,orders).review;
+ if(!review.eligible)throw Error(review.reason);
+ const copy=x=>JSON.parse(JSON.stringify(x)),plan=copy(draft);plan.companyCreditOrders=[];
+ const statement=p.companySnapshot||(v.companyEconomy?corporateStatement(v):null);
+ if(!statement)throw Error('A public company statement is required for this forecast.');
+ let world=copy(statement.world),owner=copy(p);owner.companySnapshot=copy(statement);
+ const baseline=operatingPreview(owner,plan,v.economy,v,true);
+ for(const order of [...orders].sort((a,b)=>a.companyId.localeCompare(b.companyId))){
+  const {companyId,...terms}=order,result=CompanyFinance.forecastCreditAdvance(world,companyId,p.id,terms),e=result.posting;
+  const book=AccountingPrototype.post(owner.accounting,e.source,e.changes,e.earnings);
+  world=result.world;owner=CompanyCreditBank.apply(owner,world,book);
+ }
+ const located=refreshCompanyCreditOwnerDeposits(owner,world,v.marketEconomy||p.marketSnapshot);
+ owner=located.owner;owner.companySnapshot={...copy(statement),world};
+ if(located.marketEconomy)owner.marketSnapshot=located.marketEconomy;
+ owner._companyCreditOrigination=review.reservedCapacity;owner._companyCreditFunded=review.principal;
+ const funded=operatingPreview(owner,plan,v.economy,{...v,marketEconomy:located.marketEconomy},true);
+ // The operating comparison opens before any advance, not at the temporary
+ // post-funding snapshot used to calculate coupons and ordinary capacity.
+ funded.commercial.companyLoanGrowth+=review.principal;funded.commercial.businessLoanGrowth+=review.principal;
+ return {review,baseline,funded,assumptions:'Conditional: all your reviewed company offers fund; rival offers and executive events are excluded. Existing company operations and debt payments use the current economy. Losing offers reserve no underwriting at settlement. Principal is an asset purchase, not profit or an expense.'};
+}
 // Reviewed borrowers prefer more of their eligible liquidity need, then lower
 // rates and a longer repayment term. Exact ties rotate across stable bank IDs;
 // neither submission order nor engine iteration order awards the relationship.
@@ -93,5 +119,7 @@ function fundCompanyCreditOrders(g,submissions){
   next._companyCreditFunded=reservations.find(r=>r.bankId===p.id).principal;
   return next;
  });
- return {world,players,reservations,report};
+ const located=refreshCompanyCreditDeposits({...g,companyEconomy:world,players});
+ return {world,players:located.players,marketEconomy:located.marketEconomy,commercialAccounts:located.commercialAccounts,
+  _companyCreditAccountOpening:located._companyCreditAccountOpening,reservations,report};
 }

@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "package": "branch-wars-v4.zip",
+  "sha256": "8e7460d679ce583996462a4e3bffb65984313ae31f0acb3f88a941137310c09e",
+  "htmlSha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "files": [
+    {
+      "name": "BRANCH_WARS.html",
+      "bytes": 2328459,
+      "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00"
+    },
+    {
+      "name": "BRANCH_WARS_LAN_SERVER.ps1",
+      "bytes": 13440,
+      "sha256": "52ede2ed07ed4c6ba3fe3db4045a826f0a9a2ebc7fc8db2c48ccd9ad8e81f2d1"
+    },
+    {
+      "name": "OPEN_BRANCH_WARS.bat",
+      "bytes": 2219,
+      "sha256": "c382dbd9549771fb3f7b59fbe9f49471f5f41e8f564f771475765f170ef5cd63"
+    },
+    {
+      "name": "OPEN_LAN_GAME.bat",
+      "bytes": 213,
+      "sha256": "974fc946b54082c5ece3d85ff21a090a214f11f850c8445423dd3e01c0e43277"
+    },
+    {
+      "name": "README.txt",
+      "bytes": 2860,
+      "sha256": "118b632d087dec24b0af1f0bd1fa5196207295e0f9ee3407394b9d95924f02f3"
+    }
+  ],
+  "extractedInventory": true,
+  "checks": [
+    {
+      "edition": "core",
+      "creation": true,
+      "halfReadyRecovery": true,
+      "resolvedMonth": true,
+      "idempotentRecovery": true
+    },
+    {
+      "edition": "expanded",
+      "creation": true,
+      "halfReadyRecovery": true,
+      "resolvedMonth": true,
+      "idempotentRecovery": true
+    }
+  ],
+  "additionalChecks": [
+    "source/build freshness",
+    "generated reference freshness",
+    "architecture and syntax",
+    "Windows root launchers",
+    "portable launcher",
+    "release packaging regression"
+  ],
+  "initialObservation": "An initial raw Core-state comparison found existing migration normalization: legacy strategy aliases removed and ledgerVersion added. Canonical resumed/control outcomes and resource/plan preservation pass.",
+  "limitations": [
+    "Targeted package smoke check, not the complete Windows gate.",
+    "No browser or actual two-computer acceptance claimed."
+  ]
+}

@@ -84,6 +84,7 @@ function createGame(o){
  initializeCompanyConsolidation(g,o);
  if(o.companyControlStrategyVersion===1)g.companyControlStrategyVersion=1;
  initializeSharedPremises(g,o);
+ initializeCompanyCredit(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;

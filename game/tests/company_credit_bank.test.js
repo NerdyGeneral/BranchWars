@@ -1,4 +1,5 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const copy=x=>JSON.parse(JSON.stringify(x)),context={};
 // Expose existing lexical functions for focused integration tests; no alternate
@@ -7,7 +8,7 @@ const engine=require('../tools/build_game').assemble().html.match(/<script id="e
 vm.runInNewContext(engine.replace('Object.assign(root.BWEngine,{CompanyCreditBank});','Object.assign(root.BWEngine,{CompanyCreditBank,CompanyFinance,CorporateCirculation,repayCredit,creditSummary,reconcileCredit,provideCash,validateCreditSave,settleCreditPerformance,acquisitionTerms,syncAccounts});'),context);
 const E=context.BWEngine,F=E.CompanyFinance,B=E.CompanyCreditBank;
 function fresh(){
- const g=E.createGame({...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed:'credit-bank-assets',created:1});
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'credit-bank-assets',created:1});
  const world=F.withCredit(g.companyEconomy);return {g,world,players:g.players.map(copy)};
 }
 function fund(s,i=0){
@@ -22,7 +23,8 @@ test('funded named credit adds one local loan asset, no synthetic ordinary cohor
  assert.equal(p.marketBook.markets[r.world.companies[0].market].loans,old.marketBook.markets[r.world.companies[0].market].loans+100000);
  for(const owner of r.players)B.validate(owner,r.world);
  E.validateCreditSave({...s.g,players:r.players});
- assert.throws(()=>E.migrateCampaign({...copy(s.g),players:copy(r.players)}),/not enabled/);
+ // The campaign integration rejects a domain-only claim at its version boundary.
+ assert.throws(()=>E.migrateCampaign({...copy(s.g),players:copy(r.players)}),/Unversioned named-company credit/);
 });
 test('ordinary scheduled repayments and collections do not repay or charge off company claims',()=>{
  const s=fund(fresh()),p=s.players[0],ordinary=copy(s.g.players[0]),named=copy(p.companyCredit),before=p.stats.cash;

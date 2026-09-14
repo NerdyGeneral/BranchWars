@@ -5,7 +5,8 @@ function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
  plan=planGroupDevelopment(g,index,plan);
  plan=planInvestmentStrategy(g,index,plan);
  plan=planCompanyStrategy(g,index,plan);
- return planSharedPremises(g,index,plan);
+ plan=planSharedPremises(g,index,plan);
+ return planCompanyCredit(g,index,plan);
 });}
 function chooseOpenBotCore(g, index) {
   const initial = () => {
@@ -253,4 +254,5 @@ function validatePortfolioPlan(p, plan,g=null) {
   normalizeCompanySharePlan(g,p,plan);
   normalizeCompanyControlPlan(g,p,plan);
   normalizeSharedPremisesPlan(g,p,plan);
+  normalizeCompanyCreditPlan(g,p,plan);
 }

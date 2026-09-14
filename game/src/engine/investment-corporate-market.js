@@ -6,7 +6,7 @@ const InvestmentCorporateMarket=(()=>{
   CompanyFinance.validate(company);InvestmentClients.validate(world,entities);
   const m=company.investmentMarket;
   if(world.income?m.version!==2||m.incomePaid!==world.income.paid:m.version!==1)throw Error('Corporate and investment income boundaries disagree.');
-  if(![5,6].includes(company.version)||company.month!==world.month||m.dealerCapital!==world.openingCash||
+  if(![5,6,7].includes(company.version)||company.month!==world.month||m.dealerCapital!==world.openingCash||
    m.units!==world.outsideUnits||m.basis!==world.outsideBasis||m.cashNet!==m.dealerCapital+world.outsideCashNet||
    world.dealer.accounts.equity!==m.dealerCapital+world.dealer.retainedEarnings)
    throw Error('Corporate and investment-market ownership or transfers disagree.');

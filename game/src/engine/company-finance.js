@@ -1,6 +1,6 @@
 // Pure corporate settlement boundary for the Financial Group implementation.
-// Versions 2-6 serve supported campaigns; version 7's bank-credit boundary is
-// awaiting its campaign adapter. Opening assets are explicit corporate
+// Versions 2-6 preserve historical campaigns; version 7 uses the explicit
+// 9.28 bank-credit adapter. Opening assets are explicit corporate
 // endowments, never player deposits or parent cash. All subsequent receipts have
 // a funded payer; supplier receivables cannot be spent as cash.
 const CompanyFinance = (() => {
@@ -366,6 +366,12 @@ const CompanyFinance = (() => {
     const result=CompanyCredit.originate(input.credit,input.companies,banks,companyId,bankId,terms),world=clone(input);
     world.credit=result.book;world.companies=result.companies;world.creditCashNet-=terms.principal;companyValidate(world);return {world,banks:result.banks};
   }
+  function forecastCreditAdvance(input,companyId,bankId,terms){
+    companyValidate(input);if(input.version!==7)throw Error('Company credit rules are not enabled.');
+    const result=CompanyCredit.originateBorrower(input.credit,input.companies,companyId,bankId,terms),world=clone(input);
+    world.credit=result.book;world.companies=result.companies;world.creditCashNet-=terms.principal;companyValidate(world);
+    return {world,posting:result.posting};
+  }
   // Explicit creation boundary, never an import repair or an implicit upgrade.
   function withAgency(input) {
     companyValidate(input);
@@ -445,5 +451,5 @@ const CompanyFinance = (() => {
     m.cashNet+=amount;m.distributed+=amount;m.paidAmount+=amount;companyValidate(world);return {world,recipient:received};
   }
   return Object.freeze({opening:companyOpening,validate:companyValidate,step:companyStep,forecast:companyForecast,withAgency,payAgencyPremium,
-    withInvestmentMarket,fundInvestmentDealer,recordInvestmentTrade,recordInvestmentIncome,withShares,payShareholder,withCredit,originateCredit});
+    withInvestmentMarket,fundInvestmentDealer,recordInvestmentTrade,recordInvestmentIncome,withShares,payShareholder,withCredit,originateCredit,forecastCreditAdvance});
 })();

@@ -28,6 +28,15 @@ that playable workflow; see the ledger for its evidence.
 The shared review and simultaneous paired-funding stage now exist. Continue by
 connecting those existing functions to the monthly/customer workflow and its
 versioned recovery contract, rather than creating another parallel loan system.
+Public borrower forecasts, monthly loan-income reporting, operating-deposit
+routing and internal-loan consolidation now connect to explicit9.28 submitted
+orders, recovery and simulated peers. Contextual customer loan controls and
+shared conditional draft forecasts now exist for explicit9.28 campaigns. The
+same-rule AI and actual terminal/failure ownership checks are now scoped-tested.
+Ordinary Expanded enablement now passes its setup/lobby and explicit old-rule
+fixture gate at checkpoint65. Continue into integrated viability and remaining
+customer/warning acceptance, not another enablement redesign. Do not automatically
+upgrade existing saves.
 
 ## Retained decisions and boundaries
 

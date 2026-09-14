@@ -234,8 +234,9 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 ```js
 function advanceProjects(g){const L=[];
 for(const p of g.players){if(p.marketingTurns>0)p.marketingTurns--;
-if(!p.projects.length)continue;
-const rate=1+departmentFunctionResidual(p,'operations',p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
+if(!p.projects.length){if(p.sharedPremises)p._premisesExecutionAvailable=Math.max(0,executionCapacity(p)-(p._facilityExecutionUsed||0));
+continue;
+}const rate=1+departmentFunctionResidual(p,'operations',p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0),budget=executionCapacity(p)-(p._facilityExecutionUsed||0),carry=[];
 let spent=0;
 for(const project of p.projects){const need=projectCapacity(PROJECTS[project.key]);
 if(spent+need>budget+1e-9){L.push(`${p.name}'s ${PROJECTS[project.key].name} stalled: the plan no longer staffs enough execution capacity.`);
@@ -245,7 +246,8 @@ project.progress+=rate;
 const pct=Math.min(100,Math.round(project.progress/project.total*100));
 L.push(`${p.name}'s ${PROJECTS[project.key].name} reached ${pct}%.`);
 if(project.progress>=project.total){const done=finishProject(g,p,project);
-if(done)L.push(done)}else carry.push(project)}p.projects=carry}return L}
+if(done)L.push(done)}else carry.push(project)}p.projects=carry;
+if(p.sharedPremises)p._premisesExecutionAvailable=Math.max(0,budget-spent)}return L}
 ```
 
 **Roles**

@@ -3,7 +3,12 @@ const assert=require('node:assert/strict'),{test}=require('node:test'),vm=requir
 const copy=x=>JSON.parse(JSON.stringify(x));
 function engine(html){const c={Math:Object.assign(Object.create(Math),{random:()=>.375}),Date:class extends Date{static now(){return 123456;}}};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);return c.BWEngine;}
 const E=engine(require('../tools/build_game').assemble().html);
-const options=()=>E.previewFeatureSelection({},{field:'creditProductsVersion',value:1}).options;
+// Five-family credit is an internal rule in the integrated edition, not a
+// checkbox. Pin this 9.21 fixture to the immutable preceding 9.20 rules.
+const preCredit=fs.readFileSync(path.join(__dirname,'../reports/reference-builds/BRANCH_WARS_expanded_35_ab06ac97.html'));
+assert.equal(createHash('sha256').update(preCredit).digest('hex'),'ab06ac9722a481609f56bae50aa09a76f983db86330d8e6efbadf65665ad2cfa');
+const priorOptions=engine(preCredit.toString()).previewCampaignEdition({},'expanded').options;
+const options=()=>({...copy(priorOptions),creditProductsVersion:1});
 function fresh(scenario='balanced'){return E.createGame({...options(),scenario,seed:'business-balance:1',mode:'hotseat',created:1});}
 function next(g,plans){let n=copy(g);E.submit(n,0,copy(plans[0]));n=E.migrateCampaign(n);E.submit(n,1,copy(plans[1]));E.validatePilot(n);E.validateLedger(n);for(const i of [0,1])E.validateFinancialGroupView(E.publicState(n,i));return n;}
 

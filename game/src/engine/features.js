@@ -5,6 +5,7 @@
 // import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
+  ['companyCreditVersion', 'companyCreditSupported', 1, 1, 'Named-company lending', 'COMPANY CREDIT'],
   ['sharedPremisesVersion', 'sharedPremisesSupported', 1, 1, 'Shared service premises', 'SHARED PREMISES'],
   ['companyControlStrategyVersion', 'companyControlStrategySupported', 1, 1, 'Competitive company strategy', 'COMPANY STRATEGY'],
   ['companyConsolidationVersion', 'companyConsolidationSupported', 1, 1, 'Controlled company reporting', 'COMPANY CONSOLIDATION'],
@@ -85,6 +86,7 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['companyConsolidationVersion', 'Controlled company reporting', 1, 'companyControlVersion', false, false, 'Acquisition-date accounts, outside shareholders and reconciled internal balances.'],
   ['companyControlStrategyVersion', 'Competitive company strategy', 1, 'companyConsolidationVersion', false, false, 'Funded opponent control decisions and explicit responses to shareholder offers.'],
   ['sharedPremisesVersion', 'Shared service premises', 1, 'companyControlStrategyVersion', false, false, 'Paid multi-entity office extensions, qualified local delivery and reconciled occupancy.'],
+  ['companyCreditVersion', 'Named-company lending', 1, 'sharedPremisesVersion', false, false, 'Qualified company credit, actual lender funding, persistent repayment and conserved operating deposits.'],
   ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
@@ -103,6 +105,7 @@ const CAMPAIGN_VERSION_STAGES = Object.freeze([
 ].map(Object.freeze));
 // Legacy creation checks deliberately keep their historical order and wording.
 const CAMPAIGN_OPTION_ERRORS = Object.freeze([
+  ['companyCreditVersion', 'named-company credit version'],
   ['sharedPremisesVersion', 'shared service premises version'],
   ['companyControlStrategyVersion', 'competitive company strategy version'],
   ['companyConsolidationVersion', 'controlled company reporting version'],
@@ -129,6 +132,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.companyCreditVersion===1)return '9.28';
   if(source.sharedPremisesVersion===1)return '9.27';
   if(source.companyControlStrategyVersion===1)return '9.26';
   if(source.companyConsolidationVersion===1)return '9.25';
@@ -161,6 +165,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
+  if(version==='9.28')return true;
   if(version==='9.27')return true;
   return ['9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9','9.10','9.11','9.12','9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || ['8.14','8.15'].includes(version);
 }
@@ -277,7 +282,7 @@ function previewCampaignEdition(source, edition) {
       options[field] = def.setupVersion;
       for (const required of campaignRequirements(def, false)) enableEditionPrerequisite(required.field);
     };
-    enableEditionPrerequisite('sharedPremisesVersion');
+    enableEditionPrerequisite('companyCreditVersion');
   }
   const rules = validateCampaignRules(options, 'lobby');
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)

@@ -1,7 +1,8 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm');
 const c={};vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);const E=c.BWEngine,copy=x=>JSON.parse(JSON.stringify(x));
-function fresh(funded=false){const g=E.createGame({...{...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0},seed:5,created:1,mode:'hotseat'});if(funded)for(const p of g.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:1500000,equity:1500000});return g;}
+function fresh(funded=false){const g=E.createGame({...{...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0},seed:5,created:1,mode:'hotseat'});if(funded)for(const p of g.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:1500000,equity:1500000});return g;}
 function step(g){const plans=g.players.map((p,i)=>E.chooseBot(g,i));E.submit(g,0,plans[0]);E.submit(g,1,plans[1]);E.validatePilot(g);E.validateLedger(g);return plans;}
 
 test('public company strategy waits for earnings, buys with actual surplus and ignores rival private information',()=>{

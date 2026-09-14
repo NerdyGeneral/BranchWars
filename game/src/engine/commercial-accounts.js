@@ -124,17 +124,12 @@ function planCommercialAccounts(g,index,plan){
  plan.commercialAccountPolicy={target:choice?.id||null,staffQuarters:Math.min(8,quote.capacity,quote.service+(choice?1:0))};
  return plan;
 }
-function settleCommercialAccounts(g){
- if(g.commercialAccountsVersion!==1)return [];
- const next=JSON.parse(JSON.stringify(g)),banks=next.players.map(p=>({id:p.id,policy:p.commercialAccounts.policy,
-  quarters:p._commercialAccountQuarters||0,score:p.stats.reputation/20+strategyLevel(p,'commercial'),
-  reachable:Object.keys(next.territories).filter(k=>p.branches[k]>0),
-  treasury:p.serviceDesk.contracts.filter(c=>c.kind==='treasury'&&serviceApplicationActive(p,'treasury')&&serviceLoad(p).rows.find(r=>r.id===c.id)?.served)
-   .map(c=>'company:'+next.companyEconomy.companies.findIndex(x=>'service-'+x.market===c.id))}));
- const result=CommercialAccounts.step(next.commercialAccounts,next.companyEconomy.companies,banks,next.cycle),lines=[];
+// One cash/liability relocation implementation, also used before new-version
+// company-credit receipts become available for ordinary bank spending.
+function applyCommercialAccountBalances(next,rows){
  withMarket(next,()=>{
   for(const p of next.players){
-   const before=commercialAccountBalance(p),accounts=Object.fromEntries(result.rows.filter(r=>r.owner===p.id).map(r=>[r.id,{market:r.market,balance:r.balance}]));
+   const accounts=Object.fromEntries(rows.filter(r=>r.owner===p.id).map(r=>[r.id,{market:r.market,balance:r.balance}]));
    // Withdraw first, then deposits. Each payment reconciles the bank's actual
    // cash/obligation, household subledger and finite corporate allocation.
    for(const market of Object.keys(p.marketBook.markets)){
@@ -147,11 +142,53 @@ function settleCommercialAccounts(g){
      p.accounting=AccountingPrototype.post(p.accounting,'commercial.cashLocation',{cash:change,deposits:change});syncAccounts(p);
     }
    }
-   p.commercialAccounts.report={cycle:next.cycle,before,after:commercialAccountBalance(p),quarters:p._commercialAccountQuarters||0};
-   delete p._commercialAccountQuarters;
-   lines.push(p.name+' business operating deposits: $'+commercialAccountBalance(p).toLocaleString()+'. These are company cash liabilities, not income.');
   }
  });
+}
+function refreshCompanyCreditDeposits(g){
+ if(g.companyEconomy?.version!==7)throw Error('Early company cash relocation requires explicit credit rules.');
+ const next=JSON.parse(JSON.stringify(g));
+ if(next._companyCreditAccountOpening===undefined)next._companyCreditAccountOpening=JSON.parse(JSON.stringify(next.commercialAccounts.rows));
+ // Preserve development, servicing and competitive history. Those still run
+ // once at the existing commercial-account stage, not whenever cash moves.
+ for(const row of next.commercialAccounts.rows){
+  const company=next.companyEconomy.companies.find(c=>c.id===row.id);
+  if(company.resolution){row.owner=null;row.balance=0;row.misses=0;row.progress=[0,0];}
+  else row.balance=row.owner?Math.floor(company.book.accounts.cash/2):0;
+ }
+ applyCommercialAccountBalances(next,next.commercialAccounts.rows);
+ CommercialAccounts.validate(next.commercialAccounts,next.companyEconomy.companies,next.players.map(p=>p.id));
+ return next;
+}
+function refreshCompanyCreditOwnerDeposits(p,world,marketEconomy){
+ if(!Object.keys(p.commercialAccounts.accounts).length)return {owner:JSON.parse(JSON.stringify(p)),marketEconomy};
+ if(!marketEconomy)throw Error('Company-deposit forecasts require the public market cash statement.');
+ const next={players:[JSON.parse(JSON.stringify(p))],marketEconomy:JSON.parse(JSON.stringify(marketEconomy))},
+  rows=Object.entries(p.commercialAccounts.accounts).flatMap(([id,row])=>{
+   const c=world.companies.find(c=>c.id===id);if(!c)throw Error('Unknown company deposit owner.');
+   return c.resolution?[]:[{id,market:row.market,owner:p.id,balance:Math.floor(c.book.accounts.cash/2)}];
+  });
+ applyCommercialAccountBalances(next,rows);return {owner:next.players[0],marketEconomy:next.marketEconomy};
+}
+function settleCommercialAccounts(g){
+ if(g.commercialAccountsVersion!==1)return [];
+ const next=JSON.parse(JSON.stringify(g)),banks=next.players.map(p=>({id:p.id,policy:p.commercialAccounts.policy,
+  quarters:p._commercialAccountQuarters||0,score:p.stats.reputation/20+strategyLevel(p,'commercial'),
+  reachable:Object.keys(next.territories).filter(k=>p.branches[k]>0),
+  treasury:p.serviceDesk.contracts.filter(c=>c.kind==='treasury'&&serviceApplicationActive(p,'treasury')&&serviceLoad(p).rows.find(r=>r.id===c.id)?.served)
+   .map(c=>'company:'+next.companyEconomy.companies.findIndex(x=>'service-'+x.market===c.id))}));
+ const result=CommercialAccounts.step(next.commercialAccounts,next.companyEconomy.companies,banks,next.cycle),lines=[],
+  before=next.players.map(p=>next._companyCreditAccountOpening?next._companyCreditAccountOpening.filter(r=>r.owner===p.id).reduce((n,r)=>n+r.balance,0):commercialAccountBalance(p));
+ if(next._companyCreditAccountOpening)for(const r of result.report){
+  const opening=next._companyCreditAccountOpening.find(o=>o.id===r.id);r.previousOwner=opening.owner;r.before=opening.balance;
+  r.reason=next.companyEconomy.companies.find(c=>c.id===r.id).resolution?'closed':r.owner!==opening.owner?(r.owner?'won':'withdrawn'):r.owner?'retained':'outside';
+ }
+ applyCommercialAccountBalances(next,result.rows);
+ for(const [i,p]of next.players.entries()){
+  p.commercialAccounts.report={cycle:next.cycle,before:before[i],after:commercialAccountBalance(p),quarters:p._commercialAccountQuarters||0};
+  delete p._commercialAccountQuarters;
+  lines.push(p.name+' business operating deposits: $'+commercialAccountBalance(p).toLocaleString()+'. These are company cash liabilities, not income.');
+ }
  for(const row of result.report)if(row.before!==row.after||row.previousOwner!==row.owner){
   const company=next.companyEconomy.companies.find(c=>c.id===row.id);
   company.book=GroupAccounting.post(company.book,'commercial.cashLocation',row.owner||'outside-bank',{cash:0});
@@ -166,6 +203,7 @@ function settleCommercialAccounts(g){
  for(const p of next.players){AccountingPrototype.check(p.accounting);if(Object.values(p.marketBook.markets).reduce((n,m)=>n+m.deposits,0)!==p.accounting.accounts.deposits)throw Error('Business account liabilities did not reconcile with the bank.');}
  validateDepositSave(next);validateSegmentDepositSave(next);CompanyFinance.validate(next.companyEconomy);
  for(const key of ['players','companyEconomy','marketEconomy','commercialAccounts'])g[key]=next[key];
+ delete g._companyCreditAccountOpening;
  return lines;
 }
 function validateCommercialAccounts(g,settling=false){

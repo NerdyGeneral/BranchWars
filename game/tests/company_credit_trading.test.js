@@ -1,4 +1,5 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const context={},copy=x=>JSON.parse(JSON.stringify(x));
 vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],context);
@@ -6,7 +7,7 @@ const domain={};
 vm.runInNewContext(['accounting','group-accounting','company-credit','company-finance','corporate-circulation'].map(name=>fs.readFileSync(path.join(__dirname,'../src/engine',name+'.js'),'utf8')).join('\n')+'\nthis.F=CompanyFinance;this.R=CorporateCirculation;',domain);
 const E=context.BWEngine,F=domain.F,C=E.CompanyCredit,R=domain.R;
 function fresh(){
- const g=E.createGame({...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed:'credit-trading',created:1});
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'credit-trading',created:1});
  return {world:F.withCredit(g.companyEconomy),banks:g.players.map(p=>({id:p.id,book:p.accounting})),sources:R.IDS.map(id=>E.GroupAccounting.opening(id)),holder:E.GroupAccounting.opening('test:outside-holder')};
 }
 function advance(s,index=0,principal=100000){
@@ -71,7 +72,7 @@ test('trading stress stops dividends in arrears and resolves real funded bank cl
  t.diagnostic(JSON.stringify({months:120,demand:.35,loans:s.world.credit.notes.map(n=>({company:n.companyId,status:n.status,resolution:s.world.companies.find(c=>c.id===n.companyId).resolution})),cashConserved:true}));
 });
 test('an unintegrated credit world cannot be imported into an existing Expanded campaign',()=>{
- const g=E.createGame({...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed:'reject-premature-credit',created:1});
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'reject-premature-credit',created:1});
  g.companyEconomy=F.withCredit(g.companyEconomy);const before=JSON.stringify(g);
  assert.throws(()=>E.migrateCampaign(copy(g)));assert.equal(JSON.stringify(g),before);
 });

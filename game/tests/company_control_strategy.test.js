@@ -1,8 +1,9 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),ctx={};
 vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
 const E=ctx.BWEngine,copy=x=>JSON.parse(JSON.stringify(x));
-const options=()=>({...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,companyControlVersion:1,companyConsolidationVersion:1,companyControlStrategyVersion:1,mode:'hotseat',seed:5,created:1});
+const options=()=>({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:0,companyControlVersion:1,companyConsolidationVersion:1,companyControlStrategyVersion:1,mode:'hotseat',seed:5,created:1});
 function fresh(funded=false){const g=E.createGame(options());g.players[0].doctrine='commercial';g.players[1].doctrine='community';
  // Transparent mature-capital fixture for opponent behavior, not a claim of
  // first-month affordability or ordinary campaign balance. Transfers reconcile.

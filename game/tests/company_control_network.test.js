@@ -1,8 +1,9 @@
 'use strict';
+// Retain the original pre-credit rules; latest-Expanded coverage is separate.
 process.argv.push('--source');
 const assert=require('node:assert/strict'),{peers,lobby,start}=require('./agency_peer_compat.test'),copy=x=>JSON.parse(JSON.stringify(x));
 const strategy=process.argv.includes('--strategy'),consolidation=strategy||process.argv.includes('--consolidation');
-const configure=pair=>pair.host.run("Object.assign(p2pConfig,E.previewCampaignEdition({},'expanded').options,{sharedPremisesVersion:0,companyControlVersion:1,companyConsolidationVersion:"+(consolidation?1:0)+",companyControlStrategyVersion:"+(strategy?1:0)+"})");
+const configure=pair=>pair.host.run("Object.assign(p2pConfig,({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),{sharedPremisesVersion:0,companyControlVersion:1,companyConsolidationVersion:"+(consolidation?1:0)+",companyControlStrategyVersion:"+(strategy?1:0)+"})");
 (async()=>{for(const transport of ['gh','lan','p2p']){
  const old=peers(transport,10);configure(old);old.guest.run(`const capsBefore=E.campaignCapabilities;E.campaignCapabilities=()=>{const c=capsBefore();delete c[\"${strategy?'companyControlStrategySupported':consolidation?'companyConsolidationSupported':'companyControlSupported'}\"];return c;};send(makeFeatureHello())`);await old.drain();assert.equal(old.host.state().game,null);assert(old.frames.some(([,f])=>f.type==='error'&&(strategy?/Competitive company strategy/:consolidation?/Controlled company reporting/:/Reviewed company control/).test(f.message)));
  const pair=peers(transport,10);configure(pair);await lobby(pair);await start(pair);

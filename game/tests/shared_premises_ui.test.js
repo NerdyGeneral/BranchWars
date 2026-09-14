@@ -73,7 +73,7 @@ test('actual room opens after settlement; staff remain qualified and finite, wit
 test('closed and old-rule campaigns do not gain editable premises; connection and month changes refuse stale callbacks',()=>{
  const h=officeHarness();h.click('premisesChoice','kind:agency');const stale=h.elements.get('#sharedPremisesDesk').listeners.click,old=h.run('JSON.stringify(draft)');
  h.run('game.cycle++');stale({target:{dataset:{premisesAction:'stage'}}});assert.equal(h.run('JSON.stringify(draft)'),old);
- h.run(`game=E.createGame({...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,mode:'hotseat',seed:1,created:1});newDraft(currentView());renderFacilityLifecycle(currentView())`);
+ h.run(`game=E.createGame({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0,sharedPremisesVersion:0,mode:'hotseat',seed:1,created:1});newDraft(currentView());renderFacilityLifecycle(currentView())`);
  assert(!h.run('draft.sharedPremisesPolicy'));assert.doesNotMatch(h.elements.get('#facilityLifecyclePanel').innerHTML,/id="sharedPremisesDesk"/);
  assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/commercial banking suite/);
 });

@@ -2,6 +2,10 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
+## Test V4 Expanded
+
+The [V4 playtest ZIP](releases/branch-wars-v4.zip) contains the current integrated Expanded snapshot. Extract it before playing. Read the [V4 quick-start](releases/branch-wars-v4-guide.md) and [verification limits](releases/v4-playtest-notes.md). This is a prerelease for testing, not completion of the blueprint. V2/V3 remain preserved below.
+
 ## Play the frozen V3 distribution
 
 Download [the V3 player ZIP](releases/branch-wars-v3.zip), extract it, and keep its six files together. Read its matching [45-page field manual](releases/branch-wars-v3-manual.pdf) and [frozen changes/debug/balance report](game/docs/v3-release-report.md). The unpacked copy is in [releases/v3](releases/v3/README.txt). No development tools are needed.
@@ -11,7 +15,7 @@ This is a preserved regional banking / Financial Group preview snapshot—not co
 ## Working copy versus release
 
 - Root [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) and [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) launch the local `game/` copy, **not the frozen download**.
-- The local playable HTML is older than the current source. New Expanded campaigns in source include shared-premises settlement, contextual office controls and qualified-workforce AI. Long-run balance, broader release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
+- The local playable HTML is rebuilt from checkpoint65 source for the V4 playtest. New Expanded campaigns include integrated company lending, shared-premises settlement, contextual office controls and qualified-workforce AI. Long-run balance, broader release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
 - Building source replaces the local playable HTML; it does not update the frozen ZIP or its manual. See [current artifact identities and known issues](game/docs/release-status.md) before rebuilding or sharing.
 - The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and [original V2 package](V2%20release/README.md) remain preserved rollback artifacts.
 

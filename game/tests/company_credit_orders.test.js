@@ -1,4 +1,5 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm');
 const copy=x=>JSON.parse(JSON.stringify(x)),context={};
 const engine=require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
@@ -18,7 +19,7 @@ function cleanPlan(g,i,target=null){
  return plan;
 }
 function fresh(qualified=false){
- const g=E.createGame({...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed:'credit-queue',created:1});
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'credit-queue',created:1});
  if(qualified)for(let month=0;month<2;month++){
   const plans=[cleanPlan(g,0,'company:0'),cleanPlan(g,1)];
   E.submit(g,0,plans[0]);E.submit(g,1,plans[1]);E.validatePilot(g);
@@ -62,13 +63,15 @@ test('changes to staffing invalidate previous capacity rather than reusing a sta
  assert.equal(E.companyCreditOrderReview(s.g,s.p,s.plan,[order()]).eligible,true);
 });
 
-test('funding an approved borrower pairs bank and company cash without creating deposits or ordinary cohorts',()=>{
+test('funding an approved borrower pairs cash and the funded deposit location without creating ordinary cohorts',()=>{
  const s=fresh(true),before=JSON.stringify(s),queues=[{bankId:s.p.id,plan:s.plan,orders:[order()]},{bankId:s.g.players[1].id,plan:s.rivalPlan,orders:[]}],
   funded=E.fundCompanyCreditOrders(s.g,queues),bank=funded.players[0],company=funded.world.companies[0],original=s.g.companyEconomy.companies[0];
  assert.equal(JSON.stringify(s),before);assert.equal(funded.report.length,1);
- assert.equal(bank.stats.cash,s.p.stats.cash-10000);assert.equal(bank.stats.loans,s.p.stats.loans+10000);
+ assert.equal(bank.stats.cash,s.p.stats.cash-5000);assert.equal(bank.stats.loans,s.p.stats.loans+10000);
  assert.equal(company.book.accounts.cash,original.book.accounts.cash+10000);assert.equal(company.book.accounts.debt,original.book.accounts.debt+10000);
- assert.equal(bank.stats.deposits,s.p.stats.deposits);assert.equal(bank.stats.capital,s.p.stats.capital);
+ assert.equal(bank.stats.deposits,s.p.stats.deposits+5000,'Half the actual advance is located in the existing operating account');assert.equal(bank.stats.capital,s.p.stats.capital);
+ assert.equal(E.commercialAccountBalance(bank),E.commercialAccountBalance(s.p)+5000);
+ assert.equal(bank.stats.cash+company.book.accounts.cash-E.commercialAccountBalance(bank),s.p.stats.cash+original.book.accounts.cash-E.commercialAccountBalance(s.p),'Company cash includes its bank claim, not a second physical cash pile');
  assert.deepEqual(copy(bank.creditBook),copy(s.p.creditBook),'The funded note is not also an ordinary cohort');
  assert.deepEqual(copy(funded.players[1].accounting),copy(s.g.players[1].accounting));
  assert.equal(bank._companyCreditOrigination,funded.reservations[0].capacity);assert(bank._companyCreditOrigination>=10000);

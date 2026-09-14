@@ -23,6 +23,18 @@ function monthlyPlanReview(v,plan=draft){
   for(const [i,text]of (premises.notices||[]).entries())warnings.push({id:'premises-delivery-'+i,title:'Shared-office delivery needs attention',text,tab:'markets',target:'#sharedPremisesDesk'});
  }
  if(p.companyControl)check('company-control','Review control funding and consent','group',null,'#financialGroupPanel',()=>E.normalizeCompanyControlPlan(v,p,JSON.parse(JSON.stringify(plan))));
+ if(p.companyCredit&&(plan.companyCreditOrders||[]).length){
+  const credit=E.companyCreditOrderReview(v,p,plan,plan.companyCreditOrders);
+  if(!credit.eligible){
+   add('company-credit','Review company loan commitments',credit.reason,'markets',null,'#companyLoanTitle');
+   const row=v.commercialAccountMarket?.rows.find(r=>r.id===plan.companyCreditOrders[0]?.companyId);
+   blockers.find(b=>b.id==='company-credit').serviceId=row?'service-'+row.market:null;
+  }
+ }
+ if(p.companyCredit&&typeof companyCreditWorkspace!=='undefined'&&opportunityCurrent(companyCreditWorkspace.token,false)){
+  const pending=Object.entries(companyCreditWorkspace.forms).find(([,f])=>f.dirty);
+  if(pending){const row=v.commercialAccountMarket?.rows.find(r=>r.id===pending[0]);warnings.push({id:'unstaged-company-loan',title:'Company loan form has unstaged edits',text:'The form is not a loan commitment. Review and stage the offer, or discard its edits.',tab:'markets',target:'#companyLoanTitle',serviceId:row?'service-'+row.market:null});}
+ }
  const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
  if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
  if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Math.max(1,Math.round(row.planned.shortfall))+' quarter-work units uncovered'+(Math.abs(row.planned.shortfall-Math.round(row.planned.shortfall))>=.05?' (exactly '+Number(row.planned.shortfall.toFixed(2))+')':'')).join(' · ')+'. Four units are one employee-month of work; this is delivery capacity, not spare headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
@@ -129,6 +141,7 @@ function monthlyChangeRows(v){
 function monthlyChangeName(path){
  if(path[0]==='sharedPremisesPolicy')return 'Shared office space and subsidiary time';
  if(path[0]==='companyShareOrders')return 'Company share orders';
+ if(path[0]==='companyCreditOrders')return 'Company loan offers';
  if(path[0]==='companyControlPolicy')return 'Company control instructions';
  if(path[0]==='investmentPolicy')return 'Investment business instruction';
  if(path[0]==='facilityExtensionPolicy')return 'Commercial suite construction'+(path[1]==='cancel'?' cancellation':'');
@@ -148,6 +161,7 @@ function monthlyChangeValue(v,value,path){
   return parts.join('; ')||'No construction or local assignments';
  }
  if(path[0]==='companyShareOrders'&&Array.isArray(value))return value.length?value.map(o=>{const c=v.me.companySnapshot.world.companies.find(c=>c.id===o.issuer);return (o.side==='buy'?'Buy ':'Sell ')+o.shares+' '+(c?E.ANCHOR_CLIENTS[c.clientIndex].name:o.issuer)+' at $'+(o.limitCents/100).toFixed(2)+' limit';}).join('; '):'None';
+ if(path[0]==='companyCreditOrders'&&Array.isArray(value))return value.length?value.map(o=>{const c=v.me.companySnapshot.world.companies.find(c=>c.id===o.companyId);return (c?E.ANCHOR_CLIENTS[c.clientIndex].name:o.companyId)+': '+money(o.principal)+' at '+(o.annualRateBp/100).toFixed(2)+'% for '+o.months+' months';}).join('; '):'None';
  if(path[0]==='facilityExtensionPolicy'&&typeof value==='string'){const o=v.me.facilityNetwork?.offices.find(o=>o.id===value);return o?(v.territories[o.market]?.name||o.market)+' · '+E.FacilityLifecycle.CATALOG[o.model].name:String(value);}
  if(path[0]==='commercialAccountPolicy'&&path[1]==='target'){const company=v.commercialAccountMarket?.rows.find(r=>r.id===value),agreement=v.serviceAgreements?.find(c=>c.market===company?.market);return agreement?E.clientProfile(agreement).name:String(value);}
  if(path.length===1&&path[0]==='agencyPolicy'&&value.roles)return agencyInstructionSummary(value);
@@ -164,6 +178,7 @@ function monthlyChangeTiming(path){
   switch(path[0]){
    case 'sharedPremisesPolicy':return 'One reviewed premises instruction. Fit-out uses bank cash and shared execution; qualified subsidiary time is moved from central work. Occupancy costs and rent settle once per month, with no new group profit.';
    case 'companyShareOrders':return 'One-month simultaneous auction. Existing parent cash reserves include fees and other group commitments. No immediate trade or guaranteed fill; company ownership does not award banking contracts.';
+   case 'companyCreditOrders':return 'One-month loan offers reserve bank cash and shared underwriting capacity. Principal becomes a loan asset, not an expense. Competing offers can lose; funded loans persist with repayments, arrears and possible losses.';
    case 'companyControlPolicy':return 'Paid diligence and a later reviewed offer. Closing requires funded parent commitments and any rival seller consent. Integration uses shared execution capacity; acquisition debt remains owed when work pauses.';
    case 'investmentPolicy':return 'Funding, qualified recruitment and client transfers are one reviewed instruction. Parent contributions and client assets remain separate. Nothing executes until month-end.';
    case 'facilityExtensionPolicy':return 'Fit-out is paid at resolution. Shared execution completes the work; capacity and upkeep begin the following month. Cancelling unfinished work does not refund paid expense.';

@@ -16,6 +16,12 @@ Read the [current implementation ledger](../v3-usability.md) first. These full s
 
 ## Subsequent implementation evidence
 
+- [Checkpoint65 — ordinary Expanded company lending, strict lobby compatibility and historical fixture separation](checkpoint65-expanded-credit-2026-09-13.md).
+- [Checkpoint64 — same-rule rival company loans and actual ending-stage ownership](checkpoint64-company-credit-rival-2026-09-13.md).
+- [Checkpoint63 — customer loan tickets, shared conditional forecasts and guarded staging](checkpoint63-company-credit-desk-2026-09-13.md).
+- [Checkpoint62 — versioned company-loan campaigns and simulated peer recovery](checkpoint62-company-credit-campaign-2026-09-13.md).
+- [Checkpoint61 — company-loan cash location and internal group claims](checkpoint61-company-credit-location-2026-09-13.md).
+- [Checkpoint60 — public borrower forecasts and monthly company-credit income](checkpoint60-company-credit-forecast-2026-09-13.md).
 - [Checkpoint59 — qualified company-loan review, shared origination capacity and simultaneous funding](checkpoint59-company-credit-orders-2026-09-13.md).
 - [Checkpoint58 — company-credit bank assets, local books and ordinary portfolio separation](checkpoint58-company-credit-bank-2026-09-13.md).
 - [Checkpoint57 — company credit, borrower trading and separate creditor claims](checkpoint57-company-credit-trading-2026-09-13.md); incorporates the checkpoint56 foundation, with player-bank campaign integration still pending.

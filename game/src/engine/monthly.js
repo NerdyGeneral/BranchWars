@@ -2,6 +2,7 @@ function resolveMonthlySteps(g) {
   const plans = g.players.map((p) => ({ ...p.submitted, allocation: { ...p.submitted.allocation } })),
     before = [baseScore(g, 0), baseScore(g, 1)],
     L = [];
+  if(g.companyCreditVersion===1)L.push(...recordLedgerStage(g,'settleCompanyCreditOrders','companies.credit',()=>settleCompanyCreditOrders(g,plans)));
   if(g.companySharesVersion===1)L.push(...recordLedgerStage(g,'settleCompanyShareAuction','companies.shares',()=>settleCompanyShareAuction(g,plans)));
   if(g.companyControlVersion===1)L.push(...recordLedgerStage(g,'settleCompanyControl','companies.control',()=>settleCompanyControl(g,plans)));
   // Both local-work instructions were authorized against one opening envelope.

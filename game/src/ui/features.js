@@ -64,7 +64,7 @@ function renderFeatureSelection(options, settings = {}) {
 }
 function selectedFeatureCount(rules) { return rules.features.filter(feature => feature.visible && feature.enabled).length; }
 function expandedEditionDescription() {
-  return ['Six regional markets with a finite customer economy', 'Persistent loan and deposit products', 'Offices, shared service rooms, departments and specialist teams', 'Advertising, customer onboarding, business accounts and service contracts', 'Research delivery, optional insurance, investment advice, brokerage and custody businesses, company shares and reviewed acquisitions'];
+  return ['Six regional markets with a finite customer economy', 'Persistent loan and deposit products, including qualified company lending', 'Offices, shared service rooms, departments and specialist teams', 'Advertising, customer onboarding, business accounts and service contracts', 'Research delivery, optional insurance, investment advice, brokerage and custody businesses, company shares and reviewed acquisitions'];
 }
 function featureSelectionError(container, binding, message) {
   const status = container.querySelector?.('.feature-selection-status');

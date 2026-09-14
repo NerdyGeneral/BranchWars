@@ -36,7 +36,7 @@ Edit `src/`. The ordered [manifest](../src/manifest.json) defines assembly input
 
 ### Current extension seam
 
-New Expanded creation selects9.27; old campaigns retain their saved scalars. The [premises rival planner](../src/engine/shared-premises-strategy.js) consumes owner-visible demand and the pure shared quote, never a human draft or rival private books. It reserves finite qualified time and protected operating funds. The coordinator calls it only under the saved premises marker, after other AI operating choices; it does not introduce manager authority to submit or acquire.
+New Expanded creation selects9.28 from checkpoint65; old campaigns retain their saved scalars. The [premises rival planner](../src/engine/shared-premises-strategy.js) consumes owner-visible demand and the pure shared quote, never a human draft or rival private books. It reserves finite qualified time and protected operating funds. The coordinator calls it only under the saved premises marker, after other AI operating choices; it does not introduce manager authority to submit or acquire.
 
 Explicit9.27 campaigns now use [the premises campaign adapter](../src/engine/shared-premises-campaign.js) for saved owner books, protected planning, sequential payroll/occupancy/service, canonical transfer totals and owner-private projection. Outside payments reuse the facility supplier and its circulation; internal rent is not parent capital. Construction uses remaining actual execution and cannot leave transient fields in saved state. See [checkpoint49](archive/checkpoint49-premises-campaign-2026-09-13.md) for scoped full-turn/transport evidence and [checkpoint50](archive/checkpoint50-premises-office-2026-09-13.md) for the contextual office editor. Older rules do not automatically adopt these paths.
 
@@ -57,18 +57,20 @@ The existing [commercial suites](../src/engine/facility-extensions.js), facility
 [CompanyCredit](../src/engine/company-credit.js) currently provides a pure public
 statement assessment and a paired borrower/lender accounting domain. The explicit
 CompanyFinance version7 domain now connects advances, interest, repayment,
-arrears and funded liquidation to actual company trading. Only the assessment
-is called by the company inspector. The lending functions are **not installed into campaign settlement**;
-do not attach their output to an existing save or treat domain tests as a working
-company-lending feature. There is no new campaign marker or automatic upgrade yet.
+arrears and funded liquidation to actual company trading. Historical inspectors
+retain assessment-only behavior; explicit9.28 company inspectors now review and
+stage terms through `companyCreditVersion:1` and the shared conditional forecast.
+Same-rule AI and monthly ending-stage ownership checks now pass; ordinary Expanded
+selects9.28 from checkpoint65, with scoped setup/lobby integration evidence. Do not
+attach these books to an existing save or treat scoped tests as release acceptance.
 
-The pending adapter must share actual lending capacity, protected capital and
+The integration contract requires shared lending capacity, protected capital and
 qualified work; reconcile company cash/debt with bank loan principal and interest;
 exclude named obligations from duplicate generic amortization/interest; preserve
 ownership through asset transfers and bank/company failure; and correctly handle
 company cash located in operating deposits. It must integrate consolidation,
 pure previews, AI, saved-version validation and peer capability checks before
-enabling a funding action. The original outside-creditor book must not keep a
+ordinary Expanded enablement. The original outside-creditor book must not keep a
 claim already moved to a player bank. The domain's cash-only funding check is not
 a substitute for the full campaign capital and workforce quote.
 
@@ -82,28 +84,67 @@ unsecured advances share the remaining funded cash proportionally with supplier
 and service-invoice claims. This is a provisional fictional priority rule, not
 a statement of insolvency law. Only unpaid bank claims are written off, with
 paired borrower release/lender loss. Version2–6 behavior remains preserved;
-existing campaign imports reject version7 rather than silently adopting it.
+existing campaign imports reject version7 unless their explicit9.28 marker and
+complete company/bank state match; older campaigns never acquire it automatically.
 
 [CompanyCreditBank](../src/engine/company-credit-bank.js) now applies paired
 credit-only postings to bank/local ledgers and maintains a borrower-reconciled
 owner claim projection. Ordinary cohorts exclude these claims; generic funding
 sales and bulk acquisitions cannot remove them. Department workload and facility
 scenario capital include their exposure. The projection is still refused in
-campaign saves/views pending complete versioned orchestration. The pending
-coordinator must also reserve origination work, settle operating-deposit cash,
-report already-posted income/losses once, and support the final ownership and
-preview acceptance cases before exposing orders.
+older campaign saves/views. The9.28 coordinator reserves origination work, settles
+operating-deposit cash and reports already-posted income/losses once. Final
+ordinary setup/lobby acceptance remains required before the single Expanded
+selection exposes this workflow.
 
 [Company-credit orders](../src/engine/company-credit-orders.js) provides the
 prepared qualification/capital/cash/work review and a pure two-bank funding
 stage. It shares `loanProductionCapacity` with ordinary operations. Successful
 funding returns paired world/player books and transient origination reservations;
-the monthly coordinator must adopt them atomically and retain the reservation
-through ordinary production. The current stage guard prevents duplicate calls
-on its returned state, but is not a persisted recovery contract. Do not expose
-the funding function or serialize its transient fields before the versioned
-coordinator is complete. Borrower-only forecasts must not require or fabricate
-private rival bank books.
+the monthly coordinator adopts them atomically before ordinary spending and
+retains reservations through production. Half-ready recovery stores the sealed
+orders, not partially funded settlement. Saved states reject transient fields.
+Pure domain results commit into the existing live owner objects, preserving
+turn-scoped WeakMap identities (notably product-pricing traces). Borrower-only
+forecasts must not require or fabricate private rival bank books.
+
+`companyCreditPlanForecast` reviews the complete draft queue and uses the same
+borrower origination/posting step as actual execution. It applies only the owner
+ledger to copied public statements, reconciles owned operating-deposit cash and
+reserves the shared origination budget before operating forecasts. The comparison
+is explicitly conditional on all own offers funding, not knowledge of rival
+orders. `operatingPreview` routes queued loans through this calculation; empty
+and historical plans retain their prior path. UI edits are local until reviewed
+and staged, and owner/month/draft/connection/readiness guards reject stale actions.
+
+`planCompanyCredit` runs after the rival's other planners and obtains the complete
+`root.BWEngine.publicState` projection, not the partial internal view. Its pure
+review uses the same human quote and conditional forecast, protecting cash and
+ordinary origination. It accepts only positive incremental operating earnings,
+never principal as income. Its provisional allocation/term/rate choices and the
+short ordinary-start limitation are recorded in the [checkpoint64 evidence](archive/checkpoint64-company-credit-rival-2026-09-13.md).
+
+The company-credit borrower settlement now emits lender postings. Actual
+execution applies them to required real books; `CompanyFinance.forecast` uses
+the same borrower calculation without bank ledgers. `CompanyCreditBank.forecast`
+applies only owner postings to an owner copy. The monthly corporate adapter
+atomically adopts paired world/player books before ordinary operations; the
+operating report bridge explains interest/repayment/losses without reposting
+them. Forecasts use the existing public company/market statement shapes and
+clear temporary owner state. Explicit creation/save/peer enablement and submitted
+orders are tested; customer UI staging, draft-offer forecasts, AI and final
+failure/transfer acceptance remain required. New paths never upgrade existing saves.
+
+Early company-credit cash relocation and normal commercial-account closing share
+`applyCommercialAccountBalances`. Funding now returns the matching market and
+account books as well as world/player books; callers must adopt the complete
+result atomically. `_companyCreditAccountOpening` retains original account rows
+through early cash movements, and normal closing consumes it for the once-only
+monthly report. It is rejected by the saved-state lifecycle boundary, including
+when no credit marker is present. Relocation does not run acquisition or servicing.
+Owner forecasts need only public company/market statements and their own claims.
+Consolidation optionally includes strict internal loan principal/interest in its
+existing paired elimination, without changing legacy worksheet output shapes.
 
 ## Multiplayer and recovery
 

@@ -1,0 +1,35 @@
+{
+  "checkpoint": 62,
+  "date": "2026-09-14T00:52:20.765Z",
+  "artifact": "output/BRANCH_WARS_creditcampaign62_review.html",
+  "sha256": "316558349a6548a7ce35f67aaa8a2c621a4be6dc0094c1f0e80e043ed3d3cfc2",
+  "priorReport": "output/master-checkpoint62-verification.json",
+  "priorReportSha256": "4c4b775d5d2b78278196713142d4e44fbf05110a9ac433074e283a4805aa5c0f",
+  "reason": "Initial exact-build run passed 26 tests and architecture but unseeded LAN scenario correctly refused the scripted credit offer. Fix test creation seed, not borrower cash or underwriting. Original failed report is preserved.",
+  "command": "node tests/company_credit_network.test.js",
+  "testFile": "tests/company_credit_network.test.js",
+  "testSha256": "e7ea7dec2a28cfdac4e54afbeb64945256f32c350838e9b01f3b9b10be4a43c0",
+  "creation": {
+    "seed": "credit-queue",
+    "created": 1
+  },
+  "exitCode": 0,
+  "transports": [
+    "gh",
+    "lan",
+    "p2p"
+  ],
+  "verified": [
+    "Missing capability refuses start",
+    "Paid company account development and submitted 10000 loan",
+    "Half-ready campaign restoration",
+    "Owner-private orders",
+    "Delayed plan/reveal messages do not duplicate funding"
+  ],
+  "capture": "Passing terminal output observed this turn; source and review artifact unchanged. No gameplay tuning.",
+  "limits": [
+    "Explicit 9.28 engine campaign; ordinary Expanded still 9.27 until customer controls and AI finish",
+    "No full Windows, 120/480-month balance, browser or real two-computer acceptance",
+    "No remote publication or frozen package overwrite"
+  ]
+}

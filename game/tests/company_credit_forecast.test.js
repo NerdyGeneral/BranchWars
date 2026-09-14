@@ -1,4 +1,5 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
 const copy=x=>JSON.parse(JSON.stringify(x));
 function load(html,legacy=false){const c={},names='CompanyCreditBank,CompanyFinance,CorporateCirculation,withCorporateForecast,operate,settleCorporateEconomy,finishCorporateEconomy'+(legacy?'':',addCompanyCreditOperatingReport,prepareCompanyCreditOperatingForecast');vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('Object.assign(root.BWEngine,{CompanyCreditBank});','Object.assign(root.BWEngine,{'+names+'});'),c);return c.BWEngine;}
@@ -7,7 +8,7 @@ const reference=fs.readFileSync(path.join(__dirname,'../reports/reference-builds
 assert.equal(createHash('sha256').update(reference).digest('hex'),'1b4d0a594e964ada574813fb88640c10cde2205c7a777cc5b4377b80d5e3b214');
 const old=load(reference.toString(),true);
 function fresh(seed='credit-forecast'){
- const g=E.createGame({...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed,created:1});
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed,created:1});
  const plans=g.players.map((p,i)=>E.chooseBot(g,i));
  g.companyEconomy=F.withCredit(g.companyEconomy);g.players=g.players.map(p=>B.apply(p,g.companyEconomy,p.accounting));
  for(const [i,p]of g.players.entries()){
@@ -16,6 +17,18 @@ function fresh(seed='credit-forecast'){
  }
  return {g,plans,sources:E.CorporateCirculation.IDS.map(id=>E.GroupAccounting.opening(id)),holder:E.GroupAccounting.opening('test:holder')};
 }
+
+test('owner-only advance scenarios preserve exact actual and historical origination postings across companies and terms',()=>{
+ const g=E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'advance-forecast',created:1}),world=F.withCredit(g.companyEconomy),banks=g.players.map(p=>({id:p.id,book:p.accounting})),before=JSON.stringify({world,banks});let checked=0;
+ for(const c of world.companies)for(const months of [12,24,36,48]){
+  const terms={principal:10000,months,annualRateBp:800,appetite:'balanced',product:E.CompanyCredit.assess(c).product};
+  if(!E.CompanyCredit.quote(c,terms).eligible)continue;
+  const actual=F.originateCredit(world,banks,c.id,banks[0].id,terms),prior=old.CompanyFinance.originateCredit(copy(world),copy(banks),c.id,banks[0].id,copy(terms)),preview=F.forecastCreditAdvance(world,c.id,banks[0].id,terms);
+  assert.deepEqual(copy(actual),copy(prior));assert.deepEqual(copy(preview.world),copy(actual.world));
+  assert.deepEqual(copy(preview.posting.changes),copy(actual.banks[0].book.journal.at(-1).changes));assert(!Object.hasOwn(preview,'banks'));checked++;
+ }
+ assert(checked>=12);assert.equal(JSON.stringify({world,banks}),before);
+});
 
 for(const demand of [1,.35])test('public-only forecasts match actual company/lender settlement and the preserved funding rules at demand '+demand,()=>{
  const s=fresh('forecast:'+demand);let {g,sources,holder}=s,closed=false;

@@ -1,4 +1,5 @@
 'use strict';
+// Retain the original pre-credit rules; latest-Expanded coverage is separate.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
 const copy=x=>JSON.parse(JSON.stringify(x));
 function load(html){const c={};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);return c.BWEngine;}
@@ -6,7 +7,7 @@ const baseline=fs.readFileSync(path.join(__dirname,'../reports/reference-builds/
 assert.equal(require('node:crypto').createHash('sha256').update(baseline).digest('hex'),'c22b610643d5b67174d0c0be0f9054e3180d6c031257435e86a726f5a5ed0bc7');
 const E=load(require('../tools/build_game').assemble().html),old=load(baseline);
 test('Expanded monthly earnings explain current ordered stages without changing plans, settlement, RNG or legacy projections',()=>{
- const options={...E.previewCampaignEdition({},'expanded').options,mode:'hotseat',seed:'business-balance:1',created:1},g=E.createGame(options),prior=old.createGame(options);
+ const options={...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),mode:'hotseat',seed:'business-balance:1',created:1},g=E.createGame(options),prior=old.createGame(options);
  for(let month=1;month<=2;month++){
   const opening=g.players.map(p=>p.stats.earnings),plans=g.players.map((_,i)=>E.chooseBot(g,i)),expected=prior.players.map((_,i)=>old.chooseBot(prior,i));
   assert.deepEqual(copy(plans),copy(expected));

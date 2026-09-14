@@ -1,7 +1,8 @@
 'use strict';
+// Retain the original pre-credit rules; latest-Expanded coverage is separate.
 process.argv.push('--source');
 const assert=require('node:assert/strict'),{peers,lobby,start}=require('./agency_peer_compat.test'),copy=x=>JSON.parse(JSON.stringify(x));
-const configure=pair=>pair.host.run("Object.assign(p2pConfig,E.previewCampaignEdition({},'expanded').options,{sharedPremisesVersion:1})");
+const configure=pair=>pair.host.run("Object.assign(p2pConfig,({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),{sharedPremisesVersion:1})");
 (async()=>{for(const transport of ['gh','lan','p2p']){
  const old=peers(transport,10);configure(old);
  old.guest.run("const capsBefore=E.campaignCapabilities;E.campaignCapabilities=()=>{const c=capsBefore();delete c.sharedPremisesSupported;return c;};send(makeFeatureHello())");await old.drain();

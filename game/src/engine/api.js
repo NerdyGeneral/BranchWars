@@ -13,4 +13,6 @@ Object.assign(root.BWEngine,{departmentCreditPreview});
 Object.assign(root.BWEngine,{CompanyCredit});
 Object.assign(root.BWEngine,{CompanyCreditBank});
 Object.assign(root.BWEngine,{companyCreditOrderReview});
+Object.assign(root.BWEngine,{companyCreditPlanForecast});
+Object.assign(root.BWEngine,{companyCreditStrategyReview});
 root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);if([6,7,8,9,10].includes(g.financialGroupVersion))out.earningsBridge=BankEarningsBridge.project(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;if(g.creditPerformanceVersion===1)limitCreditHistoryView(out);projectFinancialGroup(g,out,index);return out};

@@ -1,8 +1,9 @@
 'use strict';
+// Retain the original pre-credit rules; latest-Expanded coverage is separate.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm');
 const context={};vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],context);
 const E=context.BWEngine,copy=x=>JSON.parse(JSON.stringify(x));
-function opening(){return E.createGame({...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:1,mode:'hotseat',seed:'premises49',created:1});}
+function opening(){return E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:1,mode:'hotseat',seed:'premises49',created:1});}
 function plan(g,i){const p=g.players[i],a=E.chooseBot(g,i);
  a.newProjects=[];a.newProject=null;a.investments={};a.hires=0;a.specialistHires=E.emptySpecialistOrders();a.competitiveAction='none';a.opportunity=null;a.contractBid=null;
  a.facilityPolicy=E.defaultFacilityPolicy();a.facilityLifecyclePolicy=E.defaultFacilityLifecyclePlan(p);a.facilityExtensionPolicy={start:null,cancel:null};
@@ -15,10 +16,10 @@ function plan(g,i){const p=g.players[i],a=E.chooseBot(g,i);
  a.facilityLifecyclePolicy=E.facilityLifecycleStaffProposal(g,p,a).policy;return a;
 }
 function tick(g,orders){E.submit(g,0,orders[0]);E.submit(g,1,orders[1]);E.validatePilot(g);E.validateLedger(g);return g;}
-test('new Expanded selects 9.27; historical 9.26 stays unchanged and premises rules remain strict and private',()=>{
+test('explicit premises rules select 9.27; historical 9.26 stays unchanged and premises rules remain strict and private',()=>{
  const g=opening();assert.equal(g.version,'9.27');E.validatePilot(g);
- assert.equal(E.createGame({...E.previewCampaignEdition({},'expanded').options,seed:1,created:1}).version,'9.27');
- const historical={...E.previewCampaignEdition({},'expanded').options};delete historical.sharedPremisesVersion;
+ assert.equal(E.createGame({...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),seed:1,created:1}).version,'9.27');
+ const historical={...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0})};delete historical.sharedPremisesVersion;
  const old=E.createGame({...historical,seed:1,created:1});assert.equal(old.version,'9.26');assert(!E.migrateCampaign(copy(old)).sharedPremisesVersion);
  assert.throws(()=>E.createGame({sharedPremisesVersion:1}));
  for(const alter of [x=>x.version='9.26',x=>x.sharedPremisesVersion=2,x=>delete x.sharedPremisesVersion,x=>delete x.players[0].sharedPremises,x=>x.players[0].sharedPremises.totals.agencyRent=1,x=>x.players[0]._premisesExecutionAvailable=4]){const bad=copy(g);alter(bad);assert.throws(()=>E.migrateCampaign(bad));}

@@ -1,0 +1,70 @@
+{
+  "scope": "Sanitized aggregate of the interrupted ordinary-AI experiment; no raw campaign saves or customer/private book dumps.",
+  "artifact": "output/BRANCH_WARS_expanded65_review.html",
+  "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "status": "interrupted",
+  "observedOn": "2026-09-14T02:38:46.971Z",
+  "reason": "The execution handle is missing and no live matching process remains; the source report running flag is stale.",
+  "campaigns": [
+    {
+      "scenario": "balanced",
+      "requestedMonths": 120,
+      "lastRecordedMonth": 108,
+      "offered": [
+        3,
+        1
+      ],
+      "advanced": [
+        70000,
+        32000
+      ],
+      "interest": [
+        6508,
+        2916
+      ],
+      "principalPaid": [
+        70000,
+        32000
+      ],
+      "principalWrittenOff": [
+        0,
+        0
+      ],
+      "firstLoan": [
+        4,
+        6
+      ],
+      "lastBanks": [
+        {
+          "name": "Unnamed Financial Empire",
+          "cash": 11990378,
+          "capital": 763351,
+          "deposits": 27218040,
+          "depositShare": 0.4913686293202144,
+          "loans": 2091013,
+          "earnings": -1236649,
+          "staff": 16,
+          "commercialDeposits": 636158,
+          "commercialAccounts": 1
+        },
+        {
+          "name": "Synergy Holdings AI",
+          "cash": 14537152,
+          "capital": 739964,
+          "deposits": 28174263,
+          "depositShare": 0.5086313706797856,
+          "loans": 1962151,
+          "earnings": -1260036,
+          "staff": 11,
+          "commercialDeposits": 0,
+          "commercialAccounts": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Not a completed 120/480-month pass.",
+    "Does not establish long-run balance, human enjoyment or two-computer acceptance.",
+    "Original report and snapshots retained locally."
+  ]
+}

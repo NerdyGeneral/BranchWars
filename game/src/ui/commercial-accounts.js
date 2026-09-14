@@ -28,5 +28,6 @@ function renderCommercialAccountPanel(v,agreement,mount){
  $('#businessWorkLess')?.addEventListener('click',()=>stage({staffQuarters:Math.max(0,q.requested-1)},'#businessWorkLess'));
  $('#businessWorkMore')?.addEventListener('click',()=>stage({staffQuarters:Math.min(8,q.requested+1)},'#businessWorkMore'));
  $('#businessAccountStaffing')?.addEventListener('click',()=>{if(currentView()?.me.id===v.me.id)navigatePlanReview({tab:'workforce',peopleDesk:'coverage',target:'#departmentPanel'});});
- mount.insertAdjacentHTML('beforeend',companyCreditNeedContent(company));
+ if(v.me.companyCredit)renderCompanyCreditPanel(v,company,mount);
+ else mount.insertAdjacentHTML('beforeend',companyCreditNeedContent(company));
 }

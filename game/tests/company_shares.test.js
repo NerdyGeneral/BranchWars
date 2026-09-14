@@ -1,15 +1,16 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),fs=require('node:fs'),{createHash}=require('node:crypto');
 const copy=x=>JSON.parse(JSON.stringify(x));
 function load(html){const c={Math:Object.assign(Object.create(Math),{random:()=>.375}),Date:class extends Date{static now(){return 123456;}}};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);return c.BWEngine;}
 const E=load(require('../tools/build_game').assemble().html);
-function fresh(funded=false){const g=E.createGame({...{...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0},seed:5,created:1,mode:'hotseat'});
+function fresh(funded=false){const g=E.createGame({...{...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0},seed:5,created:1,mode:'hotseat'});
  if(funded)for(const p of g.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:200000,equity:200000});return g;}
 function step(g,orders=[]){const plans=g.players.map((p,i)=>E.chooseBot(g,i));for(let i=0;i<2;i++){plans[i].companyShareOrders=orders[i]||[];E.submit(g,i,plans[i]);}E.validatePilot(g);E.validateLedger(g);for(let i=0;i<2;i++)E.validateFinancialGroupView(E.publicState(g,i));return g;}
 const buy=(shares=1000,issuer='company:0')=>({issuer,side:'buy',shares,limitCents:1500});
 
 test('new ownership is explicit, funded from existing outside cash, peer gated and preserved on rematch',()=>{
- const g=fresh(),oldOptions={...{...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0}};delete oldOptions.companySharesVersion;const old=E.createGame({...oldOptions,seed:5,created:1,mode:'hotseat'});
+ const g=fresh(),oldOptions={...{...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:0,companyControlStrategyVersion:0,companyConsolidationVersion:0,companyControlVersion:0}};delete oldOptions.companySharesVersion;const old=E.createGame({...oldOptions,seed:5,created:1,mode:'hotseat'});
  assert.equal(g.version,'9.23');assert.equal(g.companyEconomy.version,6);assert.equal(old.companyEconomy.outside.accounts.cash-g.companyEconomy.outside.accounts.cash,g.companyShareMarket.capital);
  assert.deepEqual(copy(old.companyEconomy.companies),copy(g.companyEconomy.companies));assert.equal(g.companyShareMarket.outside.book.accounts.cash,g.companyShareMarket.capital);
  const caps=E.campaignCapabilities();delete caps.companySharesSupported;assert.equal(E.peerRulesIssue(E.campaignRules(g,{context:'game'}),caps).field,'companySharesVersion');

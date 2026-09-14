@@ -1,4 +1,5 @@
 'use strict';
+// Historical pre-credit fixture: select its named rules, not the latest edition.
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm'),ctx={};
 vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
 const E=ctx.BWEngine,{GroupAccounting:G,CompanyConsolidation:C}=E,copy=x=>JSON.parse(JSON.stringify(x));
@@ -40,7 +41,26 @@ test('additional purchases preserve earlier goodwill and earnings; reduced holdi
  assert.throws(()=>C.contribution(a,earned,70000),/increased/);
 });
 
-function fresh(funded=false){const g=E.createGame({...{...E.previewCampaignEdition({},'expanded').options,sharedPremisesVersion:0,companyControlStrategyVersion:0},mode:'hotseat',seed:5,created:1});
+test('controlled company loan principal and accrued interest eliminate only internal claims',()=>{
+ let b=book('company:0',1000000);b=G.post(b,'loan.advance','bank',{cash:100000,debt:100000});
+ b=G.post(b,'loan.interest','bank',{payables:1000,equity:-1000},-1000);
+ b=G.post(b,'service.invoice','bank',{payables:500,equity:-500},-500);
+ const a=capture(b),entry=row(b,a,{internalFees:500,internalCredit:{version:1,principal:100000,interest:1000}}),before=JSON.stringify(entry);
+ const external=C.summarize(base(),[row(b,a,{internalFees:500})]),internal=C.summarize(base(),[entry]);
+ assert.equal(external.assets-internal.assets,101000);assert.equal(external.liabilities-internal.liabilities,101000);
+ assert.equal(internal.ownerEquity,external.ownerEquity);assert.equal(internal.retainedEarnings,external.retainedEarnings);
+ assert.equal(internal.internalBalancesEliminated,101500);assert.equal(internal.residual,0);assert.equal(JSON.stringify(entry),before);
+ for(const credit of [{version:2,principal:100000,interest:1000},{version:1,principal:null,interest:0},{version:1,principal:NaN,interest:0},{version:1,principal:-1,interest:0},{version:1,principal:100001,interest:0},{version:1,principal:0,interest:1001},{version:1,principal:0,interest:0,extra:true}])assert.throws(()=>C.summarize(base(),[{...entry,internalCredit:credit}]));
+});
+
+test('interest within a wholly owned group cannot manufacture consolidated earnings',()=>{
+ const opening=book('company:0',1000000),a=C.capture({month:1,book:opening,sharesBefore:0,basisBefore:0,addedShares:100000,purchase:1000000});
+ const funded=G.post(opening,'loan.advance','own-bank',{cash:100000,debt:100000}),charged=G.post(funded,'loan.interest','own-bank',{payables:1000,equity:-1000},-1000);
+ const s=C.summarize(base(2001000,0,1000),[{issuer:'company:0',shares:100000,basis:1000000,book:charged,acquisition:a,internalDeposits:0,internalFees:0,internalCredit:{version:1,principal:100000,interest:1000}}]);
+ assert.equal(s.retainedEarnings,0);assert.equal(s.ownerEquity,2000000);assert.equal(s.residual,0);
+});
+
+function fresh(funded=false){const g=E.createGame({...{...({...E.previewCampaignEdition({},'expanded').options,companyCreditVersion:0}),sharedPremisesVersion:0,companyControlStrategyVersion:0},mode:'hotseat',seed:5,created:1});
  // Explicit external founder fixture tests funded mechanics, not ordinary balance.
  if(funded)for(const p of g.players)p.financialGroup.parent=G.post(p.financialGroup.parent,'fixture.shareholders','external-test-shareholder',{cash:3000000,equity:3000000});return g;}
 function plan(g,i){const p=g.players[i],x={...E.chooseBot(g,i),companyControlPolicy:E.defaultCompanyControlPlan(p),companyShareOrders:[],investmentPolicy:E.defaultInvestmentPlan(p),investments:{},newProjects:[],newProject:null};x.groupPolicy.bankSupport=0;x.groupPolicy.bankDividend=0;return x;}

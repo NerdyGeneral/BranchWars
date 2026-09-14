@@ -1,0 +1,844 @@
+{
+  "checkpoint": 62,
+  "date": "2026-09-14T00:49:14.686Z",
+  "artifact": "output/BRANCH_WARS_creditcampaign62_review.html",
+  "sha256": "316558349a6548a7ce35f67aaa8a2c621a4be6dc0094c1f0e80e043ed3d3cfc2",
+  "engineSha256": "57120bbc790ff9cf3bf7a2f4a31ad19a8e12a6a350863bde3d59e9cd38eb2e1e",
+  "sourceInputs": 191,
+  "sourceFiles": [
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\manifest.json",
+      "sha256": "2be4410e7f07f3df940e6f27bf17852bf17e2bb3e47f64a6e2598df41a575ec3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\page.html",
+      "sha256": "8f41e55b5be2748c59ea180877a54f821494dd3c2764e99760b59a51a743f13a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\primitives.js",
+      "sha256": "a0254a05402d79bf77bb2182fb8ade253284f8340481114191035eeaf195068e"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\features.js",
+      "sha256": "5e634e2691eee7d6ea4e9b27c213f5b66b10a456f50eaa597b8f965ea047daa0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\content\\catalog.js",
+      "sha256": "8392458f0fd974637caef3c6326f6fae42e386be8bd7b41182a3169382ee968d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\content\\workforce.js",
+      "sha256": "bddf91deb99d7fd9f7dd7500e28ff706ab043236eaf39921fd4ce76f0f85a6a6"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\institution.js",
+      "sha256": "df7c09b0663b9a699583926ac8cf2fe094a840e7cb0bc4dcd8661c1a229ae078"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\territories.js",
+      "sha256": "f08737f042ceee14a57ee7bd89d9778d351fecb6845e1fe89ab557fb7fba0149"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\campaign.js",
+      "sha256": "72f20668182310a2fe8d902cdd2c87c37d5a19059eb7b0ee58fc3de6601cb057"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\actions.js",
+      "sha256": "f4df9978570b83782fab39c9e3688cd8c05dfaee407fb13b3daec5427385c209"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\operations.js",
+      "sha256": "10d219091eff2cf9b44d75cd1412a3fba4b6f9b20bb2ae60782ca5b2af1118c7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\competition.js",
+      "sha256": "02e5c0aba53125dd3b9cd7ef9a2180cea9945fea03acd0f754456237e0642aca"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\projects.js",
+      "sha256": "50cae9b59b52ff8b42706ca89dddf5a5a9c9fe462fd146d8c7ea90f9b704e7e0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\ai.js",
+      "sha256": "5d21384fefb6bc5d101017766c99d8dc54db6be282a41aa5c452491818d9fd53"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\plans.js",
+      "sha256": "e67217a53cf5bf5b191f5ec2cdb2d93893b007b736c5edecaff217d04dd284c8"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\monthly.js",
+      "sha256": "4abd1bac9602bdde1bec8a5df5b1447a568be004208741785274bcf9cb8e02e7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\portfolio.js",
+      "sha256": "c33dae8991d8505686b8881813a2d9a51119f9f4c85efd832b831b28193edb57"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\session.js",
+      "sha256": "ac1a167057e0e51dea63453d656a81a917647a81fa7619056c29f52a8e372c3c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\accounting-adapter.js",
+      "sha256": "018e1d1a2ba126efa0b2100c2f742824065bfb05e20f096d0e0106a6ca2b2576"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\content\\regional-markets.js",
+      "sha256": "1ac7ffbe1ff6d386c7d9e279e7373508c75a4869d4cc154a40c3bcfe6895daf7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\regional.js",
+      "sha256": "18554f9a511474e49caeee0e9e21d152329c9ca30ed00b0b1dd627e0ee597bd3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\market-economy.js",
+      "sha256": "c115461d995739ad8adbdd4cb76534b4a21e0ab2df5d4bdc2960ccff78997cea"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\credit.js",
+      "sha256": "834ea004e1bbf9075694d068f65c8787611b6b6a282be5965350ceedb20a2614"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\credit-products.js",
+      "sha256": "0e760abfbe9827351f2b4890c0d1dd08327b8d6018032c201445fd5806f4e527"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\funding.js",
+      "sha256": "8a6701556e29a560910f1d7cc6b6458cd4b3db56414e76d06deb5a25b0ea6565"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\deposits.js",
+      "sha256": "3507722f46c0dbb7727f2cba79d2652a3af3e6f17a481f75230c44a91349b22e"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\term-funding.js",
+      "sha256": "aa7d723333798a82bc0499563f36a32de21be099a88ebbbda4f54c2256e784bd"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\retail.js",
+      "sha256": "690b32308063cd81d753f189a3661f6817ec560d7572adc24f09ac0763a0d2c6"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\deployment.js",
+      "sha256": "71d59303db644c94f22c3007dea4ef5f2044865a03921f120e61a081d29f2290"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\contracts.js",
+      "sha256": "09735cadb4ab55453e7dd16eaa46548f98cf689982c456e82eb4da082eb39c32"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\services.js",
+      "sha256": "5b59c517809e69b49c31e141d2da3e746ba0618dfc7c6b7da79641993631e45e"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\content\\anchor-clients.js",
+      "sha256": "587bd0c75d090d3d2071f7f33492d35a971b0918aa868b46c43a1d6b94e8ba7a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\management.js",
+      "sha256": "c3de1c80472c799021e7eab7bf25377ffd503e6107d457e67db2e0e2240d659d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\relationships.js",
+      "sha256": "163ab0d663211882aa3e25050e71fc2f5d69c6acc84bd71b12448ddd1cdac8cf"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\content\\customer-markets.js",
+      "sha256": "c04a3601a66511578b8301761d7281b4e02fd8e4f640d0e527e878f912f864e4"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\customer-demand.js",
+      "sha256": "459bea4604cee2544e26220a5c4192e7af690a382551b179df37db65ececeeb2"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\customer-relationships.js",
+      "sha256": "550bd01f427636c7fb4d2673f052f775e084b6c8097ab9497e2e438580eb4b30"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\workforce.js",
+      "sha256": "fc0a1c39102eb764c011ec958567e0bb60114ccd6feba94d86012573b8560fc0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\households.js",
+      "sha256": "7fcea51cc6ebf0b3bbe49403e2905402792debed5ba92a87607a4addc567cbe7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\collections.js",
+      "sha256": "339b50b99f0b5a6c21ec8f4f82c0d4d8f753ae2caf058749b3d196148453a523"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\segment-deposits.js",
+      "sha256": "647592833a692df8ad878a9e1951dce1f35d9710b2c48f651cd2f128d4a67c60"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\product-programs.js",
+      "sha256": "a7b935fc833effa656e13864a5e94850854a3eb9273a891e7f2ff6920bc893b8"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\product-pricing.js",
+      "sha256": "ac7631caf2be191f0082e4202d905c513427bcc70e4cf0647d2a873af575ca1d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\advertising.js",
+      "sha256": "5bc2362e1d3ef8267d3da6ad8aeaa6646e0513c275208f128a64bce446936869"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\regional-growth.js",
+      "sha256": "1e8bc6eb6ae411ed6b8578ba5b379c81086e5cdd01f2803230fae8e10635050b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\relationship-offers.js",
+      "sha256": "f24ae2f9922ccd4de19cf7a564bd17c7a0afe9692f16de1e4f12a661752f9c4c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\onboarding.js",
+      "sha256": "db877a2a68bb0b851095bf6032dbb8369079f7133b3c6bd872e3801fb7562696"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\customer-effects.js",
+      "sha256": "84558175c895808ddf1984a66321ef9679fab689ee24b1e2270c3f20ba92feab"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\recovery.js",
+      "sha256": "a87beb00c6826fb36c364271e26d2497a03119c97ce0da9eeec7e32b80dfdb0b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\ledger.js",
+      "sha256": "de4c67f5e823ce1217630eea01f74183d5a82c435c5082d34648642aa32be1f0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\accounting.js",
+      "sha256": "fdbf7145a209a3c3f6f62c7858b4b603f6661458c36a7645e279a99e2f825c92"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\group-accounting.js",
+      "sha256": "e97e50cfe1d9cbb2cf2655978e2d9407ccf564a1ddac2f0e3e5af4959e43c12f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-finance.js",
+      "sha256": "f1d2e57c0372df57d600f2341dab44b5fb892b6059ca2c7709db1f98c2819939"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-credit.js",
+      "sha256": "ba48972bc1009ffa5b3a285ace089e4b7befa2a47c1fffb27ec66dbec436d636"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-credit-bank.js",
+      "sha256": "29b94d3c59bcfe514f6d0a1cfe28f7fbc22b400e293d7d59af23a20df87f0ff1"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-credit-orders.js",
+      "sha256": "1bbf017d256a3f7756926976ddcf6071cc190ea0f6b53645cb25b6e54aa5a8f0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-credit-campaign.js",
+      "sha256": "df4509b10f3791aad54740d158a23b4b4818504fcef86ca65e39ec5eea918551"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-auction.js",
+      "sha256": "2232a5bdcf1456f710b274561c84376db79c5cd18c7771b3b227735634f3fd00"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control.js",
+      "sha256": "d188f960bdd07fb0055648c8de1dbc257490ede67582534dd21832b32d3a40af"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control-settlement.js",
+      "sha256": "648eddb011ce4ac86fe0f4d1b418e2ecaab8763fb1dda6d1ce4dfa1ff5ee714d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control-campaign.js",
+      "sha256": "18b12dc92c002afc07fde89617275214323d027a7c3765c590fc3c6c3b18d64a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control-runtime.js",
+      "sha256": "375872e02ed18d55b67f36702e4a2382f824486e2bdfc700693a12cae9e1ba6c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control-validation.js",
+      "sha256": "10025a248942e4060d8f0ab104f9db7e7fd40c6b935b14bf992ff73fa1682de5"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-consolidation.js",
+      "sha256": "add8117692237b0e296a0c1873ecdec6a3005cf6cb275a95068e1a1a62a65add"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-control-strategy.js",
+      "sha256": "eb61033ffce9dcbb34027ed87e660ffc5e51e441d354037a0f5f03034c836a29"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-shares.js",
+      "sha256": "3a16ce8e14dc534ee2d657f1d601fbb67cf54277ce1502bba74dbddabc75407a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\corporate-circulation.js",
+      "sha256": "871a3e1eb1fe5e6e9538fd5147f696d527285a64344b4828e0d3e7ddafeed9d9"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\financial-group.js",
+      "sha256": "54483731d4097ce5959680c41f69b61d26263063e460b6ac09f345dbbc916418"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\corporate-income.js",
+      "sha256": "fd26693ae2bb418ec3e1e31c7928db9e47bbd9bd289e6f7bb6e8e18db3d75963"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\commercial-accounts.js",
+      "sha256": "407123c7b43fc9588d75fec38df7bc66d699a5d380c798ad4ef0ee0a3fd9b971"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\agency.js",
+      "sha256": "eaaac02f52c1c3896745c6ba3c9820465f174330f3a85fef102b36b3fb61bb9f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\agency-professionals.js",
+      "sha256": "a269bc6b02944ff42b2dab4a516bb665654a393bd06b886927bd382a5885ddce"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-network.js",
+      "sha256": "905f238ddfbdedee56ae830257eb37ed32df05297d6d654abb1b32d0f6576048"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-adapter.js",
+      "sha256": "930c2644dfc7cff709b358edf5b57867f25fe9bb80c8bec2ec3612ecd76ac0af"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\departments.js",
+      "sha256": "ad6cb7fd5ea3ff8cd60cdb7cce99401f81f077a95d62d8d23bcbc77a933cb716"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-lifecycle.js",
+      "sha256": "c01243f775668f548ed7463f3090511e2671e25e25f686fc1e5273a7143be8ce"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-staff-planning.js",
+      "sha256": "e5fb3b013fdec7276e9ef0ad4c4bc5c5d9d54d4c2fd79b6c7cd30bf91fa540d4"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-lifecycle-quotes.js",
+      "sha256": "1264c1ed2183a774a3ce8053291adafc46618519f328e9af6645fc81dc1d90d0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-settlement.js",
+      "sha256": "fe2a3577c34db68aa76eb589cd63566c09d9e46f8d32b6cc7fec284149ccfa50"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-lifecycle-adapter.js",
+      "sha256": "fb7a75c15e8ad1b210fc06c4820e9a5f45c1884927fd7aaa4343a9f6c7e0f7c3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-extensions.js",
+      "sha256": "388fabac2bed7ab4dc573c1194d8aa35f1f60459449b80b46ca8443c3aeaf3ec"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\shared-premises.js",
+      "sha256": "94708b907521cee5d5c7dea98c8282254b59945317e8cdb6ba4a3b21ff40f6c4"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\shared-premises-campaign.js",
+      "sha256": "38e107d1bfeecb7495da98bd749fa5f7f0148608d0d665ace6ef201c5bad474f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-functions.js",
+      "sha256": "65645f76c965134abae9de13568c68dc4d2192ad34ff70ee9d5d9f575e07c31f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-function-context.js",
+      "sha256": "e1091548066e250d9ff582cac9658e9a86386cb6fe400d65c13f9b811aaf49ba"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-dispatch.js",
+      "sha256": "f07445a85f7def014212f43b6055bfe344d992a8dc0abc60f3b690b5ff7fd1fc"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-delivery.js",
+      "sha256": "99ae0fe28eb6ff83a032a63f3e8a8b47fdba8da0833296be390d4601a1bc1d7d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-provider.js",
+      "sha256": "1edf51340d29a712d97aa535421c3e8a1a58afad482ce4d442f83a90e628d72b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\department-runtime.js",
+      "sha256": "083586ad4e783f1bacbcbae373272df2115726d9b701ae03b2d4e5e8d881bd89"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\staffing-recovery.js",
+      "sha256": "7e063dc07c47e4ffdbfc32756e1c859f41aecbc819a346b72687a8bd437e3af4"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\facility-investment.js",
+      "sha256": "41228d411e83aad01fbae3e78858571872717f825fb31d40af09391414fac9f7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\migration.js",
+      "sha256": "360b730594fe970e04fe19f2d4609a7450e98b4d9b8dcc8a44c1a6dd4591b2b3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\operation-coordinator.js",
+      "sha256": "961185f14f7a41791a2a31be196988072f087e157f9db428de4c4e44d3ead292"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\project-coordinator.js",
+      "sha256": "562e820d2b6a78737ff71261948a6e3a3af3fca5bd59d90072956bb21585a13c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\cycle-coordinator.js",
+      "sha256": "fc19bbb45548476557f5d221d8ce4a67474e07ea24de3b5f19d860f694ebe2c3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\intent-coordinator.js",
+      "sha256": "92be3155a0f4bad6ceb521db628e9f476452e2deb09e9706f2549db4d6e80986"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\earnings-bridge.js",
+      "sha256": "8f6ab2042e4ab21996a4fce08654ff08f61a64114ddf3efb87adb9e46e044227"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-institution.js",
+      "sha256": "45cb5fa2ff853bcde7228b9be157221e3741ebe801028de001bebaeaa92b15e4"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-choice.js",
+      "sha256": "eea5ad0dcafd42f6c2418243876a90975cbca024c888ad8e4a49f6948c97b29f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-income.js",
+      "sha256": "72b10dde79638297dac9ba307c452120b8a8e873d9283cc76db87963dec4aac2"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-suitability.js",
+      "sha256": "a9ca0a9cb14b0021f583800162aac62f644d926084fe584be2605a0dd2931e26"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-trading.js",
+      "sha256": "722fefa08fb820df7953e6fad59c2c68b16db5980c7bb3d3afaaf97326e701be"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-notes.js",
+      "sha256": "2d1b62f6001d10f542c0625bc0b121594c5ea6a7e65fba944b217b390db44679"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-clients.js",
+      "sha256": "8ca1eb3333b2ac565396e619fc981fbf4321bb2d933ddcf93b8583f8b34adf44"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-cash-routes.js",
+      "sha256": "3ecb8a76491f02aa7bbf564df56813e9746825c290f7fc0aeaff4cb4b56ea64b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-settlement.js",
+      "sha256": "0d3b165c791d8fe80e67706e746afb6291f04168fa4a565ec86488c191e4e7b7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-bank-funding.js",
+      "sha256": "f4504efe61b7e090dfefc80001ff3f8fa118558cf941f395ef9d3260c15d3ca8"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-corporate-market.js",
+      "sha256": "2a7fbd53aec18600f94e7e049649b9ac940330f26eb16e1a49e619049d9cf682"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-campaign.js",
+      "sha256": "e74d4d237d75fe56e2d05feb41ad816a1d202d00101182babd0d95e8baa63ec7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\investment-strategy.js",
+      "sha256": "3baa43f7aa147dd81dc1364101ec36d073d5496f63771331132e7c68e1a774e3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\company-strategy.js",
+      "sha256": "a16247cac0abb3c70af226e8e006f95a5767c3fb29eb72f4711c664a10139d8b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\shared-premises-strategy.js",
+      "sha256": "8f2ad10f5b4f53e9656af6dd18571efdd29142559452455ce8ae5c279bda8303"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\api.js",
+      "sha256": "832ea4b532fd555f43bcf192f2a77b7bbebf12ac34b381cffe66e6c09ca117d3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\engine\\shell.js",
+      "sha256": "a36bec873a25f79e469d730fbbb931921a2e50963d207e9bca1576b3aa8a26fb"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\state.js",
+      "sha256": "eb1124bdb10123f9fa41518300e82a9c9eb29ecc3c94006bbb8b0692d3a34acd"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\features.js",
+      "sha256": "b7c9c235395f3d0efc9658df4e63b1d947c14383223f5a7b652a69188a7f16f7"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\lobby.js",
+      "sha256": "7ce8c7d20193c5049d9f10f3522ad8779c0c0476235c8ffe3c250fde7b6ece22"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\operations-workspace.js",
+      "sha256": "5dffd92725d2e0f7564ff1eba4a02c28fc304c68ef0307b46e7a60b87eea2a79"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\workspace-navigation.js",
+      "sha256": "a218f7cb7c8510493f2342464b1463391ff4d670e4ac1f302ebeac3528274dab"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\draft.js",
+      "sha256": "ef2c8572384febdc31431aaf29a76312ef66dad2837c590707ec8ed29fc996a9"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\persistence\\storage-codec.js",
+      "sha256": "b433e3fca0d3a29c0d52d9b0568f4ab7d8b6c421e78b925cc38ce31163aeea9b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\persistence\\saves.js",
+      "sha256": "b78a3addd9047b25ea0c07c876d137aeb9241f99cafb726165bfffd525310496"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\local-game.js",
+      "sha256": "ec308a8aeb815072d5bfc7f75217182f1bdb10bb07e42241d251baa6237fd360"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\network\\lan.js",
+      "sha256": "02fc9b29807e95de97616ec1eb47b3da9e645242d6c4428cf76ca188c6a15654"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\network\\repository.js",
+      "sha256": "33b26c9a3af777097bf46d9cef3e34bb4788b58f7925056ef69c36dd4c16f909"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\network\\peer-codecs.js",
+      "sha256": "66e76de70fc54a03da9adbbfb685a0622adbd8155fbf0b1d1a9c0fedeb3ae718"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\network\\direct.js",
+      "sha256": "58ed7f488e94d7d7c03fb9a16eb8373331efd61bf5f30655a03d0d39729bd41c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\network\\protocol.js",
+      "sha256": "c049d5eb878dfa9a6989e02c409741464529539ce10023a8009298b7d0ff1cf3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\earnings-bridge.js",
+      "sha256": "01d65b928dd6ec640f96a636edff2ecc26965e92b74a5519546041aa445494ab"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\dashboard.js",
+      "sha256": "bec403e6ba529bcde3894bc5a388cac260771690b37f118def2e2a354960f921"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\services.js",
+      "sha256": "d1763632da74fbbc1a375898da3122a217f36c644577da804372267bb1a17558"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\opportunity-workspace.js",
+      "sha256": "3be0f0fa2e634997a688301384aa99b0d64ec99724c9dcf75d4289e9fcb2957c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\service-workspace.js",
+      "sha256": "3adadfd73547716fccd8debfd56132968c299a6c9cb517c3aa88b090ab0fadcc"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\commercial-accounts.js",
+      "sha256": "e0185bfd3298320b589ae87e48a7bb7e57e17b769dae7d3838af8acfc02cf6ec"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\management.js",
+      "sha256": "ed4634a9af5055745515a28c879c2fb764b81dc0e90dc20f6bf1380ae9b7b044"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\people-workspace.js",
+      "sha256": "89711def2cb0558a4592e33c2a009f4e9430e20908beba13d6a1258a9c52106a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\workforce.js",
+      "sha256": "7055dca8d606ddc3b14708c024ce0d8128af26caaf7b7cec5c9834ccba25b66c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\departments.js",
+      "sha256": "759c5f2e83deec1fd500cd7f12805abe17e5fe89e9e85955997e3a17b74825ee"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\department-functions.js",
+      "sha256": "3af15f52070ce628b890dd4ee6f7bbd40dc239d13c07d81d01e3573799d1ae15"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\facility-network.js",
+      "sha256": "1357e428c50122f012822e5c153304c4c9f4f2a3eed6e70414085d07314982e9"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\facility-lifecycle.js",
+      "sha256": "90c40a1729f3c1dc12e625bb17ddaab442672ff7e3597e1b2a813329089e0e29"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\facility-extensions.js",
+      "sha256": "aee1176337b8217dd96ac036e3a0af4e8315e0db276e367b99dfab7d2d7413fc"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\shared-premises.js",
+      "sha256": "fffdafde1e546292c02874775d764e32eec7ca5116ce3fcb8eb3f831e11794ce"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\households.js",
+      "sha256": "b49fb41f49e55e8d798fc33292ff8bb8a53185b85f80db2374e60915488d8bf3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\collections.js",
+      "sha256": "95bd94b0bc39cee0235c089c655a063401e3b848eb8fde447937840db2bcefe0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\financial-group.js",
+      "sha256": "beed68c8b02c6d034c9e53026a2858e3f4e21406e18dffbd75bf1f314ae8e0ad"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\agency.js",
+      "sha256": "29022765149ac3be0441182bdf0780f9925baf93711440784756d49ea80bc539"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\agency-professionals.js",
+      "sha256": "09fe4c8d45209367f83c23f12c170e21a9d0cc882452dc9e19efbad3e6654bcc"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\group-workspace.js",
+      "sha256": "902f75de152de37b332c8e75c759f5aaf0ecaf4622fe5e45d78cfec7d398a17b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\company-shares.js",
+      "sha256": "473d18564c96d5a7c6e2e9f31f9800c2e02cf1261ec811aa5195fd338e0c0619"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\company-control.js",
+      "sha256": "1b5582b1d6aad68e8f565f5f1827f0210e56a1653d1d2c18a5566f182e3fb252"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\investment-workspace.js",
+      "sha256": "12d77f5a18c0a4f2ae9a338cca8fc4b5e00108f922e520679b1c0be20eca7577"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\products.js",
+      "sha256": "db4fb83f976c9a2ae3c4e5ee86c3ba42eff04d1ead0ef28acfc5d4639ca8fbfd"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\product-programs.js",
+      "sha256": "6529eccd15fb8d31ebab4a99bd9f5f968b8e78f9e84676fd85e9cda1b6dbafd3"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\product-workspace.js",
+      "sha256": "058c3edf449f45c444f87e34de49831bfc51eec2f682dbbc40cfbd4d559418c5"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\relationship-offers.js",
+      "sha256": "999068821dc5cfcb985c6f0ff723325606fd99956293de6f893f3955ef7af756"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\customer-effects.js",
+      "sha256": "47ef3ade8917086f30f4c3ed530e0ffa611fa764f70331a4a2a93a16392e5ba8"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\onboarding.js",
+      "sha256": "2d4e7841c756c40b56c79f5fea818dd3f4d679c8a8db8da5dcd77811567d3c97"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\advertising.js",
+      "sha256": "fa725f514289ab2d5bf670d638318a32483b2ede9eaa495c67b3989da4f7684d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\regional-growth.js",
+      "sha256": "10474761c7269f3e318decbda7962a9ab34a49eab2a34f553678c1ce9df1a4da"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\recovery.js",
+      "sha256": "7be26ee63fd8f61932ca72f1341c379babb567b1a9978c65d69bc7b64f63d3b9"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\plan-review.js",
+      "sha256": "377110cabdfce8dc631c7f39e637c688051d2f4ba8c0ce5cdd371ff3680deb92"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\bank-overview.js",
+      "sha256": "08b5b923b50b404e391cf227c65026a02213b7a73f5d0a8a7d1b924ef70059a0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\game-help.js",
+      "sha256": "e4ff58b626b153865191012a450aff197193d0332f750d29e3843b9e8efe2186"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\projects.js",
+      "sha256": "2257bffb5204e63cd7ed4b790bfece9848061b4fd5046de9fcc65f9eefaeaf3b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\strategy-workspace.js",
+      "sha256": "b70cc7c09b158329d382b687229f97a31a5bfac74bd84eb63a46a466f15bfcab"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\project-workspace.js",
+      "sha256": "daa4a8bb9245600a79bf3f76b7f1aa36bcb2cf834e580f75bc9bd7cdbf87dfaa"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\market-workspace.js",
+      "sha256": "7ba5513daa230a594304d9280884cc9da3b76f978947dd8dfcfa30cea52539a5"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\results.js",
+      "sha256": "617bb6ced74b9d9368d4862b3b603bbac3e632c38e73dd76b132ae016dfe059c"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\bootstrap.js",
+      "sha256": "dc2f85bb26907bdeb855e56fb1170a7acc858bf529b39af8ba99833995a46190"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\ui\\shell.js",
+      "sha256": "71f982bde5b5f5a7079eb35ad45d3f3681e8336ab61803d1ccba4005ff7849df"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\base.css",
+      "sha256": "ced6eb247f3a2ae5e8b3926e6f3176e46946123b616c151d90a21717d51d8b4f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\visual-overhaul.css",
+      "sha256": "f677e68db46261941ca086c8cdbbc92fdf549d564ed55e94752fe5656c4b6664"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\isometric-city-overhaul.css",
+      "sha256": "ca917aea08bc0f3e5eecac0806f9cbe523e1344e1a07180210c2595923895569"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\isometric-city-polish.css",
+      "sha256": "7c1eeb266a3482916c47ae5b699f28c422c5083d44bcc1bb01610196563c776a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\funding-strategy-ui.css",
+      "sha256": "45f7f19f903315d0856fe594ce491f6879013cf9b4fdaf97d5862d4bff992a33"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\portfolio-depth-ui.css",
+      "sha256": "53c1a462428d57e80b1ef8caa81d2f3274737c8d6e117269bc4dea208a20c68d"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\workspace-ui.css",
+      "sha256": "5813307af9225b4175cecb884d9807a1316390551894fce91682bba6fd34fb40"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\workspace-polish.css",
+      "sha256": "8ac35c397055f7b39505b9cbbc586a265bc34deab4a5a8f4df0890e906e5679b"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\planning-repair-ui.css",
+      "sha256": "7b6e96635d9fc887eff57cb88d102a13ed92cb29b6879b0a0f2f771769ac48e1"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\bank-identity-ui.css",
+      "sha256": "9088d4a3f583c3a6748b7a7f94ee183b7fda682ed9634572c3b1eb162a7bb6ca"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\region-summary.css",
+      "sha256": "67f3e32757c392646dcb754a6e08fc8248dcf2df86b6ebba140581d82a6b4a4f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\lobby-ui.css",
+      "sha256": "a31bd071beeaeb758f3806ef086427e6d93d4d69866538c83365d629e3092f83"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\workforce.css",
+      "sha256": "6f89fce2fb4d7351ae792e2f79d3d1b264446923a04ffab2f44e79b0eddef42f"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\households.css",
+      "sha256": "94986e03aa9ecc7d41f83da60d008412af0a62ecd72e3b31f885d912d0dfc275"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\collections.css",
+      "sha256": "c3e21de145ceadc059f7aba653c67f45fb8f041a71993933f7e6f742e23465b0"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\product-programs.css",
+      "sha256": "fffc047960dcaa343e4b933410f58c732d1e21be4ac5bde8ef7c8bd6f70b119a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\regional-growth.css",
+      "sha256": "165df72a338c2840b5f71a8fab3d94e6fff7a0bdfba1922507299fb9d365989a"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\features.css",
+      "sha256": "2ef3e84c9e0e0b976004709dbf671a7d3607a0f62fa09abb32db6af2a22f55cc"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\operations-workspace.css",
+      "sha256": "ac132f1e83c7e4afc090da946e68699ea1d5b7ea331b73b76def729512287bac"
+    },
+    {
+      "path": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\src\\styles\\usability.css",
+      "sha256": "ffe996b0a55ce9c41ea11df3a15b94bf243d619fd7ac62260f06002a691bf2f0"
+    }
+  ],
+  "testFiles": [
+    {
+      "path": "tests/company_credit_campaign.test.js",
+      "sha256": "ed0b9e310289b5e7d19ef298ed5031a71ed98415dee18f7b7f2f408f2057a8a3"
+    },
+    {
+      "path": "tests/company_credit_orders.test.js",
+      "sha256": "04dcd1d69c3b61819865cc26853d2c3f74cfbc66808907ce066453f0a399d271"
+    },
+    {
+      "path": "tests/company_credit_forecast.test.js",
+      "sha256": "999dd44aacc095bd7787c42c6f7310408ade090290017b8fa763856f4ac457b9"
+    },
+    {
+      "path": "tests/company_credit_locations.test.js",
+      "sha256": "a55f4190a46d5decee9a6662695e3bb39e4e7aef59ac411ac94d89a9af9200b4"
+    },
+    {
+      "path": "tests/company_credit_boundary.test.js",
+      "sha256": "a8bcdefaf8e5139f1eb7df0efac7b3a3fb6c39a55cd406c6852792f356f45458"
+    },
+    {
+      "path": "tests/company_credit_network.test.js",
+      "sha256": "c0a2f298f830923356ec49fc0ea5d715b870fa15f67aa2312299b04dbf639304"
+    }
+  ],
+  "checks": [
+    {
+      "args": [
+        "--test",
+        "tests/company_credit_campaign.test.js",
+        "tests/company_credit_orders.test.js",
+        "tests/company_credit_forecast.test.js",
+        "tests/company_credit_locations.test.js",
+        "tests/company_credit_boundary.test.js"
+      ],
+      "stdout": "✔ historical core rules preserve creation, AI, settlement, RNG, views and recovery exactly (76.5466ms)\n✔ historical expanded rules preserve creation, AI, settlement, RNG, views and recovery exactly (10797.1536ms)\n✔ company credit uses explicit 9.28 creation; supported selections and old saves never upgrade automatically (130.4027ms)\n✔ inconsistent markers, lender assets and unfinished settlement are rejected without repair (64.4638ms)\n✔ actual paid development, submitted loan, half-ready recovery and monthly repayment form one campaign (31341.4407ms)\n✔ unsupported or unfunded company orders cannot partially change a campaign (4905.5474ms)\n✔ public-only forecasts match actual company/lender settlement and the preserved funding rules at demand 1 (11561.8312ms)\n✔ public-only forecasts match actual company/lender settlement and the preserved funding rules at demand 0.35 (7939.5394ms)\n✔ forecast rejects malformed metadata and cannot accept a private bank context as an alternative (1114.0939ms)\n✔ the monthly company adapter posts loans once and the operating report bridge does not post cash again (1153.0462ms)\n✔ operating forecasts prepare only the owner book and do not need the rival ledger or submitted plan (1120.4304ms)\n✔ the complete prepared operating forecast includes company coupons and repayments without mutating the campaign (1131.647ms)\n✔ actual monthly banking operations include posted company interest once and clear transient settlement state (1112.3113ms)\n✔ a bank 0 loan locates cash at the actual account bank without duplication (5366.0326ms)\n✔ a bank 1 loan locates cash at the actual account bank without duplication (5008.2274ms)\n✔ a loan without an operating relationship creates no bank deposit or account (21.3059ms)\n✔ public owner forecast and actual trading agree on loan payments and account cash for lender 0 (4989.0919ms)\n✔ public owner forecast and actual trading agree on loan payments and account cash for lender 1 (4985.9106ms)\n✔ a closed company releases its deposit once and preserves the opening owner in the monthly report (4897.7509ms)\n✔ a business without an existing qualified relationship cannot skip development by submitting a loan (1303.4181ms)\n✔ a developed account receives a pure shared underwriting and funding review (7542.409ms)\n✔ queue review refuses duplicate borrowers and unaffordable or oversized advances atomically (7322.603ms)\n✔ changes to staffing invalidate previous capacity rather than reusing a stale approval (7280.9207ms)\n✔ funding an approved borrower pairs cash and the funded deposit location without creating ordinary cohorts (7313.2929ms)\n✔ borrower choice rewards suitable funding and price; exact ties rotate independently of arrival order (0.1973ms)\n✔ stale, ended and malformed offer queues fail before creating an asset (1044.4516ms)\nℹ tests 26\nℹ suites 0\nℹ pass 26\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 36716.0471\n",
+      "stderr": "",
+      "exitCode": 0,
+      "durationMs": 36793
+    },
+    {
+      "args": [
+        "tests/company_credit_network.test.js"
+      ],
+      "stdout": "PASS gh company credit: required capability, paid relationship and loan, half-ready restore, owner privacy, delayed-message protection\n",
+      "stderr": "evalmachine.<anonymous>:6925\n if(orders.length){const review=companyCreditOrderReview(g,p,plan,orders);if(!review.eligible)throw Error(review.reason);}\n                                                                                              ^\n\nError: Observed cash flow does not cover this offer under the selected underwriting standard.\n    at normalizeCompanyCreditPlan (evalmachine.<anonymous>:6925:101)\n    at validatePortfolioPlan (evalmachine.<anonymous>:13413:3)\n    at submit (evalmachine.<anonymous>:1414:393)\n    at evalmachine.<anonymous>:1438:96\n    at withRandom (evalmachine.<anonymous>:13:119)\n    at Object.submit (evalmachine.<anonymous>:1438:35)\n    at evalmachine.<anonymous>:1:3\n    at Script.runInContext (node:vm:149:12)\n    at Object.runInContext (node:vm:301:6)\n    at Object.run (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\tests\\github_resilience.test.js:39:46)\n",
+      "exitCode": 1,
+      "durationMs": 24082
+    },
+    {
+      "args": [
+        "tests/architecture.test.js",
+        "--source"
+      ],
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": "",
+      "exitCode": 0,
+      "durationMs": 987
+    }
+  ],
+  "protectedPlayable": {
+    "before": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+    "after": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561"
+  },
+  "limits": [
+    "Explicit 9.28 engine campaign; ordinary Expanded still 9.27 until customer controls and AI finish",
+    "No full Windows, 120/480-month balance, browser or real two-computer acceptance",
+    "No remote publication or frozen package overwrite"
+  ]
+}

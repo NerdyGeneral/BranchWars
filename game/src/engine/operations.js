@@ -66,6 +66,12 @@ function projectOperatingForecast(copy,forecastOpeningOwner=null){
  return result;
 }
 function operatingPreview(p,plan,economy,g=null,includeCommercial=false){
+ if(p.companyCredit&&plan.companyCreditOrders?.length){
+  if(!g)throw Error('Current public campaign context is required to forecast company offers.');
+  const q=companyCreditPlanForecast({...g,economy},p,plan),result={...q.funded,companyCreditAssumptions:q.assumptions};
+  if(!includeCommercial)delete result.commercial;
+  return result;
+ }
  if(p.departmentOffice){
   // Compensation is posted to a private owner copy, once, before production.
   // The normal forecast setup still owns every other policy and reservation.

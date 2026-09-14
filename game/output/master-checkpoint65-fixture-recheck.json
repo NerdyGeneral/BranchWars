@@ -1,0 +1,27 @@
+{
+  "artifact": "output/BRANCH_WARS_expanded65_review.html",
+  "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "earlierReport": "output/master-checkpoint65-verification.json",
+  "scope": "Recheck two historical fixture corrections; no production or golden changes",
+  "tests": [
+    {
+      "path": "tests/credit_products.test.js",
+      "sha256": "0eace40cffb5e715dbb42a45d405c4bdb1689d1a7d56f18d38b29c97562c1557"
+    },
+    {
+      "path": "tests/investment_strategy.test.js",
+      "sha256": "d82ca2c8fbe63f880e270c896d846e4c96d2aa6ec97c74126d9bc3c6a9b4bf8d"
+    }
+  ],
+  "status": "passed",
+  "args": [
+    "--test",
+    "--test-concurrency=2",
+    "tests/credit_products.test.js",
+    "tests/investment_strategy.test.js"
+  ],
+  "code": 0,
+  "stdout": "✔ five families require explicit 9.21 rules; legacy and malformed campaign boundaries stay strict (66.0728ms)\n✔ terms, collateral and concentration are persistent credit risks, not extra money or books (16.9671ms)\n✔ both new loan families fund, amortize, age and resume in all four economies with finite ordinary resources (77833.8701ms)\n✔ ordinary new-version AI protects acquired business-account work instead of assigning it twice (10570.3125ms)\n✔ immutable checkpoint35 9.20 preserves creation, AI, human drafts, RNG, half-ready recovery, private views and rematch exactly (52885.7418ms)\n✔ strategy version is explicit, peer-gated and preserved through rematch; marker drift is rejected (66.8976ms)\n✔ pure review distinguishes advice/brokerage, ignores private rivals and cannot fund launch from staged dividends (607.2552ms)\n✔ funded whole campaigns exercise ordinary AI launch, credentials, client acquisition, cash funding and portfolio work (107726.4258ms)\n✔ immutable checkpoint36 9.21 AI, human turns, RNG, saves, views and rematch are unchanged (57931.5728ms)\nℹ tests 9\nℹ suites 0\nℹ pass 9\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 166610.035\n",
+  "stderr": "",
+  "sourceMatches": true
+}

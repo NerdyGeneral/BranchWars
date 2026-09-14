@@ -17,6 +17,7 @@ const sources={...([6,7,8,9,10].includes(g.financialGroupVersion)?{'departments.
  if(g.facilityExtensionsVersion===1){sources['facilities.extensions']='prepareFacilityExtensions';sources['facilities.extensionProgress']='advanceFacilityExtensions';}
  if(g.investmentServicesVersion===1)sources['group.investment']='settleInvestmentServices';
  if(g.sharedPremisesVersion===1)sources['group.premises']='settleSharedPremisesGroup';
+ if(g.companyCreditVersion===1)sources['companies.credit']='settleCompanyCreditOrders';
  if(g.companySharesVersion===1){sources['companies.shares']='settleCompanyShareAuction';sources['companies.shareIncome']='settleCompanyDistributions';}
  if(g.companyControlVersion===1){sources['companies.control']='settleCompanyControl';sources['companies.integration']='advanceCompanyControlIntegration';}
  if(g.companyConsolidationVersion===1)sources['companies.valuation']='finishCompanyShares';

@@ -7,7 +7,7 @@
 3. [Release status](release-status.md) — exact playable/source/package identities, known issues and release gates.
 4. [Roadmap](roadmap.md) — sequencing and retained acceptance contracts, not a competing status report.
 
-The frozen V3 ZIP/manual, local playable HTML and newer development source are different artifacts. Read [which version is which](release-status.md#which-version-am-i-looking-at) before testing or distributing.
+The frozen V3 ZIP/manual and V4 playtest are different artifacts. The local playable HTML was rebuilt from current source for V4; read [which version is which](release-status.md#which-version-am-i-looking-at) before testing or distributing.
 
 ## One job per document
 
@@ -39,4 +39,4 @@ The frozen V3 ZIP/manual, local playable HTML and newer development source are d
 
 The [September 13 follow-up audit](archive/documentation-recheck-2026-09-13.md) records the earlier consolidation check at checkpoint56. Historical document counts and preservation manifests describe their original checkpoint, not a limit on future evidence.
 
-The subsequent September 13 documentation recheck found 66 Markdown documents here, including 52 archived records. The live ledger, release status and roadmap are approximately 19 KB, 9 KB and 10 KB rather than the old 215/114/56 KB. No further bulk move or rename was needed. All five preserved archive hashes still match the cleanup manifest; the normal playable, frozen ZIP and matching manual retain their recorded fingerprints. All 29 reference-build files remain in place. Release status now explicitly separates unfinished post-checkpoint58 source from the last recorded review artifact. No game build, deletion or publication was performed for this recheck.
+The [latest documentation recheck](archive/documentation-recheck-2026-09-13.md#post-checkpoint64-follow-up) confirms that consolidation remains in place. No further bulk move or rename was needed. Use release status for changing candidate identities; this index does not maintain a second build-status summary. Historical counts describe their observation, not a maintenance target.

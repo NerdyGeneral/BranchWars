@@ -6,7 +6,7 @@ const E=load(require('../tools/build_game').assemble().html);
 function fresh(funded=false){const options={...E.previewCampaignEdition({},'expanded').options};
  // This fixture targets historical 9.22, not whichever edition is newest.
  // Hidden scalar rules cannot be selected with the checkbox-proposal API.
- for(const field of ['companySharesVersion','companyControlVersion','companyConsolidationVersion','companyControlStrategyVersion','sharedPremisesVersion'])delete options[field];
+ for(const field of ['companySharesVersion','companyControlVersion','companyConsolidationVersion','companyControlStrategyVersion','sharedPremisesVersion','companyCreditVersion'])delete options[field];
  const g=E.createGame({...options,seed:'investment-strategy',mode:'hotseat',created:1});
  // Explicit external shareholder fixture, not ordinary AI balance evidence.
  if(funded)for(const p of g.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:1500000,equity:1500000});return g;
