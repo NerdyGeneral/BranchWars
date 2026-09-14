@@ -1,5 +1,7 @@
 # V3.1 long-campaign stability — final local candidate report
 
+> Historical, edition-bound evidence for the September 9 V3.1 candidate. Its completion and verification claims do not apply to newer source. See [current release status](release-status.md). Original results and failure history remain below; this path is retained for existing links.
+
 September 9, 2026. **Scoped technical verification complete; human acceptance outstanding.**
 This completes the bounded local V3.1 stability candidate, not the wider regional /
 Financial Group blueprint. No GitHub publication, national expansion or insurance

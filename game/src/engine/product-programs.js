@@ -170,7 +170,7 @@ function planProductPrograms(g,index,plan) {
  plan.productProgramPolicy=policy;normalizeProductProgramPlan(p,plan);
  // Compare existing targets against fit targeting, including real vendor expenses.
  const current={...plan,productProgramPolicy:productProgramPolicy(p)};normalizeProductProgramPlan(p,current);
- const forecast=q=>operatingPreview({...p,marketSnapshot:g.marketEconomy},q,g.economy);
+ const forecast=q=>operatingPreview({...p,marketSnapshot:g.marketEconomy},q,g.economy,g);
  const score=r=>r.profit-(r.fundingLoss||0)+Math.max(0,r.depositGrowth)*.005;
  let selectedReport=null;
  if(JSON.stringify(current.productProgramPolicy.markets)!==JSON.stringify(plan.productProgramPolicy.markets)){
@@ -188,7 +188,7 @@ function planProductPrograms(g,index,plan) {
   const retreat=JSON.parse(JSON.stringify(plan));retreat.productProgramPolicy.retire.push(product);
   for(const row of Object.values(retreat.productProgramPolicy.markets))for(const mix of Object.values(row)){mix[product]=0;if(!Object.values(mix).some(Boolean))mix.essential=4;}
   normalizeProductProgramPlan(p,retreat);
-  if(projectPlanStatus(p,retreat).eligible){
+  if(projectPlanStatus(p,retreat,g).eligible){
    selectedReport=selectedReport||forecast(plan);const retiredReport=forecast(retreat);
    if(score(retiredReport)-score(selectedReport)>PRODUCT_RETIRE_COST/8){plan=retreat;selectedReport=retiredReport;}
   }
@@ -200,9 +200,9 @@ function planProductPrograms(g,index,plan) {
   if(state.retired||plan.productProgramPolicy.retire.includes(product)||state.route==='build'||p.projects.some(x=>PRODUCT_PROGRAM_PROJECTS[x.key]?.product===product))continue;
   let key=strategyLevel(p,d.branch)>=1?d.project:state.route==='none'?product==='rewards'?'licenseRewards':'licenseHighYield':null;
   if(key){const next={...plan,newProjects:[...planInitiatives(plan),key]};next.newProject=next.newProjects[0];
-   if(projectPlanStatus(p,next).eligible&&planBudget(p,next).remaining>=250000){plan=next;break;}}
+   if(projectPlanStatus(p,next,g).eligible&&planBudget(p,next,g).remaining>=250000){plan=next;break;}}
   if(state.route==='partner'&&strategyLevel(p,d.branch)<1) {
-   const room=Math.min(50000,CAPABILITY_CAP_PER_CYCLE-(plan.investments[d.branch]||0),capabilityNextCost(p,d.branch)-(plan.investments[d.branch]||0),planBudget(p,plan).remaining-250000);
+   const room=Math.min(50000,CAPABILITY_CAP_PER_CYCLE-(plan.investments[d.branch]||0),capabilityNextCost(p,d.branch)-(plan.investments[d.branch]||0),planBudget(p,plan,g).remaining-250000);
    if(room>=1000)plan.investments[d.branch]=(plan.investments[d.branch]||0)+Math.floor(room);
   }
  }

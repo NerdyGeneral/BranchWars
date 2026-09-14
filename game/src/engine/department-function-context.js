@@ -44,7 +44,7 @@ const DepartmentFunctionContext = (() => {
   const sum=xs=>xs.reduce((a,b)=>a+b,0);
   function functionContextWorkloads(p,training){
     const households=sum(Object.values(p.householdBook?.markets||{}).flatMap(row=>Object.values(row))),
-      loans=sum((p.creditBook?.cohorts||[]).map(c=>c.principal)),deposits=sum((p.depositBook?.cohorts||[]).map(c=>c.principal)),
+      loans=sum((p.creditBook?.cohorts||[]).map(c=>c.principal))+companyCreditPrincipal(p),deposits=sum((p.depositBook?.cohorts||[]).map(c=>c.principal)),
       household=householdServiceReview(p),collections=collectionsReview(p),services=serviceLoad(p),
       pending=sum((p.onboarding?.pending||[]).map(row=>row.count)),
       activeProducts=Object.values(p.productDeployment?.ready||{}).filter(Boolean).length,
@@ -61,7 +61,7 @@ const DepartmentFunctionContext = (() => {
     const intakeProspecting=p.onboarding&&p.onboarding.policy.share>0&&onboardingOpen(p,p.onboarding.policy)?1:0;
     const sources={households,businessRelationships:p.stats.business,merchantRelationships:p.stats.merchant,eligibleOffers:offers,intakeProspecting,
       householdDemandFte:household?.demand||0,pendingApplications:pending,contractLoad:sum((services?.rows||[]).map(r=>r.load)),
-      loanPrincipal:loans,loanVintages:p.creditBook?.cohorts.length||0,latePrincipal:sum(collections?.late||[]),
+      loanPrincipal:loans,loanVintages:(p.creditBook?.cohorts.length||0)+(p.companyCredit?.claims.length||0),latePrincipal:sum(collections?.late||[]),
       depositPrincipal:deposits,depositVintages:p.depositBook?.cohorts.length||0,activeProducts,activeApplications,offices,
       riskPoints:p.stats.compliance,emergencyDebt:p.accounting.accounts.emergencyDebt,termVintages,employedBankers:p.stats.staff,
       paidTrainingRoles:training?.paused?0:(training?.rows||[]).filter(r=>r.spend>0).length};
@@ -90,7 +90,7 @@ const DepartmentFunctionContext = (() => {
     // Raw attribution is a private, non-recursive read of retained obligations.
     // Consumer adapters must not reuse an earlier month's dispatch here.
     p=copy(p);p._departmentFunctionsRaw=true;delete p._departmentFunctionExecution;
-    const budget=options.budget||planBudget(p,draft),prepared=facilityLifecyclePlanningContext(v,p,draft,budget),owner=prepared.owner,
+    const budget=options.budget||planBudget(p,draft,v),prepared=facilityLifecyclePlanningContext(v,p,draft,budget),owner=prepared.owner,
       productive=departmentProductiveAllocation(owner),physical=roles(),teachers=roles(),exactRetained=Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,roles()])),
       exactRetainedTasks=Object.fromEntries(['offerSales','commercialRelationships','householdSupport','applicationProcessing','commercialDelivery','creditAdministration','collections','technology','risk','treasury','people'].map(id=>[id,roles()]));
     for(const role of DepartmentFunctions.ROLES){

@@ -1,0 +1,37 @@
+{
+  "checkpoint": 40,
+  "status": "Source strategy integration; final release remains incomplete",
+  "candidate": "output/BRANCH_WARS_company40_review.html",
+  "candidateSha256": "b42933f555e5fb6ef56221e27cba989f8cf3c6a2f33aa67aa9cdede69bb17e32",
+  "engineSha256": "c24cb322f5a8aeea4e0d06ccf676a558b73103e1952912b491ba2c74de41d42f",
+  "sourceInputs": 175,
+  "previousTurnClassification": "progress",
+  "passed": [
+    "company_strategy.test.js: 3 groups, funded ordinary-AI purchases and liquidity sale, pure public-information decisions, savings policy preserving existing work",
+    "company_shares.test.js: 5 groups including six funded campaign months and four-economy immutable checkpoint37 exact comparison",
+    "company_shares_network.test.js: GitHub, LAN and direct-link simulations; missing capability refusal, simultaneous fills, checkpoint restore, private orders and duplicate protection",
+    "architecture.test.js without ceiling changes",
+    "git diff --check"
+  ],
+  "ordinaryStartDiagnostic": {
+    "months": 8,
+    "injectedResources": false,
+    "result": "No validation failures; negative early retained earnings remain. Month6 executive-event costs were 150000 per bank, with no staged hire or competitive action. This is not a balance pass."
+  },
+  "longBalance": {
+    "session": 12437,
+    "command": "node tests/commercial_accounts_balance.test.js --expanded --checkpoint=40",
+    "target": "output/master-checkpoint40-commercial-expanded-120.json",
+    "status": "Running; last checked via live process handle, not assumed complete",
+    "injectedResources": false
+  },
+  "pending": [
+    "Long-campaign strategy and diversification results",
+    "Reviewed takeover, acquisition financing and integration",
+    "Remaining approved connected facilities, products, management and relationship content",
+    "Exact final Windows gate, browser acceptance, 480-month stress and performance matrix",
+    "Human two-computer playtest",
+    "Final manual, rendered PDF and exportable release package"
+  ],
+  "preserved": "Main BRANCH_WARS.html remains checked checkpoint37/save9.22; no pin changes, golden regeneration or GitHub publication"
+}

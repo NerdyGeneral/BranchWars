@@ -1,5 +1,7 @@
 # Branch Wars V3.1 — local candidate field-manual addendum
 
+> Historical, edition-bound addendum for the earlier V3.1 candidate. Statements below describe that build, not the current Expanded source. See [current artifact identities](release-status.md#which-version-am-i-looking-at). Retained at this path to preserve existing links.
+
 **Technically verified local candidate. Not published or human-accepted.**
 Use alongside the unchanged V3 manual. The wider National Empire and insurance
 underwriting expansions are not part of this update.

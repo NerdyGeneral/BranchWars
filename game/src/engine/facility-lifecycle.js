@@ -36,12 +36,13 @@ const FacilityLifecycle = (() => {
   function lifecycleEntry(cycle,inherited){return {conditionBp:10000,deferredWearBp:0,ageMonths:0,initialRampMonths:inherited?4:0,rampMonths:inherited?4:0,
     maintenance:'full',staffQuarters:Object.fromEntries(ROLES.map(r=>[r,0])),hubId:null,
     renovation:null,renovations:0,registeredCycle:cycle};}
-  function lifecycleInitialize(p,cycle,enabled){
+  function lifecycleInitialize(p,cycle,enabled,version=VERSION){
     if(enabled!==true)return copy(p);
+    if(![1,2].includes(version))throw Error('Unsupported facility workforce rules.');
     if(p.facilityLifecycle||!whole(cycle)||cycle<1)throw Error('Lifecycle initialization is an explicit new-campaign operation.');
     const next=copy(p),records={};
     for(const o of lifecycleOffices(next)){if(!CATALOG[o.model]||Object.hasOwn(records,o.id))throw Error('Invalid opening facility model or duplicate identity.');records[o.id]=lifecycleEntry(cycle,true);}
-    next.facilityLifecycle={version:VERSION,startedCycle:cycle,records,lastPreparedCycle:0,lastSettledCycle:0,lastAdvancedCycle:0,lastAdvanceCapacity:0,lastActivatedCycle:cycle,report:null,history:[]};
+    next.facilityLifecycle={version,startedCycle:cycle,records,lastPreparedCycle:0,lastSettledCycle:0,lastAdvancedCycle:0,lastAdvanceCapacity:0,lastActivatedCycle:cycle,report:null,history:[]};
     lifecycleValidate(next,cycle,true);return next;
   }
   function lifecycleRegister(p,id,cycle){
@@ -59,6 +60,23 @@ const FacilityLifecycle = (() => {
   function lifecycleDefaultPlan(p){return {offices:Object.fromEntries(lifecycleOffices(p).filter(active).map(o=>{const r=p.facilityLifecycle.records[o.id];return[o.id,{maintenance:r.maintenance,staffQuarters:copy(r.staffQuarters),hubId:r.hubId}];})),renovate:null,cancel:null};}
   function lifecycleValidateStaff(staff){if(!exact(staff,ROLES)||Object.values(staff).some(n=>!whole(n)||n>400))throw Error('Facility staff use bounded quarter-FTE allocations.');}
   function lifecycleAvailable(context){lifecycleValidateStaff(context.availableStaffQuarters);return context.availableStaffQuarters;}
+  // Group9's lifecycle v2 treats advisory work as a use of business bankers,
+  // not a second source of employees. Role assignments stay distinct in each
+  // office; the source pool is shared for proposals, validation and forecasts.
+  function lifecycleStaffPoolRole(p,role){return p.facilityLifecycle?.version===2&&role==='wealth'?'business':role;}
+  function lifecycleStaffTotals(p,offices){
+    const totals=Object.fromEntries(ROLES.map(r=>[r,0]));
+    for(const row of Object.values(offices)){
+      lifecycleValidateStaff(row.staffQuarters);
+      for(const role of ROLES)totals[lifecycleStaffPoolRole(p,role)]+=row.staffQuarters[role];
+    }
+    return totals;
+  }
+  function lifecyclePhysicalPool(p,pool){
+    lifecycleValidateStaff(pool);
+    if(p.facilityLifecycle?.version===2&&pool.wealth!==0)throw Error('Advisory work shares business bankers; a separate wealth pool is not permitted.');
+    return pool;
+  }
   function lifecycleNext(book){return book.lastSettledCycle?book.lastSettledCycle+1:book.startedCycle;}
   function lifecycleContext(context,kind){
     if(!context||!whole(context.cycle)||context.cycle<1)throw Error('Lifecycle context requires a positive integer month.');
@@ -85,13 +103,13 @@ const FacilityLifecycle = (() => {
     for(const id of ids){
       const order=plan.offices[id],o=lifecycleById(p,id);
       if(!exact(order,['maintenance','staffQuarters','hubId'])||!Object.hasOwn(modes,order.maintenance)||order.hubId!==null&&typeof order.hubId!=='string')throw Error('Invalid facility operating instructions.');
-      lifecycleValidateStaff(order.staffQuarters);for(const r of ROLES)totals[r]+=order.staffQuarters[r];
+      lifecycleValidateStaff(order.staffQuarters);for(const r of ROLES)totals[lifecycleStaffPoolRole(p,r)]+=order.staffQuarters[r];
       if(order.hubId!==null){const hub=lifecycleById(p,order.hubId);
         if(!hub||!active(hub)||hub.id===id||hub.model!=='regionalHub'||o.model==='regionalHub'||
           typeof context.nearby!=='function'||!context.nearby(hub.market,o.market))throw Error('Hub support requires an operating authored neighboring hub.');
       }
     }
-    const pool=lifecycleAvailable(context);for(const r of ROLES)if(totals[r]>pool[r])throw Error('Facility staffing exceeds the same shared department pool.');
+    const pool=lifecyclePhysicalPool(p,lifecycleAvailable(context));for(const r of ROLES)if(totals[r]>pool[r])throw Error('Facility staffing exceeds the same shared department pool.'+(p.facilityLifecycle.version===2&&r==='business'?' Commercial and wealth assignments use the same business bankers.':''));
     if(plan.cancel&&(!ids.includes(plan.cancel)||!p.facilityLifecycle.records[plan.cancel].renovation))throw Error('No active renovation to cancel.');
     if(plan.renovate){
       const o=lifecycleById(p,plan.renovate),r=p.facilityLifecycle.records[plan.renovate];
@@ -103,22 +121,23 @@ const FacilityLifecycle = (() => {
     return copy(plan);
   }
   function lifecycleAllocateStaff(p,pool){
-    lifecycleValidateStaff(pool);const remaining=copy(pool),result=lifecycleDefaultPlan(p);
+    lifecyclePhysicalPool(p,pool);const remaining=copy(pool),result=lifecycleDefaultPlan(p);
     // Deterministic bounded proposal only; does not alter policies or hire staff.
-    for(const o of lifecycleOffices(p).filter(active))for(const role of ROLES){const n=Math.min(remaining[role],CATALOG[o.model].staffQuarters[role]);result.offices[o.id].staffQuarters[role]=n;remaining[role]-=n;}
+    for(const o of lifecycleOffices(p).filter(active))for(const role of ROLES){const source=lifecycleStaffPoolRole(p,role),n=Math.min(remaining[source],(p.facilityExtensions?facilityExtensionStaffReference(p,o):CATALOG[o.model].staffQuarters)[role]);result.offices[o.id].staffQuarters[role]=n;remaining[source]-=n;}
     return {plan:result,unused:remaining};
   }
   function lifecycleMetrics(p,context){
     lifecycleContext(context,'metrics');
-    const pool=lifecycleAvailable(context),requested=Object.fromEntries(ROLES.map(role=>[role,lifecycleOffices(p).filter(active).reduce((n,o)=>n+p.facilityLifecycle.records[o.id].staffQuarters[role],0)]));
+    const pool=lifecyclePhysicalPool(p,lifecycleAvailable(context)),requested=lifecycleStaffTotals(p,Object.fromEntries(lifecycleOffices(p).filter(active).map(o=>[o.id,p.facilityLifecycle.records[o.id]])));
     const rows=[],serviceScale=1000000;
     for(const o of lifecycleOffices(p).filter(active)){
       const r=p.facilityLifecycle.records[o.id],def=CATALOG[o.model],t=lifecycleTerms(p,o,context);
       lifecycleValidateStaff(r.staffQuarters);
       if(!whole(r.conditionBp)||r.conditionBp>10000||!whole(r.rampMonths)||r.rampMonths>4||!Object.hasOwn(modes,r.maintenance))throw Error('Invalid facility operating inputs.');
-      const effectiveStaffQuarters=Object.fromEntries(ROLES.map(role=>[role,r.staffQuarters[role]*Math.min(1,requested[role]?pool[role]/requested[role]:1)]));
+      const effectiveStaffQuarters=Object.fromEntries(ROLES.map(role=>{const source=lifecycleStaffPoolRole(p,role);return [role,r.staffQuarters[role]*Math.min(1,requested[source]?pool[source]/requested[source]:1)];}));
+      const split=p.facilityExtensions?facilityExtensionStaffSplit(p,o,effectiveStaffQuarters):{base:effectiveStaffQuarters,suite:0};
       const soften=p?.accounting?.version===4,
-        ratio=role=>def.staffQuarters[role]?(n=>soften?.25+.75*n:n)(Math.min(1,effectiveStaffQuarters[role]/def.staffQuarters[role])):1;
+        ratio=role=>def.staffQuarters[role]?(n=>soften?.25+.75*n:n)(Math.min(1,split.base[role]/def.staffQuarters[role])):1;
       const ops=ratio('operations'),condition=r.conditionBp<=RULES.criticalCondition?0:.25+.75*r.conditionBp/10000;
       const ramp=Math.min(1,(r.rampMonths+1)/RULES.rampMonths),disruption=(o.conversion||r.renovation)?RULES.renovationDisruption:1;
       const factor=condition*ramp*disruption*ops;
@@ -127,6 +146,7 @@ const FacilityLifecycle = (() => {
       const lending=def.staffQuarters.lending?ratio('lending'):sales;
       const capacity={depositCapacity:t.capacity.depositCapacity*factor*sales,loanCapacity:t.capacity.loanCapacity*factor*lending,
         serviceCapacity:t.capacity.serviceCapacity*factor*sales,advisoryCapacity:licensed?t.capacity.advisoryCapacity*factor*ratio('wealth'):0};
+      if(split.suite>0)for(const key of Object.keys(capacity))capacity[key]+=COMMERCIAL_SUITE.capacity[key]*split.suite*condition*ramp*disruption;
       if(capacity.serviceCapacity>1000000)throw Error('Service throughput exceeds fixed-point range.');
       capacity.serviceCapacity=Math.floor(capacity.serviceCapacity*serviceScale)/serviceScale;
       if(o.model==='wealth'&&!licensed)for(const key of Object.keys(capacity))capacity[key]=0;
@@ -249,7 +269,7 @@ const FacilityLifecycle = (() => {
   }
   function lifecycleValidate(p,cycle,enabled){
     const b=p.facilityLifecycle;if(enabled!==true){if(b!==undefined)throw Error('Unversioned facility lifecycle.');return;}
-    if(!whole(cycle)||cycle<1||!exact(b,['version','startedCycle','records','lastPreparedCycle','lastSettledCycle','lastAdvancedCycle','lastAdvanceCapacity','lastActivatedCycle','report','history'])||b.version!==VERSION||
+    if(!whole(cycle)||cycle<1||!exact(b,['version','startedCycle','records','lastPreparedCycle','lastSettledCycle','lastAdvancedCycle','lastAdvanceCapacity','lastActivatedCycle','report','history'])||![1,2].includes(b.version)||
       !whole(b.startedCycle)||b.startedCycle<1||b.startedCycle>cycle||!whole(b.lastAdvanceCapacity)||b.lastAdvanceCapacity>RULES.maxOffices||
       !exact(b.records,lifecycleOffices(p).map(o=>o.id))||!Array.isArray(b.history)||b.history.length>48||
       ['lastPreparedCycle','lastSettledCycle','lastAdvancedCycle','lastActivatedCycle'].some(k=>!whole(b[k])||b[k]>cycle))throw Error('Invalid facility lifecycle book.');
@@ -287,5 +307,5 @@ const FacilityLifecycle = (() => {
     }
     if(b.report&&(b.report.cycle!==b.lastSettledCycle||JSON.stringify(b.report)!==JSON.stringify(b.history.at(-1))))throw Error('Maintenance report/history mismatch.');
   }
-  return Object.freeze({VERSION,ROLES,RULES,CATALOG,modes,initialize:lifecycleInitialize,register:lifecycleRegister,close:lifecycleClose,defaultPlan:lifecycleDefaultPlan,allocateStaff:lifecycleAllocateStaff,normalize:lifecycleNormalize,metrics:lifecycleMetrics,quote:lifecycleQuote,prepare:lifecyclePrepare,advance:lifecycleAdvance,settle:lifecycleSettle,activate:lifecycleActivate,attribute:lifecycleAttribute,validate:lifecycleValidate});
+  return Object.freeze({VERSION,ROLES,RULES,CATALOG,modes,staffPoolRole:lifecycleStaffPoolRole,staffTotals:lifecycleStaffTotals,initialize:lifecycleInitialize,register:lifecycleRegister,close:lifecycleClose,defaultPlan:lifecycleDefaultPlan,allocateStaff:lifecycleAllocateStaff,normalize:lifecycleNormalize,metrics:lifecycleMetrics,quote:lifecycleQuote,prepare:lifecyclePrepare,advance:lifecycleAdvance,settle:lifecycleSettle,activate:lifecycleActivate,attribute:lifecycleAttribute,validate:lifecycleValidate});
 })();

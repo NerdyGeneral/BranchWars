@@ -106,7 +106,7 @@ function validateRegionalGrowthState(g, settling = false) {
       !regionalGrowthShape(b.carry, ['arrivals', 'departures']) || !Object.values(b.carry).every(x => regionalGrowthValidGrid(g, x))) fail('books or carries.');
   if (!regionalGrowthShape(b.regimeCycles, Object.keys(REGIONAL_GROWTH_RATES)) || !Object.values(b.regimeCycles).every(regionalGrowthUint) ||
       Object.values(b.regimeCycles).reduce((a, n) => a + n, 0) !== b.lastCycle) fail('regime history.');
-  const openingOutsideAnchor = regionalGrowthOpeningOutside(g), rateTotals = { arrivals: 0, departures: 0 };
+  const openingOutsideAnchor = regionalGrowthOpeningOutside(g), rateTotals = { arrivals: 0, departures: 0 }, investmentOutflows=investmentSavingsOutflows(g);
   for (const [regime, n] of Object.entries(b.regimeCycles)) for (const direction of Object.keys(rateTotals)) rateTotals[direction] += n * REGIONAL_GROWTH_RATES[regime][direction];
   for (const k of regionalGrowthKeys(g)) {
     const m = g.marketEconomy?.markets?.[k], region = g.territories[k].region;
@@ -114,11 +114,11 @@ function validateRegionalGrowthState(g, settling = false) {
     for (const r of ['customers', 'deposits']) {
       const pools = r === 'customers' ? m.households : m.segmentDeposits;
       if (!regionalGrowthShape(pools, ['community', 'union', 'total']) || !Object.values(pools).every(x => regionalGrowthShape(x, Object.keys(CUSTOMER_SEGMENTS)) && Object.values(x).every(regionalGrowthUint))) fail('outside ownership.');
-      for (const owner of ['community', 'union', 'total']) if (Object.values(pools[owner]).reduce((a, n) => a + n, 0) !== m[owner][r]) fail('aggregate ownership.');
+      for (const owner of ['community', 'union', 'total']) if (Object.values(pools[owner]).reduce((a, n) => a + n, 0)+(owner==='total'&&r==='deposits'?nonHouseholdMarketDeposits(g,k):0) !== m[owner][r]) fail('aggregate ownership.');
       for (const s of Object.keys(CUSTOMER_SEGMENTS)) {
         const initial = b.openingOutside[k][r][s], owned = g.players.reduce((n, p) => n + (r === 'customers' ? p.householdBook.markets[k][s] : p.depositBook.cohorts.filter(c => c.market === k && c.segment === s).reduce((a, c) => a + c.principal, 0)), 0);
         if (initial !== openingOutsideAnchor[k][r][s] || initial > b.openingWorld[k][r][s]) fail('opening anchors.');
-        const total = b.openingWorld[k][r][s] + b.cumulativeIn[k][r][s] - b.cumulativeOut[k][r][s];
+        const total = b.openingWorld[k][r][s] + b.cumulativeIn[k][r][s] - b.cumulativeOut[k][r][s] - (r==='deposits'&&investmentOutflows?investmentOutflows[k][s]:0);
         if (!regionalGrowthUint(total) || total !== pools.total[s] || pools.community[s] + pools.union[s] + owned !== total) fail('conservation.');
         for (const direction of ['arrivals', 'departures']) {
           const numerator = initial * rateTotals[direction] * (direction === 'arrivals' && region === 'growthCoast' ? 12 : 10);
@@ -187,7 +187,7 @@ function settleRegionalGrowth(g) {
       next.cumulativeIn[k][r][s] += arrived; next.cumulativeOut[k][r][s] += departed;
       pools.total[s] += arrived - departed;
     }
-    markets[k].total[r] = Object.values(pools.total).reduce((a, n) => a + n, 0);
+    markets[k].total[r] = Object.values(pools.total).reduce((a, n) => a + n, 0)+(r==='deposits'?nonHouseholdMarketDeposits(g,k):0);
   }
   // Validate the complete candidate before touching either authoritative object.
   validateRegionalGrowthState({ ...g, regionalGrowth: next, marketEconomy: { ...g.marketEconomy, markets } }, true);

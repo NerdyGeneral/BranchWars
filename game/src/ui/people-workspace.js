@@ -51,7 +51,7 @@ function recruitmentOption(v,role,step){
  if(role==='generalist')next.hires=(next.hires||0)+step;
  else{if(!E.SPECIALIST_ROLES[role])throw Error('Unknown specialist role.');next.specialistHires={...E.emptySpecialistOrders(),...next.specialistHires};next.specialistHires[role]+=step;}
  E.normalizeWorkforcePlan(v.me,next);
- const before=E.planBudget(v.me,draft),after=E.planBudget(v.me,next);
+ const before=E.planBudget(v.me,draft,v),after=E.planBudget(v.me,next,v);
  return {next,before,after,extraSigning:after.recruiting-before.recruiting,reason:step>0&&after.remaining<0?'The combined plan exceeds cash or capital limits.':''};
 }
 function stagePeopleHire(role,step,token){
@@ -66,7 +66,7 @@ function stagePeopleHire(role,step,token){
 function renderPeopleRecruitment(v){
  const mount=$('#peopleRecruitment');if(!mount||!v.me.workforce)return;
  const token=workforceEditToken(v),locked=!workforceEditCurrent(token),cash=n=>'$'+Math.round(n).toLocaleString('en-US');
- let quote;try{quote=E.planBudget(v.me,draft);}catch(error){mount.innerHTML='<p class="bad">Recruitment quote unavailable: '+esc(error.message)+'</p>';return;}
+ let quote;try{quote=E.planBudget(v.me,draft,v);}catch(error){mount.innerHTML='<p class="bad">Recruitment quote unavailable: '+esc(error.message)+'</p>';return;}
  const cards=['generalist',...Object.keys(E.SPECIALIST_ROLES)].map(role=>{
   const definition=E.SPECIALIST_ROLES[role],name=definition?.name||'Generalist bankers',count=role==='generalist'?(draft.hires||0):(draft.specialistHires?.[role]||0);
   let plus,reason='';try{plus=recruitmentOption(v,role,1);reason=plus.reason;}catch(error){reason=error.message;}
@@ -93,8 +93,8 @@ function workforceFormPlan(v){
 }
 function previewWorkforceForm(v,token){
  if(!workforceEditCurrent(token))return false;
- try{const form=workforceForm(v),next=workforceFormPlan(v),before=E.workforceReview(v.me,draft,v.economy),after=E.workforceReview(v.me,next,v.economy);
-  const departments=v.me.departmentOffice?E.departmentBudgetQuote(v.me,next):null;
+ try{const form=workforceForm(v),next=workforceFormPlan(v),before=E.workforceReview(v.me,draft,v.economy,v),after=E.workforceReview(v.me,next,v.economy,v);
+  const departments=v.me.departmentOffice?E.departmentBudgetQuote(v.me,next,v):null;
   form.preview={token,next,before,after,departments};form.notice='Preview only. Review costs, effective limits and teaching time before staging.';return true;
  }catch(error){const form=workforceForm(v);form.preview=null;form.notice=error.message;return false;}
 }
@@ -103,7 +103,7 @@ function stageWorkforceForm(v){
  if(!preview||!workforceEditCurrent(preview.token)){form.preview=null;form.notice='Preview is stale or the plan is locked. Preview the current form again.';return false;}
  let next;
  try{next=workforceFormPlan(v);if(JSON.stringify(next)!==JSON.stringify(preview.next))throw Error('The form changed. Preview it again.');
-  E.workforceReview(v.me,next,v.economy);
+  E.workforceReview(v.me,next,v.economy,v);
  }catch(error){form.notice=error.message;form.preview=null;return false;}
  draft=next;workforceFormState=null;
  try{renderProjects(v);renderReady(v);}catch(error){toast('Training was staged, but the screen could not refresh: '+error.message);}

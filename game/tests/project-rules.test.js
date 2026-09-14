@@ -131,21 +131,28 @@ const c = {E, draft: copy(base), esc: String, money: String, toast() {}, capacit
   renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {}, renderMonthlyPlanReview() {},
   unassigned: () => 0, planReady: () => true,
   $: node, $$: selector => selector === '[data-project]' ? [{dataset: {project: 'branch'}, addEventListener: (_, f) => callbacks.push(f)}] : []};
+c.liveView=v;c.currentView=()=>c.liveView;
+Object.assign(c,{game:g,view:v,draftOwner:v.me.id,lastCycle:v.cycle,
+  featureConnectionGeneration:0,connectionAttempt:0,linkSession:null,gh:{active:false},lan:null});
 // Ready now shares the real planning review. Load that dependency rather than
 // replacing its project/budget validation with a passing stub.
-vm.runInNewContext(source.slice(source.indexOf('function monthlyPlanReview('), source.indexOf('function navigatePlanReview(')) +
-  source.slice(source.indexOf('function projectChoiceStatus('), source.indexOf('function renderDetails(')) +
+vm.runInNewContext(source.slice(source.indexOf('function opportunityToken('), source.indexOf('function opportunitySelection(')) +
+  source.slice(source.indexOf('function monthlyPlanReview('), source.indexOf('function navigatePlanReview(')) +
+  source.slice(source.indexOf('function projectEntryPriceNote('), source.indexOf('function renderDetails(')) +
   ';globalThis.choice=projectChoiceStatus;globalThis.toggle=toggleInitiative;globalThis.draw=renderProjects;globalThis.ready=renderReady;', c);
 c.draw(v); assert(sinks.get('#projectGrid').innerHTML.includes('data-project="branch"'));
 same(c.choice(v, 'branch').quote, E.projectPlanStatus(v.me, {...base, newProjects: ['branch'], newProject: 'branch'}).quote);
 c.draft.newProjects = ['branch']; c.draft.newProject = 'branch';
 const poorView = {...v, me: {...v.me, stats: {...v.me.stats, cash: 0}}};
+c.liveView=poorView;
 assert(c.choice(poorView, 'branch').eligible, 'An unaffordable selected project can be removed');
 c.toggle('branch', poorView); assert.equal(c.draft.newProjects.length, 0);
 assert(!c.choice(poorView, 'branch').eligible);
 c.toggle('branch', poorView); assert.equal(c.draft.newProjects.length, 0, 'Stale click cannot add an invalid project');
 const locked = {...v, me: {...v.me, submitted: true}};
+c.liveView=locked;
 c.toggle('branch', locked); assert.equal(c.draft.newProjects.length, 0);
+c.liveView=v;
 c.draft.newProjects = ['branch', 'branchAutomation']; c.draft.newProject = 'branch';
 c.ready(v); assert(node('#readyBtn').disabled); assert(node('#submitMsg').textContent.length > 0);
 console.log('Shared project rules passed: ' + compared + ' independent legacy comparisons, regional quotes, forged IDs, conflicts, timing, execution accounting, seat privacy and real UI handlers.');

@@ -23,7 +23,7 @@ const FacilityNetwork = (() => {
   function facilityDomainPublishMirrors(p){Object.assign(p,facilityDomainMirrors(p));}
   function facilityDomainInitialize(g,enabled){
     if(enabled!==true)return g;
-    const version=[5,6,7,8].includes(g.financialGroupVersion)?CATALOG_VERSION:VERSION,models=version===CATALOG_VERSION?ALL_MODELS:MODELS;
+    const version=[5,6,7,8,9,10].includes(g.financialGroupVersion)?CATALOG_VERSION:VERSION,models=version===CATALOG_VERSION?ALL_MODELS:MODELS;
     const staged=[];
     for(const p of g.players){
       if(p.facilityNetwork)throw Error('Facility identities are already initialized.');
@@ -84,6 +84,7 @@ const FacilityNetwork = (() => {
     if(!o||!active(o))return fail('That office is not operating.');
     if(o.model===request.model)return fail('The office already uses that model.');
     if(o.conversion)return fail('That office already has a conversion in progress.');
+    if(p.facilityExtensions?.offices[o.id]&&(p.facilityExtensions.offices[o.id].readyCycle===null||!COMMERCIAL_SUITE.hosts.includes(request.model)))return fail('Complete suite construction and choose a model with compatible suite space.');
     if(p.facilityNetwork.version===CATALOG_VERSION){
       const issue=typeof context.modelIssue==='function'?context.modelIssue(p,o.market,request.model):
         request.model==='wealth'?'A licensed operating wealth subsidiary is required.':'';

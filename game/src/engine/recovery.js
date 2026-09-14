@@ -26,7 +26,7 @@ function decisionQuote(p, event, choice) {
 
 // Owner-only, reversible recovery choices. These estimates use existing prices
 // and accounting; they neither change failure thresholds nor award catch-up cash.
-function bankRecoveryReview(p, plan, economy, event) {
+function bankRecoveryReview(p, plan, economy, event,g=null) {
   if (!p.productPrograms || !p.accounting) return { supported:false, stressed:false };
   const owner = JSON.parse(JSON.stringify(p));
   owner.doctrine = typeof owner.doctrine === 'object' ? owner.doctrine.key : owner.doctrine;
@@ -34,8 +34,8 @@ function bankRecoveryReview(p, plan, economy, event) {
   // Do not assume an expansion-call windfall or an unapproved board rescue.
   if (event && ['a','b'].includes(plan.decision)) applyDecision({ event }, owner, plan.decision);
   const decisionExpense = Math.max(0, p.stats.capital - owner.stats.capital);
-  const forecast = operatingPreview({ ...p, focus:plan.focus || p.focus }, plan, economy);
-  const budget = planBudget(p, plan), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
+  const forecast = operatingPreview({ ...p, focus:plan.focus || p.focus }, plan, economy,g);
+  const budget = planBudget(p, plan,g), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
   // Campaign/training expense is already inside operating profit. It must not
   // be subtracted for a second time alongside projects, hiring and research.
   const nonOperatingSpend = budget.total - operatingSpend;
@@ -87,13 +87,13 @@ function recoveryDecisionSafe(p, plan, decision, event) {
   if (event.key === 'storm') return u.technology+digital >= 2;
   return false;
 }
-function bankRecoveryOptions(p, input, economy, event) {
-  const current=bankRecoveryReview(p,input,economy,event), options=[];
+function bankRecoveryOptions(p, input, economy, event,g=null) {
+  const current=bankRecoveryReview(p,input,economy,event,g), options=[];
   if (!current.supported) return { current, options };
   const copy=x=>JSON.parse(JSON.stringify(x));
   const add=(key,label,description,changes,plan) => {
     if (JSON.stringify(plan)===JSON.stringify(input)) return null;
-    const review=bankRecoveryReview(p,plan,economy,event);
+    const review=bankRecoveryReview(p,plan,economy,event,g);
     if (review.netAfterSpend <= current.netAfterSpend+1000 || review.householdCoverage+1e-9 < Math.min(1.05,current.householdCoverage) ||
       review.serviceCoverage+1e-9 < Math.min(1,current.serviceCoverage)) return null;
     const option={key,label,description,changes,plan,review};options.push(option);return option;
@@ -124,7 +124,7 @@ function bankRecoveryOptions(p, input, economy, event) {
     if(input.allocation.service-moved<2)continue;
     const plan=copy(input);plan.allocation.service-=moved;plan.allocation.business+=moved;plan.householdPolicy.retention=retention;
     const coverage=householdServiceReview(p,plan.allocation,plan.householdPolicy).coverage;if(coverage<1.05)continue;
-    const review=bankRecoveryReview(p,plan,economy,event);
+    const review=bankRecoveryReview(p,plan,economy,event,g);
     if(review.netAfterSpend>current.netAfterSpend+1000 && review.serviceCoverage+1e-9>=Math.min(1,current.serviceCoverage) && (!staffing || review.netAfterSpend>staffing.review.netAfterSpend))
       staffing={key:'staffing',label:'Rebalance existing staff',description:'Redirect spare Retail capacity to Business while maintaining household and signed-service coverage.',
         changes:[moved+' Retail banker'+(moved===1?'':'s')+' → Business','Household retention time → '+retention+'%'],plan,review};
@@ -135,8 +135,8 @@ function bankRecoveryOptions(p, input, economy, event) {
 function planBankRecovery(g, index, input) {
   if(![1,2].includes(g.productProgramsVersion))return input;
   const p={...g.players[index],focus:input.focus,marketSnapshot:g.marketEconomy};
-  const current=bankRecoveryReview(p,input,g.economy,g.event);if(!current.stressed)return input;
-  const choices=bankRecoveryOptions(p,input,g.economy,g.event).options;
+  const current=bankRecoveryReview(p,input,g.economy,g.event,g);if(!current.stressed)return input;
+  const choices=bankRecoveryOptions(p,input,g.economy,g.event,g).options;
   choices.sort((a,b)=>b.review.netAfterSpend-a.review.netAfterSpend || a.key.localeCompare(b.key));
   return choices[0]?.plan || input;
 }

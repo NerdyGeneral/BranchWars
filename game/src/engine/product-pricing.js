@@ -48,18 +48,18 @@ function productPricingQuote(p,g,plan) {
  return {rows,interest:summary.interest,directCost:summary.interest+summary.service-summary.fees,
   coverage:householdServiceReview(staged).coverage,term:summary.rows.term};
 }
-function productPricingComparison(p,plan,economy) {
+function productPricingComparison(p,plan,economy,g=null) {
  if(p.productPrograms?.version!==2)throw Error('Product pricing requires a new pricing-enabled campaign.');
  const current=JSON.parse(JSON.stringify(plan));
  current.productProgramPolicy.pricingBp={...p.productPrograms.pricingBp};
  const quote=input=>productPricingQuote(p,{economy},input),before=quote(current),after=quote(plan);
  return {before,after,monthlyInterestChange:after.interest-before.interest,
-  schedule:{keep:productPricingSchedule(p,plan,economy,current.productProgramPolicy.pricingBp),staged:productPricingSchedule(p,plan,economy)},
-  keep:operatingPreview(p,current,economy),staged:operatingPreview(p,plan,economy)};
+  schedule:{keep:productPricingSchedule(p,plan,economy,current.productProgramPolicy.pricingBp,g),staged:productPricingSchedule(p,plan,economy,undefined,g)},
+  keep:operatingPreview(p,current,economy,g),staged:operatingPreview(p,plan,economy,g)};
 }
-function productPricingSchedule(p,plan,economy,pricingBp=plan.productProgramPolicy.pricingBp){
+function productPricingSchedule(p,plan,economy,pricingBp=plan.productProgramPolicy.pricingBp,g=null){
  const staged=JSON.parse(JSON.stringify(plan));staged.productProgramPolicy.pricingBp={...pricingBp};
- const fixed=prepareOperatingForecast(p,staged),schedule=[];
+ const fixed=prepareOperatingForecast(p,staged,g),schedule=[];
  // Existing contracts only: no new subscriptions, acquisition, loan production
  // or invented future regime. Known former-customer maturities still leave.
  fixed.termFunding.policy.offer='off';
@@ -94,14 +94,14 @@ function planProductPricing(g,index,input) {
   const quote=productPricingQuote(p,g,plan),key=Object.values(quote.rows).map(r=>r.rate).join(','),candidate={plan,quote};
   const prior=effective.get(key);
   if(prior){if(tie(candidate,prior)<0)effective.set(key,{...candidate,forecast:prior.forecast});}
-  else effective.set(key,{...candidate,forecast:operatingPreview(p,plan,g.economy)});
+  else effective.set(key,{...candidate,forecast:operatingPreview(p,plan,g.economy,g)});
  }
  const candidates=[...effective.values()];
  candidates.sort((a,b)=>b.forecast.profit-a.forecast.profit||tie(a,b));
  const baseline=candidates[0],last=p.productPrograms.review;
  const outflow=last?Object.values(last.flows.rivalTransfers).reduce((n,x)=>n+Math.max(0,-x),0):0;
  if(!outflow||p.stats.lastProfit<=0||p.stats.cash<500000||fundingPosition(p).excess>0||
-  bankRecoveryReview(p,baseline.plan,g.economy,g.event).stressed)return baseline.plan;
+  bankRecoveryReview(p,baseline.plan,g.economy,g.event,g).stressed)return baseline.plan;
  // Only already-published quotes are visible here, never rival cohorts or plans.
  const rival=g.players[1-index].productPrograms.quotes;
  if(!rival)return baseline.plan;
@@ -115,11 +115,11 @@ function planProductPricing(g,index,input) {
   }
   return principal?value/principal:0;
  };
- const baselineSchedule=productPricingSchedule(p,baseline.plan,g.economy);
+ const baselineSchedule=productPricingSchedule(p,baseline.plan,g.economy,undefined,g);
  const affordable=candidates.filter(c=>{
   if(c.forecast.profit<=0||c.quote.interest-baseline.quote.interest>p.stats.lastProfit*.1||
    (c.forecast.fundingLoss||0)>(baseline.forecast.fundingLoss||0)||c.forecast.capitalRatio<8)return false;
-  const schedule=c===baseline?baselineSchedule:productPricingSchedule(p,c.plan,g.economy);
+  const schedule=c===baseline?baselineSchedule:productPricingSchedule(p,c.plan,g.economy,undefined,g);
   return schedule.every((row,i)=>row.interest-baselineSchedule[i].interest<=p.stats.lastProfit*.1&&
    c.forecast.profit-Math.max(0,row.directCost-schedule[0].directCost)>0);
  });

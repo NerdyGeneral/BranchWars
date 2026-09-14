@@ -15,14 +15,14 @@ function facilityLifecycleModelTerms(p,office,descriptor=FacilityLifecycle.CATAL
  if(FACILITY_PROJECT_KEYS[office.model]){
   // RAW metrics: FacilityLifecycle owns the single conversion/renovation factor.
   const raw=facilityRawOfficeMetrics(p,office);
-  return {cost:facilityNewOfficeCost(p,office.market,office.model),upkeep:Math.round(raw.expense),
+  return {cost:facilityNewOfficeCost(p,office.market,office.model),upkeep:Math.round(raw.expense)+facilityExtensionUpkeep(p,office),
    capacity:{depositCapacity:raw.depositCapacity,loanCapacity:raw.loanCapacity,serviceCapacity:raw.serviceCapacity,
     advisoryCapacity:p.accounting?.version===4?(raw.advisoryCapacity||0):0}};
  }
  // New-model prices use the same branch strategy/operations/entry pricing path.
  // These catalog quotes do not grant construction permission or create offices.
  return {cost:projectCost({...p,focus:office.market},{kind:'branch',cost:descriptor.cost}),
-  upkeep:Math.round(descriptor.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000),
+  upkeep:Math.round(descriptor.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000)+facilityExtensionUpkeep(p,office),
   capacity:{depositCapacity:descriptor.capacity.depositCapacity*profile.deposits*(1+state.service*.15),
    loanCapacity:descriptor.capacity.loanCapacity*profile.loans,serviceCapacity:descriptor.capacity.serviceCapacity,
    advisoryCapacity:descriptor.capacity.advisoryCapacity}};
@@ -71,9 +71,10 @@ function facilityLifecycleStagedStaff(p,draft,base) {
  }
  applyRelationshipOfferPolicy(owner,plan.relationshipOfferPolicy);applyOnboardingPolicy(owner,plan.onboardingPolicy);
  applyServicePolicy(owner,plan.servicePolicy);applyCollectionsPolicy(owner,plan.collectionsPolicy);
+ if(owner.commercialAccounts){normalizeCommercialAccountPlan(owner,plan);owner.commercialAccounts.policy=plan.commercialAccountPolicy;}
  const productive=owner.departmentOffice?departmentProductiveAllocation(owner):owner.allocation;
  // Physical FTE only. Specialist productivity is not another employee.
- const staff={service:householdSalesStaff(owner,productive.service),business:departmentFunctionResidual(owner,'business',commercialSalesStaff(owner)),
+ const staff={service:householdSalesStaff(owner,productive.service),business:departmentFunctionResidual(owner,'business',commercialSalesStaff(owner))-(departmentFunctionExecution(owner)?commercialAccountWork(owner)/4:0),
   lending:creditSalesStaff(owner,productive.lending),operations:departmentFunctionResidual(owner,'operations',productive.operations),wealth:0};
  if(!owner.serviceDesk)staff.business=Math.max(0,staff.business-(owner.serviceContracts?.length||0));
  // There is currently no licensed wealth/brokerage entity. An agency, a research
@@ -82,7 +83,8 @@ function facilityLifecycleStagedStaff(p,draft,base) {
  if(Object.values(availableStaffQuarters).some(n=>!Number.isSafeInteger(n)||n<0||n>400))throw Error('Facility staff pool exceeds supported bounds.');
  return {owner,availableStaffQuarters,training:prepared?.training};
 }
-function facilityLifecycleProtectedBudget(p,draft,budget=planBudget(p,draft)) {
+function facilityLifecycleProtectedBudget(p,draft,budget=null,g=null) {
+ budget=budget||planBudget(p,draft,g);
  const reserve=Math.max(draft.workforcePolicy?.reserve??p.workforce?.policy.reserve??0,
   draft.departmentPolicy?.reserve??p.departmentOffice?.policy.reserve??0);
  const mandatory=budget.mandatoryObligations||0;
@@ -91,7 +93,7 @@ function facilityLifecycleProtectedBudget(p,draft,budget=planBudget(p,draft)) {
   Math.max(0,(budget.capitalBudget??p.stats.cash)-mandatory));
  return {reserve,mandatory,optional,limit,remaining:limit-optional};
 }
-function facilityLifecyclePlanningContext(v,p,draft,budget=planBudget(p,draft)) {
+function facilityLifecyclePlanningContext(v,p,draft,budget=planBudget(p,draft,v)) {
  if(!p.facilityLifecycle)throw Error('Facility lifecycle requires a new supported campaign.');
  if(!Number.isSafeInteger(budget.total)||budget.total<0||!Number.isFinite(budget.freeCapacity)||
   !Number.isSafeInteger(budget.remaining))throw Error('Invalid shared planning budget.');
@@ -107,15 +109,16 @@ function facilityLifecyclePlanningContext(v,p,draft,budget=planBudget(p,draft)) 
  // Existing wages/payables may remain unfunded; they must not prevent a
  // no-spend turn. Only optional commitments consume the remaining protected
  // envelope, while still reserving every existing obligation ahead of them.
- const {mandatory,limit}=facilityLifecycleProtectedBudget(p,draft,budget);
+ const {mandatory,limit}=facilityLifecycleProtectedBudget(p,draft,budget,v);
  const optionalOther=Math.max(0,otherSpend-mandatory);
  const freeCash=Math.max(0,Math.floor(limit-optionalOther));
  const policy=draft.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p);
  const existingCapacity=commitment.capacity-(policy.renovate?FacilityLifecycle.RULES.renovationCapacity:0);
  const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
  const occupiedMarkets=[...p.projects.filter(x=>local(x.key)).map(x=>x.target),
-  ...planInitiatives(draft).filter(local).map(()=>draft.focus||p.focus)];
+  ...planInitiatives(draft).filter(local).map(key=>projectPlanTarget(draft,key)||p.focus)];
  if(draft.facilityPolicy?.convert){const target=p.facilityNetwork.offices.find(o=>o.id===draft.facilityPolicy.convert.officeId);if(target)occupiedMarkets.push(target.market);}
+ if(p.facilityExtensions)occupiedMarkets.push(...facilityExtensionBusyMarkets(p,draft));
  let restriction='';
  if(tierRank(p)>=2||p.capitalRestriction>0||draft.capitalAction)restriction='Restore capital standing before committing to a renovation.';
  if(policy.renovate){const office=p.facilityNetwork.offices.find(o=>o.id===policy.renovate),territory=office&&v.territories?.[office.market];
@@ -123,7 +126,7 @@ function facilityLifecyclePlanningContext(v,p,draft,budget=planBudget(p,draft)) 
  return {owner,commitment,remaining:limit-optionalOther-commitment.total,
   freeCapacity:budget.freeCapacity+(capacityIncluded?commitment.capacity:0)-commitment.capacity,context:{cycle:v.cycle,freeCash,
   freeExecution:Math.max(0,budget.freeCapacity+(capacityIncluded?commitment.capacity:0)-existingCapacity),
-  availableStaffQuarters:staged.availableStaffQuarters,wealthLicensed:()=>false,
+  availableStaffQuarters:staged.availableStaffQuarters,wealthLicensed:owner.facilityLifecycle?.version===2?facilityWealthLicensed:()=>false,
   nearby:(from,to)=>facilityLifecycleNearby(v,from,to),modelTerms:facilityLifecycleModelTerms,occupiedMarkets,restriction}};
 }
 function lifecycleInstructionQuote(v,p,draft={}) {
@@ -132,7 +135,7 @@ function lifecycleInstructionQuote(v,p,draft={}) {
  if(!p.facilityLifecycle)return empty;
  try{
   const plan={...draft,facilityLifecyclePolicy:draft.facilityLifecyclePolicy===undefined?defaultFacilityLifecyclePlan(p):draft.facilityLifecyclePolicy};
-  const budget=planBudget(p,plan),staged=facilityLifecyclePlanningContext(v,p,plan,budget),{owner,context}=staged;
+  const budget=planBudget(p,plan,v),staged=facilityLifecyclePlanningContext(v,p,plan,budget),{owner,context}=staged;
   const currentMetrics=FacilityLifecycle.metrics(owner,context),nearbyHubIds={};
   const active=p.facilityNetwork.offices.filter(o=>o.closedCycle===null);
   for(const office of active)nearbyHubIds[office.id]=active.filter(h=>h.id!==office.id&&h.model==='regionalHub'&&office.model!=='regionalHub'&&
@@ -160,7 +163,7 @@ function lifecycleInstructionQuote(v,p,draft={}) {
  }catch(error){return {...empty,status:{eligible:false,reason:error.message}};}
 }
 function facilityLifecycleStaffProposal(v,p,draft={}) {
- if([6,7,8].includes(v.financialGroupVersion)){
+ if([6,7,8,9,10].includes(v.financialGroupVersion)){
   const staged=facilityLifecyclePlanningContext(v,p,draft),current=draft.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p),proposal=facilityStaffAllocation(staged.owner,current,staged.context);
   return {policy:proposal.policy,availableStaffQuarters:staged.context.availableStaffQuarters,unused:proposal.unused,
    notes:['Productive quarter-FTE bundles only; existing maintenance, hub links and work orders are retained. No bankers are hired.']};

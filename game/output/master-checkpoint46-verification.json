@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-13",
+  "checkpoint": 46,
+  "status": "partial implementation; campaign enablement unfinished",
+  "artifact": "output/BRANCH_WARS_premises46_delivery.html",
+  "assemblyInputs": 184,
+  "htmlSha256": "5458546589c36e64c9bc89f314d7a15a9f32d2138625a5b6aeea6c1e9f73c42e",
+  "engineSha256": "44393194fbd0004a828ac4dd0a6da32640c34d55a57e8104c7ca4d3bdb49f93d",
+  "sourceMatchesArtifact": true,
+  "scriptSyntax": "passed",
+  "documentation": {"exitCode": 0, "files": 58, "localLinks": 467},
+  "whitespaceCheck": "passed",
+  "creationVersion": "9.26",
+  "campaignPremisesEnabled": false,
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "commands": [
+    {"command": "node tests/shared_premises.test.js", "exitCode": 0, "groups": 8},
+    {"command": "node tests/shared_premises_delivery.test.js", "exitCode": 0, "groups": 8, "consecutiveLocalServiceMonths": 24},
+    {"command": "node tests/investment_clients.test.js", "exitCode": 0, "groups": 10, "institutionClientMonths": 83},
+    {"command": "node tests/investment_trading.test.js", "exitCode": 0, "groups": 4},
+    {"command": "node tests/shared_premises_boundary.test.js", "exitCode": 0, "exactScenarios": ["balanced", "rate", "regulatory", "growth"]}
+  ],
+  "observedTestRepair": "Combined product fixture omitted the required income-settlement step; corrected fixture sequencing, retained validators and legacy expectations.",
+  "remaining": ["insurance dispatch", "ordered occupancy and subsidiary accounting/wind-down coordinator", "versioned campaign and transport integration", "office controls", "full source/package gate", "120/480 integrated strategy matrix", "browser and human acceptance", "final manual and local package"],
+  "publication": false,
+  "balanceAcceptance": false,
+  "fullGate": false
+}

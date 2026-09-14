@@ -20,7 +20,7 @@ adjustDepositReport=function(p,g,r){
  r.otherIncome+=c.fees;r.expense+=c.cost;r.profit+=c.fees-c.cost;
 };
 const contractCatalog=projectCatalog;
-projectCatalog=function(p){const out=contractCatalog(p);if(!p.serviceContracts)delete out.contractAdvertising;return out};
+projectCatalog=function(p,g=null){const out=contractCatalog(p,g);if(!p.serviceContracts)delete out.contractAdvertising;return out};
 
 
 

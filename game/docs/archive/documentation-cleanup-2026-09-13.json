@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-13",
+  "scope": "Documentation and indexing only. No game, test, tool, frozen release, reference-build or remote changes.",
+  "preservation": "Complete pre-cleanup narratives retained; only an archival banner, relative Markdown link rebasing and LF line endings differ. Existing hashes/results and all 48 acceptance-contract rows are preserved.",
+  "documents": [
+    {
+      "source": "docs/v3-usability.md",
+      "originalSha256": "7648a4a8bccd6519a647929d0232830f9c2716678968265b60328db3b007575c",
+      "archive": "docs/archive/implementation-history-2026-09-13.md",
+      "archiveSha256": "c637e562045e18e354c3a763d7ab5ad52e6d19ecf5e22f9ea056f766477bd69c"
+    },
+    {
+      "source": "docs/release-status.md",
+      "originalSha256": "b8ba9463ee2a240810c0edf3ea5da6404bd24e4cfa2fb3ba57b57c0a72fc2c06",
+      "archive": "docs/archive/release-history-2026-09-13.md",
+      "archiveSha256": "1ff7eb9424a331a813ae4046c1ea5152c2daa99c5426c9d831c48982d08e1e3b"
+    },
+    {
+      "source": "docs/roadmap.md",
+      "originalSha256": "e374a0b81e06fd9ad6b2fcad0394822a2773c84281611ec0ed49067a88fd5a93",
+      "archive": "docs/archive/roadmap-history-2026-09-13.md",
+      "archiveSha256": "e3f5c46b68ab0cc9764cfc25056b92009233477bdff969d2b7b00004d231d52e"
+    },
+    {
+      "source": "docs/ui-rework.md",
+      "originalSha256": "6d2f14f4efa4624f669cc5808480c297b7914a57dc0b98118d708fc48770d69a",
+      "archive": "docs/archive/superseded-ui-rework-2026-09-13.md",
+      "archiveSha256": "646308f5ab270a1dec3b7a2c9a768dc14e6ae1926c419fc2c876757fb8482103"
+    },
+    {
+      "source": "docs/architecture.md",
+      "originalSha256": "5a488ed00f0f48114dc92a775851a2ee36db09d28308d26cd394411590714b20",
+      "archive": "docs/archive/architecture-history-2026-09-13.md",
+      "archiveSha256": "a57587648dea76a28d2208d3225ac8cd5d574169ff6d54a323c7537a87d249fb"
+    }
+  ],
+  "protectedFilesVerifiedUnchanged": 538,
+  "protectedManifestSha256": "cf3d6e3b8b00bef1b28e4f2c1dcccffda6f454a4bbec0c38cf4a79a0b936449d",
+  "protectedScopes": [
+    "src",
+    "tests",
+    "tools",
+    "reports/reference-builds",
+    "../releases",
+    "../V2 release",
+    "normal game HTML, LAN server and launchers"
+  ],
+  "referenceFiles": 27,
+  "deletedFiles": 0,
+  "publication": false,
+  "verification": {
+    "documentationPathCheck": {
+      "files": 57,
+      "localLinks": 461,
+      "passed": true
+    },
+    "markdownSectionLinks": {
+      "checked": 94,
+      "missing": 0
+    },
+    "preservedAcceptanceRows": 48,
+    "archiveBodiesVerified": 5,
+    "sourceMatchesCheckpoint45Artifact": true,
+    "liveDocumentBytes": {
+      "v3-usability.md": 14067,
+      "release-status.md": 5440,
+      "roadmap.md": 8509,
+      "architecture.md": 6890,
+      "ui-rework.md": 748
+    }
+  }
+}

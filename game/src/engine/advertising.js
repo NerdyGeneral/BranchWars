@@ -183,7 +183,7 @@ function planAdvertising(g, index, input) {
   }
   if (best) {
     plan.advertisingPolicy = best;
-    if (planBudget(p, plan).remaining < 300000) plan.advertisingPolicy.budget = 0;
+    if (planBudget(p, plan,g).remaining < 300000) plan.advertisingPolicy.budget = 0;
     else plan.householdPolicy = JSON.parse(JSON.stringify(shadow.householdBook.policy));
   }
   return plan;

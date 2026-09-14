@@ -72,8 +72,18 @@ function createGame(o){
  initializeFacilityNetwork(g);
  initializeDepartments(g);
  initializeFacilityLifecycle(g);
- if([6,7,8].includes(g.financialGroupVersion))initializeDepartmentFunctions(g);
+ if([6,7,8,9,10].includes(g.financialGroupVersion))initializeDepartmentFunctions(g);
  initializeCorporateCirculation(g);
+ initializeCommercialAccounts(g,o);
+ initializeFacilityExtensions(g,o);
+ initializeInvestmentServices(g,o);
+ initializeCreditProducts(g,o);
+ if(o.investmentStrategyVersion===1)g.investmentStrategyVersion=1;
+ initializeCompanyShares(g,o);
+ initializeCompanyControl(g,o);
+ initializeCompanyConsolidation(g,o);
+ if(o.companyControlStrategyVersion===1)g.companyControlStrategyVersion=1;
+ initializeSharedPremises(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;

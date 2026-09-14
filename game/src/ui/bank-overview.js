@@ -4,10 +4,10 @@ const overviewDollars=n=>Number.isFinite(n)?(n<0?'−':'')+'$'+Math.round(Math.a
 function bankFinancialOverview(v,review){
  const p=v.me,q=review.quote;
  let protection=null,quoteError=null,position=null,bookError=null;
- try{if(q&&p.facilityLifecycle)protection=E.facilityLifecycleProtectedBudget(p,draft,q);}catch(error){quoteError=error.message;}
+ try{if(q&&p.facilityLifecycle)protection=E.facilityLifecycleProtectedBudget(p,draft,q,v);}catch(error){quoteError=error.message;}
  try{if(p.accounting){position=E.AccountingPrototype.check(p.accounting);if(position.residual!==0)bookError='Recorded bank accounts do not reconcile.';}}catch(error){bookError=error.message;}
  const room=quoteError?null:protection?protection.remaining:q?(q.discretionaryRemaining??q.remaining):null;
- const bridge=[6,7,8].includes(v.financialGroupVersion)&&typeof bankEarningsBridgeView!=='undefined'?bankEarningsBridgeView.review(v):null;
+ const bridge=[6,7,8,9,10].includes(v.financialGroupVersion)&&typeof bankEarningsBridgeView!=='undefined'?bankEarningsBridgeView.review(v):null;
  return {cash:p.stats.cash,room,quoteError,quote:q,protection,position,bookError,
   equity:bookError?null:position?.equity??p.stats.capital,
   earnings:p.accounting?p.accounting.retainedEarnings:p.stats.earnings,

@@ -12,7 +12,7 @@ test('overview does not create disabled systems or mutate supported campaigns',(
 });
 test('headcount completion does not conceal uncovered work or fabricate coverage',()=>{
  const h=fresh();assert.equal(h.run('peopleOverviewModel(currentView()).unallocated'),0);assert(h.run('peopleOverviewModel(currentView()).tasks.some(row=>row.shortfall>0)'));
- assert.equal(h.run('JSON.stringify(peopleOverviewModel(currentView()).tasks)'),h.run('JSON.stringify(E.departmentFunctionsQuote(currentView(),currentView().me,draft).delivery.rows.map(row=>({id:row.id,workload:row.workload,served:row.planned.served,shortfall:row.planned.shortfall})))'));
+ assert.equal(h.run('JSON.stringify(peopleOverviewModel(currentView()).tasks)'),h.run('JSON.stringify((()=>{const q=E.departmentFunctionsQuote(currentView(),currentView().me,draft);return q.delivery.rows.map(row=>({id:row.id,department:q.dispatch.rows.find(task=>task.id===row.id)?.department,workload:row.workload,served:row.planned.served,shortfall:row.planned.shortfall}))})())'));
  h.run('renderPeopleOverview(currentView());');const html=h.elements.get('#peopleOverview').innerHTML;assert.match(html,/does not guarantee work coverage/);assert.match(html,/zero coverage pauses ordinary origination/);assert.match(html,/not idle staff/);
 });
 test('quote normalization never repairs a partial draft in place',()=>{

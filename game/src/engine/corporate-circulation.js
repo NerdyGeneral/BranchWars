@@ -17,7 +17,7 @@ const CorporateCirculation=(()=>{
  }
  function step(world,sources){
   CompanyFinance.validate(world);
-  if(world.version!==4||world.month!==world.circulation.month+1)throw Error('Corporate circulation requires one unsettled completed month.');
+  if(![4,5,6,7].includes(world.version)||world.month!==world.circulation.month+1)throw Error('Corporate circulation requires one unsettled completed month.');
   if(!Array.isArray(sources)||sources.length!==IDS.length)throw Error('Five funded outside counterparties are required.');
   for(const [i,book]of sources.entries()){
    GroupAccounting.validate(book);if(book.entityId!==IDS[i])throw Error('Unexpected circulation payer.');
@@ -46,13 +46,13 @@ const CorporateCirculation=(()=>{
  return Object.freeze({IDS,opening,step});
 })();
 function initializeCorporateCirculation(g){
- if(![7,8].includes(g.financialGroupVersion))return;
+ if(![7,8,9,10].includes(g.financialGroupVersion))return;
  g.companyEconomy=CorporateCirculation.opening(g.companyEconomy);
  g.agencyEconomy.version=2;g.agencyEconomy.circulated={carrier:0,supplier:0};
  for(const key of ['facilityEconomy','departmentEconomy','departmentFunctionEconomy']){g[key].version=2;g[key].circulated=0;}
 }
 function validateCorporateCirculation(g){
- if(![7,8].includes(g.financialGroupVersion))return;
+ if(![7,8,9,10].includes(g.financialGroupVersion))return;
  const e=g.agencyEconomy,others=['facilityEconomy','departmentEconomy','departmentFunctionEconomy'].map(k=>g[k]);
  const counters=[e?.circulated?.carrier,e?.circulated?.supplier,...others.map(x=>x?.circulated)];
  if(e?.version!==2||others.some(x=>x?.version!==2)||counters.some(n=>!Number.isSafeInteger(n)||n<0)||
@@ -61,7 +61,7 @@ function validateCorporateCirculation(g){
   throw Error('Corporate receipts do not match funded counterparty spending.');
 }
 function settleCorporateCirculation(g){
- if(![7,8].includes(g.financialGroupVersion))return [];
+ if(![7,8,9,10].includes(g.financialGroupVersion))return [];
  const result=CorporateCirculation.step(g.companyEconomy,[g.agencyEconomy.carrier,g.agencyEconomy.supplier,
   g.facilityEconomy.supplier,g.departmentEconomy.supplier,g.departmentFunctionEconomy.supplier]);
  const next={...g,companyEconomy:result.world,agencyEconomy:{...g.agencyEconomy,carrier:result.sources[0],supplier:result.sources[1],

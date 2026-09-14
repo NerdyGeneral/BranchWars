@@ -19,7 +19,7 @@ function stageBankRecovery(v, key) {
   const next = JSON.parse(JSON.stringify(option.plan));
   try {
     E.normalizeProductProgramPlan(v.me, next);
-    const status = E.projectPlanStatus(v.me, next);
+    const status = E.projectPlanStatus(v.me, next,v);
     if (!status.eligible) throw Error(status.reason);
     const before = JSON.parse(JSON.stringify(draft));
     draft = next;
@@ -66,7 +66,7 @@ function renderBankRecovery(v) {
   $('#compareRecovery').addEventListener('click',()=>{
     if (v.me.submitted || !draft.decision) return;
     try {
-      const result = E.bankRecoveryOptions(v.me, draft, v.economy, v.event);
+      const result = E.bankRecoveryOptions(v.me, draft, v.economy, v.event,v);
       recoveryComparison = { key:recoveryDraftKey(v), ...result };
       renderOperatingPreview(v);
     } catch(e) { toast(e.message); }

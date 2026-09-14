@@ -4,6 +4,7 @@ function runLegacyOperations(g, p, preview = false) {
     : withRandom(g, 'state', () => calculateLegacyOperations(g, p, preview));
 }
 function operate(g, p, preview = false) {
+  if(preview&&p.companyCredit)prepareCompanyCreditOperatingForecast(g,p);
   const ownsOnboardingQuota = !!p.onboarding && !p.marketQuota;
   // v8.13 forecasts share a private outside book through returns and onboarding.
   if (preview && p.onboarding) g = { ...g, marketEconomy: JSON.parse(JSON.stringify(g.marketEconomy || marketContext?.marketEconomy || p.marketSnapshot)) };
@@ -75,6 +76,7 @@ function operate(g, p, preview = false) {
             '.';
       }
     } finally {
+      if(preview&&p.companyCredit){delete p._companyCreditPayment;delete p._corporateCreditPreview;delete p._companyCreditReportApplied;}
       cleanupAdvertisingCycle(p);
       if(p.relationshipOffers)delete p._relationshipOfferBudget;
       if(p.onboarding)delete p._onboardingBudget;

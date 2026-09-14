@@ -48,6 +48,23 @@ test('All historical Group1–5 views retain field absence, not a silent upgrade
 });
 const {harness}=require('./github_resilience.test'),h=harness();
 h.run('game='+JSON.stringify(game)+';seat=0;gh.active=false;p2pRole="";newDraft(currentView());');
+
+test('Historical investment projection stays fixed while complete owner history repairs the current UI',()=>{
+ const legacy=E.createGame({...E.previewFeatureSelection({}, {field:'facilityExtensionsVersion',value:1}).options,investmentServicesVersion:1,investmentAssetsVersion:1,investmentCashVersion:1,mode:'hotseat',seed:'investment-standing-cash',created:1});
+ const initial=legacy.players[0].accounting.retainedEarnings,orders=legacy.players.map((p,i)=>E.chooseBot(legacy,i));
+ E.submit(legacy,0,orders[0]);E.submit(legacy,1,orders[1]);const v=E.publicState(legacy,0);
+ assert.equal(v.earningsBridge.available,false,'Historical public format remains unchanged');
+ // Use actual owner ledger when the public byte budget prunes it. The UI must
+ // refuse the incomplete version rather than inventing missing opening events.
+ const complete=copy(v);complete.causalEvents=legacy.eventLedger.filter(e=>e.target===v.me.id&&(e.deltas||e.category==='resolution.start'));
+ complete.operatingEvents=legacy.eventLedger.filter(e=>e.target===v.me.id&&e.category==='operations.result');
+ complete.causalView={firstIncludedId:complete.causalEvents[0]?.id||null};
+ const before=JSON.stringify(legacy);assert.equal(B.review(complete).opening,initial);
+ h.c.repairedView=complete;assert(h.run('bankEarningsBridgeView.review(repairedView).available'));
+ const damaged=copy(complete);damaged.causalEvents=damaged.causalEvents.filter(e=>e.category!=='resolution.start');h.c.repairedView=damaged;assert.equal(h.run('bankEarningsBridgeView.review(repairedView).available'),false);
+ const foreign=copy(complete);foreign.causalEvents.find(e=>e.category==='group.investment').source='unknownInvestmentSource';assert.equal(B.review(foreign).available,false);
+ assert.equal(JSON.stringify(legacy),before);
+});
 test('Actual Overview uses bounded summary after detailed owner history is trimmed',()=>{
  h.run('const bridgeView=currentView();bridgeView.causalEvents=[];bridgeView.operatingEvents=[];renderActualBankOperatingResult(bridgeView);');
  const rendered=h.elements.get('#operatingReport').innerHTML;

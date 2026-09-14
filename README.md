@@ -2,28 +2,29 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
-**V3 regional banking / Financial Group preview.** This is a playable snapshot,
-not the completed expansion blueprint. Real two-computer multiplayer acceptance
-is still pending; automated checks are not a zero-bug or balance guarantee.
+## Play the frozen V3 distribution
 
-Download [the V3 player ZIP](releases/branch-wars-v3.zip), extract it, and keep its
-six files together. No development tools are needed. Read the
-[45-page V3 field manual](releases/branch-wars-v3-manual.pdf) and
-[V3 changes, debug and balance report](game/docs/v3-release-report.md).
-The unpacked player copy is in [releases/v3](releases/v3/README.txt).
-The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and
-[original V2 package](V2%20release/README.md) remain unchanged rollback artifacts.
+Download [the V3 player ZIP](releases/branch-wars-v3.zip), extract it, and keep its six files together. Read its matching [45-page field manual](releases/branch-wars-v3-manual.pdf) and [frozen changes/debug/balance report](game/docs/v3-release-report.md). The unpacked copy is in [releases/v3](releases/v3/README.txt). No development tools are needed.
 
-Run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) to play, or [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) to host a local-network game.
+This is a preserved regional banking / Financial Group preview snapshot—not completion of the Expanded blueprint and **not the latest working source**. Real two-computer acceptance remains separate from automated checks.
 
-- [Player guide](game/docs/player-guide.md)
-- [Current release status](game/docs/release-status.md)
-- [Blueprint roadmap](game/docs/roadmap.md)
-- [Game reference](game/docs/game-reference.md)
-- [Architecture and maintenance](game/docs/architecture.md)
-- [Changelog](game/docs/changelog.md)
-- [Documentation index](game/docs/README.md)
+## Working copy versus release
 
-The runnable package lives in `game/`. Its HTML, server and launchers retain their established names. Existing bookmarks or shortcuts into the old versioned folder must be updated; use the root launchers above. Export saves before switching URLs or replacing a download: browser storage belongs to its original origin. Both friends should use the same build.
+- Root [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) and [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) launch the local `game/` copy, **not the frozen download**.
+- The local playable HTML is older than the current source. New Expanded campaigns in source include shared-premises settlement, contextual office controls and qualified-workforce AI. Long-run balance, broader release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
+- Building source replaces the local playable HTML; it does not update the frozen ZIP or its manual. See [current artifact identities and known issues](game/docs/release-status.md) before rebuilding or sharing.
+- The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and [original V2 package](V2%20release/README.md) remain preserved rollback artifacts.
 
-Development: run `node game/tools/check.js` for the fast gate, or `node game/tools/check.js --full` for complete regression and balance checks. No Node installation or build step is required to play.
+Export saves before changing builds or URLs. Browser storage belongs to its original origin; supported saves retain their rules. Both friends should use the same build. Automated checks are not a zero-bug or balance guarantee.
+
+## Development starting points
+
+1. [Approved master objective](game/docs/expanded-edition-goal.md)
+2. [Current implementation checklist](game/docs/v3-usability.md#master-requirement-inventory-and-finish-gates)
+3. [Release status and gates](game/docs/release-status.md)
+4. [Roadmap and scope](game/docs/roadmap.md)
+5. [Documentation index](game/docs/README.md)
+
+[Player guide](game/docs/player-guide.md) · [Game reference](game/docs/game-reference.md) · [Architecture](game/docs/architecture.md) · [Changelog](game/docs/changelog.md)
+
+Development: `node game/tools/check.js` runs the fast gate; `node game/tools/check.js --full` runs the full required gate. Passing one build's tests does not certify newer source. Remote publication and release changes require separate approval.

@@ -1,0 +1,180 @@
+{
+  "engineSha256": "047cbbd7c0f168a159b2f96d253eec859927e15fd6312a5a9cfbba20e3442600",
+  "portableSha256": "66be280142a5235a09e6c60cd04970caf3e4a5c71c8cb07924e03e43b50e8d84",
+  "scope": "Ordinary current AI for both seats; no injected resources. Early failures are retained. Not human or two-computer acceptance.",
+  "baseline": false,
+  "campaigns": [
+    {
+      "scenario": "balanced",
+      "requestedMonths": 24,
+      "completed": 24,
+      "firstAccount": [
+        2,
+        null
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 5176609,
+              "equity": 1077964,
+              "deposits": 22844007,
+              "loans": 4341362,
+              "earnings": -822036,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 146884
+            },
+            {
+              "cash": 6579397,
+              "equity": 585362,
+              "deposits": 22738608,
+              "loans": 2844573,
+              "earnings": -1314638,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 127603
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 174981,
+      "msPerMonth": 7291
+    },
+    {
+      "scenario": "rate",
+      "requestedMonths": 24,
+      "completed": 24,
+      "firstAccount": [
+        2,
+        2
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 12487364,
+              "equity": 855006,
+              "deposits": 28514080,
+              "loans": 2943322,
+              "earnings": -1294994,
+              "businessDeposits": 0,
+              "accounts": 1,
+              "work": 0,
+              "chargeoffs": 152821
+            },
+            {
+              "cash": 1828210,
+              "equity": 903059,
+              "deposits": 19273255,
+              "loans": 3356561,
+              "earnings": -1246941,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 151700
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 164411,
+      "msPerMonth": 6850
+    },
+    {
+      "scenario": "regulatory",
+      "requestedMonths": 24,
+      "completed": 24,
+      "firstAccount": [
+        2,
+        null
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 12034483,
+              "equity": 1595039,
+              "deposits": 28882607,
+              "loans": 3899163,
+              "earnings": -304961,
+              "businessDeposits": 39918,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 178524
+            },
+            {
+              "cash": 4218633,
+              "equity": 874073,
+              "deposits": 20311278,
+              "loans": 3066718,
+              "earnings": -1025927,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 126562
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 195480,
+      "msPerMonth": 8145
+    },
+    {
+      "scenario": "growth",
+      "requestedMonths": 24,
+      "completed": 24,
+      "firstAccount": [
+        2,
+        19
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 3610260,
+              "equity": 552840,
+              "deposits": 20309355,
+              "loans": 3351935,
+              "earnings": -1797160,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 126536
+            },
+            {
+              "cash": 1624302,
+              "equity": 661469,
+              "deposits": 19680627,
+              "loans": 4285794,
+              "earnings": -1688531,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 104652
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 159021,
+      "msPerMonth": 6626
+    }
+  ]
+}

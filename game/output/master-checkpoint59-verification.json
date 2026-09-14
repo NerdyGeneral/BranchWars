@@ -1,0 +1,43 @@
+{
+  "checkpoint": 59,
+  "date": "2026-09-13",
+  "scope": "Pure qualified company-credit review and simultaneous paired funding stage. Real submitted turns establish the test customer; the credit-world fixture is explicit and is not a supported migration. Monthly campaign, save/peer and UI integration remain unfinished.",
+  "artifact": "output/BRANCH_WARS_creditorders59_review.html",
+  "artifactSha256": "1b4d0a594e964ada574813fb88640c10cde2205c7a777cc5b4377b80d5e3b214",
+  "engineSha256": "cce4f9f4694f6dcbfe3387f51563aceb764f9f568425ad9f8f83844c93395328",
+  "sourceInputs": 190,
+  "normalPlayableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "checks": [
+    {
+      "name": "credit-order-bank-trading-domain-ui-legacy",
+      "args": [
+        "--test",
+        "tests/company_credit_orders.test.js",
+        "tests/company_credit_bank.test.js",
+        "tests/company_credit_trading.test.js",
+        "tests/company_credit.test.js",
+        "tests/company_credit_ui.test.js",
+        "tests/company_credit_boundary.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "durationMs": 31966,
+      "stdout": "✔ company needs use actual cash, unpaid bills and a differentiated financing profile (40.9868ms)\n✔ underwriting refuses mismatched, oversized, distressed and unsupported offers without mutation (22.7807ms)\n✔ funded loans pair actual bank cash/assets and company cash/debt; deposits and equity do not change (22.0525ms)\n✔ principal and interest reconcile through 12 monthly payments with no repeated settlement (29.8932ms)\n✔ principal and interest reconcile through 24 monthly payments with no repeated settlement (46.9386ms)\n✔ principal and interest reconcile through 36 monthly payments with no repeated settlement (77.3461ms)\n✔ principal and interest reconcile through 48 monthly payments with no repeated settlement (115.3626ms)\n✔ funded customer receipts cure arrears and resume accrual without a duplicate advance (17.2905ms)\n✔ arrears become nonperforming, stop accrual and require explicit paired writeoff (16.4687ms)\n✔ two separate company loans cannot spend the same bank money and corrupt retained claims fail (21.4331ms)\n✔ a repaid register remains replayable and bounded through 120 months (235.2502ms)\n✔ funded named credit adds one local loan asset, no synthetic ordinary cohorts or deposit income (58.2467ms)\n✔ ordinary scheduled repayments and collections do not repay or charge off company claims (26.0683ms)\n✔ bank and borrower payments reconcile while ordinary portfolios continue amortizing (1164.8062ms)\n✔ automatic funding sales and portfolio acquisitions cannot silently erase or clone an individual claim (21.0191ms)\n✔ replayed bank projections are idempotent and stale or mismatched postings fail without mutation (21.1463ms)\n✔ existing departmental credit and risk workloads include named loan balances without adding staff (642.6626ms)\n✔ historical core rules preserve creation, AI, settlement, RNG, views and recovery exactly (70.6881ms)\n✔ historical expanded rules preserve creation, AI, settlement, RNG, views and recovery exactly (10667.194ms)\n✔ a business without an existing qualified relationship cannot skip development by submitting a loan (1269.7228ms)\n✔ a developed account receives a pure shared underwriting and funding review (7465.8389ms)\n✔ queue review refuses duplicate borrowers and unaffordable or oversized advances atomically (7311.7874ms)\n✔ changes to staffing invalidate previous capacity rather than reusing a stale approval (7201.4147ms)\n✔ funding an approved borrower pairs bank and company cash without creating deposits or ordinary cohorts (7303.7845ms)\n✔ borrower choice rewards suitable funding and price; exact ties rotate independently of arrival order (0.191ms)\n✔ stale, ended and malformed offer queues fail before creating an asset (1034.3079ms)\n✔ actual corporate trading repays only each lender own principal and interest before dividends (8936.9592ms)\n✔ credit-enabled company worlds reject inconsistent claims, cash boundaries and missing lender books (22.4836ms)\n✔ trading stress stops dividends in arrears and resolves real funded bank claims without duplicate supplier losses (6178.793ms)\nℹ {\"months\":120,\"demand\":0.35,\"loans\":[{\"company\":\"company:0\",\"status\":\"writtenOff\",\"resolution\":{\"month\":18,\"proceeds\":648000,\"assetLoss\":648000,\"creditorRecovery\":294345,\"creditorWriteoff\":0,\"supplierRecovery\":269437,\"supplierWriteoff\":315226,\"equityDistribution\":0,\"bankRecovery\":[0,0],\"bankWriteoff\":[0,0],\"creditRecovery\":84218,\"creditWriteoff\":98531}},{\"company\":\"company:1\",\"status\":\"writtenOff\",\"resolution\":{\"month\":17,\"proceeds\":1080000,\"assetLoss\":1080000,\"creditorRecovery\":506400,\"creditorWriteoff\":0,\"supplierRecovery\":480461,\"supplierWriteoff\":506106,\"equityDistribution\":0,\"bankRecovery\":[0,0],\"bankWriteoff\":[0,0],\"creditRecovery\":93139,\"creditWriteoff\":98110}}],\"cashConserved\":true}\n✔ an unintegrated credit world cannot be imported into an existing Expanded campaign (21.639ms)\n✔ partial cash liquidation recovers before writing off only the unpaid lender claim (19.401ms)\n✔ named-client financing assessment uses public company books without staging a fake loan (184.6054ms)\nℹ tests 32\nℹ suites 0\nℹ pass 32\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 31907.9543\n",
+      "stderr": ""
+    },
+    {
+      "name": "source-architecture",
+      "args": [
+        "tests/architecture.test.js",
+        "--source"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "durationMs": 912,
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": ""
+    }
+  ],
+  "allPassed": true,
+  "publication": false
+}

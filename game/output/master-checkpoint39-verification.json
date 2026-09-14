@@ -1,0 +1,42 @@
+{
+  "checkpoint": 39,
+  "status": "Source integration candidate; not a final release",
+  "candidate": "output/BRANCH_WARS_company39_review.html",
+  "candidateSha256": "934af4c0950a767d9da1ddd66443fb28db095e7b7569069eca4b3997b29566b1",
+  "engineSha256": "797a81dac15dc06fb395b0ed45cac290d6407828e7b96179ab55a69c008f79c3",
+  "preservedPlayableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "sourceInputs": 174,
+  "passed": [
+    "Production auction kernel: 8 groups including 120 seeded auction months",
+    "Company campaign: 5 groups including 6 funded months, purchases, sales, dividends, restored half-ready plans and malformed views",
+    "Exact immutable checkpoint37 comparison: 4 economies, 2 months each, creation, human/AI plans, RNG, saves, public views and rematch",
+    "Company UI: 2 groups covering contextual staging, multiple issuers, removal, retained form edits, invalid tickets and stale handlers",
+    "Expanded setup: 2 groups covering confirmation, cancellation, hidden scalar rules and Core return",
+    "Expanded lobby/start/settlement: GitHub, LAN and direct-link simulated transports",
+    "Company-share multiplayer: 3 simulated transports; missing capability refusal, simultaneous partial fills, checkpoint restore, owner privacy and duplicate-message protection",
+    "Architecture checks without changing ceilings",
+    "Documentation links and whitespace checks"
+  ],
+  "repairedDuringVerification": [
+    "Share ownership and distribution entries were absent from the event-ledger validation registry",
+    "Readiness-only public views use a boolean rather than an owner-private submitted plan",
+    "Dividends now leave the corporate payer pool before later unrelated spending, while valuation includes the final monthly result",
+    "Whole parent commitments are revalidated when capital, agency or investment-service instructions change"
+  ],
+  "testLimitations": [
+    "Funded company campaign/network tests use explicitly journaled external-shareholder fixtures; they do not establish ordinary-start affordability or balance",
+    "120 auction months are domain tests, not 120 full company-ownership campaign months",
+    "Missing-capability tests use simulated modern clients advertising no company-share support, not an actual older binary",
+    "No real two-computer playtest or current candidate browser acceptance in this checkpoint",
+    "Full Windows gate, final engine pin and main portable rebuild intentionally remain pending"
+  ],
+  "remaining": [
+    "Company-share AI allocation",
+    "Approved reviewed takeover, financing and integration workflow",
+    "Full 120/480-month current-version strategy and ownership balance",
+    "Ordinary-start AI diversification viability",
+    "Remaining approved facilities/management/product/relationship work",
+    "Final manual, rendered PDF, local package and release acceptance"
+  ],
+  "publication": "No commit, push or GitHub publication"
+}

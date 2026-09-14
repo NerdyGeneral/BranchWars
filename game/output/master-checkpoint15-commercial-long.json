@@ -1,0 +1,365 @@
+{
+  "engineSha256": "78bea163b87039813a235c29163f7301594427cf41962590866e51d5420a53f9",
+  "portableSha256": "bb6ae726ed5db903681ce340bd9d60efc7baf1d28e5964004e032a3e3f5da514",
+  "scope": "Ordinary current AI for both seats; no injected resources. Early failures are retained. Not human or two-computer acceptance.",
+  "baseline": false,
+  "campaigns": [
+    {
+      "scenario": "balanced",
+      "requestedMonths": 120,
+      "completed": 120,
+      "firstAccount": [
+        2,
+        2
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 5832911,
+              "equity": 1121159,
+              "deposits": 24551177,
+              "loans": 5463425,
+              "earnings": -778841,
+              "businessDeposits": 133753,
+              "accounts": 1,
+              "work": 2,
+              "chargeoffs": 132391
+            },
+            {
+              "cash": 9141371,
+              "equity": 1073645,
+              "deposits": 25099264,
+              "loans": 3131538,
+              "earnings": -826355,
+              "businessDeposits": 220231,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 115351
+            }
+          ]
+        },
+        {
+          "month": 48,
+          "banks": [
+            {
+              "cash": 4851107,
+              "equity": 927933,
+              "deposits": 20463408,
+              "loans": 2164234,
+              "earnings": -972067,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 229384
+            },
+            {
+              "cash": 7313222,
+              "equity": 1473840,
+              "deposits": 20295863,
+              "loans": 556481,
+              "earnings": -1780260,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 181285
+            }
+          ]
+        },
+        {
+          "month": 72,
+          "banks": [
+            {
+              "cash": 1089568,
+              "equity": 791422,
+              "deposits": 16544319,
+              "loans": 1870173,
+              "earnings": -1108578,
+              "businessDeposits": 1274676,
+              "accounts": 2,
+              "work": 0,
+              "chargeoffs": 273701
+            },
+            {
+              "cash": 11201220,
+              "equity": 1298480,
+              "deposits": 25842477,
+              "loans": 2039737,
+              "earnings": -2867344,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 210357
+            }
+          ]
+        },
+        {
+          "month": 96,
+          "banks": [
+            {
+              "cash": 5819935,
+              "equity": 851097,
+              "deposits": 20878050,
+              "loans": 1784053,
+              "earnings": -1048903,
+              "businessDeposits": 1346344,
+              "accounts": 2,
+              "work": 2,
+              "chargeoffs": 321985
+            },
+            {
+              "cash": 12468768,
+              "equity": 724639,
+              "deposits": 27515271,
+              "loans": 1871142,
+              "earnings": -3541185,
+              "businessDeposits": 784489,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 261299
+            }
+          ]
+        },
+        {
+          "month": 120,
+          "banks": [
+            {
+              "cash": 13383099,
+              "equity": 931576,
+              "deposits": 28706727,
+              "loans": 2130045,
+              "earnings": -1068424,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 391786
+            },
+            {
+              "cash": 10572742,
+              "equity": 775277,
+              "deposits": 25727097,
+              "loans": 2029632,
+              "earnings": -3490547,
+              "businessDeposits": 848689,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 329123
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 1308646,
+      "msPerMonth": 10905
+    },
+    {
+      "scenario": "regulatory",
+      "requestedMonths": 480,
+      "completed": 187,
+      "firstAccount": [
+        2,
+        2
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 12503020,
+              "equity": 908418,
+              "deposits": 29777451,
+              "loans": 3638849,
+              "earnings": -991582,
+              "businessDeposits": 44958,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 179282
+            },
+            {
+              "cash": 3240984,
+              "equity": 874480,
+              "deposits": 19305720,
+              "loans": 3039216,
+              "earnings": -1025520,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 126848
+            }
+          ]
+        },
+        {
+          "month": 48,
+          "banks": [
+            {
+              "cash": 7003213,
+              "equity": 540980,
+              "deposits": 21996928,
+              "loans": 990695,
+              "earnings": -1359020,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 261397
+            },
+            {
+              "cash": 7170688,
+              "equity": 568514,
+              "deposits": 21270043,
+              "loans": 767869,
+              "earnings": -1331486,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 195447
+            }
+          ]
+        },
+        {
+          "month": 72,
+          "banks": [
+            {
+              "cash": 2049713,
+              "equity": 681112,
+              "deposits": 16854952,
+              "loans": 942351,
+              "earnings": -1218888,
+              "businessDeposits": 41040,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 285365
+            },
+            {
+              "cash": 10828060,
+              "equity": 720199,
+              "deposits": 24894407,
+              "loans": 886546,
+              "earnings": -1179801,
+              "businessDeposits": 116612,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 218506
+            }
+          ]
+        },
+        {
+          "month": 96,
+          "banks": [
+            {
+              "cash": 7929537,
+              "equity": 298500,
+              "deposits": 23709112,
+              "loans": 1534075,
+              "earnings": -1701500,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 315330
+            },
+            {
+              "cash": 7126976,
+              "equity": 909237,
+              "deposits": 21859070,
+              "loans": 1741331,
+              "earnings": -990763,
+              "businessDeposits": 251420,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 257895
+            }
+          ]
+        },
+        {
+          "month": 120,
+          "banks": [
+            {
+              "cash": 13522224,
+              "equity": 1169103,
+              "deposits": 28529865,
+              "loans": 1632744,
+              "earnings": -830897,
+              "businessDeposits": 92193,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 363808
+            },
+            {
+              "cash": 8532800,
+              "equity": 1015252,
+              "deposits": 23304659,
+              "loans": 1887111,
+              "earnings": -884748,
+              "businessDeposits": 187100,
+              "accounts": 1,
+              "work": 1,
+              "chargeoffs": 314285
+            }
+          ]
+        },
+        {
+          "month": 144,
+          "banks": [
+            {
+              "cash": 12240049,
+              "equity": 1074379,
+              "deposits": 29524711,
+              "loans": 3420913,
+              "earnings": -925621,
+              "businessDeposits": 286647,
+              "accounts": 1,
+              "work": 0,
+              "chargeoffs": 426084
+            },
+            {
+              "cash": 18022486,
+              "equity": 814958,
+              "deposits": 34694144,
+              "loans": 2684743,
+              "earnings": -1185042,
+              "businessDeposits": 2988126,
+              "accounts": 3,
+              "work": 3,
+              "chargeoffs": 377393
+            }
+          ]
+        },
+        {
+          "month": 168,
+          "banks": [
+            {
+              "cash": 22132425,
+              "equity": 1312808,
+              "deposits": 40751086,
+              "loans": 4511629,
+              "earnings": -687192,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 532238
+            },
+            {
+              "cash": 28525696,
+              "equity": 1036516,
+              "deposits": 45978766,
+              "loans": 3687713,
+              "earnings": -963484,
+              "businessDeposits": 2982516,
+              "accounts": 3,
+              "work": 3,
+              "chargeoffs": 457043
+            }
+          ]
+        }
+      ],
+      "failure": {
+        "month": 188,
+        "message": "Invalid product pricing review or published quotes."
+      },
+      "elapsedMs": 2782322,
+      "msPerMonth": 14879
+    }
+  ]
+}

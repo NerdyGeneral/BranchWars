@@ -15,7 +15,7 @@ function harness(features={}){
  for(const panel of panels)mounts['[data-workspace="'+panel.dataset.workspace+'"].active']=panel;
  const plan=Object.freeze({decision:'a',hires:2}),v={me:{id:'owner',...features},cycle:4};
  const c={view:v,game:null,draft:plan,draftOwner:'owner',lastCycle:4,seat:0,workspaceTab:'overview',reconcileOperationsWorkspace(){},requestAnimationFrame(fn){fn()},window:{innerWidth:1265,matchMedia:()=>({matches:true})},
-  renderFacilityNetwork(){},renderProductPrograms(){},renderCollections(){},renderFinancialGroup(){},renderHouseholds(){},renderWorkforce(){},
+  renderMarketInspector(){},renderFacilityNetwork(){},renderProductPrograms(){},renderCollections(){},renderFinancialGroup(){},renderHouseholds(){},renderWorkforce(){},
   $:key=>mounts[key]||null,$$:key=>({'[data-workspace-tab]':tabs,'[data-workspace-group]':groups,'[data-workspace]':panels}[key]||[])};
  vm.createContext(c);vm.runInContext(draftSource+'\n'+navigation,c);
  const run=code=>vm.runInContext(code,c),go=tab=>run(`setWorkspaceTab(${JSON.stringify(tab)})`),select=id=>run(`selectWorkspaceGroup(${JSON.stringify(id)})`),refresh=()=>run('reconcileWorkspaceNavigation()');

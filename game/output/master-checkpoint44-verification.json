@@ -1,0 +1,29 @@
+{
+  "checkpoint":44,
+  "date":"2026-09-13",
+  "status":"competitive ownership integrated; master goal incomplete",
+  "sourceInputs":183,
+  "candidate":"output/BRANCH_WARS_competition44_review.html",
+  "sha256":"5edab8933b03bd7d0b04cbb324062334a2bc1d67fcacfa0a08c73c23439c55eb",
+  "engineSha256":"e99e8aaa779c6ec84779a73be55e304eae10da17a10570444b8f3e2fd603564b",
+  "normalPortableUnchangedSha256":"b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "edition":"Source Expanded now selects9.26 through companyControlStrategyVersion:1, including control and consolidation. Core/historical rules remain unchanged. No extra checkbox.",
+  "checks":[
+    {"command":"node tests/company_control_strategy.test.js","result":"3 groups passed","milliseconds":51233.5756,"scope":"Explicit boundary, pure/private decisions, no unfunded/community acquisition, funded ordinary-plan8-month campaign, actual consent/refusal follow-up, changed control and recovery."},
+    {"command":"node --test tests/company_shares.test.js tests/company_control_campaign.test.js tests/company_control_ui.test.js tests/company_consolidation_ui.test.js tests/commercial_locations_ui.test.js tests/expanded_edition.test.js","result":"22 groups passed","milliseconds":61117.7816,"scope":"Ownership, reviewed control, reporting, location/forecast UI, setup, exact immutable37 and funded campaign/restore cases."},
+    {"command":"node tests/company_consolidation_legacy.test.js --consolidation","result":"4 scenarios passed","scope":"Exact immutable43/save9.25 creation, human/AI plans, paid acquisition, RNG, half-ready recovery, both owner views and rematch. No golden regeneration."},
+    {"command":"node tests/company_control_network.test.js --strategy","result":"GitHub, LAN and P2P passed","scope":"Simulated capability refusal, paid closing, private uncombined plans, checkpoint reload, owner projection and duplicate/stale messages."},
+    {"command":"node tests/expanded_edition_network.test.js","result":"GitHub, LAN and P2P passed","scope":"Current9.26 Expanded host edit/apply, guest authority, cancellation, readiness reset, stale readiness, start and settlement."},
+    {"command":"node tests/usability_help.test.js","result":"8 groups passed; static search/render microbenchmark115.7ms/1000, not browser frame timing"},
+    {"command":"node tests/architecture.test.js","result":"passed original ceilings, syntax and safety gates"},
+    {"command":"node tests/docs.test.js","result":"passed51 Markdown files/333 local links"},
+    {"command":"git -c core.safecrlf=false diff --check","result":"passed"}
+  ],
+  "fixes":["Current opponent investment/control decisions read doctrine.key from the public owner view, rather than comparing the object to text.","Existing control cash commitments are reserved before discretionary investment/share spending.","Usable paid diligence is preferred over purchasing a different review; expired targets have a cooldown.","New strategy preserves healthy control through six integration stages before short-loss-streak selling unless parent liquidity is stressed."],
+  "provisionalPolicies":{"positiveStatements":3,"monthlyOperatingEarningsYieldMinimum":0.0075,"offerPremium":0.25,"parentCashFloor":100000,"commercialAvailableCashFraction":0.60,"otherAvailableCashFraction":0.45,"borrowingPriceFractionMaximum":0.25,"distributableCashCoverage":2,"diligenceCooldownMonths":12,"healthyControlSalePremium":0.35,"minoritySalePremium":0.20,"stressedSalePremium":0.10},
+  "fixtureLimit":"Behavior test explicitly contributes10M external shareholder capital to each parent and transfers5M to each bank. Review4/offer5/close6/retained-control8 prove funded opponent behavior, not ordinary-start affordability or enjoyable long balance. Canonical costs, losses, debt and dividends were not tuned.",
+  "ordinaryBalance":{"command":"node tests/commercial_accounts_balance.test.js --expanded --checkpoint=44","sessionId":59456,"statusAtLastPoll":"running; no final result","report":"output/master-checkpoint44-commercial-expanded-120.json","scope":"120 months Balanced, seed business-balance:1, ordinary starting resources/AI, no injected capital. Driver loads exact44 engine once and preserves early failures. Poll the handle; this JSON is not process-state proof."},
+  "browser":"No fresh browser claim. Checkpoint43 local candidate opening was refused by URL policy; no workaround attempted. Real-screen and two-computer acceptance remain outstanding.",
+  "publication":"None. Normal portable untouched; no commit, push, merge or release modification.",
+  "next":"Complete approved multi-service premises and shared occupancy, then remaining connected management/customer/research scope and final release/manual/package gates. Reopen company mechanics only for concrete defects or failed integration requirements."
+}

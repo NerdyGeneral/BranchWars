@@ -1,0 +1,17 @@
+{
+  "checkpoint": 36,
+  "campaignVersion": "9.21",
+  "portableSha256": "9d4aa4d5d969ea95864f5f76a53b6adc6623a171aa72968a3d6f9ed3a3a69b35",
+  "engineSha256": "3f4d71d4b732a8041bbd2c6232f6c1b939b1f59f74a25f01108b485d0240207f",
+  "engineTests": {"groups": 5, "exitCode": 0, "elapsedMs": 145977, "fundedScenarioMonths": 24, "ordinaryAiMonths": 4, "exactLegacyMonths": 12, "legacyScenarios": 4},
+  "legacyReference": "reports/reference-builds/BRANCH_WARS_expanded_35_ab06ac97.html",
+  "legacyScope": "Exact creation, AI/human drafts, RNG, half-ready resume, both owner views and rematch; immutable reference not regenerated.",
+  "uiTests": {"newLendingGroups": 1, "editionGroups": 2, "screenshotRequestGroups": 7, "helpGroups": 8, "setup": "pass"},
+  "simulatedTransports": ["GitHub repository", "LAN", "P2P"],
+  "transportScope": "Host draft, guest authority, cancel, atomic settings, readiness reset, stale ready, version9.21 start and one settled month. Missing credit-products peer capability separately rejected by engine test.",
+  "browser": {"viewport": "1265x720", "checks": ["five-benefit setup confirmation", "new campaign", "Continue", "compact five-family Credit rows", "terms/exposure disclosure", "50/50 small-business/CRE draft staged without submitting turn"]},
+  "checks": {"architecture": "pass", "enginePin": "pass", "docs": "51 Markdown files, 331 local links", "portableCurrent": true, "whitespace": "pass"},
+  "olderBuildBaseline": {"checkpoint": 35, "status": "running", "observedMonth": 96, "businessDeposits": [1952273, 1366642], "notThisBuild": true},
+  "remaining": ["new-version120/480-month balance matrix", "investment-business AI", "company ownership/takeovers", "full final Windows release gate", "mature/larger UI acceptance", "updated comprehensive manual and rendered PDF", "final local V3 package", "real two-computer and human gameplay acceptance"],
+  "publication": "None. Not a final release or bug-free guarantee."
+}

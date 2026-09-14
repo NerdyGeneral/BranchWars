@@ -1,0 +1,26 @@
+{
+  "checkpoint": 43,
+  "date": "2026-09-13",
+  "status": "scoped implementation verified; master goal incomplete",
+  "sourceInputs": 182,
+  "candidate": "output/BRANCH_WARS_consolidation43_review.html",
+  "sha256": "00c37a32ea5c092fc8abbdc1b2ae97aca6edd4614c04ef55f21ff5ea4986226f",
+  "engineSha256": "f10ba1f1abf9b186a2850bae83b82ccc507c4391d461acef0bf0ecae27e6bac2",
+  "normalPortableUnchangedSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "newRules": "Explicit companyConsolidationVersion:1 /9.25; requires reviewed control. Default source Expanded remains9.23. No new checkbox or automatic save upgrade.",
+  "checks": [
+    {"command":"node --test tests/company_consolidation.test.js tests/company_consolidation_ui.test.js tests/company_control_ui.test.js","result":"10 groups passed","milliseconds":54182.6779,"scope":"Pure accounting, funded ten-month campaign, sold control, six integration stages, debt, current views, corrupt records, half-ready recovery, rematch and contextual UI."},
+    {"command":"node tests/company_control_network.test.js --consolidation","result":"GitHub, LAN and P2P passed","scope":"Simulated peers; capability refusal, three-month funded reviewed closing, current owner summaries, half-ready checkpoint, sealed plans and duplicate/stale messages. Not physical two-computer or actual older-binary acceptance."},
+    {"command":"node tests/company_consolidation_legacy.test.js","result":"4 scenarios passed","scope":"Exact immutable checkpoint42 creation, three funded months including acquisition, human/AI plans, RNG, half-ready migration, owner views and rematch. Reference hash is pinned; no goldens regenerated."},
+    {"command":"node tests/company_consolidation_ui.test.js","result":"1 group passed after final UI copy and company-name change"},
+    {"command":"node tests/architecture.test.js","result":"passed original ceilings and syntax/safety gates"},
+    {"command":"node tests/docs.test.js","result":"passed;51 Markdown files,333 local links"},
+    {"command":"git -c core.safecrlf=false diff --check","result":"passed"}
+  ],
+  "defectFixed":"Losing control creates a finishCompanyShares ledger change. Its previously reused share-income category rejected the true source on import. Versioned companies.valuation now records it correctly without weakening old ledger validation.",
+  "provisionalAccounting":"Fictional book-value acquisition worksheet; includes noncash goodwill, outside equity and owned post-acquisition earnings. Reduces goodwill on sales and removes it on control loss/failure. Does not claim comprehensive accounting-law compliance or ordinary impairment testing.",
+  "balance":"No new balance tuning or ordinary 120/480-month results in this checkpoint. External-founder test contributions prove funded mechanics, not ordinary affordability or fun.",
+  "browser":"Attempt to open the separate local review candidate was refused by browser URL policy. No workaround attempted. Current43 visual acceptance remains unverified; user's open game untouched.",
+  "publication": "None; no commit, push, merge or normal-portable overwrite.",
+  "remaining": ["Broader control/consent and opponent-strategy acceptance before default Expanded enablement", "Remaining approved service-extension and management interactions", "Ordinary long-campaign balance and performance matrix", "Practical-screen browser and human play acceptance", "Full Windows final-candidate gate", "Comprehensive updated manual, rendered PDF and exportable local V3 package"]
+}

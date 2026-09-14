@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');
-const h=harness();
+const h=require('./group_ui_harness.js').groupHarness();
 h.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:3}).options;"+
   "game=E.createGame({...options,mode:'hotseat',seed:'agency-ui',created:1});seat=0;workspaceTab='group';"+
   // A UI-only funded fixture; the engine campaign tests prove actual earning and funding paths.
@@ -17,10 +17,11 @@ function uniqueRenderedIds(markup){
 }
 uniqueRenderedIds(markup);
 assert.match(markup,/INSURANCE AGENCY/);assert.match(markup,/separate from banking mandates/);
-assert.match(markup,/18 independent relationships/);assert.match(markup,/does not insure claims/);
-assert.match(markup,/not guaranteed revenue/i);assert.match(markup,/service units/);
+const roster=h.run('agencyResultsMarkup(currentView())');
+assert.match(roster,/18 independent relationships/);assert.match(markup,/does not insure claims/);
+assert.match(markup,/not guaranteed revenue/i);assert.match(roster,/service units/);
 assert.match(markup,/\$120,000/);assert.match(markup,/\$30,000/);
-assert.match(markup,/employee benefits/i);assert.match(markup,/Corporate cover roster/);
+assert.match(markup,/employee benefits/i);assert.match(roster,/Corporate cover roster/);
 assert.match(markup,/role="tablist" aria-label="Financial Group desks"/);
 assert.match(markup,/If launched: recurring operating expense/);
 assert.match(markup,/These totals include the operating insurance agency/);
@@ -44,9 +45,14 @@ h.elements.get('#groupTab-capital').listeners.keydown({key:'ArrowLeft',preventDe
 assert.equal(h.run('financialGroupDesk'),'companies');
 h.elements.get('#groupTab-agency').listeners.click();
 for(const c of h.run('E.ANCHOR_CLIENTS'))assert(markup.includes(c.name));
-assert.doesNotMatch(markup.split('id="agency-staff"')[1].split('</select>')[0],/<option value="0"/);
+assert(!markup.includes('<select'),'The agency inspector no longer presents dropdown controls');
 const before=h.run('JSON.stringify(game)'),draftBefore=h.run('JSON.stringify(draft)');
-h.run("for(const [key,value] of Object.entries({capital:120000,staff:1,target:'property',outreach:2,supportCap:10000,dividend:0}))$('#agency-'+key).value=String(value);$('#agency-launch').checked=true;");
+h.elements.get('#agency-section-operations').listeners.click();
+assert(!h.elements.get('#financialGroupPanel').innerHTML.includes('id="agency-choice-staff-0"'));
+h.elements.get('#agency-choice-outreach-2').listeners.click();
+h.elements.get('#agency-section-funding').listeners.click();
+h.run("for(const [key,value] of Object.entries({capital:120000,supportCap:10000,dividend:0}))$('#agency-'+key).value=String(value);$('#agency-launch').checked=true;");
+h.elements.get('#agency-capital').listeners.input();
 h.elements.get('#groupTab-companies').listeners.click();h.elements.get('#groupTab-agency').listeners.click();
 assert.equal(h.elements.get('#agency-capital').value,'120000','Switching desks preserves unstaged working-form values.');
 h.elements.get('#previewAgency').listeners.click();
@@ -54,7 +60,7 @@ assert.equal(h.run('JSON.stringify(game)'),before,'Preview must not mutate autho
 assert.equal(h.run('JSON.stringify(draft)'),draftBefore,'Preview must not stage a plan.');
 assert.match(h.elements.get('#agencyInstructionStatus').textContent,/Preview only/);
 assert.match(h.elements.get('#agencyInstructionQuote').innerHTML,/\$120,000/);
-h.elements.get('#agency-outreach').listeners.change();
+h.elements.get('#agency-capital').listeners.change();
 assert.match(h.elements.get('#agencyInstructionQuote').innerHTML,/form changed/i);
 assert.equal(h.run('JSON.stringify(draft)'),draftBefore,'Editing the form must not stage its values.');
 h.elements.get('#previewAgency').listeners.click();
@@ -68,7 +74,7 @@ assert.equal(h.run('financialGroupDesk'),'agency','Staging must keep the current
 const staged=h.run('JSON.stringify(draft)');
 firstStage();
 assert.equal(h.run('JSON.stringify(draft)'),staged,'Old controls cannot overwrite a staged plan.');
-assert.match(h.run('lastToast'),/plan changed/);
+assert.match(h.run('lastToast'),/plan or connection changed/);
 assert.equal(h.run('stageAgencyPolicy(currentView(),{...draft.agencyPolicy,capital:999999})'),false);
 assert.equal(h.run('JSON.stringify(draft)'),staged,'Invalid funding must reject atomically.');
 assert.equal(h.run('stageAgencyPolicy(currentView(),{...draft.agencyPolicy,staff:0})'),false);
@@ -89,12 +95,14 @@ assert.equal(h.run('game.players[0].agency.status'),'active');
 assert.equal(h.run('financialGroupDesk'),'agency','Same-owner settlement must keep the current desk.');
 assert.equal(h.run('draft.agencyPolicy.launch'),false);
 assert.equal(h.run('draft.agencyPolicy.capital'),0);
+h.elements.get('#agency-section-results').listeners.click();
 assert.match(h.elements.get('#financialGroupPanel').innerHTML,/LAST SETTLED MONTH · 1/);
 uniqueRenderedIds(h.elements.get('#financialGroupPanel').innerHTML);
 assert.match(h.elements.get('#financialGroupPanel').innerHTML,/Expenses invoiced/);
 const settled=h.run('JSON.stringify(game)');
 h.run('agencyPanel(currentView());agencyResultsMarkup(currentView());');
 assert.equal(h.run('JSON.stringify(game)'),settled,'Settled statements and roster rendering are pure.');
+h.elements.get('#agency-section-funding').listeners.click();
 const currentStage=h.elements.get('#stageAgency').listeners.click;
 h.run('seat=1;newDraft(currentView());');
 const guestDraft=h.run('JSON.stringify(draft)');currentStage();
@@ -105,7 +113,7 @@ h.run('game=JSON.parse(JSON.stringify(game));');
 const restoredDraft=h.run('JSON.stringify(draft)');preReloadStage();
 assert.equal(h.run('JSON.stringify(draft)'),restoredDraft,'Replacement campaigns invalidate controls even at the same owner and month.');
 // Rival display strings are escaped. No hidden rival agency book enters markup.
-h.run("const safeView=currentView();safeView.rival.name='<script>bad</script>';safeView.me.agencySnapshot.relationships[0].owner=safeView.rival.id;const escaped=agencyPanel(safeView);");
+h.run("const safeView=currentView();safeView.rival.name='<script>bad</script>';safeView.me.agencySnapshot.relationships[0].owner=safeView.rival.id;const escaped=agencyResultsMarkup(safeView);");
 assert.match(h.run('escaped'),/&lt;script&gt;bad&lt;\/script&gt;/);
 assert(!h.run('escaped').includes('<script>bad</script>'));
 assert.equal(h.run('currentView().rival.agency'),undefined);

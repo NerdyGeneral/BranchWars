@@ -110,9 +110,10 @@ for(const scenario of Object.keys(E.SCENARIOS)){
 assert(targetedAudienceTurns>0,'AI must open delivered products, not just pay for unused platforms');
 const {harness}=require('./github_resilience.test.js'),ui=harness();ui.c.world=fresh();
 ui.run("game=world;seat=0;workspaceTab='products';newDraft(E.publicState(game,0));renderReady=()=>{};renderProjects=()=>{};renderProducts=()=>{};renderProductPrograms(E.publicState(game,0))");
-assert(ui.elements.get('#productProgramsPanel').innerHTML.includes('PRODUCT MANAGEMENT'));
+assert(ui.elements.get('#productProgramsPanel').innerHTML.includes('PRODUCTS & CUSTOMER GROWTH'));
 assert(ui.run("toggleProductDevelopment(E.publicState(game,0),'licenseRewards')"));assert.deepEqual(copy(ui.run('draft.newProjects')),['licenseRewards']);
 const focus=ui.run('draft.focus');ui.run("productDeskView='targets';inspectedProductMarket='university';renderProductPrograms(E.publicState(game,0))");assert.equal(ui.run('draft.focus'),focus);
-assert(ui.elements.get('#productProgramsPanel').innerHTML.includes('target_connected_rewards'));
+assert(ui.elements.get('#productProgramsPanel').innerHTML.includes('id="product-audience-connected"'));
+assert(ui.elements.get('#productProgramsPanel').innerHTML.includes('id="product-select-rewards"'));
 ui.run("view=E.publicState(game,0);view.me.submitted=true");assert.equal(ui.run("toggleProductDevelopment(view,'licenseHighYield')"),false);
 console.log(JSON.stringify({passed:true,turns,launches,targetedAudienceTurns,checks:['paid rollout','shared capacity stalls','research gate','local fit and allocations','vendor cost reconciliation','retirement and guarantees','pure preview','sealed migration','corrupt saves','owner privacy','UI draft staging']},null,2));

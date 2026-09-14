@@ -1,0 +1,44 @@
+{
+  "checkpoint": 41,
+  "date": "2026-09-13",
+  "scope": "Production takeover domain rules only; campaign, UI and network integration unfinished",
+  "sourceInputs": 177,
+  "assembledPortableSha256": "85afc4ed6683964d87f7aa7aac016d95e130543c0f1a2dacf05cb9a13a78ca45",
+  "engineSha256": "daaa4c2e9b17b6ffc8fee8f5af660d36fa44de918c08ede06abbcf813bb0f738",
+  "checks": {
+    "finalCombinedSourceCommand": "node --test tests/company_control.test.js tests/company_auction_kernel.test.js tests/company_shares.test.js",
+    "finalCombinedSourceGroupsPassed": 23,
+    "finalCombinedSourceDurationMs": 59640.7381,
+    "companyControlGroups": 10,
+    "companyControlResult": "pass",
+    "auctionGroups": 8,
+    "auctionResult": "pass including 120 seeded domain months",
+    "architecture": "pass without ceiling changes",
+    "documentation": "pass: 51 Markdown files, 332 local links",
+    "legacy": "pass: immutable checkpoint37 creation, human/AI resolution, RNG, half-ready saves, views and rematch",
+    "controlDebt": "36 months, full repayment plus arrears/catch-up and distinct counterparties",
+    "integration": "six paid work units; pause, insufficient work/cash and duplicate month checks",
+    "normalPortable": "unchanged checkpoint37/save9.22",
+    "publication": "none"
+  },
+  "balance": {
+    "build": 40,
+    "session": 12437,
+    "completedMonths": 120,
+    "status": "completed with exit 0 and exact checkpoint40 hashes",
+    "firstInvestment": [null, null],
+    "firstCompanyShares": [null, 48],
+    "finalRetainedEarnings": [-433098, -962461],
+    "gameOver": false,
+    "msPerMonth": 9049,
+    "assessment": "Improved cumulative earnings relative to37 but still negative; loan books shrank and subsidiary viability remains unproven"
+  },
+  "remaining": [
+    "Explicit campaign version and peer boundary, canonical saves and validation",
+    "Actual finite outside lender/provider funding and cross-book conservation",
+    "Shared reservations, offer settlement ordering and execution work",
+    "Controlled-company consolidation and liabilities/premium presentation",
+    "Owner-private contextual controls, consent and simulated transport coverage",
+    "Remaining full master objective, final balance/browser/Windows/manual/package gates"
+  ]
+}

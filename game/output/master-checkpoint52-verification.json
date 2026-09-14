@@ -1,0 +1,45 @@
+{
+  "checkpoint":52,
+  "date":"2026-09-13",
+  "scope":"Development-gate repair and current Expanded department acceptance; no game-source or playable changes",
+  "gameArtifact":"output/BRANCH_WARS_premises51_expanded.html",
+  "sourceInputs":187,
+  "sourceSha256":"c22b610643d5b67174d0c0be0f9054e3180d6c031257435e86a726f5a5ed0bc7",
+  "normalPortableSha256":"b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "architecture":{
+    "source":"pass","normalPortable":"pass","scopeAndIntegrityGroups":8,"overrideWrites":74,
+    "ceilingsChanged":false,
+    "ceilingSha256":"f8b8f59c4e272e9da9091d8f7d143e59792f8f0bc59739e759282ac1ad5a5bab",
+    "parser":"Vendored Acorn8.18.0 MIT; upstream SHA512 and extracted file SHA256 verified; no runtime dependency or installation",
+    "scope":"Lexical bindings, declarations, parameters, catches, loops, classes, switch evaluation, template expressions, direct/destructured/compound/API writes. Not proof against dynamic eval, API aliases or every architecture requirement."
+  },
+  "departmentAcceptance":{
+    "wholeExpanded":"pass","durationMs":12492.5056,"resourcesInjected":false,
+    "coverage":["Actual paid specialist recruitment","Qualified promotion without added headcount","Compensation and delivered training","Persistent leader identity and experience","Player skill target stops purchases","Pure proposal preserves unrelated strategic orders","Save/public-view/accounting validation each month","Explicit demotion and severance without employee deletion"],
+    "departmentUiSource":"pass; proposal authority, stale/owner/sealed-state checks",
+    "departmentExecution":"10 checks pass; paid and paused teaching fixed through liquidity changes",
+    "retainedFinding":"Initial acceptance test called an unexported helper; it now uses public departmentBudgetQuote.leadership. No production rule changed."
+  },
+  "testHashes":{
+    "tools/architecture_overrides.js":"8e7c0f5cb5ecc395c15e7a7fb2293e34065c2beea12cdcddf581fd706ec3f1b9",
+    "tests/architecture.test.js":"4107e68e802ffce7962a2ccfc9594729c6b33d22a966a451c650b208697a8877",
+    "tests/architecture_scope.test.js":"c91c1fc5629c42394768684f69394bcc24d6c41e20a5a93d805308b5fdf142e8",
+    "tests/department_expanded_acceptance.test.js":"504469a24c48c551009dc7c19c84893cad9d3bb6de546d2b8343bca7ff526d84"
+  },
+  "balance":{
+    "report":"output/master-checkpoint51-commercial-expanded-long.json",
+    "balanced120":"completed with no validation or bank failure; not balance acceptance",
+    "elapsedMs":1075019,"msPerMonth":8958,
+    "closingBanks":[
+      {"cash":18344544,"capital":993497,"loans":2461027,"deposits":33712074,"cumulativeEarnings":-1006503,"lastProfit":115219,"staff":17},
+      {"cash":20840479,"capital":506755,"loans":1317371,"deposits":32487017,"cumulativeEarnings":-1393245,"lastProfit":24782,"staff":15}
+    ],
+    "investmentBusinesses":"neither opened; no shared rooms or company control acquired",
+    "nextDiagnosis":"Attribute cumulative losses and contracting loans to actual operating/development costs, staffing and strategy before tuning. No catch-up resources or mandatory diversification.",
+    "regulatory480":"launch session18698 remains live; inspect terminal evidence before claiming completion"
+  },
+  "documentation":{"markdownFiles":64,"localLinks":507,"status":"pass"},
+  "fullWindowsReleaseGate":"not run on a final package",
+  "realBrowserAndTwoComputerAcceptance":"outstanding",
+  "publication":false
+}

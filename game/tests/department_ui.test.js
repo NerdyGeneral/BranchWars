@@ -49,7 +49,7 @@ assert.equal(fingerprint('game'),qualified);assert.equal(run('game.players[0].de
 assert.match(panel.innerHTML,/\$26,000/);assert.match(panel.innerHTML,/One assigned banker reserved for teaching/);
 // Actual domain settlement supplies a persistent identity and paid compensation.
 run("E.settleDepartmentLeadership(game,[copy(draft),{...copy(draft),...E.defaultDepartmentPlan(game.players[1]),allocation:copy(game.players[1].allocation),workforcePolicy:copy(game.players[1].workforce.policy)}]);for(const p of game.players){p.operatingReport={};E.settleDepartmentExperience(game,p);}game.cycle++;resetDraft();renderDepartments(currentView());");
-assert.match(panel.innerHTML,/:leader:1/);assert.match(panel.innerHTML,/appointed month 1/);assert.match(panel.innerHTML,/Last settled month 1/);
+assert.match(panel.innerHTML,/:leader:1/);assert.match(panel.innerHTML,/Appointed month 1/);assert.match(panel.innerHTML,/Last settled month 1/);
 const settled=fingerprint('game');assert(run("stageDepartmentPlan(currentView(),draft.departmentPolicy,{...draft.leaderOrders,business:'none'})"));
 assert.equal(fingerprint('game'),settled);assert.match(panel.innerHTML,/demotion\/replacement \$4,000/);
 // Prepare delegation is read-only and applying a proposal preserves strategic choices.

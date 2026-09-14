@@ -3,7 +3,7 @@
 const FACILITY_INVESTMENT_HORIZON=60;
 function facilityInvestmentDraft(input){const plan=departmentFunctionCopy(input);plan.facilityPolicy=defaultFacilityPolicy();plan.investments={};plan.newProjects=[];plan.newProject=null;return plan;}
 function facilityInvestmentGross(report){return Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));}
-function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfront=0){
+function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfront=0,g=null){
  const p=departmentFunctionCopy(source),market=plan.focus||p.focus,rows=[];
  p.allocation={...plan.allocation};p.policies={...p.policies,lending:plan.lendingPolicy};p.products={...plan.products};
  p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
@@ -11,7 +11,7 @@ function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfr
  // Separate scenario cash/equity, never assigned back to a bank. Reserve the
  // ENTIRE current budget up front (conservative for recurring commitments),
  // keep the existing liquidity/capital buffers and never invent financing.
- const budget=planBudget(source,plan),otherRisk=riskAssets(source)-source.stats.loans,
+ const budget=planBudget(source,plan,g),otherRisk=riskAssets(source)-source.stats.loans+companyCreditPrincipal(source),
   reserve=Math.max(600000,source.stats.deposits*({liquid:.02,reinvest:.08,balanced:.05}[plan.capitalPolicy]||.05));
  let cash=source.stats.cash-upfront-budget.total-(source.accounting.accounts.payables||0),
   capital=source.stats.capital-upfront-budget.total,value=0;
@@ -33,7 +33,7 @@ function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfr
   const principal=p.creditBook.cohorts.reduce((n,c)=>n+c.principal,0),interest=p.creditBook.cohorts.reduce((n,c)=>n+performingCredit(c)*c.rate/1000000,0),
    net=interest-credit.loss-credit.cost+noncredit[month],discount=(1+Math.max(0,economy.rate)/1200)**(month+1);
   cash+=interest-credit.cost+noncredit[month];capital+=interest-credit.cost+noncredit[month];
-  p.stats.loans=principal;value+=net/discount;
+  p.stats.loans=principal+companyCreditPrincipal(p);value+=net/discount;
   rows.push({month:month+1,requested:flow,originations:originated,principal,repaid,recovered:credit.recovered,interest,loss:credit.loss,collectionsCost:credit.cost,noncredit:noncredit[month],net,discount,cash,capital,capitalRatio:100*capital/Math.max(1,principal+otherRisk)});
  }
  return {value,rows};
@@ -62,7 +62,7 @@ function facilityInvestmentReview(g,index,input,request){
  // The returned plan makes this opportunity cost explicit to the caller.
  const context=facilityContext(g,p,plan),quote=FacilityNetwork.quote(p,request,context);
  if(!quote.eligible)return {...reject(quote.reason),quote};
- const budget=planBudget(p,plan),review=aiCashPlanningReview(g,index,plan),ready=quote.cost<=review.limit-budget.total;
+ const budget=planBudget(p,plan,g),review=aiCashPlanningReview(g,index,plan),ready=quote.cost<=review.limit-budget.total;
  const duringPlan={...plan,facilityPolicy:{convert:{...request},cancel:null}};
  for(const [stage,draft]of [['current',plan],['construction',duringPlan]]){
   const authorized=departmentFunctionsQuote(g,p,draft);
@@ -79,7 +79,7 @@ function facilityInvestmentReview(g,index,input,request){
  if(!authorized.status.eligible)return {...reject('activation: '+authorized.status.reason),quote};
  const lifecycle=lifecycleInstructionQuote(g,future.owner,future.plan);
  if(!lifecycle.status.eligible)return {...reject('activation: '+lifecycle.status.reason),quote};
- const forecast=(owner,draft)=>operatingPreview({...owner,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
+ const forecast=(owner,draft)=>operatingPreview({...owner,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
   before=forecast(p,plan),during=forecast(p,duringPlan),after=forecast(future.owner,future.plan);
  for(const report of [during,after])if(report.capitalRatio<10||report.profit-(report.fundingLoss||0)<=0||
   (report.fundingLoss||0)>(before.fundingLoss||0)||(report.emergencyDebt||0)>(before.emergencyDebt||0))
@@ -87,8 +87,8 @@ function facilityInvestmentReview(g,index,input,request){
  const months=FACILITY_INVESTMENT_HORIZON,constructionMonths=2,
   baseFlows=Array(months).fill(facilityInvestmentGross(before)),futureFlows=Array.from({length:months},(_,i)=>facilityInvestmentGross(i<constructionMonths?during:after)),
   recurring=r=>r.profit-r.loanIncome+(r.chargeoff||0)+(r.collectionsCost||0),
-  baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before))),
-  futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost);
+  baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before)),undefined,g),
+  futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost,g);
  if(futureStream.rows.some(row=>row.cash<0||row.capitalRatio<10))return {...reject('The funded long-run scenario breaches cash or capital protection.'),quote,before,during,after,baseStream,futureStream};
  const value=futureStream.value-baseStream.value-quote.cost;
  return {eligible:true,ready,reason:ready?'':'Accumulate protected capital before committing this conversion.',quote,
@@ -98,7 +98,7 @@ function facilityInvestmentReview(g,index,input,request){
   assumption:'Frozen economy, staff, collections and non-credit operating earnings; projected loans capped by cash and 10% capital plus buffers. No borrowing, future hiring or deposit/customer growth. Unstarted research/projects deferred. Principal repayment is not profit; this is not a future earnings guarantee.'};
 }
 function planFacilityInvestment(g,index,input){
- if(![7,8].includes(g.financialGroupVersion))return input;
+ if(![7,8,9,10].includes(g.financialGroupVersion))return input;
  const p=g.players[index];if(p.stats.lastProfit<=0||tierRank(p)>=2)return input;
  const draft=facilityInvestmentDraft(input),draftAuthorized=departmentFunctionsQuote(g,p,draft);
  // Deferring research can make previously paused training affordable. That
@@ -106,9 +106,9 @@ function planFacilityInvestment(g,index,input){
  // Keep the original funded plan rather than inventing capacity, cancelling
  // training or forecasting an impossible deferred-spending alternative.
  if(!draftAuthorized.status.eligible)return input;
- const context=facilityContext(g,p,draft),budget=planBudget(p,draft),
+ const context=facilityContext(g,p,draft),budget=planBudget(p,draft,g),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
-  current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy),
+  current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
   gross=facilityInvestmentGross(current),capacity=regionalBranchMetrics(p).loanCapacity,
   owner={...p,allocation:draft.allocation,policies:{...p.policies,lending:draft.lendingPolicy},products:draft.products},
   coupon=Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000)),horizon=FACILITY_INVESTMENT_HORIZON;

@@ -1,6 +1,7 @@
 // Owner-only Workforce desk. All economics and mandate proposals come
 // from the versioned department engine; opening or previewing this desk spends nothing.
 let departmentUiState={owner:null,open:false,revision:0,proposal:null,form:null};
+let departmentSelection={campaign:null,owner:null,role:'service'};
 function departmentFormSelectors(){
   const fields=['reserve','vendors','research','leadership','mode','staffLimit','vendorLimit','salesFloor','training','trainingTarget',...Object.keys(E.SPECIALIST_ROLES).map(role=>'training-'+role)];
   return [...fields.map(key=>'#department-'+key),...Object.keys(E.SPECIALIST_ROLES).map(role=>'#departmentLeader-'+role)];
@@ -27,15 +28,16 @@ function refreshDepartmentWorkspace(v){
 }
 function departmentUiMoney(value){const n=Math.round(Number(value)||0);return (n<0?'−':'')+'$'+Math.abs(n).toLocaleString();}
 function departmentUiRole(role){return E.ROLES[role].name;}
+function departmentUiConnection(){return [typeof featureConnectionGeneration==='undefined'?0:featureConnectionGeneration,typeof connectionAttempt==='undefined'?0:connectionAttempt,typeof linkSession==='undefined'?null:linkSession,typeof gh==='undefined'?null:gh,typeof lan==='undefined'?null:lan];}
 function departmentUiCurrent(v,signature,campaign){
   const now=currentView();return !!(now?.me?.departmentOffice&&draft&&(game||view)===campaign&&now.me.id===v.me.id&&now.cycle===v.cycle&&
-    draftOwner===now.me.id&&lastCycle===now.cycle&&!now.me.submitted&&!now.gameOver&&JSON.stringify(draft)===signature);
+    draftOwner===now.me.id&&lastCycle===now.cycle&&!now.me.submitted&&!now.gameOver&&!(typeof gh!=='undefined'&&gh.active&&gh.paused)&&JSON.stringify(draft)===signature);
 }
 function stageDepartmentPlan(v,policy,orders,signature=JSON.stringify(draft),campaign=game||view){
   if(!departmentUiCurrent(v,signature,campaign)){toast('The bank, month or plan changed. Reopen the Departments desk.');return false;}
   try{const next=JSON.parse(JSON.stringify(draft)),now=currentView();
     next.departmentPolicy=JSON.parse(JSON.stringify(policy));next.leaderOrders=JSON.parse(JSON.stringify(orders));
-    E.normalizeDepartmentPlan(now.me,next);E.departmentBudgetQuote(now.me,next);
+    E.normalizeDepartmentPlan(now.me,next,now);E.departmentBudgetQuote(now.me,next,now);
     draft=next;departmentUiState.proposal=null;departmentUiState.form=null;renderReady(now);refreshDepartmentWorkspace(now);
     $('#departmentInstructionStatus').textContent='Department limits and leader orders staged. No appointments or cash payments occur until the month resolves.';return true;
   }catch(error){toast(error.message);return false;}
@@ -52,15 +54,15 @@ function departmentQuoteMarkup(quote){
     '<p class="micro">Teaching needs an existing leader, eligible colleagues, paid compensation and funded training. The teaching banker is unavailable for productive sales/service work during that class. These skill figures are teaching potential before task-delivery limits. Development shows the operating forecast after those limits; actual skill benefits require settlement, not a preview. Ordinary workforce pay and training are not charged again here.</p>';
 }
 function departmentLeaderCard(v,role,orders){
-  const office=v.me.departmentOffice,leader=office.leaders[role],profile=leader?E.DEPARTMENT_LEADERS[leader.profile]:null,locked=v.me.submitted||v.gameOver;
+  const office=v.me.departmentOffice,leader=office.leaders[role],profile=leader?E.DEPARTMENT_LEADERS[leader.profile]:null,locked=v.me.submitted||v.gameOver||(typeof gh!=='undefined'&&gh.active&&gh.paused);
   return '<section class="credit-policy"><h4>'+esc(departmentUiRole(role))+'</h4><p class="small">'+(leader?
-    esc(profile.name)+'<br><span class="micro">'+esc(leader.id)+' · appointed month '+integer(leader.appointed)+' · experience '+integer(leader.experience)+' · '+integer(leader.classes)+' taught classes</span>':'No department leader appointed.')+'</p>'+
+    esc(profile.name)+'<br><span class="micro">Appointed month '+integer(leader.appointed)+' · experience '+integer(leader.experience)+' · '+integer(leader.classes)+' taught classes</span>':'No department leader appointed.')+'</p>'+
     '<p class="micro">Unpaid compensation: '+departmentUiMoney(office.arrears[role])+'. '+(leader?'Recurring leadership compensation '+departmentUiMoney(profile.salary)+'/month; cumulative salary paid '+departmentUiMoney(leader.compensation)+'.':'Demotion does not erase prior department payables.')+'</p>'+
     (office.arrears[role]?'<p class="notice">Leadership teaching suspended until this department’s compensation is paid.</p>':'')+
     '<label for="departmentLeader-'+role+'">Explicit leader order<select id="departmentLeader-'+role+'"'+(locked?' disabled':'')+'><option value="retain"'+(orders[role]===null?' selected':'')+'>Retain current arrangement</option>'+
     '<option value="none"'+(orders[role]==='none'?' selected':'')+'>Demote current leader · severance owed</option>'+
     Object.entries(E.DEPARTMENT_LEADERS).map(([key,p])=>'<option value="'+key+'"'+(orders[role]===key?' selected':'')+'>'+esc(p.name)+' · '+departmentUiMoney(p.salary)+'/month</option>').join('')+'</select></label>'+
-    '<details><summary>Profile strengths, costs and qualifications</summary>'+Object.entries(E.DEPARTMENT_LEADERS).map(([,p])=>'<p class="micro"><b>'+esc(p.name)+'</b> · appointment '+departmentUiMoney(p.appointment)+' · monthly '+departmentUiMoney(p.salary)+'. '+esc(p.description)+'</p>').join('')+
+    '<details><summary>Profile strengths, costs and qualifications</summary>'+(leader?'<p class="micro">Leader record: '+esc(leader.id)+'</p>':'')+Object.entries(E.DEPARTMENT_LEADERS).map(([,p])=>'<p class="micro"><b>'+esc(p.name)+'</b> · appointment '+departmentUiMoney(p.appointment)+' · monthly '+departmentUiMoney(p.salary)+'. '+esc(p.description)+'</p>').join('')+
     '<p class="micro">Promote an existing specialist assigned to this department; appointment creates no employee. Changing profile replaces the leader and their individual experience, with appointment and severance expenses. Demotion is explicit and does not dismiss the employee.</p></details></section>';
 }
 function departmentUiField(key,label,value,disabled){
@@ -79,24 +81,29 @@ function renderDepartmentLeadership(v,navigation=''){
   if(departmentUiState.owner!==p.id)departmentUiState={owner:p.id,open:false,revision:departmentUiState.revision,proposal:null,form:null};
   const pending=pendingDepartmentForm(v);
   const defaults=E.defaultDepartmentPlan(p),policy=draft.departmentPolicy||defaults.departmentPolicy,orders=draft.leaderOrders||defaults.leaderOrders;
-  const disabled=p.submitted||v.gameOver?' disabled':'',m=policy.mandate;
+  const disabled=p.submitted||v.gameOver||(typeof gh!=='undefined'&&gh.active&&gh.paused)?' disabled':'',m=policy.mandate;
+  const roles=Object.keys(E.SPECIALIST_ROLES);
+  if(departmentSelection.campaign!==(game||view)||departmentSelection.owner!==p.id)departmentSelection={campaign:game||view,owner:p.id,role:roles[0]};
+  const selected=departmentSelection.role;
+  const directory='<nav class="object-directory" aria-label="Leadership departments">'+roles.map(role=>{const leader=p.departmentOffice.leaders[role],profile=leader?E.DEPARTMENT_LEADERS[leader.profile]:null;return '<button type="button" class="object-row" id="department-select-'+role+'" aria-pressed="'+(selected===role)+'"><span><b>'+esc(departmentUiRole(role))+'</b><small>'+(profile?esc(profile.name)+' · '+departmentUiMoney(profile.salary)+'/month':'No leader appointed')+'</small><small>'+departmentUiMoney(policy.envelopes.training[role])+'/month training ceiling</small></span></button>';}).join('')+'</nav>';
+  const cards=roles.map(role=>'<section class="object-detail" id="department-detail-'+role+'" aria-label="'+esc(departmentUiRole(role))+' leadership"'+(selected===role?'':' hidden')+'>'+departmentLeaderCard(v,role,orders)+
+    departmentUiField('training-'+role,'Training ceiling ($/month)',policy.envelopes.training[role],disabled)+'<p class="micro">This ceiling limits this department’s training. It does not order classes; the recurring training mandate lives in Development. All departments share the bank-wide reserve and budgets below.</p></section>').join('');
   let quoteContent;
-  try{quoteContent=departmentQuoteMarkup(E.departmentBudgetQuote(p,{...draft,departmentPolicy:policy,leaderOrders:orders}));}
+  try{quoteContent=departmentQuoteMarkup(E.departmentBudgetQuote(p,{...draft,departmentPolicy:policy,leaderOrders:orders},v));}
   catch(error){quoteContent='<p class="notice">'+esc(error.message)+' Review conflicting instructions before staging.</p>';}
-  mount.innerHTML=navigation+'<details id="departmentDesk"'+(departmentUiState.open?' open':'')+'><summary>DEPARTMENTS &amp; LEADERSHIP · four operating roles</summary><section class="credit-policy group-credit-policy">'+
+  mount.innerHTML=navigation+'<details id="departmentDesk"'+(departmentUiState.open?' open':'')+'><summary>DEPARTMENTS &amp; LEADERSHIP · four operating roles</summary><section class="leadership-workspace object-workspace">'+
     '<p class="small">Persistent spending ceilings and existing-staff leadership. Envelopes are limits, not prepaid funds or extra money. Appointments and demotions remain explicit monthly orders.</p>'+
+    '<div class="object-columns">'+directory+'<div>'+cards+'</div></div>'+
     '<details><summary>Spending envelopes, common reserve and delegation limits</summary><div class="credit-controls">'+
     departmentUiField('reserve','Common discretionary cash reserve ($)',policy.reserve,disabled)+
-    ['vendors','research','leadership'].map(key=>departmentUiField(key,key==='vendors'?'Shared vendor ceiling ($/month)':key==='research'?'Shared research ceiling ($/month)':'Leadership appointment/compensation ceiling ($/month)',policy.envelopes[key],disabled)).join('')+
-    Object.keys(E.SPECIALIST_ROLES).map(role=>departmentUiField('training-'+role,departmentUiRole(role)+' training ceiling ($/month)',policy.envelopes.training[role],disabled)).join('')+'</div>'+
+    ['vendors','research','leadership'].map(key=>departmentUiField(key,key==='vendors'?'Shared vendor ceiling ($/month)':key==='research'?'Shared research ceiling ($/month)':'Leadership appointment/compensation ceiling ($/month)',policy.envelopes[key],disabled)).join('')+'</div>'+
     '<p class="micro">These controls do not automatically rewrite existing research, vendor or workforce orders. A conflicting lower ceiling must be reconciled before it can be staged. Existing owed compensation survives reserve or budget changes.</p>'+
     '<label for="department-mode">Delivery proposal mandate<select id="department-mode"'+disabled+'><option value="manual"'+(m.mode==='manual'?' selected':'')+'>Manual · preserve current instructions</option><option value="maintain-service"'+(m.mode==='maintain-service'?' selected':'')+'>Prepare bounded service/research proposal</option></select></label>'+
     '<div class="credit-controls">'+departmentUiField('staffLimit','Maximum delegated delivery staff',m.staffLimit,disabled)+departmentUiField('vendorLimit','Maximum delegated vendor units',m.vendorLimit,disabled)+
     departmentUiField('salesFloor','Minimum commercial sales staff',m.salesFloor,disabled)+departmentUiField('trainingTarget','Delegated training skill target',m.trainingTarget,disabled)+
     '<label for="department-training">Training proposal<select id="department-training"'+disabled+'><option value="off"'+(!m.training?' selected':'')+'>Off · preserve training instructions</option><option value="on"'+(m.training?' selected':'')+'>Prepare training within ceilings</option></select></label></div></details>'+
-    '<div class="credit-controls">'+Object.keys(E.SPECIALIST_ROLES).map(role=>departmentLeaderCard(v,role,orders)).join('')+'</div>'+
-    '<button type="button" class="btn" id="previewDepartments"'+disabled+'>Preview form</button> <button type="button" class="btn" id="stageDepartments"'+disabled+'>Stage limits and leader orders</button>'+
-    ' <button type="button" class="btn" id="discardDepartmentForm"'+disabled+'>Discard unstaged edits</button>'+
+    '<div class="object-action-strip"><button type="button" class="btn" id="previewDepartments"'+disabled+'>Preview all department edits</button> <button type="button" class="btn" id="stageDepartments"'+disabled+'>Stage limits and leader orders</button>'+
+    ' <button type="button" class="btn" id="discardDepartmentForm"'+disabled+'>Discard unstaged edits</button></div>'+
     '<p id="departmentInstructionStatus" class="small" role="status">Form changes are not staged until you choose Stage.</p><div id="departmentQuote" aria-live="polite">'+quoteContent+'</div>'+
     '<details><summary>Prepare a bounded operating proposal</summary><p class="small">Uses your staged mandate, not unstaged form edits. Prepare never applies a plan. Review exact changes before choosing Stage proposal. Managers cannot borrow, hire, close facilities, acquire, change products or submit a turn.</p>'+
     '<button type="button" class="btn" id="prepareDepartmentDraft"'+disabled+'>Prepare proposal from staged limits</button><div id="departmentProposal" aria-live="polite"></div></details>'+
@@ -104,6 +111,15 @@ function renderDepartmentLeadership(v,navigation=''){
       ', compensation invoices paid '+departmentUiMoney(p.departmentOffice.report.paid)+', still owed '+departmentUiMoney(p.departmentOffice.report.arrears)+'. Payment of old invoices is not a second expense.</p>':'')+
     '<p class="micro">Departments share your bank’s cash and existing staff. Leaders can accelerate paid training but take a banker away from productive work while teaching; stronger skills must justify the compensation and lost capacity.</p></section></details>';
   bindDepartments(v);
+  // Switching the inspected department does not recreate forms, lose raw edits,
+  // appoint a leader or stage another department's hidden controls.
+  const campaign=game||view,revision=departmentUiState.revision;
+  for(const role of roles)$('#department-select-'+role).addEventListener('click',()=>{
+    const now=currentView();if((game||view)!==campaign||now?.me.id!==p.id||now.cycle!==v.cycle||departmentUiState.revision!==revision)return;
+    departmentSelection.role=role;
+    for(const id of roles){$('#department-detail-'+id).hidden=id!==role;$('#department-select-'+id).setAttribute('aria-pressed',String(id===role));}
+    if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget($('#department-detail-'+role));else $('#department-detail-'+role).focus();
+  });
   if(pending){
     for(const [selector,value]of Object.entries(pending.values))$(selector).value=value;
     $('#departmentInstructionStatus').textContent='Unstaged edits restored for this bank and month. Preview or Stage to use them; your monthly plan is unchanged.';
@@ -121,7 +137,7 @@ function departmentUiRead(){
 function prepareDepartmentProposal(v,signature=JSON.stringify(draft),campaign=game||view){
   if(!departmentUiCurrent(v,signature,campaign))return false;
   try{
-    const prepared=E.departmentDraft(v.me,JSON.parse(JSON.stringify(draft)),v.economy),next=JSON.parse(JSON.stringify(draft));
+    const prepared=E.departmentDraft(v.me,JSON.parse(JSON.stringify(draft)),v.economy,v),next=JSON.parse(JSON.stringify(draft));
     // Strict UI allowlist: proposed service/research/training only. Preserve all
     // manually chosen bids, facility/leader orders, products and other strategies.
     const allowed=['servicePolicy','investments','workforcePolicy'],changes=[];
@@ -132,8 +148,8 @@ function prepareDepartmentProposal(v,signature=JSON.stringify(draft),campaign=ga
     const unrelated=key=>!allowed.includes(key);
     if(Object.keys(prepared.plan).some(key=>unrelated(key)&&JSON.stringify(prepared.plan[key])!==JSON.stringify(draft[key]))||
       Object.keys(draft).some(key=>unrelated(key)&&!Object.hasOwn(prepared.plan,key)))throw Error('Delegation proposed an unauthorized strategic change.');
-    E.normalizeDepartmentPlan(v.me,next);E.departmentBudgetQuote(v.me,next);
-    departmentUiState.proposal={signature,campaign,owner:v.me.id,cycle:v.cycle,next};
+    E.normalizeDepartmentPlan(v.me,next,v);E.departmentBudgetQuote(v.me,next,v);
+    departmentUiState.proposal={signature,campaign,owner:v.me.id,cycle:v.cycle,connection:departmentUiConnection(),next};
     $('#departmentProposal').innerHTML='<p class="small">'+(changes.length?changes.length+' instruction groups proposed. Your plan is unchanged.':'No changes proposed under the current mandate.')+'</p>'+
       departmentProposalComparison(v,changes,next)+
       '<p class="micro">'+(prepared.notes||[]).map(esc).join(' · ')+'</p>'+
@@ -153,25 +169,25 @@ function departmentProposalComparison(v,changes,next){
     rows.push('<tr><th>'+esc(path.map(key=>labels[key]||key).join(' · '))+'</th><td>'+esc(format(before))+'</td><td>'+esc(format(after))+'</td></tr>');};
   for(const change of changes)visit(change.before,change.after,[change.key]);
   if(!rows.length)return '';
-  const before=E.planBudget(v.me,draft),after=E.planBudget(v.me,next);
+  const before=E.planBudget(v.me,draft,v),after=E.planBudget(v.me,next,v);
   return '<h4>Before / after · exact instruction changes</h4><div class="table-scroll" tabindex="0" aria-label="Department proposal comparison"><table class="regional-table"><thead><tr><th>Instruction</th><th>Staged plan</th><th>Proposed plan</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div><p class="small">Whole-plan quoted commitments: '+departmentUiMoney(before.total)+' → '+departmentUiMoney(after.total)+'. This is not a second charge or a forecast of every cash flow. More delivery time leaves less for commercial sales and other shared work; additional vendor orders cost money even when unused.</p><p class="micro">Only the listed service, research and training instructions may change. The proposal cannot borrow, hire, close facilities, acquire, appoint leaders, change products or submit your turn.</p>';
 }
 function stageDepartmentProposal(v){
   const proposal=departmentUiState.proposal;
-  if(!proposal||!departmentUiCurrent(v,proposal.signature,proposal.campaign)||proposal.owner!==v.me.id||proposal.cycle!==v.cycle){toast('The proposal is stale. Prepare the current plan again.');return false;}
-  try{const next=JSON.parse(JSON.stringify(proposal.next)),now=currentView();E.normalizeDepartmentPlan(now.me,next);E.departmentBudgetQuote(now.me,next);
+  if(!proposal||!departmentUiCurrent(v,proposal.signature,proposal.campaign)||proposal.owner!==v.me.id||proposal.cycle!==v.cycle||proposal.connection.some((item,index)=>item!==departmentUiConnection()[index])){toast('The proposal is stale. Prepare the current plan again.');return false;}
+  try{const next=JSON.parse(JSON.stringify(proposal.next)),now=currentView();E.normalizeDepartmentPlan(now.me,next,now);E.departmentBudgetQuote(now.me,next,now);
     draft=next;departmentUiState.proposal=null;renderReady(now);refreshDepartmentWorkspace(now);return true;
   }catch(error){toast(error.message);return false;}
 }
 function bindDepartments(v){
-  const signature=JSON.stringify(draft),campaign=game||view,revision=departmentUiState.revision;
-  const current=()=>revision===departmentUiState.revision&&departmentUiCurrent(v,signature,campaign);
+  const signature=JSON.stringify(draft),campaign=game||view,revision=departmentUiState.revision,connection=departmentUiConnection();
+  const current=()=>revision===departmentUiState.revision&&!connection.some((item,index)=>item!==departmentUiConnection()[index])&&departmentUiCurrent(v,signature,campaign);
   $('#departmentDesk').addEventListener('toggle',()=>{if(revision===departmentUiState.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id)departmentUiState.open=!!$('#departmentDesk').open;});
   $('#stageDepartments').addEventListener('click',()=>{if(!current())return;try{const form=departmentUiRead();stageDepartmentPlan(v,form.policy,form.orders,signature,campaign);}catch(error){$('#departmentInstructionStatus').textContent=error.message;toast(error.message);}});
   $('#discardDepartmentForm').addEventListener('click',()=>{if(!current())return;departmentUiState.form=null;departmentUiState.proposal=null;refreshDepartmentWorkspace(v);$('#departmentInstructionStatus').textContent='Unstaged edits discarded. Your staged monthly plan is unchanged.';});
   $('#previewDepartments').addEventListener('click',()=>{if(!current())return;try{
     const form=departmentUiRead(),next=JSON.parse(JSON.stringify(draft));next.departmentPolicy=form.policy;next.leaderOrders=form.orders;
-    E.normalizeDepartmentPlan(v.me,next);$('#departmentQuote').innerHTML=departmentQuoteMarkup(E.departmentBudgetQuote(v.me,next));
+    E.normalizeDepartmentPlan(v.me,next,v);$('#departmentQuote').innerHTML=departmentQuoteMarkup(E.departmentBudgetQuote(v.me,next,v));
     $('#departmentInstructionStatus').textContent='Preview only. Your monthly plan is unchanged.';
   }catch(error){$('#departmentInstructionStatus').textContent=error.message;toast(error.message);}});
   $('#prepareDepartmentDraft').addEventListener('click',()=>{if(current())prepareDepartmentProposal(v,signature,campaign);});

@@ -179,12 +179,12 @@ function transferSpecialistTalent(from, to) {
   target.count++; source.count--;
   if (!source.count) source.skill = 0;
 }
-function workforceReview(p, input, economy) {
+function workforceReview(p, input, economy,g=null) {
   if (!p.workforce) return null;
   const plan = JSON.parse(JSON.stringify(input));
   normalizeWorkforcePlan(p, plan);
-  const quote = planBudget(p, plan), training = workforceTrainingQuote(p, plan.workforcePolicy, quote.total - (quote.training || 0));
-  const forecast = operatingPreview({ ...p, focus: plan.focus }, plan, economy);
+  const quote = planBudget(p, plan,g), training = workforceTrainingQuote(p, plan.workforcePolicy, quote.total - (quote.training || 0));
+  const forecast = operatingPreview({ ...p, focus: plan.focus }, plan, economy,g);
   training.total = forecast.workforceTraining;
   training.paused = !!forecast.workforceTrainingPaused;
   for (const row of training.rows) {
@@ -221,7 +221,7 @@ function planSpecialistWorkforce(g, index, input) {
       const candidate = JSON.parse(JSON.stringify(plan));
       if (candidate.hires > 0) candidate.hires--;
       candidate.specialistHires[role]++;
-      if (planBudget(p, candidate).remaining >= 200000) return candidate;
+      if (planBudget(p, candidate,g).remaining >= 200000) return candidate;
     }
   }
   return plan;
@@ -253,7 +253,7 @@ function validateWorkforceSave(g) {
       if (amounts.some(k => !Number.isSafeInteger(report[k]) || report[k] < 0) || ![0, 1].includes(report.workforceTrainingPaused) ||
           report.workforceTraining > report.workforceTrainingRequested || (report.workforceTrainingPaused && report.workforceTraining !== 0) ||
           Object.keys(SPECIALIST_ROLES).reduce((n, k) => n + report['trainingSpend_' + k], 0) !== report.workforceTraining ||
-          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5,6,7,8].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
+          Object.keys(SPECIALIST_ROLES).some(k => !Number.isSafeInteger(report['trainingGain_' + k]) || report['trainingGain_' + k] < 0 || report['trainingGain_' + k] > ([4,5,6,7,8,9,10].includes(g.financialGroupVersion)&&p.departmentOffice?8:SPECIALIST_MAX_GAIN) ||
             !Number.isFinite(report['specialistBonus_' + k]) || report['specialistBonus_' + k] < 0)) throw Error('Invalid workforce operating report');
     }
     if (p.submitted) {

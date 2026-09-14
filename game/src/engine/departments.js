@@ -45,10 +45,10 @@ function validateDepartmentPolicy(policy) {
   return policy;
 }
 function initializeDepartments(g) {
-  if(![4,5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   g.departmentEconomy={version:1,month:0,supplier:GroupAccounting.opening('department:providers'),paid:0};
   for(const p of g.players) {
-    if(g.financialGroupVersion===8)p.accounting=AccountingPrototype.withPremises(p.accounting);
+    if([8,9,10].includes(g.financialGroupVersion))p.accounting=AccountingPrototype.withPremises(p.accounting);
     else if(p.accounting.version!==3)p.accounting=AccountingPrototype.withPayables(p.accounting);
     syncAccounts(p);
     p.departmentOffice={version:1,lastCycle:0,sequence:0,policy:defaultDepartmentPolicy(),
@@ -71,7 +71,7 @@ function departmentLeadershipQuote(p, plan) {
   const salary=rows.reduce((n,r)=>n+r.salary,0),appointments=rows.reduce((n,r)=>n+r.appointment,0),severance=rows.reduce((n,r)=>n+r.severance,0);
   return {salary,appointments,severance,total:salary+appointments+severance,rows};
 }
-function normalizeDepartmentPlan(p, plan) {
+function normalizeDepartmentPlan(p, plan,g=null) {
   if(!p.departmentOffice) {
     if(plan.departmentPolicy!==undefined||plan.leaderOrders!==undefined)throw Error('Department offices require Group 4 rules.');
     return;
@@ -87,7 +87,7 @@ function normalizeDepartmentPlan(p, plan) {
       throw Error('Promote an existing qualified banker assigned to that department; leaders do not create staff.');
   }
   const quote=departmentLeadershipQuote(p,plan),policy=plan.departmentPolicy;
-  const planned=planBudget(p,plan),otherCommitments=Math.max(0,planned.total-(planned.departmentLeadership||0));
+  const planned=planBudget(p,plan,g),otherCommitments=Math.max(0,planned.total-(planned.departmentLeadership||0));
   // Existing compensation obligations survive budget cuts. A new appointment
   // requires protected cash/capital; demotion may accrue its explicit severance.
   if(quote.appointments && (quote.total>policy.envelopes.leadership ||
@@ -163,7 +163,7 @@ function departmentSettlePlayer(p, plan, cycle, supplier) {
   return supplier;
 }
 function settleDepartmentLeadership(g, plans) {
-  if(![4,5,6,7,8].includes(g.financialGroupVersion))return [];
+  if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion))return [];
   const e=g.departmentEconomy;
   if(e.month!==g.cycle-1)throw Error('Department compensation already settled.');
   for(const [i,p]of g.players.entries()) {
@@ -173,10 +173,10 @@ function settleDepartmentLeadership(g, plans) {
   e.month=g.cycle;
   return []; // Detailed costs/instructions remain in owner-only reports/ledger.
 }
-function departmentProspectiveOwner(p, input) {
+function departmentProspectiveOwner(p, input,g=null) {
   if(!p.departmentOffice)return departmentCopy(p);
   const plan=departmentCopy(input);
-  normalizeDepartmentPlan(p,plan);
+  normalizeDepartmentPlan(p,plan,g);
   return departmentPreparedOwner(p,plan);
 }
 // Internal forecast composition: the complete draft was validated against its
@@ -270,11 +270,11 @@ function addDepartmentOperatingReport(p) {
   p.stats.lastProfit-=expense;
   if(p.marketReport){p.marketReport.central-=expense;p.marketReport.profit-=expense;}
 }
-function departmentBudgetQuote(p,input) {
+function departmentBudgetQuote(p,input,g=null) {
   if(!p.departmentOffice)return null;
-  const plan=departmentCopy(input);normalizeDepartmentPlan(p,plan);
+  const plan=departmentCopy(input);normalizeDepartmentPlan(p,plan,g);
   const network=p.facilityNetwork?facilityProspectiveOwner(p,plan):p,
-    prospective=departmentPreparedOwner(network,plan),leadership=departmentLeadershipQuote(p,plan),budget=planBudget(p,plan);
+    prospective=departmentPreparedOwner(network,plan),leadership=departmentLeadershipQuote(p,plan),budget=planBudget(p,plan,g);
   const remaining=Math.max(0,budget.total-(budget.training||0)-leadership.total-(p.facilityNetwork?facilityDraftSpend(p,plan):0));
   const training=workforceTrainingQuote(prospective,plan.workforcePolicy||p.workforce.policy,remaining);
   prospective._workforceCosts={training};
@@ -290,7 +290,7 @@ function departmentBudgetQuote(p,input) {
         departmentProductiveAllocation(prospective)[role]),
       bonus:specialistBonus(prospective,role),training:training.rows.find(r=>r.role===role)}))};
 }
-function departmentDraft(p,input,economy) {
+function departmentDraft(p,input,economy,g=null) {
   const plan=departmentCopy(input),notes=[];
   if(!p.departmentOffice)return {plan,notes};
   if(plan.departmentPolicy===undefined)plan.departmentPolicy=defaultDepartmentPlan(p).departmentPolicy;
@@ -303,7 +303,7 @@ function departmentDraft(p,input,economy) {
       vendorLimit:Math.min(m.vendorLimit,Math.floor(policy.envelopes.vendors/6000)),salesFloor:m.salesFloor};
     delegated.management.research.reserve=Math.max(delegated.management.research.reserve,policy.reserve);
     delegated.management.research.budget=Math.min(delegated.management.research.budget,policy.envelopes.research);
-    const prepared=managementPlan(p,delegated,economy);
+    const prepared=managementPlan(p,delegated,economy,g);
     // Retain only permitted proposals, never rewrite the player's persistent
     // management preferences, manual bids, borrowing, hires or facility orders.
     plan.servicePolicy=prepared.plan.servicePolicy;plan.investments=prepared.plan.investments;
@@ -315,11 +315,11 @@ function departmentDraft(p,input,economy) {
     plan.workforcePolicy.training[role]=Math.max(...WORKFORCE_TRAINING_BUDGETS.filter(n=>n<=ceiling));
     plan.workforcePolicy.reserve=Math.max(plan.workforcePolicy.reserve,policy.reserve);
   }
-  normalizeDepartmentPlan(p,plan);
+  normalizeDepartmentPlan(p,plan,g);
   return {plan,notes};
 }
 function planDepartments(g,index,input) {
-  if(![4,5,6,7,8].includes(g.financialGroupVersion))return input;
+  if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion))return input;
   const p=g.players[index],plan=departmentCopy(input);
   Object.assign(plan,defaultDepartmentPlan(p));
   plan.departmentPolicy.envelopes.research=Math.max(plan.departmentPolicy.envelopes.research,
@@ -333,13 +333,13 @@ function planDepartments(g,index,input) {
       if(p.stats.cash-plan.departmentPolicy.reserve>quote.appointment+quote.salary+100000)plan.leaderOrders[role]=profile;
     }
   }
-  const proposed=departmentLeadershipQuote(p,plan),budget=planBudget(p,plan);
+  const proposed=departmentLeadershipQuote(p,plan),budget=planBudget(p,plan,g);
   const otherCommitments=Math.max(0,budget.total-(budget.departmentLeadership||0));
   const available=Math.max(0,Math.min(p.stats.cash-plan.departmentPolicy.reserve,pilotSpendingLimit(p)));
   if(proposed.appointments&&(proposed.total>plan.departmentPolicy.envelopes.leadership||proposed.total+otherCommitments>available))
     for(const role of departmentRoles())if(plan.leaderOrders[role]!==null&&plan.leaderOrders[role]!=='none'&&
         plan.leaderOrders[role]!==p.departmentOffice.leaders[role]?.profile)plan.leaderOrders[role]=null;
-  normalizeDepartmentPlan(p,plan);return plan;
+  normalizeDepartmentPlan(p,plan,g);return plan;
 }
 function validateDepartmentPlayer(p,month) {
   const d=p.departmentOffice;
@@ -380,33 +380,33 @@ function validateDepartmentPlayer(p,month) {
   }
 }
 function validateDepartmentSave(g) {
-  if(![4,5,6,7,8].includes(g.financialGroupVersion)) {
+  if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion)) {
     if(g.departmentEconomy!==undefined||g.players.some(p=>p.departmentOffice!==undefined||p._departmentTeaching!==undefined||p._departmentTraining!==undefined||p.submitted?.departmentPolicy!==undefined||p.submitted?.leaderOrders!==undefined)||
         Object.values(g.lastPlans||{}).some(plan=>plan?.departmentPolicy!==undefined||plan?.leaderOrders!==undefined))
       throw Error('Unversioned department offices.');
     return;
   }
   const e=g.departmentEconomy,month=g.gameOver?g.cycle:g.cycle-1;
-  if(!departmentExact(e,['version','month','supplier','paid',...([7,8].includes(g.financialGroupVersion)?['circulated']:[])])||e.version!==([7,8].includes(g.financialGroupVersion)?2:1)||e.month!==month||!departmentWhole(e.paid))throw Error('Invalid department counterparties.');
-  const circulated=[7,8].includes(g.financialGroupVersion)?e.circulated:0;if(!departmentWhole(circulated))throw Error('Invalid department circulation.');
+  if(!departmentExact(e,['version','month','supplier','paid',...([7,8,9,10].includes(g.financialGroupVersion)?['circulated']:[])])||e.version!==([7,8,9,10].includes(g.financialGroupVersion)?2:1)||e.month!==month||!departmentWhole(e.paid))throw Error('Invalid department counterparties.');
+  const circulated=[7,8,9,10].includes(g.financialGroupVersion)?e.circulated:0;if(!departmentWhole(circulated))throw Error('Invalid department circulation.');
   GroupAccounting.validate(e.supplier);
   if(e.supplier.entityId!=='department:providers'||['investments','debt','payables','custodyAssets','custodyLiabilities'].some(k=>e.supplier.accounts[k]))throw Error('Invalid department supplier accounts.');
   for(const p of g.players) {
     validateDepartmentPlayer(p,month);
-    if(p.submitted)normalizeDepartmentPlan(p,departmentCopy(p.submitted));
+    if(p.submitted)normalizeDepartmentPlan(p,departmentCopy(p.submitted),g);
   }
   if(e.supplier.accounts.cash+circulated!==e.paid||e.paid!==g.players.reduce((n,p)=>n+p.departmentOffice.paid,0)||
       e.supplier.accounts.businessAssets!==g.players.reduce((n,p)=>n+p.accounting.accounts.payables,0))throw Error('Department cash and claims do not reconcile.');
 }
 function projectDepartments(g,out,index) {
-  if(![4,5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   out.me.departmentOffice=departmentCopy(g.players[index].departmentOffice);
   delete out.rival.departmentOffice;
   const rival=g.players[1-index].id;
   if(out.lastPlans?.[rival]){delete out.lastPlans[rival].departmentPolicy;delete out.lastPlans[rival].leaderOrders;}
 }
 function validateDepartmentView(view) {
-  if(![4,5,6,7,8].includes(view.financialGroupVersion)) {
+  if(![4,5,6,7,8,9,10].includes(view.financialGroupVersion)) {
     if(view.departmentEconomy!==undefined||view.me?.departmentOffice!==undefined||view.rival?.departmentOffice!==undefined||
         view.me?._departmentTeaching!==undefined||view.rival?._departmentTeaching!==undefined||view.me?._departmentTraining!==undefined||view.rival?._departmentTraining!==undefined||
         Object.values(view.lastPlans||{}).some(plan=>plan?.departmentPolicy!==undefined||plan?.leaderOrders!==undefined))throw Error('Unversioned department view.');

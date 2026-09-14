@@ -58,7 +58,7 @@ h.run('view=currentView();sourceView=JSON.stringify(view);renderProductPrograms(
 assert.equal(h.run('JSON.stringify(game)'), world, 'rendering cannot mutate accounts, pending requests, policies or RNG');
 assert.equal(h.run('JSON.stringify(view)'), h.run('sourceView'));
 assert.equal(h.run('JSON.stringify(draft)'), before);
-assert.match(html(h), /data-product-view="onboarding"[^>]*>Applications & onboarding/);
+assert.match(html(h), /id="product-desk-onboarding"[^>]*>Applications/);
 assert.match(html(h), /Pending applications are not owned households or deposits/);
 assert.match(html(h), /do not reserve outside customers or funds/);
 assert.match(html(h), /No same-month activation/);

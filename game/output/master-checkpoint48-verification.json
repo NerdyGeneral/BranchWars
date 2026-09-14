@@ -1,0 +1,29 @@
+{
+  "checkpoint": 48,
+  "date": "2026-09-13",
+  "status": "scoped-tests-pass; campaign integration incomplete",
+  "sourceInputs": 184,
+  "expandedSaveVersion": "9.26",
+  "artifact": "output/BRANCH_WARS_premises48_verified.html",
+  "sha256": "c12fef86e2a5ec8b763cae9e064dcc2ea4873d931129944087335ec890f4218f",
+  "engineSha256": "21fe68979c7fde0c623422bd84a215cbef1064ae36cc9d15d7e93bab430ae213",
+  "preservedIntermediate": {
+    "artifact": "output/BRANCH_WARS_premises48_shared.html",
+    "sha256": "5b058f7195dae3f17062bf6c87bde9c31f5bb5ef92d41b8e8e060d936637471e",
+    "status": "failed solvent-default test; not final artifact"
+  },
+  "terminalChecks": [
+    {"test": "shared_premises_delivery.test.js", "groups": 11, "status": "pass"},
+    {"test": "shared_premises_agency.test.js", "groups": 9, "status": "pass", "combinedFixtures": "two twelve-month prepared settlement fixtures, not full campaign turns"},
+    {"test": "shared_premises.test.js", "groups": 8, "status": "pass"},
+    {"test": "shared_premises_boundary.test.js", "scenarios": 4, "reference": "checkpoint44", "status": "exact comparison pass"},
+    {"test": "investment_closure.test.js", "groups": 10, "aggregateDomainMonths": 108, "status": "pass"},
+    {"test": "investment_institution.test.js", "groups": 9, "aggregateDomainMonths": 61, "status": "pass"}
+  ],
+  "fundingObservation": {"agencyStartingCapital": 200000, "withoutSupportFailureMonth": 12, "fundedComparison": {"parentContributionMonth": 10, "amount": 50000, "activeThroughMonth": 12}, "balanceAccepted": false},
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "fullWindowsGate": "not run",
+  "current120And480StrategyMatrix": "outstanding",
+  "browserAndTwoComputerAcceptance": "outstanding",
+  "publication": false
+}

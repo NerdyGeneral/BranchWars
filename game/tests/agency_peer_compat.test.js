@@ -18,7 +18,7 @@ oldModule._compile(oldHarnessText,harnessFile);
 const oldHarness=oldModule.exports.harness,{harness:modernHarness}=require('./github_resilience.test.js');
 const oldEngine=oldHarness().c.window.BWEngine,newEngine=modernHarness().c.window.BWEngine;
 assert.equal(oldEngine.campaignCapabilities().financialGroupSupported,2);
-assert.equal(newEngine.campaignCapabilities().financialGroupSupported,8);
+assert.equal(newEngine.campaignCapabilities().financialGroupSupported,10);
 for(const rules of [1,2]){
  const options=oldEngine.previewFeatureSelection({}, {field:'financialGroupVersion',value:rules}).options;
  const contract=oldEngine.campaignRules(options,{context:'lobby'});
@@ -27,8 +27,8 @@ for(const rules of [1,2]){
  const fallback=modernHarness('guest').run('makeFeatureHello()');
  assert.equal(oldEngine.peerRulesIssue(contract,fallback),null,'V2-compatible hello is refused by the actual old engine');
 }
-function peers(transport,rules,oldHost=false,oldGuest=false){
- const host=(oldHost?oldHarness:modernHarness)('host'),guest=(oldGuest?oldHarness:modernHarness)('guest');
+function peers(transport,rules,oldHost=false,oldGuest=false,priorHarness=oldHarness){
+ const host=(oldHost?priorHarness:modernHarness)('host'),guest=(oldGuest?priorHarness:modernHarness)('guest');
  const queue=[],frames=[],settings=newEngine.previewFeatureSelection({}, {field:'financialGroupVersion',value:rules}).options;
  for(const [i,p]of [host,guest].entries()){
   p.c.enqueue=m=>{frames.push([i,copy(m)]);queue.push([i,copy(m)]);};
@@ -91,8 +91,8 @@ async function modernBoundaries(){
   assert.equal(pair.host.state().game.version,'9.2');
   const hellos=pair.frames.filter(([i,m])=>i===1&&m.type==='hello').map(([,m])=>m);
   assert.equal(hellos[0].financialGroupSupported,2);
-  assert(hellos.some(m=>m.financialGroupSupported===8&&m.featureChallenge));
-  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===8));
+  assert(hellos.some(m=>m.financialGroupSupported===10&&m.featureChallenge));
+  assert(pair.frames.some(([i,m])=>i===0&&m.type==='hello_request'&&m.financialGroupSupported===10));
   const before=JSON.stringify(pair.host.state().game),caps=copy(pair.host.run('featurePeerCapabilities'));
   pair.host.c.bootstrap=copy(hellos[0]);pair.host.run('handleMessage(bootstrap)');await pair.drain();
   assert.deepEqual(copy(pair.host.run('featurePeerCapabilities')),caps,'Late bootstrap replaced confirmed modern capability');
@@ -117,7 +117,8 @@ async function modernBoundaries(){
   await start(edited);assert.equal(edited.host.state().game.version,'9.2');
  }
 }
-(async()=>{
+module.exports={peers,lobby,start};
+if(require.main===module)(async()=>{
  const cases=await mixedLegacy();await modernBoundaries();
  console.log(JSON.stringify({passed:true,mixedLegacyCases:cases,transports:3,
   scope:'Actual immutable V2 engine/client on both host directions for Group 1/2; modern Group 3 bootstrap, refusal, lobby upgrade and delayed-message fences. Physical two-computer acceptance remains separate.'}));

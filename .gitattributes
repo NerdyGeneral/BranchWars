@@ -1,4 +1,27 @@
 # Preserve tested portable/package and compatibility-reference bytes on Windows.
+/game/tools/vendor/acorn.js -text
+/game/tools/vendor/acorn-license.txt -text
+# Preserve newly committed checkpoint evidence and reference fingerprints.
+/game/output/** -text
+/game/reports/reference-builds/BRANCH_WARS_assets1_8eb2011a.html -text
+/game/reports/reference-builds/BRANCH_WARS_business1_bb6ae726.html -text
+/game/reports/reference-builds/BRANCH_WARS_business2_6de2fe68.html -text
+/game/reports/reference-builds/BRANCH_WARS_cash1_2f0a92c3.html -text
+/game/reports/reference-builds/BRANCH_WARS_choice1_90d0d4e1.html -text
+/game/reports/reference-builds/BRANCH_WARS_creditorders59_1b4d0a59.html -text
+/game/reports/reference-builds/BRANCH_WARS_delivery55_afde61a6.html -text
+/game/reports/reference-builds/BRANCH_WARS_expanded_35_ab06ac97.html -text
+/game/reports/reference-builds/BRANCH_WARS_group10_2af5dba7.html -text
+/game/reports/reference-builds/BRANCH_WARS_group9_1bb3e687.html -text
+/game/reports/reference-builds/BRANCH_WARS_income1_8d4a9fda.html -text
+/game/reports/reference-builds/BRANCH_WARS_investment1_c8fcc78a.html -text
+/game/reports/reference-builds/BRANCH_WARS_lending1_36_9d4aa4d5.html -text
+/game/reports/reference-builds/BRANCH_WARS_premises1_c22b6106.html -text
+/game/reports/reference-builds/BRANCH_WARS_strategy1_37_b4351e85.html -text
+/game/reports/reference-builds/BRANCH_WARS_suitability1_078a2834.html -text
+/game/reports/reference-builds/BRANCH_WARS_suites1_5cc991f7.html -text
+/game/reports/reference-builds/BRANCH_WARS_sweeps1_900f62d2.html -text
+/game/reports/reference-builds/BRANCH_WARS_trading1_84b55d3d.html -text
 /game/BRANCH_WARS.html -text
 /game/BRANCH_WARS_LAN_SERVER.ps1 -text
 /game/OPEN_BRANCH_WARS.bat -text

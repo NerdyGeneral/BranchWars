@@ -43,11 +43,15 @@ assert.equal(g.companyEconomy.version,4);assert.equal(g.departmentFunctionEconom
 const mismatchedProvider=copy(g);mismatchedProvider.departmentFunctionEconomy.version=1;
 delete mismatchedProvider.departmentFunctionEconomy.circulated;assert.throws(()=>E.validatePilot(mismatchedProvider));
 const rules=E.campaignRules(g,{context:'game'}),caps=E.campaignCapabilities();
-assert.equal(caps.financialGroupSupported,8);assert.equal(E.peerRulesIssue(rules,caps),null);
+assert.equal(caps.financialGroupSupported,10);assert.equal(E.peerRulesIssue(rules,caps),null);
 assert(E.peerRulesIssue(rules,{...caps,financialGroupSupported:6}),'Published V3 peer must reject Group7');
 assert(E.peerRulesIssue(rules,{...caps,departmentStaffingSupported:1}),'Frozen staffing evidence still required');
 const malformed=copy(g);malformed.version='9.5';assert.throws(()=>E.validatePilot(malformed));
-assert.throws(()=>E.createGame({...options,financialGroupVersion:9}));
+// Group10 is now an explicitly supported boundary; refusal must target the
+// first unsupported version, not turn a previously valid guard into a false fail.
+assert.throws(()=>E.createGame({...options,financialGroupVersion:caps.financialGroupSupported+1}));
+const currentGroup=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:10}).options,created:1,seed:'supported-group10'});
+assert.equal(currentGroup.financialGroupVersion,10);assert.equal(currentGroup.version,'9.9');E.validatePilot(currentGroup);
 const plan=g.players.map((_,i)=>E.chooseBot(g,i));E.submit(g,0,plan[0]);const restored=E.migrateCampaign(copy(g));
 E.submit(g,1,plan[1]);E.submit(restored,1,copy(plan[1]));
 assert.deepEqual(copy(E.migrateCampaign(copy(g))),copy(E.migrateCampaign(copy(restored))));

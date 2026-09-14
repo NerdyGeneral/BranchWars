@@ -13,7 +13,7 @@ const agencyCopy = value => JSON.parse(JSON.stringify(value));
 const agencyExact = (value, keys) => value && typeof value === 'object' && !Array.isArray(value) &&
   Object.keys(value).sort().join() === [...keys].sort().join();
 const agencyWhole = n => Number.isSafeInteger(n) && n >= 0;
-function groupEntities(p) { return p.agency?.status === 'active' ? [p.agency.book] : []; }
+function groupEntities(p) { return [...(p.agency?.status === 'active' ? [p.agency.book] : []),...(p.investmentBusiness?.status==='active'?[p.investmentBusiness.book]:[])]; }
 function agencyFixedCost(staff) { return AGENCY_RULES.overhead + staff * AGENCY_RULES.salary; }
 function agencyRelationships(companies) {
   return companies.flatMap(c => Object.keys(AGENCY_PRODUCTS).map(product => ({
@@ -22,7 +22,7 @@ function agencyRelationships(companies) {
   })));
 }
 function initializeAgency(g) {
-  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return;
+  if (![3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)) return;
   if (!g.companyEconomy || g.agencyEconomy) throw Error('Agency requires an initialized company economy.');
   if (g.companyEconomy.version !== 3) throw Error('Agency requires versioned corporate premium accounting.');
   g.agencyEconomy = { version: 1, month: 0, carrier: GroupAccounting.opening('agency:carriers'),
@@ -35,16 +35,18 @@ function initializeAgency(g) {
     p.agency = { version: 1, status: 'unopened', book: GroupAccounting.opening(p.id + ':agency'),
       staff: 0, policy: { target: 'property', outreach: 0, supportCap: 0 },
       openedCycle: 0, failedCycle: 0, failures: 0, report: null };
+    if(g.financialGroupVersion===10){p.agency.version=2;p.agency.professionals=emptyAgencyProfessionals();}
   }
 }
 function defaultAgencyPlan(p) {
   const a = p.agency;
   return { launch: false, capital: 0, staff: a?.staff || 1, target: a?.policy.target || 'property',
-    outreach: a?.policy.outreach || 0, supportCap: a?.policy.supportCap || 0, dividend: 0 };
+    outreach: a?.policy.outreach || 0, supportCap: a?.policy.supportCap || 0, dividend: 0,...(a?.version===2?agencyProfessionalDefault(p):{}) };
 }
 function agencyQuote(p, input = defaultAgencyPlan(p), companies = p.companySnapshot?.world) {
   if (!p.agency) return null;
-  const a = p.agency, monthlyExpense = agencyFixedCost(input.staff) + input.outreach * AGENCY_RULES.outreachCost;
+  const a = p.agency, professional=a.version===2?agencyProfessionalQuote(p,input):null,
+    fixedCost=agencyProfessionalOperatingCost(p,input),monthlyExpense=fixedCost+input.outreach*AGENCY_RULES.outreachCost;
   const relationships = (p.agencySnapshot?.relationships || []).filter(r => r.owner === p.id);
   let estimatedCommission = 0;
   for (const r of relationships) {
@@ -52,13 +54,13 @@ function agencyQuote(p, input = defaultAgencyPlan(p), companies = p.companySnaps
     if (c && !c.resolution) estimatedCommission += Math.floor(Math.round(c.baseFee * product.premiumRate) * product.commissionRate);
   }
   return { status: a.status, launchMinimum: AGENCY_RULES.launchMinimum, setupCost: AGENCY_RULES.setupCost,
-    recruitmentCost: Math.max(0, input.staff - a.staff) * AGENCY_RULES.recruitment,
-    monthlyExpense, fixedCost: agencyFixedCost(input.staff), capacity: input.staff * AGENCY_RULES.staffCapacity,
+    recruitmentCost: professional?professional.recruitmentCost:Math.max(0, input.staff - a.staff) * AGENCY_RULES.recruitment,
+    monthlyExpense, fixedCost, capacity: professional?professional.units:input.staff * AGENCY_RULES.staffCapacity,
     committedCapital: input.capital, availableParentCash: p.financialGroup.parent.accounts.cash,
     distributionLimit: a.status === 'active' ? GroupAccounting.distributionLimit(a.book, 0, monthlyExpense) : 0,
     relationships: relationships.length, serviceLoad: relationships.reduce((n,r) => n + AGENCY_PRODUCTS[r.product].load, 0),
     reserveRequired: 3 * monthlyExpense, estimatedCommission, cash: a.book.accounts.cash,
-    equity: a.book.accounts.equity, payables: a.book.accounts.payables };
+    equity: a.book.accounts.equity, payables: a.book.accounts.payables,...(professional?{professional}: {}) };
 }
 function agencyReview(p) { return agencyQuote(p); }
 function normalizeAgencyPlan(p, plan) {
@@ -68,13 +70,14 @@ function normalizeAgencyPlan(p, plan) {
   }
   if (plan.agencyPolicy === undefined) plan.agencyPolicy = defaultAgencyPlan(p);
   const s = plan.agencyPolicy;
-  if (!agencyExact(s, ['launch','capital','staff','target','outreach','supportCap','dividend']) ||
+  if (!agencyExact(s, ['launch','capital','staff','target','outreach','supportCap','dividend',...(p.agency.version===2?['roles','maintainCredentials']:[])]) ||
       typeof s.launch !== 'boolean' || !agencyWhole(s.capital) || s.capital > 1000000000 ||
       !Number.isInteger(s.staff) || s.staff < 1 || s.staff > AGENCY_RULES.maxStaff ||
       !Object.hasOwn(AGENCY_PRODUCTS, s.target) || ![0,1,2].includes(s.outreach) ||
       !agencyWhole(s.supportCap) || s.supportCap > AGENCY_RULES.maxSupport || !agencyWhole(s.dividend))
     throw Error('Invalid insurance agency instructions.');
-  const a = p.agency, reserved = plan.groupPolicy?.bankSupport || 0;
+  if(p.agency.version===2)normalizeAgencyProfessionals(p,s);
+  const a = p.agency, reserved = (plan.groupPolicy?.bankSupport || 0)+(p.investmentBusiness?plan.investmentPolicy?.institution?.capital||0:0);
   if (s.launch && (a.status === 'active' || s.capital < AGENCY_RULES.launchMinimum))
     throw Error('A new agency requires its full funded launch capital.');
   if (!s.launch && a.status !== 'active' && (s.capital || s.dividend))
@@ -139,6 +142,7 @@ function agencyWindDown(g, p) {
     { investments: -loss, equity: -loss }, -loss);
   p.financialGroup.investmentBasis.agency = 0;
   a.status = 'failed'; a.staff = 0; a.failedCycle = g.cycle; a.failures++;
+  if(a.version===2){a.professionals.employees=[];a.professionals.registration={appliedCycle:0,readyCycle:0,validThrough:0};}
   a.policy.outreach = 0; a.policy.supportCap = 0; a.report.failed = true;
   for (const r of e.relationships) if (r.owner === p.id) {
     r.owner = null; r.remaining = 0; r.quality = 0; a.report.lost++;
@@ -146,10 +150,11 @@ function agencyWindDown(g, p) {
 }
 function agencyPrepare(g, p, plan) {
   const a = p.agency, s = plan.agencyPolicy;
+  const professional=a.version===2?agencyProfessionalQuote(p,s,g.cycle):null;
   a.report = agencyEmptyReport(g.cycle);
   // Revalidate against pre-settlement authority. Current parent cash may have
   // changed since submission; unmet capital requests are reduced, never borrowed.
-  const free = Math.max(0, p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0));
+  const free = Math.max(0, p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0) - (p.investmentBusiness?plan.investmentPolicy?.institution?.capital||0:0));
   if (s.launch) {
     if (free < s.capital || s.capital < AGENCY_RULES.launchMinimum) return;
     a.book = GroupAccounting.opening(p.id + ':agency'); a.status = 'active'; a.staff = 0;
@@ -162,12 +167,13 @@ function agencyPrepare(g, p, plan) {
   if (a.status !== 'active') return;
   const hires = Math.max(0, s.staff - a.staff);
   a.staff = s.staff; a.policy = { target: s.target, outreach: s.outreach, supportCap: s.supportCap };
-  a.report.recruitment = hires * AGENCY_RULES.recruitment;
+  if(professional)applyAgencyProfessionals(g,p,s,professional);
+  a.report.recruitment = professional?professional.recruitmentCost:hires * AGENCY_RULES.recruitment;
   agencyInvoice(g, p, a.report.recruitment, 'agency.recruitment');
-  agencyInvoice(g, p, agencyFixedCost(a.staff) + s.outreach * AGENCY_RULES.outreachCost, 'agency.operations');
+  agencyInvoice(g, p, agencyProfessionalOperatingCost(p,s) + s.outreach * AGENCY_RULES.outreachCost, 'agency.operations');
   const shortfall = Math.max(0, a.book.accounts.payables - a.book.accounts.cash);
   const support = Math.min(shortfall, s.supportCap,
-    Math.max(0, p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0)));
+    Math.max(0, p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0) - (p.investmentBusiness?plan.investmentPolicy?.institution?.capital||0:0)));
   agencyInvest(g, p, support); a.report.support = support;
   agencyPayBills(g, p);
   // Obligations precede acquisition: a business must not sell policies to rescue
@@ -181,12 +187,45 @@ function agencyCandidateScore(p, company, relationship, incumbent) {
   return 50 + local + service + digital + p.agency.staff * 2 + p.agency.policy.outreach * 5 +
     (incumbent ? 8 + relationship.quality : 0);
 }
-function settleAgency(g, plans) {
-  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return [];
+function settleAgency(g, plans, premises) {
+  if(premises===undefined)return settleAgencyDelivery(g,plans);
+  // This integration path has a second authority check after staff/credentials
+  // are prepared. Reject bad site instructions before adopting any payroll,
+  // capital movement, premium or relationship from that preparation.
+  const next={...g,players:agencyCopy(g.players),agencyEconomy:agencyCopy(g.agencyEconomy),companyEconomy:agencyCopy(g.companyEconomy)};
+  const lines=settleAgencyDelivery(next,plans,premises);
+  g.agencyEconomy=next.agencyEconomy;g.companyEconomy=next.companyEconomy;
+  for(const [i,p]of g.players.entries()){p.agency=next.players[i].agency;p.financialGroup=next.players[i].financialGroup;}
+  return lines;
+}
+function settleAgencyDelivery(g, plans, premises) {
+  if(!prepareAgencySettlement(g,plans))return [];
+  return finishAgencySettlement(g,plans,premises);
+}
+function prepareAgencySettlement(g,plans){
+  if (![3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)) return false;
   const e = g.agencyEconomy;
   if (e.month !== g.cycle - 1 || g.companyEconomy.month !== g.cycle)
     throw Error('Agency settlement must occur once after company operations.');
+  if(g.players.some(p=>p.agency.report?.cycle===g.cycle))throw Error('Agency workforce was already prepared this month.');
   for (const [i,p] of g.players.entries()) agencyPrepare(g, p, plans[i]);
+  return true;
+}
+function finishAgencySettlement(g,plans,premises){
+  const e=g.agencyEconomy;
+  if(!e||e.month!==g.cycle-1||g.companyEconomy.month!==g.cycle||g.players.some(p=>p.agency.report?.cycle!==g.cycle))throw Error('Prepare agency operating costs once before service.');
+  const network=premises===undefined?null:SharedPremises.agencyDelivery(premises,g.players,g.cycle);
+  const localAgencyPool=(p,market)=>network?.[g.players.indexOf(p)].local.find(r=>r.market===market);
+  const agencyWorkAvailable=(p,market,product,acquiring)=>{
+    const i=g.players.indexOf(p),r=network[i],local=localAgencyPool(p,market),central=!acquiring||plans[i].focus===market;
+    return (local?.units||0)+(central?r.central.units:0)>=AGENCY_PRODUCTS[product].load&&
+      (!acquiring||(local?.acquisitions[product]||0)+(central?r.central.acquisitions[product]:0)>=1);
+  };
+  const consumeAgencyWork=(p,market,product,acquiring)=>{
+    const r=network[g.players.indexOf(p)],local=localAgencyPool(p,market),amount=AGENCY_PRODUCTS[product].load,used=Math.min(amount,local?.units||0);
+    if(local)local.units-=used;r.central.units-=amount-used;
+    if(acquiring){if((local?.acquisitions[product]||0)>0)local.acquisitions[product]--;else r.central.acquisitions[product]--;}
+  };
   const used = new Map(g.players.map(p => [p.id, 0])), won = new Map(g.players.map(p => [p.id, 0]));
   // Service existing obligations before new acquisition. Month-rotated ordering
   // resolves scarce staff and tied bids without giving one bank permanent priority.
@@ -201,11 +240,13 @@ function settleAgency(g, plans) {
     }
     const renewal = r.remaining <= 1, candidates = g.players.filter(p => {
       const a = p.agency;
-      if (a.status !== 'active' || used.get(p.id) + product.load > a.staff * AGENCY_RULES.staffCapacity) return false;
+      const delivery=agencyDelivery(p,g.cycle);
+      if (a.status !== 'active' || !delivery.permitted.includes(r.product) || (network?!agencyWorkAvailable(p,c.market,r.product,p.id!==r.owner):used.get(p.id) + product.load > delivery.units)) return false;
       if (p.id === r.owner && !renewal) return true;
       if (!renewal && r.owner !== null) return false;
       if (p.id === r.owner) return true;
-      return a.policy.target === r.product && a.policy.outreach > 0 && won.get(p.id) < a.policy.outreach * 2;
+      return a.policy.target === r.product && a.policy.outreach > 0 && won.get(p.id) < a.policy.outreach * 2 &&
+        (!delivery.producers||won.get(p.id)<Math.floor(delivery.producers[r.product]*2));
     });
     candidates.sort((a,b) => agencyCandidateScore(b,c,r,b.id === r.owner) - agencyCandidateScore(a,c,r,a.id === r.owner) ||
       ((g.players.indexOf(a) + g.cycle + c.clientIndex) % 2) - ((g.players.indexOf(b) + g.cycle + c.clientIndex) % 2));
@@ -222,6 +263,7 @@ function settleAgency(g, plans) {
       e.carrier = flow.payer; provider.agency.book = flow.provider; e.commissionPaid += commission;
     }
     provider.agency.report.commission += commission; provider.agency.report.premiums += premium;
+    if(network)consumeAgencyWork(provider,c.market,r.product,provider.id!==r.owner);
     provider.agency.report.clients++; used.set(provider.id, used.get(provider.id) + product.load);
     if (r.owner !== provider.id) {
       if (old) old.agency.report.lost++;
@@ -235,10 +277,10 @@ function settleAgency(g, plans) {
     const a = p.agency, s = plans[i].agencyPolicy;
     if (a.status !== 'active') continue;
     const amount = Math.min(s.dividend, GroupAccounting.distributionLimit(a.book, 0,
-      agencyFixedCost(a.staff) + a.policy.outreach * AGENCY_RULES.outreachCost));
+      agencyProfessionalOperatingCost(p,s) + a.policy.outreach * AGENCY_RULES.outreachCost));
     if (amount) {
       const flow = GroupAccounting.dividend(a.book, p.financialGroup.parent, amount,
-        { monthlyFixedCost: agencyFixedCost(a.staff) + a.policy.outreach * AGENCY_RULES.outreachCost });
+        { monthlyFixedCost: agencyProfessionalOperatingCost(p,s) + a.policy.outreach * AGENCY_RULES.outreachCost });
       a.book = flow.entity; p.financialGroup.parent = flow.parent; e.parentCashNet -= amount;
       a.report.dividend = amount;
     }
@@ -250,8 +292,8 @@ function settleAgency(g, plans) {
 }
 function validateAgencyPlayer(p, cycle) {
   const a = p.agency, f = p.financialGroup;
-  if (!agencyExact(a, ['version','status','book','staff','policy','openedCycle','failedCycle','failures','report']) ||
-      a.version !== 1 || !['unopened','active','failed'].includes(a.status) ||
+  if (!agencyExact(a, ['version','status','book','staff','policy','openedCycle','failedCycle','failures','report',...(a?.version===2?['professionals']:[])]) ||
+      ![1,2].includes(a.version) || !['unopened','active','failed'].includes(a.status) ||
       !agencyWhole(a.staff) || a.staff > AGENCY_RULES.maxStaff ||
       (a.status === 'active' ? a.staff < 1 : a.staff !== 0) ||
       !agencyWhole(a.openedCycle) || a.openedCycle > cycle || !agencyWhole(a.failedCycle) || a.failedCycle > cycle ||
@@ -259,6 +301,7 @@ function validateAgencyPlayer(p, cycle) {
       !Object.hasOwn(AGENCY_PRODUCTS, a.policy.target) || ![0,1,2].includes(a.policy.outreach) ||
       !agencyWhole(a.policy.supportCap) || a.policy.supportCap > AGENCY_RULES.maxSupport)
     throw Error('Invalid insurance agency state.');
+  if(a.version===2)validateAgencyProfessionals(p,cycle);
   GroupAccounting.validate(a.book);
   if (a.book.entityId !== p.id + ':agency' || ['businessAssets','investments','debt','custodyAssets','custodyLiabilities'].some(k => a.book.accounts[k]))
     throw Error('Agency cannot hold underwriting, investment, borrowed or customer assets.');
@@ -270,7 +313,7 @@ function validateAgencyPlayer(p, cycle) {
     throw Error('Invalid agency lifecycle.');
   if (!f || f.version !== 2 || !agencyExact(f.investmentBasis, ['bank','agency']) ||
       Object.values(f.investmentBasis).some(n => !agencyWhole(n)) ||
-      f.investmentBasis.bank + f.investmentBasis.agency !== f.parent.accounts.investments ||
+      f.investmentBasis.bank + f.investmentBasis.agency + (p.investmentBusiness?.capitalBasis||0) !== f.parent.accounts.investments ||
       a.status !== 'active' && f.investmentBasis.agency !== 0 ||
       a.status === 'active' && a.book.accounts.equity !== f.investmentBasis.agency + a.book.retainedEarnings)
     throw Error('Agency investment basis does not reconcile.');
@@ -295,17 +338,17 @@ function validateAgencyRelationships(relationships, companies, ids) {
     throw Error('Invalid insurance relationship.');
 }
 function validateAgencySave(g) {
-  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) {
+  if (![3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)) {
     if (g.agencyEconomy !== undefined || g.players.some(p => p.agency !== undefined || p.submitted?.agencyPolicy !== undefined))
       throw Error('Unversioned insurance agency.');
     return;
   }
   const e = g.agencyEconomy, month = g.gameOver ? g.cycle : g.cycle - 1;
-  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss',...([7,8].includes(g.financialGroupVersion)?['circulated']:[])]) ||
-      e.version !== ([7,8].includes(g.financialGroupVersion)?2:1) || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
+  if (!agencyExact(e, ['version','month','carrier','supplier','relationships','parentCashNet','premiumPaid','commissionPaid','operatingPaid','creditorLoss',...([7,8,9,10].includes(g.financialGroupVersion)?['circulated']:[])]) ||
+      e.version !== ([7,8,9,10].includes(g.financialGroupVersion)?2:1) || e.month !== month || !Number.isSafeInteger(e.parentCashNet) ||
       ['premiumPaid','commissionPaid','operatingPaid','creditorLoss'].some(k => !agencyWhole(e[k])))
     throw Error('Invalid agency economy.');
-  const circulated=[7,8].includes(g.financialGroupVersion)?e.circulated:{carrier:0,supplier:0};
+  const circulated=[7,8,9,10].includes(g.financialGroupVersion)?e.circulated:{carrier:0,supplier:0};
   if(!agencyExact(circulated,['carrier','supplier'])||Object.values(circulated).some(n=>!agencyWhole(n)))throw Error('Invalid agency circulation.');
   GroupAccounting.validate(e.carrier); GroupAccounting.validate(e.supplier);
   if (e.carrier.entityId !== 'agency:carriers' || e.supplier.entityId !== 'agency:suppliers' ||
@@ -315,6 +358,7 @@ function validateAgencySave(g) {
   validateAgencyRelationships(e.relationships, g.companyEconomy.companies, g.players.map(p => p.id));
   let cash = e.carrier.accounts.cash + e.supplier.accounts.cash, claims = 0;
   for (const p of g.players) {
+    if(p.agency?.version!==(g.financialGroupVersion===10?2:1))throw Error('Agency professional rules do not match this campaign.');
     validateAgencyPlayer(p, g.cycle); cash += p.agency.book.accounts.cash; claims += p.agency.book.accounts.payables;
     if (p.agencySnapshot !== undefined) throw Error('Saved agency contains projected owner state.');
     if (p.submitted) normalizeAgencyPlan(p, agencyCopy(p.submitted));
@@ -322,13 +366,13 @@ function validateAgencySave(g) {
     if (p.agency.report?.cycle !== (month || undefined) && !(month === 0 && p.agency.report === null))
       throw Error('Stale agency report.');
   }
-  if (cash + circulated.carrier + circulated.supplier !== e.parentCashNet + e.premiumPaid || e.supplier.accounts.businessAssets !== claims ||
+  if (cash + circulated.carrier + circulated.supplier + sharedPremisesTotal(g,'agencyRent') !== e.parentCashNet + e.premiumPaid || e.supplier.accounts.businessAssets !== claims ||
       e.carrier.accounts.cash + circulated.carrier !== e.premiumPaid - e.commissionPaid ||
       e.supplier.accounts.cash + circulated.supplier !== e.operatingPaid || g.companyEconomy.agencyCashNet !== e.premiumPaid)
     throw Error('Agency cash and counterparty resources do not reconcile.');
 }
 function projectAgency(g, out, index) {
-  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return;
+  if (![3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)) return;
   const p = g.players[index], rival = g.players[1-index];
   out.me.agency = agencyCopy(p.agency);
   out.me.agencySnapshot = { version: 1, month: g.agencyEconomy.month, relationships: agencyCopy(g.agencyEconomy.relationships) };
@@ -336,11 +380,12 @@ function projectAgency(g, out, index) {
   if (out.lastPlans?.[rival.id]) delete out.lastPlans[rival.id].agencyPolicy;
 }
 function validateAgencyView(view) {
-  if (![3,4,5,6,7,8].includes(view.financialGroupVersion)) {
+  if (![3,4,5,6,7,8,9,10].includes(view.financialGroupVersion)) {
     if (view.agencyEconomy !== undefined || view.me?.agency !== undefined || view.me?.agencySnapshot !== undefined || view.rival?.agency !== undefined || view.rival?.agencySnapshot !== undefined)
       throw Error('Unversioned insurance agency view.');
     return;
   }
+  if(view.me.agency?.version!==(view.financialGroupVersion===10?2:1))throw Error('Agency professional view rules do not match this campaign.');
   validateAgencyPlayer(view.me, view.cycle);
   const s = view.me.agencySnapshot;
   if (!agencyExact(s, ['version','month','relationships']) || s.version !== 1 || s.month !== (view.gameOver ? view.cycle : view.cycle-1))
@@ -350,9 +395,9 @@ function validateAgencyView(view) {
     throw Error('Private insurance agency information exposed.');
 }
 function planAgency(g, index, plan) {
-  if (![3,4,5,6,7,8].includes(g.financialGroupVersion)) return plan;
+  if (![3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)) return plan;
   const p = g.players[index], a = p.agency, s = defaultAgencyPlan(p);
-  const free = p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0);
+  const free = p.financialGroup.parent.accounts.cash - (plan.groupPolicy?.bankSupport || 0) - (p.investmentBusiness?plan.investmentPolicy?.institution?.capital||0:0);
   const open = g.companyEconomy.companies.filter(c => !c.resolution);
   // Fund the parent through the same explicit safe bank dividend instruction.
   // This month's proposed dividend is never counted as launch cash.
@@ -374,8 +419,22 @@ function planAgency(g, index, plan) {
     targets.sort((a,b) => b.available - a.available);
     s.target = targets[0].product; s.outreach = targets[0].available && load < s.staff * AGENCY_RULES.staffCapacity ? 1 : 0;
     if (a.book.accounts.cash < agencyFixedCost(s.staff) * 2 && free > 0) s.capital = Math.min(50000, free);
-    const limit = agencyQuote(p, s).distributionLimit;
+    const limit = a.version===2?0:agencyQuote(p, s).distributionLimit;
     if (!s.capital && limit > 20000) s.dividend = Math.floor(limit / 2);
+  }
+  if(a.version===2){
+    // Keep a stable licensed team. New staff are real recruits, not bank staff
+    // reassigned into an unrelated profession, and credentials are maintained.
+    s.roles=agencyProfessionalDefault(p).roles;s.maintainCredentials=true;
+    const required=AGENCY_PRODUCTS[s.target]&&s.target==='benefits'?'benefitsProducer':'propertyProducer';
+    if(!s.roles[required]){
+      if(a.status!=='active')s.target='property';
+      else if(a.book.accounts.cash>6*agencyProfessionalOperatingCost(p,{roles:s.roles})&&Object.values(s.roles).reduce((n,x)=>n+x,0)<AGENCY_RULES.maxStaff)s.roles[required]=1;
+      else s.target=s.roles.propertyProducer?'property':'benefits';
+    }
+    s.staff=Object.values(s.roles).reduce((n,x)=>n+x,0);
+    // Recheck the real salaries and reserve instead of the legacy generic rate.
+    const limit=agencyQuote(p,s).distributionLimit;s.dividend=!s.capital&&limit>20000?Math.floor(limit/2):0;
   }
   plan.agencyPolicy = s; normalizeAgencyPlan(p, plan); return plan;
 }

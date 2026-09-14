@@ -1,0 +1,35 @@
+{
+  "checkpoint": 42,
+  "date": "2026-09-13",
+  "sourceInputs": 181,
+  "engineSha256": "8950a0f02e12dfb5f6669626d9cb9cc40a9188d67e8cb9e4e540f38a956c9095",
+  "portableSha256": "de6c18ffa3f515ee1b038b8c93dcb45c8ec8df083d6f147b55a72667bf351ffd",
+  "candidate": "output/BRANCH_WARS_control42_review.html",
+  "scope": "Explicit companyControlVersion1/save9.24 integration; normal Expanded selection remains9.23, checked portable9.22",
+  "checks": {
+    "domainGroups": 10,
+    "campaignGroups": 4,
+    "fundedCampaignMonths": 10,
+    "controlUiGroups": 3,
+    "existingShareUiGroups": 2,
+    "simulatedTransports": ["GitHub", "LAN", "direct link"],
+    "transportScope": "capability refusal, three funded months, half-ready restore, owner privacy and delayed/duplicate plans",
+    "oldPeerCaveat": "Capability omitted from modern code, not a complete older binary",
+    "legacy": "Immutable checkpoint37 creation, human/AI, RNG, half-ready saves, views and rematch passed",
+    "architecture": "passed with original ceilings",
+    "whitespace": "passed",
+    "publication": "none"
+  },
+  "provisional": [
+    "Half of initial outside-shareholder trading cash capitalizes the finite acquisition lender",
+    "Submitted control offers may await consent, but closing cannot transfer rival votes without explicit consent",
+    "Outstanding debt, unpaid interest and integration remain reserved/owed; ordinary company trading cannot gain control"
+  ],
+  "remaining": [
+    "Controlled-company consolidation, acquisition-date basis, outside shareholders and internal-balance eliminations",
+    "Complete response/defense UI and real browser acceptance",
+    "Broader ownership exit/re-entry, defaults and rival strategic use",
+    "Enable completed control through the single normal Expanded selection",
+    "Remaining master premises, management, balance, full release gate, manual PDF and exportable V3 artifacts"
+  ]
+}

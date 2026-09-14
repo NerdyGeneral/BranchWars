@@ -32,7 +32,7 @@ function normalizeManagementPolicy(p,plan){
 }
 // This is a pure DRAFT preparer, never called after a human locks a plan.
 // Existing explicit bids, offers, projects, hires and manual investments are preserved.
-function managementPlan(p,input,economy){
+function managementPlan(p,input,economy,g=null){
  if(p.departmentFunctions){
   const current=departmentFunctionsQuote({cycle:p.facilityLifecycle.lastActivatedCycle},p,input);
   if(!current.status.eligible)return {plan:JSON.parse(JSON.stringify(input)),notes:['Management paused: '+current.status.reason+' Standing instructions are unchanged; review department and office staffing.']};
@@ -41,7 +41,7 @@ function managementPlan(p,input,economy){
  const m=validateManagement(plan.management||p.management);plan.management=JSON.parse(JSON.stringify(m));
  const d=m.delivery;
  if(d.mode!=='manual'){
-  const options=serviceDeliveryOptions(p,plan,economy).filter(o=>o.staff<=d.staffLimit&&o.outsourcing<=d.vendorLimit&&plan.allocation.business-o.staff>=d.salesFloor);
+  const options=serviceDeliveryOptions(p,plan,economy,undefined,g).filter(o=>o.staff<=d.staffLimit&&o.outsourcing<=d.vendorLimit&&plan.allocation.business-o.staff>=d.salesFloor);
   if(d.mode==='inhouse')options.sort((a,b)=>a.outsourcing-b.outsourcing||b.bankProfit-a.bankProfit);
   const best=options[0],bid=plan.contractBid;
   if(best){
@@ -58,8 +58,8 @@ function managementPlan(p,input,economy){
   for(const key of r.priority){
    const target=r.targets[key],already=plan.investments[key]||0;if(!target)continue;
    const room=Math.max(0,CAPABILITY_TIERS[key][target-1]-capabilitySpend(p,key)-already);
-   const budget=planBudget(p,plan),reserveRoom=p.stats.cash-r.reserve-budget.total;
-   const advisory=servicePlanReview(p,plan,economy).spendingLimit-budget.total;
+   const budget=planBudget(p,plan,g),reserveRoom=p.stats.cash-r.reserve-budget.total;
+   const advisory=servicePlanReview(p,plan,economy,g).spendingLimit-budget.total;
    const amount=Math.floor(Math.min(remaining,room,CAPABILITY_CAP_PER_CYCLE-already,budget.remaining,reserveRoom,advisory)/1000)*1000;
    if(amount>=1000){plan.investments[key]=already+amount;remaining-=amount;notes.push('Recurring research staged $'+amount.toLocaleString()+' for '+STRATEGY_BRANCHES[key].name+'.')}
   }
@@ -75,7 +75,7 @@ function planInstitutionManagement(g,index,plan){
  plan.management.research.enabled=true;
  plan.management.research.budget=25000;
  plan.management.delivery.mode='profit';
- return managementPlan({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy).plan;
+ return managementPlan({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy,g).plan;
 }
 
 function validateManagementSave(g){

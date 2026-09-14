@@ -35,7 +35,7 @@ function change(h, field, value) {
 const legacy = setup(0, false);
 assert.equal(legacy.run('productDeskView'), 'development', 'a stale new subview falls back for older campaigns');
 assert.doesNotMatch(html(legacy), /data-product-view="relationships"|EXISTING CUSTOMER OFFERS/);
-assert.match(html(legacy), /Development & retirement/);
+assert.match(html(legacy), /Product catalogue/);
 const legacyWorld = legacy.run('JSON.stringify(game)');
 legacy.run("productDeskView='advertising';renderProductPrograms(E.publicState(game,0))");
 assert.match(html(legacy), /3\.00 banker equivalents/, 'older campaigns keep their full post-retention advertising time');
@@ -48,7 +48,7 @@ const world = h.run('JSON.stringify(game)'), draftBefore = h.run('JSON.stringify
 h.run('renderProductPrograms(E.publicState(game,0))');
 assert.equal(h.run('JSON.stringify(game)'), world, 'review must not mutate accounts, policies or RNG');
 assert.equal(h.run('JSON.stringify(draft)'), draftBefore, 'review must not mutate the draft');
-assert.match(html(h), /data-product-view="relationships"[^>]*>Existing customers/);
+assert.match(html(h), /id="product-desk-relationships"[^>]*>Existing customers/);
 assert.match(html(h), /Eligible existing balances|Locked \/ guaranteed balances excluded/);
 assert.match(html(h), /conversion equivalents/);
 assert.match(html(h), /CURRENT-BOOK QUOTE/);

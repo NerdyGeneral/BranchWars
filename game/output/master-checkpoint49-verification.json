@@ -1,0 +1,26 @@
+{
+  "checkpoint": 49,
+  "date": "2026-09-13",
+  "status": "campaign integration scoped-tested; office UI and setup enablement pending",
+  "sourceInputs": 185,
+  "defaultExpandedVersion": "9.26",
+  "explicitSharedPremisesVersion": "9.27",
+  "artifact": "output/BRANCH_WARS_premises49_campaign.html",
+  "sha256": "9832d2ca315e68ce61a3bd0c0a79bd9e5a1dc59523dba7759ad580845d1ebd7a",
+  "engineSha256": "7347850181574d866903facec80c11a217660ad990333f6c75f26f0b55376f7c",
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "finalTerminalChecks": [
+    {"test": "shared_premises_campaign.test.js", "groups": 5, "status": "pass"},
+    {"test": "shared_premises_boundary.test.js", "scenarios": 4, "reference": "checkpoint44", "status": "exact comparison pass"},
+    {"test": "shared_premises_network.test.js", "transports": ["gh","lan","p2p"], "monthsPerTransport": 2, "status": "pass"}
+  ],
+  "additionalIntegrationChecks": [
+    {"test": "shared_premises_delivery.test.js", "groups": 11, "status": "pass"},
+    {"test": "shared_premises_agency.test.js", "groups": 9, "status": "pass"},
+    {"test": "facility_extensions.test.js", "groups": 3, "status": "pass"}
+  ],
+  "fullWindowsGate": "not run",
+  "balance120And480": "outstanding",
+  "realTwoComputerAndBrowserAcceptance": "outstanding",
+  "publication": false
+}

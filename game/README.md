@@ -8,13 +8,17 @@ A turn-based banking strategy game with Solo AI, Pass & Play, LAN and Repository
 - **Local-network host:** run [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat). Friends use the address and room code shown by the host.
 - **GitHub multiplayer:** follow the [player guide](docs/player-guide.md). Update both computers and export saves before switching builds.
 
-The deeper two-region banking systems are opt-in campaign previews. Existing saves retain their rules. The visible edition label and the version stored in a campaign save are different identifiers; neither means the national blueprint is complete. See the current release status for the latest preview and its acceptance limits.
+New campaigns present Core or integrated Expanded. Historical modular saves retain their original rules; there is no automatic upgrade. The visible edition label and the version stored in a campaign save are different identifiers; neither means the national blueprint is complete. See the current release status for the latest preview and its acceptance limits.
+
+The local playable HTML and source are different development checkpoints; neither is the frozen V3 download. See [artifact identities](docs/release-status.md#which-version-am-i-looking-at) before rebuilding or sharing. The packaged [V3 ZIP/manual](../releases/v3/README.txt) remain separate preserved artifacts.
 
 ## Read
 
 - [Game reference](docs/game-reference.md) — generated mechanics and values.
-- [Current release status](docs/release-status.md) — shipped features, checks and known limits.
-- [Blueprint roadmap](docs/roadmap.md) — what is implemented versus unfinished.
+- [Current release status](docs/release-status.md) — distinguishes the frozen release, playable build, tested checkpoint and unfinished source.
+- [Implementation ledger](docs/v3-usability.md) — the authoritative completed/remaining checklist.
+- [Approved master objective](docs/expanded-edition-goal.md) — scope and finish criteria.
+- [Blueprint roadmap](docs/roadmap.md) — approved scope and sequencing.
 - [Documentation index](docs/README.md) — player guide, developer tools and historical archive.
 
 ## Validate

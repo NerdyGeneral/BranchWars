@@ -19,6 +19,21 @@ full release gate or physical two-computer testing. `RUN_TESTS.bat` still runs t
 complete suite. Golden updates are deliberate: see [contributing](../../CONTRIBUTING.md).
 The original save fixtures must not be overwritten.
 
+### Offline architecture checks
+
+`architecture_overrides.js` uses a pinned [Acorn parser](https://github.com/acornjs/acorn)
+to distinguish real function/API writes from unrelated local variables, comments,
+strings and parameter defaults. `tests/architecture_scope.test.js` covers scope
+boundaries, destructuring/compound/loop writes and parser integrity. Both fast and
+full gates include these regressions; override ceilings are not regenerated.
+
+The development-only parser is vendored in `tools/vendor/acorn.js` under its MIT
+license (`acorn-license.txt`). `acorn-provenance.json` records the exact version,
+registry tarball integrity and file fingerprints. Git preserves those bytes.
+No package installation or network is needed to run the checks. The parser is
+not part of the game manifest, playable HTML or player runtime. This static check
+is not a call graph or proof against dynamic eval/API-alias mutation.
+
 ## `build_game.js`
 
 Edit `src/` modules, then run these commands from the repository root:
@@ -122,3 +137,16 @@ This extended matrix is a release exercise, not an extra run of every CI job.
 ## Reference points
 
 Current expected values are in `../docs/game-reference.md` §12.
+
+## Captured ordinary-campaign economics
+
+`node tools/trace_campaign_economics.js 24 economics-unique-name` runs ordinary
+Expanded AI from the fixed Balanced `business-balance:1` start. Use a new name;
+the tool refuses to replace an existing output directory. It records the exact
+engine, opening/six-month/closing compressed saves, actual plans, pure owner-view
+forecasts and top-level causal financial movements. Cash, loans and earnings
+must reconcile every month. It adds no resources or alternative strategy and
+does not replace long-run balance, UI or multiplayer acceptance. Compare
+reported operating profit with other earnings movements without subtracting
+already-included operating costs twice. Recorded principal repayments return
+cash, not income. Runs accept1–120 months; preserve failures as evidence.

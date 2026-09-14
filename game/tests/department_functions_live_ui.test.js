@@ -22,11 +22,13 @@ test('actual Group6 default draft and compact alternative desks',()=>{const h=fr
 });
 
 test('control labels exclude selector options and the before/after function budget is explicit',()=>{const h=fresh(),html=h.elements.get('#departmentFunctionsMount').innerHTML;
- for(const id of ['df-function','df-priority','df-vendor','df-staff-service','df-staff-business']){
+ for(const id of ['df-priority','df-vendor','df-staff-service','df-staff-business']){
   const label=html.match(new RegExp('<label id="'+id+'-label" for="'+id+'">([^<]+)</label>'));
   assert(label,'Explicit text-only label for '+id);assert(html.includes('id="'+id+'" aria-labelledby="'+id+'-label"'));
  }
- assert.match(html,/>Inspect or edit one function<\/label><select/);assert(!html.includes('available after current shared commitments'));
+ assert.match(html,/aria-label="Work functions"/);assert(!html.includes('id="df-function"'));
+ for(const id of h.run('E.DepartmentFunctions.IDS'))assert.match(html,new RegExp('id="df-select-'+id+'"'));
+ assert(!html.includes('available after current shared commitments'));
  h.run(`const priced=JSON.parse(JSON.stringify(draft.departmentFunctionsPolicy));priced.vendors.people=1;
  const costQuote=E.departmentFunctionsQuote(currentView(),currentView().me,{...draft,departmentFunctionsPolicy:priced});
  departmentFunctionsLive.controller.preview(priced,departmentFunctionsLive.controller.token());renderDepartments(currentView());`);

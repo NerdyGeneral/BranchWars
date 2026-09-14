@@ -13,7 +13,7 @@ function initializeProductDeployments(g,o){
  return g;
 }
 const deploymentCatalog=projectCatalog;
-projectCatalog=function(p){const out=deploymentCatalog(p);if(!p.productPrograms)for(const [k,d]of Object.entries(PROJECTS))if(d.programOnly)delete out[k];if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
+projectCatalog=function(p,g=null){const out=deploymentCatalog(p,g);if(!p.productPrograms)for(const [k,d]of Object.entries(PROJECTS))if(d.programOnly)delete out[k];if(!p.productDeployment)for(const d of Object.values(RETAIL_DEPLOYMENTS))delete out[d.project];return out};
 
 
 const deploymentMix=applyRetailMix;
@@ -32,10 +32,10 @@ function planProductDeployment(g,index,plan){
  const key=index===0?'rewards':'highYield',d=RETAIL_DEPLOYMENTS[key];
  if(p.productDeployment.ready[key]||p.stats.lastProfit<=0||fundingPosition(p).excess>0)return plan;
  if(strategyLevel(p,d.branch)<1){
-  const current=plan.investments[d.branch]||0,room=Math.min(50000,capabilityNextCost(p,d.branch)-current,CAPABILITY_CAP_PER_CYCLE-current,planBudget(p,plan).remaining);
+  const current=plan.investments[d.branch]||0,room=Math.min(50000,capabilityNextCost(p,d.branch)-current,CAPABILITY_CAP_PER_CYCLE-current,planBudget(p,plan,g).remaining);
   if(room>=1000)plan.investments[d.branch]=current+Math.floor(room);
  }else if(!projectBarred(p,d.project)&&!p.projects.some(x=>x.key===d.project)){
-  const q=planBudget(p,plan),def=PROJECTS[d.project];
+  const q=planBudget(p,plan,g),def=PROJECTS[d.project];
   if(q.remaining>=projectCost(p,def)&&q.freeCapacity>=projectCapacity(def)){plan.newProjects=[...planInitiatives(plan),d.project];plan.newProject=plan.newProjects[0]}
  }
  return plan;

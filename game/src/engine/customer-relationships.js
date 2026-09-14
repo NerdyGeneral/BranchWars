@@ -11,7 +11,7 @@ function customerRelationshipReview(p,key,allocation=p.allocation){
  });
 }
 
-function serviceWorkforceOptions(p,input,economy){
+function serviceWorkforceOptions(p,input,economy,g=null){
  if(!p.customerRelationships)return null;
  const base=JSON.parse(JSON.stringify(input)),roles=Object.keys(ROLES);
  const valid=a=>a&&roles.every(k=>Number.isSafeInteger(a[k])&&a[k]>=0)&&roles.reduce((n,k)=>n+a[k],0)===p.stats.staff;
@@ -29,12 +29,12 @@ function serviceWorkforceOptions(p,input,economy){
   const desk=base.servicePolicy||p.serviceDesk?.policy;
   if(desk&&c.allocation.business<desk.staff)reasons.push('Would remove a banker reserved for signed commercial services.');
   if(base.contractBid&&c.allocation.business<Math.max(1,(desk?.staff||0)+1))reasons.push('Keep a Business sales banker for the explicit service bid.');
-  const budget=planBudget(p,plan);
+  const budget=planBudget(p,plan,g);
   if(budget.load>budget.capacity)reasons.push('Would leave active or planned initiatives above execution capacity.');
-  const forecast=reasons.length?null:operatingPreview({...p,focus:base.focus},plan,economy);
+  const forecast=reasons.length?null:operatingPreview({...p,focus:base.focus},plan,economy,g);
   return {...c,blocked:reasons.length>0,reasons,budget,forecast,bankProfit:forecast?forecast.profit-(forecast.fundingLoss||0):null};
  });
- const hirePlan={...base,hires:(base.hires||0)+1},budget=planBudget(p,base),hireBudget=planBudget(p,hirePlan);
+ const hirePlan={...base,hires:(base.hires||0)+1},budget=planBudget(p,base,g),hireBudget=planBudget(p,hirePlan,g);
  const hireBlocked=planHires(hirePlan)>hireLimit(p)||hireBudget.remaining<0;
  return {options,customers:p.stats.customers,requiredService:p.householdBook?Math.max(0,Math.ceil((householdServiceReview(p,base.allocation,base.householdPolicy||p.householdBook.policy).demand-(p.upgrades.training||0)*.3)/((base.householdPolicy||p.householdBook.policy).retention/100)-specialistBonus(p,'service',base.allocation))):Math.max(0,Math.ceil(Math.max(1,p.stats.customers/700)-(p.upgrades.training||0)*.3-specialistBonus(p,'service',base.allocation))),
   hiring:{blocked:hireBlocked,total:planHires(hirePlan),incrementalCost:hireBudget.recruiting-budget.recruiting,basePayrollAdded:hireBudget.basePayrollAdded-budget.basePayrollAdded,

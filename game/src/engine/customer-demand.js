@@ -69,7 +69,7 @@ function customerMixPlan(g,p,input){
  for(const product of ['rewards','highYield'])if(p.productDeployment.ready[product])candidates.push({essential:1,rewards:0,highYield:0,[product]:3});
  let chosen=input,value=-Infinity;
  for(const mix of candidates){
-  const plan={...input,retailMix:{...mix}},r=operatingPreview({...p,marketSnapshot:g.marketEconomy},plan,g.economy);
+  const plan={...input,retailMix:{...mix}},r=operatingPreview({...p,marketSnapshot:g.marketEconomy},plan,g.economy,g);
   // A bounded planning preference, not revenue: value new franchise balances at 0.5%.
   const score=r.profit-(r.fundingLoss||0)+Math.max(0,r.depositGrowth)*.005;
   if(score>value){value=score;chosen=plan}

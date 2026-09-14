@@ -112,14 +112,18 @@ function repairSavedRivalry(g){
   t.exited=Array.isArray(t.exited)?t.exited.slice(0,2):[false,false];
   while(t.exitStreak.length<2)t.exitStreak.push(0);
   while(t.exited.length<2)t.exited.push(false);
-  if(t.exited[0])t.shares=[0,100];
-  else if(t.exited[1])t.shares=[100,0];
+  // Regional Group 8 records withdrawal separately from conserved deposit
+  // ownership. Loading must not invent a 100% rival franchise or change replay.
+  if(![8,9,10].includes(g.financialGroupVersion)){
+   if(t.exited[0])t.shares=[0,100];
+   else if(t.exited[1])t.shares=[100,0];
+  }
  }
  return g;
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
- if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7'].includes(g.version))validateCampaignRules(g,'game');
+ if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9'].includes(g.version))validateCampaignRules(g,'game');
  else {
  if(g.onboardingVersion!==undefined&&g.version!=='8.13')throw Error('Onboarding requires a v8.13 save.');
  if(g.relationshipOffersVersion!==undefined&&g.version!==(g.onboardingVersion===1?'8.13':'8.12'))throw Error('Relationship offers requires a v8.12 save.');

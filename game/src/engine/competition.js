@@ -30,8 +30,20 @@ function acquisitionTerms(g,p,target){
  const deal=strategyLevel(p,'acquisition'),share=market.shares[seller]/100;
  return {buyer,seller,deal,depositTake:Math.round(Math.min(rival.stats.deposits*(.045+deal*.012)*Math.max(.45,share),4200000)),loanTake:Math.round(Math.min(rival.stats.loans*(.025+deal*.007)*Math.max(.4,share),1900000)),customerTake:Math.round(Math.min(rival.stats.customers*(.035+deal*.008),420))};
 }
-function awardOpportunity(p,o){if(!authorizeDepartmentOpportunityAward(p,o))return;const terms=opportunityTerms(o);switch(o.type){case'deposit':delta(p,'deposits',terms.deposits);delta(p,'customers',18);break;case'business':delta(p,'deposits',terms.deposits);delta(p,'business',5);delta(p,'merchant',6);delta(p,'cash',terms.feeIncome);break;case'loan':delta(p,'loans',terms.loans);delta(p,'cash',terms.feeIncome);delta(p,'compliance',4);break;case'wealth':delta(p,'deposits',terms.deposits);delta(p,'wealth',4);delta(p,'influence',3);break;case'payroll':delta(p,'deposits',terms.deposits);delta(p,'customers',75);delta(p,'business',4);delta(p,'merchant',5);break;case'public':delta(p,'deposits',terms.deposits);delta(p,'influence',5);delta(p,'attention',2)}delta(p,'opportunityWins',1);delta(p,'reputation',3);delta(p,'momentum',4)}
-function resolveOpportunities(g,plans){if([6,7,8].includes(g.financialGroupVersion))return resolveDepartmentOpportunities(g,plans);const L=[],byId=id=>g.opportunities.find(o=>o.id===id),o0=byId(plans[0].opportunity),o1=byId(plans[1].opportunity);if(o0&&o1&&o0.id===o1.id){const a=opportunityPower(g.players[0],o0)+simulationRandom()*5,b=opportunityPower(g.players[1],o1)+simulationRandom()*5,w=a>=b?0:1;awardOpportunity(g.players[w],o0);L.push(`${g.players[w].name} defeated its rival for ${o0.name} in ${g.territories[o0.market].name}.`)}else{[[0,o0],[1,o1]].forEach(([i,o])=>{if(!o)return;const chance=clamp(.32+opportunityPower(g.players[i],o)/38,.42,.9);if(simulationRandom()<chance){awardOpportunity(g.players[i],o);L.push(`${g.players[i].name} won ${o.name} in ${g.territories[o.market].name}.`)}else L.push(`${g.players[i].name} lost ${o.name} after a lengthy follow-up sequence.`)})}return L}
+function awardOpportunity(p,o){
+ if(!authorizeDepartmentOpportunityAward(p,o))return;
+ const terms=opportunityTerms(o);
+ switch(o.type){
+  case'deposit':delta(p,'deposits',terms.deposits);delta(p,'customers',18);break;
+  case'business':delta(p,'deposits',terms.deposits);delta(p,'business',5);delta(p,'merchant',6);delta(p,'cash',terms.feeIncome);break;
+  case'loan':postOpportunityCredit(p,o,terms);delta(p,'compliance',4);break;
+  case'wealth':delta(p,'deposits',terms.deposits);delta(p,'wealth',4);delta(p,'influence',3);break;
+  case'payroll':delta(p,'deposits',terms.deposits);delta(p,'customers',75);delta(p,'business',4);delta(p,'merchant',5);break;
+  case'public':delta(p,'deposits',terms.deposits);delta(p,'influence',5);delta(p,'attention',2);
+ }
+ delta(p,'opportunityWins',1);delta(p,'reputation',3);delta(p,'momentum',4);
+}
+function resolveOpportunities(g,plans){if([6,7,8,9,10].includes(g.financialGroupVersion))return resolveDepartmentOpportunities(g,plans);const L=[],byId=id=>g.opportunities.find(o=>o.id===id),o0=byId(plans[0].opportunity),o1=byId(plans[1].opportunity);if(o0&&o1&&o0.id===o1.id){const a=opportunityPower(g.players[0],o0)+simulationRandom()*5,b=opportunityPower(g.players[1],o1)+simulationRandom()*5,w=a>=b?0:1;awardOpportunity(g.players[w],o0);L.push(`${g.players[w].name} defeated its rival for ${o0.name} in ${g.territories[o0.market].name}.`)}else{[[0,o0],[1,o1]].forEach(([i,o])=>{if(!o)return;const chance=clamp(.32+opportunityPower(g.players[i],o)/38,.42,.9);if(simulationRandom()<chance){awardOpportunity(g.players[i],o);L.push(`${g.players[i].name} won ${o.name} in ${g.territories[o.market].name}.`)}else L.push(`${g.players[i].name} lost ${o.name} after a lengthy follow-up sequence.`)})}return L}
 function marketFacilities(p,k){return p.facilityMarkets&&Array.isArray(p.facilityMarkets[k])?p.facilityMarkets[k]:[]}
 function depositPull(p,k,t){const a=p.allocation,competitive=(p.focus===k?(p.turnEffects.depositAttack||0):0)+(p.turnEffects.depositDefense||0),models=marketFacilities(p,k),retail=models.filter(x=>x==='retail').length,digital=models.filter(x=>x==='digital').length;return (p.branches[k]||0)*(1.5+strategyLevel(p,'network')*.12)+retail*1.5+digital*.55+(p.focus===k?1.8:0)+a.service*.9+p.stats.reputation/22+p.stats.digital/55+strategyLevel(p,'digital')*.1+(p.doctrine==='community'?.375:0)+(p.doctrine==='commercial'?.25:0)+(p.doctrine==='efficiency'?.775:0)+(p.doctrine==='people'?.6:0)+(p.policies.deposit==='aggressive'?.75:p.policies.deposit==='margin'?-.4:0)+(p.marketingTurns>0?1.2:0)+(t.specialties.includes('service')?1:0)+competitive-(tierRank(p)>=3?2.5:0)}
 function competitionScale(g){const markets=activeTerritories(g).length;return markets>=12?.6:markets>=8?.86:1}
@@ -66,12 +78,24 @@ function updateCampaignAct(g){
  return''
 }
 function absorbFranchise(g,winner,loser){const w=winner.stats?winner:g.players[winner],l=loser.stats?loser:g.players[loser],wi=g.players.indexOf(w),li=1-wi;delta(w,'deposits',Math.round(l.stats.deposits*.72));delta(w,'loans',Math.round(l.stats.loans*.55));delta(w,'customers',Math.round(l.stats.customers*.65));delta(w,'business',Math.round(l.stats.business*.5));for(const[k,t]of activeTerritories(g)){w.branches[k]=Math.max(w.branches[k]||0,l.branches[k]||0);w.facilityMarkets[k]=[...(w.facilityMarkets[k]||[]),...(l.facilityMarkets[k]||[])].slice(0,w.branches[k]);l.branches[k]=0;l.facilityMarkets[k]=[];t.exited=t.exited||[false,false];t.exitStreak=t.exitStreak||[0,0];t.exited[wi]=false;t.exited[li]=true;t.exitStreak=[0,0];t.shares[wi]=100;t.shares[li]=0}w.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(w.facilityMarkets))for(const type of models)w.facilities[type]++}
-const absorbFranchiseCore=absorbFranchise;absorbFranchise=function(g,winner,loser){absorbFranchiseCore(g,winner,loser);for(const p of g.players){p.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(p.facilityMarkets||{}))for(const type of models)p.facilities[type]++}};
+const absorbFranchiseCore=absorbFranchise;absorbFranchise=function(g,winner,loser){
+ // The original aggregate award is not a purchase/transfer of detailed books.
+ // Keep the victory, but never manufacture a percentage of the rival's assets
+ // or borrow household funds through an unscoped terminal delta. Closing a real
+ // merger requires separately priced, reconciled transactions, not this shortcut.
+ if(g.regionalEconomyVersion===1)return;
+ absorbFranchiseCore(g,winner,loser);for(const p of g.players){p.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(p.facilityMarkets||{}))for(const type of models)p.facilities[type]++}
+};
+function completedFranchiseResult(g,legacy){
+ if(g.regionalEconomyVersion!==1)return legacy;
+ const winner=g.players.find(p=>p.id===g.winnerId),loser=g.players.find(p=>p.id===g.failedId);
+ return (g.endReason==='domination'?'TOTAL MARKET DOMINATION':'BANK CONTROL VICTORY')+' // '+winner.name+' won the contest against '+loser.name+'. Both institutions retain separate final books. No unpriced assets, deposits or customers are awarded; a control result is not a completed financial merger.';
+}
 function evaluateStrategicEnd(g){
  const failed=g.players.filter(p=>(p.distress||0)>=RECEIVERSHIP_CYCLES);
  if(failed.length){g.gameOver=true;g.endReason='receivership';if(failed.length===2)g.winnerId=g.fundingRulesVersion===2?null:capitalRatio(g.players[0])>capitalRatio(g.players[1])?g.players[0].id:capitalRatio(g.players[1])>capitalRatio(g.players[0])?g.players[1].id:null;else{const survivor=g.players.find(p=>p!==failed[0]);g.winnerId=survivor.id;g.failedId=failed[0].id;absorbFranchise(g,survivor,failed[0])}return`RECEIVERSHIP // ${failed.map(p=>p.name).join(' and ')} placed into receivership. ${g.winnerId?g.players.find(p=>p.id===g.winnerId).name+' assumes the deposits and branch network.':'No acquirer was solvent enough to assume the franchise.'}`}
  const territories=activeTerritories(g),open=territories.filter(([,t])=>unlocked(g,t)),allUnlocked=open.length===territories.length;
- for(let loser=0;loser<2;loser++)if(allUnlocked&&open.length&&open.every(([,t])=>t.exited&&t.exited[loser])){const winner=1-loser;g.gameOver=true;g.endReason='domination';g.winnerId=g.players[winner].id;g.failedId=g.players[loser].id;absorbFranchise(g,g.players[winner],g.players[loser]);return`TOTAL MARKET DOMINATION // ${g.players[loser].name} has no operating market left. ${g.players[winner].name} absorbs the franchise.`}
+ for(let loser=0;loser<2;loser++)if(allUnlocked&&open.length&&open.every(([,t])=>t.exited&&t.exited[loser])){const winner=1-loser;g.gameOver=true;g.endReason='domination';g.winnerId=g.players[winner].id;g.failedId=g.players[loser].id;absorbFranchise(g,g.players[winner],g.players[loser]);return completedFranchiseResult(g,`TOTAL MARKET DOMINATION // ${g.players[loser].name} has no operating market left. ${g.players[winner].name} absorbs the franchise.`)}
  const actThree=campaignAct(g).key==='consolidation',settled=actThree&&open.length>0&&open.every(([,t])=>t.exited&&t.exited.some(Boolean));
  g.consolidationStalemate=settled?(Number(g.consolidationStalemate)||0)+1:0;
  g.buyoutPressure=Array.isArray(g.buyoutPressure)?g.buyoutPressure:[0,0];
@@ -82,7 +106,7 @@ function evaluateStrategicEnd(g){
   const mandatedAuction=settled&&g.consolidationStalemate>=8&&a>b&&bidderRank<=2;
   const eligible=!takeoverGuard&&(distressedBuyout||settledBuyout||mandatedAuction);
   g.buyoutPressure[bidder]=eligible?(g.buyoutPressure[bidder]||0)+1:0;
-  if(g.buyoutPressure[bidder]>=2){g.gameOver=true;g.endReason='buyout';g.winnerId=g.players[bidder].id;g.failedId=g.players[target].id;absorbFranchise(g,g.players[bidder],g.players[target]);return mandatedAuction?`MANDATED CONSOLIDATION // With every market divided and no independent path to expansion, ${g.players[bidder].name} won the regulator-supervised franchise auction and acquired ${g.players[target].name}.`:`HOSTILE BUYOUT // ${g.players[bidder].name} sustained a two-cycle takeover position and acquired ${g.players[target].name}.`}
+  if(g.buyoutPressure[bidder]>=2){g.gameOver=true;g.endReason='buyout';g.winnerId=g.players[bidder].id;g.failedId=g.players[target].id;absorbFranchise(g,g.players[bidder],g.players[target]);return completedFranchiseResult(g,mandatedAuction?`MANDATED CONSOLIDATION // With every market divided and no independent path to expansion, ${g.players[bidder].name} won the regulator-supervised franchise auction and acquired ${g.players[target].name}.`:`HOSTILE BUYOUT // ${g.players[bidder].name} sustained a two-cycle takeover position and acquired ${g.players[target].name}.`)}
  }
  return''
 }

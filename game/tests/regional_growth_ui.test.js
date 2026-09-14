@@ -27,7 +27,7 @@ const context = { window: { BWEngine: { publicState(world) {
  console, Math: Object.create(Math) };
 context.Math.random = () => { throw Error('A review cannot consume randomness'); };
 vm.createContext(context);
-vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/facility-network.js') + '\n' + read('src/ui/regional-growth.js'), context);
+vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/market-workspace.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/facility-network.js') + '\n' + read('src/ui/regional-growth.js'), context);
 const run = code => vm.runInContext(code, context);
 const mount = elements.get('#regionalGrowthMount'), section = elements.get('#regionalGrowthWorkspace');
 const grid = (customers, deposits) => ({ customers: { everyday: customers, connected: 0, reserve: 0 }, deposits: { everyday: deposits, connected: 0, reserve: 0 } });

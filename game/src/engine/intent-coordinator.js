@@ -1,8 +1,16 @@
-function chooseOpenBot(g,index){return withCorporateForecast(g,()=>chooseOpenBotCore(g,index));}
+function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
+ let plan=chooseOpenBotCore(g,index);
+ plan=planCommercialAccounts(g,index,plan);
+ plan=planFacilityExtensions(g,index,plan);
+ plan=planGroupDevelopment(g,index,plan);
+ plan=planInvestmentStrategy(g,index,plan);
+ plan=planCompanyStrategy(g,index,plan);
+ return planSharedPremises(g,index,plan);
+});}
 function chooseOpenBotCore(g, index) {
   const initial = () => {
     let plan = withRandom(g, 'aiState', () => chooseBaselinePlan(g, index));
-    if([6,7,8].includes(g.financialGroupVersion))plan.departmentFunctionsPolicy={
+    if([6,7,8,9,10].includes(g.financialGroupVersion))plan.departmentFunctionsPolicy={
       quotas:Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,Object.fromEntries(DepartmentFunctions.ROLES.map(role=>[role,0]))])),
       vendors:Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,0]))};
     if(identifiedInstitution(g)){
@@ -41,27 +49,27 @@ function chooseOpenBotCore(g, index) {
   plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
   plan=planFinancialGroup(g,index,plan);
   plan=planAgency(g,index,plan);
-  plan=planFacilityNetwork(g,index,plan,![7,8].includes(g.financialGroupVersion));
+  plan=planFacilityNetwork(g,index,plan,![7,8,9,10].includes(g.financialGroupVersion));
   plan=planDepartments(g,index,plan);
   // A changed loan mix can change the loss reserve after the earlier pricing
   // pass. Recheck only new group campaigns; old AI order remains byte-exact.
-  if([5,6,7,8].includes(g.financialGroupVersion))plan=planFacilityLifecycle(g,index,planFinalCashReserve(g,index,plan));
-  if([6,7,8].includes(g.financialGroupVersion)){
+  if([5,6,7,8,9,10].includes(g.financialGroupVersion))plan=planFacilityLifecycle(g,index,planFinalCashReserve(g,index,plan));
+  if([6,7,8,9,10].includes(g.financialGroupVersion)){
     plan=planDepartmentFunctions(g,index,planFinalCashReserve(g,index,plan));
     plan=planFinalCashReserve(g,index,plan);
-    if([7,8].includes(g.financialGroupVersion))plan=planExecutionReserve(g,index,plan);
-    if([7,8].includes(g.financialGroupVersion))plan=staffingRecoveryReview(g,index,plan).plan;
-    return [7,8].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;
+    if([7,8,9,10].includes(g.financialGroupVersion))plan=planExecutionReserve(g,index,plan);
+    if([7,8,9,10].includes(g.financialGroupVersion))plan=staffingRecoveryReview(g,index,plan).plan;
+    return [7,8,9,10].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;
   }
-  return [1,2,3,4,5,6,7,8].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
+  return [1,2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
 }
 function planExecutionReserve(g,index,input){
-  if(![7,8].includes(g.financialGroupVersion))return input;
+  if(![7,8,9,10].includes(g.financialGroupVersion))return input;
   const p=g.players[index];let plan=input;
   // Early project selection precedes paid teaching and departmental dispatch.
   // Final physical capacity, not early headcount, must fund NEW initiatives.
   // Existing paid work may stall under ordinary rules; never cancel it here.
-  while(planInitiatives(plan).length&&projectPlanStatus(p,plan).code==='capacity'){
+  while(planInitiatives(plan).length&&projectPlanStatus(p,plan,g).code==='capacity'){
     plan=departmentFunctionCopy(plan);
     plan.newProjects=[...planInitiatives(plan)];plan.newProjects.pop();
     plan.newProject=plan.newProjects[0]||null;
@@ -84,7 +92,7 @@ function aiCashPlanningReview(g, index, plan) {
   if (forecastPlan.relationshipOfferPolicy) forecastPlan.relationshipOfferPolicy.share = 0;
   if (forecastPlan.onboardingPolicy) forecastPlan.onboardingPolicy.share = 0;
   if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
-  const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy);
+  const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy,g);
   const operatingLoss = Math.max(0, -forecast.profit + (forecast.fundingLoss || 0));
   const cashReserve = 250000, capitalReserve = 200000 + 2 * operatingLoss;
   const limit = Math.max(0, Math.min(p.stats.cash - decisionExpense - cashReserve,
@@ -120,13 +128,13 @@ function planFinalCashReserve(g, index, input) {
   }
   const review = aiCashPlanningReview(g, index, plan);
   const excess = () => {
-    const budget=planBudget(p,plan);
+    const budget=planBudget(p,plan,g);
     // Group5 lifecycle and final AI cleanup share the same whole-plan reserve.
     // Existing versions retain their exact raw-limit ordering and decisions.
     return Math.max(0,budget.total-review.limit,
-      [5,6,7,8].includes(g.financialGroupVersion)?-facilityLifecycleProtectedBudget(p,plan,budget).remaining:0);
+      [5,6,7,8,9,10].includes(g.financialGroupVersion)?-facilityLifecycleProtectedBudget(p,plan,budget,g).remaining:0);
   };
-  if([6,7,8].includes(g.financialGroupVersion)&&plan.departmentFunctionsPolicy&&excess()){
+  if([6,7,8,9,10].includes(g.financialGroupVersion)&&plan.departmentFunctionsPolicy&&excess()){
     // Only uncommitted AI vendor orders may be reduced. Existing obligations,
     // employed staff and paid work are never erased to manufacture cash room.
     for(const id of DepartmentFunctions.IDS.slice().reverse()){
@@ -142,7 +150,7 @@ function planFinalCashReserve(g, index, input) {
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
   if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
   if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;
-  if([7,8].includes(g.financialGroupVersion)&&staffingRecoveryPriority(p)&&planHires(plan)>0){
+  if([7,8,9,10].includes(g.financialGroupVersion)&&staffingRecoveryPriority(p)&&planHires(plan)>0){
     // Unstarted expansion is discretionary; funded replacement staffing has
     // priority when the existing institution is understaffed or demoralized.
     // Never cancel work already in progress or strip a live emergency defense.
@@ -159,7 +167,7 @@ function planFinalCashReserve(g, index, input) {
   if (excess() && plan.facilityPolicy) plan.facilityPolicy.convert=null;
   if (excess() && plan.leaderOrders) for(const role of Object.keys(plan.leaderOrders))if(plan.leaderOrders[role]&&plan.leaderOrders[role]!=='none')plan.leaderOrders[role]=null;
   if (excess() && plan.productProgramPolicy) plan.productProgramPolicy.retire = [];
-  if ([5,6,7,8].includes(g.financialGroupVersion)&&excess()) {
+  if ([5,6,7,8,9,10].includes(g.financialGroupVersion)&&excess()) {
     plan.facilityLifecyclePolicy=plan.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p);
     plan.facilityLifecyclePolicy.renovate=null;
     if(excess())for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance='off';
@@ -172,12 +180,13 @@ function planFinalCashReserve(g, index, input) {
   }
   // No persistent retry queue: an unfunded initiative stays unstaged until a
   // later plan can fund it. Execution checks still handle unpredictable shocks.
-  if([5,6,7,8].includes(g.financialGroupVersion)&&plan.facilityLifecyclePolicy)
+  if([5,6,7,8,9,10].includes(g.financialGroupVersion)&&plan.facilityLifecyclePolicy)
     plan.facilityLifecyclePolicy=facilityLifecycleStaffProposal(g,p,plan).policy;
   return plan;
 }
 function validatePilot(g) {
-  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7'].includes(g.version)) validateCampaignRules(g, 'game');
+  for(const p of g.players)if(p.submitted){const issue=projectLocationsIssue(g,p,p.submitted);if(issue)throw Error(issue);}
+  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8','9.9'].includes(g.version)) validateCampaignRules(g, 'game');
   validateStoredDepartmentFunctionPolicies(g);
   validateAccountingSave(g);
   validateRegionalSave(g);
@@ -197,9 +206,13 @@ function validatePilot(g) {
   validateWorkforceSave(g);
   validateHouseholdSave(g);
   validateCreditPerformanceSave(g);
+  validateCreditProducts(g);
+  validateInvestmentStrategyRules(g);
   validateSegmentDepositSave(g);
   validateProductProgramSave(g);
   validateAdvertisingSave(g);
+  validateInvestmentServices(g);
+  validateSharedPremises(g);
   validateRegionalGrowthSave(g);
   validateRelationshipOfferSave(g);
   validateOnboardingSave(g);
@@ -210,9 +223,18 @@ function validatePilot(g) {
   validateDepartmentSave(g);
   validateFacilityLifecycleSave(g);
   validateDepartmentFunctionsSave(g);
+  validateCommercialAccounts(g);
+  validateFacilityExtensions(g);
+  validateCompanyShares(g);
+  validateCompanyControl(g);
+  validateCompanyConsolidation(g);
+  validateCompanyControlStrategy(g);
   return g;
 }
-function validatePortfolioPlan(p, plan) {
+function validatePortfolioPlan(p, plan,g=null) {
+  normalizeInvestmentPlan(p,plan,g);
+  normalizeCommercialAccountPlan(p,plan);
+  const locations=projectLocationsIssue(g,p,plan);if(locations)throw Error(locations);
   normalizeProductProgramPlan(p, plan);
   normalizeAdvertisingPlan(p, plan);
   normalizeRelationshipOfferPlan(p, plan);
@@ -226,5 +248,9 @@ function validatePortfolioPlan(p, plan) {
   normalizeCollectionsPlan(p, plan);
   normalizeGroupPlan(p, plan);
   normalizeAgencyPlan(p, plan);
-  normalizeDepartmentPlan(p, plan);
+  normalizeDepartmentPlan(p, plan,g);
+  normalizeFacilityExtensionPlan(g,p,plan);
+  normalizeCompanySharePlan(g,p,plan);
+  normalizeCompanyControlPlan(g,p,plan);
+  normalizeSharedPremisesPlan(g,p,plan);
 }

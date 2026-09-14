@@ -1,0 +1,220 @@
+{
+  "engineSha256": "74d47eeb754c7c9d5d17a91aa3ea2e32e73f36ef99620e46685aabb66b9cd735",
+  "portableSha256": "05362beba159ceb7d841d4cf00b904c9686f91cb67fd87ed611e27dfef7f9f62",
+  "scope": "Paired six-month normal openings, player starts one commercial suite versus no fit-out; ordinary AI after opening. No grants. Short integration/economics evidence, not long-campaign balance acceptance.",
+  "cases": [
+    {
+      "scenario": "balanced",
+      "build": false,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 4007496,
+          "equity": 1259693,
+          "earnings": -640307,
+          "deposits": 24129909,
+          "loans": 7482106,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        },
+        {
+          "cash": 2172579,
+          "equity": 1143902,
+          "earnings": -756098,
+          "deposits": 22798181,
+          "loans": 7869504,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 23695
+    },
+    {
+      "scenario": "balanced",
+      "build": true,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 3968469,
+          "equity": 1174846,
+          "earnings": -725154,
+          "deposits": 24325750,
+          "loans": 7632127,
+          "staff": 8,
+          "suites": 1,
+          "operatingSuites": 1
+        },
+        {
+          "cash": 2467330,
+          "equity": 1301922,
+          "earnings": -598078,
+          "deposits": 22916262,
+          "loans": 7850854,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 20031
+    },
+    {
+      "scenario": "rate",
+      "build": false,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 3902470,
+          "equity": 1831132,
+          "earnings": -318868,
+          "deposits": 24011166,
+          "loans": 7423828,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        },
+        {
+          "cash": 6204188,
+          "equity": 1395706,
+          "earnings": -754294,
+          "deposits": 26165124,
+          "loans": 7456642,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 22150
+    },
+    {
+      "scenario": "rate",
+      "build": true,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 4194130,
+          "equity": 1146959,
+          "earnings": -1003041,
+          "deposits": 24501974,
+          "loans": 7554803,
+          "staff": 8,
+          "suites": 1,
+          "operatingSuites": 1
+        },
+        {
+          "cash": 6004670,
+          "equity": 1395798,
+          "earnings": -754202,
+          "deposits": 25968846,
+          "loans": 7459974,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 18628
+    },
+    {
+      "scenario": "regulatory",
+      "build": false,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 3766718,
+          "equity": 1298235,
+          "earnings": -601765,
+          "deposits": 23810528,
+          "loans": 7442045,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        },
+        {
+          "cash": 2280159,
+          "equity": 1357741,
+          "earnings": -542259,
+          "deposits": 22620448,
+          "loans": 7798030,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 20414
+    },
+    {
+      "scenario": "regulatory",
+      "build": true,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 4150437,
+          "equity": 1305236,
+          "earnings": -594764,
+          "deposits": 24311232,
+          "loans": 7566031,
+          "staff": 8,
+          "suites": 1,
+          "operatingSuites": 1
+        },
+        {
+          "cash": 2220373,
+          "equity": 1417392,
+          "earnings": -482608,
+          "deposits": 22520009,
+          "loans": 7817028,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 18995
+    },
+    {
+      "scenario": "growth",
+      "build": false,
+      "months": 6,
+      "gameOver": false,
+      "banks": [
+        {
+          "cash": 3392011,
+          "equity": 1810636,
+          "earnings": -539364,
+          "deposits": 24641845,
+          "loans": 8684470,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        },
+        {
+          "cash": 2502773,
+          "equity": 1309410,
+          "earnings": -1040590,
+          "deposits": 23397324,
+          "loans": 7743961,
+          "staff": 8,
+          "suites": 0,
+          "operatingSuites": 0
+        }
+      ],
+      "elapsedMs": 18419
+    },
+    {
+      "scenario": "growth",
+      "build": true,
+      "months": 4,
+      "failure": {
+        "month": 5,
+        "message": "Facility staffing exceeds the same shared department pool. Commercial and wealth assignments use the same business bankers."
+      },
+      "elapsedMs": 12092
+    }
+  ]
+}

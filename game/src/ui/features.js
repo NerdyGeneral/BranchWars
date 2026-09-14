@@ -1,4 +1,4 @@
-const SETUP_FEATURE_IDS = Object.freeze({ financialGroupVersion: 'financialGroupPreview', campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'serviceExpansion',
+const SETUP_FEATURE_IDS = Object.freeze({ facilityExtensionsVersion:'facilityExtensionsPreview', commercialAccountsVersion:'commercialAccountsPreview', financialGroupVersion: 'financialGroupPreview', campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'serviceExpansion',
   managementVersion: 'institutionManagement', customerDemandVersion: 'customerNeeds', workforceVersion: 'specialistWorkforce',
   customerOwnershipVersion: 'householdOwnership', creditPerformanceVersion: 'creditPerformance', segmentDepositsVersion: 'segmentDeposits',
   productProgramsVersion: 'productPrograms', advertisingVersion: 'advertisingPreview', regionalGrowthVersion: 'regionalGrowthPreview',
@@ -21,10 +21,21 @@ function readFeatureSelection(container, prefix = '') {
   }
   return options;
 }
-function readSetupFeatureOptions() { return readFeatureSelection($('#setupFeatureOptions')); }
+function readSetupFeatureOptions() {
+  const container=$('#setupFeatureOptions'), binding=container._featureSelectionBinding;
+  // The committed scalar rules also include underlying systems with no checkbox.
+  // Do not reconstruct this edition from only its visible compatibility controls.
+  if (!binding) return readFeatureSelection(container);
+  // Retain the historical visible-option shape and implicit creation defaults;
+  // carry explicitly selected hidden previews instead of dropping their markers.
+  return Object.fromEntries(Object.entries(binding.read()).filter(([field,value])=>{
+    const def=E.CAMPAIGN_FEATURES.find(x=>x.field===field);
+    return def?.visible || def && !def.implicit && value>0;
+  }));
+}
 function featureSelectionSummary(options) {
   const rules = E.campaignRules(options, { context: 'lobby' }), selected = rules.features.filter(feature => feature.visible && feature.enabled);
-  return (selected.length ? 'Selected: ' + selected.map(feature => feature.label).join(', ') + '.' : 'Selected: original campaign rules. No optional systems.') +
+  return (options.financialGroupVersion ? 'Expanded edition: a connected regional banking simulation with optional Financial Group businesses.' : selected.length ? 'Historical custom rules: ' + selected.length + ' optional systems selected. Existing campaigns keep their rules.' : 'Core edition: original campaign rules. No optional systems.') +
     (rules.enabled.includes('campaignRulesVersion') ? ' Regional Rivalry overrides campaign size: six markets.' : ' Campaign size follows the selector.') +
     (rules.valid ? '' : ' Selection needs attention: ' + rules.issues.map(issue => issue.message).join(' '));
 }
@@ -42,15 +53,18 @@ function renderFeatureSelection(options, settings = {}) {
   const marker = descriptors.find(feature => feature.field === 'featureRulesVersion');
   const pilot = marker ? row(marker) : `<div class="feature-option"><label for="${esc(featureSelectionId('featureRulesVersion', prefix))}"><input id="${esc(featureSelectionId('featureRulesVersion', prefix))}" type="checkbox" disabled> Modular combinations preview</label><div class="micro muted">Unavailable in this engine. Existing cumulative setup remains unchanged.</div></div>`;
   return `<div class="feature-selection-summary small" role="status" aria-live="polite">${esc(featureSelectionSummary(options))}</div>` +
-    `<details class="feature-selection-details" data-feature-prefix="${esc(prefix)}"${(settings.expanded ?? featureSelectionExpansion[prefix]) ? ' open' : ''}><summary>Optional systems · ${descriptors.filter(feature => feature.enabled).length} selected</summary>` +
-    `<p class="micro muted">Choose the complexity you want. Prerequisite changes are shown for confirmation; existing saves keep their rules. Preview balance is not accepted as final.</p>` +
     `<div class="feature-modes" role="group" aria-label="Campaign complexity">` +
-    `<button type="button" class="btn" data-feature-mode="core"${settings.disabled ? ' disabled' : ''}>Core rules</button>` +
-    `<button type="button" class="btn" data-feature-mode="expanded"${settings.disabled ? ' disabled' : ''}>Expanded rules</button>` +
-    `<p class="micro muted">Core is the original campaign. Expanded adds every optional system; they depend on one another, so they arrive together.</p></div>` +
+    `<button type="button" class="btn" data-feature-mode="core" aria-pressed="${!selectedFeatureCount(rules)}"${settings.disabled ? ' disabled' : ''}>Core edition</button>` +
+    `<button type="button" class="btn" data-feature-mode="expanded" aria-pressed="${!!options.financialGroupVersion}"${settings.disabled ? ' disabled' : ''}>Expanded edition</button>` +
+    `<p class="micro muted">${expandedEditionDescription().join(' · ')}. Systems work together; starting a subsidiary remains your choice. Rules are fixed once play starts. Preview balance remains provisional.</p></div>` +
+    `<details hidden class="feature-selection-details" data-feature-prefix="${esc(prefix)}"${(settings.expanded ?? featureSelectionExpansion[prefix]) ? ' open' : ''}><summary>Compatibility settings</summary>` +
     `<div hidden data-feature-fields>` +
     pilot + descriptors.filter(feature => feature.field !== 'featureRulesVersion').map(row).join('') + '</div></details>' +
     '<div class="feature-selection-status small bad" role="alert"></div>';
+}
+function selectedFeatureCount(rules) { return rules.features.filter(feature => feature.visible && feature.enabled).length; }
+function expandedEditionDescription() {
+  return ['Six regional markets with a finite customer economy', 'Persistent loan and deposit products', 'Offices, shared service rooms, departments and specialist teams', 'Advertising, customer onboarding, business accounts and service contracts', 'Research delivery, optional insurance, investment advice, brokerage and custody businesses, company shares and reviewed acquisitions'];
 }
 function featureSelectionError(container, binding, message) {
   const status = container.querySelector?.('.feature-selection-status');
@@ -81,6 +95,7 @@ function commitFeatureSelection(pending) {
     // Commit may replace the controls. Restore focus to the new node, not the
     // detached checkbox that closed the confirmation dialog.
     if (pending.control?.id) $('#' + pending.control.id)?.focus?.();
+    else if(pending.control?.dataset?.featureMode)pending.container.querySelector?.('[data-feature-mode="'+pending.control.dataset.featureMode+'"]')?.focus?.();
     return true;
   } catch (error) { featureSelectionError(pending.container, binding, error.message); return false; }
 }
@@ -102,9 +117,11 @@ function bindFeatureSelection(container, binding) {
   element.addEventListener('click', event => {
     const mode = event.target?.dataset?.featureMode;
     if (!mode) return;
-    const field = mode === 'core' ? 'campaignRulesVersion' : 'financialGroupVersion';
+    const field = mode === 'core' ? 'campaignRulesVersion' : 'facilityExtensionsVersion';
     const input = element.querySelector(`[data-feature-field="${field}"]`);
     if (!input || input.disabled) return;
+    input._editionRequest = mode;
+    input._editionButton = event.target;
     input.checked = mode !== 'core';
     input.dispatchEvent(new Event('change', { bubbles: true }));
   });
@@ -112,6 +129,8 @@ function bindFeatureSelection(container, binding) {
     const control = event.target, field = control?.dataset?.featureField;
     if (!field) return;
     const current = element._featureSelectionBinding, options = current.read(), requested = !!control.checked;
+    const edition = control._editionRequest, editionButton = control._editionButton;
+    delete control._editionRequest; delete control._editionButton;
     const details = control.closest?.('details');
     if (details?.dataset?.featurePrefix !== undefined) featureSelectionExpansion[details.dataset.featurePrefix] = !!details.open;
     control.checked = Number(options[field] || 0) > 0;
@@ -120,13 +139,14 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
-      const pending = { container: element, control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
+      const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }
       pendingFeatureSelection = pending;
-      $('#featureSelectionTitle').textContent = (requested ? 'Enable ' : 'Disable ') + descriptor.label + '?';
-      $('#featureSelectionAffected').innerHTML = proposal.changes.filter(change => change.field !== field).map(change =>
+      $('#featureSelectionTitle').textContent = edition ? (edition === 'expanded' ? 'Choose Expanded edition?' : 'Choose Core edition?') : (requested ? 'Enable ' : 'Disable ') + descriptor.label + '?';
+      $('#featureSelectionExplanation').textContent = edition ? 'This changes the setup for the next campaign only. Existing saves are unchanged. Nothing changes until you confirm.' : 'This selection also changes the systems below. Nothing changes until you confirm.';
+      $('#featureSelectionAffected').innerHTML = edition ? (edition === 'expanded' ? expandedEditionDescription() : ['Original banking rivalry and its existing campaign-size choices', 'Expanded systems will be off for this new campaign']).map(text => '<li>' + esc(text) + '</li>').join('') : proposal.changes.filter(change => change.field !== field).map(change =>
         `<li>${esc(change.label)}: ${change.to ? 'on' : 'off'}${change.reason ? ' — ' + esc(change.reason) : ''}</li>`).join('');
       const dialog = $('#featureSelectionDialog'); dialog.classList.remove('hidden');
       if (dialog.showModal && !dialog.open) dialog.showModal();

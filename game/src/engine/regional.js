@@ -76,7 +76,7 @@ resolveMarketExits=function(g){
  const lines=[];
  // Group8 lets a full withdrawal stand, so total market domination can resolve.
  // Every earlier group clears the flag each cycle and can never reach that end.
- const enduring=g.financialGroupVersion===8;
+ const enduring=[8,9,10].includes(g.financialGroupVersion);
  for(const [key,t]of activeTerritories(g))for(let i=0;i<2;i++){
   const p=g.players[i];t.exited=enduring&&Array.isArray(t.exited)?t.exited:[false,false];
   const rival=g.players[1-i],protectedNow=t.reentryUntil&&t.reentryUntil[i]>=g.cycle;
@@ -122,14 +122,14 @@ function planRegionalOffice(g,index,plan){
  plan.newProject=plan.newProjects[0]||null;
  if(!occupied&&p.branches[plan.focus]>0&&p.stats.lastProfit>50000){
   const state=p.regionalOperations.markets[plan.focus],key=state.automation<2?'branchAutomation':state.service<2?'branchService':null;
-  if(key&&!p.projects.some(x=>x.key===key)&&!projectBarred(p,key)&&projectCost(p,PROJECTS[key])<=Math.max(0,pilotSpendingLimit(p,.10,300000)-planBudget(p,plan).total)&&usedCapacity(p,[...plan.newProjects.map(k=>PROJECTS[k]),PROJECTS[key]])<=executionCapacity(p,plan.allocation))plan.newProjects.push(key);
+  if(key&&!p.projects.some(x=>x.key===key)&&!projectBarred(p,key)&&([9,10].includes(g.financialGroupVersion)?projectStartTerms(g,p,key,plan.focus).cost:projectCost(p,PROJECTS[key]))<=Math.max(0,pilotSpendingLimit(p,.10,300000)-planBudget(p,plan,g).total)&&usedCapacity(p,[...plan.newProjects.map(k=>PROJECTS[k]),PROJECTS[key]])<=executionCapacity(p,plan.allocation))plan.newProjects.push(key);
  }
  plan.newProject=plan.newProjects[0]||null;
- const limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-operatingPreview(p,plan,g.economy).profit)*2);
- for(const key of Object.keys(plan.investments||{})){const over=Math.max(0,planBudget(p,plan).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(over));if(plan.investments[key]<1000)delete plan.investments[key]}
- if(planBudget(p,plan).total>limit)plan.hires=0;
- while(plan.newProjects.length&&planBudget(p,plan).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
- if(planBudget(p,plan).total>limit)plan.competitiveAction='none';
+ const limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-operatingPreview(p,plan,g.economy,g).profit)*2);
+ for(const key of Object.keys(plan.investments||{})){const over=Math.max(0,planBudget(p,plan,g).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(over));if(plan.investments[key]<1000)delete plan.investments[key]}
+ if(planBudget(p,plan,g).total>limit)plan.hires=0;
+ while(plan.newProjects.length&&planBudget(p,plan,g).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
+ if(planBudget(p,plan,g).total>limit)plan.competitiveAction='none';
  return plan;
 }
 // Market economy v1: conserved deposit and relationship franchises.

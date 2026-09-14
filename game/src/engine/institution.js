@@ -98,11 +98,26 @@ function hireCost(p,count){let total=0;const staff=p.stats.staff;for(let i=0;i<c
 function hireLimit(p){return MAX_HIRES_PER_CYCLE}
 function planInitiatives(plan){if(!plan)return[];const list=Array.isArray(plan.newProjects)?plan.newProjects:(plan.newProject?[plan.newProject]:[]);const seen=new Set();return list.filter(k=>typeof k==='string'&&!seen.has(k)&&(seen.add(k),true))}
 function planHires(plan){const n=Math.floor(Number(plan&&plan.hires)||0);return (n>0?n:0)+specialistHireCount(plan)}
-function planBudget(p,plan){return p.departmentFunctions&&!p._departmentFunctionsRaw&&!departmentFunctionExecution(p)?departmentFunctionPlanningBudget(p,plan):planBudgetBase(p,plan);}
-function planBudgetBase(p,plan){
+// Group10 accepts explicit local destinations. Missing instructions retain the
+// historical focus-based behavior; no save is upgraded or repaired here.
+function projectPlanTarget(plan,key){return plan.projectTargets&&Object.prototype.hasOwnProperty.call(plan.projectTargets,key)?plan.projectTargets[key]:plan.focus;}
+function projectLocationsIssue(g,p,plan){
+ if(p.facilityExtensions){const occupied=facilityExtensionBusyMarkets(p,plan);if(planInitiatives(plan).some(key=>(PROJECTS[key]?.kind==='branch'||PROJECTS[key]?.regionalOnly)&&occupied.includes(projectPlanTarget(plan,key)||p.focus)))return 'Commercial suite construction occupies this market. Finish or cancel it before other local office work.';}
+ if(plan.projectTargets===undefined)return '';
+ if(g?.financialGroupVersion!==10)return 'Independent construction locations require the current Expanded edition.';
+ const targets=plan.projectTargets,chosen=planInitiatives(plan);
+ if(!targets||typeof targets!=='object'||Array.isArray(targets))return 'Invalid construction locations.';
+ for(const [key,target]of Object.entries(targets)){
+  if(!chosen.includes(key)||!projectDefinition(key)?.target||typeof target!=='string')return 'A construction location must belong to a staged local initiative.';
+  const issue=projectTargetIssue(g,p,PROJECTS[key],target);if(issue)return issue;
+ }
+ return '';
+}
+function planBudget(p,plan,g=null){return p.departmentFunctions&&!p._departmentFunctionsRaw&&!departmentFunctionExecution(p)?departmentFunctionPlanningBudget(p,plan,g):planBudgetBase(p,plan,g);}
+function planBudgetBase(p,plan,g=null){
  if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
- const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?projectCost(p,projectDefinition(key)):0),0);
+ const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?([9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,key,projectPlanTarget(plan,key)||p.focus).cost:projectCost(p,projectDefinition(key))):0),0);
  const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
  const hires=planHires(plan),recruiting=(hires?hireCost(p,hires):0)+(p.workforce?specialistHirePremium(plan):0);
  const productRetirement=p.productPrograms?(plan.productProgramPolicy?.retire?.length||0)*PRODUCT_RETIRE_COST:0;
@@ -111,13 +126,17 @@ function planBudgetBase(p,plan){
  const onboarding=p.onboarding?onboardingBudget(p,plan):0;
  const facilityConversion=facilityDraftSpend(p,plan),departmentLeadership=p.departmentOffice?departmentLeadershipQuote(p,plan).total:0;
  const lifecycle=facilityLifecycleDraftCommitment(p,plan);
+ const extensions=facilityExtensionCommitment(p,plan);
+ const shared=p.sharedPremises?sharedPremisesCommitment(p,plan):{cost:0,capacity:0};
  const departmentFunctions=p.departmentFunctions?departmentFunctionDraftCost(p,plan):0;
  const unpaidDepartmentFunctions=p.departmentFunctions&&p._departmentFunctionPaidCycle===p.departmentFunctions.lastCycle?0:departmentFunctions;
- const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+extensions.cost+shared.cost+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
- const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity;
+ const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity+extensions.capacity+shared.capacity+companyControlExecution(p,plan);
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
  if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
+ if(p.facilityExtensions){quote.facilityExtensions=extensions.cost;quote.facilityExtensionsCapacity=extensions.capacity;}
+ if(p.sharedPremises){quote.sharedPremises=shared.cost;quote.sharedPremisesCapacity=shared.capacity;}
  if(p.departmentFunctions){quote.departmentFunctions=unpaidDepartmentFunctions;quote.departmentFunctionsCommitted=departmentFunctions;quote.departmentFunctionsPaid=departmentFunctions-unpaidDepartmentFunctions;}
  if(p.facilityNetwork)quote.facilityConversion=facilityConversion;
  if(p.departmentOffice)quote.departmentLeadership=departmentLeadership;
@@ -137,12 +156,12 @@ function planBudgetBase(p,plan){
  }
  return quote;
 }
-function fundingStep(p,plan,key,step){
+function fundingStep(p,plan,key,step,g=null){
  const spent=capabilitySpend(p,key),tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;
  const next=tiers.find(x=>x>spent),limit=next?Math.min(CAPABILITY_CAP_PER_CYCLE,next-spent):0;
  const current=Math.max(0,Math.round(Number((plan.investments||{})[key])||0));
  if(step<0)return Math.max(0,current+step);
- const amount=Math.max(0,Math.min(limit,current+step,current+Math.max(0,planBudget(p,plan).remaining)));
+ const amount=Math.max(0,Math.min(limit,current+step,current+Math.max(0,planBudget(p,plan,g).remaining)));
  return amount>0&&amount<1000?0:amount;
 }
 function strategyCostMultiplier(){return 1}
@@ -167,7 +186,7 @@ function projectCost(p,def,focus=p.focus,premium=1){
 // outright costs close to double, one barely lost costs barely more. Every other
 // group returns 1 and is charged exactly what it was before.
 function marketReentryPremium(g,p,focus){
- if(!g||g.financialGroupVersion!==8)return 1;
+ if(!g||![8,9,10].includes(g.financialGroupVersion))return 1;
  const territory=g&&g.territories&&g.territories[focus];if(!territory)return 1;
  const index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
  if(index<0||!territory.exited||!territory.exited[index])return 1;
@@ -183,12 +202,13 @@ function projectTerms(p,key,focus=p.focus,premium=1){
   retired:!!def.legacy,atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
   branchFull:!!(def.kind==='branch'&&p.branches[focus]>=3)};
 }
-function projectPlanStatus(p,plan){
- const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan);
+function projectPlanStatus(p,plan,g=null){
+ const owner=regionalOperations(p)?{...p,focus:plan.focus}:p,chosen=planInitiatives(plan),quote=planBudget(owner,plan,g);
  const fail=(code,reason)=>({eligible:false,code,reason,quote});
+ const locations=projectLocationsIssue(g,p,plan);if(locations)return fail('locations',locations);
  let load=usedCapacity(owner)+facilityDraftCapacity(owner,plan);
  for(const key of chosen){
-  const def=PROJECTS[key],terms=projectTerms(owner,key,plan.focus);
+  const def=PROJECTS[key],terms=projectTerms(owner,key,projectPlanTarget(plan,key));
   if(!terms)return fail('unknown','That strategic project does not exist.');
   if(key==='capital')return fail('capital-action','Capital requests are now an emergency board action.');
   if(terms.retired)return fail('retired',def.name+' is retired and can no longer be started.');
@@ -203,10 +223,13 @@ function projectPlanStatus(p,plan){
  if(owner.accounting&&(owner.departmentOffice?quote.discretionaryRemaining<0:quote.remaining<0))return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
  if(regionalOperations(owner)){
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
-  const projects=chosen.filter(local),active=owner.projects.filter(x=>x.target===plan.focus&&local(x.key));
-  if(owner.facilityNetwork)active.push(...FacilityNetwork.pending(owner).filter(o=>o.market===plan.focus&&o.id!==plan.facilityPolicy?.cancel));
-  if(owner.facilityLifecycle)active.push(...owner.facilityNetwork.offices.filter(o=>o.market===plan.focus&&owner.facilityLifecycle.records[o.id].renovation&&o.id!==plan.facilityLifecyclePolicy?.cancel));
-  if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
+  const markets=new Set(chosen.filter(local).map(key=>projectPlanTarget(plan,key)));
+  for(const market of markets){
+   const projects=chosen.filter(key=>local(key)&&projectPlanTarget(plan,key)===market),active=owner.projects.filter(x=>x.target===market&&local(x.key));
+   if(owner.facilityNetwork)active.push(...FacilityNetwork.pending(owner).filter(o=>o.market===market&&o.id!==plan.facilityPolicy?.cancel));
+   if(owner.facilityLifecycle)active.push(...owner.facilityNetwork.offices.filter(o=>o.market===market&&owner.facilityLifecycle.records[o.id].renovation&&o.id!==plan.facilityLifecyclePolicy?.cancel));
+   if(projects.length>1||(projects.length&&active.length))return fail('office-conflict','Choose one office construction, upgrade or closure per market at a time.');
+  }
  }
  if(plan.capitalAction&&chosen.some(key=>['branch','acquisition'].includes(PROJECTS[key].kind)))return fail('board-expansion','Board assistance cannot be combined with an expansion initiative.');
  if(p.productPrograms){const products=chosen.filter(key=>PRODUCT_PROGRAM_PROJECTS[key]).map(key=>PRODUCT_PROGRAM_PROJECTS[key].product);if(new Set(products).size!==products.length||products.some(k=>plan.productProgramPolicy?.retire?.includes(k)))return fail('product-conflict','Choose one development route or retirement per product.');}
@@ -220,16 +243,25 @@ function projectTargetIssue(g,p,def,focus){
  if(!def.target)return '';
  const territory=g.territories[focus],index=g.players?g.players.findIndex(x=>x.id===p.id):g.me&&g.me.id===p.id?0:1;
  if(!territory||!unlocked(g,territory))return 'Choose an open focus market.';
- if(territory.exited&&territory.exited[index]&&g.financialGroupVersion!==8)return 'Your institution permanently exited that market. Choose an operating market.';
+ if(territory.exited&&territory.exited[index]&&![8,9,10].includes(g.financialGroupVersion))return 'Your institution permanently exited that market. Choose an operating market.';
  return '';
 }
-function projectStartStatus(g,p,key){
- const terms=projectTerms(p,key,p.focus,marketReentryPremium(g,p,p.focus)),def=PROJECTS[key];
+// The campaign/view supplies public territory ownership; no cached price or new
+// saved field is authoritative. Group9 charges re-entry on new office entry,
+// not unrelated research, recruitment or remediation at the same monthly focus.
+// Group8 execution and all historical planning retain their original rules.
+function projectStartTerms(g,p,key,focus=p.focus){
+ const def=projectDefinition(key);if(!def)return null;
+ const premium=[9,10].includes(g?.financialGroupVersion)&&def.kind!=='branch'?1:marketReentryPremium(g,p,focus);
+ return projectTerms(p,key,focus,premium);
+}
+function projectStartStatus(g,p,key,focus=p.focus){
+ const terms=projectStartTerms(g,p,key,focus),def=PROJECTS[key];
  const fail=code=>({eligible:false,code,terms});
  if(!terms)return fail('unknown');
  if(usedCapacity(p,[def])>executionCapacity(p))return fail('capacity');
  if(terms.running)return fail('running');
- if(projectTargetIssue(g,p,def,p.focus)||terms.branchFull)return fail('target');
+ if(projectTargetIssue(g,p,def,focus)||terms.branchFull)return fail('target');
  if(terms.atMaximum)return fail('maximum');
  if(terms.barred)return fail('barred');
  if(key==='capital'&&p.stats.influence<8)return fail('influence');
@@ -238,7 +270,7 @@ function projectStartStatus(g,p,key){
  // executive/rival effects would change already accepted campaign rules.
  return {eligible:true,code:null,terms};
 }
-function projectCatalog(p){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
+function projectCatalog(p,g=null){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
 function branchGoal(g){return{town:4,regional:5,state:6,national:8}[g.scope]||8}

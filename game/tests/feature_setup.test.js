@@ -8,7 +8,9 @@ const ids = { campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'se
   advertisingVersion: 'advertisingPreview', regionalGrowthVersion: 'regionalGrowthPreview', relationshipOffersVersion: 'relationshipOffersPreview', onboardingVersion: 'onboardingPreview' };
 const read = peer => copy(peer.run('readSetupFeatureOptions()'));
 const initial = read(h), markup = peer => peer.elements.get('#setupFeatureOptions').innerHTML;
-assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 14);
+assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 16);
+assert.equal(initial.facilityExtensionsVersion,0,'Office suites require explicit new-campaign selection, never an old-save upgrade.');
+assert.equal(initial.commercialAccountsVersion,0,'Company operating accounts are never selected implicitly for old configurations.');
 assert.equal(initial.financialGroupVersion,0,'The approved group preview remains unchecked.');
 assert.equal(h.elements.get('#financialGroupPreview').checked,false);
 const groupSetup=harness();
@@ -18,7 +20,7 @@ assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0
 groupSetup.run('cancelFeatureSelectionConfirmation()');
 assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),0);
 groupSetup.changeFeature('#financialGroupPreview',true);assert(groupSetup.confirmFeatures());
-assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),8,'New selections opt into Group8 stability rules; existing saves retain their version.');
+assert.equal(groupSetup.run('readSetupFeatureOptions().financialGroupVersion'),10,'New selections use Group10 qualified agency rules; existing saves retain their version.');
 assert.equal(groupSetup.run('readSetupFeatureOptions().onboardingVersion'),1);
 assert.equal(groupSetup.run('readSetupFeatureOptions().productProgramsVersion'),2);
 groupSetup.changeFeature('#onboardingPreview',false);assert(groupSetup.run('featureSelectionPending()'));
@@ -256,5 +258,5 @@ async function modularLocalPersistence() {
   unsupported.storage.set('branchWarsV7Save', JSON.stringify({ version: '8.99', gameOver: false })); unsupported.run('updateContinue()');
   assert(unsupported.elements.get('#continueBtn').classList.contains('hidden'));
 }
-modularLocalPersistence().then(() => console.log('Feature setup PASS: unchanged opt-in defaults, current pricing-enabled creation, dependency confirmation/cancellation, reverse cascades, stale revisions, mode parity, and all four modular pairs through real autosave/Continue/export/import/rematch.'))
+modularLocalPersistence().then(() => console.log('Feature setup PASS: unchanged Core default, current Expanded creation, dependency confirmation/cancellation, reverse cascades, stale revisions and mode parity.'+(modularAvailable?' All four modular pairs tested through autosave/Continue/export/import/rematch.':' Historical modular setup is unavailable; historical persistence is checked in integrated_campaign_recovery.')))
   .catch(error => { console.error(error); process.exitCode = 1; });

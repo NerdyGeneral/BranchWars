@@ -15,6 +15,7 @@ files.push('tests/docs.test.js','tools/build_reference.js','tools/reference-temp
 files.push('tests/behavior-golden.test.js','tests/architecture.test.js','tests/fixtures/behavior-golden.json','tests/fixtures/override-ceilings.json','tests/fixtures/legacy-half-ready.json','tests/fixtures/pilot-half-ready.json','tests/fixtures/goodwill-half-ready.json','tools/check.js');
 files.push('tests/save-baseline.test.js','tests/launcher-path.test.js','tests/fixtures/save-continuation.json');
 files.push('tests/reference-eol.test.js');
+files.push('tests/architecture_scope.test.js','tools/architecture_overrides.js','tools/vendor/acorn.js','tools/vendor/acorn-license.txt','tools/vendor/acorn-provenance.json');
 files.push('OPEN_BRANCH_WARS.bat','OPEN_LAN_GAME.bat','tests/portable-launcher.test.js');
 files.push('tests/storage_capacity.test.js','tests/storage_recovery.js','tests/storage_guest_recovery.test.js');
 files.push('tests/project-rules.test.js');
@@ -36,13 +37,19 @@ files.push('tests/company_finance.test.js');
 files.push('tests/company_agency_boundary.test.js','tests/agency.test.js','tests/agency_ui.test.js','tests/agency_legacy_compat.test.js','tests/agency_peer_compat.test.js');
 const institutionChecks=['accounting_payables.test.js','facility_network.test.js','facilities_integration.test.js','facility_ui.test.js','facility_ai_conflicts.test.js',
   'departments.test.js','departments_integration.test.js','department_ui.test.js','department_workforce_ui.test.js','department_execution.test.js','balance_sheet_ui.test.js','institution_legacy_compat.test.js','institution_network.test.js'];
+institutionChecks.push('department_expanded_acceptance.test.js');
+institutionChecks.push('credit_planning_ui.test.js');
+institutionChecks.push('research_delivery_expanded.test.js','strategy_workspace.test.js');
+institutionChecks.push('company_credit.test.js','company_credit_boundary.test.js','company_credit_ui.test.js','company_credit_trading.test.js','company_credit_bank.test.js','company_credit_orders.test.js');
+institutionChecks.push('company_credit_forecast.test.js');
+files.push('reports/reference-builds/BRANCH_WARS_delivery55_afde61a6.html','reports/reference-builds/BRANCH_WARS_creditorders59_1b4d0a59.html');
 institutionChecks.push('department_ai_affordability.test.js','department_obligations.test.js','department_obligations_ui.test.js');
 institutionChecks.push('facility_lifecycle_legacy_compat.test.js','facility_lifecycle_integration.test.js','facility_conversion_lifecycle.test.js','facility_hub_transitions.test.js','facility_lifecycle_network.test.js','facility_lifecycle_ui.test.js','facility_submission.test.js');
 institutionChecks.push('usability_plan_review.test.js','usability_changes.test.js','usability_people.test.js','usability_people_workflows.test.js','usability_navigation.test.js','usability_bank_overview.test.js','usability_help.test.js','usability_engine_boundary.test.js');
 files.push(...institutionChecks.map(f=>'tests/'+f),'reports/reference-builds/BRANCH_WARS_agency_group3_c3af45b3.html');
 const functionChecks=['usability_forms.test.js','v31_version_boundary.test.js','v31_funded_origination.test.js','v31_circulation.test.js','v31_recruitment.test.js','v31_staffing_recovery.test.js','v31_staffing_priority.test.js','v31_facility_planning.test.js','v31_facility_investment.test.js','v31_facility_cash.test.js','v31_budget_ui.test.js','v31_forecast_copy.test.js','v31_stability_ui.test.js','v31_staffing_network.test.js','v31_adversarial_network.test.js','department_functions.test.js','department_provider.test.js','department_function_context.test.js',
   'department_dispatch.test.js','department_delivery.test.js','department_functions_ui.test.js',
-  'department_functions_live_ui.test.js','earnings_bridge.test.js','department_ai_lending.test.js','facility_staff_planning.test.js','doctrine_resume.test.js','department_planning_contract.test.js','department_runtime.test.js',
+  'department_functions_live_ui.test.js','earnings_bridge.test.js','earnings_bridge_expanded.test.js','department_ai_lending.test.js','facility_staff_planning.test.js','doctrine_resume.test.js','department_planning_contract.test.js','department_runtime.test.js',
   'department_group5_compat.test.js','department_functions_network.test.js',
   'department_customer_capacity.test.js','department_customer_capacity_ui.test.js','department_staffing_network.test.js',
   'department_captured_replay.test.js','department_storage_capacity.test.js','department_storage_recovery.test.js','department_long_storage.test.js'];
@@ -168,6 +175,7 @@ report.tests.push(run('specialist_workforce.test.js', process.execPath, ['tests/
 report.tests.push(run('workforce_network.test.js', process.execPath, ['tests/workforce_network.test.js']));
 report.tests.push(run('Specialist workforce GitHub relay', process.execPath, ['tests/github_resilience.test.js', '--workforce']));
 report.tests.push(run('build.test.js', process.execPath, ['tests/build.test.js']));
+report.tests.push(run('architecture_scope.test.js', process.execPath, ['tests/architecture_scope.test.js']));
 report.tests.push(run('architecture.test.js', process.execPath, ['tests/architecture.test.js']));
 report.tests.push(run('behavior-golden.test.js', process.execPath, ['tests/behavior-golden.test.js']));
 report.tests.push(run('save-baseline.test.js', process.execPath, ['tests/save-baseline.test.js']));

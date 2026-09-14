@@ -76,12 +76,14 @@ function creditPerformanceForecast(p, economy, allocation = p.allocation, policy
   if (!review) return null;
   const def = COLLECTION_APPROACHES[policy.approach], rows = Object.fromEntries(Object.keys(p.marketBook.markets).map(k =>
     [k,{ entered:0,cured:0,resolved:0,recovered:0,loss:0,cost:0 }]));
+  const exposures=p.creditProductsVersion===1?creditProductExposures(p):null;
   const moves = p.creditBook.cohorts.map(c => {
     const [early,late,nonperforming] = c.late;
     const cured = [Math.floor(early*def.early*review.coverage), Math.floor(late*def.late*review.coverage)];
     const resolved = Math.min(nonperforming,Math.ceil(nonperforming*def.resolve*(.25+.75*review.coverage)));
-    const loss = Math.round(resolved*def.severity), recovered = resolved-loss;
-    const incidence = Math.min(.04, .006*c.risk/10000*(economy?.credit || 1)*(p.turnEffects.credit || 1));
+    const productRisk=p.creditProductsVersion===1?creditProductRisk(p,c,economy,exposures):{incidence:1,severity:1};
+    const loss = Math.round(resolved*def.severity*productRisk.severity), recovered = resolved-loss;
+    const incidence = Math.min(.04, .006*c.risk/10000*(economy?.credit || 1)*(p.turnEffects.credit || 1)*productRisk.incidence);
     const entered = c.seasoning ? 0 : Math.floor(performingCredit(c)*incidence);
     const move = { entered,cured:cured[0]+cured[1],resolved,recovered,loss,
       late:[entered,early-cured[0],late-cured[1]+nonperforming-resolved] };

@@ -22,7 +22,7 @@ for(const variant of ['baseline','candidate']){
   // functions, keeping the tested engine and data identical in both cases.
   h.run(oldNavigation.slice(oldNavigation.indexOf('function availableWorkspaces(')));
  }
- h.run("for(const key of ['renderFacilityNetwork','renderFacilityLifecycle','renderProductPrograms','renderCollections','renderFinancialGroup','renderHouseholds','renderWorkforce','renderBankOverview'])eval(key+'=()=>{}');monthlyPlanReview=()=>({});const measureCurrentView=currentView;let measureCalls=0;currentView=function(){measureCalls++;return measureCurrentView()};");
+ h.run("for(const key of ['renderMarketInspector','renderFacilityNetwork','renderFacilityLifecycle','renderProductPrograms','renderCollections','renderFinancialGroup','renderHouseholds','renderWorkforce','renderBankOverview'])eval(key+'=()=>{}');monthlyPlanReview=()=>({});const measureCurrentView=currentView;let measureCalls=0;currentView=function(){measureCalls++;return measureCurrentView()};");
  const before=sha(h.run('JSON.stringify({game,draft})'));
  for(const action of ["setWorkspaceTab('products')","setWorkspaceTab('workforce')","setWorkspaceTab('overview')","selectWorkspaceGroup('customers')"]){
   const timings=[],counts=[];

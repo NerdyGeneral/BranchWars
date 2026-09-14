@@ -1,0 +1,51 @@
+{
+  "checkpoint": 55,
+  "scope": "Real paid research/delivery acceptance and owner-only Research service-use display. No simulation, AI, pricing, saved-state or balance changes.",
+  "portable": "output/BRANCH_WARS_delivery55_review.html",
+  "portableSha256": "afde61a6409a0c176a8586f682431bf5817db8712eef1613beaab7e88562c001",
+  "engineSha256": "0c361c9efa3dbcb97643bea25774c1f8724f8123b24109dade92007633dc66ef",
+  "inputs": 187,
+  "normalPlayablePreservedSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "frozenZipPreservedSha256": "85dae43104c4c68f106b371b6ead8891a453bd08a4198162133a493e3a7ab28f",
+  "frozenManualPreservedSha256": "b577325f9c4fd34a2e73a3feda41acd47dc4e0ecd7b2b3c3dfec568cb5b9e1ed",
+  "checks": {
+    "research_delivery_expanded.test.js": {
+      "command": "node --test tests/research_delivery_expanded.test.js",
+      "testSha256": "8933e32e70b0d41af157ba7388075d52721a8ed22690ffb9fb1a84a3c8dc9be2",
+      "exitCode": 0,
+      "passed": 6,
+      "failed": 0,
+      "elapsedMs": 217362.0168,
+      "resolvedMonthsAcrossSixCampaigns": 54,
+      "scope": "Normal opening resources, actual paid milestones and submitted months, deterministic save/recovery, local retail adoption, paid retirement with retained books, supported treasury acquisition and partner-to-owned continuity, optional payroll automation upkeep. Not a matched profitability comparison."
+    },
+    "strategy_workspace.test.js --source": {"exitCode":0,"checks":12,"scope":"Owner-only prepared use, pure inspection, exact staging, stale context and contextual activation navigation; inert DOM, not visual browser acceptance."},
+    "strategy_workspace.test.js": {"exitCode":0,"checks":11,"scope":"Older preserved normal portable behavior; not a new-source UI pass."},
+    "product_workspace.test.js --source": {"exitCode":0,"checks":10},
+    "service_workspace.test.js --source": {"exitCode":0,"checks":6},
+    "architecture.test.js --source": {"exitCode":0,"scope":"Unchanged override ceilings, gate sensitivity, syntax and launcher/CI contracts."},
+    "releaseRunnerSyntax": "Passed; research delivery registered in both runners and strategy workspace added to the complete baseline runner.",
+    "sourceArtifact": "Byte-identical assembled source; engine byte-identical to checkpoint54."
+  },
+  "failedDevelopmentAttempts": [
+    "Initial treasury fixture did not obtain a mandate; insufficient supported delivery was not distinguished from bid uncertainty.",
+    "Instrumented treasury fixture showed 2.67 effective points versus three required; no bid eligible. Corrected test policy buys missing Technology support using the prepared quote, retains servicing during research, and deep-copies standing prices. No engine restriction was weakened."
+  ],
+  "olderStressRun": {
+    "checkpoint":51,
+    "report":"output/master-checkpoint51-commercial-expanded-long.json",
+    "reportSha256":"7d83130b28f993805feb8c5cc4bf0ef4d8da21cfa2d09faa6b45a61e0c3095cb",
+    "engineSha256":"9673fbce467b5cde2c001ddef98061ecf888101320f4761eca0f7b278a12dedb",
+    "terminal":true,
+    "exitCode":0,
+    "balanced":{"requestedMonths":120,"completedMonths":120,"gameOver":false},
+    "regulatory":{"requestedMonths":480,"completedMonths":263,"gameOver":true,"closingCapital":[-430130,483258],"cumulativeEarnings":[-5242440,-2936742]},
+    "validationException":false,
+    "limitations":"No terminal save/root-cause trace in this older report. Early game ending is retained, not a480-month pass or evidence of current-build balance acceptance."
+  },
+  "fullWindowsGate":"Not run for this intermediate candidate",
+  "newMultiplayerGate":"Not run; no transport or simulation change in this batch",
+  "browserAcceptance":"Not performed; prior review-artifact access denial remains a separate acceptance issue",
+  "physicalTwoComputerAcceptance":"Not performed",
+  "publication":false
+}

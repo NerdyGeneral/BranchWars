@@ -1,6 +1,6 @@
 // Group 4 integration. These adapters reuse the existing office prices,
 // operating profiles and shared monthly plan rather than inventing a second economy.
-function identifiedInstitution(g) { return [4,5,6,7,8].includes(g.financialGroupVersion); }
+function identifiedInstitution(g) { return [4,5,6,7,8,9,10].includes(g.financialGroupVersion); }
 function validateFacilitySnapshot(p,cycle,gameOver,enabled) {
   FacilityNetwork.validate(p,cycle,enabled);
   if(p._facilityExecutionUsed!==undefined)throw Error('Unfinished facility execution cannot be restored.');
@@ -12,8 +12,8 @@ function validateFacilitySnapshot(p,cycle,gameOver,enabled) {
 function validateFacilitySave(g) {
   const enabled=identifiedInstitution(g);
   for(const p of g.players){
-    if(enabled&&p.facilityNetwork?.version!==([5,6,7,8].includes(g.financialGroupVersion)?2:1))throw Error('Facility catalog does not match campaign rules.');
-    if(![5,6,7,8].includes(g.financialGroupVersion)&&(p.projects||[p.project].filter(Boolean)).some(x=>PROJECTS[x.key]?.institutionOnlyVersion===5))throw Error('Unversioned facility project.');
+    if(enabled&&p.facilityNetwork?.version!==([5,6,7,8,9,10].includes(g.financialGroupVersion)?2:1))throw Error('Facility catalog does not match campaign rules.');
+    if(![5,6,7,8,9,10].includes(g.financialGroupVersion)&&(p.projects||[p.project].filter(Boolean)).some(x=>PROJECTS[x.key]?.institutionOnlyVersion===5))throw Error('Unversioned facility project.');
   }
   for(const p of g.players)validateFacilitySnapshot(p,g.cycle,g.gameOver,enabled);
   if(!enabled&&Object.values(g.lastPlans||{}).some(p=>p.facilityPolicy!==undefined))
@@ -21,7 +21,7 @@ function validateFacilitySave(g) {
 }
 function validateFacilityView(view) {
   const enabled=identifiedInstitution(view);
-  if(enabled&&view.me.facilityNetwork?.version!==([5,6,7,8].includes(view.financialGroupVersion)?2:1))throw Error('Facility view catalog does not match campaign rules.');
+  if(enabled&&view.me.facilityNetwork?.version!==([5,6,7,8,9,10].includes(view.financialGroupVersion)?2:1))throw Error('Facility view catalog does not match campaign rules.');
   FacilityNetwork.validateView(view,enabled);
   validateFacilitySnapshot(view.me,view.cycle,view.gameOver,enabled);
   if(!enabled&&Object.values(view.lastPlans||{}).some(p=>p.facilityPolicy!==undefined))
@@ -99,11 +99,12 @@ function facilityConversionMetrics(g,p,plan,budget) {
   };
 }
 function facilityContext(g,p,plan) {
-  const budget=planBudget(p,plan),order=plan.facilityPolicy?.convert;
+  const budget=planBudget(p,plan,g),order=plan.facilityPolicy?.convert;
   const local=key=>PROJECTS[key]&&(PROJECTS[key].kind==='branch'||PROJECTS[key].regionalOnly);
   const occupiedMarkets=[...p.projects.filter(x=>local(x.key)).map(x=>x.target),
-    ...planInitiatives(plan).filter(local).map(()=>plan.focus)];
+    ...planInitiatives(plan).filter(local).map(key=>projectPlanTarget(plan,key))];
   const target=order&&p.facilityNetwork?.offices.find(o=>o.id===order.officeId);
+  if(p.facilityExtensions)occupiedMarkets.push(...facilityExtensionBusyMarkets(p,plan));
   let restriction='';
   if(target&&g.territories&&(!g.territories[target.market]||!unlocked(g,g.territories[target.market])))restriction='Choose an open market.';
   if(tierRank(p)>=2||p.capitalRestriction>0||plan.capitalAction)restriction='Restore capital standing before committing to a facility conversion.';
@@ -117,9 +118,9 @@ function facilityContext(g,p,plan) {
 // quotes deliberately retain the selected staff instructions. The AI can also
 // consider the ordinary allocation it could select after activation, using
 // only CURRENT post-servicing, post-teaching staff; never hypothetical hires.
-function facilityAiConversionMetrics(g,p,plan,budget=planBudget(p,plan)) {
+function facilityAiConversionMetrics(g,p,plan,budget=planBudget(p,plan,g)) {
   const retained=facilityConversionMetrics(g,p,plan,budget);
-  if(![7,8].includes(g.financialGroupVersion)||!p.facilityLifecycle)return retained;
+  if(![7,8,9,10].includes(g.financialGroupVersion)||!p.facilityLifecycle)return retained;
   let staged;
   return (ignored,office)=>{
     const current=FacilityNetwork.office(p,office.id);
@@ -143,7 +144,7 @@ function facilityInstructionQuote(g,p,plan) {
     attempted=plan.facilityPolicy?.convert?FacilityNetwork.quote(p,plan.facilityPolicy.convert,context):null;
     const policy=FacilityNetwork.policy(p,plan,context);
     const quote=policy?.convert?FacilityNetwork.quote(p,policy.convert,context):null;
-    const projects=projectPlanStatus(p,plan);
+    const projects=projectPlanStatus(p,plan,g);
     return {policy,status:{eligible:projects.eligible,reason:projects.reason},quote};
   } catch(error) { return {policy:null,status:{eligible:false,reason:error.message},quote:attempted}; }
 }
@@ -154,7 +155,7 @@ function facilityProgressComparison(g,p,office,plan) {
     during:facilityOfficeMetrics(p,office),
     after:facilityOfficeMetrics(p,{...office,model:office.conversion.model,conversion:null})
   };
-  const metrics=facilityConversionMetrics(g,p,plan,planBudget(p,plan)),
+  const metrics=facilityConversionMetrics(g,p,plan,planBudget(p,plan,g)),
     before=metrics(p,{...office,conversion:null}),
     after=metrics(p,{...office,model:office.conversion.model,conversion:null}),during={...before};
   for(const key of ['depositCapacity','loanCapacity','serviceCapacity','advisoryCapacity'])
@@ -169,7 +170,7 @@ function normalizeFacilityPlan(g,p,plan) {
 }
 function prepareFacilityInstructions(g,plans,openingContexts=null) {
   if(!identifiedInstitution(g))return [];
-  if(openingContexts&&(![5,6,7,8].includes(g.financialGroupVersion)||openingContexts.length!==g.players.length))
+  if(openingContexts&&(![5,6,7,8,9,10].includes(g.financialGroupVersion)||openingContexts.length!==g.players.length))
     throw Error('Opening facility contexts do not match the campaign.');
   return recordLedgerStage(g,'prepareFacilityInstructions','facilities.instructions',()=>g.players.flatMap((p,i)=>{
     const context=openingContexts?{...openingContexts[i]}:facilityContext(g,p,plans[i]);
@@ -187,11 +188,12 @@ function advanceInstitutionProjects(g) {
   if(!identifiedInstitution(g))return advanceProjects(g);
   const lines=[];
   try {
+    if(g.companyControlVersion===1)lines.push(...recordLedgerStage(g,'advanceCompanyControlIntegration','companies.integration',()=>advanceCompanyControlIntegration(g)));
     recordLedgerStage(g,'advanceFacilityInstructions','facilities.progress',()=>{
       for(const p of g.players){
-        const result=FacilityNetwork.advance(p,{cycle:g.cycle,freeExecution:executionCapacity(p),
+        const result=FacilityNetwork.advance(p,{cycle:g.cycle,freeExecution:Math.max(0,executionCapacity(p)-(p._companyControlExecutionUsed||0)),
           workRate:1+departmentFunctionResidual(p,'operations',p.departmentOffice?departmentProductiveAllocation(p).operations:p.allocation.operations)*.08+(p.doctrine==='efficiency'?.1:0)});
-        p._facilityExecutionUsed=result.usedCapacity;
+        p._facilityExecutionUsed=result.usedCapacity+(p._companyControlExecutionUsed||0);
         for(const e of result.events)lines.push(p.name+' office '+e.officeId.split(':').at(-1)+
           (e.type==='facility.conversion.stalled'?' conversion stalled: insufficient staffed execution capacity.':
             e.readyCycle?' conversion work finished; the new office model activates next month.':
@@ -199,8 +201,9 @@ function advanceInstitutionProjects(g) {
       }
     });
     lines.push(...advanceFacilityLifecycle(g));
+    if(g.facilityExtensionsVersion===1)lines.push(...recordLedgerStage(g,'advanceFacilityExtensions','facilities.extensionProgress',()=>advanceFacilityExtensions(g)));
     lines.push(...advanceProjects(g));
-  } finally { for(const p of g.players)delete p._facilityExecutionUsed; }
+  } finally { for(const p of g.players){delete p._facilityExecutionUsed;delete p._companyControlExecutionUsed;} }
   return lines;
 }
 function activateFacilityInstructions(g) {
@@ -258,7 +261,7 @@ function planFacilityNetwork(g,index,plan,selectConversion=true) {
     FacilityNetwork.pending(p).some(office=>office.market===plan.focus);
   // Group7 also reserves the local site for already-paid renovation work.
   // Earlier campaign planners remain unchanged; human orders stay strict.
-  if([7,8].includes(g.financialGroupVersion)&&p.facilityLifecycle)occupied=occupied||
+  if([7,8,9,10].includes(g.financialGroupVersion)&&p.facilityLifecycle)occupied=occupied||
     p.facilityNetwork.offices.some(office=>office.closedCycle===null&&office.market===plan.focus&&
       p.facilityLifecycle.records[office.id].renovation&&office.id!==plan.facilityLifecyclePolicy?.cancel);
   plan.newProjects=planInitiatives(plan).filter(key=>{
@@ -269,8 +272,8 @@ function planFacilityNetwork(g,index,plan,selectConversion=true) {
   plan.newProject=plan.newProjects[0]||null;
   if(p.stats.lastProfit<=0||!selectConversion)return plan;
   const context=facilityContext(g,p,plan),review=aiCashPlanningReview(g,index,plan);
-  if([7,8].includes(g.financialGroupVersion)&&p.facilityLifecycle)context.officeMetrics=facilityAiConversionMetrics(g,p,plan);
-  context.freeCash=Math.min(context.freeCash,Math.max(0,review.limit-planBudget(p,plan).total));
+  if([7,8,9,10].includes(g.financialGroupVersion)&&p.facilityLifecycle)context.officeMetrics=facilityAiConversionMetrics(g,p,plan);
+  context.freeCash=Math.min(context.freeCash,Math.max(0,review.limit-planBudget(p,plan,g).total));
   context.score=q=>{
     // Payback from actual current deposit/loan production constraints, not a free
     // model preference. Expanded role/catalog strategies can extend this later.

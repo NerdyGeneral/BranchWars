@@ -1,13 +1,31 @@
 // Campaign rules are derived from the existing version scalars. This catalog
 // owns compatibility and setup choices, not simulation order or private books.
-// Retired. Modular selection was a pilot for a capability the engine does not
-// have: the campaign features are a strict chain, so they cannot be chosen
-// independently. Setup offers Core and Expanded instead. Existing 8.14 saves
-// still load through campaignVersion and migration below.
+// Setup offers Core and Expanded. This flag controls discovery/selection only:
+// historical modular 8.14/8.15 campaigns still require their exact rules for
+// import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
-  ['financialGroupVersion', 'financialGroupSupported', 8, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
+  ['sharedPremisesVersion', 'sharedPremisesSupported', 1, 1, 'Shared service premises', 'SHARED PREMISES'],
+  ['companyControlStrategyVersion', 'companyControlStrategySupported', 1, 1, 'Competitive company strategy', 'COMPANY STRATEGY'],
+  ['companyConsolidationVersion', 'companyConsolidationSupported', 1, 1, 'Controlled company reporting', 'COMPANY CONSOLIDATION'],
+  ['companyControlVersion', 'companyControlSupported', 1, 1, 'Reviewed company control', 'COMPANY CONTROL'],
+  ['companySharesVersion', 'companySharesSupported', 1, 1, 'Company share ownership', 'COMPANY SHARES'],
+  ['investmentStrategyVersion', 'investmentStrategySupported', 1, 1, 'Investment business strategy', 'GROUP STRATEGY'],
+  ['creditProductsVersion', 'creditProductsSupported', 1, 1, 'Expanded lending portfolios', 'LENDING PRODUCTS'],
+  ['investmentNotesVersion', 'investmentNotesSupported', 1, 1, 'Fixed-term investment notes', 'INVESTMENT NOTES'],
+  ['investmentTradingVersion', 'investmentTradingSupported', 1, 1, 'Client portfolio orders', 'INVESTMENT TRADING'],
+  ['investmentSuitabilityVersion', 'investmentSuitabilitySupported', 1, 1, 'Customer investment mandates', 'INVESTMENT SUITABILITY'],
+  ['investmentIncomeVersion', 'investmentIncomeSupported', 1, 1, 'Funded investment distributions', 'INVESTMENT INCOME'],
+  ['investmentChoiceVersion', 'investmentChoiceSupported', 1, 1, 'Investment customer preferences', 'INVESTMENT CHOICE'],
+  ['investmentSweepVersion', 'investmentSweepSupported', 1, 1, 'Standing investment cash arrangements', 'INVESTMENT SWEEPS'],
+  ['investmentCashVersion', 'investmentCashSupported', 1, 1, 'Investment cash withdrawals', 'INVESTMENT CASH'],
+  ['investmentAssetsVersion', 'investmentAssetsSupported', 1, 1, 'Backed investment assets', 'INVESTMENT ASSETS'],
+  ['investmentServicesVersion', 'investmentServicesSupported', 1, 1, 'Investment services', 'INVESTMENT SERVICES'],
+  ['facilityExtensionsVersion', 'facilityExtensionsSupported', 1, 1, 'Adaptable office suites', 'OFFICE SUITES'],
+  ['commercialAccountsVersion', 'commercialAccountsSupported', 2, 1, 'Business operating accounts', 'BUSINESS ACCOUNTS'],
+  ['financialGroupVersion', 'financialGroupSupported', 10, 1, 'Financial Group preview', 'FINANCIAL GROUP'],
   ['financialGroupVersion', 'departmentStaffingSupported', 2, 6, 'Frozen department staffing evidence', 'DEPARTMENT STAFFING'],
+  ['financialGroupVersion', 'projectLocationsSupported', 1, 10, 'Independent construction locations', 'CONSTRUCTION LOCATIONS'],
   ['featureRulesVersion', 'featureRulesSupported', 1, 1, 'Modular combinations preview', 'MODULAR RULES'],
   ['onboardingVersion', 'onboardingSupported', 1, 1, 'Customer onboarding preview', 'ONBOARDING'],
   ['relationshipOffersVersion', 'relationshipOffersSupported', 1, 1, 'Relationship offers preview', 'RELATIONSHIP OFFERS'],
@@ -48,14 +66,32 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['regionalGrowthVersion', 'Regional growth', 1, 'advertisingVersion', true, false, 'Outside economic arrivals and departures at month end.'],
   ['relationshipOffersVersion', 'Relationship offers', 1, 'regionalGrowthVersion', true, false, 'Voluntary product switching for existing customers.'],
   ['onboardingVersion', 'Customer onboarding', 1, 'relationshipOffersVersion', true, false, 'Applications, staff bottlenecks and funded activation.'],
-  ['financialGroupVersion', 'Financial Group preview', 8, 'onboardingVersion', true, false, 'Separate parent capital, staffed insurance agency, facility networks and renovation, plus departmental workloads, paid outsourcing and bounded leadership.'],
+  ['financialGroupVersion', 'Financial Group preview', 10, 'onboardingVersion', true, false, 'Separate parent capital, qualified agency producers and servicing staff, ongoing operating permissions, facilities sharing a finite workforce, departmental workloads and bounded leadership.'],
+  ['commercialAccountsVersion', 'Business operating accounts', 1, 'financialGroupVersion', true, false, 'Qualified named-company cash accounts, dedicated work and conserved bank funding.'],
+  ['facilityExtensionsVersion', 'Adaptable office suites', 1, 'commercialAccountsVersion', true, false, 'Commercial services within existing premises, sharing real staff, construction and upkeep.'],
+  ['investmentServicesVersion', 'Investment services', 1, 'facilityExtensionsVersion', false, false, 'Qualified investment institutions and funded customer accounts.'],
+  ['investmentAssetsVersion', 'Backed investment assets', 1, 'investmentServicesVersion', false, false, 'Dealer inventory purchased from existing bank securities, using funded counterparties.'],
+  ['investmentCashVersion', 'Investment cash withdrawals', 1, 'investmentAssetsVersion', false, false, 'Client cash returned to an existing bank deposit account.'],
+  ['investmentSweepVersion', 'Standing investment cash arrangements', 1, 'investmentCashVersion', false, false, 'Customer-directed affiliated deposits, external bank deposits and money-market fund placements.'],
+  ['investmentChoiceVersion', 'Investment customer preferences', 1, 'investmentSweepVersion', false, false, 'Persistent customer priorities, delivery quality, fees and earned relationship continuity.'],
+  ['investmentIncomeVersion', 'Funded investment distributions', 1, 'investmentChoiceVersion', false, false, 'Variable cash-funded security income and customer-owned fund earnings.'],
+  ['investmentSuitabilityVersion', 'Customer investment mandates', 1, 'investmentIncomeVersion', false, false, 'Persistent liquidity needs constrain funded securities purchases and fund allocations.'],
+  ['investmentTradingVersion', 'Client portfolio orders', 1, 'investmentSuitabilityVersion', false, false, 'Qualified, cash-funded purchases and sales of existing client securities.'],
+  ['investmentNotesVersion', 'Fixed-term investment notes', 1, 'investmentTradingVersion', false, false, 'Client-funded fixed coupons, maturity obligations and issuer liquidity risk.'],
+  ['creditProductsVersion', 'Expanded lending portfolios', 1, 'investmentNotesVersion', false, false, 'Small-business and commercial-property lending with retained terms, collateral and concentration risk.'],
+  ['investmentStrategyVersion', 'Investment business strategy', 1, 'creditProductsVersion', false, false, 'Funded rival diversification, qualified servicing, portfolio mandates and deliberate wind-down.'],
+  ['companySharesVersion', 'Company share ownership', 1, 'investmentStrategyVersion', false, false, 'Parent-funded company auctions, separate ownership, dividends and thin outside liquidity.'],
+  ['companyControlVersion', 'Reviewed company control', 1, 'companySharesVersion', false, false, 'Paid diligence, funded control offers, acquisition debt and persistent integration.'],
+  ['companyConsolidationVersion', 'Controlled company reporting', 1, 'companyControlVersion', false, false, 'Acquisition-date accounts, outside shareholders and reconciled internal balances.'],
+  ['companyControlStrategyVersion', 'Competitive company strategy', 1, 'companyConsolidationVersion', false, false, 'Funded opponent control decisions and explicit responses to shareholder offers.'],
+  ['sharedPremisesVersion', 'Shared service premises', 1, 'companyControlStrategyVersion', false, false, 'Paid multi-entity office extensions, qualified local delivery and reconciled occupancy.'],
   ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
   peers: Object.freeze(CAMPAIGN_PEER_REQUIREMENTS.filter(peer => peer.field === field)),
-  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
-  requires: Object.freeze(field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
+  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8,9,10]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
+  requires: Object.freeze(field==='commercialAccountsVersion'?[Object.freeze({field:'financialGroupVersion',version:10})]:field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
 })));
 const CAMPAIGN_FEATURE_FIELDS = Object.freeze(CAMPAIGN_FEATURES.map(row => row.field));
 const CAMPAIGN_LEGACY_VERSIONS = Object.freeze(['6.0', '7.0', '7.1', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8', '8.9', '8.10', '8.11', '8.12', '8.13']);
@@ -67,6 +103,18 @@ const CAMPAIGN_VERSION_STAGES = Object.freeze([
 ].map(Object.freeze));
 // Legacy creation checks deliberately keep their historical order and wording.
 const CAMPAIGN_OPTION_ERRORS = Object.freeze([
+  ['sharedPremisesVersion', 'shared service premises version'],
+  ['companyControlStrategyVersion', 'competitive company strategy version'],
+  ['companyConsolidationVersion', 'controlled company reporting version'],
+  ['companyControlVersion', 'reviewed company control version'],
+  ['companySharesVersion', 'company share ownership version'],
+  ['investmentStrategyVersion', 'investment business strategy version'],
+  ['creditProductsVersion', 'expanded lending products version'],
+  ['investmentNotesVersion', 'investment notes version'],
+  ['investmentTradingVersion', 'investment trading version'],
+  ['investmentSuitabilityVersion', 'investment suitability version'],
+  ['investmentIncomeVersion', 'investment income version'],
+  ['investmentChoiceVersion', 'investment customer choice version'],
   ['customerDemandVersion', 'customer demand version'], ['onboardingVersion', 'onboarding version'],
   ['relationshipOffersVersion', 'relationship offers version'], ['regionalGrowthVersion', 'regional growth version'],
   ['advertisingVersion', 'advertising version'], ['productProgramsVersion', 'product programmes version'],
@@ -77,10 +125,30 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['retailLifecycleVersion', 'retail lifecycle'], ['termFundingVersion', 'term funding'], ['depositProductsVersion', 'deposit products'],
   ['fundingCovenantVersion', 'funding covenant'], ['creditLifecycleVersion', 'credit lifecycle'],
   ['marketEconomyVersion', 'market economy'], ['regionalEconomyVersion', 'regional economy version'], ['campaignRulesVersion', 'campaign rules'],
-  ['featureRulesVersion', 'modular feature rules version'], ['financialGroupVersion', 'financial group version']
+  ['featureRulesVersion', 'modular feature rules version'], ['financialGroupVersion', 'financial group version'], ['commercialAccountsVersion','business operating accounts version'], ['facilityExtensionsVersion','office extension version'], ['investmentServicesVersion','investment services version'], ['investmentAssetsVersion','investment assets version'], ['investmentCashVersion','investment cash version'], ['investmentSweepVersion','investment sweep version']
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.sharedPremisesVersion===1)return '9.27';
+  if(source.companyControlStrategyVersion===1)return '9.26';
+  if(source.companyConsolidationVersion===1)return '9.25';
+  if(source.companyControlVersion===1)return '9.24';
+  if(source.companySharesVersion===1)return '9.23';
+  if(source.investmentStrategyVersion===1)return '9.22';
+  if(source.creditProductsVersion===1)return '9.21';
+  if(source.investmentNotesVersion===1)return '9.20';
+  if(source.investmentTradingVersion===1)return '9.19';
+  if(source.investmentSuitabilityVersion===1)return '9.18';
+  if(source.investmentIncomeVersion===1)return '9.17';
+  if(source.investmentChoiceVersion===1)return '9.16';
+  if(source.investmentSweepVersion===1)return '9.15';
+  if(source.investmentCashVersion===1)return '9.14';
+  if(source.investmentAssetsVersion===1)return '9.13';
+  if(source.investmentServicesVersion===1)return '9.12';
+  if(source.facilityExtensionsVersion===1)return '9.11';
+  if(source.commercialAccountsVersion===1)return '9.10';
+  if (source.financialGroupVersion===10) return '9.9';
+  if (source.financialGroupVersion===9) return '9.8';
   if (source.financialGroupVersion===8) return '9.7';
   if (source.financialGroupVersion===7) return '9.6';
   if (source.financialGroupVersion===6) return '9.5';
@@ -93,7 +161,8 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  return ['9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || version === '8.15' || (MODULAR_FEATURE_RULES_AVAILABLE && version === '8.14');
+  if(version==='9.27')return true;
+  return ['9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9','9.10','9.11','9.12','9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || ['8.14','8.15'].includes(version);
 }
 function campaignOptionIssues(source, context) {
   const issues = [];
@@ -101,7 +170,7 @@ function campaignOptionIssues(source, context) {
     const value = source[field], def = campaignFeature(field);
     if (value === undefined) continue;
     const allowed = field === 'campaignRulesVersion' && context === 'creation' ? [1] : def.versions;
-    if (!allowed.includes(value) || (field === 'featureRulesVersion' && value === 1 && !MODULAR_FEATURE_RULES_AVAILABLE))
+    if (!allowed.includes(value))
       issues.push({ field, code: 'unsupported_version', message: 'Unsupported ' + name });
     else if (['game', 'view'].includes(context) && value === 0)
       issues.push({ field, code: 'disabled_state_version', message: 'Disabled campaign features must omit their saved version: ' + def.label + '.' });
@@ -120,7 +189,7 @@ function campaignRules(source, { context = 'creation' } = {}) {
   if (!source || typeof source !== 'object' || Array.isArray(source)) throw Error('Invalid campaign rules source.');
   if (!['creation', 'lobby', 'game', 'view'].includes(context)) throw Error('Unknown campaign rules context.');
   const issues = campaignOptionIssues(source, context), versions = {}, saved = ['game', 'view'].includes(context);
-  const modular = MODULAR_FEATURE_RULES_AVAILABLE && source.featureRulesVersion === 1;
+  const modular = source.featureRulesVersion === 1;
   for (const def of CAMPAIGN_FEATURES) {
     const requirements = campaignRequirements(def, modular);
     const available = requirements.every(r => versions[r.field] >= r.version);
@@ -162,7 +231,7 @@ function previewFeatureSelection(source, { field, value }) {
   const options = { ...source }, before = campaignRules(source, { context: 'lobby' });
   const set = (key, next) => { if (key === 'campaignRulesVersion' && next === 0) delete options[key]; else options[key] = next; };
   set(field, value);
-  const modular = MODULAR_FEATURE_RULES_AVAILABLE && options.featureRulesVersion === 1;
+  const modular = options.featureRulesVersion === 1;
   if (modular && value && ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion'].includes(field)) throw Error('This feature is not supported in the Modular combinations preview.');
   function enable(key, minimum) {
     const def = campaignFeature(key);
@@ -193,8 +262,30 @@ function previewFeatureSelection(source, { field, value }) {
       reason: def.field === field ? 'selected' : def.version ? 'required dependency' : 'dependent feature disabled' }));
   return { options, rules, changes, requiresConfirmation: changes.some(change => change.field !== field) };
 }
+// New-campaign edition selection only. Saved campaigns retain their authoritative
+// scalar versions; this proposal never migrates books or creates subsidiaries.
+function previewCampaignEdition(source, edition) {
+  if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
+  const before = campaignRules(source, { context: 'lobby' });
+  let options;
+  if (edition === 'core') options = previewFeatureSelection(source, { field: 'campaignRulesVersion', value: 0 }).options;
+  else {
+    options = { ...source };
+    if (options.featureRulesVersion) options.featureRulesVersion = 0;
+    const enableEditionPrerequisite = field => {
+      const def = campaignFeature(field);
+      options[field] = def.setupVersion;
+      for (const required of campaignRequirements(def, false)) enableEditionPrerequisite(required.field);
+    };
+    enableEditionPrerequisite('sharedPremisesVersion');
+  }
+  const rules = validateCampaignRules(options, 'lobby');
+  const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
+    .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version, reason: 'edition selection' }));
+  return { options, rules, changes, requiresConfirmation: changes.length > 0 };
+}
 function campaignCapabilities() {
-  return { lobbySupported: 1, ...Object.fromEntries(CAMPAIGN_FEATURES.filter(def => def.available)
+  return { lobbySupported: 1, ...Object.fromEntries(CAMPAIGN_FEATURES
     .flatMap(def => def.peers.map(peer => [peer.capability, peer.supported]))) };
 }
 function campaignNeedsFreshHandshake(source) {
@@ -204,7 +295,7 @@ function peerRulesIssue(rules, capabilities = {}) {
   if (!rules || !rules.options || !Array.isArray(rules.issues)) throw Error('Resolve campaign rules before checking a peer.');
   if (!rules.valid) return { ...rules.issues[0], status: 'CAMPAIGN RULES REFUSED' };
   const values = rules.options;
-  const checks = CAMPAIGN_FEATURES.filter(def => def.available).flatMap(def => def.peers).sort((a, b) => a.order - b.order);
+  const checks = CAMPAIGN_FEATURES.flatMap(def => def.peers).sort((a, b) => a.order - b.order);
   for (const { field, capability, supported, minimum, range, label, status } of checks) {
     if (!(values[field] >= minimum)) continue;
     const compatible = range ? Number.isInteger(capabilities[capability]) && capabilities[capability] >= values[field] && capabilities[capability] <= supported : capabilities[capability] === supported;

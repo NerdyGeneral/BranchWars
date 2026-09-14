@@ -23,7 +23,7 @@ function reconcileDeposits(p){
  if(!p.depositBook||depositBypass)return;
  const g=depositWorld||marketContext||{economy:{rate:3.75}};
  for(const [market,m]of Object.entries(p.marketBook.markets)){
-  const held=p.depositBook.cohorts.filter(c=>c.market===market).reduce((n,c)=>n+c.principal,0),difference=m.deposits-held,product=p.products.retail;
+  const held=p.depositBook.cohorts.filter(c=>c.market===market).reduce((n,c)=>n+c.principal,0),difference=m.deposits-held-nonHouseholdDepositBalance(p,market),product=p.products.retail;
   if(p.segmentDeposits&&difference)throw Error('Segment deposit books disagree with local balances');
   if(difference>0){const parts=p.retailLifecycle?marketSplit(difference,retailAcquisitionMix(p,g,market)):{[product]:difference};for(const [offered,n]of Object.entries(parts))if(n)p.depositBook.cohorts.push({market,product:offered,principal:n,remaining:offered==='highYield'?6:0,quotedCycle:g.cycle||p.depositBook.asOfCycle+1,rate:depositRate(p,g,offered)})}
   else if(difference<0)takeDeposits(p,market,-difference);
@@ -82,7 +82,7 @@ function validateDepositSave(g){
   const b=p.depositBook;
   if(!b||b.version!==1||!Array.isArray(b.cohorts)||b.cohorts.length>5000||!Number.isInteger(b.asOfCycle)||b.asOfCycle<0||b.asOfCycle>g.cycle)throw Error('Invalid deposit cohorts');
   for(const c of b.cohorts)if(!c||!p.marketBook.markets[c.market]||!DEPOSIT_SERVICE[c.product]||!Number.isSafeInteger(c.principal)||c.principal<=0||!Number.isInteger(c.remaining)||c.remaining<0||c.remaining>6||!Number.isInteger(c.quotedCycle)||c.quotedCycle<0||c.quotedCycle>g.cycle||!Number.isInteger(c.rate)||c.rate<0||c.rate>100000||(c.remaining>0&&c.product!=='highYield'))throw Error('Invalid deposit terms');
-  for(const [k,m]of Object.entries(p.marketBook.markets))if(b.cohorts.filter(c=>c.market===k).reduce((n,c)=>n+c.principal,0)!==m.deposits)throw Error('Deposit cohorts disagree with local balances');
+  for(const [k,m]of Object.entries(p.marketBook.markets))if(b.cohorts.filter(c=>c.market===k).reduce((n,c)=>n+c.principal,0)+nonHouseholdDepositBalance(p,k)!==m.deposits)throw Error('Deposit cohorts disagree with local balances');
  }
  return g;
 }

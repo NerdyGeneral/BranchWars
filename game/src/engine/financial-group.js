@@ -2,7 +2,7 @@
 const GROUP_SAFEGUARDS = Object.freeze({ capitalRatio: .10, depositCash: .05, subsidiaryReserveMonths: 3 });
 const CREDIT_ALLOCATION_STEPS = Object.freeze([0,25,50,75,100]);
 function initializeFinancialGroup(g, options) {
-  if (![1,2,3,4,5,6,7,8].includes(options.financialGroupVersion)) return;
+  if (![1,2,3,4,5,6,7,8,9,10].includes(options.financialGroupVersion)) return;
   g.financialGroupVersion = options.financialGroupVersion;
   for (const p of g.players) {
     const parent = GroupAccounting.post(GroupAccounting.opening(p.id + ':parent'), 'opening.bankOwnership',
@@ -11,8 +11,8 @@ function initializeFinancialGroup(g, options) {
     p.creditPortfolio = { version: 1, allocation: Object.fromEntries(Object.keys(CREDIT_TERMS).map(k=>[k,k===p.products.credit?100:0])) };
   }
 }
-function validateCreditAllocation(allocation) {
-  if (!allocation || Array.isArray(allocation) || Object.keys(allocation).sort().join() !== Object.keys(CREDIT_TERMS).sort().join() ||
+function validateCreditAllocation(allocation,p={}) {
+  if (!allocation || Array.isArray(allocation) || Object.keys(allocation).sort().join() !== creditProductKeys(p).sort().join() ||
       Object.values(allocation).some(n=>!CREDIT_ALLOCATION_STEPS.includes(n)) ||
       Object.values(allocation).reduce((sum,n)=>sum+n,0)!==100) throw Error('Lending allocations must total 100% in 25-point steps.');
 }
@@ -41,7 +41,7 @@ function normalizeGroupPlan(p, plan) {
       !Number.isSafeInteger(policy.bankDividend)||policy.bankDividend<0||
       !Number.isSafeInteger(policy.bankSupport)||policy.bankSupport<0 ||
       (policy.bankDividend>0&&policy.bankSupport>0)) throw Error('Choose one funded bank/parent capital direction per month.');
-  validateCreditAllocation(policy.creditAllocation);
+  validateCreditAllocation(policy.creditAllocation,p);
   const quote=groupCapitalQuote(p);
   if(policy.bankDividend>quote.dividendLimit||policy.bankSupport>quote.supportLimit)
     throw Error('Group transfer exceeds current unreserved cash, retained earnings or capital safeguards.');
@@ -50,7 +50,7 @@ function applyGroupPortfolio(p, plan) {
   if(p.financialGroup&&plan.groupPolicy)p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
 }
 function settleGroupCapital(g, plans) {
-  if(![1,2,3,4,5,6,7,8].includes(g.financialGroupVersion))return [];
+  if(![1,2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion))return [];
   const lines=[];
   for(const [index,p] of g.players.entries()) {
     const policy=plans[index].groupPolicy,quote=groupCapitalQuote(p);
@@ -84,10 +84,10 @@ function settleGroupCapital(g, plans) {
 function validateFinancialGroupPlayer(p, cycle, validateIntent = false) {
   const f=p.financialGroup,c=p.creditPortfolio;
   if(!f||Object.keys(f).sort().join()!==(p.agency?'investmentBasis,parent,report,version':'parent,report,version')||f.version!==(p.agency?2:1)||
-      !c||c.version!==1||Object.keys(c).sort().join()!=='allocation,version')throw Error('Invalid Financial Group state.');
-  GroupAccounting.validate(f.parent);validateCreditAllocation(c.allocation);
+      !c||c.version!==(p.creditProductsVersion===1?2:1)||Object.keys(c).sort().join()!=='allocation,version')throw Error('Invalid Financial Group state.');
+  GroupAccounting.validate(f.parent);validateCreditAllocation(c.allocation,p);
   if(f.parent.entityId!==p.id+':parent')throw Error('Financial Group parent belongs to another institution.');
-  if(['businessAssets','custodyAssets','debt','payables','custodyLiabilities'].some(key=>f.parent.accounts[key]!==0))
+  if([...(p.companyShares?[]:['businessAssets']),...(p.companyControl?[]:['debt','payables']),'custodyAssets','custodyLiabilities'].some(key=>f.parent.accounts[key]!==0))
     throw Error('Unsupported parent assets or obligations for this group rules version.');
   if(f.report!==null) {
     const r=f.report;
@@ -103,23 +103,23 @@ function validateFinancialGroupSave(g) {
     if(g.players.some(p=>p.financialGroup!==undefined||p.creditPortfolio!==undefined))throw Error('Unversioned Financial Group state.');
     return;
   }
-  if(![1,2,3,4,5,6,7,8].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
+  if(![1,2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion))throw Error('Unsupported Financial Group version.');
   for(const p of g.players) {
-    if(p.financialGroup?.version!==([3,4,5,6,7,8].includes(g.financialGroupVersion)?2:1))throw Error('Group entity rules do not match the campaign.');
+    if(p.financialGroup?.version!==([3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)?2:1))throw Error('Group entity rules do not match the campaign.');
     validateFinancialGroupPlayer(p,g.cycle,true);
     GroupAccounting.consolidate(p.financialGroup.parent,groupEntities(p),p.accounting);
   }
 }
 function projectFinancialGroup(g,out,index) {
-  if(![1,2,3,4,5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![1,2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   out.financialGroupVersion=g.financialGroupVersion;
   const me=g.players[index],rival=g.players[1-index];
   out.me.financialGroup=JSON.parse(JSON.stringify(me.financialGroup));
   out.me.creditPortfolio=JSON.parse(JSON.stringify(me.creditPortfolio));
   out.me.groupCapitalQuote=groupCapitalQuote(me);
-  out.me.groupSummary=GroupAccounting.consolidate(me.financialGroup.parent,groupEntities(me),me.accounting);
-  const publicTotals=GroupAccounting.consolidate(rival.financialGroup.parent,groupEntities(rival),rival.accounting);
-  out.rival.groupSummary={equity:publicTotals.equity,assets:publicTotals.assets,customerAssets:publicTotals.custodyAssets};
+  out.me.groupSummary=companyConsolidatedSummary(g,me);
+  const publicTotals=companyConsolidatedSummary(g,rival);
+  out.rival.groupSummary={equity:publicTotals.ownerEquity??publicTotals.equity,assets:publicTotals.assets,customerAssets:publicTotals.custodyAssets};
   if(out.lastPlans?.[rival.id])delete out.lastPlans[rival.id].groupPolicy;
   projectCorporateEconomy(g,out,index);
   projectAgency(g,out,index);
@@ -127,17 +127,36 @@ function projectFinancialGroup(g,out,index) {
   projectDepartments(g,out,index);
   projectFacilityLifecycle(g,out,index);
   projectDepartmentFunctions(g,out,index);
+  projectCommercialAccounts(g,out,index);
+  projectFacilityExtensions(g,out,index);
+  projectInvestmentServices(g,out,index);
+  projectCreditProducts(g,out,index);
+  projectCompanyShares(g,out,index);
+  projectCompanyControl(g,out,index);
+  projectCompanyConsolidation(g,out,index);
+  projectSharedPremises(g,out,index);
+  if(g.companyControlStrategyVersion===1)out.companyControlStrategyVersion=1;
 }
 function validateFinancialGroupView(view) {
+  validateSharedPremisesView(view);
+  validateCompanyControlView(view);
+  validateCompanyControlStrategy(view);
+  validateCompanyConsolidationView(view);
+  validateCompanySharesView(view);
+  validateInvestmentStrategyRules(view);
+  validateCreditProductsView(view);
+  validateInvestmentServicesView(view);
+  validateFacilityExtensionsView(view);
+  validateCommercialAccountView(view);
   validateCorporateView(view);
   validateAgencyView(view);
   validateFacilityView(view);
   validateDepartmentView(view);
   validateFacilityLifecycleView(view);
   validateDepartmentFunctionsView(view);
-  if(view.me?.accounting&&view.me.accounting.version!==(view.financialGroupVersion===8?4:[4,5,6,7].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
+  if(view.me?.accounting&&view.me.accounting.version!==([8,9,10].includes(view.financialGroupVersion)?4:[4,5,6,7].includes(view.financialGroupVersion)?3:[2,3].includes(view.financialGroupVersion)?2:1))
     throw Error('Unsupported bank accounting view for the current campaign rules.');
-  if(![1,2,3,4,5,6,7,8].includes(view.financialGroupVersion)) {
+  if(![1,2,3,4,5,6,7,8,9,10].includes(view.financialGroupVersion)) {
     if(view.me?.financialGroup!==undefined||view.me?.creditPortfolio!==undefined||view.rival?.groupSummary!==undefined)
       throw Error('Unversioned Financial Group view.');
     return;
@@ -145,9 +164,9 @@ function validateFinancialGroupView(view) {
   validateFinancialGroupPlayer(view.me,view.cycle);
   if(view.rival.financialGroup!==undefined||view.rival.creditPortfolio!==undefined)throw Error('Private rival group state exposed.');
   if(view.lastPlans?.[view.rival.id]?.groupPolicy!==undefined)throw Error('Private rival capital instructions exposed.');
-  const expected=GroupAccounting.consolidate(view.me.financialGroup.parent,groupEntities(view.me),view.me.accounting);
+  const expected=companyConsolidatedSummary(view,view.me);
   if(!view.me.groupSummary||Object.keys(view.me.groupSummary).sort().join()!==Object.keys(expected).sort().join()||
-      Object.keys(expected).some(key=>view.me.groupSummary[key]!==expected[key]))throw Error('Owner group totals do not reconcile.');
+      Object.keys(expected).some(key=>view.companyConsolidationVersion===1?JSON.stringify(view.me.groupSummary[key])!==JSON.stringify(expected[key]):view.me.groupSummary[key]!==expected[key]))throw Error('Owner group totals do not reconcile.');
   const summary=view.rival.groupSummary;
   if(!summary||Object.keys(summary).sort().join()!=='assets,customerAssets,equity'||
       !Number.isSafeInteger(summary.equity)||!Number.isSafeInteger(summary.assets)||summary.assets<0||
@@ -155,12 +174,12 @@ function validateFinancialGroupView(view) {
 }
 function creditProductionParts(p,g,amount) {
   if(!p.creditPortfolio)return [{principal:amount,...creditTerms(p,g)}];
-  const weights=Object.fromEntries(Object.entries(p.creditPortfolio.allocation).map(([k,n])=>[k,n*PRODUCT_PORTFOLIOS.credit.options[k].loans]));
+  const weights=Object.fromEntries(Object.entries(p.creditPortfolio.allocation).map(([k,n])=>[k,n*creditProductOptions(p)[k].loans]));
   return Object.entries(marketSplit(amount,weights)).filter(([,n])=>n>0).map(([product,principal])=>({principal,...creditTerms(p,g,product)}));
 }
 function portfolioCreditOption(p) {
   const result={};
-  for(const [product,allocation] of Object.entries(p.creditPortfolio.allocation))for(const [key,value]of Object.entries(PRODUCT_PORTFOLIOS.credit.options[product]))
+  for(const [product,allocation] of Object.entries(p.creditPortfolio.allocation))for(const [key,value]of Object.entries(creditProductOptions(p)[product]))
     if(typeof value==='number')result[key]=(result[key]||0)+value*allocation/100;
   return result;
 }
@@ -189,21 +208,25 @@ function groupFutureCreditValue(source,economy,plan,terms) {
   }
   return {monthlyPerDollar:value/24/1000000,interestPerDollar:interest/1000000,lossPerDollar:loss/1000000};
 }
-function groupLendingComparison(p,input,economy) {
+function groupLendingComparison(p,input,economy,g=null) {
   if(!p.financialGroup)throw Error('Lending comparison requires Financial Group rules.');
   const plan=JSON.parse(JSON.stringify(input));normalizeGroupPlan(p,plan);
-  const keys=Object.keys(CREDIT_TERMS),owner={...p,allocation:plan.allocation,
+  const keys=creditProductKeys(p),owner={...p,allocation:plan.allocation,
     policies:{...p.policies,lending:plan.lendingPolicy},products:plan.products};
   const future=Object.fromEntries(keys.map(key=>[key,groupFutureCreditValue(owner,economy,plan,creditTerms(owner,{economy},key))]));
   const candidates=[{...plan.groupPolicy.creditAllocation},{...p.creditPortfolio.allocation}];
   for(const key of keys)candidates.push(Object.fromEntries(keys.map(k=>[k,k===key?100:0])));
-  for(const omitted of keys)candidates.push(Object.fromEntries(keys.map(k=>[k,k===omitted?0:50])));
-  candidates.push(Object.fromEntries(keys.map(k=>[k,k===plan.products.credit?50:25])));
+  if(p.creditProductsVersion===1){
+    for(const pair of [['mortgage','smallBusiness'],['middleMarket','commercialProperty'],['consumer','smallBusiness']])candidates.push(Object.fromEntries(keys.map(k=>[k,pair.includes(k)?50:0])));
+  }else{
+    for(const omitted of keys)candidates.push(Object.fromEntries(keys.map(k=>[k,k===omitted?0:50])));
+    candidates.push(Object.fromEntries(keys.map(k=>[k,k===plan.products.credit?50:25])));
+  }
   const rows=[],seen=new Set();
   for(const allocation of candidates) {
     const signature=keys.map(k=>allocation[k]).join();if(seen.has(signature))continue;seen.add(signature);
     const candidate={...plan,groupPolicy:{...plan.groupPolicy,creditAllocation:allocation}};
-    const forecast=operatingPreview(p,candidate,economy);
+    const forecast=operatingPreview(p,candidate,economy,g);
     const originations=Math.round(Math.max(0,forecast.loanGrowth+(forecast.principalRepaid||0)+
       (forecast.creditRecovery||0)+(forecast.chargeoff||0)));
     const parts=creditProductionParts({...owner,creditPortfolio:{version:1,allocation}},{economy},originations);
@@ -219,7 +242,7 @@ function groupLendingComparison(p,input,economy) {
 function planFinancialGroup(g,index,plan) {
   const p=g.players[index];if(!p.financialGroup)return plan;
   plan.groupPolicy=defaultGroupPlan(p);
-  const comparison=groupLendingComparison({...p,marketSnapshot:g.marketEconomy},plan,g.economy);
+  const comparison=groupLendingComparison({...p,marketSnapshot:g.marketEconomy},plan,g.economy,g);
   let best=null;
   for(const row of comparison.rows)if(best===null||row.utility>best.utility+.01)best=row;
   plan.groupPolicy.creditAllocation={...best.allocation};

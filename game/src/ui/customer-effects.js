@@ -18,7 +18,7 @@ function requestCustomerEffects(v) {
  const key = customerEffectsKey(live);
  try {
   // Full operating comparisons run only on an explicit request or stage click.
-  const result = E.customerEffectsComparison(live.me, draft, live.economy);
+  const result = E.customerEffectsComparison(live.me, draft, live.economy,live);
   const fresh = customerEffectsLive(live);
   if (!fresh || fresh.me.submitted || fresh.gameOver || customerEffectsKey(fresh) !== key) return false;
   customerEffectsCache = { key, result }; renderProductPrograms(fresh); return true;
@@ -32,12 +32,12 @@ function stageCustomerEffects(v, key) {
  try {
   if (JSON.stringify(customerEffectsPatch(draft, shown.patch)) === JSON.stringify(draft)) return false;
   const sourceKey = customerEffectsKey(live);
-  const result = E.customerEffectsComparison(live.me, draft, live.economy), row = result.rows.find(item => item.key === key);
+  const result = E.customerEffectsComparison(live.me, draft, live.economy,live), row = result.rows.find(item => item.key === key);
   const fresh = customerEffectsLive(live);
   if (!row?.eligible || !fresh || fresh.me.submitted || fresh.gameOver || customerEffectsKey(fresh) !== sourceKey) return false;
   const checked = customerEffectsPatch(draft, row.patch);
   E.normalizeProductProgramPlan(live.me, checked); E.normalizeAdvertisingPlan(live.me, checked); E.normalizeRelationshipOfferPlan(live.me, checked);
-  const status = E.projectPlanStatus(live.me, checked);
+  const status = E.projectPlanStatus(live.me, checked,live);
   if (!status.eligible) throw Error(status.reason);
   // Normalizers may repair unrelated derived fields. Validate those repairs,
   // but stage only the two fields explicitly offered by this comparison.

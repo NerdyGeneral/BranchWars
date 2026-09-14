@@ -1,0 +1,35 @@
+{
+  "checkpoint": 50,
+  "date": "2026-09-13",
+  "status": "contextual office controls and campaign integration scoped-tested; AI and normal setup enablement pending",
+  "sourceInputs": 186,
+  "defaultExpandedVersion": "9.26",
+  "explicitSharedPremisesVersion": "9.27",
+  "artifact": "output/BRANCH_WARS_premises50_office.html",
+  "sha256": "a38dc54533b86bf54c1d58bc6559d45ea3d58cbf8067244132ffbb550da3069b",
+  "engineSha256": "f728bfaba426f77e5cbc7abeeb187d78ce8e6511a1be025e914f571e2b1996f1",
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "terminalChecks": [
+    {"test": "shared_premises_ui.test.js", "groups": 5, "status": "pass", "scope": "Object editor; preview, stage, discard and reset; real room and qualified staffing; preservation of other drafts; space conflict; maintenance quotes; read-only submitted view; stale connection refusal; atomic undo and invalid-plan blockers"},
+    {"test": "facility_extensions_ui.test.js", "groups": 2, "status": "pass"},
+    {"test": "usability_plan_review.test.js", "groups": 7, "status": "pass"},
+    {"test": "usability_help.test.js", "groups": 8, "status": "pass"},
+    {"test": "shared_premises_campaign.test.js", "groups": 5, "status": "pass"},
+    {"test": "shared_premises_boundary.test.js", "scenarios": 4, "reference": "checkpoint44", "status": "exact comparison pass"}
+  ],
+  "transportChecks": {"test": "shared_premises_network.test.js", "transports": ["gh", "lan", "p2p"], "monthsPerTransport": 2, "status": "pass; final source rechecked and matched to artifact"},
+  "retainedFindings": [
+    "A staged commercial suite could previously overbook space occupied by an existing shared room; submission now rejects it before mutation.",
+    "Staged maintenance now enters the shared-premises estimate: the visiting-room test checks 900 versus 1008 dollars.",
+    "A stale-connection test initially applied an old editor; explicit connection-attempt validation and working-form invalidation repair it.",
+    "An obsolete 9.11 current-Expanded assertion also fails on the preserved checkpoint49 artifact. Current source9.26 and historical suite-only9.11 are now checked separately. No golden regeneration."
+  ],
+  "balanceTuning": "none; space and maintenance consistency repairs only",
+  "performance": {"helpSearch1000Ms": 125.0, "scope": "Static help search and HTML string microbenchmark, not real-browser frame time"},
+  "fullWindowsGate": "not run",
+  "documentation": {"markdownFiles": 62, "localLinks": 494, "status": "pass"},
+  "sourceArtifactIdentity": "exact match; normal playable unchanged",
+  "balance120And480": "outstanding",
+  "realTwoComputerAndBrowserAcceptance": "outstanding",
+  "publication": false
+}

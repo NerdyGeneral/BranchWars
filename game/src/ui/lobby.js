@@ -48,7 +48,7 @@ function lobbyOptions(){
   managementVersion:c.managementVersion||0,customerDemandVersion:c.customerDemandVersion||0};
  // Keep the established lobby field-presence contract; underlying defaults are
  // resolved by the registry rather than serialized as another enabled map.
- for(const feature of E.CAMPAIGN_FEATURES)if(feature.visible&&!(feature.field in settings)&&c[feature.field])settings[feature.field]=c[feature.field];
+ for(const feature of E.CAMPAIGN_FEATURES)if((feature.visible||(!feature.implicit&&feature.peers.length))&&!(feature.field in settings)&&c[feature.field])settings[feature.field]=c[feature.field];
  E.validateCampaignRules(settings,'lobby');
  return settings;
 }
@@ -113,7 +113,7 @@ function applyLobbySettings(){
   lobby.settings=JSON.parse(JSON.stringify(settings));lobby.revision++;lobby.players.forEach(p=>p.ready=false);
   // Clear old feature values as well as setting new ones, without replacing
   // connection identity, transport credentials or unrelated room configuration.
-  for(const feature of E.CAMPAIGN_FEATURES)if(feature.visible)delete p2pConfig[feature.field];
+  for(const feature of E.CAMPAIGN_FEATURES)if(feature.visible||(!feature.implicit&&feature.peers.length))delete p2pConfig[feature.field];
   Object.assign(p2pConfig,settings);
   lobby.note='Campaign settings updated. Both players must confirm again.';lobby.error='';publishLobby();
   if(peerFeatureStatus(lobby.settings).pending)challengePeerFeatures();
@@ -130,7 +130,7 @@ function receiveLobby(message){
  if(lobby&&next.revision<lobby.revision)return;
  if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
  lobby=JSON.parse(JSON.stringify(next));linkReady=true;stopHandshake();ghCheckpoint();renderLobby();
- if([6,7,8].includes(next.settings.financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
+ if([6,7,8,9,10].includes(next.settings.financialGroupVersion))setConnection('CAMPAIGN RULES CONFIRMED // DEPARTMENT STAFFING READY','good');
 }
 function renderLobbyControls(){
  if(!lobby)return;

@@ -167,7 +167,7 @@ function onboardingCheckBoundary(p, world) {
   AccountingPrototype.check(p.accounting);
   for (const [key, m] of Object.entries(world.markets)) {
     const book = p.marketBook.markets[key];
-    if (p.depositBook.cohorts.filter(c => c.market === key).reduce((n, c) => n + c.principal, 0) !== book.deposits ||
+    if (p.depositBook.cohorts.filter(c => c.market === key).reduce((n, c) => n + c.principal, 0)+nonHouseholdDepositBalance(p,key) !== book.deposits ||
         Object.values(p.householdBook.markets[key]).reduce((n, c) => n + c, 0) !== book.customers) throw Error('Onboarding owner books disagree.');
     for (const owner of ['community', 'union']) for (const [field, resource] of [['households', 'customers'], ['segmentDeposits', 'deposits']])
       if (!Object.values(m[field][owner]).every(onboardingUint) || Object.values(m[field][owner]).reduce((n, c) => n + c, 0) !== m[owner][resource]) throw Error('Onboarding outside books disagree.');
@@ -297,10 +297,10 @@ function validateOnboardingSave(g) {
   }
   return g;
 }
-function onboardingPlanForecast(p, plan, economy) {
-  return finishOperatingForecast(prepareOperatingForecast(p, plan), economy);
+function onboardingPlanForecast(p, plan, economy,g=null) {
+  return finishOperatingForecast(prepareOperatingForecast(p, plan,g), economy);
 }
-function onboardingContinuation(closingBank, candidate, currentBudget) {
+function onboardingContinuation(closingBank, candidate, currentBudget,g=null) {
   const cycle = closingBank.onboarding.lastCycle + 1;
   const pending = closingBank.onboarding.pending.filter(row => row.eligibleCycle <= cycle && row.expiresCycle > cycle && onboardingOpen(closingBank, row));
   const count = pending.reduce((n, row) => n + row.count, 0), principal = pending.reduce((n, row) => n + row.principal, 0);
@@ -334,7 +334,7 @@ function onboardingContinuation(closingBank, candidate, currentBudget) {
   const planned = onboardingDraft(continuationBank, nextPlan), capacity = onboardingStaff(planned, planned.onboarding.policy).capacity;
   result.capacity = capacity;
   if (count > capacity) return result;
-  const budget = planBudget(continuationBank, nextPlan);
+  const budget = planBudget(continuationBank, nextPlan,g);
   result.available = Math.floor(Math.max(0, Math.min(continuationBank.stats.cash - planned.workforce.policy.reserve, pilotSpendingLimit(continuationBank)) -
     (budget.advertising || 0) - (budget.training || 0) - (budget.relationshipOffers || 0)));
   result.remaining = budget.remaining;
@@ -375,15 +375,15 @@ function planOnboarding(g, index, input) {
   // search every product through expensive operating forecasts or invent ROI.
   for (const share of active ? [25, 50] : [25]) {
     const candidate = { ...plan, ...(householdPolicy ? { householdPolicy } : {}), onboardingPolicy: { ...chosen, share } }, planned = onboardingDraft(p, candidate);
-    const budget = planBudget(p, candidate);
+    const budget = planBudget(p, candidate,g);
     if (onboardingStaff(planned, candidate.onboardingPolicy).capacity < 2 || budget.remaining < 300000) continue;
     const quote = onboardingReview({ ...planned, marketSnapshot: g.marketEconomy }, g);
     if (active ? quote.totals.activated.count <= bestActivated : !quote.totals.generated.count) continue;
-    if (!base) base = operatingPreview(owner, plan, g.economy);
-    const closed = onboardingPlanForecast(owner, candidate, g.economy), forecast = closed.operatingReport;
+    if (!base) base = operatingPreview(owner, plan, g.economy,g);
+    const closed = onboardingPlanForecast(owner, candidate, g.economy,g), forecast = closed.operatingReport;
     if (active ? forecast.onboardingActivated <= bestActivated : !closed.onboarding.report.totals.generated.count) continue;
     if (forecast.profit <= 0 || forecast.profit < base.profit * .98 || (forecast.fundingLoss || 0) > (base.fundingLoss || 0) || forecast.onboardingCost > base.profit * .02) continue;
-    if (!onboardingContinuation(closed, candidate, budget).eligible) continue;
+    if (!onboardingContinuation(closed, candidate, budget,g).eligible) continue;
     best = candidate; bestActivated = forecast.onboardingActivated;
   }
   return best;
@@ -399,7 +399,7 @@ function reconsiderOnboardingPending(g, index, finalPlan) {
   if (!candidate.onboardingPolicy?.share) return finalPlan;
   const unchangedPlan = value => JSON.stringify(Object.entries(value).filter(([key]) => key !== 'onboardingPolicy'));
   if (unchangedPlan(candidate) !== unchangedPlan(finalPlan)) return finalPlan;
-  const beforeBudget = planBudget(p, finalPlan), afterBudget = planBudget(p, candidate);
+  const beforeBudget = planBudget(p, finalPlan,g), afterBudget = planBudget(p, candidate,g);
   // Training quotes can silently pause when another cost is added. Comparing
   // every other budget field prevents financing this fee by clipping training
   // or any present/future component, even when the plan itself is unchanged.
@@ -407,7 +407,7 @@ function reconsiderOnboardingPending(g, index, finalPlan) {
   if (unchangedBudget(afterBudget) !== unchangedBudget(beforeBudget)) return finalPlan;
   const beforeReserve = aiCashPlanningReview(g, index, finalPlan), afterReserve = aiCashPlanningReview(g, index, candidate);
   if (!beforeReserve || !afterReserve || afterReserve.limit !== beforeReserve.limit || afterBudget.total > beforeReserve.limit) return finalPlan;
-  const closingBank = onboardingPlanForecast({ ...p, marketSnapshot: g.marketEconomy }, candidate, g.economy);
+  const closingBank = onboardingPlanForecast({ ...p, marketSnapshot: g.marketEconomy }, candidate, g.economy,g);
   if (!(closingBank.operatingReport.onboardingActivated > 0) || closingBank.onboarding.report.totals.generated.count !== 0) return finalPlan;
   // No fresh-demand restart and no second trimming pass: actual execution still
   // applies the shared stock, affordability, service and expiry rules.

@@ -12,8 +12,13 @@ const checkpointPath=checkpointArg?(checkpointArg.includes('=')?path.resolve(che
 const checkpointText=checkpointPath?fs.readFileSync(checkpointPath,'utf8'):null,checkpoint=checkpointText?JSON.parse(checkpointText):null;
 assert(!process.argv.includes('--continue')||checkpoint,'Use --checkpoint with --continue.');
 const patch=fs.readFileSync(path.join(root,'experiments/institution/department-ai-affordability.patch'),'utf8').replace(/\r\n/g,'\n');
-const lines=patch.split('\n'),before=lines.filter(x=>x.startsWith('-')).map(x=>x.slice(1)).join('\n'),after=lines.filter(x=>x.startsWith('+')).map(x=>x.slice(1)).join('\n');
+const lines=patch.split('\n');
+let before=lines.filter(x=>x.startsWith('-')).map(x=>x.slice(1)).join('\n'),after=lines.filter(x=>x.startsWith('+')).map(x=>x.slice(1)).join('\n');
 const html=require('../tools/build_game').assemble().html,source=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
+// The target-aware budget API now receives the campaign explicitly. Adapt only
+// these call signatures; retain the archived patch and failing-before behavior.
+const contextSignature=text=>text.replace('planBudget(p,plan)','planBudget(p,plan,g)').replace('normalizeDepartmentPlan(p,plan);','normalizeDepartmentPlan(p,plan,g);');
+if(source.includes(contextSignature(after))){before=contextSignature(before);after=contextSignature(after);}
 const candidateMode=process.argv.includes('--candidate-patch');
 let candidate=source,baseline=source;
 if(candidateMode){if(checkpoint)assert.equal(hash(source),checkpoint.engineHash,'Frozen production engine changed before experiment capture');assert.equal(source.split(before).length,2);candidate=source.replace(before,after);}

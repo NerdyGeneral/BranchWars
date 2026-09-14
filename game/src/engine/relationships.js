@@ -23,9 +23,9 @@ resolveOpportunities=function(g,plans){
  return lines;
 };
 // Owner-only scorecard. Desk net excludes shared payroll; never sum it with bank profit.
-function departmentScorecard(p,plan,economy){
+function departmentScorecard(p,plan,economy,g=null){
  const proposed={...p,allocation:plan.allocation,serviceDesk:p.serviceDesk?{...p.serviceDesk,policy:plan.servicePolicy||p.serviceDesk.policy}:undefined};
- const load=p.serviceDesk?serviceLoad(proposed):null,forecast=operatingPreview(p,plan,economy),budget=planBudget(p,plan);
+ const load=p.serviceDesk?serviceLoad(proposed):null,forecast=operatingPreview(p,plan,economy,g),budget=planBudget(p,plan,g);
  return {departments:Object.entries(ROLES).map(([key,role])=>({key,name:role.name,current:p.allocation[key],planned:plan.allocation[key]})),
  service:load?{demand:load.rows.reduce((n,r)=>n+r.load,0),capacity:load.capacity,served:load.served,count:load.count,fees:load.fees,direct:load.direct,vendors:load.outsourced,platforms:load.platform,net:load.fees-load.cost,sales:load.sales}:null,
  execution:{load:budget.load,capacity:budget.capacity},research:budget.research,recruiting:budget.recruiting,
@@ -57,7 +57,7 @@ function renewalPricingPlan(g,p,input){
 
 function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
-if(g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
+if(g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8)||(g.version==='9.8'&&g.financialGroupVersion===9)||(g.version==='9.9'&&g.financialGroupVersion===10)||(g.version==='9.10'&&g.financialGroupVersion===10&&g.commercialAccountsVersion===1)||(g.version==='9.11'&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(['9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26','9.27'].includes(g.version)&&g.investmentAssetsVersion===1&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(g.version==='9.12'&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
  if(!records||Object.keys(records).sort().join()!==ids.join())throw Error('Invalid relationship roster');
  const owner=id=>id===null||g.players.some(p=>p.id===id);

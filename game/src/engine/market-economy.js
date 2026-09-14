@@ -42,7 +42,8 @@ syncAccounts=function(p){
  marketSync(p);if(!p.marketBook||marketBypass)return;
  const rows=p.marketBook.markets,total=Object.values(rows).reduce((n,m)=>n+m.loans,0),difference=p.stats.loans-total;
  if(!difference)return;
- const weights=Object.fromEntries(Object.keys(rows).map(k=>[k,difference<0?rows[k].loans:(marketTarget?k===marketTarget?1:0:1+(p.branches[k]||0)*4)]));
+ const weights=Object.fromEntries(Object.keys(rows).map(k=>[k,difference<0?ordinaryLoanPrincipal(p,k):(marketTarget?k===marketTarget?1:0:1+(p.branches[k]||0)*4)]));
+ if(difference<0&&-difference>Object.values(weights).reduce((sum,n)=>sum+n,0))throw Error('An ordinary loan adjustment would remove a named-company claim.');
  for(const [k,n]of Object.entries(marketSplit(Math.abs(difference),weights)))rows[k].loans+=difference>0?n:-n;
 };
 function transferMarket(g,from,to,key,resource,requested){
@@ -121,7 +122,7 @@ const marketAcquisition=acquisitionTerms;
 acquisitionTerms=function(g,p,target){
  const terms=marketAcquisition(g,p,target);if(!g.marketEconomy)return terms;
  const book=g.players[terms.seller].marketBook.markets[target];
- return {...terms,depositTake:Math.min(terms.depositTake,book.deposits),loanTake:Math.min(terms.loanTake,book.loans),customerTake:Math.min(terms.customerTake,book.customers)};
+ return {...terms,depositTake:Math.min(terms.depositTake,book.deposits),loanTake:Math.min(terms.loanTake,ordinaryLoanPrincipal(g.players[terms.seller],target)),customerTake:Math.min(terms.customerTake,book.customers)};
 };
 
 

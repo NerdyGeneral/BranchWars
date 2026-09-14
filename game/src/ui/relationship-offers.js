@@ -9,7 +9,7 @@ function relationshipOfferReason(reason) {
   ready: 'Eligible balances and available capacity support this quote.'
  }[reason] || reason;
 }
-function relationshipOfferUiLocked(v){return v.me.submitted||v.gameOver||[6,7,8].includes(v.financialGroupVersion)&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
+function relationshipOfferUiLocked(v){return v.me.submitted||v.gameOver||[6,7,8,9,10].includes(v.financialGroupVersion)&&(draftOwner!==v.me.id||lastCycle!==v.cycle||gh.active&&gh.paused);}
 function relationshipOfferRepairControls(v){
  const p=v.me,policy=draft.relationshipOfferPolicy||p.relationshipOffers.policy,disabled=relationshipOfferUiLocked(v)?'disabled':'';
  const select=(field,label,options)=>'<label for="relationshipOffer-'+field+'">'+label+'<select id="relationshipOffer-'+field+'" '+disabled+'>'+options.map(([value,name])=>'<option value="'+esc(value)+'" '+(String(policy[field])===String(value)?'selected':'')+'>'+esc(name)+'</option>').join('')+'</select></label>';
@@ -19,7 +19,7 @@ function relationshipOfferRepairControls(v){
   select('share','Share of Retail sales time',E.RELATIONSHIP_OFFER_SHARES.map(n=>[n,n?n+'% to existing customers':'Paused · 0%']));
 }
 function relationshipOfferContent(v,productPreview){
- if(![6,7,8].includes(v.financialGroupVersion))return relationshipOfferDeskBody(v,productPreview);
+ if(![6,7,8,9,10].includes(v.financialGroupVersion))return relationshipOfferDeskBody(v,productPreview);
  try{return relationshipOfferDeskBody(v,productPreview,v.gameOver?{owner:v.me,plan:draft,relationshipOffers:null}:E.departmentCustomerPreview(v.me,v,draft));}
  catch(error){
   const last=v.me.relationshipOffers.report;
@@ -37,7 +37,7 @@ function relationshipOfferDeskBody(v, productPreview, prepared=null) {
  E.applyAdvertisingPolicy(p, draft.advertisingPolicy);
  E.applyRelationshipOfferPolicy(p, policy);
  if (p.onboarding) E.applyOnboardingPolicy(p, draft.onboardingPolicy);
- const budget = E.planBudget(p, draft);
+ const budget = E.planBudget(p, draft,v);
  p._workforceReserved = budget.total - (budget.training || 0) - (budget.advertising || 0) - (budget.relationshipOffers || 0) - (budget.onboarding || 0);
  p._relationshipOfferBudget = E.relationshipOfferBudget(p, draft);
  if (p.onboarding) p._onboardingBudget = budget.onboarding || 0;
@@ -86,14 +86,14 @@ function relationshipOfferDeskBody(v, productPreview, prepared=null) {
 function relationshipOfferViewStamp(v){return JSON.stringify([v.version,v.cycle,v.resolutionId,v.gameOver,v.me,draft]);}
 function stageRelationshipOffer(v, field, value, sourceKey=relationshipOfferViewStamp(v),campaign=game||view) {
  if (!draft || v.me.submitted || v.gameOver || !v.me.relationshipOffers || !['market', 'segment', 'product', 'share'].includes(field)) return false;
- if([6,7,8].includes(v.financialGroupVersion)){
+ if([6,7,8,9,10].includes(v.financialGroupVersion)){
   const live=currentView();
   if(!live||campaign!==(game||view)||live.me.id!==v.me.id||live.me.submitted||live.gameOver||draftOwner!==live.me.id||lastCycle!==live.cycle||gh.active&&gh.paused||sourceKey!==relationshipOfferViewStamp(live))return false;
   try{
    const next=JSON.parse(JSON.stringify(draft));next.relationshipOfferPolicy={...(next.relationshipOfferPolicy||live.me.relationshipOffers.policy),[field]:field==='share'?Number(value):value};
    E.normalizeProductProgramPlan(live.me,next);E.normalizeAdvertisingPlan(live.me,next);E.normalizeRelationshipOfferPlan(live.me,next);if(live.me.onboarding)E.normalizeOnboardingPlan(live.me,next);
    const pauseRepair=field==='share'&&next.relationshipOfferPolicy.share===0&&(draft.relationshipOfferPolicy||live.me.relationshipOffers.policy).share>0;
-   if(!pauseRepair){const status=E.projectPlanStatus(live.me,next);if(!status.eligible)throw Error(status.reason);E.departmentCustomerPreview(live.me,live,next);}
+   if(!pauseRepair){const status=E.projectPlanStatus(live.me,next,live);if(!status.eligible)throw Error(status.reason);E.departmentCustomerPreview(live.me,live,next);}
    const fresh=currentView();if(!fresh||fresh.me.submitted||fresh.gameOver||campaign!==(game||view)||sourceKey!==relationshipOfferViewStamp(fresh))return false;
    draft=next;renderProducts(fresh);renderProjects(fresh);renderReady(fresh);return true;
   }catch(error){toast(error.message);const fresh=currentView();if(fresh?.me.id===v.me.id)renderProductPrograms(fresh);return false;}

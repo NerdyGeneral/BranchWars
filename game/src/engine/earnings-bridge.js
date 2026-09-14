@@ -10,6 +10,7 @@ const BankEarningsBridge = (() => {
   const sources = {
     'departments.dispatch':'deliverDepartmentFunctions','departments.functions':'prepareDepartmentFunctions','departments.delivery':'finishDepartmentFunctions',
     'facilities.lifecycle':'prepareFacilityLifecycle','facilities.renovation':'advanceFacilityLifecycle','facilities.maintenance':'settleFacilityLifecycle','facilities.renewal':'activateFacilityLifecycle',
+    'facilities.extensions':'prepareFacilityExtensions','facilities.extensionProgress':'advanceFacilityExtensions',
     'facilities.instructions':'prepareFacilityInstructions','facilities.progress':'advanceFacilityInstructions','facilities.activation':'activateFacilityInstructions',
     'departments.leadership':'settleDepartmentLeadership','departments.experience':'settleDepartmentExperience',
     'group.agency':'settleAgency','companies.settlement':'settleCorporateEconomy','companies.contracts':'finishCorporateEconomy','group.capital':'settleGroupCapital','group.portfolio':'applyGroupPortfolio',
@@ -18,7 +19,12 @@ const BankEarningsBridge = (() => {
     'competition.deposits':'depositContest','funding.settlement':'settleFunding',relationships:'resolveOpportunities','markets.competition':'simulateMarkets','markets.exit':'resolveMarketExits','markets.dividend':'franchiseDividends',
     'project.advance':'advanceProjects','risk.consequences':'consequences','research.investment':'applyInvestments','staff.hiring':'applyHiring','staff.training':'settleWorkforceTraining',milestones:'awardMilestones','campaign.ending':'evaluateStrategicEnd'
   };
-  function reviewBankEarningsBridge(v) {
+  const extendedSources={'group.investment':'settleInvestmentServices','companies.operatingDeposits':'settleCommercialAccounts'};
+  // Current integrated rules add ordered company and shared-occupancy stages.
+  // Keep historical public projections byte-stable; never accept arbitrary
+  // category/source pairs merely because their amounts happen to reconcile.
+  const premisesSources={'companies.shares':'settleCompanyShareAuction','companies.control':'settleCompanyControl','companies.shareIncome':'settleCompanyDistributions','companies.valuation':'finishCompanyShares','group.premises':'settleSharedPremisesGroup'};
+  function reviewBankEarningsBridge(v,includeExtended=true) {
     const p=v?.me, report=p?.operatingReport, cycle=report?.cycle;
     if(!p?.accounting)return unavailable('Bank accounting is not enabled for this campaign.');
     if(!int(cycle)||cycle<1)return unavailable('Complete a month to see the earnings bridge.');
@@ -47,7 +53,7 @@ const BankEarningsBridge = (() => {
       return unavailable('The completed operating report does not match owner history.');
     let change=0;
     for(const e of current.slice(1)){
-      if(sources[e.category]!==e.source||e.parentCause!==root.id||!e.deltas||Array.isArray(e.deltas)||typeof e.deltas!=='object'||!Object.values(e.deltas).every(Number.isFinite)||!e.changes||Array.isArray(e.changes))
+      if((sources[e.category]||(includeExtended?extendedSources[e.category]:undefined)||(v.sharedPremisesVersion===1?premisesSources[e.category]:undefined))!==e.source||e.parentCause!==root.id||!e.deltas||Array.isArray(e.deltas)||typeof e.deltas!=='object'||!Object.values(e.deltas).every(Number.isFinite)||!e.changes||Array.isArray(e.changes))
         return unavailable('A monthly earnings event is inconsistent; the bridge is unavailable.');
       const amount=e.deltas.earnings??0;
       if(!int(amount)||!int(change+amount))return unavailable('A monthly earnings amount is invalid.');
@@ -61,15 +67,18 @@ const BankEarningsBridge = (() => {
   // validation, before UI history byte pruning; no journal reconstruction,
   // new saved book, or resource/earnings calculation is introduced here.
   function projectBankEarningsBridge(g,seat){
-    if(![6,7,8].includes(g?.financialGroupVersion))return null;
+    if(![6,7,8,9,10].includes(g?.financialGroupVersion))return null;
     const p=g.players?.[seat];
     if(!p?.accounting)return null;
     const ownerEvents=Array.isArray(g.eventLedger)?g.eventLedger.filter(e=>e?.target===p.id):[];
-    const v={cycle:g.cycle,gameOver:g.gameOver,resolutionId:g.resolutionId,ledgerPrunedThrough:g.ledgerPrunedThrough,
+    const v={cycle:g.cycle,gameOver:g.gameOver,resolutionId:g.resolutionId,ledgerPrunedThrough:g.ledgerPrunedThrough,sharedPremisesVersion:g.sharedPremisesVersion,
       me:{id:p.id,accounting:{retainedEarnings:p.accounting.retainedEarnings},stats:{earnings:p.stats?.earnings},operatingReport:p.operatingReport},
       causalEvents:ownerEvents.filter(e=>e.deltas||e.category==='resolution.start'),
       operatingEvents:ownerEvents.filter(e=>e.category==='operations.result')};
-    const b=reviewBankEarningsBridge(v);
+    // Preserve historical transport projections exactly. The new rules include
+    // investment/operating-deposit stages; current UI can also reconcile older
+    // views when their complete owner-only event history is still available.
+    const b=reviewBankEarningsBridge(v,g.investmentSweepVersion===1);
     // Whitelist only identity, finite earnings amounts and a fixed explanation.
     // Never publish stage deltas, changes, parent books or rival information.
     return {version:1,ownerId:p.id,resolutionId:g.resolutionId,

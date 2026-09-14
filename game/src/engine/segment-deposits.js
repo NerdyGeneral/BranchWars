@@ -166,7 +166,7 @@ function validateSegmentDepositSave(g) {
   for(const [key,m]of Object.entries(g.marketEconomy.markets)) {
     const b=m.segmentDeposits;
     if(!b||Object.keys(b).sort().join()!=='community,total,union'||!Object.values(b).every(valid))throw Error('Invalid outside segment deposits');
-    for(const owner of ['community','union','total'])if(Object.values(b[owner]).reduce((a,n)=>a+n,0)!==m[owner].deposits)throw Error('Outside segment deposits disagree');
+    for(const owner of ['community','union','total'])if(Object.values(b[owner]).reduce((a,n)=>a+n,0)+(owner==='total'?nonHouseholdMarketDeposits(g,key):0)!==m[owner].deposits)throw Error('Outside segment deposits disagree');
     for(const segment of Object.keys(CUSTOMER_SEGMENTS))if(b.community[segment]+b.union[segment]+g.players.reduce((n,p)=>n+p.depositBook.cohorts.filter(c=>c.market===key&&c.segment===segment).reduce((a,c)=>a+c.principal,0),0)!==b.total[segment])throw Error('Segment deposit conservation failed');
   }
   return g;

@@ -6,9 +6,13 @@ h.run("game=E.createGame({mode:'hotseat',seed:19,created:1});seat=0;view=E.publi
 const world=h.run('JSON.stringify(game)'),initial=h.run('JSON.stringify(draft)');
 h.run('renderStrategy(view)');
 let markup=h.elements.get('#strategyTree').innerHTML;
-assert.equal((markup.match(/class="strategy-lane /g)||[]).length,5);
-assert.equal((markup.match(/Full roadmap/g)||[]).length,5);
-assert.equal((markup.match(/class="capability-milestone /g)||[]).length,20,'all existing milestones remain available');
+assert.equal((markup.match(/id="strategy-select-/g)||[]).length,5);
+assert.equal((markup.match(/Full roadmap/g)||[]).length,1);
+assert.equal((markup.match(/class="capability-milestone /g)||[]).length,4,'one full capability roadmap is visible');
+let milestoneCount=0;
+for(const branch of h.run('Object.keys(E.STRATEGY_BRANCHES)')){h.c.inspectedBranch=branch;h.run('strategyWorkspace.branch=inspectedBranch;renderStrategy(view)');milestoneCount+=(h.elements.get('#strategyTree').innerHTML.match(/class="capability-milestone /g)||[]).length;}
+assert.equal(milestoneCount,20,'all existing milestones remain reachable by capability');
+h.run("strategyWorkspace.branch='network';renderStrategy(view)");
 assert(markup.includes('Stage monthly maximum · $250K'),'monthly cap is not represented as guaranteed milestone completion');
 assert(!markup.includes('data-strategy-details="network" open'),'roadmaps begin collapsed, current milestone is visible');
 assert.equal(h.run('JSON.stringify(game)'),world,'render is world/RNG pure');
@@ -31,7 +35,7 @@ assert.equal(h.run('confirmStrategyModel(view)'),false,'confirmation rejects a c
 assert(h.run("proposeStrategyModel(view,'network','retailDensity')"));
 assert(h.run('confirmStrategyModel(view)'));
 assert.equal(h.run('draft.specializations.network'),'retailDensity');
-h.run('renderStrategy(view)');
+h.run("strategyWorkspace.desk='model';renderStrategy(view)");
 assert(h.elements.get('#strategyTree').innerHTML.includes('STAGED · NOT YET ADOPTED'));
 assert.equal(h.run('game.players[0].specializations.network'),undefined,'stage does not adopt in authoritative state');
 const staged=h.run('JSON.stringify(draft)');
@@ -45,18 +49,18 @@ assert(h.run("proposeStrategyModel(view,'network','retailDensity')"),'maxed capa
 assert(h.run('confirmStrategyModel(view)'));
 assert.equal(h.run('draft.investments.network'),undefined,'late adoption requires no invented research charge');
 // Capability details are local UI state and must survive funding re-renders.
-h.elements.get('#strategyTree').querySelectorAll=()=>[{dataset:{strategyDetails:'digital'}}];
-h.run('renderStrategy(view)');
+h.run("strategyWorkspace.branch='digital';strategyWorkspace.desk='milestones';strategyWorkspace.roadmaps=['digital'];renderStrategy(view)");
 assert(h.elements.get('#strategyTree').innerHTML.includes('data-strategy-details="digital" open'));
 // Cash/capital bounds come from the engine, not a separately invented UI budget.
 h.run("view.me.stats.cash=1500;draft.investments={};renderStrategy(view)");
 assert.equal(h.run("strategyFundingStatus(view,'digital').maximum"),h.run("E.fundingStep(view.me,draft,'digital',250000)"));
 // Expanded campaigns describe only enabled applications and retain multi-capability requirements.
 h.run("game=E.createGame({mode:'hotseat',seed:3,created:1,campaignRulesVersion:1,serviceExpansionVersion:1,managementVersion:2,customerDemandVersion:2,workforceVersion:1,customerOwnershipVersion:1,creditPerformanceVersion:1,segmentDepositsVersion:1,productProgramsVersion:1});view=E.publicState(game,0);newDraft(view);renderStrategy(view)");
-markup=h.elements.get('#strategyTree').innerHTML;
+markup='';
+for(const branch of ['network','digital','commercial']){h.c.inspectedBranch=branch;h.run("strategyWorkspace.branch=inspectedBranch;strategyWorkspace.desk='applications';strategyWorkspace.application=null;renderStrategy(view)");markup+=h.elements.get('#strategyTree').innerHTML;}
 assert(markup.includes('Rewards Checking')&&markup.includes('High-Yield Savings'));
-assert(markup.includes('COMMERCIAL BANK tier 1 + DIGITAL PLATFORM tier 1'));
-assert(markup.includes('licensed route is also available without research'));
+assert(markup.includes('COMMERCIAL BANK tier 1 (needed) + DIGITAL PLATFORM tier 1 (needed)'));
+assert(/licensed route is also available without research/i.test(markup));
 assert(markup.includes('Research eligibility is not deployment, activation, new balances or guaranteed profit'));
 // Follow the complete monthly resolution, including its late-specialization pass.
 // applyInvestments alone is not the complete operating-model rule.
@@ -69,7 +73,7 @@ for(const branch of Object.keys(E.STRATEGY_BRANCHES))for(const owner of [0,1])fo
  plans[owner].specializations[branch]=scenario==='permanent-choice'?models[1]:models[0];
  if(scenario==='reach-tier-one')plans[owner].investments[branch]=20000;
  const before=JSON.stringify(g);
- h.c.caseView=E.publicState(g,owner);h.c.casePlan=copy(plans[owner]);h.run('view=caseView;draft=casePlan');
+ h.c.caseView=E.publicState(g,owner);h.c.casePlan=copy(plans[owner]);h.c.caseGame=g;h.c.caseOwner=owner;h.run('game=caseGame;seat=caseOwner;view=caseView;newDraft(view);draft=casePlan');
  assert.equal(h.run(`proposeStrategyModel(view,${JSON.stringify(branch)},${JSON.stringify(models[0])})`),scenario!=='permanent-choice',scenario+' UI eligibility');
  assert.equal(JSON.stringify(g),before,'selection preview does not mutate whole engine');
  for(const seat of [1-owner,owner])E.submit(g,seat,copy(plans[seat]));

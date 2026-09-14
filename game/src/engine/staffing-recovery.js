@@ -9,7 +9,7 @@ function staffingProtectedDefense(g,index,key){
 }
 function staffingActionAffordable(g,index,key){
  const p=g.players[index];
- if(![7,8].includes(g.financialGroupVersion)||!staffingRecoveryPriority(p)||staffingProtectedDefense(g,index,key))return true;
+ if(![7,8,9,10].includes(g.financialGroupVersion)||!staffingRecoveryPriority(p)||staffingProtectedDefense(g,index,key))return true;
  const hires=planHiring(g,p,0);
  return !hires||pilotSpendingLimit(p,.10,200000)-COMPETITIVE_ACTIONS[key].cost>=hireCost(p,hires);
 }
@@ -59,16 +59,16 @@ function staffingRecoveryReview(g,index,input){
    if(Math.abs(next.workload-row.workload)>1e-8||next.delivered.served+1e-8<row.delivered.served)throw Error('Existing '+row.id+' work changed: '+row.workload+'/'+row.delivered.served+' -> '+next.workload+'/'+next.delivered.served+'.');
   }
   if(before.opportunity?.eligible&&!after.opportunity?.eligible)throw Error('Funded pursuit lost its reserved work.');
-  const budget=planBudget(p,candidate),offices=lifecycleInstructionQuote(g,p,candidate);
-  if(budget.remaining<0||budget.freeCapacity<0||!projectPlanStatus(p,candidate).eligible||
-   facilityLifecycleProtectedBudget(p,candidate,budget).remaining<0||!offices.status.eligible)throw Error('Shared budget or execution is not feasible.');
+  const budget=planBudget(p,candidate,g),offices=lifecycleInstructionQuote(g,p,candidate);
+  if(budget.remaining<0||budget.freeCapacity<0||!projectPlanStatus(p,candidate,g).eligible||
+   facilityLifecycleProtectedBudget(p,candidate,budget,g).remaining<0||!offices.status.eligible)throw Error('Shared budget or execution is not feasible.');
   oldOffices=oldOffices||lifecycleInstructionQuote(g,p,base);
   if(!oldOffices.status.eligible)throw Error('Baseline office quote is not feasible.');
   for(const row of oldOffices.quote.metrics.rows){
    const next=offices.quote.metrics.rows.find(r=>r.officeId===row.officeId);
    if(!next||Object.keys(row.capacity).some(k=>next.capacity[k]+1e-8<row.capacity[k]))throw Error('Existing office output reduced.');
   }
-  const forecast=plan=>operatingPreview({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy);
+  const forecast=plan=>operatingPreview({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy,g);
   oldForecast=oldForecast||forecast(base);const nextForecast=forecast(candidate);
   const gross=r=>Math.round((r.loanGrowth||0)+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
   if(gross(nextForecast)<gross(oldForecast))throw Error('Funded lending reduced.');

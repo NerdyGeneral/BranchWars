@@ -12,9 +12,9 @@ function facilityWealthLicensed(p) {
 }
 function facilityLifecycleStaff(p) {
   const productive=p.departmentOffice?departmentProductiveAllocation(p):p.allocation;
-  const physical={service:householdSalesStaff(p,productive.service),business:departmentFunctionResidual(p,'business',commercialSalesStaff(p)),
+  const physical={service:householdSalesStaff(p,productive.service),business:departmentFunctionResidual(p,'business',commercialSalesStaff(p))-(departmentFunctionExecution(p)?commercialAccountWork(p)/4:0),
     lending:creditSalesStaff(p,productive.lending),operations:departmentFunctionResidual(p,'operations',productive.operations),
-    wealth:p.accounting?.version===4?departmentFunctionResidual(p,'business',commercialSalesStaff(p)):0};
+    wealth:p.accounting?.version===4&&p.facilityLifecycle?.version!==2?departmentFunctionResidual(p,'business',commercialSalesStaff(p)):0};
   if(!p.serviceDesk)physical.business=Math.max(0,physical.business-(p.serviceContracts?.length||0));
   return Object.fromEntries(FacilityLifecycle.ROLES.map(role=>[role,Math.min(400,Math.max(0,Math.floor(physical[role]*4)))]));
 }
@@ -26,7 +26,7 @@ function facilityLifecycleLiveContext(p,cycle) {
     nearby:(a,b)=>a===b||!!FACILITY_LIFECYCLE_NEIGHBORS[a]?.includes(b),modelTerms:facilityLifecycleModelTerms};
 }
 function initializeFacilityLifecycle(g) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   facilityLifecycleCommit(g,FacilitySettlement.initialize(g));
   for(const p of g.players){
     const proposal=FacilityLifecycle.allocateStaff(p,facilityLifecycleStaff(p));
@@ -83,7 +83,7 @@ function normalizeFacilityLifecyclePlan(g,p,plan) {
   plan.facilityLifecyclePolicy=result.policy;
 }
 function prepareFacilityLifecycle(g,plans,openingContexts=null) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'prepareFacilityLifecycle','facilities.lifecycle',()=>{
     const result=FacilitySettlement.prepare(g,plans,(world,p,plan)=>openingContexts?openingContexts[g.players.findIndex(x=>x.id===p.id)]:facilityLifecyclePlanningContext(world,p,plan).context);
     facilityLifecycleCommit(g,result.game);
@@ -91,7 +91,7 @@ function prepareFacilityLifecycle(g,plans,openingContexts=null) {
   });
 }
 function advanceFacilityLifecycle(g) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'advanceFacilityLifecycle','facilities.renovation',()=>{
     const alreadyAdvanced=new Set(g.players.filter(p=>p.facilityLifecycle.lastAdvancedCycle===g.cycle).map(p=>p.id));
     const result=FacilitySettlement.advance(g,(_,p)=>facilityLifecycleLiveContext(p,g.cycle));
@@ -102,7 +102,7 @@ function advanceFacilityLifecycle(g) {
   });
 }
 function settleFacilityLifecycle(g,plans) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return [];
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return [];
   return recordLedgerStage(g,'settleFacilityLifecycle','facilities.maintenance',()=>{
     const result=FacilitySettlement.settle(g,(_,p)=>{
       const context=facilityLifecycleLiveContext(p,g.cycle),plan=plans[g.players.findIndex(x=>x.id===p.id)];
@@ -120,7 +120,7 @@ function settleFacilityLifecycle(g,plans) {
   });
 }
 function activateFacilityLifecycle(g) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   recordLedgerStage(g,'activateFacilityLifecycle','facilities.renewal',()=>{
     const result=FacilitySettlement.activate(g);facilityLifecycleCommit(g,result.game);
     for(const e of result.events)addLog(g,e.officeId+' renovation activated; condition restored.','FACILITY');
@@ -129,10 +129,11 @@ function activateFacilityLifecycle(g) {
 function validateFacilityLifecycleSave(g) {
   FacilitySettlement.validate(g);
   for(const p of g.players){
+    if(p.facilityLifecycle&&p.facilityLifecycle.version!==([9,10].includes(g.financialGroupVersion)?2:1))throw Error('Facility workforce rules do not match the campaign.');
     if(p.facilityLifecycle)validateFacilityLifecycleBoundary(p,g.cycle,g.gameOver);
     if(p.submitted)normalizeFacilityLifecyclePlan(g,p,JSON.parse(JSON.stringify(p.submitted)));
   }
-  if(![5,6,7,8].includes(g.financialGroupVersion)&&Object.values(g.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion)&&Object.values(g.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))
     throw Error('Unversioned saved lifecycle orders.');
 }
 function validateFacilityLifecycleBoundary(p,cycle,gameOver) {
@@ -148,7 +149,7 @@ function validateFacilityLifecycleBoundary(p,cycle,gameOver) {
   }
 }
 function projectFacilityLifecycle(g,out,index) {
-  if(![5,6,7,8].includes(g.financialGroupVersion))return;
+  if(![5,6,7,8,9,10].includes(g.financialGroupVersion))return;
   out.me.facilityLifecycle=JSON.parse(JSON.stringify(g.players[index].facilityLifecycle));
   delete out.rival.facilityLifecycle;
   if(out.lastPlans?.[out.rival.id])delete out.lastPlans[out.rival.id].facilityLifecyclePolicy;
@@ -156,11 +157,12 @@ function projectFacilityLifecycle(g,out,index) {
 function validateFacilityLifecycleView(v) {
   if(v.facilityEconomy!==undefined||v.rival?.facilityLifecycle!==undefined||v.lastPlans?.[v.rival?.id]?.facilityLifecyclePolicy!==undefined)
     throw Error('Private facility lifecycle data exposed.');
-  if(![5,6,7,8].includes(v.financialGroupVersion)){
+  if(![5,6,7,8,9,10].includes(v.financialGroupVersion)){
     if(v.me?.facilityLifecycle!==undefined||v.me?.submitted?.facilityLifecyclePolicy!==undefined||
       Object.values(v.lastPlans||{}).some(p=>p.facilityLifecyclePolicy!==undefined))throw Error('Unversioned facility lifecycle view.');
     return;
   }
+  if(v.me.facilityLifecycle?.version!==([9,10].includes(v.financialGroupVersion)?2:1))throw Error('Facility workforce view rules do not match the campaign.');
   validateFacilityLifecycleBoundary(v.me,v.cycle,v.gameOver);
 }
 function planFacilityLifecycle(g,index,plan) {
@@ -172,7 +174,7 @@ function planFacilityLifecycle(g,index,plan) {
   // Reconsider care after recovery: last month's emergency deferral is not a
   // permanent AI strategy. Human standing instructions are never rewritten.
   for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance='full';
-  for(const mode of ['basic','off'])if(facilityLifecycleProtectedBudget(p,plan).remaining<0)
+  for(const mode of ['basic','off'])if(facilityLifecycleProtectedBudget(p,plan,undefined,g).remaining<0)
     for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance=mode;
   let best=null;
   for(const office of p.facilityNetwork.offices.filter(o=>o.closedCycle===null)){
@@ -190,8 +192,7 @@ function planFacilityLifecycle(g,index,plan) {
 function prepareFacilityLifecycleForecast(p,plan) {
   if(!p.facilityLifecycle)return p;
   const policy=plan.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p),context=facilityLifecycleLiveContext(p);
-  const requested=Object.fromEntries(FacilityLifecycle.ROLES.map(role=>[role,
-    Object.values(policy.offices||{}).reduce((n,row)=>n+(row.staffQuarters?.[role]||0),0)]));
+  const requested=FacilityLifecycle.staffTotals(p,policy.offices||{});
   const normalizationPool=Object.fromEntries(FacilityLifecycle.ROLES.map(role=>[role,Math.max(context.availableStaffQuarters[role],requested[role])]));
   const result=FacilityLifecycle.prepare(p,policy,{...context,availableStaffQuarters:normalizationPool,
     payCash:(owner,amount,source)=>{

@@ -3,6 +3,14 @@
 A measured inventory of every catalogued item in the game: what exists, whether a UI
 path can show it, and whether play ever reaches it.
 
+**Historical note from checkpoint42 (not current status):** the measured Group8 inventory below is
+historical, not a reachability measurement of current source9.23. Company shares
+now have campaign settlement, local order tickets and bounded AI. Reviewed
+takeover rules now have explicit9.24 campaign/UI adapters and simulated transport
+coverage, but normal Expanded enablement awaits controlled-company consolidation.
+Keep the measurements below intact; current completion and remaining coverage
+are tracked in [the acceptance ledger](v3-usability.md).
+
 Built against `BRANCH_WARS.html` at engine digest `42cdfc3f`, Group 8
 (`financialGroupVersion: 8`), difficulty `chairman`.
 
@@ -51,6 +59,81 @@ reported 78 of 118 keys "undisclosed", but most content is rendered dynamically 
 view (for example `$('#eventName').textContent = v.event.name`), so a key legitimately
 never appears in UI source. Per-key visibility needs DOM-level checking against a
 rendered workspace, which Phase 3 does.
+
+## Phase 2 verdict: nothing here is independently dead
+
+The register lists 13 unreached items. Checked one by one against measured play, **none
+is dead content** — every one is gated on growth or distress the economy does not produce.
+Requirement versus what play actually reaches:
+
+| unreached item | requires | measured |
+|---|---|---|
+| milestone `scale` | $50M deposits + loans | 26-34M |
+| milestone `builder` | 8 branch levels | 1-2 |
+| milestone `trusted` | 82 reputation, risk < 30 | reputation **16** |
+| milestone `digital` | 80 adoption, technology 2 | 42, technology **0** |
+| mandate `earnings` | +$2.2M cumulative | **−$1.0M to −1.3M** |
+| mandate `people` | morale 82, staff 10, training 2 | morale 14-32, staff 7-8, training 0 |
+| mandate `digital` | adoption 85, technology 2 | 42, 0 |
+| mandate `network` | 4-6 branch levels by scope | 1-2 |
+| action `liquidityDefense` | liquidity < 2.5%, or a rival deposit raid | cash/deposits 10-32% |
+| action `takeoverDefense` | buyout pressure, or `tierRank>=2` | pressure 0, tier always `strong` |
+| `watch`/`consent`/`critical`/`failing` | capital ratio below 8% | never below 12% |
+| `receivership`/`domination`/`buyout` | those tiers, or total market exit | neither |
+
+Three root facts explain all thirteen:
+
+1. **The bank does not grow.** Deposits flat, branch levels 1-2, digital frozen at 42,
+   upgrades 0 of 15, reputation 16, morale falling.
+2. **The bank never gets into trouble.** Ratio never below 12%, tier always `strong`.
+3. **Cumulative earnings stay negative.**
+
+**So Phase 2 makes no code change, by its own rule.** Lowering a milestone threshold or
+loosening an eligibility test would relabel the stagnation rather than fix it, and would
+move no campaign number that matters. The work belongs in Phase 5 (growth) and in the
+owner's decision about whether distress should be reachable by choice. Doctrines
+(`digital`, `people`) and the `consumer` credit term are AI selection, not content gates:
+a human can pick all three today.
+
+## The residual cascade, refined
+
+There are **two** separate cascades, and conflating them misdirects the fix.
+
+**Service pool** (`department-function-context.js:99-105`) — three claims compound on the
+remainder: `householdBook.policy.retention` (default **75**), then
+`relationshipOffers.policy.share`, then `onboarding.policy.share`. Residual is
+`(1−r)(1−o)(1−b)` and floors to **0 quarters in every cycle measured**. This starves
+household acquisition and therefore deposits.
+
+**Lending pool** — a different claimant set: `creditSalesStaff` takes
+`staff × (1 − creditPerformance.policy.share/100)`, then
+`departmentFunctionResidualProductivity` scales by `remainingPools/physical`, i.e. by the
+**department function quotas**. Measured 3 of 8 lending quarters left at cycle 1, 0 of 4
+by cycle 6.
+
+An earlier note proposed switching the service claims from multiplying to dividing one
+budget. **That is a smaller lever than it appeared**, for two reasons:
+
+1. With retention at 75, both models starve the pool. Multiplicative leaves 25% before
+   the other two claims; additive leaves 25% minus them, which floors at 0 just as fast.
+   The default dominates the shape.
+2. **It would not help lending at all.** Retention, offers and onboarding claim *service*.
+   Lending is claimed by the collections share and the department quotas. Measured
+   confirmation: setting `retention 25`, `offers share 0` and `onboarding share 0` each
+   changed origination by **nothing**; only the collections share moved it, to 22%.
+
+So the cascade is a real architectural smell — four systems drawing residuals from shared
+pools, with the residual computed last — but reshaping it is not the route to making
+lending matter. That route is a lending source not drawn from the retail pool at all,
+which is what Phase 5 pursues. The interface changes in `ui-rework.md` Part 3 stand on
+their own regardless.
+
+## Live docs
+
+Checked, current. `game-reference.md` regenerates byte-identical, so the generated
+reference has not drifted. No live doc repeats the "deposits out-earn loans" claim that
+earlier review material contained. `docs/archive/` left alone per the policy in
+`docs/README.md`.
 
 ## Version gates — healthier than assumed
 

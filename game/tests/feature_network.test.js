@@ -27,7 +27,7 @@ function peers(transport,settings={},legacy=false){
 async function start(pair){
  const{host,guest}=pair;
  guest.run("handleMessage({type:'hello_request'})");await pair.drain();
- assert(host.state().lobby,'Handshake opens lobby');assert.equal(host.state().game,null);
+ assert(host.state().lobby,'Handshake opens lobby: '+pair.frames.filter(([,m])=>m.type==='error').map(([,m])=>m.message).join('; '));assert.equal(host.state().game,null);
  assert(host.run('peerFeatureStatus().compatible'));
  host.run('editLobbyIdentity(true)');await pair.drain();
  guest.run('editLobbyIdentity(true)');await pair.drain();
@@ -118,6 +118,12 @@ async function pilotPairs(){
  pair.host.run('syncPeers()');assert(pair.queue.every(([,m])=>m.type!=='state'),'Pending challenge leaked a new state');
  await pair.drain();assert(pair.host.run('peerFeatureStatus().compatible'));
  assert.equal(JSON.stringify(pair.host.state().game),before,'Handshake changed simulation or sealed plans');
+ // Historical handshakes/replay stay supported without exposing the retired
+ // pilot as a new setup choice. The tests above must still run in this build.
+ if(!E.CAMPAIGN_FEATURES.find(feature=>feature.field==='featureRulesVersion').available){
+  assert(pair.host.elements.get('#lobbyFeature-featureRulesVersion').disabled);
+  return true;
+ }
  // Editing into a marked profile after a legacy opening must initiate the new
  // challenge, not leave both seats permanently blocked in the lobby.
  const changed=peers('gh',base);
@@ -282,6 +288,8 @@ async function pricingPairs(){
  return profiles.length*3;
 }
 async function main(){
+ await integratedStaffingPairs();
+ await withdrawnCheckpointRecovery();
  await financialGroupPairs();
  await activeAgencyPairs();
  headerChecks();await legacyPairs();await editableLobbies();const modular=await pilotPairs();await checkpointChecks();await markedCheckpointResume();
@@ -289,6 +297,58 @@ async function main(){
  await markedCheckpointResume({productProgramsVersion:2,featureRulesVersion:undefined,advertisingVersion:1,relationshipOffersVersion:1,onboardingVersion:1});
  const pricing=await pricingPairs();console.log('Pricing network PASS: '+pricing+' simulated lobby and priced-plan workflows, GitHub commit/reveal and duplicate protection, fresh v2 challenge, old-product-peer refusal, private billed reports, malformed report refusal and reconnect fences. Physical two-computer acceptance remains separate.');
  console.log('Feature network PASS: legacy peer compatibility, all three simulated transports, rule-only state rejection before adoption, immutable active rules, private checkpoint validation and resume handshake'+(modular?', all four marked combinations, strict old-peer refusal and stale-challenge fences.':'; modular pilot is not activated yet.'));
+}
+async function integratedStaffingPairs(){
+ const E=harness().c.window.BWEngine,settings=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:9}).options;
+ for(const transport of ['gh','lan','p2p']){
+  const pair=peers(transport,settings),{host,guest}=pair;await start(pair);
+  assert.equal(host.state().game.version,'9.8');assert.equal(guest.state().view.me.facilityLifecycle.version,2);
+  const plans=host.state().game.players.map((p,i)=>host.run('E.chooseBot(game,'+i+')'));
+  host.c.integratedPlan=plans[0];guest.c.integratedPlan=plans[1];
+  if(transport==='gh'){await guest.run('ghCommitPlan(integratedPlan)');await pair.drain();assert.equal(host.state().game.players[1].submitted,null);}
+  host.run('E.submit(game,0,integratedPlan);syncPeers()');await pair.drain();
+  if(transport!=='gh'){guest.run("send(turnMessage('plan',{plan:integratedPlan}))");await pair.drain();}
+  assert.equal(host.state().game.cycle,2);assert.equal(guest.state().view.cycle,2);
+  assert.equal(guest.state().view.rival.facilityLifecycle,undefined);assert.equal(guest.state().view.rival.departmentFunctions,undefined);
+  const accepted=JSON.stringify(guest.state().view),bad=copy(guest.state().view);bad.me.facilityLifecycle.version=1;guest.c.invalidStaffing=bad;
+  assert.throws(()=>guest.run("handleMessage({type:'state',state:invalidStaffing})"),/workforce view rules/);
+  assert.equal(JSON.stringify(guest.state().view),accepted);
+  const message=pair.frames.findLast(([i,m])=>i===1&&m.type===(transport==='gh'?'plan_reveal':'plan'))?.[1];assert(message);
+  host.c.duplicateStaffing=copy(message);const before=JSON.stringify(host.state().game);await host.run('handleMessage(duplicateStaffing)');await pair.drain();assert.equal(JSON.stringify(host.state().game),before);
+  const old=peers(transport,settings);old.guest.run("const oldStaffHello=makeFeatureHello;makeFeatureHello=request=>({...oldStaffHello(request),financialGroupSupported:8});handleMessage({type:'hello_request'})");await old.drain();
+  assert.equal(old.host.state().game,null);assert.equal(old.host.state().lobby,null);assert(old.frames.some(([,m])=>m.type==='error'&&/Financial Group/.test(m.message)));
+ }
+ await markedCheckpointResume({...settings,featureRulesVersion:undefined});
+ console.log('Integrated Group9 staffing network PASS: three simulated transports, commitment/reveal, duplicates, private books, mismatched book and old-peer refusal, two-seat checkpoint/fresh handshake.');
+}
+async function withdrawnCheckpointRecovery(){
+ const probe=harness(),settings=probe.c.window.BWEngine.previewFeatureSelection({}, {field:'financialGroupVersion',value:8}).options;
+ for(const transport of ['gh','lan','p2p']){
+  const pair=peers(transport,settings);await start(pair);
+  pair.host.run("game=E.migrateCampaign(game);const exit=game.territories.northside;exit.shares=[5,95];exit.exitStreak[0]=5;E.resolveMarketExits(game);syncPeers()");await pair.drain();
+  assert.equal(pair.guest.state().view.territories.northside.exited[1],true,'Guest sees the host withdrawal in its own orientation');
+  assert.equal(pair.guest.state().view.rival.departmentFunctions,undefined);
+  if(transport!=='gh')continue;
+  const expected=copy(pair.host.state().game),restored=[harness('host'),harness('guest')],queue=[];
+  for(const[index,source]of [pair.host,pair.guest].entries()){
+   source.run('ghCheckpoint()');const raw=source.storage.get('branchWarsGhResume');assert(!raw.includes('PRIVATE_TEST_TOKEN'));
+   const peer=restored[index];peer.storage.set('branchWarsGhResume',raw);peer.c.document.querySelector('#ghToken').value='PRIVATE_TEST_TOKEN';
+   peer.c.enqueue=message=>queue.push([index,copy(message)]);
+   peer.run('gh.active=false;ghPoll=()=>{};ghFlush=()=>{};ghCheckRepo=async()=>{};ghRead=async()=>({missing:true});send=message=>enqueue(message)');
+   await peer.run('ghResume()');assert(peer.state().gh.active,'Withdrawn Group8 checkpoint resumes');
+  }
+  const[host,guest]=restored;
+  assert(host.run('peerFeatureStatus().pending'),'Resume must obtain new capabilities');
+  assert.deepEqual(copy(host.state().game),expected,'Host checkpoint preserves exact market shares and simulation');
+  for(let n=0;queue.length;n++){
+   assert(n<100,'Withdrawal resume handshake did not converge');const[index,frame]=queue.shift(),peer=restored[1-index];peer.c.frame=frame;await peer.run('handleMessage(frame)');
+  }
+  assert(host.run('featurePeerFresh'));assert(host.run('peerFeatureStatus().compatible'));
+  assert.deepEqual(copy(host.state().game),expected,'Fresh handshake must not reinitialize the campaign');
+  assert.equal(guest.state().view.territories.northside.exited[1],true);
+  assert.equal(guest.state().view.rival.agency,undefined);
+ }
+ console.log('Withdrawal recovery PASS: Group8 state across three simulated transports; exact two-peer GitHub checkpoint, fresh handshake and owner privacy.');
 }
 
 async function activeAgencyPairs(){

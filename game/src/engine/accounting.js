@@ -152,8 +152,8 @@ const AccountingPrototype=(()=>{
   check(next);return copy(next);
  }
  // Budget bridge is a quote, not a replacement for plan/capacity validation.
- function planSpending(book,p,plan){
-  const quote=planBudget(p,plan);
+ function planSpending(book,p,plan,g=null){
+  const quote=planBudget(p,plan,g);
   const events=[{kind:'competitiveAction',amount:quote.action},{kind:'project',amount:quote.projects},{kind:'research',amount:quote.research},{kind:'hiring',amount:quote.recruiting}].filter(e=>e.amount);
   return {book:activities(book,events),quote:{...quote},expense:quote.total};
  }

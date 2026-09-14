@@ -117,7 +117,7 @@ function settleRelationshipOffers(g, p) {
   convertRelationshipOfferBook(shadow, report);
   // The pure quote performs all affordability and integer calculations before
   // committing the book. Principal/customer ownership and accounting do not move.
-  for (const key of Object.keys(p.marketBook.markets)) if (shadow.depositBook.cohorts.filter(c => c.market === key).reduce((n, c) => n + c.principal, 0) !== p.marketBook.markets[key].deposits)
+  for (const key of Object.keys(p.marketBook.markets)) if (shadow.depositBook.cohorts.filter(c => c.market === key).reduce((n, c) => n + c.principal, 0)+nonHouseholdDepositBalance(p,key) !== p.marketBook.markets[key].deposits)
     throw Error('Relationship offer changed owned deposit principal.');
   p.depositBook.cohorts = shadow.depositBook.cohorts; state.lastCycle = cycle; state.report = report;
   return report;
@@ -189,10 +189,10 @@ function planRelationshipOffers(g, index, input) {
         (CUSTOMER_SEGMENTS[segment].fit[product] - CUSTOMER_SEGMENTS[segment].fit[c.product]), 0) / q.eligiblePrincipal : 0;
       if (q.requested) choices.push({ policy, value: q.requested * fitGain });
     }
-  const forecast = next => operatingPreview({ ...p, marketSnapshot: g.marketEconomy }, next, g.economy);
+  const forecast = next => operatingPreview({ ...p, marketSnapshot: g.marketEconomy }, next, g.economy,g);
   const baseline = forecast(plan); let best = plan, bestScore = baseline.profit - (baseline.fundingLoss || 0);
   for (const choice of choices.sort((a, b) => b.value - a.value).slice(0, 2)) {
-    const candidate = { ...offerPlan, relationshipOfferPolicy: choice.policy }, budget = planBudget(p, candidate);
+    const candidate = { ...offerPlan, relationshipOfferPolicy: choice.policy }, budget = planBudget(p, candidate,g);
     if (budget.remaining < 300000) continue;
     const report = forecast(candidate);
     if (!report.relationshipOfferConverted || report.profit <= 0 || report.relationshipOfferCost > baseline.profit * .02 ||

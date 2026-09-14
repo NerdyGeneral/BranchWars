@@ -9,12 +9,20 @@ function monthlyPlanReview(v,plan=draft){
  if(!plan.focus||!v.territories[plan.focus])add('focus','Choose a focus market','Select an open market for market-dependent orders.','markets',null,'#marketMap');
  if(!['a','b'].includes(plan.decision))add('decision','Answer the executive call','Choose a response before submitting this month.','operations','monthly','#decisionGrid');
  if(unallocated!==0||Object.values(plan.allocation||{}).some(x=>!Number.isInteger(x)||x<0))add('allocation','Allocate your employees',unallocated>0?unallocated+' employee'+(unallocated===1?'':'s')+' remain'+(unallocated===1?'s':'')+' unallocated.':unallocated<0?Math.abs(unallocated)+' employee'+(Math.abs(unallocated)===1?' is':'s are')+' over-allocated.':'Staff allocations must be non-negative whole numbers.','operations','monthly','#staffGrid');
- const project=check('project-quote','Review project instructions','operations','projects','#projectGrid',()=>E.projectPlanStatus(p,plan));
- const quote=project?.quote||check('budget-quote','Review shared spending','operations','forecast','#planBudget',()=>E.planBudget(p,plan));
+ const project=check('project-quote','Review project instructions','operations','projects','#projectGrid',()=>E.projectPlanStatus(p,plan,v));
+ const quote=project?.quote||check('budget-quote','Review shared spending','operations','forecast','#planBudget',()=>E.planBudget(p,plan,v));
  if(quote&&(quote.discretionaryRemaining??quote.remaining)<0)add('budget','Reduce optional commitments','Optional spending exceeds available cash or capital room by '+cash(-(quote.discretionaryRemaining??quote.remaining))+'. Existing obligations remain owed.','operations','projects','#planBudget');
  if(project&&!project.eligible)add('projects','Resolve initiative conflict',project.reason,'operations','projects','#projectGrid');
  const lifecycle=p.facilityLifecycle?check('facility-quote','Review office instructions','markets',null,'#facilityLifecyclePanel',()=>E.lifecycleInstructionQuote(v,p,plan)):null;
  if(lifecycle&&!lifecycle.status.eligible)add('facilities','Resolve office staffing or funding',lifecycle.status.reason,'markets',null,'#facilityLifecyclePanel');
+ if(p.facilityExtensions)check('office-suite','Review commercial suite instructions','markets',null,'#facilityLifecyclePanel',()=>E.normalizeFacilityExtensionPlan(v,p,JSON.parse(JSON.stringify(plan))));
+ if(p.sharedPremises){
+  const premises=E.sharedPremisesPlanReview(v,p,plan);
+  if(!premises.eligible&&!p.submitted&&!v.gameOver)add('shared-premises','Review shared-office instructions',premises.reason,'markets',null,'#sharedPremisesDesk');
+  const problem=blockers.find(x=>x.id==='shared-premises');if(problem)problem.premisesOffice=plan.sharedPremisesPolicy?.build?.office||p.sharedPremises.book.rooms[0]?.office;
+  for(const [i,text]of (premises.notices||[]).entries())warnings.push({id:'premises-delivery-'+i,title:'Shared-office delivery needs attention',text,tab:'markets',target:'#sharedPremisesDesk'});
+ }
+ if(p.companyControl)check('company-control','Review control funding and consent','group',null,'#financialGroupPanel',()=>E.normalizeCompanyControlPlan(v,p,JSON.parse(JSON.stringify(plan))));
  const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
  if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
  if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Math.max(1,Math.round(row.planned.shortfall))+' quarter-work units uncovered'+(Math.abs(row.planned.shortfall-Math.round(row.planned.shortfall))>=.05?' (exactly '+Number(row.planned.shortfall.toFixed(2))+')':'')).join(' · ')+'. Four units are one employee-month of work; this is delivery capacity, not spare headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
@@ -44,11 +52,27 @@ function monthlyPlanReview(v,plan=draft){
  if(E.planHires(plan)>E.hireLimit(p))add('hires','Reduce combined recruitment','Generalists and specialists share the '+E.hireLimit(p)+'-banker monthly limit.','operations','projects','#hiringPanel');
  if(typeof pendingDepartmentForm==='function'&&pendingDepartmentForm(v))warnings.push({id:'unstaged-leaders',title:'Leadership form has unstaged edits',text:'These entries are not in your monthly plan. Preview and stage them, or explicitly discard them.',tab:'workforce',target:'#departmentPanel'});
  if(p.workforce&&typeof workforceForm==='function'&&workforceForm(v).dirty)warnings.push({id:'unstaged-training',title:'Training form has unstaged edits',text:'Training and reserve entries are not yet in your monthly plan. Preview and stage them, or discard them.',tab:'workforce',target:'#workforcePanel'});
+ if(p.commercialAccounts){
+  const q=check('business-accounts','Review business account instructions','markets',null,'#commercialClientWorkspace',()=>E.commercialAccountReview(v,p,plan));
+  if(q&&(q.quarters<q.service||(q.policy.target&&q.development<1))){
+   const companyId=q.policy.target||Object.keys(p.commercialAccounts.accounts)[0],row=v.commercialAccountMarket.rows.find(r=>r.id===companyId);
+   warnings.push({id:'business-work',title:'Business account work is uncovered',text:q.quarters+' quarters available; '+q.service+' needed for existing accounts and one more for a selected pursuit. Development stalls without capacity; three missed service months cause deposits to leave. Restore Business capacity or revise its reservations.',
+    tab:'markets',target:'#businessAccountTitle',serviceId:row?'service-'+row.market:null});
+  }
+ }
+ if(p.agency?.version===2){
+  const agency=check('agency-plan','Review qualified agency instruction','group',null,'#agencyDesk',()=>{E.normalizeAgencyPlan(p,JSON.parse(JSON.stringify(plan)));return E.agencyQuote(p,plan.agencyPolicy);});
+  const problem=blockers.find(x=>x.id==='agency-plan');if(problem)problem.groupDesk='agency';
+  if(agency&&(p.agency.status==='active'||plan.agencyPolicy?.launch)&&agency.professional.phase!=='authorized')warnings.push({id:'agency-permission',title:'Agency delivery is not yet authorized',text:agency.professional.phase==='registration pending'?'Registration becomes ready in month '+agency.professional.readyCycle+'. Funded salaries and overhead still apply; no covers can be serviced before then.':'Registration or producer credentials are missing or overdue. Review qualified roles and maintenance. Ordinary Business bankers do not replace agency producers.',tab:'group',groupDesk:'agency',target:'#agencyDesk'});
+ }
  return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
 }
 function navigatePlanReview(item){
  setWorkspaceTab(item.tab);
+ if(item.premisesOffice)inspectLifecycleOffice(item.premisesOffice);
+ if(item.serviceId)inspectServiceAgreement(currentView(),item.serviceId);
  if(item.desk)setOperationsDesk(item.desk);
+ if(item.groupDesk)setFinancialGroupDesk(item.groupDesk);
  if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.peopleDesk||(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership'));
  const target=$(item.target)||$('[data-workspace="'+item.tab+'"]');
  if(!target)return;
@@ -61,12 +85,9 @@ function renderMonthlyPlanReview(v,review){
  const mount=$('#monthlyPlanReview');if(!mount)return;
  const locked=v.me.submitted||v.gameOver,items=[...review.blockers,...review.warnings];
  const summary=$('#monthlyReviewSummary');
- const box=$('#monthlyReviewDetails');
- if(box){
-  const blocking=!locked&&review.blockers.length>0;
-  if(blocking&&box.dataset.autoOpened!==String(v.cycle)){box.open=true;box.dataset.autoOpened=String(v.cycle);}
-  if(!blocking)delete box.dataset.autoOpened;
- }
+ // Required work remains visible in the summary and disabled Ready explanation.
+ // Redrawing a different desk must not reopen a large review over that workspace.
+ // Preserve the player's explicit disclosure state instead of fighting it.
  if(summary)summary.textContent='Review this month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
  const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Go to '+esc(item.tab)+'</button></li>').join('');
  mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
@@ -89,9 +110,12 @@ function monthlyChangeRows(v){
  const state=monthlyChangesState;
  if(!state.baseline||state.owner!==v.me.id||state.cycle!==v.cycle)return [];
  const rows=[],walk=(before,after,path)=>{
-  if(JSON.stringify(before)===JSON.stringify(after))return;
+  if(JSON.stringify(before)===JSON.stringify(after)&&!(path.length===1&&path[0]==='newProjects'&&JSON.stringify(state.baseline.projectTargets)!==JSON.stringify(draft.projectTargets)))return;
+  // Qualified role counts and total headcount are one validated instruction.
+  // Undoing a single count would leave an impossible partly-restored team.
+  if(path.length===1&&(path[0]==='sharedPremisesPolicy'||path[0]==='investmentPolicy'||path[0]==='agencyPolicy'&&v.me.agency?.version===2)){rows.push({path,before,after});return;}
   if(path.length===1&&path[0]==='newProjects'&&Array.isArray(before)&&Array.isArray(after)){
-   for(const key of new Set([...before,...after]))if(before.includes(key)!==after.includes(key))rows.push({path:['newProjects',key],before:before.includes(key),after:after.includes(key),initiative:true});
+   for(const key of new Set([...before,...after]))if(before.includes(key)!==after.includes(key)||state.baseline.projectTargets?.[key]!==draft.projectTargets?.[key])rows.push({path:['newProjects',key],before:before.includes(key),after:after.includes(key),initiative:true});
    return;
   }
   if(before&&after&&typeof before==='object'&&typeof after==='object'&&!Array.isArray(before)&&!Array.isArray(after)){
@@ -100,15 +124,33 @@ function monthlyChangeRows(v){
  };
  walk(state.baseline,draft,[]);
  // newProject is a compatibility alias for the first newProjects entry.
- return rows.filter(row=>row.path[0]!=='newProject');
+ return rows.filter(row=>!['newProject','projectTargets'].includes(row.path[0]));
 }
 function monthlyChangeName(path){
+ if(path[0]==='sharedPremisesPolicy')return 'Shared office space and subsidiary time';
+ if(path[0]==='companyShareOrders')return 'Company share orders';
+ if(path[0]==='companyControlPolicy')return 'Company control instructions';
+ if(path[0]==='investmentPolicy')return 'Investment business instruction';
+ if(path[0]==='facilityExtensionPolicy')return 'Commercial suite construction'+(path[1]==='cancel'?' cancellation':'');
+ if(path[0]==='commercialAccountPolicy')return path[1]==='target'?'Business account pursuit':'Business account work · quarter employee-months';
+ if(path[0]==='agencyPolicy')return 'Agency instruction'+(path.length>1?' · '+path.slice(1).join(' · '):'');
  const names={allocation:'Staff allocation',hires:'Generalist recruitment',specialistHires:'Specialist recruitment',investments:'Research funding',newProjects:'New initiatives',focus:'Action target',decision:'Executive response',competitiveAction:'Competitive action',capitalAction:'Emergency board request',departmentFunctionsPolicy:'Department delivery',facilityLifecyclePolicy:'Facility instructions',departmentPolicy:'Department budgets',leaderOrders:'Leader instructions',workforcePolicy:'Workforce policy',specializations:'Operating model',products:'Product settings',contractBid:'Service bid',contractExit:'Contract exit',opportunity:'Relationship pursuit'};
  const words=value=>String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
  return path.map((part,i)=>i===0?(names[part]||words(part)):words(part)).join(' · ');
 }
 function monthlyChangeValue(v,value,path){
  if(value===undefined||value===null||value==='none'||value==='')return 'None';
+ if(path[0]==='sharedPremisesPolicy'&&path.length===1){
+  const build=value.build,office=build&&v.me.facilityNetwork.offices.find(o=>o.id===build.office),parts=[];
+  if(build)parts.push(E.SharedPremises.CATALOG[build.kind].name+' at '+(v.territories[office?.market]?.name||build.office));
+  if(value.cancel)parts.push('Cancel room '+value.cancel+' fit-out');if(value.remove)parts.push('Remove room '+value.remove);
+  if(value.allocations.length)parts.push(value.allocations.map(a=>'Room '+a.room+': '+a.quarters/4+' '+premisesRoleNames[a.role]+' employee-months').join('; '));
+  return parts.join('; ')||'No construction or local assignments';
+ }
+ if(path[0]==='companyShareOrders'&&Array.isArray(value))return value.length?value.map(o=>{const c=v.me.companySnapshot.world.companies.find(c=>c.id===o.issuer);return (o.side==='buy'?'Buy ':'Sell ')+o.shares+' '+(c?E.ANCHOR_CLIENTS[c.clientIndex].name:o.issuer)+' at $'+(o.limitCents/100).toFixed(2)+' limit';}).join('; '):'None';
+ if(path[0]==='facilityExtensionPolicy'&&typeof value==='string'){const o=v.me.facilityNetwork?.offices.find(o=>o.id===value);return o?(v.territories[o.market]?.name||o.market)+' · '+E.FacilityLifecycle.CATALOG[o.model].name:String(value);}
+ if(path[0]==='commercialAccountPolicy'&&path[1]==='target'){const company=v.commercialAccountMarket?.rows.find(r=>r.id===value),agreement=v.serviceAgreements?.find(c=>c.market===company?.market);return agreement?E.clientProfile(agreement).name:String(value);}
+ if(path.length===1&&path[0]==='agencyPolicy'&&value.roles)return agencyInstructionSummary(value);
  if(typeof value==='boolean')return value?'Requested':'Not requested';
  if(Array.isArray(value))return value.length?value.map(x=>monthlyChangeValue(v,x,path)).join(', '):'None';
  if(typeof value==='object')return Object.entries(value).map(([k,x])=>monthlyChangeName([k])+': '+monthlyChangeValue(v,x,path)).join('; ');
@@ -119,7 +161,14 @@ function monthlyChangeValue(v,value,path){
  return String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
 }
 function monthlyChangeTiming(path){
- switch(path[0]){
+  switch(path[0]){
+   case 'sharedPremisesPolicy':return 'One reviewed premises instruction. Fit-out uses bank cash and shared execution; qualified subsidiary time is moved from central work. Occupancy costs and rent settle once per month, with no new group profit.';
+   case 'companyShareOrders':return 'One-month simultaneous auction. Existing parent cash reserves include fees and other group commitments. No immediate trade or guaranteed fill; company ownership does not award banking contracts.';
+   case 'companyControlPolicy':return 'Paid diligence and a later reviewed offer. Closing requires funded parent commitments and any rival seller consent. Integration uses shared execution capacity; acquisition debt remains owed when work pauses.';
+   case 'investmentPolicy':return 'Funding, qualified recruitment and client transfers are one reviewed instruction. Parent contributions and client assets remain separate. Nothing executes until month-end.';
+   case 'facilityExtensionPolicy':return 'Fit-out is paid at resolution. Shared execution completes the work; capacity and upkeep begin the following month. Cancelling unfinished work does not refund paid expense.';
+   case 'commercialAccountPolicy':return 'Standing instructions. Existing Business work is reserved; qualification and company cash allocations settle at month-end. No immediate payment, hire or guaranteed account win.';
+  case 'agencyPolicy':return 'The entire agency instruction is staged together. Recruitment, funding and permissions change only at resolution; closed agencies incur no ongoing charge without launch.';
   case 'hires':case 'specialistHires':return 'Reports next month; recurring payroll follows. Shared recruitment limit applies.';
   case 'investments':return 'Funding settles this month; completed capability benefits begin next month.';
   case 'newProjects':return 'Starts at resolution if eligible; completion depends on project workload and execution capacity.';
@@ -137,7 +186,11 @@ function proposeMonthlyUndo(v,index){
  if(v.me.submitted||v.gameOver)return null;
  const row=monthlyChangeRows(v)[index];if(!row)return null;
  const next=JSON.parse(JSON.stringify(draft));let parent=next;
- if(row.initiative){const key=row.path[1];next.newProjects=next.newProjects.filter(x=>x!==key);if(row.before)next.newProjects.push(key);}
+ if(row.initiative){const key=row.path[1];next.newProjects=next.newProjects.filter(x=>x!==key);if(row.before)next.newProjects.push(key);
+  if(next.projectTargets)delete next.projectTargets[key];
+  if(row.before&&monthlyChangesState.baseline.projectTargets?.[key])next.projectTargets={...(next.projectTargets||{}),[key]:monthlyChangesState.baseline.projectTargets[key]};
+  if(next.projectTargets&&!Object.keys(next.projectTargets).length)delete next.projectTargets;
+ }
  else{
   for(const part of row.path.slice(0,-1)){if(!parent||typeof parent!=='object')return null;parent=parent[part];}
   const key=row.path.at(-1);if(row.before===undefined)delete parent[key];else parent[key]=JSON.parse(JSON.stringify(row.before));

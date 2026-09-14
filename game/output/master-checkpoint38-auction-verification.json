@@ -1,0 +1,23 @@
+{
+  "checkpoint": 38,
+  "date": "2026-09-13",
+  "scope": "Isolated approved N-10 call-auction prerequisite, not enabled campaign content or completed company-control mechanics",
+  "module": "experiments/company-equity/call-auction.js",
+  "moduleSha256": "24856bdf5accb047a914d0a2f51b12c1967ea2fc057a9569fd7ee051216e3f74",
+  "tests": 8,
+  "passed": 8,
+  "durationMs": 8349.6764,
+  "seededAuctionMonths": 120,
+  "separateBoundedInventoryMonths": 55,
+  "cashInjectedDuringSettlement": 0,
+  "founderFixturesAreOrdinaryCampaigns": false,
+  "checks": ["finite liquidity", "share and cash conservation", "pure reservations and quotes", "full-plan cash limits", "no unsettled sales reuse", "price limits", "partial fills", "order-arrival independence", "rotating integer ties", "fees and basis", "malformed state and fills", "duplicate-month refusal", "cash-backed dividend quote"],
+  "campaignEngineChanged": false,
+  "currentCampaignEngineSha256": "fe9fa06b26900c7c92fbcbb08c38bc04b16f3096bdf74de2acfcda2b10c34633",
+  "campaignIntegration": "unfinished",
+  "playerUI": "unfinished",
+  "takeovers": "unfinished",
+  "balanceCampaign37": "confirmed live; most recently observed month72",
+  "releaseAccepted": false,
+  "publicationPerformed": false
+}

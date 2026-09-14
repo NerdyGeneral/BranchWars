@@ -65,7 +65,12 @@ async function repositoryHappyPaths(){
  const join=preparation('guest');join.c.document.querySelector('#ghGuestToken').value='TEST_ONLY';join.run("unpack=()=>({repo:'test/game',room:'ABCDEFGH'});polls=0;ghPoll=()=>{polls++}");
  join.c.fetch=async url=>url.includes('/contents/')?response(404,{}):response(200,{default_branch:'main',private:true});
  await join.run('ghJoinRoom()');assert.equal(join.run('gh.active'),true);assert.equal(join.run('gh.side'),'guest');assert.equal(join.run('gh.room'),'ABCDEFGH');
- assert.equal(join.run('gh.outbox[0].msg.type'),'hello');assert.equal(join.run('gh.outbox[0].msg.featureRulesSupported'),undefined,'the retired modular pilot is no longer advertised to peers');assert.equal(join.run('polls'),1);assert.equal(join.run('shown.at(-1)'),'#connectScreen');
+ assert.equal(join.run('gh.outbox[0].msg.type'),'hello');
+ // Setup retirement is not withdrawal of historical save compatibility. A
+ // resumed modular room still needs an honest capability handshake.
+ assert.equal(join.run('gh.outbox[0].msg.featureRulesSupported'),1,'historical modular checkpoints remain supported');
+ assert.throws(()=>join.run("E.previewFeatureSelection({}, {field:'featureRulesVersion',value:1})"),/Unsupported setup/,'historical support must not restore modular creation');
+ assert.equal(join.run('polls'),1);assert.equal(join.run('shown.at(-1)'),'#connectScreen');
  for(const side of ['host','guest']){
   const resumed=preparation(side);resumed.run("savedCampaign=E.createGame({mode:'p2p',seed:'resume-happy',created:1});savedView=E.publicState(savedCampaign,1)");
   const connection={...resumed.state().gh,active:false,seen:0,mine:0,published:0,outbox:[]};

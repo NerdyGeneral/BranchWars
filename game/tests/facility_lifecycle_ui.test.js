@@ -48,7 +48,7 @@ E.lifecycleInstructionQuote=(v,p,plan)=>{
 };
 E.facilityLifecycleStaffProposal=(v,p,plan)=>{const q=FacilityLifecycle.allocateStaff(p,pool);return {policy:q.plan,unused:q.unused};};
 `);
-run(read('src/ui/facility-lifecycle.js'));
+run(read('src/ui/facility-lifecycle.js')+'\n'+read('src/ui/facility-extensions.js'));
 // Build worn facilities through every real monthly phase, not fabricated age,
 // phase counters or history. Off maintenance loses180bp/month:25months ->55%.
 run("for(let month=0;month<25;month++){const plans=game.players.map(p=>{const plan=FacilityLifecycle.defaultPlan(p);for(const row of Object.values(plan.offices))row.maintenance='off';return plan;});closeFixtureMonth(plans);}draft.facilityLifecyclePolicy=E.defaultFacilityLifecyclePlan(game.players[0]);renderFacilityLifecycle(currentView());");
@@ -56,6 +56,13 @@ const panel=element('#facilityLifecyclePanel'),state=()=>run('JSON.stringify(gam
 assert.match(panel.innerHTML,/OFFICE CONDITION &amp; STAFFING/);assert.match(panel.innerHTML,/55.0%/);assert.match(panel.innerHTML,/1.80 points wear last month/);
 assert.match(panel.innerHTML,/four quarters = one banker/);assert.match(panel.innerHTML,/Deferred|deferred wear/);assert.match(panel.innerHTML,/bank:0:office:1/);
 assert(!panel.innerHTML.includes('NEVER-RENDER-RIVAL'));assert.equal(state(),initial);assert.equal(plan(),original);
+// UI speaks in employee-months; authoritative saves still use integer quarters.
+element('#lifecycleStaff-service').value='0.75';
+assert.equal(run("lifecycleReadForm().offices['bank:0:office:1'].staffQuarters.service"),3);
+assert.equal(plan(),original);assert.equal(state(),initial);
+element('#lifecycleStaff-service').value='0.1';element('#stageLifecycleSettings').listeners.click();
+assert.equal(plan(),original,'Non-quarter inputs cannot be rounded into accepted staffing');assert.match(run('lastToast'),/quarter-FTE/);
+run('renderFacilityLifecycle(currentView());');
 // Actual authored proximity from the adapter, never map coordinates inferred by UI.
 assert.match(element('#lifecycleHub').value,/^$/);assert.match(panel.innerHTML,/<option value="bank:0:office:2">bank:0:office:2/);
 element('#lifecycleMaintenance').value='basic';element('#lifecycleHub').value='bank:0:office:2';
@@ -80,12 +87,12 @@ assert.match(panel.innerHTML,/\$143,000 already paid/);assert.match(panel.innerH
 const work=state();element('#cancelLifecycleRenovation').listeners.click();assert.equal(state(),work);assert.equal(run('draft.facilityLifecyclePolicy.cancel'),'bank:0:office:1');assert.match(element('#lifecycleStatus').textContent,/not refunded/);
 element('#clearLifecycleSettings').listeners.click();assert.equal(run('draft.facilityLifecyclePolicy.cancel'),null);assert.equal(state(),work);
 // Unlicensed advisory output stays visibly unavailable even in a broad roster fixture.
-element('#lifecycleOffice').value='bank:0:office:3';element('#lifecycleOffice').listeners.change();assert.match(panel.innerHTML,/Advisory output unavailable/);
+run("inspectLifecycleOffice('bank:0:office:3')");assert.match(panel.innerHTML,/Advisory output unavailable/);
 assert.equal(run('lifecycleUi.office'),'bank:0:office:3');
 const signature=run('JSON.stringify(draft)'),campaign=run('game');run('game.players[0].submitted={};renderFacilityLifecycle(currentView());');
 assert.match(panel.innerHTML,/id="stageLifecycleSettings" disabled/);assert.equal(run('stageFacilityLifecycle(currentView(),draft.facilityLifecyclePolicy)'),false);
 assert.match(panel.innerHTML,/Plan submitted.*orders are locked/);
-element('#lifecycleOffice').value='bank:0:office:1';element('#lifecycleOffice').listeners.change();assert.equal(run('lifecycleUi.office'),'bank:0:office:1','Sealed planning still permits read-only office inspection.');
+run("inspectLifecycleOffice('bank:0:office:1')");assert.equal(run('lifecycleUi.office'),'bank:0:office:1','Sealed planning still permits read-only office inspection.');
 run('game.players[0].submitted=false;renderFacilityLifecycle(currentView());');const replaced=element('#stageLifecycleSettings').listeners.click;
 run('game=copy(game);');const replacement=plan();replaced();assert.equal(plan(),replacement);
 // A real month can end with an identical persistent policy. Form-only edits
@@ -114,7 +121,7 @@ assert.equal(integrated.run('JSON.stringify(game)'),actualState,'Production life
 integrated.run('renderPlanBudget(currentView());');assert.match(integrated.elements.get('#planBudget').innerHTML,/Facility maintenance \+ renovation/);
 // Actual browser regression: previewing a healthy office is invalid. Clearing
 // it can produce an identical canonical draft, but must still reset form state.
-integrated.run(`function hydrateHealthyOfficeControls(){const row=lifecycleUi.form.offices[lifecycleUi.office];$('#lifecycleMaintenance').value=row.maintenance;$('#lifecycleHub').value=row.hubId||'';for(const role of E.FacilityLifecycle.ROLES)$('#lifecycleStaff-'+role).value=String(row.staffQuarters[role]);}
+integrated.run(`function hydrateHealthyOfficeControls(){const row=lifecycleUi.form.offices[lifecycleUi.office];$('#lifecycleMaintenance').value=row.maintenance;$('#lifecycleHub').value=row.hubId||'';for(const role of E.FacilityLifecycle.ROLES)$('#lifecycleStaff-'+role).value=String(row.staffQuarters[role]/4);}
  hydrateHealthyOfficeControls();const beforeHealthyPreview=JSON.stringify(draft);
  $('#previewLifecycleRenovation').listeners.click();`);
 assert.match(integrated.elements.get('#facilityLifecyclePanel').innerHTML,/Choose a worn operating office/);
@@ -138,7 +145,7 @@ budgetUi.run(`const options=E.previewFeatureSelection({}, {field:'financialGroup
  game.players[0].workforce.departments.business.count=2;game.players[0].workforce.departments.business.skill=20;
  game.players[0].allocation={service:3,business:3,lending:1,operations:1};E.validatePilot(game);newDraft(currentView());draft.decision='b';
  renderOperatingPreview=()=>{};renderWorkforce=()=>{};renderProductPrograms=()=>{};renderPipeline=()=>{};
- function hydrateLifecycleControls(){const row=lifecycleUi.form.offices[lifecycleUi.office];$('#lifecycleMaintenance').value=row.maintenance;$('#lifecycleHub').value=row.hubId||'';for(const role of E.FacilityLifecycle.ROLES)$('#lifecycleStaff-'+role).value=String(row.staffQuarters[role]);}
+ function hydrateLifecycleControls(){const row=lifecycleUi.form.offices[lifecycleUi.office];$('#lifecycleMaintenance').value=row.maintenance;$('#lifecycleHub').value=row.hubId||'';for(const role of E.FacilityLifecycle.ROLES)$('#lifecycleStaff-'+role).value=String(row.staffQuarters[role]/4);}
  renderFacilityLifecycle(currentView());const businessBefore=E.lifecycleInstructionQuote(currentView(),currentView().me,draft).availableStaffQuarters.business;
  const staleTeachingHandler=$('#stageLifecycleSettings').listeners.click;
  draft.leaderOrders.business='mentor';draft.workforcePolicy.training.business=20000;
@@ -148,7 +155,7 @@ budgetUi.run(`const options=E.previewFeatureSelection({}, {field:'financialGroup
  const taughtPool=E.lifecycleInstructionQuote(currentView(),currentView().me,draft).availableStaffQuarters.business;
 `);
 assert.equal(budgetUi.run('taughtPool'),budgetUi.run('businessBefore-4'),'Paid teaching removes exactly one physical banker from office availability.');
-assert.match(budgetUi.elements.get('#facilityLifecyclePanel').innerHTML,new RegExp('id="lifecycleStaff-business" min="0" step="1" max="'+budgetUi.run('taughtPool')+'"'));
+assert.match(budgetUi.elements.get('#facilityLifecyclePanel').innerHTML,new RegExp('id="lifecycleStaff-business" min="0" step="0.25" max="'+budgetUi.run('taughtPool/4')+'"'));
 budgetUi.run(`draft.leaderOrders.business=null;draft.workforcePolicy.training.business=0;draft.departmentPolicy.reserve=10000000;
  renderFacilityLifecycle(currentView());hydrateLifecycleControls();const protectedState=JSON.stringify(game),protectedDraft=JSON.stringify(draft);
  const protectedReview=E.lifecycleInstructionQuote(currentView(),currentView().me,draft);

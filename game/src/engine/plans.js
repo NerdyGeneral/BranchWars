@@ -27,7 +27,7 @@ function validatePlan(g,p,plan){
  normalizeDepartmentFunctionsPlan(g,p,plan);
  normalizeFacilityPlan(g,p,plan);
  normalizeFacilityLifecyclePlan(g,p,plan);
- const projects=projectPlanStatus(p,plan);if(!projects.eligible)throw Error(projects.reason);
+ const projects=projectPlanStatus(p,plan,g);if(!projects.eligible)throw Error(projects.reason);
  if(plan.contractBid!=null){
   if(plan.opportunity)throw Error('Choose one relationship pursuit: a new opportunity or a service agreement.');
   const c=(g.serviceAgreements||[]).find(c=>c.id===plan.contractBid);

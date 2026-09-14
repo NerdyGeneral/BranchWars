@@ -15,7 +15,9 @@ h.run("game=E.createGame(options);seat=0;workspaceTab='products';productDeskView
 const markup=()=>h.elements.get('#productProgramsPanel').innerHTML;
 assert.match(markup(),/Pricing &amp; funding|Pricing & funding/);
 assert.match(markup(),/Annual adjustment/);assert.match(markup(),/Rival offers have not settled/);
-assert.match(markup(),/id="pricing-rewards"[^>]*disabled/);
+h.run("productWorkspace.product='rewards';renderProductPrograms(currentView())");
+assert.match(markup(),/id="product-price-more"[^>]*disabled/);
+h.run("productWorkspace.product='essential';renderProductPrograms(currentView())");
 const original=h.run('JSON.stringify(game)');
 assert(h.run("stageProductProgramme(currentView(),next=>{next.productProgramPolicy.pricingBp.essential=25})"));
 assert.equal(h.run('draft.productProgramPolicy.pricingBp.essential'),25);
@@ -25,11 +27,13 @@ h.elements.get('#compareProductPricing').listeners.click();
 assert.match(h.elements.get('#productPricingComparison').textContent,/monthly interest change/);
 assert.equal(h.run('JSON.stringify(draft)'),before);assert.equal(h.run('JSON.stringify(game)'),original);
 h.run("E.submit(game,0,draft);renderProductPrograms(currentView())");
-assert.match(markup(),/id="pricing-essential"[^>]*disabled/);
+assert.match(markup(),/id="product-price-more"[^>]*disabled/);
 assert.equal(h.run("stageProductProgramme(currentView(),next=>{next.productProgramPolicy.pricingBp.essential=-25})"),false);
 h.run("E.submit(game,1,E.chooseBot(game,1));newDraft(currentView());draft.decision='b';renderProductPrograms(currentView())");
-assert.match(markup(),/Actual billed month 1/);assert.match(markup(),/Rival transfers \(net\)/);
 assert.match(markup(),/Last settled rival offers/);
+h.run("productDeskView='reports';renderProductPrograms(currentView())");
+assert.match(markup(),/Actual billed month 1/);assert.match(markup(),/Rival transfers \(net\)/);
+h.run("productDeskView='pricing';renderProductPrograms(currentView())");
 h.run("seat=1;newDraft(currentView());renderProductPrograms(currentView())");
 assert.equal(h.run('draft.productProgramPolicy.pricingBp.essential'),h.run('game.players[1].productPrograms.pricingBp.essential'));
 assert.equal(h.elements.get('#productPricingComparison').innerHTML||'', '', 'No retained comparison cache belongs to the previous owner.');
@@ -43,9 +47,11 @@ retired.run("game=E.createGame(options);seat=0;workspaceTab='products';productDe
  "game.players[0].productPrograms.products.rewards={route:'partner',retired:true};"+
  "game.players[0].productPrograms.pricingBp.rewards=25;game.players[0].depositBook.cohorts[0].product='rewards';"+
  "newDraft(currentView());renderProductPrograms(currentView());");
+retired.run("productWorkspace.product='rewards';renderProductPrograms(currentView())");
 const retiredMarkup=retired.elements.get('#productProgramsPanel').innerHTML;
 assert.match(retiredMarkup,/Retained variable rate/);
-assert.match(retiredMarkup,/id="pricing-rewards"[^>]*disabled/);
-assert.match(retiredMarkup,/Illustrative quote/,'Undeveloped savings still shows a hypothetical quote.');
+assert.match(retiredMarkup,/id="product-price-more"[^>]*disabled/);
+retired.run("productWorkspace.product='highYield';renderProductPrograms(currentView())");
+assert.match(retired.elements.get('#productProgramsPanel').innerHTML,/Illustrative quote/,'Undeveloped savings still shows a hypothetical quote.');
 assert(!markup().includes('Retained variable rate'),'Undeveloped Rewards must not imply existing serviced accounts.');
 console.log('Pricing UI source harness PASS: version gating, staged versus committed prices, pure explicit comparison, sealed controls, billed review, owner switch and retained-rate labels. Real-browser layout acceptance is separate.');

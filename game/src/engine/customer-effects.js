@@ -17,22 +17,22 @@ function customerEffectsRetention(p, target, economy) {
   return { departures: report.rows[target.market].departures[target.segment],
     withdrawableOutflow: before - customerEffectsSegment(shadow, target).withdrawablePrincipal };
 }
-function customerEffectsBusinessGuard(p, plan) {
+function customerEffectsBusinessGuard(p, plan,g=null) {
   const remaining = plan.allocation.business - 1;
   if (remaining < 1) return 'Keep at least one Business banker; no spare Business banker is available.';
   if (remaining < (p.workforce.departments.business?.count || 0)) return 'This move would displace a Business specialist from their department.';
   const desk = plan.servicePolicy;
   if (remaining < desk.staff) return 'This move would remove a banker reserved for signed commercial services.';
-  const before = prepareOperatingForecast(p, plan), next = customerEffectsCopy(plan);
+  const before = prepareOperatingForecast(p, plan,g), next = customerEffectsCopy(plan);
   next.allocation.business--; next.allocation.service++;
-  const after = prepareOperatingForecast(p, next), prior = serviceLoad(before), proposed = serviceLoad(after);
+  const after = prepareOperatingForecast(p, next,g), prior = serviceLoad(before), proposed = serviceLoad(after);
   const served = new Set(proposed.rows.filter(r => r.served).map(r => r.id));
   if (prior.rows.some(r => r.served && !served.has(r.id)) || proposed.capacity + 1e-9 < prior.capacity)
     return 'This move would reduce signed-service or bid delivery capacity.';
   if (plan.contractBid && commercialSalesStaff(after) < 1) return 'Keep a Business sales banker for the explicit service bid.';
   return '';
 }
-function customerEffectsComparison(p, draft, economy) {
+function customerEffectsComparison(p, draft, economy,g=null) {
   const labels = { baseline: 'No existing-customer offer', offers: 'Selected offer',
     staffing: 'One Business banker to Retail', combined: 'Retail reassignment and selected offer' };
   const assumptions = [
@@ -73,7 +73,7 @@ function customerEffectsComparison(p, draft, economy) {
   const off = { ...plan.relationshipOfferPolicy, share: 0 }, selected = { ...plan.relationshipOfferPolicy };
   const base = { ...plan, relationshipOfferPolicy: off };
   let guard;
-  try { guard = customerEffectsBusinessGuard(owner, base); } catch (error) { guard = error.message; }
+  try { guard = customerEffectsBusinessGuard(owner, base,g); } catch (error) { guard = error.message; }
   result.reassignment.eligible = !guard; result.reassignment.reason = guard;
   result.rows = Object.entries(labels).map(([key, label]) => {
     const moved = key === 'staffing' || key === 'combined', offered = key === 'offers' || key === 'combined';
@@ -82,10 +82,10 @@ function customerEffectsComparison(p, draft, economy) {
     const row = { key, label, eligible: false, reason: '', patch, metrics: null };
     if (moved && guard) { row.reason = guard; return row; }
     try {
-      const next = { ...plan, ...patch }, status = projectPlanStatus(owner, next);
+      const next = { ...plan, ...patch }, status = projectPlanStatus(owner, next,g);
       if (!status.eligible) { row.reason = status.reason; return row; }
       if (status.quote.load > status.quote.capacity + 1e-9) { row.reason = 'The plan exceeds available execution capacity.'; return row; }
-      const prepared = prepareOperatingForecast(owner, next), openingMetrics = customerEffectsSegment(prepared, result.target);
+      const prepared = prepareOperatingForecast(owner, next,g), openingMetrics = customerEffectsSegment(prepared, result.target);
       const currentRetention = customerEffectsRetention(prepared, result.target, economy);
       const closingBank = finishOperatingForecast(prepared, economy), closing = customerEffectsSegment(closingBank, result.target);
       const nextRetention = customerEffectsRetention(closingBank, result.target, economy);

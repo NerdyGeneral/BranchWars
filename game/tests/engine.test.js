@@ -1251,10 +1251,10 @@ assert(html.includes('id="trendChart"'));
 assert(html.includes('<title>Branch Wars: Executive Command</title>'), 'portable keeps its product identity');
 assert(html.includes('BRANCH WARS // OPEN-ENDED MARKET WAR'), 'footer describes the current open-ended campaign');
 assert(!html.includes('BRANCH WARS v8.1'), 'do not label modern optional-rule campaigns with a stale release version');
-assert(html.includes('ENTERPRISE STRATEGY TREE'));
+assert(html.includes('RESEARCH & DELIVERY'));
 assert(html.includes('id="productPortfolio"'));
 assert(html.includes('function renderProducts'));
-assert(html.includes('data-specialization-branch'));
+assert(html.includes('function strategyModelsContent') && html.includes('id="confirmStrategyModel"'), 'capability models retain an explicit review and confirmation');
 assert(html.includes('branchCommercial') && html.includes('branchDigital'));
 assert(html.includes('EMERGENCY BOARD CAPITAL'));
 assert.equal((html.match(/data-workspace-tab=/g) || []).length, 11, 'command center has six core workspaces plus optional Workforce, Customers, Credit, Products and Group workspaces');
@@ -1462,10 +1462,15 @@ assert(agencyIds.every(id=>!ids.includes(id)),'Rendered group controls must not 
 // Their source occurrences are not simultaneous DOM elements; each workspace
 // renderer has its own emitted-markup checks in the UI suites.
 const declaredIds=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+// These workspaces construct field IDs at runtime. Test their actual emitted
+// controls, rather than exempting missing names from the selector contract.
+agencyHarness.run("game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:9}).options,mode:'hotseat',seed:'expanded-selector-contract',created:1});seat=0;newDraft(currentView());draft.decision='b';renderFacilityLifecycle(currentView());workspaceTab='products';productDeskView='onboarding';renderProductPrograms(currentView());resetMarketWorkspace(currentView());marketWorkspace.advertisingOpen=true;renderMarketAdvertising(currentView());");
+const expandedIds=[...Array.from(agencyHarness.elements.values(),node=>node.innerHTML||'').join('\n').matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+for(const id of ['onboarding-share','lifecycleStaff-service','market-advertising-market'])assert(expandedIds.includes(id),id+' must be emitted by its current renderer');
 // Check the leading ID of descendant selectors too; it is not itself an ID.
 const missingIds = [...html.matchAll(/\$\('#([\w-]+)(?:[^']*)'\)/g)]
   .map((item) => item[1])
-  .filter((id) => !declaredIds.includes(id)&&!renderedIds.includes(id)&&!agencyIds.includes(id));
+  .filter((id) => !declaredIds.includes(id)&&!renderedIds.includes(id)&&!agencyIds.includes(id)&&!expandedIds.includes(id));
 assert.deepEqual([...new Set(missingIds)], [], 'every fixed client selector must target a real element');
 assert(html.includes('id="ghGuide"'), 'Repository Link must include its first-time setup guide');
 assert(clientFn('setMode').includes("'#ghGuide'"), 'the Repository Link guide must appear only with that mode');
