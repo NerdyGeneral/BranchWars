@@ -15,7 +15,7 @@ This is a preserved regional banking / Financial Group preview snapshot—not co
 ## Working copy versus release
 
 - Root [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) and [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) launch the local `game/` copy, **not the frozen download**.
-- The local playable HTML is rebuilt from checkpoint65 source for the V4 playtest. New Expanded campaigns include integrated company lending, shared-premises settlement, contextual office controls and qualified-workforce AI. Long-run balance, broader release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
+- The current V4 playtest is **v4.0.0-rc2**, built from checkpoint66 source. New Core8.19 / Expanded9.32 campaigns include improved bank income reporting, shared credit/service workload and funding-flow explanations alongside company lending and contextual workspaces. Conventional lending balance, final release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
 - Building source replaces the local playable HTML; it does not update the frozen ZIP or its manual. See [current artifact identities and known issues](game/docs/release-status.md) before rebuilding or sharing.
 - The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and [original V2 package](V2%20release/README.md) remain preserved rollback artifacts.
 

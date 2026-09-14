@@ -47,5 +47,8 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: windows-regression-evidence
-          path: game/reports/baselines/*.json
+          path: |
+            game/reports/baselines/*.json
+            game/reports/baselines/*.jsonl
+            game/reports/baselines/*.log
           retention-days: 7

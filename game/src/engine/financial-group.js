@@ -211,7 +211,12 @@ function groupFutureCreditValue(source,economy,plan,terms) {
 function groupLendingComparison(p,input,economy,g=null) {
   if(!p.financialGroup)throw Error('Lending comparison requires Financial Group rules.');
   const plan=JSON.parse(JSON.stringify(input));normalizeGroupPlan(p,plan);
-  const keys=creditProductKeys(p),owner={...p,allocation:plan.allocation,
+  let source=p;
+  if(p.creditWorkloadVersion===1){
+    const normalized=departmentCopy(plan);normalizeDepartmentPlan(p,normalized,g);
+    source=prepareCreditScenarioOwner(p,normalized,g);
+  }
+  const keys=creditProductKeys(p),owner={...source,allocation:plan.allocation,
     policies:{...p.policies,lending:plan.lendingPolicy},products:plan.products};
   const future=Object.fromEntries(keys.map(key=>[key,groupFutureCreditValue(owner,economy,plan,creditTerms(owner,{economy},key))]));
   const candidates=[{...plan.groupPolicy.creditAllocation},{...p.creditPortfolio.allocation}];
@@ -227,7 +232,7 @@ function groupLendingComparison(p,input,economy,g=null) {
     const signature=keys.map(k=>allocation[k]).join();if(seen.has(signature))continue;seen.add(signature);
     const candidate={...plan,groupPolicy:{...plan.groupPolicy,creditAllocation:allocation}};
     const forecast=operatingPreview(p,candidate,economy,g);
-    const originations=Math.round(Math.max(0,forecast.loanGrowth+(forecast.principalRepaid||0)+
+    const originations=p.creditWorkloadVersion===1?ordinaryCreditOriginations(forecast):Math.round(Math.max(0,forecast.loanGrowth+(forecast.principalRepaid||0)+
       (forecast.creditRecovery||0)+(forecast.chargeoff||0)));
     const parts=creditProductionParts({...owner,creditPortfolio:{version:1,allocation}},{economy},originations);
     const currentCoupon=parts.reduce((n,c)=>n+c.principal*c.rate/1000000,0);

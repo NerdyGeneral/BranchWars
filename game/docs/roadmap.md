@@ -10,11 +10,74 @@ New campaigns offer Core or integrated Expanded. Supported historical modular ca
 
 ## Remaining delivery sequence
 
+V4 rc2 is a separately authorized playtest publication, not a scope-completion
+milestone. Resume with conventional lending/service balance, then integrated
+workforce usability, exact-build release validation and human multiplayer
+acceptance. Keep the former V4 tag and V2/V3 rollback distributions intact.
+
+   Strategy acceptance must include servicing-aware expansion: keep existing
+   customer work and recurring costs visible alongside growth. A staffing-tilt
+   test that removes that work is an explicit risk strategy, not sufficient
+   evidence that a conventional bank cannot succeed. Preserve failed runs and
+   compare any adapted policy separately on unchanged rules before retuning.
+
+   Supported historical campaigns must remain usable through the contextual UI:
+   optional company identities cannot be assumed by service directories, inspectors
+   or bid review. Validate emitted controls and reversible actions, not obsolete
+   headings or source variable spellings. Missing history remains unavailable,
+   rather than being reconstructed from current balances.
+
+0. **Income stabilization checkpoint (in progress):** before more content, trace Core/Expanded revenue and sustaining costs, preserve an exact economic baseline, and separate actual income, unchanged-policy forecasts, draft effects and principal movements. Use Frost/JPMorgan statements as reporting/economic context, never a mandatory revenue ratio. Income/principal review and bounded persistent history are integrated into new Core/Expanded setup, with scoped setup and simulated-transport checks. Complete fee/activity attribution, coordinated network/staffing valuation, evidence-backed versioned tuning and the whole strategy/long-run matrix remain required. No publication authority is implied.
+
+   The explicit9.31 candidate now separates recorded securities/loan interest,
+   fees, sustaining costs and legacy abstract income in an expandable statement.
+   Use those actual sources to repair unsupported income mechanics and assess
+   lending versus service economics; disclosure alone is not balance completion.
+   Private12/24-month removal/payroll experiments informed explicit8.18/9.32:
+   automatic bonuses are removed and shared base pay is provisionally$12K.
+   Existing campaigns remain unchanged. Continue conventional lending/network
+   viability and fee-scaling work, using actual production, runoff, sustaining
+   costs and retained earnings. The Core matrix still favors commercial staffing;
+   this working boundary is not strategic acceptance or final numerical tuning.
+   Expanded9.32 now has one completed ordinary120-month run; loans still shrink
+   despite positive retained earnings. Fee-cut/private workload experiments did
+   not establish a better economy and are not adopted. The Core104-month failure
+   now has a complete causal trace: audit its simplified deposit/asset cash
+   treatment and withdrawal funding before more numerical throughput tuning.
+   The explicit8.19 Core accounting correction now passes its transaction,
+   lifecycle, forecast/UI and simulated transport gates. The formerly failing
+   case completes120; the24-case matrix has no receivership or execution error.
+   Corrections are now integrated into Core/Expanded creation as one coherent
+   edition choice, preserving the historical API and saves. Do not add more
+   checkboxes or restart fee-cut experiments without new evidence. Commercial
+   scaling, Expanded lending and480-month acceptance remain open. Preserve legacy
+   rules; no debt forgiveness, free cash or silent save upgrade.
+
+   Source attribution now distinguishes Core's abstract deposit contribution
+   from Expanded account-equivalent fees; the label repair changes no economics.
+   The Regulatory seed2 run ended by control victory at145 of480 requested months,
+   with positive capital but negative cumulative bank earnings. Preserve that
+   outcome and inspect the existing consolidation-ending rules alongside loan
+   viability before interpreting campaign length. Do not extend an ended save or
+   alter historical victory conditions merely to satisfy a stress-test duration.
+
 1. **Shared-premises acceptance:** same-rule AI, funded multi-office/closure checks and normal Expanded selection are implemented. Carry them into the whole-campaign balance matrix and final release gate; do not redesign the accepted room model. Preserve external-custodian operations, canonical transfer counters and actual unpaid-claim evidence for mandatory wind-down. Historical campaign rules stay unchanged; real-browser acceptance remains separate from scoped interaction tests.
+
+   Income-checkpoint finding: explicit serviced-income rules fix fees surviving
+   zero delivered relationship work. Matched tests still favor commercial staffing;
+   joint office/staff scenarios improve production, but their earlier negative
+   valuations did not model the later staffing change. Broader policy forecasts
+   are not realized long-run returns. Next address lending/network costs, throughput and portfolio
+   returns together, then integrate tested new rules into the single edition choice.
+   A further explicit9.31 correction removes administration driven by internal
+   cohort fragmentation while retaining principal, product/location complexity
+   and separate collections work. Evaluate that correction in ordinary long-run
+   campaigns before choosing throughput/cost tuning; do not raise yields merely
+   to offset a representation-related workload defect.
 2. **Connected institution:** finish the ledger's remaining commercial needs/share-of-wallet and warning-remedy requirements; carry the verified department/leadership and paid research/product/service-delivery paths into mature operator acceptance. Research use and Credit flows now use prepared staffing; retain that shared calculation in future screens. Extend existing systems rather than replacing approved content.
 3. **Integrated viability:** use captured ordinary campaigns to distinguish repayment from loan losses and recurring profit from executive/development spending before tuning. Run justified identity/staffing/advertising, partner-versus-owned and extension-versus-dedicated comparisons; representative120-month and selected480-month campaigns. Retain failures and ordinary-start results. Do not treat every shrinking portfolio as a defect or inject resources to force diversification.
 4. **Release stabilization:** fix concrete defects, complete exact-source/package architecture, lifecycle, multiplayer, accounting and performance gates, and inspect early/mature browser workflows.
-5. **Local handoff:** finish in-game help, comprehensive period-style manual and visually checked PDF, exportable V3 package, exact-build reports, known issues and human checklist.
+5. **Local handoff:** finish in-game help, comprehensive period-style manual and visually checked PDF, exportable V3 package, exact-build reports, known issues and human checklist. A guide-derived development PDF now exists; synchronize and verify it again at candidate freeze rather than treating an intermediate handbook as release acceptance. Artifact evidence belongs in release status.
 
 A dependency may change the order, not the finish line. Finish → verify → move forward; do not turn this into an architecture or polishing loop.
 

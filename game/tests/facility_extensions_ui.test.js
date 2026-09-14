@@ -30,7 +30,10 @@ test('Core and historical offices keep their existing controls; latest Expanded 
  assert(h.run('featureSelectionPending()'));assert.equal((h.elements.get('#featureSelectionAffected').innerHTML.match(/<li>/g)||[]).length,5);
  assert(h.confirmFeatures());assert.equal(h.run('readSetupFeatureOptions().facilityExtensionsVersion'),1);
  // This tests the current integrated selection, not the historical suite-only
- // campaign. Current Expanded includes premises9.27 (portable37:9.22).
- assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),process.argv.includes('--portable')?'9.22':'9.27');
+ // campaign. Current Expanded includes reporting and corrected economics9.32;
+ // historical suite creation below remains9.11.
+ assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),'9.32');
+ assert.equal(h.run('readSetupFeatureOptions().bankEconomicsVersion'),1);
+ assert.equal(h.run('readSetupFeatureOptions().creditWorkloadVersion'),1);
  assert.equal(h.run('E.campaignRules(E.previewFeatureSelection({}, {field:"facilityExtensionsVersion",value:1}).options,{context:"lobby"}).version'),'9.11','Historical suite creation retains its original boundary');
 });

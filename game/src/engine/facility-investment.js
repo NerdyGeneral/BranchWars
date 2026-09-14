@@ -2,9 +2,14 @@
 // not booked assets, promised customers, or additional spendable resources.
 const FACILITY_INVESTMENT_HORIZON=60;
 function facilityInvestmentDraft(input){const plan=departmentFunctionCopy(input);plan.facilityPolicy=defaultFacilityPolicy();plan.investments={};plan.newProjects=[];plan.newProject=null;return plan;}
-function facilityInvestmentGross(report){return Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));}
+function facilityInvestmentGross(report,owner=null){
+ return owner?.creditWorkloadVersion===1?ordinaryCreditOriginations(report):Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));
+}
+function facilityInvestmentCreditOwner(source,plan,g){
+ return prepareCreditScenarioOwner(source,plan,g);
+}
 function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfront=0,g=null){
- const p=departmentFunctionCopy(source),market=plan.focus||p.focus,rows=[];
+ const p=facilityInvestmentCreditOwner(source,plan,g),market=plan.focus||p.focus,rows=[];
  p.allocation={...plan.allocation};p.policies={...p.policies,lending:plan.lendingPolicy};p.products={...plan.products};
  p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
  p.creditPerformance.policy={...plan.collectionsPolicy};p.turnEffects={};
@@ -34,7 +39,7 @@ function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfr
    net=interest-credit.loss-credit.cost+noncredit[month],discount=(1+Math.max(0,economy.rate)/1200)**(month+1);
   cash+=interest-credit.cost+noncredit[month];capital+=interest-credit.cost+noncredit[month];
   p.stats.loans=principal+companyCreditPrincipal(p);value+=net/discount;
-  rows.push({month:month+1,requested:flow,originations:originated,principal,repaid,recovered:credit.recovered,interest,loss:credit.loss,collectionsCost:credit.cost,noncredit:noncredit[month],net,discount,cash,capital,capitalRatio:100*capital/Math.max(1,principal+otherRisk)});
+  rows.push({month:month+1,requested:flow,originations:originated,principal,repaid,recovered:credit.recovered,interest,loss:credit.loss,collectionsCost:credit.cost,noncredit:noncredit[month],net,discount,cash,capital,capitalRatio:100*capital/Math.max(1,principal+otherRisk),...(source.creditWorkloadVersion===1?{collectionsCapacity:credit.capacity,collectionsCoverage:credit.coverage}:{})});
  }
  return {value,rows};
 }
@@ -85,7 +90,7 @@ function facilityInvestmentReview(g,index,input,request){
   (report.fundingLoss||0)>(before.fundingLoss||0)||(report.emergencyDebt||0)>(before.emergencyDebt||0))
   return {...reject('Construction or activation weakens protected funding/capital or produces an operating loss.'),quote,before,during,after};
  const months=FACILITY_INVESTMENT_HORIZON,constructionMonths=2,
-  baseFlows=Array(months).fill(facilityInvestmentGross(before)),futureFlows=Array.from({length:months},(_,i)=>facilityInvestmentGross(i<constructionMonths?during:after)),
+  baseFlows=Array(months).fill(facilityInvestmentGross(before,p)),futureFlows=Array.from({length:months},(_,i)=>facilityInvestmentGross(i<constructionMonths?during:after,p)),
   recurring=r=>r.profit-r.loanIncome+(r.chargeoff||0)+(r.collectionsCost||0),
   baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before)),undefined,g),
   futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost,g);
@@ -109,7 +114,7 @@ function planFacilityInvestment(g,index,input){
  const context=facilityContext(g,p,draft),budget=planBudget(p,draft,g),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
   current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
-  gross=facilityInvestmentGross(current),capacity=regionalBranchMetrics(p).loanCapacity,
+  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity,
   owner={...p,allocation:draft.allocation,policies:{...p.policies,lending:draft.lendingPolicy},products:draft.products},
   coupon=Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000)),horizon=FACILITY_INVESTMENT_HORIZON;
  context.officeMetrics=metrics;

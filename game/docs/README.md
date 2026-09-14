@@ -7,7 +7,7 @@
 3. [Release status](release-status.md) — exact playable/source/package identities, known issues and release gates.
 4. [Roadmap](roadmap.md) — sequencing and retained acceptance contracts, not a competing status report.
 
-The frozen V3 ZIP/manual and V4 playtest are different artifacts. The local playable HTML was rebuilt from current source for V4; read [which version is which](release-status.md#which-version-am-i-looking-at) before testing or distributing.
+The frozen V3 ZIP/manual, V4 playtest and newer local development HTML are different artifacts. Read [which version is which](release-status.md#which-version-am-i-looking-at) before testing or distributing.
 
 ## One job per document
 
@@ -16,6 +16,7 @@ The frozen V3 ZIP/manual and V4 playtest are different artifacts. The local play
 | Learn how to play, host or recover | [Player guide](player-guide.md) |
 | Mechanics and numerical values | [Generated game reference](game-reference.md) — generated from the local playable HTML, not automatically from newer source |
 | Frozen V3 handbook | [Matching field manual PDF](../../releases/branch-wars-v3-manual.pdf) |
+| Current local handbook | [Development manual status](release-status.md#local-development-handbook--not-a-published-replacement) — guide-derived PDF; not a released replacement |
 | Frozen V3 changes and original QA | [Edition-bound release report](v3-release-report.md) |
 | Earlier V3.1 candidate evidence | [Stability report](v31-stability-report.md) and [manual addendum](v31-manual-addendum.md) — historical, not the current candidate |
 | Maintain source and compatibility | [Architecture](architecture.md) and [tools](../tools/README.md) |

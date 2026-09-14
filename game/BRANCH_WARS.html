@@ -590,6 +590,16 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 #financialGroupPanel .investment-note-table table{width:100%;border-collapse:collapse;min-width:32rem}
 #financialGroupPanel .investment-note-table caption{text-align:left;padding-bottom:.6rem;font-size:.85rem;color:#546978}
 #financialGroupPanel .investment-note-table th,#financialGroupPanel .investment-note-table td{text-align:left;padding:.55rem .65rem;border-bottom:1px solid #d9e2ea}
+/* Income review is contextual and read-only; charts never share principal axes. */
+.income-review{margin-block:1rem;padding:1rem;border:1px solid var(--line,#d5dfec);border-radius:12px;min-width:0}
+.income-review .decision-facts{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.income-review details{margin-top:.7rem}
+.income-history{margin:1rem 0;max-width:700px;color:var(--accent,#2869b5)}
+.income-history svg{display:block;width:100%;height:auto;min-width:280px}
+.income-review .table-scroll{overflow-x:auto}
+.bank-income-statement{margin-block:1rem}
+.bank-income-statement .table-scroll{overflow-x:auto}
+.bank-income-statement .statement-subtotal td{font-weight:700;border-top:1px solid var(--line,#d5dfec)}
 </style>
 </head>
 <body>
@@ -781,6 +791,11 @@ const pick=a=>a[Math.floor(simulationRandom()*a.length)];
 // import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
+  ['bankEconomicsVersion', 'bankEconomicsSupported', 1, 1, 'Service-based bank economics', 'BANK ECONOMICS'],
+  ['bankEconomicsVersion', 'coreAccountingSupported', 1, 2, 'Core balance-sheet accounting', 'CORE ACCOUNTING'],
+  ['creditWorkloadVersion', 'creditWorkloadSupported', 1, 1, 'Portfolio-based credit administration', 'CREDIT WORKLOAD'],
+  ['commercialServiceVersion', 'commercialServiceSupported', 1, 1, 'Serviced commercial income', 'COMMERCIAL SERVICING'],
+  ['incomeHistoryVersion', 'incomeHistorySupported', 1, 1, 'Persistent income reporting', 'INCOME HISTORY'],
   ['companyCreditVersion', 'companyCreditSupported', 1, 1, 'Named-company lending', 'COMPANY CREDIT'],
   ['sharedPremisesVersion', 'sharedPremisesSupported', 1, 1, 'Shared service premises', 'SHARED PREMISES'],
   ['companyControlStrategyVersion', 'companyControlStrategySupported', 1, 1, 'Competitive company strategy', 'COMPANY STRATEGY'],
@@ -863,13 +878,17 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['companyControlStrategyVersion', 'Competitive company strategy', 1, 'companyConsolidationVersion', false, false, 'Funded opponent control decisions and explicit responses to shareholder offers.'],
   ['sharedPremisesVersion', 'Shared service premises', 1, 'companyControlStrategyVersion', false, false, 'Paid multi-entity office extensions, qualified local delivery and reconciled occupancy.'],
   ['companyCreditVersion', 'Named-company lending', 1, 'sharedPremisesVersion', false, false, 'Qualified company credit, actual lender funding, persistent repayment and conserved operating deposits.'],
-  ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.']
+  ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.'],
+  ['incomeHistoryVersion', 'Persistent income reporting', 1, null, false, false, 'Twelve completed months of private income, relationship and principal records retained independently of diagnostic logs.'],
+  ['commercialServiceVersion', 'Serviced commercial income', 1, 'incomeHistoryVersion', false, false, 'Opening relationships earn fees only through finite servicing; operating-step acquisitions start earning next month.'],
+  ['creditWorkloadVersion', 'Portfolio-based credit administration', 1, 'commercialServiceVersion', false, false, 'Loan administration follows principal and product-location portfolios rather than internal cohort fragmentation.'],
+  ['bankEconomicsVersion', 'Service-based bank economics', 1, 'commercialServiceVersion', false, false, 'Income comes from earning assets and delivered services, not automatic staff or upgrade bonuses; shared base payroll is $12K per banker per month.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
   peers: Object.freeze(CAMPAIGN_PEER_REQUIREMENTS.filter(peer => peer.field === field)),
-  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8,9,10]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
-  requires: Object.freeze(field==='commercialAccountsVersion'?[Object.freeze({field:'financialGroupVersion',version:10})]:field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
+  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8,9,10]:['bankEconomicsVersion', 'managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
+  requires: Object.freeze(field==='creditWorkloadVersion'?[Object.freeze({field:'commercialServiceVersion',version:1}),Object.freeze({field:'companyCreditVersion',version:1})]:field==='commercialAccountsVersion'?[Object.freeze({field:'financialGroupVersion',version:10})]:field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
 })));
 const CAMPAIGN_FEATURE_FIELDS = Object.freeze(CAMPAIGN_FEATURES.map(row => row.field));
 const CAMPAIGN_LEGACY_VERSIONS = Object.freeze(['6.0', '7.0', '7.1', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8', '8.9', '8.10', '8.11', '8.12', '8.13']);
@@ -882,6 +901,10 @@ const CAMPAIGN_VERSION_STAGES = Object.freeze([
 // Legacy creation checks deliberately keep their historical order and wording.
 const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['companyCreditVersion', 'named-company credit version'],
+  ['incomeHistoryVersion', 'income history version'],
+  ['commercialServiceVersion', 'commercial servicing version'],
+  ['creditWorkloadVersion', 'credit workload version'],
+  ['bankEconomicsVersion', 'bank economics version'],
   ['sharedPremisesVersion', 'shared service premises version'],
   ['companyControlStrategyVersion', 'competitive company strategy version'],
   ['companyConsolidationVersion', 'controlled company reporting version'],
@@ -908,6 +931,11 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.bankEconomicsVersion===2)return '8.19';
+  if(source.bankEconomicsVersion===1)return source.companyCreditVersion===1?'9.32':'8.18';
+  if(source.creditWorkloadVersion===1)return '9.31';
+  if(source.commercialServiceVersion===1)return source.companyCreditVersion===1?'9.30':'8.17';
+  if(source.incomeHistoryVersion===1)return source.companyCreditVersion===1?'9.29':'8.16';
   if(source.companyCreditVersion===1)return '9.28';
   if(source.sharedPremisesVersion===1)return '9.27';
   if(source.companyControlStrategyVersion===1)return '9.26';
@@ -941,6 +969,10 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
+  if(version==='8.19'||version==='8.18'||version==='9.32')return true;
+  if(version==='9.31')return true;
+  if(version==='8.17'||version==='9.30')return true;
+  if(version==='8.16'||version==='9.29')return true;
   if(version==='9.28')return true;
   if(version==='9.27')return true;
   return ['9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9','9.10','9.11','9.12','9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || ['8.14','8.15'].includes(version);
@@ -982,6 +1014,12 @@ function campaignRules(source, { context = 'creation' } = {}) {
   }
   if (modular) for (const field of ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion']) if (versions[field] > 0)
     issues.push({ field, code: 'unsupported_combination', message: campaignFeature(field).label + ' is not supported in the Modular combinations preview.' });
+  if(versions.bankEconomicsVersion===2&&(versions.campaignRulesVersion>0||versions.companyCreditVersion>0||source.fundingRulesVersion===1))
+    issues.push({field:'bankEconomicsVersion',code:'unsupported_combination',message:'Core balance-sheet economics requires Core with funding rules 2.'});
+  if(versions.bankEconomicsVersion===1&&versions.companyCreditVersion===1&&versions.creditWorkloadVersion!==1)
+    issues.push({field:'bankEconomicsVersion',code:'missing_dependency',message:'Expanded bank economics requires Portfolio-based credit administration.'});
+  if(versions.incomeHistoryVersion===1&&versions.companyCreditVersion!==1&&Object.entries(versions).some(([key,value])=>!['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion'].includes(key)&&value>0))
+    issues.push({field:'incomeHistoryVersion',code:'unsupported_combination',message:'Persistent income reporting requires Core or the complete integrated Expanded rules.'});
   if (saved) {
     if (!campaignVersionSupported(source.version)) issues.push({ field: 'version', code: 'unsupported_save', message: 'Unsupported campaign save version.' });
     else if ((source.featureRulesVersion === 1 || source.version === '8.14') && (!modular || source.version !== (source.productProgramsVersion === 2 ? '8.15' : '8.14')))
@@ -1037,6 +1075,16 @@ function previewFeatureSelection(source, { field, value }) {
       }
     } while (changed);
   }
+  // Historical custom selections remain available without being upgraded. A
+  // proposal that leaves the two reporting profiles explicitly includes removal
+  // of the reporting marker in its confirmation; saved-state validation never
+  // performs this adjustment.
+  if (options.incomeHistoryVersion === 1 && campaignRules(options, { context: 'lobby' }).issues.some(issue => issue.field === 'incomeHistoryVersion' && issue.code === 'unsupported_combination')) {
+    delete options.incomeHistoryVersion;
+    delete options.commercialServiceVersion;
+    delete options.creditWorkloadVersion;
+    delete options.bankEconomicsVersion;
+  }
   const rules = campaignRules(options, { context: 'lobby' });
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version,
@@ -1045,7 +1093,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -1060,6 +1108,18 @@ function previewCampaignEdition(source, edition) {
     };
     enableEditionPrerequisite('companyCreditVersion');
   }
+  // The player-facing setup opts into current reporting. Preserve this API's
+  // historical default for explicit old-rule construction and replay tools.
+  if (currentReporting) options.incomeHistoryVersion = 1;
+  // Explicit new-game/lobby choice, never a saved-state upgrade. Keep the
+  // reporting-only API stable for historical configurations and replay tools.
+  if (currentEconomics) {
+    options.incomeHistoryVersion=1;
+    options.commercialServiceVersion=1;
+    options.bankEconomicsVersion=edition==='core'?2:1;
+    if(edition==='expanded')options.creditWorkloadVersion=1;
+    else delete options.creditWorkloadVersion;
+  }
   const rules = validateCampaignRules(options, 'lobby');
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version, reason: 'edition selection' }));
@@ -1070,7 +1130,7 @@ function campaignCapabilities() {
     .flatMap(def => def.peers.map(peer => [peer.capability, peer.supported]))) };
 }
 function campaignNeedsFreshHandshake(source) {
-  return source.featureRulesVersion===1||source.productProgramsVersion===2;
+  return source.incomeHistoryVersion===1||source.featureRulesVersion===1||source.productProgramsVersion===2;
 }
 function peerRulesIssue(rules, capabilities = {}) {
   if (!rules || !rules.options || !Array.isArray(rules.issues)) throw Error('Resolve campaign rules before checking a peer.');
@@ -1385,7 +1445,7 @@ function planBudgetBase(p,plan,g=null){
  const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+extensions.cost+shared.cost+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
  const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity+extensions.capacity+shared.capacity+companyControlExecution(p,plan);
- const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*bankBasePayroll(p)};
  if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
  if(p.facilityExtensions){quote.facilityExtensions=extensions.cost;quote.facilityExtensionsCapacity=extensions.capacity;}
  if(p.sharedPremises){quote.sharedPremises=shared.cost;quote.sharedPremisesCapacity=shared.capacity;}
@@ -1580,7 +1640,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
+ if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
  const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
  const g=createSeededCampaign(baseOptions);
@@ -1628,10 +1688,14 @@ function createGame(o){
  if(o.companyControlStrategyVersion===1)g.companyControlStrategyVersion=1;
  initializeSharedPremises(g,o);
  initializeCompanyCredit(g,o);
+ initializeIncomeHistory(g,o);
+ initializeCommercialService(g,o);
+ initializeCreditWorkload(g,o);
+ initializeBankEconomics(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;
- if(o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
+ if(o.incomeHistoryVersion===1||o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
@@ -1685,15 +1749,46 @@ function availableLoanProduction(g,p){
  const capacity=loanProductionCapacity(g,p);
  return p._companyCreditOrigination===undefined?capacity:Math.max(0,capacity-p._companyCreditOrigination);
 }
+// New credit-workload rules distinguish ordinary vintage production from
+// named-company advances and collections. Use only at explicit new-rule call
+// sites; historical AI/valuation arithmetic stays on its original path.
+function ordinaryCreditOriginations(report){
+ const named=report.companyCredit;
+ const adjustment=named?(named.principalPaid||0)+(named.recoveredPrincipal||0)-(named.interestWrittenOff||0)-(named.advanced||0):0;
+ return Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)+adjustment));
+}
+function prepareCreditScenarioOwner(source,plan,g){
+ const owner=departmentFunctionCopy(source);
+ if(source.creditWorkloadVersion===1){
+  const prepared=prepareDepartmentFunctionForecast(source,plan,g);
+  // Copy paid work, not its hypothetical payment. The calling income/valuation
+  // forecast already includes provider costs; preparation must not charge twice.
+  owner._departmentFunctionExecution=prepared._departmentFunctionExecution;
+  owner._departmentFunctionExpertise=prepared._departmentFunctionExpertise;
+ }
+ return owner;
+}
 function calculateLegacyOperations(g,p,preview=false){
  const s=p.stats,a={...workforceAllocation(p),lending:creditSalesStaff(p,workforceAllocation(p).lending),business:commercialSalesStaff(p)+specialistBusinessBonus(p)},u=p.upgrades,dp=p.policies.deposit,lp=p.policies.lending,cp=p.policies.capital,branch=p.facilityNetwork?effectiveFacilityBranches(p):branchLevels(p),macro=g.economy||MACRO_REGIMES.steady;
+ const commercialService=commercialOperatingService(p,a);
  const priorSensitive=Math.min(s.rateSensitiveDeposits||0,s.deposits),runoffPressure={expansion:.8,steady:1,tight:1.2,downturn:1.1,recovery:.9}[macro.key]||1,runoffRate={margin:.1,balanced:.03,aggressive:.01}[dp]*runoffPressure,depositRunoff=Math.round(priorSensitive*runoffRate);
  if(depositRunoff){delta(p,'rateSensitiveDeposits',-depositRunoff);delta(p,'deposits',-depositRunoff);p.fundingGap=(p.fundingGap||0)+depositRunoff}
  const network=strategyProgress(p,'network'),digital=strategyProgress(p,'digital'),commercial=strategyProgress(p,'commercial'),ops=strategyProgress(p,'operations'),retailProduct=productOption(p,'retail'),businessProduct=productOption(p,'business'),creditProduct=productOption(p,'credit'),facilities=effectiveFacilityTotals(p)||{retail:branch,commercial:0,digital:0},training=(1+u.training*.08)*(p.doctrine==='people'?1.1:1),tech=1+u.technology*.08+u.analytics*.035+digital*.045,prod=p.turnEffects.production||1,capitalGrowth={liquid:.86,balanced:1,reinvest:1.13}[cp],service=(householdSalesStaff(p,a.service)*training+branch*(.55+network*.05)+(facilities.retail||0)*.3+(facilities.digital||0)*.22+digital*.05)*prod*(p.turnEffects.service||1),regRank=tierRank(p),depMult={margin:.76,balanced:1,aggressive:1.25}[dp]*(p.turnEffects.deposit||1)*macro.deposits*capitalGrowth*(regRank>=2?.75:1)*(1+digital*.01+network*.025)*retailProduct.deposits*(businessProduct.deposits||1)*(hasSpecialization(p,'digital','customerExperience')?1.07:1),depGain=Math.min((service*125000+branch*85000)*depMult,marketAvailable(p,'deposits'),regionalOperations(p)?Math.max(0,regionalBranchMetrics(p).depositCapacity-(p.onboarding?.report?.totals.activated.principal||0)):Infinity),bizGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.45)*(1.25+s.morale/120)*training*(p.doctrine==='commercial'?1.12:1)*(1+commercial*.08)*businessProduct.business)),merchantGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.4)*(1.05+tech*.25)*(p.doctrine==='commercial'?1.1:1)*(1+commercial*.08)*businessProduct.merchant)),loanGain=availableLoanProduction(g,p);
  delta(p,'deposits',depGain);delta(p,'rateSensitiveDeposits',depGain*({margin:.01,balanced:.06,aggressive:.3}[dp]+(retailProduct.sensitive||0)));s.rateSensitiveDeposits=Math.min(s.rateSensitiveDeposits,s.deposits);s.depositRunoff=depositRunoff;delta(p,'customers',service*(preview?9.5:rint(7,12))*retailProduct.customers);delta(p,'business',bizGain);delta(p,'merchant',merchantGain);delta(p,'loans',loanGain);delta(p,'wealth',u.wealth*(1+a.service*.12)+commercial*.35);delta(p,'digital',(u.technology+u.analytics*.5+digital*.35+(facilities.digital||0)*.45)*(1+a.service*.15)*(p.turnEffects.digital||1)*(p.doctrine==='digital'?1.02:1)*(retailProduct.digital||1)*(businessProduct.digital||1));delta(p,'reputation',retailProduct.reputation||0);delta(p,'attention',creditProduct.attention||0);delta(p,'compliance',(lp==='growth'?5:lp==='conservative'?-2:2)+(cp==='reinvest'?2:cp==='liquid'?-1:0)-departmentFunctionTaskFte(p,'risk',a.operations)*1.55-u.training*1.2-u.operations*.9-ops*.45);
- const rateFactor=.75+macro.rate/10,depositIncome=s.deposits*.0028*rateFactor*({margin:1.35,balanced:1,aggressive:.45}[dp]),fundingCost=s.deposits*(macro.rate/2400)*({margin:.5,balanced:.8,aggressive:1.2}[dp])*retailProduct.funding+(p.fundingRulesVersion===2?(s.emergencyDebt||0)*.01:0),commercialIncome=(s.business*760+s.merchant*650)*(1+commercial*.075)*businessProduct.fees*(hasSpecialization(p,'commercial','treasury')?1.14:1),loanIncome=s.loans*.0047*(.8+macro.rate/12)*creditProduct.spread,revenue=(a.service+a.business+a.lending)*8000+depositIncome-fundingCost+loanIncome+commercialIncome+s.wealth*1450+u.technology*13000+u.wealth*18000+digital*4000,efficiency=(p.doctrine==='efficiency'?.94:1)*(1-u.operations*.06)*(1-ops*.035)*(hasSpecialization(p,'digital','automation')?.92:1)*(hasSpecialization(p,'operations','lean')?.9:1),facilityExpense=regionalOperations(p)?regionalBranchMetrics(p).expense:(facilities.retail||0)*22000+(facilities.commercial||0)*22000+(facilities.digital||0)*12000,expense=(s.staff*18000+facilityExpense)*efficiency+(p._workforceCosts?p._workforceCosts.payroll:0),creditGuard=Math.max(.28,1-(a.operations+u.training+u.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1),creditPolicy={conservative:.55,balanced:1,growth:1.45}[lp],chargeoff=Math.round(s.loans*.0025*macro.credit*creditPolicy*creditGuard*(p.turnEffects.credit||1)*creditProduct.credit*(businessProduct.risk||1)*(hasSpecialization(p,'commercial','specializedCredit')?1.08:1)),profit=(revenue-expense)*(p.turnEffects.profit||1)-chargeoff;
+ const rateFactor=.75+macro.rate/10,depositIncome=s.deposits*.0028*rateFactor*({margin:1.35,balanced:1,aggressive:.45}[dp]),
+  fundingCost=s.deposits*(macro.rate/2400)*({margin:.5,balanced:.8,aggressive:1.2}[dp])*retailProduct.funding+(p.fundingRulesVersion===2?(s.emergencyDebt||0)*.01:0),
+  commercialIncome=(commercialService?commercialService.feeBase:s.business*760+s.merchant*650)*(1+commercial*.075)*businessProduct.fees*(hasSpecialization(p,'commercial','treasury')?1.14:1),
+  loanIncome=s.loans*.0047*(.8+macro.rate/12)*creditProduct.spread,revenue=bankAbstractIncome(p,(a.service+a.business+a.lending)*8000)+depositIncome-fundingCost+loanIncome+commercialIncome+bankAbstractIncome(p,s.wealth*1450)+bankAbstractIncome(p,u.technology*13000)+bankAbstractIncome(p,u.wealth*18000)+bankAbstractIncome(p,digital*4000),efficiency=(p.doctrine==='efficiency'?.94:1)*(1-u.operations*.06)*(1-ops*.035)*(hasSpecialization(p,'digital','automation')?.92:1)*(hasSpecialization(p,'operations','lean')?.9:1),facilityExpense=regionalOperations(p)?regionalBranchMetrics(p).expense:(facilities.retail||0)*22000+(facilities.commercial||0)*22000+(facilities.digital||0)*12000,expense=(s.staff*bankBasePayroll(p)+facilityExpense)*efficiency+(p._workforceCosts?p._workforceCosts.payroll:0),creditGuard=Math.max(.28,1-(a.operations+u.training+u.operations+ops*.65)*.075)*(hasSpecialization(p,'operations','resilience')?.82:1),creditPolicy={conservative:.55,balanced:1,growth:1.45}[lp],chargeoff=Math.round(s.loans*.0025*macro.credit*creditPolicy*creditGuard*(p.turnEffects.credit||1)*creditProduct.credit*(businessProduct.risk||1)*(hasSpecialization(p,'commercial','specializedCredit')?1.08:1)),profit=(revenue-expense)*(p.turnEffects.profit||1)-chargeoff;
  p.operatingReport={cycle:g.cycle,depositIncome,fundingCost,loanIncome,commercialIncome,otherIncome:revenue+fundingCost-depositIncome-loanIncome-commercialIncome,expense,chargeoff,eventAdjustment:(revenue-expense)*((p.turnEffects.profit||1)-1),profit:Math.round(profit),depositGrowth:Math.round(depGain)-depositRunoff,loanGrowth:Math.round(loanGain)-chargeoff,depositRunoff};
  addWorkforceReport(p,p.operatingReport);
+ // Additive diagnostic detail in the unpublished workload candidate only.
+ // Existing income/expense arithmetic and all historical report shapes stay
+ // unchanged. These are recorded source terms, not another posting or ledger.
+ if(p.creditWorkloadVersion===1||p.bankEconomicsVersion===2)Object.assign(p.operatingReport,{incomeSource_version:1,
+  incomeSource_staffActivity:bankAbstractIncome(p,(a.service+a.business+a.lending)*8000),incomeSource_wealthRelationships:bankAbstractIncome(p,s.wealth*1450),
+  incomeSource_technologyBonus:bankAbstractIncome(p,u.technology*13000),incomeSource_wealthUpgradeBonus:bankAbstractIncome(p,u.wealth*18000),incomeSource_digitalStrategyBonus:bankAbstractIncome(p,digital*4000),
+  incomeSource_basePayroll:s.staff*bankBasePayroll(p)*efficiency,incomeSource_facilityUpkeep:facilityExpense*efficiency,incomeSource_securitiesInterest:0});
+ if(commercialService)Object.assign(p.operatingReport,{commercialOpeningBusiness:commercialService.business,commercialOpeningMerchant:commercialService.merchant,commercialServiceWorkload:commercialService.workload,commercialServiceDelivered:commercialService.served,commercialServiceCoverage:commercialService.coverage});
  s.fundingCost=Math.round(fundingCost);s.lastProfit=Math.round(profit);delta(p,'chargeoffs',chargeoff);delta(p,'loans',-chargeoff);const cashFlow=profit+(cp==='liquid'?35000:0);if(cashFlow<0&&s.cash< -cashFlow)p.fundingGap=(p.fundingGap||0)+(-cashFlow-s.cash);delta(p,'cash',cashFlow);delta(p,'capital',profit>0?profit*.25:profit);delta(p,'earnings',profit);delta(p,'morale',operatingWorkloadMorale(p,a).change);delta(p,'reputation',(service>=4?(p.doctrine==='community'?3:2):service<2?-3:0)-(regRank>=3?3:0));const profitText=profit<0?`-$${Math.abs(Math.round(profit)).toLocaleString()}`:`$${Math.round(profit).toLocaleString()}`;return`${p.name} produced ${Math.round(depGain).toLocaleString()} in deposits, ${Math.round(loanGain).toLocaleString()} in loans, paid $${Math.round(fundingCost).toLocaleString()} in funding cost, earned ${profitText}, and absorbed $${chargeoff.toLocaleString()} in credit losses${depositRunoff?`; $${depositRunoff.toLocaleString()} of rate-sensitive deposits also left`:''}.`}
 function prepareOperatingForecast(p,plan,g=null){
  const copy=JSON.parse(JSON.stringify(p));copy.doctrine=typeof copy.doctrine==='object'?copy.doctrine.key:copy.doctrine;
@@ -1836,7 +1931,7 @@ function updateCampaignAct(g){
  if(next!==current){g.act=next;const act=campaignAct(g);addLog(g,`${act.roman} // ${act.name} — ${act.text}`,'ACT');return`${act.roman} BEGINS — ${act.name}. ${act.text}`}
  return''
 }
-function absorbFranchise(g,winner,loser){const w=winner.stats?winner:g.players[winner],l=loser.stats?loser:g.players[loser],wi=g.players.indexOf(w),li=1-wi;delta(w,'deposits',Math.round(l.stats.deposits*.72));delta(w,'loans',Math.round(l.stats.loans*.55));delta(w,'customers',Math.round(l.stats.customers*.65));delta(w,'business',Math.round(l.stats.business*.5));for(const[k,t]of activeTerritories(g)){w.branches[k]=Math.max(w.branches[k]||0,l.branches[k]||0);w.facilityMarkets[k]=[...(w.facilityMarkets[k]||[]),...(l.facilityMarkets[k]||[])].slice(0,w.branches[k]);l.branches[k]=0;l.facilityMarkets[k]=[];t.exited=t.exited||[false,false];t.exitStreak=t.exitStreak||[0,0];t.exited[wi]=false;t.exited[li]=true;t.exitStreak=[0,0];t.shares[wi]=100;t.shares[li]=0}w.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(w.facilityMarkets))for(const type of models)w.facilities[type]++}
+function absorbFranchise(g,winner,loser){if(g.bankEconomicsVersion===2&&!accountingSuppressed)return coreBookAbsorption(g,winner,loser);const w=winner.stats?winner:g.players[winner],l=loser.stats?loser:g.players[loser],wi=g.players.indexOf(w),li=1-wi;delta(w,'deposits',Math.round(l.stats.deposits*.72));delta(w,'loans',Math.round(l.stats.loans*.55));delta(w,'customers',Math.round(l.stats.customers*.65));delta(w,'business',Math.round(l.stats.business*.5));for(const[k,t]of activeTerritories(g)){w.branches[k]=Math.max(w.branches[k]||0,l.branches[k]||0);w.facilityMarkets[k]=[...(w.facilityMarkets[k]||[]),...(l.facilityMarkets[k]||[])].slice(0,w.branches[k]);l.branches[k]=0;l.facilityMarkets[k]=[];t.exited=t.exited||[false,false];t.exitStreak=t.exitStreak||[0,0];t.exited[wi]=false;t.exited[li]=true;t.exitStreak=[0,0];t.shares[wi]=100;t.shares[li]=0}w.facilities={retail:0,commercial:0,digital:0};for(const models of Object.values(w.facilityMarkets))for(const type of models)w.facilities[type]++}
 const absorbFranchiseCore=absorbFranchise;absorbFranchise=function(g,winner,loser){
  // The original aggregate award is not a purchase/transfer of detailed books.
  // Keep the victory, but never manufacture a percentage of the rival's assets
@@ -1895,7 +1990,7 @@ function applyProjectEffects(g,p,project){
   if(strategyLevel(p,'network')>=4)pushShare(g.territories[target],p===g.players[0]?2.5:-2.5);
   return `${p.name} completed ${def.name} in ${g.territories[target].name}, adding permanent ${def.facility} banking capacity.`;
  }
- const result=applyBaseProjectEffects(g,p,project);
+ const result=g.bankEconomicsVersion===2&&project.key==='acquisition'?coreBookAcquisition(g,p,project):applyBaseProjectEffects(g,p,project);
  if(project.key==='branch')addFacility(project.target,'retail');
  if(project.key==='acquisition'){
   const type=hasSpecialization(p,'acquisition','integrator')?'commercial':'retail',target=project.target,rival=g.players[1-g.players.indexOf(p)];
@@ -1940,7 +2035,7 @@ function planHiring(g,p,committed){
   const target=p.stats.staff<12?Math.min(2,12-p.stats.staff):p.stats.staff<22?1:0;
   let count=0;
   while(count<target){
-   const next=count+1,payroll=next*18000,cost=hireCost(p,next);
+   const next=count+1,payroll=next*bankBasePayroll(p),cost=hireCost(p,next);
    // Six months of additional gross payroll must remain in CASH; current bank
    // earnings must cover twice that run-rate. Do not reserve future payroll a
    // second time in capital: the whole-plan AI already retains its $200K equity
@@ -2199,11 +2294,15 @@ function createSeededCampaign(o){
 
 
 const submitCore=submit;
-submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resolutionId,result=submitCore(g,...args);if(g.resolutionId!==before){g.eventLedger=g.eventLedger||[];g.ledgerSequence=g.ledgerSequence||0;for(const p of g.players){if(!p.operatingReport)continue;g.eventLedger.push({id:++g.ledgerSequence,cycle:p.operatingReport.cycle,category:'operations.result',source:'operate',target:p.id,visibility:'owner',report:(g.companyCreditVersion===1?companyCreditLedgerReport(p.operatingReport):{...p.operatingReport})})}if(g.eventLedger.length>2000){const removed=g.eventLedger.splice(0,g.eventLedger.length-2000);g.ledgerPrunedThrough=removed[removed.length-1].id}}return result})};
+submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resolutionId,result=submitCore(g,...args);if(g.resolutionId!==before){recordIncomeHistory(g);g.eventLedger=g.eventLedger||[];g.ledgerSequence=g.ledgerSequence||0;for(const p of g.players){if(!p.operatingReport)continue;g.eventLedger.push({id:++g.ledgerSequence,cycle:p.operatingReport.cycle,category:'operations.result',source:'operate',target:p.id,visibility:'owner',report:(g.companyCreditVersion===1?companyCreditLedgerReport(p.operatingReport):{...p.operatingReport})})}if(g.eventLedger.length>2000){const removed=g.eventLedger.splice(0,g.eventLedger.length-2000);g.ledgerPrunedThrough=removed[removed.length-1].id}}return result})};
 
 
 const rematchCore=rematch;
-rematch=function(g,...args){return withRandom(g,'state',()=>rematchCore(g,...args))};
+rematch=function(g,...args){return withRandom(g,'state',()=>{
+ const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,result=rematchCore(g,...args);
+ if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});g.version=campaignVersion(g);validatePilot(g);}
+ return result;
+})};
 
 // Resolution-stage ledger: source-attributed net changes, not a double-entry journal.
 // Keep private bank records separate; no rival plans or complete rival stats are copied.
@@ -2264,8 +2363,10 @@ function postMonthlyOperations(g,p,preview=false){
  // Work on a clone so income/loss formulas still see produced loans/deposits.
  const calculation=JSON.parse(JSON.stringify(p));delete calculation.accounting;
  const text=runLegacyOperations(g,calculation,preview),r={...calculation.operatingReport};
+ if(p.bankEconomicsVersion===2)r.depositInterest=r.fundingCost-before.accounts.emergencyDebt*.01;
  const securitiesIncome=Math.round(before.accounts.securities*(g.economy.rate/1200));
  r.otherIncome+=securitiesIncome;r.profit+=securitiesIncome;
+ if(r.incomeSource_version===1)r.incomeSource_securitiesInterest=securitiesIncome;
  // Apply funding in actual chronological order, not by borrowing an unexplained residual.
  const inflow=Math.round(r.depositGrowth+r.depositRunoff),originations=Math.round(r.loanGrowth+r.chargeoff);
  if(p.creditBook){
@@ -2376,7 +2477,7 @@ function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max
 
 
 function planPilotReserve(g,index,plan){
- if(!pilot(g))return plan;
+ if(!pilot(g)&&g.bankEconomicsVersion!==2)return plan;
  const p=g.players[index],forecast=operatingPreview(p,plan,g.economy,g),limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-forecast.profit)*2);
  if(plan.competitiveAction==='takeoverDefense')plan.competitiveAction='none';
  let available=limit-(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
@@ -2397,6 +2498,9 @@ function planPilotReserve(g,index,plan){
  return plan;
 }
 function validateAccountingSave(g){
+ if(g.bankEconomicsVersion===2){
+  validateCampaignRules(g,'game');for(const p of g.players)validateCoreBalanceOwner(p);return g;
+ }
  if(g.campaignRulesVersion===undefined){if(g.players.some(p=>p.accounting))throw Error('Unversioned accounting save');return g}
  if(g.campaignRulesVersion!==1||g.fundingRulesVersion!==2)throw Error('Unsupported pilot save');
  if(!g.regions||Object.keys(g.territories).length!==6)throw Error('Invalid pilot geography');
@@ -2636,7 +2740,7 @@ function marketContribution(p){
  allocate(r.depositIncome,weights('deposits'),'income');allocate(r.loanIncome,weights('loans'),'income');
  allocate(r.commercialIncome,Object.fromEntries(Object.entries(books).map(([k,b])=>[k,b.business*760+b.merchant*650])),'income');
  allocate(r.fundingCost,weights('deposits'),'funding');if(p.creditPerformance){for(const [k,loss]of Object.entries(p.creditPerformance.report.rows))rows[k].credit=loss.loss}else allocate(r.chargeoff,weights('loans'),'credit');
- const efficiency=(r.expense-(r.depositServiceCost||0)-(r.advertisingCost||0))/Math.max(1,p.stats.staff*18000+metrics.expense);
+ const efficiency=(r.expense-(r.depositServiceCost||0)-(r.advertisingCost||0))/Math.max(1,p.stats.staff*bankBasePayroll(p)+metrics.expense);
  for(const m of metrics.rows)rows[m.key].facility=Math.round(m.expense*efficiency);
  for(const row of Object.values(rows))row.contribution=row.income-row.funding-row.credit-row.facility;
  const total=Object.values(rows).reduce((n,row)=>n+row.contribution,0);
@@ -3675,7 +3779,8 @@ function renewalPricingPlan(g,p,input){
 
 function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
-if(g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8)||(g.version==='9.8'&&g.financialGroupVersion===9)||(g.version==='9.9'&&g.financialGroupVersion===10)||(g.version==='9.10'&&g.financialGroupVersion===10&&g.commercialAccountsVersion===1)||(g.version==='9.11'&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(['9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26','9.27','9.28'].includes(g.version)&&g.investmentAssetsVersion===1&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(g.version==='9.12'&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
+const reportingRules=g.incomeHistoryVersion===1&&['9.29','9.30','9.31','9.32'].includes(g.version)&&validateCampaignRules(g,'game').valid;
+if(!reportingRules&&g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8)||(g.version==='9.8'&&g.financialGroupVersion===9)||(g.version==='9.9'&&g.financialGroupVersion===10)||(g.version==='9.10'&&g.financialGroupVersion===10&&g.commercialAccountsVersion===1)||(g.version==='9.11'&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(['9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26','9.27','9.28'].includes(g.version)&&g.investmentAssetsVersion===1&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(g.version==='9.12'&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
  if(!records||Object.keys(records).sort().join()!==ids.join())throw Error('Invalid relationship roster');
  const owner=id=>id===null||g.players.some(p=>p.id===id);
@@ -8907,7 +9012,12 @@ function groupFutureCreditValue(source,economy,plan,terms) {
 function groupLendingComparison(p,input,economy,g=null) {
   if(!p.financialGroup)throw Error('Lending comparison requires Financial Group rules.');
   const plan=JSON.parse(JSON.stringify(input));normalizeGroupPlan(p,plan);
-  const keys=creditProductKeys(p),owner={...p,allocation:plan.allocation,
+  let source=p;
+  if(p.creditWorkloadVersion===1){
+    const normalized=departmentCopy(plan);normalizeDepartmentPlan(p,normalized,g);
+    source=prepareCreditScenarioOwner(p,normalized,g);
+  }
+  const keys=creditProductKeys(p),owner={...source,allocation:plan.allocation,
     policies:{...p.policies,lending:plan.lendingPolicy},products:plan.products};
   const future=Object.fromEntries(keys.map(key=>[key,groupFutureCreditValue(owner,economy,plan,creditTerms(owner,{economy},key))]));
   const candidates=[{...plan.groupPolicy.creditAllocation},{...p.creditPortfolio.allocation}];
@@ -8923,7 +9033,7 @@ function groupLendingComparison(p,input,economy,g=null) {
     const signature=keys.map(k=>allocation[k]).join();if(seen.has(signature))continue;seen.add(signature);
     const candidate={...plan,groupPolicy:{...plan.groupPolicy,creditAllocation:allocation}};
     const forecast=operatingPreview(p,candidate,economy,g);
-    const originations=Math.round(Math.max(0,forecast.loanGrowth+(forecast.principalRepaid||0)+
+    const originations=p.creditWorkloadVersion===1?ordinaryCreditOriginations(forecast):Math.round(Math.max(0,forecast.loanGrowth+(forecast.principalRepaid||0)+
       (forecast.creditRecovery||0)+(forecast.chargeoff||0)));
     const parts=creditProductionParts({...owner,creditPortfolio:{version:1,allocation}},{economy},originations);
     const currentCoupon=parts.reduce((n,c)=>n+c.principal*c.rate/1000000,0);
@@ -12463,6 +12573,8 @@ const DepartmentFunctions = (() => {
 // relationships: eligible offered products at existing offer throughput, plus
 // one quarter per80 business/150 merchant ties;
 // credit: four quarters per$10M principal plus one per48 distinct vintages;
+// creditWorkloadVersion1 replaces the vintage-row term with active product/
+// market portfolios plus named-company claims, retaining the principal term.
 // technology: one per24 deposit vintages + two per deployed product/application
 //             + one per4 offices; NOT project execution capacity;
 // risk: one per$20M loans + one per$40M deposits + one per100 current risk points;
@@ -12522,9 +12634,13 @@ const DepartmentFunctionContext = (() => {
       riskPoints:p.stats.compliance,emergencyDebt:p.accounting.accounts.emergencyDebt,termVintages,employedBankers:p.stats.staff,
       paidTrainingRoles:training?.paused?0:(training?.rows||[]).filter(r=>r.spend>0).length};
     if(Object.values(sources).some(n=>!Number.isFinite(n)||n<0))throw Error('Invalid existing book workload inputs.');
-    const raw={relationships:offers/RELATIONSHIP_OFFER_CAPACITY*4+sources.businessRelationships/80+sources.merchantRelationships/150,
+    // New rules remove a storage-granularity penalty, not actual servicing:
+    // principal still drives administration; arrears drive collections below.
+    const creditWork=p.creditWorkloadVersion===1?CreditWorkload.quote(p):null;
+    if(creditWork)sources.administrationGroups=creditWork.administrationGroups;
+    const raw={relationships:commercialRelationshipWork(sources.businessRelationships,sources.merchantRelationships,offers/RELATIONSHIP_OFFER_CAPACITY*4),
       onboarding:sources.householdDemandFte*4+pending/ONBOARDING_CAPACITY*4+intakeProspecting+sources.contractLoad/2*4,
-      credit:loans/10000000*4+sources.loanVintages/48,
+      credit:creditWork?creditWork.workload:loans/10000000*4+sources.loanVintages/48,
       collections:sources.latePrincipal/1000000*4,
       technology:sources.depositVintages/24+activeProducts*2+activeApplications*2+offices/4,
       risk:loans/20000000+deposits/40000000+sources.riskPoints/100,
@@ -12533,7 +12649,7 @@ const DepartmentFunctionContext = (() => {
     const workloads=Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,Math.ceil(raw[id])]));
     if(Object.values(workloads).some(n=>!whole(n,DepartmentFunctions.RULES.maxWorkload)))throw Error('Workload exceeds the prototype review range.');
     const taskWorkloads={
-      offerSales:offers/RELATIONSHIP_OFFER_CAPACITY*4,commercialRelationships:sources.businessRelationships/80+sources.merchantRelationships/150,
+      offerSales:offers/RELATIONSHIP_OFFER_CAPACITY*4,commercialRelationships:commercialRelationshipWork(sources.businessRelationships,sources.merchantRelationships),
       householdSupport:sources.householdDemandFte*4,applicationProcessing:pending/ONBOARDING_CAPACITY*4+intakeProspecting,commercialDelivery:sources.contractLoad/2*4,
       creditAdministration:raw.credit,collections:raw.collections,technology:raw.technology,risk:raw.risk,treasury:raw.treasury,people:raw.people};
     return {workloads,sources,raw,taskWorkloads};
@@ -13191,7 +13307,7 @@ function departmentOriginationFloorAcceptance(g,p,beforePlan,afterPlan){
     if(facilityLifecycleProtectedBudget(p,afterPlan,budget,g).remaining<0)return reject('Protected cash reserve is not funded.');
     if(!lifecycleInstructionQuote(g,p,afterPlan).status.eligible)return reject('Existing office instructions are not feasible.');
     const forecast=q=>operatingPreview({...p,marketSnapshot:g.marketEconomy},q,g.economy,g),oldForecast=forecast(beforePlan),nextForecast=forecast(afterPlan);
-    const gross=r=>Math.round(r.loanGrowth+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
+    const gross=r=>p.creditWorkloadVersion===1?ordinaryCreditOriginations(r):Math.round(r.loanGrowth+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
     if(gross(nextForecast)<=Math.max(0,gross(oldForecast)))return reject('No funded origination benefit.');
     if(nextForecast.fundingLoss>oldForecast.fundingLoss||(nextForecast.emergencyDebt||0)>(oldForecast.emergencyDebt||0)||
       nextForecast.capitalRatio<GROUP_SAFEGUARDS.capitalRatio*100)return reject('Funding or capital protection worsened.');
@@ -13349,7 +13465,7 @@ function staffingRecoveryReview(g,index,input){
   }
   const forecast=plan=>operatingPreview({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy,g);
   oldForecast=oldForecast||forecast(base);const nextForecast=forecast(candidate);
-  const gross=r=>Math.round((r.loanGrowth||0)+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
+  const gross=r=>p.creditWorkloadVersion===1?ordinaryCreditOriginations(r):Math.round((r.loanGrowth||0)+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
   if(gross(nextForecast)<gross(oldForecast))throw Error('Funded lending reduced.');
   if((nextForecast.fundingLoss||0)>(oldForecast.fundingLoss||0)||
    (nextForecast.emergencyDebt||0)>(oldForecast.emergencyDebt||0)||nextForecast.capitalRatio<10)throw Error('Funding or capital protection worsened.');
@@ -13365,9 +13481,14 @@ function staffingRecoveryReview(g,index,input){
 // not booked assets, promised customers, or additional spendable resources.
 const FACILITY_INVESTMENT_HORIZON=60;
 function facilityInvestmentDraft(input){const plan=departmentFunctionCopy(input);plan.facilityPolicy=defaultFacilityPolicy();plan.investments={};plan.newProjects=[];plan.newProject=null;return plan;}
-function facilityInvestmentGross(report){return Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));}
+function facilityInvestmentGross(report,owner=null){
+ return owner?.creditWorkloadVersion===1?ordinaryCreditOriginations(report):Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));
+}
+function facilityInvestmentCreditOwner(source,plan,g){
+ return prepareCreditScenarioOwner(source,plan,g);
+}
 function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfront=0,g=null){
- const p=departmentFunctionCopy(source),market=plan.focus||p.focus,rows=[];
+ const p=facilityInvestmentCreditOwner(source,plan,g),market=plan.focus||p.focus,rows=[];
  p.allocation={...plan.allocation};p.policies={...p.policies,lending:plan.lendingPolicy};p.products={...plan.products};
  p.creditPortfolio.allocation={...plan.groupPolicy.creditAllocation};
  p.creditPerformance.policy={...plan.collectionsPolicy};p.turnEffects={};
@@ -13397,7 +13518,7 @@ function facilityInvestmentCreditStream(source,economy,plan,flows,noncredit,upfr
    net=interest-credit.loss-credit.cost+noncredit[month],discount=(1+Math.max(0,economy.rate)/1200)**(month+1);
   cash+=interest-credit.cost+noncredit[month];capital+=interest-credit.cost+noncredit[month];
   p.stats.loans=principal+companyCreditPrincipal(p);value+=net/discount;
-  rows.push({month:month+1,requested:flow,originations:originated,principal,repaid,recovered:credit.recovered,interest,loss:credit.loss,collectionsCost:credit.cost,noncredit:noncredit[month],net,discount,cash,capital,capitalRatio:100*capital/Math.max(1,principal+otherRisk)});
+  rows.push({month:month+1,requested:flow,originations:originated,principal,repaid,recovered:credit.recovered,interest,loss:credit.loss,collectionsCost:credit.cost,noncredit:noncredit[month],net,discount,cash,capital,capitalRatio:100*capital/Math.max(1,principal+otherRisk),...(source.creditWorkloadVersion===1?{collectionsCapacity:credit.capacity,collectionsCoverage:credit.coverage}:{})});
  }
  return {value,rows};
 }
@@ -13448,7 +13569,7 @@ function facilityInvestmentReview(g,index,input,request){
   (report.fundingLoss||0)>(before.fundingLoss||0)||(report.emergencyDebt||0)>(before.emergencyDebt||0))
   return {...reject('Construction or activation weakens protected funding/capital or produces an operating loss.'),quote,before,during,after};
  const months=FACILITY_INVESTMENT_HORIZON,constructionMonths=2,
-  baseFlows=Array(months).fill(facilityInvestmentGross(before)),futureFlows=Array.from({length:months},(_,i)=>facilityInvestmentGross(i<constructionMonths?during:after)),
+  baseFlows=Array(months).fill(facilityInvestmentGross(before,p)),futureFlows=Array.from({length:months},(_,i)=>facilityInvestmentGross(i<constructionMonths?during:after,p)),
   recurring=r=>r.profit-r.loanIncome+(r.chargeoff||0)+(r.collectionsCost||0),
   baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before)),undefined,g),
   futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost,g);
@@ -13472,7 +13593,7 @@ function planFacilityInvestment(g,index,input){
  const context=facilityContext(g,p,draft),budget=planBudget(p,draft,g),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
   current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
-  gross=facilityInvestmentGross(current),capacity=regionalBranchMetrics(p).loanCapacity,
+  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity,
   owner={...p,allocation:draft.allocation,policies:{...p.policies,lending:draft.lendingPolicy},products:draft.products},
   coupon=Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000)),horizon=FACILITY_INVESTMENT_HORIZON;
  context.officeMetrics=metrics;
@@ -13622,6 +13743,7 @@ function repairSavedRivalry(g){
 }
 function migrateCampaign(g){
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
+ validateIncomeHistoryCampaign(g);
  if(g.financialGroupVersion!==undefined||g.featureRulesVersion!==undefined||g.productProgramsVersion===2||['8.14','8.15','9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9'].includes(g.version))validateCampaignRules(g,'game');
  else {
  if(g.onboardingVersion!==undefined&&g.version!=='8.13')throw Error('Onboarding requires a v8.13 save.');
@@ -13974,7 +14096,7 @@ function resolveCycle(g) {
       try {
         for(const p of g.players)beginProductPricingReview(g,p);
         const result = resolveMonthlySteps(g);
-        if (pilot(g))
+        if (pilot(g)||g.bankEconomicsVersion===2)
           for (const p of g.players) {
             p.accounting = AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting, 96));
             syncAccounts(p);
@@ -14005,6 +14127,7 @@ function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
  plan=planInvestmentStrategy(g,index,plan);
  plan=planCompanyStrategy(g,index,plan);
  plan=planSharedPremises(g,index,plan);
+ if(g.commercialServiceVersion===1)plan=commercialServicePlanReview(g,index,plan).plan;
  return planCompanyCredit(g,index,plan);
 });}
 function chooseOpenBotCore(g, index) {
@@ -14185,6 +14308,7 @@ function planFinalCashReserve(g, index, input) {
   return plan;
 }
 function validatePilot(g) {
+  validateIncomeHistoryCampaign(g);
   for(const p of g.players)if(p.submitted){const issue=projectLocationsIssue(g,p,p.submitted);if(issue)throw Error(issue);}
   if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8','9.9'].includes(g.version)) validateCampaignRules(g, 'game');
   validateStoredDepartmentFunctionPolicies(g);
@@ -16330,9 +16454,362 @@ function planSharedPremises(g,index,plan){
  if(g.sharedPremisesVersion!==1)return plan;
  return sharedPremisesStrategyReview(root.BWEngine.publicState(g,index),plan).plan;
 }
+// Versioned servicing/activation correction, not a second customer book.
+// Preserve the original left-to-right sum, including the optional offer work.
+// Department workload, task dispatch and fee coverage must use the same units.
+function commercialRelationshipWork(business,merchant,initial=0){return initial+business/80+merchant/150;}
+const CommercialFeeEconomics=Object.freeze({
+ quote(business,merchant,capacityQuarters){
+  if(!Number.isSafeInteger(business)||business<0||!Number.isSafeInteger(merchant)||merchant<0||!Number.isFinite(capacityQuarters)||capacityQuarters<0)throw Error('Invalid commercial servicing inputs.');
+  const workload=commercialRelationshipWork(business,merchant),served=Math.min(workload,capacityQuarters),coverage=workload?served/workload:1;
+  return {business,merchant,workload,served,coverage,feeBase:(business*760+merchant*650)*coverage};
+ }
+});
+function commercialOperatingService(p,allocation){
+ if(p.commercialServiceVersion!==1)return null;
+ // Expanded uses the existing paid, dispatched relationship task. Core has
+ // no department desk: servicing automatically reserves part of its same
+ // Business allocation, leaving only the remainder for selling this month.
+ const capacity=p.departmentFunctions?departmentFunctionTaskFte(p,'commercialRelationships',0)*4:allocation.business*4,
+  review=CommercialFeeEconomics.quote(p.stats.business,p.stats.merchant,capacity);
+ if(!p.departmentFunctions)allocation.business=Math.max(0,allocation.business-review.served/4);
+ return review;
+}
+function initializeCommercialService(g,o){
+ if(o.commercialServiceVersion!==1)return;
+ g.commercialServiceVersion=1;for(const p of g.players)p.commercialServiceVersion=1;
+}
+function validateCommercialServiceCampaign(g){
+ const enabled=g.commercialServiceVersion===1;
+ if(['8.17','9.30'].includes(g.version)&&!enabled)throw Error('Missing commercial servicing rules.');
+ if(g.commercialServiceVersion!==undefined&&!enabled)throw Error('Unsupported commercial servicing rules.');
+ if(g.players.some(p=>p.commercialServiceVersion!==(enabled?1:undefined)))throw Error('Commercial servicing owner rules do not match the campaign.');
+ if(enabled)validateCampaignRules(g,'game');
+}
+function projectCommercialService(g,out){
+ if(g.commercialServiceVersion===1){out.commercialServiceVersion=1;out.me.commercialServiceVersion=1;}
+}
+function validateCommercialServiceView(v){
+ if(['8.17','9.30'].includes(v.version)&&v.commercialServiceVersion!==1)throw Error('Missing commercial servicing view rules.');
+ if(v.me?.commercialServiceVersion!==v.commercialServiceVersion||v.rival?.commercialServiceVersion!==undefined)throw Error('Invalid commercial servicing owner view.');
+ if(v.commercialServiceVersion!==undefined)validateCampaignRules(v,'view');
+}
+function commercialServicePlanReview(g,index,input){
+ const p=g.players[index],no=reason=>({accepted:false,reason,plan:input});
+ if(p.commercialServiceVersion!==1||!p.departmentFunctions)return no('Current department-servicing rules required.');
+ const before=departmentFunctionsQuote(g,p,input);
+ if(!before.status.eligible)return no(before.status.reason);
+ const row=before.delivery.rows.find(x=>x.id==='commercialRelationships'),missing=Math.ceil(Math.max(0,row.workload-row.delivered.served));
+ if(!missing)return no('Existing relationship service is covered.');
+ const candidate=departmentFunctionCopy(input),current=candidate.departmentFunctionsPolicy.vendors.relationships,
+  extra=Math.min(missing,DepartmentProvider.ENTITLEMENT-current);
+ if(extra<=0)return no('The existing provider has no further capacity.');
+ candidate.departmentFunctionsPolicy.vendors.relationships+=extra;
+ const after=departmentFunctionsQuote(g,p,candidate);
+ if(!after.status.eligible)return no(after.status.reason);
+ // Adding paid capacity must not resume unaffordable teaching, displace another
+ // committed task, or use future fee receipts to pay this month's supplier.
+ if(JSON.stringify(before.attribution.paidTeacherQuarters)!==JSON.stringify(after.attribution.paidTeacherQuarters))return no('Paid teaching changes.');
+ for(const old of before.delivery.rows){const next=after.delivery.rows.find(x=>x.id===old.id);if(next.delivered.served+1e-8<old.delivered.served)return no('Existing work loses capacity.');}
+ const budget=planBudget(p,candidate,g);
+ if(budget.remaining<0||budget.freeCapacity<0||!projectPlanStatus(p,candidate,g).eligible||facilityLifecycleProtectedBudget(p,candidate,budget,g).remaining<0||!lifecycleInstructionQuote(g,p,candidate).status.eligible)return no('Protected current cash or work is insufficient.');
+ const forecast=plan=>operatingPreview({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy,g),old=forecast(input),next=forecast(candidate),review=aiCashPlanningReview(g,index,candidate);
+ if(budget.total>review.limit||next.profit-(next.fundingLoss||0)<=old.profit-(old.fundingLoss||0)||(next.emergencyDebt||0)>(old.emergencyDebt||0)||(next.fundingLoss||0)>(old.fundingLoss||0)||next.capitalRatio<10)return no('Servicing does not improve protected net earnings.');
+ return {accepted:true,reason:'Funded service restores fee-earning coverage after its recurring cost.',plan:candidate,before:old,after:next,additionalExpense:extra*DepartmentFunctions.FUNCTIONS.relationships.vendorRate};
+}
+// Servicing follows the portfolio, not its implementation-specific row count.
+// Cohorts retain every vintage, rate and arrears balance; no loan is merged,
+// forgiven or removed. Named-company claims remain separate servicing items.
+const CreditWorkload=Object.freeze({
+ quote(p){
+  const cohorts=p.creditBook?.cohorts||[],claims=p.companyCredit?.claims||[],groups=new Set();let principal=0;
+  for(const c of cohorts){
+   if(!Number.isSafeInteger(c.principal)||c.principal<=0||typeof c.market!=='string'||typeof c.product!=='string')throw Error('Invalid credit workload exposure.');
+   principal+=c.principal;groups.add(JSON.stringify([c.market,c.product]));
+  }
+  for(const c of claims){if(!Number.isSafeInteger(c.principal)||c.principal<0)throw Error('Invalid named-credit workload exposure.');principal+=c.principal;}
+  const administrationGroups=groups.size+claims.length,principalQuarters=principal/10000000*4,portfolioQuarters=administrationGroups/48;
+  return {principal,cohortRows:cohorts.length,namedClaims:claims.length,administrationGroups,principalQuarters,portfolioQuarters,workload:principalQuarters+portfolioQuarters};
+ }
+});
+function initializeCreditWorkload(g,o){
+ if(o.creditWorkloadVersion!==1)return;
+ g.creditWorkloadVersion=1;for(const p of g.players)p.creditWorkloadVersion=1;
+}
+function validateCreditWorkloadCampaign(g){
+ const enabled=g.creditWorkloadVersion===1;
+ if(g.version==='9.31'&&!enabled)throw Error('Missing credit workload rules.');
+ if(g.creditWorkloadVersion!==undefined&&!enabled)throw Error('Unsupported credit workload rules.');
+ if(g.players.some(p=>p.creditWorkloadVersion!==(enabled?1:undefined)))throw Error('Credit workload owner rules do not match the campaign.');
+ if(enabled)validateCampaignRules(g,'game');
+}
+function projectCreditWorkload(g,out){
+ if(g.creditWorkloadVersion===1){out.creditWorkloadVersion=1;out.me.creditWorkloadVersion=1;}
+}
+function validateCreditWorkloadView(v){
+ if(v.version==='9.31'&&v.creditWorkloadVersion!==1)throw Error('Missing credit workload view rules.');
+ if(v.me?.creditWorkloadVersion!==v.creditWorkloadVersion||v.rival?.creditWorkloadVersion!==undefined)throw Error('Invalid credit workload owner view.');
+ if(v.creditWorkloadVersion!==undefined)validateCampaignRules(v,'view');
+}
+// Explicit prospective economics. Existing campaigns keep their exact revenue
+// terms and salary. This marker is never inferred from a save or default setup.
+function bankBasePayroll(p){return [1,2].includes(p.bankEconomicsVersion)?12000:18000;}
+function bankAbstractIncome(p,legacyAmount){return [1,2].includes(p.bankEconomicsVersion)?0:legacyAmount;}
+function initializeBankEconomics(g,o){
+ if(![1,2].includes(o.bankEconomicsVersion))return;
+ g.bankEconomicsVersion=o.bankEconomicsVersion;
+ for(const p of g.players){
+  p.bankEconomicsVersion=o.bankEconomicsVersion;
+  if(o.bankEconomicsVersion===2){
+   // New opening only. Represent the existing balance sheet; do not grant cash,
+   // change opening equity, or invent backdated transactions on a saved bank.
+   const s=p.stats,b=AccountingPrototype.opening();
+   Object.assign(b.accounts,{cash:s.cash,loans:s.loans,deposits:s.deposits,equity:s.capital,emergencyDebt:s.emergencyDebt||0});
+   b.accounts.securities=s.deposits+(s.emergencyDebt||0)+s.capital-s.cash-s.loans;
+   b.journalBase={accounts:{...b.accounts},retainedEarnings:0,sequence:0};
+   AccountingPrototype.check(b);p.accounting=b;syncAccounts(p);
+  }
+ }
+}
+function validateBankEconomicsCampaign(g){
+ const enabled=[1,2].includes(g.bankEconomicsVersion);
+ if(['8.18','8.19','9.32'].includes(g.version)&&!enabled)throw Error('Missing bank economics rules.');
+ if(g.bankEconomicsVersion!==undefined&&!enabled)throw Error('Unsupported bank economics rules.');
+ if(g.players.some(p=>p.bankEconomicsVersion!==(enabled?g.bankEconomicsVersion:undefined)))throw Error('Bank economics owner rules do not match the campaign.');
+ if(enabled)validateCampaignRules(g,'game');
+}
+function projectBankEconomics(g,out){
+ if([1,2].includes(g.bankEconomicsVersion)){
+  out.bankEconomicsVersion=g.bankEconomicsVersion;out.me.bankEconomicsVersion=g.bankEconomicsVersion;
+  if(g.bankEconomicsVersion===2)out.me.accounting=JSON.parse(JSON.stringify(g.players.find(p=>p.id===out.me.id).accounting));
+ }
+}
+function validateBankEconomicsView(v){
+ if(['8.18','8.19','9.32'].includes(v.version)&&![1,2].includes(v.bankEconomicsVersion))throw Error('Missing bank economics view rules.');
+ if(v.me?.bankEconomicsVersion!==v.bankEconomicsVersion||v.rival?.bankEconomicsVersion!==undefined)throw Error('Invalid bank economics owner view.');
+ if(v.bankEconomicsVersion!==undefined)validateCampaignRules(v,'view');
+ if(v.bankEconomicsVersion===2){
+  validateCoreBalanceOwner(v.me);
+  if(v.rival?.accounting!==undefined)throw Error('Private rival accounting exposed.');
+ }
+}
+function validateCoreBalanceOwner(p){
+ if(p.bankEconomicsVersion!==2||p.fundingRulesVersion!==2||p.accounting?.version!==1||p.accounting.journal.length>192)throw Error('Invalid Core balance sheet.');
+ const b=AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting,96));
+ for(const [stat,key]of Object.entries({cash:'cash',loans:'loans',deposits:'deposits',capital:'equity',emergencyDebt:'emergencyDebt'}))
+  if(p.stats[stat]!==b.accounts[key])throw Error('Core statistics disagree with accounts.');
+ if(p.stats.earnings!==b.retainedEarnings)throw Error('Core retained earnings disagree with accounts.');
+}
+function coreBalanceTransfer(buyer,seller,deposits,loans){
+ // Preserve the sold loan book while raising the backing settlement cash.
+ const settlement=deposits-loans;
+ if(settlement>0)provideCash(seller,settlement,loans);
+ else if(settlement<0)provideCash(buyer,-settlement);
+ const result=AccountingPrototype.acquisition(buyer.accounting,seller.accounting,{deposits,loans,premium:0});
+ buyer.accounting=result.buyer;seller.accounting=result.seller;syncAccounts(buyer);syncAccounts(seller);
+}
+function coreBookAcquisition(g,p,project){
+ const terms=acquisitionTerms(g,p,project.target),rival=g.players[terms.seller],previous=accountingSuppressed;
+ let result;
+ // Retain the authored customer/branch/market effects, replacing only their
+ // four financial deltas with one conserved, backed book transfer.
+ try{accountingSuppressed=true;result=applyBaseProjectEffects(g,p,project);}
+ finally{accountingSuppressed=previous;}
+ coreBalanceTransfer(p,rival,terms.depositTake,terms.loanTake);return result;
+}
+function coreBookAbsorption(g,winner,loser){
+ const w=winner.stats?winner:g.players[winner],l=loser.stats?loser:g.players[loser],
+  deposits=Math.round(l.stats.deposits*.72),loans=Math.round(l.stats.loans*.55),
+  customers=Math.round(l.stats.customers*.65),business=Math.round(l.stats.business*.5),previous=accountingSuppressed;
+ try{accountingSuppressed=true;absorbFranchise(g,w,l);}
+ finally{accountingSuppressed=previous;}
+ delta(l,'customers',-customers);delta(l,'business',-business);
+ coreBalanceTransfer(w,l,deposits,loans);
+}
+// Reporting-only saved records. No funds, inferred old income or forecast values.
+const IncomeHistory=(()=>{
+ const fields=['loanIncome','commercialIncome','depositIncome','otherIncome','fundingCost','expense','chargeoff','eventAdjustment','corporateInvoiceLoss','profit','loanGrowth','contractFees'];
+ const copy=value=>JSON.parse(JSON.stringify(value));
+ const fail=()=>{throw Error('Invalid private income history.');};
+ function exact(value,keys){if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).sort().join()!==[...keys].sort().join())fail();}
+ function numbers(value,keys){if(keys.some(key=>!(key==='contractFees'&&value[key]===null)&&(typeof value[key]!=='number'||!Number.isFinite(value[key])||Math.abs(value[key])>Number.MAX_SAFE_INTEGER)))fail();}
+ function stocks(value){for(const key of ['principal','business','merchant'])if(!Number.isSafeInteger(value[key])||value[key]<0)fail();}
+ function validate(book,lastCycle){
+  exact(book,['version','lastCycle','opening','records']);
+  if(book.version!==1||book.lastCycle!==lastCycle||!Number.isSafeInteger(lastCycle)||lastCycle<0||!Array.isArray(book.records)||book.records.length!==Math.min(12,lastCycle))fail();
+  exact(book.opening,['principal','business','merchant']);stocks(book.opening);
+  for(const [index,row]of book.records.entries()){
+   exact(row,['cycle',...fields,'principal','business','merchant']);
+   if(row.cycle!==lastCycle-book.records.length+index+1)fail();
+   numbers(row,fields);stocks(row);
+  }
+  return book;
+ }
+ function create(p){return {version:1,lastCycle:0,opening:{principal:p.stats.loans,business:p.stats.business,merchant:p.stats.merchant},records:[]};}
+ function append(book,p,cycle){
+  validate(book,cycle-1);
+  const report=p.operatingReport;
+  if(!report||report.cycle!==cycle)fail();
+  const row={cycle,...Object.fromEntries(fields.map(key=>[key,report[key]===undefined?(key==='corporateInvoiceLoss'?0:key==='contractFees'?null:undefined):report[key]])),principal:p.stats.loans,business:p.stats.business,merchant:p.stats.merchant};
+  const next={...book,lastCycle:cycle,records:[...book.records,row].slice(-12)};
+  validate(next,cycle);return next;
+ }
+ return {create,append,validate,copy};
+})();
+function initializeIncomeHistory(g,o){
+ if(o.incomeHistoryVersion!==1)return;
+ g.incomeHistoryVersion=1;for(const p of g.players)p.incomeHistory=IncomeHistory.create(p);
+}
+function recordIncomeHistory(g){
+ if(g.incomeHistoryVersion!==1)return;
+ const cycle=g.gameOver?g.cycle:g.cycle-1;
+ // Validate both results before replacing either book. Replays cannot append a
+ // duplicate: normal submit calls this only for a new resolution identity.
+ const next=g.players.map(p=>IncomeHistory.append(p.incomeHistory,p,cycle));
+ g.players.forEach((p,i)=>p.incomeHistory=next[i]);
+}
+function validateIncomeHistoryCampaign(g){
+ validateBankEconomicsCampaign(g);
+ validateCreditWorkloadCampaign(g);
+ validateCommercialServiceCampaign(g);
+ if(g.incomeHistoryVersion===undefined){if(['8.16','9.29'].includes(g.version)||g.players.some(p=>p.incomeHistory!==undefined))throw Error('Unversioned income history.');return;}
+ validateCampaignRules(g,'game');
+ const cycle=g.gameOver?g.cycle:g.cycle-1;
+ for(const p of g.players)IncomeHistory.validate(p.incomeHistory,cycle);
+}
+function projectIncomeHistory(g,out,index){
+ projectBankEconomics(g,out);
+ projectCreditWorkload(g,out);
+ projectCommercialService(g,out);
+ if(g.incomeHistoryVersion!==1)return;
+ out.incomeHistoryVersion=1;out.me.incomeHistory=IncomeHistory.copy(g.players[index].incomeHistory);
+}
+function validateIncomeHistoryView(v){
+ validateBankEconomicsView(v);
+ validateCreditWorkloadView(v);
+ validateCommercialServiceView(v);
+ if(v.rival?.incomeHistory!==undefined)throw Error('Private rival income history exposed.');
+ if(v.incomeHistoryVersion===undefined){if(['8.16','9.29'].includes(v.version)||v.me?.incomeHistory!==undefined)throw Error('Unversioned income history.');return;}
+ validateCampaignRules(v,'view');IncomeHistory.validate(v.me?.incomeHistory,v.gameOver?v.cycle:v.cycle-1);
+}
+// Read-only reporting from owner-authorized operating results. No settlement,
+// saved-rule changes, inferred historical yields or economic calculations.
+const IncomeReview=(()=>{
+ const number=value=>typeof value==='number'&&Number.isFinite(value)?value:null;
+ function change(value,baseline){
+  value=number(value);baseline=number(baseline);
+  if(value===null||baseline===null)return {amount:null,percent:null};
+  return {amount:value-baseline,percent:baseline>0?(value-baseline)/baseline*100:null};
+ }
+ function metric(report,key){
+  if(!report)return null;
+  if(key==='loanAfterLosses')return number(report.loanIncome)===null||number(report.chargeoff)===null?null:report.loanIncome-report.chargeoff;
+  return number(report[key]);
+ }
+ function history(view){
+  const lastAllowed=view.gameOver?view.cycle:view.cycle-1,records=new Map();
+  if(view.incomeHistoryVersion===1){
+   validateIncomeHistoryView(view);
+   for(const row of view.me.incomeHistory.records)records.set(row.cycle,row);
+  }
+  const accept=report=>report&&Number.isSafeInteger(report.cycle)&&report.cycle>0&&report.cycle<=lastAllowed;
+  for(const event of view.incomeHistoryVersion===1?[]:view.operatingEvents||[]){
+   if(event.category!=='operations.result'||event.visibility!=='owner'||event.target!==view.me.id||!accept(event.report)||event.cycle!==event.report.cycle)continue;
+   records.set(event.cycle,event.report);
+  }
+  // The latest owner report remains usable when its older ledger was pruned.
+  if(view.incomeHistoryVersion!==1&&accept(view.me.operatingReport))records.set(view.me.operatingReport.cycle,view.me.operatingReport);
+  if(!records.size)return [];
+  const latest=lastAllowed;
+  return Array.from({length:Math.min(12,latest)},(_,i)=>{
+   const cycle=Math.max(1,latest-11)+i,report=records.get(cycle);
+   return {cycle,loanIncome:metric(report,'loanIncome'),commercialIncome:metric(report,'commercialIncome'),
+    chargeoff:metric(report,'chargeoff'),loanAfterLosses:metric(report,'loanAfterLosses'),loanGrowth:metric(report,'loanGrowth'),
+    contractFees:metric(report,'contractFees'),business:metric(report,'business'),merchant:metric(report,'merchant'),available:!!report};
+  });
+ }
+ function compare(view,standing,draft,key){
+  const points=history(view),last=points.at(-1),previous=points.at(-2);
+  const actual=metric(last,key),prior=metric(previous,key),base=metric(standing,key),proposed=metric(draft,key);
+  return {key,cycle:last?.cycle??null,actual,standing:base,draft:proposed,
+   actualChange:change(actual,prior),standingChange:change(base,actual),forecastChange:change(proposed,actual),draftChange:change(proposed,base)};
+ }
+ function principalHistory(view){
+  const lastAllowed=view.gameOver?view.cycle:view.cycle-1,records=new Map();
+  if(view.incomeHistoryVersion===1){
+   validateIncomeHistoryView(view);records.set(0,view.me.incomeHistory.opening.principal);
+   for(const row of view.me.incomeHistory.records)records.set(row.cycle,row.principal);
+  }else for(const row of view.trend||[])if(Number.isSafeInteger(row.cycle)&&row.cycle>=0&&row.cycle<=lastAllowed&&number(row.meLoans)!==null)records.set(row.cycle,row.meLoans);
+  if(!records.size)return [];
+  const first=Math.max(0,lastAllowed-11);
+  return Array.from({length:lastAllowed-first+1},(_,i)=>{
+   const cycle=first+i,principal=records.get(cycle)??null;
+   return {cycle,principal,change:change(principal,records.get(cycle-1)??null)};
+  });
+ }
+ function relationshipChange(view){
+  if(view.incomeHistoryVersion!==1)return null;
+  validateIncomeHistoryView(view);
+  const book=view.me.incomeHistory,last=book.records.at(-1),before=book.records.at(-2)||(last?.cycle===1?book.opening:null);
+  if(!last||!before)return null;
+  return {cycle:last.cycle,business:last.business-before.business,merchant:last.merchant-before.merchant};
+ }
+ function reconciliation(report){
+  if(!report)return null;
+  const fields=['depositIncome','loanIncome','commercialIncome','otherIncome','fundingCost','expense','chargeoff','eventAdjustment','profit'];
+  if(fields.some(k=>number(report[k])===null))return null;
+  const invoiceLoss=number(report.corporateInvoiceLoss)??0;
+  const calculated=report.depositIncome+report.loanIncome+report.commercialIncome+report.otherIncome-report.fundingCost-report.expense-report.chargeoff+report.eventAdjustment-invoiceLoss;
+  const residual=report.profit-calculated;
+  return {calculated,reported:report.profit,invoiceLoss,residual,reconciled:Math.abs(residual)<=2};
+ }
+ function statement(report){
+  const unavailable=reason=>({available:false,reason}),prefix='incomeSource_',entries=Object.entries(report||{}).filter(([key])=>key.startsWith(prefix));
+  if(!entries.length)return unavailable('Detailed income sources were not recorded for this result.');
+  const c=Object.fromEntries(entries.map(([key,value])=>[key.slice(prefix.length),value]));
+  const keys=['version','staffActivity','wealthRelationships','technologyBonus','wealthUpgradeBonus','digitalStrategyBonus','basePayroll','facilityUpkeep','securitiesInterest'];
+  const bridge=reconciliation(report);
+  if(!bridge||!bridge.reconciled||!c||Array.isArray(c)||c.version!==1||Object.keys(c).sort().join()!==keys.sort().join()||
+   keys.some(k=>number(c[k])===null||c[k]<0)||number(report.depositInterest)===null)
+   return unavailable('Recorded statement detail is incomplete or does not reconcile.');
+  const optional=['contractFees','specialistPayroll','workforceTraining','depositServiceCost','contractServicing','collectionsCost',
+   'customerAcquisitionCost','advertisingCost','relationshipOfferCost','onboardingCost','departmentExpense','departmentFunctionExpense','facilityMaintenance'];
+  if(optional.some(k=>report[k]!==undefined&&(number(report[k])===null||report[k]<0)))return unavailable('Invalid recorded service income or operating expense.');
+  const amount=k=>report[k]??0,abstract=c.staffActivity+c.wealthRelationships+c.technologyBonus+c.wealthUpgradeBonus+c.digitalStrategyBonus,
+   unclassified=report.otherIncome-c.securitiesInterest-amount('contractFees')-abstract,
+   fundingOther=report.fundingCost-report.depositInterest;
+  if(unclassified< -2||fundingOther< -2)return unavailable('Recorded income or funding components exceed their totals.');
+  const expenses=[['basePayroll','Base banker payroll',c.basePayroll],['facilityUpkeep','Facility operating upkeep',c.facilityUpkeep],
+   ['specialistPayroll','Specialist compensation premiums',amount('specialistPayroll')],['workforceTraining','Staff training',amount('workforceTraining')],
+   ['depositServiceCost','Deposit servicing and product platforms',amount('depositServiceCost')],['contractServicing','Commercial contract delivery',amount('contractServicing')],
+   ['collectionsCost','Collections case costs',amount('collectionsCost')],['customerAcquisitionCost','Ordinary customer acquisition',amount('customerAcquisitionCost')],
+   ['advertisingCost','Advertising campaigns',amount('advertisingCost')],['relationshipOfferCost','Relationship conversion',amount('relationshipOfferCost')],
+   ['onboardingCost','Application activation',amount('onboardingCost')],['departmentExpense','Department leadership and budgets',amount('departmentExpense')],
+   ['departmentFunctionExpense','Department purchased work',amount('departmentFunctionExpense')],['facilityMaintenance','Facility maintenance',amount('facilityMaintenance')]];
+  const remainingExpense=report.expense-expenses.reduce((n,row)=>n+row[2],0);
+  if(remainingExpense< -2)return unavailable('Recorded expense components exceed total operating expense.');
+  // The residual stays explicit. Never relabel unknown income as service fees,
+  // invent historic yields from current balances or allocate shared costs into
+  // fictional product profits. Embedded platform costs are not counted twice.
+  const rows=[['loanInterest','Loan interest',report.loanIncome],['securitiesInterest','Securities interest',c.securitiesInterest],
+   ['depositInterest','Deposit interest expense',-report.depositInterest],['otherFunding','Other funding expense',-fundingOther],
+   ['netInterest','Net interest income',report.loanIncome+c.securitiesInterest-report.fundingCost],
+   ['depositFees','Deposit account fees',report.depositIncome],['commercialFees','Business and merchant fees',report.commercialIncome],
+   ['contractFees','Service contract revenue (billed)',amount('contractFees')],['abstract','Legacy modeled bonuses (not verified service fees)',abstract],
+   ['unclassified','Other unclassified income / source rounding',unclassified],['operatingExpense','Total operating expense',-report.expense],
+   ['creditLoss','Modeled credit losses',-report.chargeoff],['invoiceLoss','Corporate invoice losses',-bridge.invoiceLoss],
+   ['eventAdjustment','Operating event adjustment',report.eventAdjustment],['rounding','Report rounding',bridge.residual],['profit','Operating profit',report.profit]];
+  return {available:true,rows,expenses:[...expenses,['unclassifiedExpense','Other operating expense / source rounding',remainingExpense]],
+   bonuses:[['staffActivity','Legacy staff activity income',c.staffActivity],['wealthRelationships','Legacy wealth relationship income',c.wealthRelationships],
+    ['technologyBonus','Technology upgrade income',c.technologyBonus],['wealthUpgradeBonus','Wealth upgrade income',c.wealthUpgradeBonus],['digitalStrategyBonus','Digital strategy income',c.digitalStrategyBonus]],
+   netInterest:report.loanIncome+c.securitiesInterest-report.fundingCost,abstract,unclassified,remainingExpense};
+ }
+ return {change,history,compare,principalHistory,relationshipChange,reconciliation,statement};
+})();
 root.BWEngine={opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
+Object.assign(root.BWEngine,{bankBasePayroll,IncomeReview,IncomeHistory,validateIncomeHistoryView,CreditWorkload,CommercialFeeEconomics,commercialServicePlanReview:(g,index,plan)=>withCorporateForecast(g,()=>commercialServicePlanReview(g,index,plan))});
 Object.assign(root.BWEngine,{SharedPremises,sharedPremisesPlanReview,sharedPremisesStrategyReview});
 Object.assign(root.BWEngine,{COMMERCIAL_SUITE,facilityExtensionQuote,facilityExtensionActive,facilityExtensionStaffReference,facilityExtensionCommitment,normalizeFacilityExtensionPlan,prepareFacilityExtensions,advanceFacilityExtensions,validateFacilityExtensions});
 Object.assign(root.BWEngine,{creditProductReview,creditProductRisk,creditProductOptions,InvestmentNotes,InvestmentInstitution,InvestmentIncome,InvestmentSuitability,InvestmentTrading,InvestmentCustomerChoice,InvestmentClients,InvestmentSettlement,InvestmentBankFunding,InvestmentCorporateMarket,defaultInvestmentPlan,validateInvestmentServices});
@@ -16347,7 +16824,7 @@ Object.assign(root.BWEngine,{CompanyCreditBank});
 Object.assign(root.BWEngine,{companyCreditOrderReview});
 Object.assign(root.BWEngine,{companyCreditPlanForecast});
 Object.assign(root.BWEngine,{companyCreditStrategyReview});
-root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);if([6,7,8,9,10].includes(g.financialGroupVersion))out.earningsBridge=BankEarningsBridge.project(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;if(g.creditPerformanceVersion===1)limitCreditHistoryView(out);projectFinancialGroup(g,out,index);return out};
+root.BWEngine.publicState=function(g,index){const out=publicStateCore(g,index);if([6,7,8,9,10].includes(g.financialGroupVersion))out.earningsBridge=BankEarningsBridge.project(g,index);out.operatingEvents=(g.eventLedger||[]).filter(e=>e.category==='operations.result'&&e.visibility==='owner'&&e.target===g.players[index].id).slice(-100).map(e=>({...e,report:{...e.report}}));out.causalEvents=(g.eventLedger||[]).filter(e=>e.visibility==='owner'&&e.target===g.players[index].id&&(e.deltas||e.category==='resolution.start')).slice(-200).map(ledgerCopy);out.ledgerPrunedThrough=g.ledgerPrunedThrough||0;if(g.creditPerformanceVersion===1)limitCreditHistoryView(out);projectIncomeHistory(g,out,index);projectFinancialGroup(g,out,index);return out};
 })(typeof window!=='undefined'?window:globalThis);
 
 </script>
@@ -16417,7 +16894,7 @@ function readSetupFeatureOptions() {
 }
 function featureSelectionSummary(options) {
   const rules = E.campaignRules(options, { context: 'lobby' }), selected = rules.features.filter(feature => feature.visible && feature.enabled);
-  return (options.financialGroupVersion ? 'Expanded edition: a connected regional banking simulation with optional Financial Group businesses.' : selected.length ? 'Historical custom rules: ' + selected.length + ' optional systems selected. Existing campaigns keep their rules.' : 'Core edition: original campaign rules. No optional systems.') +
+  return (options.financialGroupVersion ? 'Expanded edition: a connected regional banking simulation with optional Financial Group businesses.' : selected.length ? 'Historical custom rules: ' + selected.length + ' optional systems selected. Existing campaigns keep their rules.' : (options.bankEconomicsVersion===2?'Core edition: banking rivalry with funded deposits, loans and reconciled accounts.':'Core edition: original campaign rules. No optional systems.')) +
     (rules.enabled.includes('campaignRulesVersion') ? ' Regional Rivalry overrides campaign size: six markets.' : ' Campaign size follows the selector.') +
     (rules.valid ? '' : ' Selection needs attention: ' + rules.issues.map(issue => issue.message).join(' '));
 }
@@ -16521,14 +16998,14 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = edition ? E.previewCampaignEdition(options, edition) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
       const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }
       pendingFeatureSelection = pending;
       $('#featureSelectionTitle').textContent = edition ? (edition === 'expanded' ? 'Choose Expanded edition?' : 'Choose Core edition?') : (requested ? 'Enable ' : 'Disable ') + descriptor.label + '?';
       $('#featureSelectionExplanation').textContent = edition ? 'This changes the setup for the next campaign only. Existing saves are unchanged. Nothing changes until you confirm.' : 'This selection also changes the systems below. Nothing changes until you confirm.';
-      $('#featureSelectionAffected').innerHTML = edition ? (edition === 'expanded' ? expandedEditionDescription() : ['Original banking rivalry and its existing campaign-size choices', 'Expanded systems will be off for this new campaign']).map(text => '<li>' + esc(text) + '</li>').join('') : proposal.changes.filter(change => change.field !== field).map(change =>
+      $('#featureSelectionAffected').innerHTML = edition ? (edition === 'expanded' ? expandedEditionDescription() : ['Banking rivalry with funded deposits, loans and reconciled accounts; existing campaign-size choices', 'Expanded systems will be off for this new campaign']).map(text => '<li>' + esc(text) + '</li>').join('') : proposal.changes.filter(change => change.field !== field).map(change =>
         `<li>${esc(change.label)}: ${change.to ? 'on' : 'off'}${change.reason ? ' — ' + esc(change.reason) : ''}</li>`).join('');
       const dialog = $('#featureSelectionDialog'); dialog.classList.remove('hidden');
       if (dialog.showModal && !dialog.open) dialog.showModal();
@@ -16538,7 +17015,11 @@ function bindFeatureSelection(container, binding) {
   });
 }
 function initializeSetupFeatures() {
-  const container = $('#setupFeatureOptions'), options = readSetupFeatureOptions();
+  const container = $('#setupFeatureOptions'), initial = readSetupFeatureOptions();
+  // This is a new-game draft, not an import or a running campaign. Standard
+  // Core gets the same reporting profile as an explicit Core edition choice.
+  const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
@@ -17511,7 +17992,7 @@ function validateIncomingFeatureRules(snapshot,context='view'){
  const rules=E.validateCampaignRules(snapshot,context);
  const issue=E.peerRulesIssue(rules,E.campaignCapabilities());
  if(issue)throw Error(issue.message);
- if(context==='view'){E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
+ if(context==='view'){E.validateIncomeHistoryView(snapshot);E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
  return rules;
 }
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.
@@ -17693,6 +18174,141 @@ function createBankEarningsBridgeUi(engine){
 
 const bankEarningsBridgeView=createBankEarningsBridgeUi(E.BankEarningsBridge);
 function renderBankEarningsBridge(v){return bankEarningsBridgeView.render(v);}
+// UI-only adapter for already validated owner projections. Not a
+// network validator or a reconstruction of total funding/cash movement.
+function createFundingMovementUi(engine){
+ const unavailable=reason=>({available:false,reason}),int=Number.isSafeInteger;
+ function reviewFundingMovement(v){
+  const p=v?.me,r=p?.operatingReport,cycle=v?.gameOver?v?.cycle:v?.cycle-1;
+  if(!p?.id||!int(cycle)||cycle<1||r?.cycle!==cycle||!int(v.resolutionId)||v.resolutionId<1)
+   return unavailable('Complete a month to see recorded funding movements.');
+  const events=v.causalEvents,fences=v.operatingEvents;
+  if(!Array.isArray(events)||!Array.isArray(fences))return unavailable('Recorded owner funding history is unavailable.');
+  let previous=0;
+  for(const e of events){
+   if(!e||!int(e.id)||e.id<=previous||e.target!==p.id||e.visibility!=='owner'||!int(e.cycle)||e.cycle<1||e.cycle>cycle)
+    return unavailable('Recorded funding history does not match this owner.');
+   previous=e.id;
+  }
+  if(v.causalView&&v.causalView.firstIncludedId!==(events[0]?.id||null))return unavailable('Funding history coverage is inconsistent.');
+  const currentFences=fences.filter(e=>e?.cycle===cycle);
+  if(currentFences.length!==1)return unavailable('The completed funding report is unavailable.');
+  const fence=currentFences[0];
+  if(fence.target!==p.id||fence.visibility!=='owner'||fence.category!=='operations.result'||fence.source!=='operate'||!int(fence.id)||fence.id<=previous||fence.report?.cycle!==cycle||fence.report.profit!==r.profit)
+   return unavailable('The completed funding report does not match this snapshot.');
+  const rows=events.filter(e=>e.cycle===cycle&&e.category==='competition.deposits');
+  if(rows.length>1)return unavailable('Duplicate competition movements cannot be displayed as a total.');
+  let competition=null;
+  if(rows.length){
+   const e=rows[0];
+   if(e.source!=='depositContest'||!int(e.parentCause)||e.parentCause<1||e.parentCause>=e.id||!e.deltas||Array.isArray(e.deltas)||!Object.values(e.deltas).every(Number.isFinite))
+    return unavailable('The recorded competition movement is inconsistent.');
+   // An existing stage may change other owner statistics but not deposits.
+   const amount=e.deltas.deposits??0;
+   if(!int(amount))return unavailable('The recorded deposit amount is invalid.');
+   competition=amount;
+  }else{
+   // Absence means zero only when existing engine coverage proves a complete
+   // month. Prefix-pruned history must never become an invented zero.
+   try{if(engine.BankEarningsBridge.review(v).available)competition=0;}catch{}
+  }
+  const organic=int(r.depositGrowth)?r.depositGrowth:null;
+  return {available:true,cycle,organic,competition,coverage:competition===null?'partial':'recorded-components'};
+ }
+ const dollars=n=>n===null?'Unavailable':(n<0?'−':n>0?'+':'')+'$'+Math.abs(n).toLocaleString('en-US');
+ function renderFundingMovement(v){
+  if(!v?.me?.operatingReport)return '';
+  const q=reviewFundingMovement(v);
+  if(!q.available)return '<details class="funding-movements"><summary>Latest funding movements · unavailable</summary><p>Complete owner history is unavailable or inconsistent. No deposit movement has been inferred.</p></details>';
+  return '<details class="funding-movements"><summary>Funding movements · completed month '+q.cycle+'</summary><table class="forecast-table"><caption>Recorded deposit components · dollars, not income</caption><tbody><tr><th scope="row">Organic deposit flow · operating report</th><td>'+dollars(q.organic)+'</td></tr><tr><th scope="row">Recorded deposit competition</th><td>'+dollars(q.competition)+'</td></tr></tbody></table><p>These are separate recorded components, not total deposit change. Customer departures, company accounts and other stages may also change funding. Loan principal repayments release cash but are not earnings.</p><p>Standing-policy and draft organic forecasts exclude competition. Positive organic growth does not guarantee that total deposits will rise.</p>'+(q.competition===null?'<p>Competition history is incomplete in this view; unavailable does not mean zero.</p>':q.competition<0?'<p>Competition withdrew funding. Review deposit pricing, service capacity and market presence before committing more cash to loans, hiring or expansion.</p>':'')+'</details>';
+ }
+ return Object.freeze({review:reviewFundingMovement,render:renderFundingMovement});
+}
+const fundingMovementView=createFundingMovementUi(E);
+function standingOperatingPlan(p){
+ return {allocation:p.allocation,products:p.products,depositPolicy:p.policies.deposit,lendingPolicy:p.policies.lending,capitalPolicy:p.policies.capital};
+}
+function incomeAmount(value,signed=false){
+ if(!Number.isFinite(value))return 'Not available';
+ return (value<0?'−':signed&&value>0?'+':'')+'$'+Math.abs(value).toLocaleString(undefined,{maximumFractionDigits:2});
+}
+function incomeChange(change){
+ if(change.amount===null)return 'Not available';
+ return incomeAmount(change.amount,true)+(change.percent===null?' · % not meaningful': ' · '+(change.percent>0?'+':'')+change.percent.toFixed(1)+'%');
+}
+function renderBankIncomeStatement(v,before,after){
+ const expected=v.gameOver?v.cycle:v.cycle-1,actual=v.me.operatingReport?.cycle===expected?v.me.operatingReport:null;
+ if(![actual,before,after].some(r=>r?.incomeSource_version!==undefined))return '';
+ const columns=[['Last completed month',E.IncomeReview.statement(actual)],['Standing policies',E.IncomeReview.statement(before)],['Your draft',E.IncomeReview.statement(after)]],
+  template=columns.find(([,q])=>q.available)?.[1];
+ const notices=columns.filter(([,q])=>!q.available).map(([label,q])=>'<p class="micro">'+esc(label)+': '+esc(q.reason)+'</p>').join('');
+ if(!template)return '<p class="notice" role="status">Detailed income statement unavailable.</p>'+notices;
+ const labelFor=(key,label)=>key==='depositFees'&&!v.me.depositBook?'Core deposit-linked contribution (modeled)':label;
+ const table=(field,caption)=>'<div class="table-scroll"><table class="forecast-table"><caption>'+caption+'</caption><thead><tr><th>Bank operations</th>'+columns.map(([label])=>'<th>'+label+'</th>').join('')+'</tr></thead><tbody>'+template[field].map(([key,label])=>'<tr'+(['netInterest','operatingExpense','profit'].includes(key)?' class="statement-subtotal"':'')+'><th scope="row">'+esc(labelFor(key,label))+'</th>'+columns.map(([,q])=>'<td>'+incomeAmount(q.available?q[field].find(row=>row[0]===key)?.[2]:null)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+ const depositNotice=v.me.depositBook?'':'<p class="micro">Core estimates its deposit-linked contribution from total deposits, deposit strategy and the economy; it does not model billed account fees. This simplified contribution is separate from interest on earning assets. Customer deposit balances remain liabilities, not income.</p>';
+ return '<details class="bank-income-statement"><summary>Income statement · actual, standing &amp; draft</summary><p class="small">Bank operations only, not consolidated group earnings. Net interest income is a subtotal—not extra revenue. Costs below are already included in profit.</p>'+depositNotice+notices+table('rows','Monthly income and expenses · dollars')+
+  '<details><summary>Where operating costs go</summary>'+table('expenses','Components of operating expense · not additional charges')+'<p class="micro">Deposit servicing includes its product platforms. Shared payroll is not allocated into invented product-level profits. Capital spending and other cycle stages remain in the earnings bridge.</p></details>'+
+  '<details><summary>Legacy modeled bonuses · economic audit</summary>'+table('bonuses','Recorded abstract income · not attributed customer fees')+'<p class="micro">These older mechanics are shown separately rather than described as verified service revenue. Their long-run economics remain under review; displaying them does not add income.</p></details>'+
+  '<p class="micro muted">Securities interest uses the recorded operating-stage amount, not today’s closing asset balance. Prior detailed components are unavailable when they were not saved. Loan principal, deposits and client investment assets are not income. Modeled credit losses are not a GAAP allowance or provision statement. Subsidiaries have their own operating statements.</p></details>'+fundingMovementView.render(v);
+}
+function incomeHistoryGraph(points,key,standing,draft,balanceOnly=false){
+ const values=points.map(p=>p[key]).filter(Number.isFinite).concat([standing,draft].filter(Number.isFinite));
+ if(!values.length)return '<p class="micro">'+(balanceOnly?'No retained principal balances in this period.':'No completed income history yet. Forecasts are estimates, not recorded results.')+'</p>';
+ const lo=Math.min(0,...values),hi=Math.max(0,...values),span=hi-lo||1,width=620,height=140;
+ const y=n=>20+(hi-n)/span*90,x=i=>75+i*(width-110)/Math.max(1,points.length-(balanceOnly?1:0)),zero=y(0);
+ let previous=null;
+ const actual=points.map((p,i)=>{
+  const n=p[key];if(!Number.isFinite(n)){previous=null;return '';}
+  const pos={x:x(i),y:y(n)},line=previous?'<line x1="'+previous.x+'" y1="'+previous.y+'" x2="'+pos.x+'" y2="'+pos.y+'" stroke="currentColor" stroke-width="2"/>':'';
+  previous=pos;
+  return line+'<circle cx="'+pos.x+'" cy="'+pos.y+'" r="3" fill="currentColor"><title>Month '+p.cycle+': '+incomeAmount(n)+'</title></circle>';
+ }).join('');
+ const forecast=[['Standing',standing,-5],['Draft',draft,5]].map(([label,n,offset])=>Number.isFinite(n)?'<circle cx="'+(x(points.length)+offset)+'" cy="'+y(n)+'" r="5" fill="white" stroke="currentColor" stroke-dasharray="2 2"><title>'+label+' forecast: '+incomeAmount(n)+'</title></circle>':'').join('');
+ return '<figure class="income-history"><svg viewBox="0 0 '+width+' '+height+'" role="img" aria-label="'+(balanceOnly?'Actual outstanding principal in dollars, not income.':'Monthly income in dollars. Solid points are actual; hollow dashed points are forecasts.')+' Exact values in the table below."><line x1="70" y1="'+zero+'" x2="610" y2="'+zero+'" stroke="currentColor" opacity=".2"/><text x="2" y="16" font-size="11">'+esc(incomeAmount(hi))+'</text><text x="2" y="120" font-size="11">'+esc(incomeAmount(lo))+'</text>'+actual+forecast+'<text x="75" y="138" font-size="11">'+(points.length?'Month '+points[0].cycle:'No actuals')+'</text><text x="520" y="138" font-size="11">'+(balanceOnly?'Latest actual':'Forecast')+'</text></svg><figcaption class="micro">'+(balanceOnly?'Actual principal only; month 0 is the opening balance.':'Solid = actual · hollow/dashed = forecasts.')+' Missing months are gaps, not zero '+(balanceOnly?'balances.':'income. Dollar scale only; principal is not plotted as income.')+'</figcaption></figure>';
+}
+function renderPrincipalHistory(v){
+ const points=E.IncomeReview.principalHistory(v);
+ return '<details><summary>Loan principal history · separate from income</summary><p class="small">Current outstanding principal: <b>'+incomeAmount(v.me.stats.loans)+'</b>. Whole-bank balances include all settled movements, not just the operating stage.</p>'+
+  (points.length?incomeHistoryGraph(points,'principal',null,null,true)+'<div class="table-scroll"><table class="forecast-table"><caption>Actual loan balances · month 0 is opening, later months are closing</caption><thead><tr><th>Month</th><th>Outstanding principal</th><th>Change vs previous month</th></tr></thead><tbody>'+points.map(p=>'<tr><th scope="row">'+p.cycle+'</th><td>'+incomeAmount(p.principal)+'</td><td>'+incomeChange(p.change)+'</td></tr>').join('')+'</tbody></table></div>':'<p class="micro">No retained principal history. Old balances are not reconstructed from current income.</p>')+'</details>';
+}
+function bindIncomeServicingAction(v){
+ const button=$('#incomeServicingAction');if(!button||v.commercialServiceVersion!==1)return;
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle;
+ button.onclick=()=>{
+  const now=currentView();
+  if(!now||(game||view)!==campaign||now.me.id!==owner||now.cycle!==cycle||now.commercialServiceVersion!==1)return;
+  // Navigation only. The existing department controller protects unstaged
+  // inputs and performs its own review/adoption; this never buys capacity.
+  if(now.me.departmentFunctions){
+   navigatePlanReview({tab:'workforce',peopleDesk:'coverage',target:'#departmentPanel'});
+   const controller=departmentFunctionsLive.controller;
+   if(controller?.select('relationships',controller.token())){
+    renderDepartments(currentView());focusWorkspaceTarget($('#df-detail-title'));
+   }
+  }else navigatePlanReview({tab:'operations',desk:'monthly',target:'#staffGrid'});
+ };
+}
+function renderIncomeReview(v,before,after,kind='loan'){
+ const loan=kind==='loan',key=loan?'loanIncome':'commercialIncome',title=loan?'Loan income · actual & outlook':'Business & merchant fees · actual & outlook';
+ const points=E.IncomeReview.history(v),q=E.IncomeReview.compare(v,before,after,key);
+ const rows=[['Last actual'+(q.cycle?' · month '+q.cycle:''),incomeAmount(q.actual)],['Actual vs previous month',incomeChange(q.actualChange)],
+  ['Standing-policy forecast',incomeAmount(q.standing)],['Standing forecast vs last actual',incomeChange(q.standingChange)],['Draft forecast',incomeAmount(q.draft)],
+  ['Draft forecast vs last actual',incomeChange(q.forecastChange)],['Effect of draft vs standing policies',incomeChange(q.draftChange)]];
+ const net=loan?E.IncomeReview.compare(v,before,after,'loanAfterLosses'):null;
+ const relationships=loan?null:E.IncomeReview.relationshipChange(v),count=n=>(n>0?'+':'')+n.toLocaleString();
+ const provenance=v.incomeHistoryVersion===1?'Twelve-month owner-only records are retained in this campaign independently of diagnostic-log pruning.':'Uses retained owner-only operating reports. Unavailable history is not reconstructed. Earlier records may have been pruned from older saves.';
+ const coverage=r=>Number.isFinite(r?.commercialServiceCoverage)?(r.commercialServiceCoverage*100).toFixed(1)+'%':'Not available';
+ const servicing=!loan&&v.commercialServiceVersion===1?'<p class="small">Relationship servicing: standing <b>'+coverage(before)+'</b> · draft <b>'+coverage(after)+'</b>. Fees require serviced relationships present at the start of operations; customers acquired during that step start earning next month. '+(v.me.departmentFunctions?'Use Sales and relationships department staffing or its paid service provider to cover this work. Payroll and vendor costs remain included in bank expenses.':'Existing Business bankers service the book first; their remaining time wins new business. No additional servicing fee is charged on top of payroll.')+'</p>'+
+  (Number.isFinite(after?.commercialServiceCoverage)&&after.commercialServiceCoverage<1?'<p class="warn" role="status">Your draft leaves existing relationships partly or wholly unserved. Their recurring fees fall even if customer counts grow. Reassign available time or review paid capacity before expanding.</p>':'')+
+  '<button type="button" class="btn" id="incomeServicingAction">'+(v.me.departmentFunctions?'Review relationship servicing':'Review Business staffing')+'</button>':'';
+ return '<section class="income-review" aria-label="'+title+'"><h4>'+title+'</h4><div class="decision-facts"><div><small>Last completed month</small><b>'+incomeAmount(q.actual)+'</b></div><div><small>Draft forecast</small><b>'+incomeAmount(q.draft)+'</b></div><div><small>Forecast vs last actual</small><b>'+incomeChange(q.forecastChange)+'</b></div></div>'+
+  '<p class="micro">Zero draft effect means no change from standing policies—not zero growth. Forecasts exclude uncertain wins, rival decisions and executive events.</p>'+servicing+(loan&&v.creditWorkloadVersion===1?'<p class="small">Loan administration follows outstanding principal and active product portfolios by location, plus individual company loans—not the number of internal vintage records. Collections still require separate capacity as loans fall into arrears. Use Credit administration and Collections staffing to address shortfalls.</p>':'')+(loan?renderPrincipalHistory(v):'')+
+  '<details><summary>Income history &amp; comparison details</summary>'+incomeHistoryGraph(points,key,q.standing,q.draft)+
+  '<div class="table-scroll"><table class="forecast-table"><caption>Distinct comparisons · dollars per month</caption><tbody>'+rows.map(([label,value])=>'<tr><th scope="row">'+label+'</th><td>'+value+'</td></tr>').join('')+'</tbody></table></div>'+
+  (loan?'<p class="small">After modeled credit losses: last actual <b>'+incomeAmount(net.actual)+'</b> · standing <b>'+incomeAmount(net.standing)+'</b> · draft <b>'+incomeAmount(net.draft)+'</b>. Before shared funding and operating costs; not net lending profit.</p>':'<p class="micro">Business/merchant fees are the engine’s aggregate relationship income. Treasury contracts and subsidiary earnings are separate; they are not added to this line. This is not transaction-level attribution.</p>')+
+  (relationships?'<p class="small">Net relationship change in month '+relationships.cycle+': <b>'+count(relationships.business)+' business</b> · <b>'+count(relationships.merchant)+' merchant</b>. Includes all settled additions and losses, not just recruitment. These categories can overlap; do not add them as unique customers.</p>':'')+
+  '<div class="table-scroll"><table class="forecast-table"><caption>Retained actual records · forecasts are not included</caption><thead><tr><th>Month</th><th>'+ (loan?'Loan interest':'Business/merchant fees')+'</th>'+(loan?'<th>Credit losses</th><th>Net operating principal change</th>':'<th>Service contract fees (all types)</th>')+'</tr></thead><tbody>'+points.map(p=>'<tr><th scope="row">'+p.cycle+'</th><td>'+incomeAmount(p[key])+'</td>'+(loan?'<td>'+incomeAmount(p.chargeoff)+'</td><td>'+incomeAmount(p.loanGrowth,true)+'</td>':'<td>'+incomeAmount(p.contractFees)+'</td>')+'</tr>').join('')+'</tbody></table></div><p class="micro muted">'+provenance+' '+(loan?'Principal change is a balance movement, not earnings; this table does not claim a historical closing balance.':'Contract fees may be billed but not yet collected.')+'</p></details></section>';
+}
 function tierClass(key){return key==='strong'?'good':key==='watch'?'warn':'bad'}
 function ownerLabel(share){return share>=55?['YOU CONTROL','me']:share<=45?['RIVAL CONTROLS','rival']:['CONTESTED','contested']}
 const MAP_POSITIONS={downtown:[24,29],northside:[43,14],industrial:[13,53],suburbs:[42,48],county_seat:[61,31],university:[64,13],metro_core:[64,59],state_capital:[83,29],agricultural:[29,75],innovation:[84,53],logistics:[58,82],resort:[84,80]};
@@ -17771,7 +18387,7 @@ function loanBookNotice(v){
  const r=v.me.operatingReport;if(!r||!Number.isFinite(r.loanGrowth)||r.loanGrowth>=0)return '';
  let capacity=null;try{capacity=E.regionalBranchMetrics(v.me).loanCapacity;}catch(e){capacity=null;}
  const shrink=money(Math.abs(Math.round(r.loanGrowth)));
- return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Repayments exceeded new lending by '+shrink+' last month'
+ return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Net operating principal fell by '+shrink+' last month; repayments and credit losses can both contribute'
   +(Number.isFinite(capacity)?'; local origination capacity is '+money(Math.round(capacity))+' against a book of '+money(Math.round(v.me.stats.loans)):'')
   +'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>';
 }
@@ -17789,7 +18405,7 @@ function renderCoreLoanIncome(v,before,after){
 function renderOperatingPreview(v){
  if(operatingForecastView.owner!==v.me.id)operatingForecastView={owner:v.me.id,desk:'bank'};
  if([6,7,8,9,10].includes(v.financialGroupVersion))renderActualBankOperatingResult(v);
- const basePlan={allocation:v.me.allocation,products:v.me.products,depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital};
+ const basePlan=standingOperatingPlan(v.me);
  const issue=departmentForecastIssue(v,draft)||departmentForecastIssue(v,basePlan);
  if(issue){$('#operatingPreview').innerHTML=renderBalanceSheet(v)+departmentForecastNotice(issue);return;}
  const before=E.operatingPreview(v.me,basePlan,v.economy,v,true);let after,creditNotice='';
@@ -17806,14 +18422,15 @@ function renderOperatingPreview(v){
  if(v.me.fundingCovenant)rows.push(['Debt after operations (before treasury repayment)','emergencyDebt'],['Covenant excess after operations','fundingExcess']);
  const signed=n=>(n<0?'−':n>0?'+':'')+money(Math.abs(n));
  const desks={bank:'Bank forecast',commercial:'Commercial banking',books:'Balances & books'},desk=operatingForecastView.desk;
- const fundingRules=v.campaignRulesVersion===1?'Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included in the forecast. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'This saved campaign retains its original capital and funding mechanics.';
+ const fundingRules=(v.campaignRulesVersion===1||v.bankEconomicsVersion===2)?'Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included in the forecast. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'This saved campaign retains its original capital and funding mechanics.';
  const comparison=list=>'<table class="forecast-table"><thead><tr><th>Per cycle</th><th>Current plan</th><th>Your draft</th><th>Change</th></tr></thead><tbody>'+list.map(([label,key])=>'<tr><td>'+label+'</td><td>'+money(before[key])+'</td><td>'+money(after[key])+'</td><td>'+signed(after[key]-before[key])+'</td></tr>').join('')+'</tbody></table>';
  $('#operatingPreview').innerHTML=creditNotice+'<div class="workbench-toolbar" role="group" aria-label="Forecast views">'+Object.entries(desks).map(([key,label])=>'<button class="btn" type="button" data-forecast-view="'+key+'" aria-pressed="'+(desk===key)+'">'+label+'</button>').join('')+'</div>'+
   '<div data-forecast-panel="books"'+(desk!=='books'?' hidden':'')+'><h3>FUNDING RULES &amp; BOOKS</h3><p class="small">'+fundingRules+'</p>'+renderBalanceSheet(v)+loanBookNotice(v)+renderFundingCovenant(v)+renderDepositProducts(v)+renderCreditBook(v)+'</div>'+
   '<div data-forecast-panel="bank"'+(desk!=='bank'?' hidden':'')+'><h3>OPERATING PREVIEW</h3><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Pilot forecasts include funding sales needed for their own projected flows.</p>'+comparison(rows.slice(0,summaryCount))+renderCoreLoanIncome(v,before,after)+
-  renderCommercialSnapshot(v,after.commercial)+(rows.length>summaryCount?'<details><summary>Funding, product and servicing breakdown</summary>'+comparison(rows.slice(summaryCount))+'</details>':'')+'<p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash. Detailed funding terms and current balances are under Balances &amp; books.</p></div>'+
-  '<div data-forecast-panel="commercial"'+(desk!=='commercial'?' hidden':'')+'>'+renderCommercialForecast(v,before.commercial,after.commercial)+'</div>';
+  renderBankIncomeStatement(v,before,after)+renderIncomeReview(v,before,after)+renderCommercialSnapshot(v,after.commercial)+(rows.length>summaryCount?'<details><summary>Funding, product and servicing breakdown</summary>'+comparison(rows.slice(summaryCount))+'</details>':'')+'<p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash. Detailed funding terms and current balances are under Balances &amp; books.</p></div>'+
+  '<div data-forecast-panel="commercial"'+(desk!=='commercial'?' hidden':'')+'>'+renderIncomeReview(v,before,after,'commercial')+renderCommercialForecast(v,before.commercial,after.commercial)+'</div>';
  renderBankRecovery(v);
+ bindIncomeServicingAction(v);
  const identity=game||view,owner=v.me.id,cycle=v.cycle;
  $$('[data-forecast-view]').forEach(button=>button.addEventListener('click',()=>{
   const now=currentView(),key=button.dataset.forecastView;if(!now||(game||view)!==identity||now.me.id!==owner||now.cycle!==cycle||!Object.hasOwn(desks,key))return;
@@ -17853,7 +18470,12 @@ function renderCommercialForecast(v,before,after){
 }
 function renderActualBankOperatingResult(v){
  const actual=v.me.operatingReport;
- $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${[['Income before funding',actual.depositIncome+actual.loanIncome+actual.commercialIncome+actual.otherIncome],['Funding expense',-actual.fundingCost],['Payroll & facilities',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment],['Operating profit',actual.profit]].map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${money(value)}</b></div>`).join('')}</div><p class="micro muted">Operating stage only. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
+ const bridge=E.IncomeReview.reconciliation(actual);
+ const items=actual?[['Loan interest',actual.loanIncome],[v.me.depositBook?'Deposit account fees':'Legacy deposit-linked earnings (abstract)',actual.depositIncome],['Business & merchant fees',actual.commercialIncome],['Other modeled income',actual.otherIncome],['Funding expense',-actual.fundingCost],['Operating expenses (including payroll & facilities)',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment]]:[];
+ if(bridge?.invoiceLoss)items.push(['Corporate invoice losses',-bridge.invoiceLoss]);
+ if(bridge?.residual)items.push([bridge.reconciled?'Report rounding':'Unreconciled report difference',bridge.residual]);
+ if(actual)items.push(['Operating profit',actual.profit]);
+ $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${items.map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${incomeAmount(value)}</b></div>`).join('')}</div>${bridge&&!bridge.reconciled?'<p class="bad" role="status">This report does not reconcile. The difference is shown for investigation, not treated as earned income.</p>':''}<p class="micro muted">Operating stage only. Other modeled income can include earning-asset returns, service fees and legacy abstract bonuses; it is not necessarily all non-interest income. Deposits are liabilities, not revenue. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
  if([6,7,8,9,10].includes(v.financialGroupVersion)&&typeof renderBankEarningsBridge==='function')$('#operatingReport').innerHTML+=renderBankEarningsBridge(v);
 }
 
@@ -17900,6 +18522,13 @@ function marketReentryCost(v,market){
  return costs.length?Math.min(...costs):E.PROJECTS.branch.cost;
 }
 function renderMarkets(v){const inspected=inspectedMarket(v);renderFacilityNetwork(v);if(v.me.facilityLifecycle)renderFacilityLifecycle(v);else{const lifecycleMount=$('#facilityLifecyclePanel');if(lifecycleMount){lifecycleMount.innerHTML='';lifecycleMount.classList.add('hidden')}}$('#marketTitle').textContent=v.campaignRulesVersion===1?'TWO-REGION MARKET NETWORK':'THE CITY';const locked=Object.values(v.territories).filter(t=>!t.unlocked),next=locked.sort((a,b)=>a.unlock-b.unlock)[0];$('#unlockText').textContent=v.campaignRulesVersion===1?'ALL SIX MARKETS OPEN · PAID RE-ENTRY AVAILABLE':next?`NEXT DISTRICTS OPEN: CYCLE ${next.unlock}`:'THE ENTIRE CITY IS OPEN';const entries=Object.entries(v.territories),roads=MAP_LINKS.filter(([a,b])=>v.territories[a]&&v.territories[b]).map(([a,b])=>{const A=mapPosition(a,v.territories[a]),B=mapPosition(b,v.territories[b]),x1=A[0]*10,y1=A[1]*6.5,x2=B[0]*10,y2=B[1]*6.5,fade=v.territories[a].unlocked&&v.territories[b].unlocked?1:.45;return`<g opacity="${fade}"><line class="city-road-edge" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/><line class="city-road" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/></g>`}).join(''),districts=entries.map(([k,t])=>districtArt(k,t)).join(''),nodes=marketEntries(v).map(([k,t])=>{const exitLimit=v.regionalEconomyVersion===1?6:3,streak=(t.exitStreak&&t.exitStreak[0])||0,withdrawn=!!(t.exited&&t.exited[0]),risk=!withdrawn&&streak>0?`<div class="market-risk ${streak>=exitLimit-1?'critical':'warning'}">AT RISK ${streak}/${exitLimit} · below 12% share</div>`:'',reentry=withdrawn?`<div class="market-risk withdrawn">${[8,9,10].includes(v.financialGroupVersion)?`WITHDRAWN · re-enter from ${money(marketReentryCost(v,k))}`:'WITHDRAWN · inspect campaign restrictions'}</div>`:'',[label,cls]=ownerLabel(t.shares[0]),p=mapPosition(k,t),models=(t.facilityModels||[]).map(type=>`<span class="facility-chip ${type}">${type==='retail'?'FULL SERVICE':type.toUpperCase()}</span>`).join('');return`<button type="button" class="market-node ${cls} ${inspected===k?'selected':''} ${t.unlocked?'':'locked'} ${withdrawn?'withdrawn':streak>0?'at-risk':''}" style="left:${p[0]}%;top:${Math.min(91,p[1]+7)}%" data-market="${k}" aria-label="${esc(t.name)}, ${label}, your share ${t.shares[0].toFixed(1)} percent" aria-pressed="${inspected===k}"><div class="node-head"><span class="share-ring" style="--share:${t.shares[0]}"></span><div><div class="market-name">${esc(t.name)}</div><div class="node-share">YOU ${t.shares[0].toFixed(1)}% · RIVAL ${t.shares[1].toFixed(1)}%</div></div></div><div class="node-meta"><span>VALUE ${t.value}</span><span>FACILITIES ${t.branches[0]}:${t.branches[1]}</span><span>${t.unlocked?label:`OPENS ${t.unlock}`}</span></div>${models?`<div class="facility-key">${models}</div>`:''}${risk}${reentry}</button>`}).join('');$('#marketMap').innerHTML=`<div class="map-board"><svg class="map-routes" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><linearGradient id="waterFade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bce2f2"/><stop offset="1" stop-color="#7dbbd9"/></linearGradient></defs><path class="city-water" fill="url(#waterFade)" d="M690,0 H1000 V650 H820 C875,535 760,446 806,342 846,251 752,151 690,0Z"/><polygon class="city-ground" points="55,275 330,46 825,116 950,408 710,620 190,572"/><polygon class="city-block" points="120,286 336,86 525,113 320,305"/><polygon class="city-block" points="339,322 548,126 768,157 565,350"/><polygon class="city-block" points="594,364 786,182 900,405 715,574"/><polygon class="city-block" points="148,324 310,340 538,555 207,531"/>${roads}${districts}<ellipse cx="505" cy="362" rx="230" ry="118" fill="none" stroke="#91b7aa" stroke-width="2" stroke-dasharray="7 8" opacity=".65"/></svg>${nodes}</div><div class="legend"><span><i class="l-me"></i>YOU · ${esc(v.me.name)} · SOLID</span><span><i class="l-rival"></i>RIVAL · ${esc(v.rival.name)} · DASHED</span><span><i class="l-contested"></i>CONTESTED DISTRICT</span><span>RING = ${v.marketEconomyVersion===1?'INFLUENCE, NOT DEPOSITS':'MARKET SHARE'}</span><span>FACILITIES = YOU:RIVAL</span></div><details class="market-region-details"><summary>Regional books, ownership &amp; network totals</summary>${renderRegionSummary(v)}</details>`;renderMarketInspector(v);const token=marketActionToken(v);$$('button[data-market]').forEach(b=>b.addEventListener('click',()=>{if(marketActionCurrent(token,false))inspectMarket(v,b.dataset.market)}))}
+// Legacy agreements have no named-company profile. This is a UI label, not
+// a synthesized company, relationship, saved field or simulated preference.
+function serviceClientPresentation(v,agreement){
+ const profile=E.clientProfile(agreement);if(profile)return profile;
+ if(agreement.clientIndex!==undefined)throw Error('Invalid service client profile.');
+ return {name:(v.territories[agreement.market]?.name||'Market')+' client',text:'This campaign tracks this service agreement without a named-company profile. Pricing, service capacity and renewal rules still apply.'};
+}
 // Retained base-render alias for existing integration entry points. Service
 // deployments now belong to the selected capability's deployment inspector.
 const serviceProjectsUI=renderProjects;
@@ -17913,7 +18542,7 @@ function renderExpandedServices(v){
  let p;try{p=serviceDraftPlayer(v);}catch(error){$('#pipeline').insertAdjacentHTML('beforeend','<section class="notice" style="grid-column:1/-1"><h3>Commercial service forecast unavailable</h3><p>'+esc(error.message)+'</p><button type="button" class="btn" id="serviceCapacityIssue">Review work commitments</button></section>');$('#serviceCapacityIssue')?.addEventListener('click',()=>setPeopleDesk('coverage',{focus:true}));return;}
  const policy=draft.servicePolicy,load=E.serviceLoad(p),token=opportunityToken(v),disabled=!opportunityCurrent(token)?'disabled':'',selected=selectedServiceAgreement(v);
  const toolsOpen=!!$('#servicePricing')?.open;
- const clients=v.serviceAgreements.map(c=>{const profile=E.clientProfile(c),type=E.SERVICE_TYPES[c.kind],own=c.owner===v.me.id;
+ const clients=v.serviceAgreements.map(c=>{const profile=serviceClientPresentation(v,c),type=E.SERVICE_TYPES[c.kind],own=c.owner===v.me.id;
   return '<button type="button" class="object-row" data-service-inspect="'+esc(c.id)+'" aria-pressed="'+(selected?.id===c.id)+'" '+(c.companyClosed?'disabled':'')+'><span><b>'+esc(profile.name)+'</b><small>'+esc(type.name)+' · '+esc(v.territories[c.market].name)+'</small></span><span class="object-tag">'+(c.companyClosed?'Closed':draft.contractBid===c.id?'Bid staged':own?'Your client':c.due===v.cycle?'Open this month':'Month '+c.due)+'</span></button>';
  }).join('');
  const number=(key,label,max)=>'<label>'+label+' <select data-service-number="'+key+'" '+disabled+'>'+Array.from({length:max+1},(_,i)=>'<option value="'+i+'" '+(policy[key]===i?'selected':'')+'>'+i+'</option>').join('')+'</select></label>';
@@ -18123,7 +18752,7 @@ function buildServiceAgreementProposal(v,plan,review,choice){
  const budget=E.planBudget(v.me,candidate,v),load=E.serviceLoad(prepared),effects=[
   'Reserve '+choice.staff+' existing Business banker'+(choice.staff===1?'':'s')+' and '+choice.outsourcing+' outsourced service points for the whole signed book'+(agreement.owner!==v.me.id?' plus this prospective agreement':'')+'. These are standing policies, not hires.',
   'The outsourcing bill is $'+load.outsourced.toLocaleString('en-US')+' per month; active platforms cost $'+load.platform.toLocaleString('en-US')+' per month. Shared payroll still applies. Costs start this month and continue until revised.',
-  bid?'Pursue '+E.SERVICE_TYPES[agreement.kind].name+' for '+E.clientProfile(agreement).name+'. A new award earns fees from next month; a rival or outside provider may win.':agreement.owner===v.me.id?'Change delivery capacity only. Existing renewal or decline instructions remain unchanged.':'Prepare capacity only. This agreement is not open for bids until month '+agreement.due+'. No future bid is scheduled.',
+  bid?'Pursue '+E.SERVICE_TYPES[agreement.kind].name+' for '+serviceClientPresentation(v,agreement).name+'. A new award earns fees from next month; a rival or outside provider may win.':agreement.owner===v.me.id?'Change delivery capacity only. Existing renewal or decline instructions remain unchanged.':'Prepare capacity only. This agreement is not open for bids until month '+agreement.due+'. No future bid is scheduled.',
   'The shared discretionary budget records $'+budget.total.toLocaleString('en-US')+' of commitments. Service delivery charges above are operating costs, not added to that budget total. No money is paid and no turn is submitted now.'
  ];
  if(review.technologyAdded)effects.splice(1,0,'Add '+review.technologyAdded+' contracted Technology work unit'+(review.technologyAdded===1?'':'s')+' for $'+(review.technologyAdded*E.DepartmentFunctions.FUNCTIONS.technology.vendorRate).toLocaleString('en-US')+' per month. This separate standing support is required for the proposed service capacity; no employee is hired.');
@@ -18154,7 +18783,7 @@ function confirmServiceAgreement(){
 function cancelServiceAgreement(){serviceWorkspace.pending=null;renderPipeline(currentView());$('#serviceInspectorTitle')?.focus?.({preventScroll:true});}
 function renderServiceAgreementInspector(v,mount=$('#pipeline')){
  const c=selectedServiceAgreement(v);if(!c)return;
- const token=opportunityToken(v),locked=!opportunityCurrent(token),type=E.SERVICE_TYPES[c.kind],profile=E.clientProfile(c),own=c.owner===v.me.id;
+ const token=opportunityToken(v),locked=!opportunityCurrent(token),type=E.SERVICE_TYPES[c.kind],profile=serviceClientPresentation(v,c),own=c.owner===v.me.id;
  let review,options=[],issue='';try{review=serviceAgreementOptions(v,draft,c.id);options=review.options;}catch(error){issue=error.message;}
  const selected=draft.contractBid===c.id,rows=options.map(o=>{
   let proposal,reason='';try{proposal=buildServiceAgreementProposal(v,draft,review,o);}catch(error){reason=error.message;}
@@ -18382,7 +19011,7 @@ function renderPeopleRecruitment(v){
   const definition=E.SPECIALIST_ROLES[role],name=definition?.name||'Generalist bankers',count=role==='generalist'?(draft.hires||0):(draft.specialistHires?.[role]||0);
   let plus,reason='';try{plus=recruitmentOption(v,role,1);reason=plus.reason;}catch(error){reason=error.message;}
   const premium=definition?.payroll||0;
-  return '<article class="workforce-card"><h3>'+esc(name)+'</h3><p class="small">'+esc(definition?.effect||'Flexible base capacity in any department; no specialist skill bonus or salary premium.')+'</p><p><b>'+count+' staged</b> · arriving next month</p><p class="small">Next recruit: '+(plus?'<b>'+cash(plus.extraSigning)+'</b> added signing cost':'quote blocked')+'</p><p class="micro">Recurring contractual base pay $18,000/month'+(premium?' + '+cash(premium)+' specialty premium':'')+'. Existing efficiency discounts affect base payroll. '+(definition?'Enters at skill 20; joining can dilute the department average.':'No training specialization required.')+'</p><button class="btn" type="button" id="people-hire-'+role+'-less" aria-label="Remove one '+esc(name)+' recruit" '+(locked||!count?'disabled':'')+'>−</button> <button class="btn" type="button" id="people-hire-'+role+'-more" '+(locked||reason?'disabled':'')+'>Stage one '+esc(name)+' recruit</button><p class="micro '+(reason?'bad':'muted')+'">'+esc(locked?'Plan locked or connection paused.':reason||'Optional. Uses the shared hiring limit and spending room.')+'</p></article>';
+  return '<article class="workforce-card"><h3>'+esc(name)+'</h3><p class="small">'+esc(definition?.effect||'Flexible base capacity in any department; no specialist skill bonus or salary premium.')+'</p><p><b>'+count+' staged</b> · arriving next month</p><p class="small">Next recruit: '+(plus?'<b>'+cash(plus.extraSigning)+'</b> added signing cost':'quote blocked')+'</p><p class="micro">Recurring contractual base pay '+cash(E.bankBasePayroll(v.me))+'/month'+(premium?' + '+cash(premium)+' specialty premium':'')+'. Existing efficiency discounts affect base payroll. '+(definition?'Enters at skill 20; joining can dilute the department average.':'No training specialization required.')+'</p><button class="btn" type="button" id="people-hire-'+role+'-less" aria-label="Remove one '+esc(name)+' recruit" '+(locked||!count?'disabled':'')+'>−</button> <button class="btn" type="button" id="people-hire-'+role+'-more" '+(locked||reason?'disabled':'')+'>Stage one '+esc(name)+' recruit</button><p class="micro '+(reason?'bad':'muted')+'">'+esc(locked?'Plan locked or connection paused.':reason||'Optional. Uses the shared hiring limit and spending room.')+'</p></article>';
  }).join('');
  mount.innerHTML='<h2>RECRUITMENT</h2><p class="small">Generalists and specialists belong to one employee pool. Compare their jobs and costs here; assigning existing employees is a separate instruction.</p><div class="people-summary"><div><span>Shared monthly recruitment</span><b>'+E.planHires(draft)+' / '+E.hireLimit(v.me)+'</b><small>All five recruit types use the same limit.</small></div><div><span>Combined signing cost</span><b>'+cash(quote.recruiting)+'</b><small>Included in the monthly plan budget—not another charge.</small></div><div><span>First productive month</span><b>'+(v.cycle+1)+'</b><small>No new recruit repairs current-month work coverage.</small></div></div><div class="people-recruit-grid">'+cards+'</div><p class="small">Recruitment can dilute morale and permanently increases payroll. Stage only changes this draft. Monthly changes provides individual undo; cash is charged when recruitment settles.</p><button class="btn" id="peopleRecruitmentAllocation" type="button">Review existing employee allocation</button>';
  for(const role of ['generalist',...Object.keys(E.SPECIALIST_ROLES)])for(const [suffix,step]of [['less',-1],['more',1]])$('#people-hire-'+role+'-'+suffix).addEventListener('click',()=>stagePeopleHire(role,step,token));
@@ -18505,7 +19134,7 @@ function renderWorkforce(v) {
       </section>
       <p class="small" id="workforceFormStatus" role="status"></p><div class="object-action-strip"><button class="btn" type="button" id="previewWorkforceForm" ${disabled}>Preview training changes</button><button class="btn" type="button" id="stageWorkforceForm" disabled>Stage reviewed training</button><button class="btn" type="button" id="discardWorkforceForm" ${disabled}>Discard unstaged training</button></div><div id="workforceFormPreview"></div>
       <details><summary>Recruitment, pay and shared funding limits</summary><p class="small">${row.hires} recruits staged for this specialty. Compare all five recruit types and their shared limit in Recruitment.</p><button type="button" class="btn" id="workforceRecruitment">Open recruitment</button>
-        <p class="micro">Each hire costs the normal size-adjusted recruiting fee <b>plus ${money(row.premium)}</b>. Ongoing pay: $18K base plus ${money(E.SPECIALIST_ROLES[row.role].payroll)} premium/month. Existing efficiency discounts affect base pay, not specialist premiums.</p>
+        <p class="micro">Each hire costs the normal size-adjusted recruiting fee <b>plus ${money(row.premium)}</b>. Ongoing pay: ${money(E.bankBasePayroll(v.me))} base plus ${money(E.SPECIALIST_ROLES[row.role].payroll)} premium/month. Existing efficiency discounts affect base pay, not specialist premiums.</p>
         <p class="micro ${review.training.paused ? 'bad' : 'muted'}">Training is reserved alongside the full plan and included in operating expenses—do not count it twice. If the combined training bill breaches the protected cash reserve or capital limit, every department pauses together. Events and rival actions can change actual affordability.</p></details>
     </div></div>
     <details class="workforce-evidence"><summary>Bank-wide workforce costs, skills and morale</summary><div class="workforce-summary">
@@ -18543,6 +19172,7 @@ function renderPeopleOverview(v){
  if(!model){mount.innerHTML='';return;}
  const {w,f,tasks,pools}=model,short=tasks.filter(row=>row.shortfall>0),roles={service:'Retail & service',business:'Business banking',lending:'Lending',operations:'Operations & risk'},number=n=>Number(n.toFixed(3)).toLocaleString('en-US');
  const effects={offerSales:['Relationship offers','Less capacity to win additional customer products.'],commercialRelationships:['Commercial relationships','Less business and merchant acquisition capacity.'],householdSupport:['Household service','Service coverage and persistent customer goodwill can suffer.'],applicationProcessing:['Application processing','Fewer pending applications can activate; waiting customers can abandon.'],commercialDelivery:['Contract delivery','Signed service agreements receive less coverage.'],creditAdministration:['Credit administration','New lending is constrained; zero coverage pauses ordinary origination, not existing loan servicing.'],collections:['Collections','Delinquent loan servicing has less capacity.'],technology:['Technology','Platform service and disruption resilience are constrained.'],risk:['Risk & compliance','Credit controls and examination resilience are constrained.'],treasury:['Treasury','Locked-term deposit handling has less coverage.'],people:['People management','Paid training gains and management performance are constrained.']};
+ if(v.me.commercialServiceVersion===1)effects.commercialRelationships[1]='Less coverage for recurring business and merchant fees, as well as acquisition.';
  const button=(key,label)=>'<button class="btn" type="button" data-people-desk="'+key+'">'+label+'</button>';
  mount.innerHTML='<header class="section-head"><div><h2>PEOPLE &amp; OPERATIONS</h2><p class="small">Who is available, which work is covered, and what needs your attention this month.</p></div><button type="button" class="btn" data-help-topic="coverage">How coverage works</button></header><div class="people-summary">'+
   '<div><span>Employees on payroll now</span><b>'+model.headcount+'</b><small>'+w.generalists+' generalists · '+(model.headcount-w.generalists)+' specialists. Specialists are included, not extra employees.</small></div>'+
@@ -18553,7 +19183,7 @@ function renderPeopleOverview(v){
   (f?'<section><h3>'+(short.length?'Work at risk this month':'Quoted tasks have coverage')+'</h3><p class="small">'+(short.length?'Start with the work you want to protect. More employees alone will not help unless their time is assigned to that task.':'Coverage is a capacity estimate, not guaranteed revenue or a guarantee against disruption.')+'</p>'+
   (short.length?'<div class="people-risk-list" aria-label="Work shortages and business consequences">'+short.map(row=>'<button type="button" class="object-row" data-people-desk="functions" data-people-function="'+esc(row.department||'')+'"><span><b>'+esc(effects[row.id]?.[0]||row.id)+'</b><small>'+esc(effects[row.id]?.[1]||'Task delivery has less capacity.')+'</small><small>Inspect coverage →</small></span><span class="object-tag">'+Math.round(100*row.served/row.workload)+'% covered</span></button>').join('')+'</div>':'')+
   '<p class="micro">Task percentages show the exact work forecast rounded for display. Vendor work is not headcount. Inspect a task to review its department, staff and outsourcing options.</p>'+
-  '<details><summary>Where the shared employee time goes</summary><p class="small">Reservations use the same employee pool. Time retained for existing work is not available again for new quotas. Remaining below is before facility/sales use—not idle staff. Specialist expertise can improve output but cannot be spent as another physical employee.</p><div class="table-scroll" tabindex="0" aria-label="Shared employee time accounting"><table class="regional-table"><thead><tr><th>Department</th><th>Assigned</th><th>Teaching</th><th>Retained work</th><th>Extra function work</th><th>Fraction held</th><th>Remaining before facilities/sales</th></tr></thead><tbody>'+pools.map(row=>'<tr><th>'+roles[row.role]+'</th>'+['assigned','teaching','retained','extra','rounding','remaining'].map(key=>'<td>'+number(row[key])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div><p class="micro">Assigned − teaching − retained − extra − held fraction = remaining. Negative remaining is an overcommitment, not additional capacity.</p></details></section>':'')+
+  '<details><summary>Where the shared employee time goes</summary><p class="small">Reservations use the same employee pool. Time retained for existing work is not available again for new quotas. Remaining below is before facility/sales use—not idle staff. Specialist expertise can improve output but cannot be spent as another physical employee.</p><div class="table-scroll" tabindex="0" aria-label="Shared employee time accounting"><table class="regional-table"><caption>Employee-months · one full-time employee = 1</caption><thead><tr><th>Department</th><th>Assigned</th><th>Teaching</th><th>Retained work</th><th>Extra function work</th><th>Fraction held</th><th>Remaining before facilities/sales</th></tr></thead><tbody>'+pools.map(row=>'<tr><th>'+roles[row.role]+'</th>'+['assigned','teaching','retained','extra','rounding','remaining'].map(key=>'<td>'+number(row[key]/4)+'</td>').join('')+'</tr>').join('')+'</tbody></table></div><p class="micro">Assigned − teaching − retained − extra − held fraction = remaining. Negative remaining is an overcommitment, not additional capacity. Values are rounded to three decimals for display; the underlying time is unchanged.</p></details></section>':'')+
   '<details><summary>Choose a remedy—not an automatic best plan</summary><ul class="small"><li>Reassign available time: no new hire required, but the work losing that time may deteriorate.</li><li>Order permitted vendor capacity: helps the supported task this month if paid; recurring costs and supplier limits apply.</li><li>Recruit: shared hiring limit, signing cost and permanent payroll; arrivals cannot repair this month’s shortage.</li><li>Train or improve leadership: consumes budget and sometimes teaching time now; qualified staff gain capability later.</li><li>Reduce optional demand or defer expansion: preserves capacity, at the cost of growth or commitments. Existing obligations do not disappear.</li></ul><p class="small">Use the detailed desks to compare and stage your choice. This overview never borrows, hires, closes facilities or submits a turn for you.</p></details><hr>';
  const campaign=game||view,owner=v.me.id,cycle=v.cycle;
  mount.onclick=event=>{
@@ -18781,6 +19411,7 @@ const DepartmentFunctionsUI=(()=>{
  const taskNames={offerSales:'Relationship offers',commercialRelationships:'Commercial relationships',householdSupport:'Household service',applicationProcessing:'Application processing',commercialDelivery:'Contract delivery',creditAdministration:'Credit administration',collections:'Collections',technology:'Technology operations',risk:'Risk and compliance',treasury:'Treasury operations',people:'People management'};
  const consumers={offerSales:'Share-of-wallet offers',commercialRelationships:'Business and merchant acquisition',householdSupport:'Household service and retention',applicationProcessing:'Pending application activation',commercialDelivery:'Signed service agreements',creditAdministration:'New loan origination',collections:'Delinquency servicing',technology:'Service platforms and disruption resilience',risk:'Credit controls and examination resilience',treasury:'Locked-term deposit handling',people:'Paid training gains and management performance'};
  function create({functions:D,quotePolicy,getSnapshot,onAdopt,onChanged=()=>{},onRedraw=null,onError=()=>{}}){
+  const consumerLabels=p=>({...consumers,...(p.commercialServiceVersion===1?{commercialRelationships:'Recurring business and merchant fees, plus acquisition'}:{})});
   let state={stamp:null,identity:null,selected:null,form:null,mandate:null,proposal:null,reviewed:false,formDirty:false,inputs:{},notice:'',revision:0};
   function capture(){
    const snapshot=getSnapshot(),view=snapshot.view,p=view?.me;
@@ -18839,6 +19470,7 @@ const DepartmentFunctionsUI=(()=>{
   function select(id,token){if(!guard(token,false)||!D.IDS.includes(id))return false;if(state.formDirty){onError('Preview or discard edited function values before switching functions.');return false;}state.selected=id;state.revision++;return true;}
   function field(id,label,value,max,disabled,step=1){return '<div class="df-field"><label id="'+id+'-label" for="'+id+'">'+esc(label)+'</label><input id="'+id+'" aria-labelledby="'+id+'-label" type="number" min="0" step="'+step+'" max="'+max+'" value="'+esc(Object.hasOwn(state.inputs,id)?state.inputs[id]:value)+'"'+(disabled?' disabled':'')+'></div>';}
   function completed(p){
+   const consumers=consumerLabels(p);
    const saved=p.departmentFunctionDelivery,ordered=p.departmentFunctions.report,report=saved?.report;
    if(!report||!ordered)return '<details id="df-completed"><summary>Last completed month</summary><p class="small">No completed department month yet.</p></details>';
    const credit=report.rows.find(r=>r.id==='creditAdministration'),pursuit=saved.opportunity;
@@ -18851,6 +19483,7 @@ const DepartmentFunctionsUI=(()=>{
   function renderDepartmentFunctionsController(){
    const current=capture();sync(current);state.revision++;
    if(!current.p?.departmentFunctions)return '';
+   const consumers=consumerLabels(current.p);
    const history=completed(current.p);
    let built,q;try{const r=review(current,state.proposal?.policy||state.form);built=r.built;q=r.quote;if(state.mandate)D.propose(current.p,state.form,built.context,state.mandate);}catch(error){return '<section class="credit-policy"><h3>Department functions</h3><p class="bad" role="status">'+esc(error.message)+'</p>'+history+'</section>';}
    const selected=state.selected,row=q.rows.find(x=>x.id===selected),definition=D.FUNCTIONS[selected],locked=current.locked,disabled=locked?' disabled':'',a=built.attribution;
@@ -19490,14 +20123,18 @@ function stageCollectionsPolicy(v, share, approach,token) {
 }
 function creditFlowRows(report){
  if(!report||!['loanGrowth','principalRepaid','creditRecovery','chargeoff'].every(k=>Number.isSafeInteger(report[k]??0))||!Number.isSafeInteger(report.loanGrowth)||!Number.isSafeInteger(report.principalRepaid))return null;
- const repaid=report.principalRepaid,recovered=report.creditRecovery||0,loss=report.chargeoff||0,originations=report.loanGrowth+repaid+recovered+loss;
+ const named=report.companyCredit||{};
+ if(!['principalPaid','recoveredPrincipal','interestWrittenOff'].every(k=>Number.isSafeInteger(named[k]??0)&&(named[k]??0)>=0))return null;
+ // Named borrower servicing is outside ordinary cohort amortization. Its
+ // unpaid-interest writeoff is an income loss, never a principal movement.
+ const repaid=report.principalRepaid+(named.principalPaid||0),recovered=(report.creditRecovery||0)+(named.recoveredPrincipal||0),loss=(report.chargeoff||0)-(named.interestWrittenOff||0),originations=report.loanGrowth+repaid+recovered+loss;
  if(Math.min(repaid,recovered,loss,originations)<0)return null;
  return [originations,-repaid,-recovered,-loss,report.loanGrowth];
 }
 function renderCreditFlow(v,review){
  const next=creditFlowRows(review.operating),actual=v.me.operatingReport,prior=actual?.cycle===(v.gameOver?v.cycle:v.cycle-1)?creditFlowRows(actual):null;
  if(!next)return '<p role="status">Loan movement forecast unavailable. Review the current plan.</p>';
- const signed=n=>(n<0?'−':n>0?'+':'')+creditMoney(Math.abs(n)),labels=['New loans funded','Scheduled principal repaid','Collections principal recovered','Credit losses','Net operating loan change'];
+ const signed=n=>(n<0?'−':n>0?'+':'')+creditMoney(Math.abs(n)),labels=['New loans funded','Scheduled principal repaid','Collections principal recovered','Principal written off','Net operating loan change'];
  return '<section class="credit-policy"><h3>LOAN BOOK MOVEMENT</h3><p class="small">'+(next[4]<0?'The draft loan book contracts. Repayments return money to cash; credit losses reduce earnings.':'The draft adds to the loan book after repayments and losses.')+'</p><div class="table-scroll"><table class="forecast-table"><caption>Whole bank · operating movements only</caption><thead><tr><th>Movement</th><th>Last completed month</th><th>This draft</th></tr></thead><tbody>'+labels.map((label,i)=>'<tr><th scope="row">'+label+'</th><td>'+(prior?signed(prior[i]):'Not yet available')+'</td><td>'+signed(next[i])+'</td></tr>').join('')+'</tbody></table></div><p class="small">'+review.staffing.origination.toFixed(2)+' employee-months remain for origination after shared work ('+review.staffing.effectiveOrigination.toFixed(2)+' effective with expertise). Credit administration coverage: '+(review.staffing.administrationCoverage*100).toFixed(0)+'%. Base lending capacity (central desk + offices): '+creditMoney(review.facilityLoanCapacity)+'.</p><div class="credit-controls"><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="creditOfficeCapacity">Inspect local offices</button></div><p class="micro muted">Current economy and draft policies; not a promised closing balance. Executive events, rival actions, opportunity wins, project completions and separate regulatory/funding sales are excluded. More capacity does not guarantee borrowers or funding. New loans use cash; principal repayments are not income.</p></section>';
 }
 function renderCollections(v) {
@@ -19505,8 +20142,9 @@ function renderCollections(v) {
   if(!v.me.creditPerformance){$('#creditPanel').innerHTML='';if(workspaceTab==='credit')setWorkspaceTab('overview');return;}
   if(workspaceTab!=='credit')return;
   const p=v.me,policy=draft.collectionsPolicy||p.creditPerformance.policy;
-  const token=workforceEditToken(v);let prepared=null,forecast;
-  try{prepared=p.departmentFunctions?E.departmentCreditPreview(p,v,draft):null;forecast=prepared?prepared.collections:E.creditPerformanceForecast({...p,turnEffects:{}},v.economy,draft.allocation,policy);}
+  const token=workforceEditToken(v);let prepared=null,forecast,incomeStanding,incomeDraft;
+  try{prepared=p.departmentFunctions?E.departmentCreditPreview(p,v,draft):null;forecast=prepared?prepared.collections:E.creditPerformanceForecast({...p,turnEffects:{}},v.economy,draft.allocation,policy);
+   incomeStanding=E.operatingPreview(p,standingOperatingPlan(p),v.economy,v);incomeDraft=prepared?prepared.operating:E.operatingPreview(p,draft,v.economy,v);}
   catch(error){$('#creditPanel').innerHTML='<h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p role="status">Credit forecast unavailable: '+esc(error.message)+'</p><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="restoreCollectionsPolicy" '+(p.submitted?'disabled':'')+'>Restore standing collections policy</button><p class="micro">Restoring changes only this draft’s collections instructions. It does not undo other department commitments.</p>';$('#creditWorkCoverage').addEventListener('click',()=>{if(creditContextCurrent(token))setPeopleDesk('coverage',{focus:true});});$('#restoreCollectionsPolicy').addEventListener('click',()=>{if(creditContextCurrent(token,true))stageCollectionsPolicy(currentView(),p.creditPerformance.policy.share,p.creditPerformance.policy.approach,token);});return;}
   const actual=p.creditPerformance.report;
   const key=v.territories[inspectedCreditMarket]?inspectedCreditMarket:draft.focus,cohorts=p.creditBook.cohorts.filter(c=>c.market===key);
@@ -19519,7 +20157,7 @@ function renderCollections(v) {
     return `<tr><th>${esc(v.productPortfolios.credit.options[product].name)}<small>${term}-month new term</small></th><td>${creditMoney(performing)}</td>${late.map(n=>'<td>'+creditMoney(n)+'</td>').join('')}<td>${risk.toFixed(2)}×<small>Retained origination risk</small></td></tr>`;
   }).join('');
   const row=forecast.rows[key];
-  $('#creditPanel').innerHTML=`<div class="section-head"><div><h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p class="small muted">Today's lending becomes tomorrow's servicing workload. Current choices do not rewrite old loan terms.</p></div></div>
+  $('#creditPanel').innerHTML=renderIncomeReview(v,incomeStanding,incomeDraft)+`<div class="section-head"><div><h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p class="small muted">Today's lending becomes tomorrow's servicing workload. Current choices do not rewrite old loan terms.</p></div></div>
     <div class="credit-summary"><div><span>Performing principal</span><b>${creditMoney(forecast.performing)}</b><small>Delinquent balances earn no interest in this preview.</small></div><div><span>Delinquent principal</span><b>${creditMoney(forecast.late.reduce((n,x)=>n+x,0))}</b><small>30 / 60 / 90+ day aging groups</small></div><div><span>Draft collections coverage</span><b>${pct(forecast.coverage)}</b><small>${forecast.capacity.toFixed(2)} effective Lending staff for ${forecast.demand.toFixed(2)} workload units</small></div></div>
     <section class="credit-policy"><h3>RECURRING COLLECTIONS MANDATE</h3><div class="credit-controls"><label for="collectionShare">Lending time reserved for collections<select id="collectionShare" ${disabled}>${[0,25,50,75,100].map(n=>`<option value="${n}" ${policy.share===n?'selected':''}>${n}% reserved for collections</option>`).join('')}</select></label><label for="collectionApproach">Resolution approach<select id="collectionApproach" ${disabled}>${Object.entries(E.COLLECTION_APPROACHES).map(([k,d])=>`<option value="${k}" ${policy.approach===k?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label></div>
     <p class="small">${forecast.salesStaff.toFixed(2)} effective Lending bankers remain for new production. Specialists strengthen their assigned team; this split does not add staff or salary. One effective collections banker covers $1M of delinquent principal.</p>
@@ -19680,7 +20318,7 @@ function renderFinancialGroup(v) {
     '<div class="workbench-actions"><button type="button" id="previewGroupCapital" class="btn"'+disabled+'>Preview transfer</button><button type="button" id="stageGroupCapital" class="btn primary"'+disabled+'>Stage capital instruction</button><button type="button" id="discardGroupCapital" class="btn">Discard unstaged edits</button></div>'+
     '<p id="groupCapitalStatus" role="status" class="small">'+(groupWorkspace.dirty.capital?'Unstaged edits restored. Preview checks current limits.':'Controls show the staged plan. Editing does not move money.')+'</p><p class="micro">Dividend safeguards: retained earnings, '+(E.GROUP_SAFEGUARDS.capitalRatio*100)+'% bank capital and '+(E.GROUP_SAFEGUARDS.depositCash*100)+'% deposit cash; no emergency debt or recovery restriction. Parent injections occur at month end and do not finance earlier bank spending in the same plan.</p></section>'+
     (report?'<p class="small">Last settled month '+report.cycle+': bank dividend '+money(report.dividend)+' of '+money(report.requestedDividend)+' requested; bank support '+money(report.support)+' of '+money(report.requestedSupport)+' requested.</p>':'')+
-    '<details><summary>Reconciled balance sheets</summary><div class="table-scroll" tabindex="0"><table class="regional-table"><thead><tr><th>Measure</th><th>Parent</th><th>Consolidated group</th></tr></thead><tbody>'+
+    '<details><summary>Reconciled balance sheets</summary>'+(p.agency?'<p class="micro">These totals include the operating insurance agency’s separate accounts, including any balances retained while it is closed. Internal parent investments are eliminated once; agency cash is not bank deposit funding.</p>':'')+'<div class="table-scroll" tabindex="0"><table class="regional-table"><thead><tr><th>Measure</th><th>Parent</th><th>Consolidated group</th></tr></thead><tbody>'+
     '<tr><th>Assets</th><td>'+money(E.GroupAccounting.validate(book).assets)+'</td><td>'+money(summary.assets)+'</td></tr>'+
     '<tr><th>Liabilities</th><td>'+money(E.GroupAccounting.validate(book).liabilities)+'</td><td>'+money(summary.liabilities)+'</td></tr>'+
     '<tr><th>Equity</th><td>'+money(book.accounts.equity)+'</td><td>'+money(summary.equity)+'</td></tr>'+
@@ -21010,6 +21648,8 @@ function renderRegionalGrowth(v) {
  mount.innerHTML = enabled ? regionalGrowthContent(v) : '';
 }
 let recoveryComparison = null, recoveryUndo = null;
+function recoveryContext(v){return {...opportunityToken(v),attempt:connectionAttempt};}
+function recoveryContextCurrent(token,write=true){return opportunityCurrent(token,write)&&token.attempt===connectionAttempt&&token.stamp===JSON.stringify(draft);}
 function recoveryDraftKey(v) {
   return JSON.stringify([v.me.id, v.cycle, draft]);
 }
@@ -21023,25 +21663,26 @@ function recoveryChanges(before, after) {
     contractBid:'Service bid', capitalAction:'Board assistance', products:'Portfolio mix' };
   return Object.entries(labels).filter(([key])=>JSON.stringify(before[key])!==JSON.stringify(after[key])).map(([,label])=>label);
 }
-function stageBankRecovery(v, key) {
-  if (!draft || v.me.submitted || !recoveryComparison || recoveryComparison.key !== recoveryDraftKey(v)) return false;
+function stageBankRecovery(v, key, proposalToken=recoveryComparison?.token) {
+  if (!draft || v.me.submitted || !recoveryComparison || proposalToken!==recoveryComparison.token || !recoveryContextCurrent(proposalToken) || recoveryComparison.key !== recoveryDraftKey(v)) return false;
   const option = recoveryComparison.options.find(o=>o.key===key);
   if (!option) return false;
   const next = JSON.parse(JSON.stringify(option.plan));
   try {
-    E.normalizeProductProgramPlan(v.me, next);
-    const status = E.projectPlanStatus(v.me, next,v);
+    const now=currentView();
+    E.normalizeProductProgramPlan(now.me, next);
+    const status = E.projectPlanStatus(now.me, next,now);
     if (!status.eligible) throw Error(status.reason);
     const before = JSON.parse(JSON.stringify(draft));
     draft = next;
-    recoveryUndo = { owner:v.me.id, cycle:v.cycle, before, applied:recoveryDraftKey(v) };
+    recoveryUndo = { token:recoveryContext(now), owner:now.me.id, cycle:now.cycle, before, applied:recoveryDraftKey(now) };
     recoveryComparison = null;
     render();
     return true;
   } catch (e) { toast(e.message); return false; }
 }
-function undoBankRecovery(v) {
-  if (v.me.submitted || !recoveryUndo || recoveryUndo.owner!==v.me.id || recoveryUndo.cycle!==v.cycle || recoveryUndo.applied!==recoveryDraftKey(v)) return false;
+function undoBankRecovery(v, undoToken=recoveryUndo?.token) {
+  if (v.me.submitted || !recoveryUndo || undoToken!==recoveryUndo.token || !recoveryContextCurrent(undoToken) || recoveryUndo.owner!==v.me.id || recoveryUndo.cycle!==v.cycle || recoveryUndo.applied!==recoveryDraftKey(v)) return false;
   draft = JSON.parse(JSON.stringify(recoveryUndo.before));
   recoveryUndo = null; recoveryComparison = null;
   render();
@@ -21052,9 +21693,9 @@ function renderBankRecovery(v) {
   if (previous) previous.remove();
   $('#recoveryWorkspace').classList.toggle('hidden', !v.me.productPrograms);
   if (!v.me.productPrograms || !draft) return;
-  const key = recoveryDraftKey(v), locked = v.me.submitted;
-  const selected = recoveryComparison?.key===key ? recoveryComparison : null;
-  const undoable = !locked && recoveryUndo?.applied===key;
+  const key = recoveryDraftKey(v), token=recoveryContext(v), locked = v.me.submitted||!recoveryContextCurrent(token);
+  const selected = recoveryComparison?.key===key&&recoveryContextCurrent(recoveryComparison.token,false) ? recoveryComparison : null;
+  const undoToken=recoveryUndo?.token,undoable = !locked && recoveryUndo?.applied===key&&recoveryContextCurrent(undoToken);
   const ratios = v.me.capitalRatio;
   const header = ratios<10 ? 'Capital recovery needs attention' : 'Compare recovery tradeoffs';
   const cards = selected ? selected.options.map(o=>{
@@ -21071,19 +21712,20 @@ function renderBankRecovery(v) {
     <p class="micro muted">Compare reversible operating choices using your own books. No free capital, debt forgiveness, guaranteed survival or automatic change to your plan.</p>
     <div class="recovery-controls"><button type="button" class="btn" id="compareRecovery" ${locked||!draft.decision?'disabled':''}>Compare recovery options</button>${undoable?'<button type="button" class="btn" id="undoRecovery">Undo staged recovery</button>':''}</div>
     ${!draft.decision?'<p class="micro">Choose an executive response first so its expense can be included.</p>':''}
+    ${gh.active&&gh.paused?'<p class="micro" role="status">Repository connection paused. Reconnect, then compare recovery options again before staging changes.</p>':''}
     ${current?`<p class="small">Current draft estimated equity change: <b>${money(current.netAfterSpend)}</b> · after-plan equity: <b>${money(current.equityAfterPlan)}</b> · known decision expense: <b>${money(current.decisionExpense)}</b>.</p><div class="recovery-options">${cards}</div>${cards?'':'<p class="small">No qualifying improvement found among these limited recovery choices. Review staffing, product costs and signed commitments manually.</p>'}`:''}
     <details><summary>What the comparison does—and does not—predict</summary><p class="micro">One-month estimate under the current economy. Includes known executive expense and planned spending without counting advertising or training twice. It projects today's economy and your current commitments only, so events, rival moves, opportunity awards and future project benefits are outside it. Guarantees and signed obligations still stand. Moving staff can lift this month's profit while costing future sales, and deposit share alone is not a measure of health.</p><p class="micro">Stage changes only your draft; review the affected departments and executive response before Mark Ready. Undo is available until you edit that staged draft or lock the turn. Not every failing bank has a viable recovery option.</p></details>
   </section>`);
   $('#compareRecovery').addEventListener('click',()=>{
-    if (v.me.submitted || !draft.decision) return;
+    if (v.me.submitted || !draft.decision || !recoveryContextCurrent(token)) return;
     try {
       const result = E.bankRecoveryOptions(v.me, draft, v.economy, v.event,v);
-      recoveryComparison = { key:recoveryDraftKey(v), ...result };
+      recoveryComparison = { key:recoveryDraftKey(v), token, ...result };
       renderOperatingPreview(v);
     } catch(e) { toast(e.message); }
   });
-  $$('[data-recovery-option]').forEach(el=>el.addEventListener('click',()=>stageBankRecovery(v,el.dataset.recoveryOption)));
-  if (undoable) $('#undoRecovery').addEventListener('click',()=>undoBankRecovery(v));
+  $$('[data-recovery-option]').forEach(el=>el.addEventListener('click',()=>stageBankRecovery(v,el.dataset.recoveryOption,selected?.token)));
+  if (undoable) $('#undoRecovery').addEventListener('click',()=>undoBankRecovery(v,undoToken));
 }
 // Owner-only presentation model. Quotes are read-only; never repair a plan or
 // normalize authoritative state merely to render an explanation.
@@ -21691,7 +22333,7 @@ function renderProjects(v){
  const committedSpend=E.planBudget(v.me,draft,v).total;
 
  const nextHireUnaffordable=E.planBudget(v.me,{...draft,hires:(draft.hires||0)+1},v).remaining<0;
- $('#hiringPanel').innerHTML=v.me.workforce?'<b>SHARED RECRUITMENT</b><p class="small">'+E.planHires(draft)+' / '+hireMax+' bankers staged · '+money(hireBill)+' combined signing cost. Arrive next month; no production this month.</p><button type="button" class="btn" id="openPeopleRecruitment">Compare generalist and specialist recruitment</button>':`<b>${v.me.workforce?'GENERALIST RECRUITING':'RECRUITING'}</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||E.planHires(draft)>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} combined signing cost · generalist payroll +${money(draft.hires*18000)}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
+ $('#hiringPanel').innerHTML=v.me.workforce?'<b>SHARED RECRUITMENT</b><p class="small">'+E.planHires(draft)+' / '+hireMax+' bankers staged · '+money(hireBill)+' combined signing cost. Arrive next month; no production this month.</p><button type="button" class="btn" id="openPeopleRecruitment">Compare generalist and specialist recruitment</button>':`<b>${v.me.workforce?'GENERALIST RECRUITING':'RECRUITING'}</b><div class="micro muted">Hire directly. New bankers report next cycle, raise payroll permanently, and dilute morale when hired in bulk.</div><div class="hire-row"><button type="button" class="stepper" data-hire="-1" ${v.me.submitted||!draft.hires?'disabled':''}>−</button><span class="hire-count">${draft.hires||0}</span><button type="button" class="stepper" data-hire="1" ${v.me.submitted||E.planHires(draft)>=hireMax||nextHireUnaffordable?'disabled':''}>+</button><span class="micro">${draft.hires?`${money(hireBill)} combined signing cost · generalist payroll +${money(draft.hires*E.bankBasePayroll(v.me))}/cycle`:`up to ${hireMax} per cycle`}</span></div><div class="micro plan-spend ${committedSpend>v.me.stats.cash?'bad':''}" style="margin-top:7px">THIS PLAN COMMITS <b>${money(committedSpend)}</b> of ${money(v.me.stats.cash)} available${committedSpend>v.me.stats.cash?' — over budget':''}</div>`;
  if(v.me.workforce){const owner=v.me.id,cycle=v.cycle,campaign=game||view;$('#openPeopleRecruitment').addEventListener('click',()=>{const now=currentView();if((game||view)===campaign&&now?.me.id===owner&&now?.cycle===cycle)setPeopleDesk('recruitment',{focus:true});});}
  $$('[data-hire]').forEach(b=>b.addEventListener('click',()=>{if(v.me.submitted)return;const step=Number(b.dataset.hire);draft.hires=Math.max(0,Math.min(hireMax-E.specialistHireCount(draft),(draft.hires||0)+step));renderProjects(v);renderReady(v)}));
  renderCampaignBuff(v);renderWorkforce(v)

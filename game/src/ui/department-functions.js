@@ -8,6 +8,7 @@ const DepartmentFunctionsUI=(()=>{
  const taskNames={offerSales:'Relationship offers',commercialRelationships:'Commercial relationships',householdSupport:'Household service',applicationProcessing:'Application processing',commercialDelivery:'Contract delivery',creditAdministration:'Credit administration',collections:'Collections',technology:'Technology operations',risk:'Risk and compliance',treasury:'Treasury operations',people:'People management'};
  const consumers={offerSales:'Share-of-wallet offers',commercialRelationships:'Business and merchant acquisition',householdSupport:'Household service and retention',applicationProcessing:'Pending application activation',commercialDelivery:'Signed service agreements',creditAdministration:'New loan origination',collections:'Delinquency servicing',technology:'Service platforms and disruption resilience',risk:'Credit controls and examination resilience',treasury:'Locked-term deposit handling',people:'Paid training gains and management performance'};
  function create({functions:D,quotePolicy,getSnapshot,onAdopt,onChanged=()=>{},onRedraw=null,onError=()=>{}}){
+  const consumerLabels=p=>({...consumers,...(p.commercialServiceVersion===1?{commercialRelationships:'Recurring business and merchant fees, plus acquisition'}:{})});
   let state={stamp:null,identity:null,selected:null,form:null,mandate:null,proposal:null,reviewed:false,formDirty:false,inputs:{},notice:'',revision:0};
   function capture(){
    const snapshot=getSnapshot(),view=snapshot.view,p=view?.me;
@@ -66,6 +67,7 @@ const DepartmentFunctionsUI=(()=>{
   function select(id,token){if(!guard(token,false)||!D.IDS.includes(id))return false;if(state.formDirty){onError('Preview or discard edited function values before switching functions.');return false;}state.selected=id;state.revision++;return true;}
   function field(id,label,value,max,disabled,step=1){return '<div class="df-field"><label id="'+id+'-label" for="'+id+'">'+esc(label)+'</label><input id="'+id+'" aria-labelledby="'+id+'-label" type="number" min="0" step="'+step+'" max="'+max+'" value="'+esc(Object.hasOwn(state.inputs,id)?state.inputs[id]:value)+'"'+(disabled?' disabled':'')+'></div>';}
   function completed(p){
+   const consumers=consumerLabels(p);
    const saved=p.departmentFunctionDelivery,ordered=p.departmentFunctions.report,report=saved?.report;
    if(!report||!ordered)return '<details id="df-completed"><summary>Last completed month</summary><p class="small">No completed department month yet.</p></details>';
    const credit=report.rows.find(r=>r.id==='creditAdministration'),pursuit=saved.opportunity;
@@ -78,6 +80,7 @@ const DepartmentFunctionsUI=(()=>{
   function renderDepartmentFunctionsController(){
    const current=capture();sync(current);state.revision++;
    if(!current.p?.departmentFunctions)return '';
+   const consumers=consumerLabels(current.p);
    const history=completed(current.p);
    let built,q;try{const r=review(current,state.proposal?.policy||state.form);built=r.built;q=r.quote;if(state.mandate)D.propose(current.p,state.form,built.context,state.mandate);}catch(error){return '<section class="credit-policy"><h3>Department functions</h3><p class="bad" role="status">'+esc(error.message)+'</p>'+history+'</section>';}
    const selected=state.selected,row=q.rows.find(x=>x.id===selected),definition=D.FUNCTIONS[selected],locked=current.locked,disabled=locked?' disabled':'',a=built.attribution;

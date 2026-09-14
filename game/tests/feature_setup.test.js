@@ -8,7 +8,8 @@ const ids = { campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'se
   advertisingVersion: 'advertisingPreview', regionalGrowthVersion: 'regionalGrowthPreview', relationshipOffersVersion: 'relationshipOffersPreview', onboardingVersion: 'onboardingPreview' };
 const read = peer => copy(peer.run('readSetupFeatureOptions()'));
 const initial = read(h), markup = peer => peer.elements.get('#setupFeatureOptions').innerHTML;
-assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 16);
+assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 18);
+assert.equal(initial.incomeHistoryVersion,1,'New Core setup records actual income without enabling Expanded systems.');
 assert.equal(initial.facilityExtensionsVersion,0,'Office suites require explicit new-campaign selection, never an old-save upgrade.');
 assert.equal(initial.commercialAccountsVersion,0,'Company operating accounts are never selected implicitly for old configurations.');
 assert.equal(initial.financialGroupVersion,0,'The approved group preview remains unchecked.');
@@ -32,7 +33,7 @@ for (const [field, id] of Object.entries(ids)) {
   if (field !== 'campaignRulesVersion') assert.equal(initial[field], 0);
 }
 assert.equal(initial.featureRulesVersion, undefined, 'the opt-in marker is never added on load');
-assert.match(markup(h), /No optional systems/);
+assert.match(markup(h), /funded deposits, loans and reconciled accounts/);
 assert.match(markup(h), /Requires:/);
 assert.match(markup(h), /feature-maturity/);
 assert.match(markup(h), /Modular combinations preview/);
@@ -72,7 +73,9 @@ h.changeFeature('#rivalryPilot', false);
 assert(h.run('featureSelectionPending()')); assert.deepEqual(read(h), full);
 assert.match(h.elements.get('#featureSelectionAffected').innerHTML, /Living institution/);
 assert.match(h.elements.get('#featureSelectionAffected').innerHTML, /Customer needs/);
-assert(h.confirmFeatures()); assert.deepEqual(read(h), initial);
+assert(h.confirmFeatures());
+const historicalCore={...initial};delete historicalCore.incomeHistoryVersion;delete historicalCore.commercialServiceVersion;delete historicalCore.bankEconomicsVersion;
+assert.deepEqual(read(h),historicalCore,'Historical custom-rule cascade does not silently add the current reporting marker.');
 h.changeFeature('#institutionManagement', true); assert(h.confirmFeatures());
 h.changeFeature('#serviceExpansion', false);
 assert(h.run('featureSelectionPending()')); assert(h.confirmFeatures());
@@ -131,6 +134,9 @@ starts.run('cancelFeatureSelectionConfirmation()'); starts.run("startLocal('ai')
 assert.equal(starts.run('createdFeatureOptions.length'), 2);
 for (const field of Object.keys(ids)) assert.equal(starts.run('createdFeatureOptions[0].' + field), starts.run('createdFeatureOptions[1].' + field));
 assert.equal(starts.run('createdFeatureOptions[0].onboardingVersion'), 0);
+assert.equal(starts.run('createdFeatureOptions[0].incomeHistoryVersion'),1);
+assert.equal(starts.run('createdFeatureOptions[1].incomeHistoryVersion'),1);
+for(const index of [0,1]){assert.equal(starts.run('createdFeatureOptions['+index+'].commercialServiceVersion'),1);assert.equal(starts.run('createdFeatureOptions['+index+'].bankEconomicsVersion'),2);}
 
 const focus = harness();
 focus.run(`featureFocusEvents=[];
@@ -258,5 +264,5 @@ async function modularLocalPersistence() {
   unsupported.storage.set('branchWarsV7Save', JSON.stringify({ version: '8.99', gameOver: false })); unsupported.run('updateContinue()');
   assert(unsupported.elements.get('#continueBtn').classList.contains('hidden'));
 }
-modularLocalPersistence().then(() => console.log('Feature setup PASS: unchanged Core default, current Expanded creation, dependency confirmation/cancellation, reverse cascades, stale revisions and mode parity.'+(modularAvailable?' All four modular pairs tested through autosave/Continue/export/import/rematch.':' Historical modular setup is unavailable; historical persistence is checked in integrated_campaign_recovery.')))
+modularLocalPersistence().then(() => console.log('Feature setup PASS: current Core reporting, current Expanded creation, dependency confirmation/cancellation, reverse cascades, stale revisions and mode parity.'+(modularAvailable?' All four modular pairs tested through autosave/Continue/export/import/rematch.':' Historical modular setup is unavailable; historical persistence is checked in integrated_campaign_recovery.')))
   .catch(error => { console.error(error); process.exitCode = 1; });

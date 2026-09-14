@@ -70,7 +70,7 @@ function staffingRecoveryReview(g,index,input){
   }
   const forecast=plan=>operatingPreview({...p,focus:plan.focus,marketSnapshot:g.marketEconomy},plan,g.economy,g);
   oldForecast=oldForecast||forecast(base);const nextForecast=forecast(candidate);
-  const gross=r=>Math.round((r.loanGrowth||0)+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
+  const gross=r=>p.creditWorkloadVersion===1?ordinaryCreditOriginations(r):Math.round((r.loanGrowth||0)+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
   if(gross(nextForecast)<gross(oldForecast))throw Error('Funded lending reduced.');
   if((nextForecast.fundingLoss||0)>(oldForecast.fundingLoss||0)||
    (nextForecast.emergencyDebt||0)>(oldForecast.emergencyDebt||0)||nextForecast.capitalRatio<10)throw Error('Funding or capital protection worsened.');

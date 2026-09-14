@@ -7,6 +7,8 @@
 // relationships: eligible offered products at existing offer throughput, plus
 // one quarter per80 business/150 merchant ties;
 // credit: four quarters per$10M principal plus one per48 distinct vintages;
+// creditWorkloadVersion1 replaces the vintage-row term with active product/
+// market portfolios plus named-company claims, retaining the principal term.
 // technology: one per24 deposit vintages + two per deployed product/application
 //             + one per4 offices; NOT project execution capacity;
 // risk: one per$20M loans + one per$40M deposits + one per100 current risk points;
@@ -66,9 +68,13 @@ const DepartmentFunctionContext = (() => {
       riskPoints:p.stats.compliance,emergencyDebt:p.accounting.accounts.emergencyDebt,termVintages,employedBankers:p.stats.staff,
       paidTrainingRoles:training?.paused?0:(training?.rows||[]).filter(r=>r.spend>0).length};
     if(Object.values(sources).some(n=>!Number.isFinite(n)||n<0))throw Error('Invalid existing book workload inputs.');
-    const raw={relationships:offers/RELATIONSHIP_OFFER_CAPACITY*4+sources.businessRelationships/80+sources.merchantRelationships/150,
+    // New rules remove a storage-granularity penalty, not actual servicing:
+    // principal still drives administration; arrears drive collections below.
+    const creditWork=p.creditWorkloadVersion===1?CreditWorkload.quote(p):null;
+    if(creditWork)sources.administrationGroups=creditWork.administrationGroups;
+    const raw={relationships:commercialRelationshipWork(sources.businessRelationships,sources.merchantRelationships,offers/RELATIONSHIP_OFFER_CAPACITY*4),
       onboarding:sources.householdDemandFte*4+pending/ONBOARDING_CAPACITY*4+intakeProspecting+sources.contractLoad/2*4,
-      credit:loans/10000000*4+sources.loanVintages/48,
+      credit:creditWork?creditWork.workload:loans/10000000*4+sources.loanVintages/48,
       collections:sources.latePrincipal/1000000*4,
       technology:sources.depositVintages/24+activeProducts*2+activeApplications*2+offices/4,
       risk:loans/20000000+deposits/40000000+sources.riskPoints/100,
@@ -77,7 +83,7 @@ const DepartmentFunctionContext = (() => {
     const workloads=Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,Math.ceil(raw[id])]));
     if(Object.values(workloads).some(n=>!whole(n,DepartmentFunctions.RULES.maxWorkload)))throw Error('Workload exceeds the prototype review range.');
     const taskWorkloads={
-      offerSales:offers/RELATIONSHIP_OFFER_CAPACITY*4,commercialRelationships:sources.businessRelationships/80+sources.merchantRelationships/150,
+      offerSales:offers/RELATIONSHIP_OFFER_CAPACITY*4,commercialRelationships:commercialRelationshipWork(sources.businessRelationships,sources.merchantRelationships),
       householdSupport:sources.householdDemandFte*4,applicationProcessing:pending/ONBOARDING_CAPACITY*4+intakeProspecting,commercialDelivery:sources.contractLoad/2*4,
       creditAdministration:raw.credit,collections:raw.collections,technology:raw.technology,risk:raw.risk,treasury:raw.treasury,people:raw.people};
     return {workloads,sources,raw,taskWorkloads};

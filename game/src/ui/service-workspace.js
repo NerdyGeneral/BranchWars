@@ -41,7 +41,7 @@ function buildServiceAgreementProposal(v,plan,review,choice){
  const budget=E.planBudget(v.me,candidate,v),load=E.serviceLoad(prepared),effects=[
   'Reserve '+choice.staff+' existing Business banker'+(choice.staff===1?'':'s')+' and '+choice.outsourcing+' outsourced service points for the whole signed book'+(agreement.owner!==v.me.id?' plus this prospective agreement':'')+'. These are standing policies, not hires.',
   'The outsourcing bill is $'+load.outsourced.toLocaleString('en-US')+' per month; active platforms cost $'+load.platform.toLocaleString('en-US')+' per month. Shared payroll still applies. Costs start this month and continue until revised.',
-  bid?'Pursue '+E.SERVICE_TYPES[agreement.kind].name+' for '+E.clientProfile(agreement).name+'. A new award earns fees from next month; a rival or outside provider may win.':agreement.owner===v.me.id?'Change delivery capacity only. Existing renewal or decline instructions remain unchanged.':'Prepare capacity only. This agreement is not open for bids until month '+agreement.due+'. No future bid is scheduled.',
+  bid?'Pursue '+E.SERVICE_TYPES[agreement.kind].name+' for '+serviceClientPresentation(v,agreement).name+'. A new award earns fees from next month; a rival or outside provider may win.':agreement.owner===v.me.id?'Change delivery capacity only. Existing renewal or decline instructions remain unchanged.':'Prepare capacity only. This agreement is not open for bids until month '+agreement.due+'. No future bid is scheduled.',
   'The shared discretionary budget records $'+budget.total.toLocaleString('en-US')+' of commitments. Service delivery charges above are operating costs, not added to that budget total. No money is paid and no turn is submitted now.'
  ];
  if(review.technologyAdded)effects.splice(1,0,'Add '+review.technologyAdded+' contracted Technology work unit'+(review.technologyAdded===1?'':'s')+' for $'+(review.technologyAdded*E.DepartmentFunctions.FUNCTIONS.technology.vendorRate).toLocaleString('en-US')+' per month. This separate standing support is required for the proposed service capacity; no employee is hired.');
@@ -72,7 +72,7 @@ function confirmServiceAgreement(){
 function cancelServiceAgreement(){serviceWorkspace.pending=null;renderPipeline(currentView());$('#serviceInspectorTitle')?.focus?.({preventScroll:true});}
 function renderServiceAgreementInspector(v,mount=$('#pipeline')){
  const c=selectedServiceAgreement(v);if(!c)return;
- const token=opportunityToken(v),locked=!opportunityCurrent(token),type=E.SERVICE_TYPES[c.kind],profile=E.clientProfile(c),own=c.owner===v.me.id;
+ const token=opportunityToken(v),locked=!opportunityCurrent(token),type=E.SERVICE_TYPES[c.kind],profile=serviceClientPresentation(v,c),own=c.owner===v.me.id;
  let review,options=[],issue='';try{review=serviceAgreementOptions(v,draft,c.id);options=review.options;}catch(error){issue=error.message;}
  const selected=draft.contractBid===c.id,rows=options.map(o=>{
   let proposal,reason='';try{proposal=buildServiceAgreementProposal(v,draft,review,o);}catch(error){reason=error.message;}

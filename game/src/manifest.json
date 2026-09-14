@@ -115,6 +115,11 @@
       "engine/investment-strategy.js",
       "engine/company-strategy.js",
       "engine/shared-premises-strategy.js",
+      "engine/commercial-fee-economics.js",
+      "engine/credit-workload.js",
+      "engine/bank-economics.js",
+      "engine/income-history.js",
+      "engine/income-review.js",
       "engine/api.js"
     ]
   },
@@ -136,6 +141,7 @@
       "network/direct.js",
       "network/protocol.js",
       "ui/earnings-bridge.js",
+      "ui/income-review.js",
       "ui/dashboard.js",
       "ui/services.js",
       "ui/opportunity-workspace.js",

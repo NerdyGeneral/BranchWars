@@ -36,3 +36,9 @@
 /game/tests/fixtures/department-regulatory480.json.gz -text
 /releases/** -text
 /releases/*.pdf binary
+/game/reports/reference-builds/BRANCH_WARS_bank_economics_225d28be.html -text
+/game/reports/reference-builds/BRANCH_WARS_core_books_3730536d.html -text
+/game/reports/reference-builds/BRANCH_WARS_credit_shared_04f118ef.html -text
+/game/reports/reference-builds/BRANCH_WARS_income_setup_5309a5ef.html -text
+/game/reports/reference-builds/BRANCH_WARS_income_sources_dd9c768a.html -text
+/game/reports/reference-builds/BRANCH_WARS_servicing_0033ac47.html -text

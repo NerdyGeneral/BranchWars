@@ -143,7 +143,7 @@ function validateIncomingFeatureRules(snapshot,context='view'){
  const rules=E.validateCampaignRules(snapshot,context);
  const issue=E.peerRulesIssue(rules,E.campaignCapabilities());
  if(issue)throw Error(issue.message);
- if(context==='view'){E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
+ if(context==='view'){E.validateIncomeHistoryView(snapshot);E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
  return rules;
 }
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.

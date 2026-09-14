@@ -1,3 +1,10 @@
+// Legacy agreements have no named-company profile. This is a UI label, not
+// a synthesized company, relationship, saved field or simulated preference.
+function serviceClientPresentation(v,agreement){
+ const profile=E.clientProfile(agreement);if(profile)return profile;
+ if(agreement.clientIndex!==undefined)throw Error('Invalid service client profile.');
+ return {name:(v.territories[agreement.market]?.name||'Market')+' client',text:'This campaign tracks this service agreement without a named-company profile. Pricing, service capacity and renewal rules still apply.'};
+}
 // Retained base-render alias for existing integration entry points. Service
 // deployments now belong to the selected capability's deployment inspector.
 const serviceProjectsUI=renderProjects;
@@ -11,7 +18,7 @@ function renderExpandedServices(v){
  let p;try{p=serviceDraftPlayer(v);}catch(error){$('#pipeline').insertAdjacentHTML('beforeend','<section class="notice" style="grid-column:1/-1"><h3>Commercial service forecast unavailable</h3><p>'+esc(error.message)+'</p><button type="button" class="btn" id="serviceCapacityIssue">Review work commitments</button></section>');$('#serviceCapacityIssue')?.addEventListener('click',()=>setPeopleDesk('coverage',{focus:true}));return;}
  const policy=draft.servicePolicy,load=E.serviceLoad(p),token=opportunityToken(v),disabled=!opportunityCurrent(token)?'disabled':'',selected=selectedServiceAgreement(v);
  const toolsOpen=!!$('#servicePricing')?.open;
- const clients=v.serviceAgreements.map(c=>{const profile=E.clientProfile(c),type=E.SERVICE_TYPES[c.kind],own=c.owner===v.me.id;
+ const clients=v.serviceAgreements.map(c=>{const profile=serviceClientPresentation(v,c),type=E.SERVICE_TYPES[c.kind],own=c.owner===v.me.id;
   return '<button type="button" class="object-row" data-service-inspect="'+esc(c.id)+'" aria-pressed="'+(selected?.id===c.id)+'" '+(c.companyClosed?'disabled':'')+'><span><b>'+esc(profile.name)+'</b><small>'+esc(type.name)+' · '+esc(v.territories[c.market].name)+'</small></span><span class="object-tag">'+(c.companyClosed?'Closed':draft.contractBid===c.id?'Bid staged':own?'Your client':c.due===v.cycle?'Open this month':'Month '+c.due)+'</span></button>';
  }).join('');
  const number=(key,label,max)=>'<label>'+label+' <select data-service-number="'+key+'" '+disabled+'>'+Array.from({length:max+1},(_,i)=>'<option value="'+i+'" '+(policy[key]===i?'selected':'')+'>'+i+'</option>').join('')+'</select></label>';

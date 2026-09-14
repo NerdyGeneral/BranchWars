@@ -76,7 +76,7 @@ function loanBookNotice(v){
  const r=v.me.operatingReport;if(!r||!Number.isFinite(r.loanGrowth)||r.loanGrowth>=0)return '';
  let capacity=null;try{capacity=E.regionalBranchMetrics(v.me).loanCapacity;}catch(e){capacity=null;}
  const shrink=money(Math.abs(Math.round(r.loanGrowth)));
- return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Repayments exceeded new lending by '+shrink+' last month'
+ return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Net operating principal fell by '+shrink+' last month; repayments and credit losses can both contribute'
   +(Number.isFinite(capacity)?'; local origination capacity is '+money(Math.round(capacity))+' against a book of '+money(Math.round(v.me.stats.loans)):'')
   +'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>';
 }
@@ -94,7 +94,7 @@ function renderCoreLoanIncome(v,before,after){
 function renderOperatingPreview(v){
  if(operatingForecastView.owner!==v.me.id)operatingForecastView={owner:v.me.id,desk:'bank'};
  if([6,7,8,9,10].includes(v.financialGroupVersion))renderActualBankOperatingResult(v);
- const basePlan={allocation:v.me.allocation,products:v.me.products,depositPolicy:v.me.policies.deposit,lendingPolicy:v.me.policies.lending,capitalPolicy:v.me.policies.capital};
+ const basePlan=standingOperatingPlan(v.me);
  const issue=departmentForecastIssue(v,draft)||departmentForecastIssue(v,basePlan);
  if(issue){$('#operatingPreview').innerHTML=renderBalanceSheet(v)+departmentForecastNotice(issue);return;}
  const before=E.operatingPreview(v.me,basePlan,v.economy,v,true);let after,creditNotice='';
@@ -111,14 +111,15 @@ function renderOperatingPreview(v){
  if(v.me.fundingCovenant)rows.push(['Debt after operations (before treasury repayment)','emergencyDebt'],['Covenant excess after operations','fundingExcess']);
  const signed=n=>(n<0?'−':n>0?'+':'')+money(Math.abs(n));
  const desks={bank:'Bank forecast',commercial:'Commercial banking',books:'Balances & books'},desk=operatingForecastView.desk;
- const fundingRules=v.campaignRulesVersion===1?'Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included in the forecast. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'This saved campaign retains its original capital and funding mechanics.';
+ const fundingRules=(v.campaignRulesVersion===1||v.bankEconomicsVersion===2)?'Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included in the forecast. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'This saved campaign retains its original capital and funding mechanics.';
  const comparison=list=>'<table class="forecast-table"><thead><tr><th>Per cycle</th><th>Current plan</th><th>Your draft</th><th>Change</th></tr></thead><tbody>'+list.map(([label,key])=>'<tr><td>'+label+'</td><td>'+money(before[key])+'</td><td>'+money(after[key])+'</td><td>'+signed(after[key]-before[key])+'</td></tr>').join('')+'</tbody></table>';
  $('#operatingPreview').innerHTML=creditNotice+'<div class="workbench-toolbar" role="group" aria-label="Forecast views">'+Object.entries(desks).map(([key,label])=>'<button class="btn" type="button" data-forecast-view="'+key+'" aria-pressed="'+(desk===key)+'">'+label+'</button>').join('')+'</div>'+
   '<div data-forecast-panel="books"'+(desk!=='books'?' hidden':'')+'><h3>FUNDING RULES &amp; BOOKS</h3><p class="small">'+fundingRules+'</p>'+renderBalanceSheet(v)+loanBookNotice(v)+renderFundingCovenant(v)+renderDepositProducts(v)+renderCreditBook(v)+'</div>'+
   '<div data-forecast-panel="bank"'+(desk!=='bank'?' hidden':'')+'><h3>OPERATING PREVIEW</h3><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Pilot forecasts include funding sales needed for their own projected flows.</p>'+comparison(rows.slice(0,summaryCount))+renderCoreLoanIncome(v,before,after)+
-  renderCommercialSnapshot(v,after.commercial)+(rows.length>summaryCount?'<details><summary>Funding, product and servicing breakdown</summary>'+comparison(rows.slice(summaryCount))+'</details>':'')+'<p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash. Detailed funding terms and current balances are under Balances &amp; books.</p></div>'+
-  '<div data-forecast-panel="commercial"'+(desk!=='commercial'?' hidden':'')+'>'+renderCommercialForecast(v,before.commercial,after.commercial)+'</div>';
+  renderBankIncomeStatement(v,before,after)+renderIncomeReview(v,before,after)+renderCommercialSnapshot(v,after.commercial)+(rows.length>summaryCount?'<details><summary>Funding, product and servicing breakdown</summary>'+comparison(rows.slice(summaryCount))+'</details>':'')+'<p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash. Detailed funding terms and current balances are under Balances &amp; books.</p></div>'+
+  '<div data-forecast-panel="commercial"'+(desk!=='commercial'?' hidden':'')+'>'+renderIncomeReview(v,before,after,'commercial')+renderCommercialForecast(v,before.commercial,after.commercial)+'</div>';
  renderBankRecovery(v);
+ bindIncomeServicingAction(v);
  const identity=game||view,owner=v.me.id,cycle=v.cycle;
  $$('[data-forecast-view]').forEach(button=>button.addEventListener('click',()=>{
   const now=currentView(),key=button.dataset.forecastView;if(!now||(game||view)!==identity||now.me.id!==owner||now.cycle!==cycle||!Object.hasOwn(desks,key))return;
@@ -158,7 +159,12 @@ function renderCommercialForecast(v,before,after){
 }
 function renderActualBankOperatingResult(v){
  const actual=v.me.operatingReport;
- $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${[['Income before funding',actual.depositIncome+actual.loanIncome+actual.commercialIncome+actual.otherIncome],['Funding expense',-actual.fundingCost],['Payroll & facilities',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment],['Operating profit',actual.profit]].map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${money(value)}</b></div>`).join('')}</div><p class="micro muted">Operating stage only. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
+ const bridge=E.IncomeReview.reconciliation(actual);
+ const items=actual?[['Loan interest',actual.loanIncome],[v.me.depositBook?'Deposit account fees':'Legacy deposit-linked earnings (abstract)',actual.depositIncome],['Business & merchant fees',actual.commercialIncome],['Other modeled income',actual.otherIncome],['Funding expense',-actual.fundingCost],['Operating expenses (including payroll & facilities)',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment]]:[];
+ if(bridge?.invoiceLoss)items.push(['Corporate invoice losses',-bridge.invoiceLoss]);
+ if(bridge?.residual)items.push([bridge.reconciled?'Report rounding':'Unreconciled report difference',bridge.residual]);
+ if(actual)items.push(['Operating profit',actual.profit]);
+ $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${items.map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${incomeAmount(value)}</b></div>`).join('')}</div>${bridge&&!bridge.reconciled?'<p class="bad" role="status">This report does not reconcile. The difference is shown for investigation, not treated as earned income.</p>':''}<p class="micro muted">Operating stage only. Other modeled income can include earning-asset returns, service fees and legacy abstract bonuses; it is not necessarily all non-interest income. Deposits are liabilities, not revenue. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
  if([6,7,8,9,10].includes(v.financialGroupVersion)&&typeof renderBankEarningsBridge==='function')$('#operatingReport').innerHTML+=renderBankEarningsBridge(v);
 }
 

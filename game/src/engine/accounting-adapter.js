@@ -53,8 +53,10 @@ function postMonthlyOperations(g,p,preview=false){
  // Work on a clone so income/loss formulas still see produced loans/deposits.
  const calculation=JSON.parse(JSON.stringify(p));delete calculation.accounting;
  const text=runLegacyOperations(g,calculation,preview),r={...calculation.operatingReport};
+ if(p.bankEconomicsVersion===2)r.depositInterest=r.fundingCost-before.accounts.emergencyDebt*.01;
  const securitiesIncome=Math.round(before.accounts.securities*(g.economy.rate/1200));
  r.otherIncome+=securitiesIncome;r.profit+=securitiesIncome;
+ if(r.incomeSource_version===1)r.incomeSource_securitiesInterest=securitiesIncome;
  // Apply funding in actual chronological order, not by borrowing an unexplained residual.
  const inflow=Math.round(r.depositGrowth+r.depositRunoff),originations=Math.round(r.loanGrowth+r.chargeoff);
  if(p.creditBook){
@@ -165,7 +167,7 @@ function pilotSpendingLimit(p,buffer=.08,reserve=0){return p.accounting?Math.max
 
 
 function planPilotReserve(g,index,plan){
- if(!pilot(g))return plan;
+ if(!pilot(g)&&g.bankEconomicsVersion!==2)return plan;
  const p=g.players[index],forecast=operatingPreview(p,plan,g.economy,g),limit=pilotSpendingLimit(p,.10,200000+Math.max(0,-forecast.profit)*2);
  if(plan.competitiveAction==='takeoverDefense')plan.competitiveAction='none';
  let available=limit-(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
@@ -186,6 +188,9 @@ function planPilotReserve(g,index,plan){
  return plan;
 }
 function validateAccountingSave(g){
+ if(g.bankEconomicsVersion===2){
+  validateCampaignRules(g,'game');for(const p of g.players)validateCoreBalanceOwner(p);return g;
+ }
  if(g.campaignRulesVersion===undefined){if(g.players.some(p=>p.accounting))throw Error('Unversioned accounting save');return g}
  if(g.campaignRulesVersion!==1||g.fundingRulesVersion!==2)throw Error('Unsupported pilot save');
  if(!g.regions||Object.keys(g.territories).length!==6)throw Error('Invalid pilot geography');

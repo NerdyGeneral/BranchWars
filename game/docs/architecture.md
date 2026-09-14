@@ -4,12 +4,88 @@ This is the maintainer guide, not another implementation timeline. Use the [impl
 
 ## Source of truth
 
+Current player-facing creation calls `previewCampaignEdition` with
+`currentEconomics:true`, selecting Core8.19 or Expanded9.32. It composes the
+existing authoritative scalars; the proposal option itself is never saved.
+The default API and `currentReporting:true` remain historical/reporting-only
+construction paths. Save import, Continue and rematch do not opt into new rules.
+Keep edition selection in this engine proposal and DOM behavior in its UI adapter.
+
+New explicit9.31 operating reports add optional finite `incomeSource_*` diagnostic
+fields at the source calculation, including actual opening-securities interest.
+No money formula, saved rule, peer capability or bounded-history schema changes.
+The flat numeric shape preserves the event ledger's numeric-report contract and
+is accepted by the prior9.31 reader. Old reports retain missing fields; subsequent
+new reports gain detail without reconstructing past balances. `IncomeReview.statement`
+validates the complete component shape and reconciliation, separates unknown
+residuals, and never posts, reallocates shared costs or treats client assets as income.
+
+Explicit9.31 `creditWorkloadVersion:1` requires serviced income and complete
+Expanded company-credit rules. The authoritative campaign scalar and owner
+mirror are validated/projected through the existing income-rule lifecycle;
+current Expanded setup selects it. Registry-derived peer capabilities require
+`creditWorkloadSupported:1`. Rematch retains it; import never adds it.
+`CreditWorkload.quote` counts principal plus distinct product/location portfolios
+and named-company claims, not ordinary storage rows. Department preparation,
+authorization, settlement and forecasts use that same quote. Vintage/arrears
+books are never compacted or rewritten by this calculation. Collections remains
+a separate exposure-driven task. All prior versions retain their old workloads.
+
+For9.31 investment and product credit scenarios, `prepareCreditScenarioOwner` obtains
+authorized Collections/Risk capacity and expertise from shared department
+preparation. Only transient work evidence is copied: budget/recurring projections
+already include provider cost. `ordinaryCreditOriginations` is shared by product
+allocation, facility valuation and department/staffing acceptance. It excludes
+named-credit advances, repayments and non-principal writeoffs. The original
+frozen-staff/noncredit assumptions remain explicit; old-version valuations retain
+their arithmetic. This is a private estimate, not a posting or resource grant.
+
 Credit's owner-only `departmentCreditPreview` delegates to the existing prepared
 department/customer owner and operating forecast. UI must not infer origination
 staff by subtracting collections from headcount: other shared work and teaching
 also consume time. This read model is neither saved nor added to network views.
 
-Edit `src/`. The ordered [manifest](../src/manifest.json) defines assembly inputs; their current count and verified artifact identity belong in [release status](release-status.md#which-version-am-i-looking-at). The standalone `BRANCH_WARS.html` is generated; the normal playable copy intentionally trails development source. Do not overwrite it or freeze a new reference merely to make freshness checks pass.
+`IncomeReview` is a pure adapter over the already authorized owner view. It
+does not run the economy, change saved fields, post money or reconstruct old
+income. Income history uses owner `operations.result` entries plus the current
+actual report; principal history uses `trend.meLoans`. Missing calendar months
+stay missing, and duplicate cycles do not create extra points. Keep economic
+forecasting in `operatingPreview` and presentation in `ui/income-review.js`.
+Explicit `incomeHistoryVersion:1` adds the separate `IncomeHistory` contract:
+Core8.16 or integrated Expanded9.29, with twelve consecutive completed records
+per owner and an opening balance reference. It is not automatically added to
+existing saves or historical custom rules. Normal new-game setup selects this
+reporting boundary for Core and Expanded, without another checkbox.
+Only the post-resolution submit fence appends records; half-ready saves do not.
+Rematch initializes empty books, and received owner views reject duplicate,
+missing, out-of-order, nonfinite or leaked rival records. The registry supplies
+`incomeHistorySupported:1`; these campaigns require a fresh compatible handshake.
+Keep the scalar authoritative, not a second feature map. This reporting-only
+boundary changes no prices, balances, money flows or AI strategy.
+`previewCampaignEdition(source, edition, {currentReporting:true})` is the
+player-facing creation proposal. The historical two-argument engine API keeps
+its prior defaults for replay and explicit legacy construction. Changing a
+historical compatibility control may propose removing an incompatible reporting
+marker; this is included in confirmation, never silently applied on import.
+
+Explicit `commercialServiceVersion:1` requires the reporting foundation and
+creates Core8.17/Expanded9.30; current editions include these servicing rules.
+The campaign scalar is authoritative; its owner mirror is validated on saves
+and private views. `commercialRelationshipWork` preserves the original
+left-associated offer/business/merchant arithmetic and supplies both dispatch
+workloads and fee coverage; keep these consumers on the same calculation.
+`CommercialFeeEconomics` bills opening-operation relationship
+counts through finite service capacity. Expanded uses its already paid,
+dispatched `commercialRelationships` task; Core reserves that work from the same
+Business allocation before selling. No additional payroll charge or client book
+is created. Existing fee rates remain provisional and unchanged. Current-step
+acquisitions begin earning in the following operating step; acquisitions already
+activated before operations are in the opening serviced population.
+AI may add bounded paid provider capacity only when a pure, current-cash-funded
+comparison improves net earnings and preserves other work and funding protections.
+Current setup includes the correction through its edition choice, not a new checkbox.
+
+Edit `src/`. The ordered [manifest](../src/manifest.json) defines assembly inputs; their current count and verified artifact identity belong in [release status](release-status.md#which-version-am-i-looking-at). The standalone `BRANCH_WARS.html` is generated and may trail source. Rebuild it deliberately when selecting a local candidate; do not replace frozen release artifacts or regenerate historical golden references merely to make checks pass.
 
 | Layer | Owns | Must not own |
 | --- | --- | --- |
@@ -187,6 +263,29 @@ Run from `game/`:
 See [developer tools](../tools/README.md) for packaging and specialized checks. `tools/architecture_overrides.js` resolves lexical bindings using the pinned, development-only Acorn parser. Separate local declarations and parameter defaults are not engine replacements; actual binding/API writes still count against the unchanged ceiling. Static analysis does not prove the absence of dynamic eval or API-alias mutations. Do not raise ceilings or suppress failures to pass a release. Archive detailed results rather than duplicating them here.
 
 ## Preservation and historical contracts
+
+Core8.19 extends the existing scalar to `bankEconomicsVersion:2`, without a
+second feature map. It uses AccountingPrototype1 independently of the regional
+pilot. Opening composition is recorded in a journal base; saved books are never
+backfilled. Core owner/account mirrors are validated on import and projection.
+Core AI uses the existing post-spending reserve gate; monthly journals compact
+through the same accounting snapshot path. New acquisition/absorption adapters
+retain authored nonfinancial effects while posting one backed book transfer.
+`coreAccountingSupported:1` is additive: do not raise the older fixed
+`bankEconomicsSupported:1` field and accidentally reject valid old peers.
+
+The explicit service-based economics boundary is `bankEconomicsVersion:1`:
+Core8.18 requires serviced income; Expanded9.32 additionally requires credit
+workload1. The registry owns versions/capabilities; the income-history validation
+and projection boundary checks campaign/owner mirrors. No second feature map or
+automatic save upgrade is introduced. `bankBasePayroll` is authoritative for
+salary, hire quotes, AI affordability, local cost allocation and recruitment UI.
+`bankAbstractIncome` preserves the old arithmetic order while disabling only the
+five unsupported revenue terms on the explicit new rules. Do not move shared
+salary into specialist premiums or treat lower pay as free extra capacity.
+The captureddd9c768a reference remains immutable. Core's existing importer can
+remove obsolete strategy metadata: recovery tests compare canonical saves without
+discarding any balances, orders, RNG or operating results.
 
 Reference builds, legacy fixtures, rollback releases, failure reproductions and user saves are evidence, not disposable clutter. Their names may be loaded by tests. Any cleanup requires a dependency check and separate authority for destructive changes.
 

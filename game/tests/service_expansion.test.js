@@ -91,7 +91,16 @@ const fresh=create('fresh');fresh.gameOver=true;E.rematch(fresh,0);E.rematch(fre
 const peerCaps=E.campaignCapabilities(),peerRules=E.validateCampaignRules(fresh,'game');
 assert.equal(peerCaps.pilotSupported,11);assert.equal(E.peerRulesIssue(peerRules,peerCaps),null);
 for(const pilotSupported of [undefined,0,10,12])assert.equal(E.peerRulesIssue(peerRules,{...peerCaps,pilotSupported}).field,'campaignRulesVersion');
-assert.match(source,/COMMERCIAL SERVICE DESK/);assert.match(source,/RESEARCH APPLICATIONS/);
+// Verify current contextual workspaces rather than removed section titles.
+const serviceUi=require('./group_ui_harness').groupHarness();
+serviceUi.run("game=E.createGame({campaignRulesVersion:1,mode:'hotseat',seed:'service-ui-contract',created:1});seat=0;workspaceTab='markets';newDraft(currentView());resetMarketWorkspace(currentView());serviceBefore=JSON.stringify({game,draft});document.querySelector('#pipeline').innerHTML='';renderExpandedServices(currentView());");
+assert.match(serviceUi.elements.get('#pipeline').innerHTML,/id="commercialClientWorkspace"/);
+assert.match(serviceUi.elements.get('#pipeline').innerHTML,/data-service-inspect=/);
+serviceUi.run("workspaceTab='strategy';strategySelection(currentView());strategyWorkspace.branch='commercial';strategyWorkspace.desk='applications';strategyWorkspace.application='buildTreasuryDesk';renderStrategyWorkspace(currentView());");
+const applicationMarkup=serviceUi.elements.get('#strategyTree').innerHTML;
+assert.match(applicationMarkup,/id="strategyDeployApplication"/);assert.match(applicationMarkup,/id="strategyServiceLink"/);
+assert.match(applicationMarkup,/Corporate Treasury/);
+assert.equal(serviceUi.run('JSON.stringify({game,draft})'),serviceUi.run('serviceBefore'),'Inspecting services and deployment does not change bank or orders');
 // Exercise the real lobby/engine boundary instead of prescribing the old
 // pre-lobby source spelling. Omitted and disabled previews must stay disabled.
 const {harness}=require('./github_resilience.test.js');
@@ -113,7 +122,9 @@ for(const transport of ['gh','lan','p2p'])for(const selected of [undefined,0,1])
  assert.equal(started.scenario,'rate');
  assert.equal(host.run('sent.filter(m=>m.type==="state").at(-1).state.serviceExpansionVersion'),started.serviceExpansionVersion,'guest must receive the same service rules');
 }
-assert.match(source,/const expanded=\$\('#servicePricing'\)\?\.open/,'pricing disclosure survives plan rerenders');
+serviceUi.run("workspaceTab='markets';document.querySelector('#servicePricing').open=true;document.querySelector('#pipeline').innerHTML='';renderExpandedServices(currentView());");
+assert.match(serviceUi.elements.get('#pipeline').innerHTML,/<details id="servicePricing"[^>]*\sopen>/,'pricing disclosure survives an actual rerender');
+assert.equal(serviceUi.run('JSON.stringify({game,draft})'),serviceUi.run('serviceBefore'),'Preserving the disclosure does not change the plan');
 
 let turns=0,maxViewBytes=0,changes=0;const results=[];
 const normalize=x=>{const y=copy(x);delete y.ledgerVersion;y.players.forEach(p=>delete p.strategy);return y};

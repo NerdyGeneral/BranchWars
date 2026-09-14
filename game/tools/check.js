@@ -3,6 +3,8 @@
 // One non-interactive entry point, usable from any working directory.
 const path = require('node:path');
 const {spawnSync} = require('node:child_process');
+const fs=require('node:fs'),crypto=require('node:crypto');
+const {createEvidence,fingerprintFiles}=require('./gate_evidence');
 const root = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const fromArgs=args.filter(arg=>arg.startsWith('--from='));
@@ -138,13 +140,40 @@ commands.push(['tests/shared_premises_campaign.test.js']);
 commands.push(['tests/shared_premises_network.test.js']);
 commands.push(['tests/shared_premises_ui.test.js']);
 commands.push(['tests/shared_premises_strategy.test.js']);
+commands.push(['tests/legacy_services_ui.test.js'],['tests/funding_movement_ui.test.js'],['tests/income_review.test.js'],['tests/income_review_ui.test.js'],['tests/income_history.test.js'],['tests/income_history_network.test.js']);
+commands.push(['tests/commercial_fee_economics.test.js']);
+commands.push(['tests/credit_workload.test.js']);
+commands.push(['tests/credit_investment_staffing.test.js']);
+commands.push(['tests/income_statement.test.js']);
+commands.push(['tests/bank_economics.test.js']);
+commands.push(['tests/bank_economics_ui.test.js']);
+commands.push(['tests/commercial_workload_shared.test.js']);
+commands.push(['tests/core_balance_sheet.test.js'],['tests/core_balance_sheet_ui.test.js']);
+commands.push(['tests/income_history_network.test.js','--core-balance']);
+commands.push(['tests/income_history_network.test.js','--bank-economics']);
+commands.push(['tests/income_history_network.test.js','--credit-workload']);
+commands.push(['tests/income_history_network.test.js','--commercial']);
+commands.push(['tests/income_banking_trial.test.js']);
+commands.push(['tests/gate_evidence.test.js']);
 const from=fromArgs[0]?.slice('--from='.length),start=from===undefined?0:commands.findIndex(command=>command[0]===from);
 if(start<0)throw Error('Unknown resume point: '+from);
+const fingerprint=()=>crypto.createHash('sha256').update(require('./build_game').assemble().html).digest('hex');
+const inputEntries=['src','tests','tools','experiments','reports/reference-builds','BRANCH_WARS.html','BRANCH_WARS_LAN_SERVER.ps1','RUN_TESTS.bat','docs/game-reference.md'];
+const expected=commands.slice(start),before=fingerprint(),inputsBefore=fingerprintFiles(root,inputEntries),evidence=createEvidence(path.join(root,'reports','baselines'),'gate',{mode:from!==undefined?'partial':args.includes('--full')?'full':'fast',from,portableSha256:before,inputEntries,inputsSha256:inputsBefore,commands:expected});
+let completed=0,gateFinished=false;
+console.log('Durable gate output: '+evidence.log);
+process.on('exit',exitCode=>{if(!gateFinished)evidence.finish({passed:false,incomplete:completed<expected.length,exitCode,completed,expected:expected.length});});
 if(from!==undefined)console.log('Partial diagnostic resume from '+from+'. Earlier checks are not rerun; this is not a complete gate.');
-for (const command of commands.slice(start)) {
+for (const command of expected) {
   console.log('Checking ' + command.join(' '));
-  const result = spawnSync(process.execPath, command, {cwd: root, stdio: 'inherit', windowsHide: true});
+  evidence.append('command-started',{command});
+  fs.writeSync(evidence.logFd,'\nChecking '+command.join(' ')+'\n');
+  const result = spawnSync(process.execPath, command, {cwd: root, stdio: ['ignore',evidence.logFd,evidence.logFd], windowsHide: true});
+  completed++;evidence.append('command-finished',{command,exitCode:result.status,signal:result.signal,error:result.error?.message||null});
   if (result.error) throw result.error;
   if (result.status !== 0) process.exit(result.status || 1);
 }
+const after=fingerprint(),inputsAfter=fingerprintFiles(root,inputEntries),sourceUnchanged=before===after&&inputsBefore===inputsAfter;
+evidence.finish({passed:sourceUnchanged,incomplete:false,completed,expected:expected.length,sourceUnchanged,portableAfterSha256:after,inputsAfterSha256:inputsAfter});gateFinished=true;
+if(!sourceUnchanged)throw Error('Playable source changed during the gate; see '+evidence.summary);
 console.log(from!==undefined?'Resumed checks passed (partial diagnostic run, not a complete gate).':args.includes('--full') ? 'Full checks passed.' : 'Fast checks passed (not full release acceptance).');

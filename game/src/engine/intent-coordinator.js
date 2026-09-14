@@ -6,6 +6,7 @@ function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
  plan=planInvestmentStrategy(g,index,plan);
  plan=planCompanyStrategy(g,index,plan);
  plan=planSharedPremises(g,index,plan);
+ if(g.commercialServiceVersion===1)plan=commercialServicePlanReview(g,index,plan).plan;
  return planCompanyCredit(g,index,plan);
 });}
 function chooseOpenBotCore(g, index) {
@@ -186,6 +187,7 @@ function planFinalCashReserve(g, index, input) {
   return plan;
 }
 function validatePilot(g) {
+  validateIncomeHistoryCampaign(g);
   for(const p of g.players)if(p.submitted){const issue=projectLocationsIssue(g,p,p.submitted);if(issue)throw Error(issue);}
   if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8','9.9'].includes(g.version)) validateCampaignRules(g, 'game');
   validateStoredDepartmentFunctionPolicies(g);

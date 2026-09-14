@@ -359,7 +359,7 @@ function departmentOriginationFloorAcceptance(g,p,beforePlan,afterPlan){
     if(facilityLifecycleProtectedBudget(p,afterPlan,budget,g).remaining<0)return reject('Protected cash reserve is not funded.');
     if(!lifecycleInstructionQuote(g,p,afterPlan).status.eligible)return reject('Existing office instructions are not feasible.');
     const forecast=q=>operatingPreview({...p,marketSnapshot:g.marketEconomy},q,g.economy,g),oldForecast=forecast(beforePlan),nextForecast=forecast(afterPlan);
-    const gross=r=>Math.round(r.loanGrowth+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
+    const gross=r=>p.creditWorkloadVersion===1?ordinaryCreditOriginations(r):Math.round(r.loanGrowth+(r.principalRepaid||0)+(r.creditRecovery||0)+(r.chargeoff||0));
     if(gross(nextForecast)<=Math.max(0,gross(oldForecast)))return reject('No funded origination benefit.');
     if(nextForecast.fundingLoss>oldForecast.fundingLoss||(nextForecast.emergencyDebt||0)>(oldForecast.emergencyDebt||0)||
       nextForecast.capitalRatio<GROUP_SAFEGUARDS.capitalRatio*100)return reject('Funding or capital protection worsened.');

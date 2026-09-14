@@ -1,24 +1,35 @@
-# V4 Expanded playtest — v4.0.0-rc1
+# V4 Expanded playtest — v4.0.0-rc2
 
-This release makes the current development work downloadable for testing. It is **not implementation-complete** and does not replace the preserved V2/V3 distributions. Source and package are published on the dedicated `release/v4-playtest` branch and tagged `v4.0.0-rc1`; main is not merged or overwritten.
+September 14, 2026. This development playtest is **not implementation-complete or balance-certified**. Source and package are published on `release/v4-playtest`; main and V2/V3 are not overwritten. The previous `v4.0.0-rc1` tag preserves the prior V4 package.
 
-## Included
+## What changed since rc1
 
-The accumulated Expanded work includes contextual banking workspaces, commercial operating deposits, persistent five-family lending, qualified workforce and leadership, research-to-delivery paths, agency and investment operating businesses, shared-service premises, company ownership/control and accounting reconciliation. The latest addition brings named-company loans into the ordinary Expanded selection, with borrower qualification, funded offers, shared capacity, repayment/losses, conditional forecasts, rival planning and strict save/peer boundaries. The confirmation describes five benefits instead of enumerating internal prerequisites.
+- Bank statements distinguish loan interest, commercial/service fees, sustaining expenses and legacy abstract income. Actual results, standing policies, proposed plans and history have distinct presentations.
+- Credit and commercial servicing consume shared finite workforce capacity. Current-version economic rules remove unsupported automatic income and use provisionally revised base payroll. Core has explicit balance-sheet support; older supported saves retain their original rules.
+- Funding review separates organic deposit growth from recorded competitive movements. Missing records are unavailable, not invented zeroes.
+- Contextual office/client controls and workforce explanations are refined. Historical service agreements without company profiles no longer crash the directory, inspector or bid review.
+- The Windows launcher now uses the central test gate, with incremental failure receipts and source-change detection.
+
+Earlier V4 features remain: multi-market construction, company deposits/loans, research and delivery, qualified departments/leadership, advertising, agency, investment businesses, shared premises and company ownership/control. The Expanded confirmation describes five benefits instead of internal prerequisites.
 
 ## Exact game identity and evidence
 
-The193-input game HTML SHA-256 is `1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00`, matching the checkpoint65 source and review artifact. New Expanded campaigns use save9.28; supported older campaigns keep their saved rules.
+The199-input game HTML SHA256 is `ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92`. Engine SHA256 is `b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642`. New campaigns use Core8.19 / Expanded9.32; supported older campaigns retain their saved rules.
 
-The [checkpoint65 acceptance record](../game/output/master-checkpoint65-acceptance.json) covers126 distinct affected tests. The initial run had119 passes and seven historical-fixture failures; all seven were addressed by correcting the two fixture setups, with nine tests passing in the recheck. The failed report is retained. Production validators and golden expectations were not weakened. Shared setup regressions, simulated GitHub/LAN/direct-link checks, ownership/privacy, recovery and source architecture checks passed within their recorded scope.
+- The targeted continuation completed21/21 commands with unchanged sources, including reporting, accounting/workload and simulated network/privacy checks.
+- The engine suite,18 reporting/legacy UI tests and324-turn service regression pass on the exact current portable. Service testing recorded47 ownership changes.
+- Packaging regressions verify the six-file allowlist, tamper rejection and immutable copies.
+- A separately extracted copy of the staged GitHub source passes build, documentation, architecture, reference-byte, current-edition, funding/legacy UI and packaging checks without local untracked diagnostics.
+- The preceding complete Windows baseline **failed:208/210** on the older UI artifact. The two failing areas were repaired and rechecked, but that does not create a new full-suite pass. Its original failed receipt is preserved.
 
-The [V4 package verification](v4-verification.json) records the extracted ZIP's exact six-file inventory and all manifest hashes, plus Core/Expanded creation, half-ready recovery and equivalent resumed/control month outcomes. Build/reference freshness, architecture, Windows launchers and packaging regressions pass. ZIP SHA-256: `8e7460d679ce583996462a4e3bffb65984313ae31f0acb3f88a941137310c09e`.
+The [V4 package verification](v4-verification.json) records this ZIP's hash and exact extracted-file/runtime checks. Broader evidence and failed experiments remain in [release status](../game/docs/release-status.md); targeted checks do not certify the full release.
 
-## Outstanding checks
+## UI, balance and outstanding checks
 
-- The final complete Windows/release gate has not been certified for this package.
-- The ordinary balance experiment last recorded month108 of the Balanced run. Its process handle is gone; the historical report's `running` label is stale. It is an interrupted experiment, not a120/480-month pass. Both banks had funded company loans; that alone does not establish economic balance.
-- Complete strategy comparisons, mature UI/performance checks and actual two-computer acceptance remain pending.
+- UI actions and financial explanations are better connected, but workforce clarity, mature-bank density and real visual acceptance are unfinished. Automated rendering tests do not establish intuitive gameplay.
+- Conventional lending versus fee-based strategies remains the main balance concern. A cautious lender survived24 Balanced months with$9.38M cash but lost$939K cumulatively and its loan book fell to$5.42M. A separate fee-oriented Rate campaign reached120 months with much stronger fee than loan-interest income. These are policy-specific experiments, not proof that every lender fails or every commercial strategy wins. Deposit dominance is not itself a bug.
+- Automatic score/stalemate endings still prevent some solvent long campaigns from continuing; changing these rules remains a separate decision. An early-ended campaign is not a480-month pass.
+- The final complete Windows gate, mature performance checks and actual two-computer acceptance remain pending.
 - A comprehensive updated manual/PDF remains pending. The V4 quick-start is supplied; the V3 PDF is preserved with its older release.
 - National Empire and insurance underwriting are not included.
 

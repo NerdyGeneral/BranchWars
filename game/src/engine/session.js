@@ -22,11 +22,15 @@ function createSeededCampaign(o){
 
 
 const submitCore=submit;
-submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resolutionId,result=submitCore(g,...args);if(g.resolutionId!==before){g.eventLedger=g.eventLedger||[];g.ledgerSequence=g.ledgerSequence||0;for(const p of g.players){if(!p.operatingReport)continue;g.eventLedger.push({id:++g.ledgerSequence,cycle:p.operatingReport.cycle,category:'operations.result',source:'operate',target:p.id,visibility:'owner',report:(g.companyCreditVersion===1?companyCreditLedgerReport(p.operatingReport):{...p.operatingReport})})}if(g.eventLedger.length>2000){const removed=g.eventLedger.splice(0,g.eventLedger.length-2000);g.ledgerPrunedThrough=removed[removed.length-1].id}}return result})};
+submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resolutionId,result=submitCore(g,...args);if(g.resolutionId!==before){recordIncomeHistory(g);g.eventLedger=g.eventLedger||[];g.ledgerSequence=g.ledgerSequence||0;for(const p of g.players){if(!p.operatingReport)continue;g.eventLedger.push({id:++g.ledgerSequence,cycle:p.operatingReport.cycle,category:'operations.result',source:'operate',target:p.id,visibility:'owner',report:(g.companyCreditVersion===1?companyCreditLedgerReport(p.operatingReport):{...p.operatingReport})})}if(g.eventLedger.length>2000){const removed=g.eventLedger.splice(0,g.eventLedger.length-2000);g.ledgerPrunedThrough=removed[removed.length-1].id}}return result})};
 
 
 const rematchCore=rematch;
-rematch=function(g,...args){return withRandom(g,'state',()=>rematchCore(g,...args))};
+rematch=function(g,...args){return withRandom(g,'state',()=>{
+ const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,result=rematchCore(g,...args);
+ if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});g.version=campaignVersion(g);validatePilot(g);}
+ return result;
+})};
 
 // Resolution-stage ledger: source-attributed net changes, not a double-entry journal.
 // Keep private bank records separate; no rival plans or complete rival stats are copied.

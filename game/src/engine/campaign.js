@@ -37,7 +37,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
+ if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
  const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
  const g=createSeededCampaign(baseOptions);
@@ -85,10 +85,14 @@ function createGame(o){
  if(o.companyControlStrategyVersion===1)g.companyControlStrategyVersion=1;
  initializeSharedPremises(g,o);
  initializeCompanyCredit(g,o);
+ initializeIncomeHistory(g,o);
+ initializeCommercialService(g,o);
+ initializeCreditWorkload(g,o);
+ initializeBankEconomics(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;
- if(o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
+ if(o.incomeHistoryVersion===1||o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}

@@ -24,7 +24,7 @@ function applyProjectEffects(g,p,project){
   if(strategyLevel(p,'network')>=4)pushShare(g.territories[target],p===g.players[0]?2.5:-2.5);
   return `${p.name} completed ${def.name} in ${g.territories[target].name}, adding permanent ${def.facility} banking capacity.`;
  }
- const result=applyBaseProjectEffects(g,p,project);
+ const result=g.bankEconomicsVersion===2&&project.key==='acquisition'?coreBookAcquisition(g,p,project):applyBaseProjectEffects(g,p,project);
  if(project.key==='branch')addFacility(project.target,'retail');
  if(project.key==='acquisition'){
   const type=hasSpecialization(p,'acquisition','integrator')?'commercial':'retail',target=project.target,rival=g.players[1-g.players.indexOf(p)];

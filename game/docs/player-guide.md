@@ -2,6 +2,102 @@
 
 Executive Command · Living Bank working build
 
+Current local new games use **Core8.19** or **Expanded9.32**. Choose the depth
+you want with those two buttons; the integrated accounting and income repairs
+do not add checkboxes. Existing campaigns keep their saved rules. The published
+V3/V4 packages and their PDF manuals are older snapshots, not this working build.
+
+### Income is not the size of your loan book
+
+The local income-review candidate adds **Loan income · actual & outlook** to
+the operating forecast and Credit workspace, and **Business & merchant fees ·
+actual & outlook** beside the commercial forecast. The published V4 package
+does not yet include these changes.
+
+- **Last actual** is the last completed month's recorded operating result.
+- **Standing-policy forecast** estimates another month without changing policy.
+- **Draft forecast versus last actual** shows expected month-to-month movement.
+- **Draft versus standing** isolates your edits. Zero here does not mean no growth.
+
+Expand income history for roughly twelve months of retained actual records and
+the exact comparison table. Solid points are actual; hollow dashed points are
+forecasts. Missing months are gaps, not zero. Percentages are unavailable when
+the comparison starts from zero, a negative result or missing data.
+
+New Core/Expanded games in the local candidate retain twelve completed
+months independently of diagnostic logs, including net business and merchant
+relationship changes. This is included in both editions, not another checkbox.
+Both multiplayer players need the updated build to start these new rules.
+Existing saves keep their original rules and available records; they are never
+upgraded to populate history. Where shown, relationship
+changes include all settled gains/losses, not only recruitment. Business and
+merchant categories can overlap and must not be added as unique customers.
+
+Both current editions include the servicing rules introduced in8.17/9.30.
+Commercial fees require relationships
+present when operations begin and sufficient servicing; new operating-step
+acquisitions start earning next month. Expanded uses Sales and relationships
+department work or its paid provider. Core reserves service time from existing
+Business bankers before they sell. The income panel shows standing/draft coverage;
+payroll and provider charges remain in bank expenses, not an additional fee.
+
+Current Expanded includes the9.31 correction removing a storage-related
+administration penalty. Its workload follows outstanding principal and active
+product portfolios by location, plus individual company loans. Keeping many
+historical vintage records does not itself require more bankers. Arrears still
+need Collections capacity; lending still requires staff, premises, funding and
+capital. Existing loans,
+interest terms, repayments and losses are not rewritten by the new workload rule.
+
+**Loan principal history** has its own graph and dollar scale. It uses recorded
+whole-bank closing balances, not estimated historical income. Repayments return
+principal; unpaid interest written off is not principal. Loan income after credit
+losses still excludes shared funding and operating costs—it is not net lending profit.
+
+The operating-result breakdown now shows corporate invoice losses separately
+when present and flags an unexplained reconciliation difference. Its operating
+expenses include more than payroll and facilities. Other modeled income remains
+an honest aggregate, including some legacy abstract bonuses; it is not all fees.
+Construction, executive decisions and other stages can make total bank earnings
+negative even when monthly operating profit is positive.
+
+Both current editions offer **Income statement · actual,
+standing & draft** in the Bank forecast. Expand it to separate loan/securities
+interest, funding costs, account and contract fees, operating costs and legacy
+modeled bonuses. Net interest income is a subtotal, not additional revenue.
+Expand **Where operating costs go** to see payroll, premises, servicing, providers,
+training and acquisition expenses; embedded product-platform costs are not charged
+twice. This is the bank's statement, not consolidated subsidiary earnings.
+
+Below it, **Funding movements** separates the completed month's organic deposit
+flow from recorded deposit competition. Neither row is the total change in
+deposits: customer departures, company accounts and other stages may also move
+funding. Forecasts exclude rival competition. If history is unavailable, the game
+says so rather than treating it as zero. A loan principal repayment releases cash
+but is not earnings. Review deposit pricing, retail service and market presence
+when competition is taking funding away.
+
+Older service-agreement campaigns may show a market/client label instead of a
+named company. Their original pricing, staffing and renewal rules still work;
+opening these screens does not add the newer company simulation to that save.
+
+**Core is deliberately simpler:** its “Core deposit-linked contribution
+(modeled)” depends on total deposits, deposit strategy and the economy. It is
+not billed account fees or interest on an earning asset. Expanded instead uses
+product/account-equivalent fees and their servicing costs. In either edition,
+the deposit balance itself is a liability, not revenue.
+
+Detailed source amounts are recorded prospectively in this candidate. An older
+saved result without them shows unavailable detail rather than reconstructing it
+from today's balances. Abstract staff/technology/wealth income remains explicitly
+labeled on older saved results. Current editions do not pay those automatic
+bonuses; research still affects its actual capabilities and customer outcomes.
+Older8.16/9.29 campaigns retain their recorded aggregate reporting and rules.
+
+Older campaigns without durable income history still depend on the retained owner
+ledger. Current reporting campaigns retain twelve aggregate months; the detailed
+source breakdown above is not retroactively populated in those older records.
+
 ### Understanding a shrinking loan book
 
 In the current development candidate, **Credit → Loan book movement** separates
@@ -34,9 +130,9 @@ optional. Continue/import/rematch never upgrade an older campaign automatically.
 
 ### Company ownership and reviewed acquisitions
 
-The current source Expanded selection includes company shares, reviewed
-controlling purchases and consolidated group reporting. The older normal
-portable retains its existing rules until the release build is rebuilt and gated.
+The current local Expanded selection includes company shares, reviewed
+controlling purchases and consolidated group reporting. Published V3/V4 packages
+are older snapshots; rebuilding the local portable does not replace them.
 Open **Financial Group → Companies** and select a company. Ownership is separate
 from providing its bank accounts, loans, merchant services or treasury contract.
 Ordinary share orders use actual parent cash and a finite auction; they do not
@@ -173,8 +269,8 @@ qualified operations capacity.
 
 The comparison explains these existing product choices, not a complete
 real-world investment suitability process. More differentiated securities and
-their risk/term behavior remain under development. Normal Expanded still uses
-its existing rules; old campaigns never acquire these rules automatically.
+their risk/term behavior remain under development. Current Expanded includes
+these choices; old campaigns never acquire these rules automatically.
 
 Explicit9.17 campaigns add cash-funded variable income on the existing securities.
 Your account statement separates direct income paid as cash from income retained
@@ -185,8 +281,9 @@ outside-issuer cash. Shortfalls are not spendable promises. Servicing and cash
 arrangements process first; new one-time funding and inventory purchases earn
 from the following month. Fractional dollars carry forward. This is a fictional
 variable-income product, not a guaranteed or insured bond return. Cash and bank
-sweeps do not earn this securities distribution. Normal Expanded and older saves
-are unchanged; broader investment products and risk suitability remain unfinished.
+sweeps do not earn this securities distribution. Current Expanded includes this
+behavior; older saves are unchanged. Broader investment products and risk
+suitability remain unfinished.
 
 Explicit9.16 development campaigns add customer preferences. Some clients care
 most about fees, some about service, and others about an established relationship.
@@ -198,12 +295,12 @@ An unaffordable or unattractive offer can lose the service relationship without
 confiscating the customer's assets or transferring their affiliated-bank deposit.
 The final service fee and standing cash instruction settle before departure.
 These are service preferences, not a full investment-risk suitability model.
-Securities coupons/returns and broader product choice remain unfinished.
-This boundary is not automatically added to existing games or the normal Expanded
-button. Historical9.15 and earlier customer-choice rules are preserved.
+Securities distributions described above are available in current Expanded;
+broader product choice remains unfinished. Existing games are not upgraded.
+Historical9.15 and earlier customer-choice rules are preserved.
 
-The normal Expanded button still starts the supported9.11 rules. Existing saves
-are not upgraded. Explicit9.12 development campaigns additionally have
+The normal Expanded button now starts9.32. Existing saves are not upgraded.
+The investment workspaces introduced in9.12 are included:
 **Financial Group → Investment services**:
 
 - **Business & team:** choose advice/brokerage, external or owned carrying,
@@ -386,6 +483,22 @@ expansion remains future work; the existing twelve-market legacy map is retained
 
 ## QUICK START
 
+1. Extract the player ZIP, keeping its files together. In the development
+   checkout, use the local game's launchers, not a frozen release folder.
+2. Open **OPEN_BRANCH_WARS.bat** for solo, hotseat or direct-link play. For LAN,
+   the host opens **OPEN_LAN_GAME.bat** and shares the server's displayed address.
+3. For a new campaign, choose **Core** or **Expanded**. Expanded is one connected
+   package, not a dependency checklist; it uses two regions and six markets.
+4. Choose your bank identity, color, scenario and opponent. In multiplayer,
+   the host applies shared lobby settings and both players confirm readiness.
+   Both players need a compatible build. See Play modes for connection details.
+5. Review the executive decision, staff allocation and forecast. Building,
+   hiring, research and diversification are optional, not compulsory purchases.
+6. **MARK READY** seals the monthly plan. Resolution waits for both institutions.
+   Export before updating, changing browsers or closing a hosting session.
+
+### Your first staffing and planning decisions
+
 **People: start with the work, not the spreadsheet.** Overview shortages open the
 responsible function directly. Work coverage has a function directory and one
 inspector showing the actual affected tasks, coverage and reviewed vendor cost.
@@ -394,11 +507,22 @@ Additional staff use employee-months: `0.25` is one quarter of a banker’s time
 effort; vendor work is not headcount. Existing service reservations are separate
 from additional assignments, and time cannot be spent twice.
 
+The Overview's shared-time table also uses employee-months, not internal
+quarter-units. Negative remaining time means overcommitment; positive remaining
+time is still before facilities/sales use, not necessarily idle staff. In current
+serviced-income campaigns, a Commercial relationships shortage can reduce
+recurring business/merchant fees as well as new acquisition.
+
 Choose **Preview changes**, review the consequences, then **Adopt reviewed
 changes** to stage them. **Discard preview** leaves the existing plan unchanged.
 Preview or discard unfinished function values before selecting another function.
 Detailed bank-wide staff accounting, proposal limits and settled results remain
 available below the inspector. Coverage does not guarantee customers or profit.
+
+Recovery comparisons and their undo controls belong to the exact reviewed
+draft and connection. A paused repository connection cannot stage recovery;
+after reconnecting or replacing the campaign, compare again. An old recovery
+card cannot apply a newer proposal just because its option has the same name.
 
 Development and Leadership also use department directories. Their unfinished
 entries survive department changes without becoming orders. Training preview
@@ -416,7 +540,7 @@ players reconfirm readiness. Guests cannot edit the shared rules.
 Historical modular combinations remain loadable under their supported versions;
 they are not offered as new-campaign selections. Existing saves are never
 automatically upgraded to Expanded. The local integration candidate creates
-Expanded Group10/save9.9 campaigns. These retain the shared commercial/wealth
+Expanded Group10/save9.32 campaigns. These retain the shared commercial/wealth
 office staff pool and add separately qualified agency employees and ongoing
 operating permissions. This candidate is still undergoing gameplay and release
 verification; older campaigns retain their exact rules.
@@ -481,9 +605,10 @@ insurance agency. The historical standalone preview required
 Customer onboarding and priced Product programmes with their prerequisites, and
 cannot be combined with the limited Modular combinations pilot. Both multiplayer
 peers must support it; an older peer is blocked rather than silently downgraded.
-This is not yet the complete Financial Group, brokerage/wealth or company-shares system.
-Campaign rules remain fixed: do not assume a campaign started on this foundation
-will automatically acquire future subsidiary or share-trading mechanics.
+That historical foundation did not include the later brokerage/wealth and
+company-share systems. Current Expanded includes their workspaces described
+elsewhere in this guide; an old foundation campaign does not automatically
+acquire those subsidiary or share-trading mechanics.
 Existing save 9.0 campaigns retain the earlier parent/lending foundation without
 the company economy; save 9.1 retains corporate clients without agencies.
 Both players need rules-3 support for new 9.2 campaigns. No older campaign
@@ -534,7 +659,9 @@ regional release; final integration and human multiplayer acceptance are pending
 
 ### Insurance agency — Group rules 3 and later
 
-Group has three desks: **Capital**, **Insurance agency** and **Companies**.
+Current Expanded has four Group desks: **Capital**, **Insurance agency**,
+**Companies** and **Investment services**. Older supported agency campaigns
+without an investment business show the first three.
 Changing desks does not submit a turn, alter your staged plan or erase working
 form values. Arrow keys, Home and End navigate the desk tabs. Company tables and
 the optional cover roster scroll within their own container on narrow displays.
@@ -652,15 +779,19 @@ setup and hiring; the prior loss and failure count are not erased.
 
 This is a third-party commercial distribution business, **not an underwriter**.
 Household insurance, wider wallet/cross-selling, carrier selection and claims or
-carrier-loss events are not implemented yet. Brokerage and wealth remain future
-approved work. Buying cover currently does not promise simulated compensation
+carrier-loss events are not implemented yet. Brokerage and investment advice
+use the separate Investment services business described earlier; agency staffing
+does not authorize those activities. Buying cover does not promise simulated compensation
 for a company's future loss event.
 
-### Identified offices and departmental leadership — current Group preview
+### Identified offices and departmental leadership — historical foundation
 
-New Financial Group campaigns use the Group 5 development rules (save 9.4). Existing saved
-campaigns keep their original rules; selecting a preview does not upgrade them.
-This is still an implementation candidate, not the completed expansion.
+The following section records the Group5/save9.4 foundation, including its
+original facility and wealth restrictions. It is not the current new-game
+selection or a statement that investment services are still unimplemented.
+Current Expanded uses9.32; see the current office inspector, Shared service rooms
+and Investment services sections for its additional choices. Existing campaigns
+keep their original rules and quoted values.
 
 Open **Markets → Office network** to inspect a particular office. Its stable ID
 and conversion count follow its history. Compare retail, commercial and digital
@@ -731,6 +862,12 @@ customers. These provisional values need long-campaign and player acceptance.
 The broader department catalog, licensed wealth operations and remaining group
 businesses are still under implementation. Existing Group 4 saves keep their
 original office behavior and never acquire condition or maintenance automatically.
+
+### Historical modular setup reference — not new-game instructions
+
+The numbered procedure below is preserved for interpreting older campaigns and
+their feature versions. Its individual preview checkboxes are no longer offered
+for new games. Use the six current Quick start steps above instead.
 
 1. Extract the ZIP.
 2. For Solo AI, Pass & Play, or Direct P2P, double-click OPEN_BRANCH_WARS.bat.
@@ -845,12 +982,20 @@ it did not start and was not charged. Select it again in a later plan if still
 wanted. Incomplete old history is labeled unknown rather than guessed. These
 display notices do not rewrite saved results or change spending rules.
 
-## COMMAND CENTER WORKSPACES — CURRENT RELEASE
+## COMMAND CENTER WORKSPACES
 
-Overview, Markets, Operations, Competition, Strategy and Intelligence are the main
-workspaces. Enabled previews add Customers, Credit, Products and Workforce as
-appropriate. A missing optional workspace does not mean its underlying feature
-has been silently enabled or that an existing save has been upgraded.
+The current navigation groups related subjects; select a group, then its desk:
+
+| Group | Workspaces |
+| --- | --- |
+| Bank & finance | Overview, Credit, Financial Group |
+| Customers & markets | Markets, Customers, Products |
+| Run the bank | Operations, People |
+| Growth & competition | Strategy, Competition, Intelligence |
+
+Only workspaces supported by your saved campaign appear. Core does not gain
+Expanded systems when a report or help shortcut is opened. Older guides may
+call People "Workforce"; these are not separate pools of employees.
 
 The Ready bar and shared plan budget stay above the workspaces. Build the plan in
 any order; navigating does not submit a turn or discard its selections.
@@ -861,7 +1006,7 @@ Operations is divided into four task desks:
 | --- | --- |
 | Monthly plan | Answer the executive call and assign your existing staff. |
 | Products & funding | Review retail/business/credit offers, deposit pricing, lending standards and capital strategy; manage term funding when enabled. |
-| Projects & hiring | Inspect active work and executive capacity, stage initiatives, recruit generalists, or request eligible emergency board capital. |
+| Projects & construction | Inspect and stage initiatives against execution capacity and shared funding; open current work/recruitment or eligible emergency board capital. |
 | Forecast & books | Read the current draft's operating estimates and existing balance books. Projected earnings are not available spending cash. |
 
 The **Review executive decision** shortcut always returns to Monthly plan.
@@ -872,7 +1017,8 @@ workspace changes, but another Pass & Play bank starts at Monthly plan.
 Operations **Products & funding** is not the optional top-level **Products**
 workspace: the latter contains product development/deployment, targeting,
 retirement and enabled customer offers/onboarding. Specialist recruitment and
-training remain in **Workforce**. Commercial service staffing, activation and
+training are in **People**, alongside Work coverage, Development and Leadership
+& budgets. Commercial service staffing, activation and
 renewal prices remain in **Markets**; their research applications are in
 **Strategy**. These are different views of the same bank and monthly draft.
 
@@ -931,16 +1077,33 @@ you change them. Projects continue automatically until completed.
 
 ## HOW A CAMPAIGN IS WON
 
-**Check the selected rules first.** Regional Rivalry and its Living Bank previews
-keep rivals in play: territory loss is not permanent exclusion, no uncontested
-franchise dividend is awarded, and score-driven buyouts/domination endings are
-disabled. Institutional failure still ends the campaign. With funding covenants,
-three consecutive unresolved covenant breaches can also force resolution. Failed
-assets remain in resolution; the survivor is not given a free franchise.
+**Check the saved rules first.** “Open-ended” currently means there is no fixed
+final month; it does not mean every supported edition disables control victories.
 
-The following receivership, permanent domination and hostile-buyout description
-is for **legacy campaigns without Regional Rivalry**. It is not the rule set for
-the six-market Living Bank preview.
+- **Current Expanded9.32 (Group10):** failure, total market exit and automatic
+  control victories are enabled. Six consecutive vulnerable months below12%
+  share can close an office or concede a market where you have no office and
+  the rival does. Paid re-entry remains possible. In Act III, a qualifying
+  two-month takeover position can end the game without selecting an attack.
+  A long divided-market stalemate can trigger the same outcome even when both
+  banks are solvent. Shareholder Defense interrupts takeover pressure for that
+  month. Winning does not award unpriced assets or merge the final bank books.
+- **Earlier Regional Rivalry / Group1–7 saves:** score-driven buyout and
+  domination endings are disabled. Institutional failure still ends play;
+  funding-covenant campaigns can also resolve after three uncured breaches.
+  Failed assets are not freely awarded to the survivor.
+- **Core:** retains its original market/control victory conditions. Current
+  Core8.19 uses backed accounting transfers rather than treating the winner's
+  ending reward as an unrestricted grant.
+
+The current automatic-ending behavior is under review for future campaigns.
+That review does not change a campaign you have already started.
+
+### Historical non-regional victory reference
+
+The following detailed description is the **historical non-regional rules
+reference**. In particular, its three-month permanent exits, franchise dividends
+and aggregate absorption language must not be applied to current Expanded.
 
 There is no cycle limit and no score comparison at an arbitrary deadline.
 Cycles measure elapsed operating periods only. A campaign continues until one
@@ -951,11 +1114,13 @@ is capital measured against its loan book and deposit base. Both institutions ca
 always see each other's ratio and regulatory standing. As the ratio falls the
 regulator escalates:
 
-  8% and above   WELL CAPITALIZED             no restrictions
-  6% to 8%       ENHANCED SUPERVISION         branch and acquisition projects suspended
-  4% to 6%       CONSENT ORDER                deposit growth capped, loan book must shrink
-  2% to 4%       UNDERCAPITALIZED             all new projects barred, franchise weakened
-  below 2%       CRITICALLY UNDERCAPITALIZED  three straight cycles here forces receivership
+| Historical capital ratio | Standing | Consequence |
+| --- | --- | --- |
+| 8% and above | Well capitalized | No restrictions |
+| 6% to 8% | Enhanced supervision | Branch and acquisition projects suspended |
+| 4% to 6% | Consent order | Deposit growth capped; loan book must shrink |
+| 2% to 4% | Undercapitalized | All new projects barred; franchise weakened |
+| Below 2% | Critically undercapitalized | Three straight cycles force receivership |
 
 Receivership ends the campaign immediately and the surviving institution assumes
 most of the failed bank's deposits, loans, customers, and branch network. This is
@@ -1412,13 +1577,13 @@ for research, and the campaign's selected rules for market exits and endings.
 - Backward import support for earlier local save files
 - Solo AI, Pass & Play, Direct P2P, export/import, and sealed WEGO play retained
 
-## REGIONAL DEMAND PREVIEW (NEW CAMPAIGNS ONLY)
+## REGIONAL DEMAND AND HISTORICAL PREVIEW RULES
 
-Enable Regional growth preview in setup. In the cumulative setup, it proposes
-Advertising attribution and the prerequisite Living Bank rules for confirmation;
-both friends need the updated build. Inside Modular combinations preview,
-Regional growth can instead run without Advertising.
-The game remains the two-region/six-market pilot. Existing saves are unchanged.
+Regional growth is included in current Expanded. No separate preview checkbox
+is needed. The historical cumulative setup required Advertising attribution;
+supported saved Modular combinations campaigns could instead run growth without
+advertising. Existing saves keep those selections. Current Expanded remains the
+two-region/six-market pilot, not a national campaign.
 
 In Markets, Regional arrivals & departures separates current outside supply
 from the previous closing's actual flows and the upcoming closing's conditional
@@ -1432,12 +1597,12 @@ availability before settlement. Expand the report for regional/market detail.
 These flows keep depleted markets supplied but do not guarantee a comeback,
 equalize bank sizes, or complete the national economy.
 
-## EXISTING-CUSTOMER OFFERS PREVIEW (NEW CAMPAIGNS ONLY)
+## EXISTING-CUSTOMER OFFERS
 
-Enable Relationship offers preview in the cumulative setup; changes to other
-prerequisites require confirmation. It is unavailable inside Modular combinations
-preview. Both friends need the v8.12-capable build. Existing saves retain their
-previous rules.
+Current Expanded includes Relationship offers. This system was introduced in
+the historical v8.12 cumulative preview and remains unavailable in saved Modular
+combinations campaigns. Existing saves retain their selections; importing does
+not enable offers or add a new setup checkbox.
 
 In Products > Existing customers, choose a local segment and an open, deployed
 product. Reserve 25% or 50% of Retail sales time after the Customers retention
@@ -1475,12 +1640,12 @@ why they cannot be staged. **Undo staged changes** restores the exact prior
 draft until another edit, a source-book change or turn locking invalidates it.
 Comparison results also clear when the draft or source state changes.
 
-## APPLICATIONS & ONBOARDING PREVIEW (NEW CAMPAIGNS ONLY)
+## APPLICATIONS & ONBOARDING
 
-Enable **Customer onboarding preview** in the cumulative setup. Confirm the
-proposal for its required previews to create a v8.13 campaign; both computers
-need the updated build. It is unavailable inside Modular combinations preview.
-Existing saves retain their rules and do not gain queues automatically.
+Current Expanded includes Customer onboarding. The original system arrived in
+the historical v8.13 cumulative preview; saved Modular combinations campaigns
+do not support it. Both computers must support the campaign's actual rules.
+Existing saves do not gain application queues automatically.
 
 In **Products > Applications & onboarding**, choose a market, segment and open
 product for new requests. Reserve 25% or 50% of Retail time remaining after
@@ -1549,12 +1714,12 @@ proposal; Stage office plan puts valid instructions in the draft. Reset network
 plan restores all offices' active instructions and removes staged office changes.
 Other role assignments and detailed records remain available when needed.
 
-### Shared service rooms (Expanded 9.27 development candidate)
+### Shared service rooms (introduced in Expanded 9.27)
 
-These controls are included in new Expanded campaigns in the newer development
-candidate, not the older normal playable HTML or frozen V3 download. There is no
-separate checkbox. Existing saves never gain rooms automatically; they keep
-their original rules. Final release and long-campaign acceptance remain pending.
+These controls are included in new Expanded9.32 campaigns in the current local
+playable HTML. That development file is separate from frozen published packages.
+There is no separate checkbox. Existing saves never gain rooms automatically;
+they keep their original rules. Final release and long-campaign acceptance remain pending.
 
 In the office inspector, open **Shared service rooms**. Choose one existing room
 or expand **Add service space** to review a visiting-adviser desk, wealth suite,
@@ -1604,27 +1769,61 @@ duplicating clients. Payroll automation can be switched off while retaining
 payroll agreements, trading lower platform upkeep for higher per-client servicing
 costs. Compare continuing costs against the actual size of your serviced book.
 
-The development candidate also provides **Company financing needs · assessment
-only** inside the selected business client. It shows actual company cash, debt,
-unpaid obligations and an indicative operating-cash shortfall. Opening estimates
-are labeled separately from settled cash flow. This is not an approved loan or
-an additional bank balance: named-company funding is still being integrated and
-has no executable order in this candidate. Existing loan products, operating
-deposit accounts and service agreements continue to work independently.
+The selected business client shows company cash, debt, unpaid obligations and
+financing needs. Under company-lending rules introduced in Expanded9.28 and
+included in current9.32, the company-loan desk can also
+stage a reviewed offer with product, principal, rate, term and risk appetite.
+Assessment alone does not make a loan: qualification, shared origination work,
+capital and funding must pass, and the offer settles through the normal monthly
+plan. A won relationship is not automatic credit approval or a free deposit.
+Older campaigns without named-company lending retain assessment-only behavior.
 
 The monthly review lists required actions without expanding over every screen.
 Open it to inspect warnings and staged changes. None of these workspaces advances
 the campaign until the normal Ready/resolution flow runs.
+
+## DEVELOPMENT-CAMPAIGN SALARY AND INCOME RULES
+
+In **Commercial banking**, the income review shows standing and draft servicing
+coverage. Customer growth does not guarantee fee growth: existing relationships
+must receive service. **Review relationship servicing** opens the relevant
+Expanded department editor; **Review Business staffing** opens Core allocation.
+These shortcuts place no orders. Review the time displaced from other work and
+recurring provider costs before adopting a change. Unstaged department edits are
+protected; preview or discard them before switching functions. Hires arrive next
+month and cannot repair this month's shortfall.
+
+New Core8.19 and Expanded9.32 campaigns use provisional$12,000 monthly base banker pay,
+before efficiency discounts; specialist premiums and other operating costs are
+additional. Recruitment and workforce screens quote the saved campaign's salary.
+These campaigns no longer earn automatic cash from staff activity or technology,
+wealth and digital upgrade counters. Income must come from the remaining modeled
+earning assets and services; research still affects its actual capabilities and
+customer outcomes. Existing campaigns keep their old rules and do not upgrade
+when loaded. These new economics are still undergoing balance testing.
+
+### Core balance-sheet candidate
+
+New Core8.19 campaigns retain the simpler Core controls but use
+reconciled accounts. Deposits bring cash and an equal obligation to customers;
+lending spends cash to acquire a loan asset. Cash, capital and profit are
+different figures. Investments may need selling at a loss to fund withdrawals.
+The Books view shows cash, loans, securities, liabilities, equity and retained
+earnings. Strategic spending is included in retained earnings, unlike older
+Core's accumulated operating-profit counter. There is no free cash payment for
+choosing the liquidity policy. Base salary remains$12,000 before discounts.
+The Core button now selects these rules for a new campaign; existing saves
+keep their recorded rules. This working build is not a completed balance or release sign-off.
 
 ## PRIVACY / WORKPLACE USE
 
 The game is fictional. Do not enter customer information, account numbers,
 credentials, confidential company information, or other protected data.
 Use workplace network features only when permitted by company policy.
-## LIVING INSTITUTION PREVIEW (NEW CAMPAIGNS ONLY)
+## HISTORICAL LIVING INSTITUTION CAMPAIGNS
 
-Enable Living institution preview on the opening screen. Confirm the proposed
-Regional Rivalry and expanded-service prerequisites. In Strategy, open
+Existing Living institution preview campaigns remain supported. Current setup
+offers Core or integrated Expanded, not a checklist of these dependencies. In Strategy, open
 Recurring Research & Service Manager to set monthly funding, tier targets,
 cash reserves and bounded service-department mandates. Use Prepare draft to
 apply new limits to this turn; settings otherwise prepare future drafts.

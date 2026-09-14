@@ -1,0 +1,648 @@
+{
+  "scope": "Actual owner funding movements from validated full retained ledger. Organic report flow is a component, not whole-bank deposit change. Rival versus outside-provider attribution within the combined competition stage is intentionally not invented.",
+  "portableSha256": "e056eeab470d3f41e68ff12e1a93d28a085e7fa0b0547f60d217043dae6cc1f1",
+  "engineSha256": "b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642",
+  "openingSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+  "closingSha256": "d2db3ad50a670294570269338aed60d0dcbeadccbf2c3d2448fcd5f612bc35c6",
+  "scriptSha256": "f430fdefbfb15736089298bb9fe7530af40ba7b02252d2a24a6d0d4cd5308234",
+  "months": 24,
+  "allDepositAndCashBridgesReconcile": true,
+  "rows": [
+    {
+      "month": 1,
+      "openingDeposits": 25600000,
+      "closingDeposits": 25234490,
+      "netDeposits": -365510,
+      "netCash": -850452,
+      "organicOperatingReport": 79719,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 79719,
+          "cash": 110901
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -445229,
+          "cash": -445229
+        }
+      ]
+    },
+    {
+      "month": 2,
+      "openingDeposits": 25234490,
+      "closingDeposits": 24879650,
+      "netDeposits": -354840,
+      "netCash": -352873,
+      "organicOperatingReport": -170,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -170,
+          "cash": 150565
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -354670,
+          "cash": -354670
+        }
+      ]
+    },
+    {
+      "month": 3,
+      "openingDeposits": 24879650,
+      "closingDeposits": 26582400,
+      "netDeposits": 1702750,
+      "netCash": 1830149,
+      "organicOperatingReport": 159065,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 159065,
+          "cash": 302544
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -111968,
+          "cash": -111968
+        },
+        {
+          "category": "relationships",
+          "source": "resolveOpportunities",
+          "deposits": 1620000,
+          "cash": 1620000
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": 35653,
+          "cash": 35653
+        }
+      ]
+    },
+    {
+      "month": 4,
+      "openingDeposits": 26582400,
+      "closingDeposits": 26584980,
+      "netDeposits": 2580,
+      "netCash": 156007,
+      "organicOperatingReport": 22132,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -6070,
+          "cash": -6070
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 22132,
+          "cash": 191439
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -13482,
+          "cash": -13482
+        }
+      ]
+    },
+    {
+      "month": 5,
+      "openingDeposits": 26584980,
+      "closingDeposits": 26305538,
+      "netDeposits": -279442,
+      "netCash": -273049,
+      "organicOperatingReport": 105540,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": 1917,
+          "cash": 1917
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 94466,
+          "cash": 109139
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -375825,
+          "cash": -375825
+        }
+      ]
+    },
+    {
+      "month": 6,
+      "openingDeposits": 26305538,
+      "closingDeposits": 27028776,
+      "netDeposits": 723238,
+      "netCash": 776777,
+      "organicOperatingReport": 105313,
+      "stages": [
+        {
+          "category": "companies.credit",
+          "source": "settleCompanyCreditOrders",
+          "deposits": 29500,
+          "cash": -29500
+        },
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -68,
+          "cash": 2821
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 64493,
+          "cash": 188423
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -400687,
+          "cash": -400687
+        },
+        {
+          "category": "relationships",
+          "source": "resolveOpportunities",
+          "deposits": 1030000,
+          "cash": 1030000
+        }
+      ]
+    },
+    {
+      "month": 7,
+      "openingDeposits": 27028776,
+      "closingDeposits": 26451807,
+      "netDeposits": -576969,
+      "netCash": -729898,
+      "organicOperatingReport": -774,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -46,
+          "cash": 2825
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -52675,
+          "cash": -23495
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -463362,
+          "cash": -463362
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": -60886,
+          "cash": -60886
+        }
+      ]
+    },
+    {
+      "month": 8,
+      "openingDeposits": 26451807,
+      "closingDeposits": 27046780,
+      "netDeposits": 594973,
+      "netCash": 653074,
+      "organicOperatingReport": -741,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -111791,
+          "cash": -37063
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -483236,
+          "cash": -483236
+        },
+        {
+          "category": "relationships",
+          "source": "resolveOpportunities",
+          "deposits": 1190000,
+          "cash": 1190000
+        }
+      ]
+    },
+    {
+      "month": 9,
+      "openingDeposits": 27046780,
+      "closingDeposits": 26650002,
+      "netDeposits": -396778,
+      "netCash": -278557,
+      "organicOperatingReport": 21638,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -116686,
+          "cash": 23151
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -333578,
+          "cash": -333578
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": 53486,
+          "cash": 53486
+        }
+      ]
+    },
+    {
+      "month": 10,
+      "openingDeposits": 26650002,
+      "closingDeposits": 26111877,
+      "netDeposits": -538125,
+      "netCash": -9399,
+      "organicOperatingReport": -858,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -7344,
+          "cash": -4527
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -183317,
+          "cash": -89156
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -347464,
+          "cash": -347464
+        }
+      ]
+    },
+    {
+      "month": 11,
+      "openingDeposits": 26111877,
+      "closingDeposits": 25780268,
+      "netDeposits": -331609,
+      "netCash": -660859,
+      "organicOperatingReport": -820,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -7313,
+          "cash": -4513
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -44806,
+          "cash": -60955
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -277240,
+          "cash": -277240
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": -2250,
+          "cash": -2250
+        }
+      ]
+    },
+    {
+      "month": 12,
+      "openingDeposits": 25780268,
+      "closingDeposits": 25251378,
+      "netDeposits": -528890,
+      "netCash": -435705,
+      "organicOperatingReport": -783,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": -7281,
+          "cash": -4500
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -183187,
+          "cash": -72331
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -336172,
+          "cash": -336172
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": -2250,
+          "cash": -2250
+        }
+      ]
+    },
+    {
+      "month": 13,
+      "openingDeposits": 25251378,
+      "closingDeposits": 24606190,
+      "netDeposits": -645188,
+      "netCash": -664051,
+      "organicOperatingReport": -624,
+      "stages": [
+        {
+          "category": "companies.settlement",
+          "source": "settleCorporateEconomy",
+          "deposits": 86,
+          "cash": 2850
+        },
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -191139,
+          "cash": -201714
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -427001,
+          "cash": -427001
+        },
+        {
+          "category": "companies.operatingDeposits",
+          "source": "settleCommercialAccounts",
+          "deposits": -27134,
+          "cash": -27134
+        }
+      ]
+    },
+    {
+      "month": 14,
+      "openingDeposits": 24606190,
+      "closingDeposits": 24190415,
+      "netDeposits": -415775,
+      "netCash": -701941,
+      "organicOperatingReport": 54299,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": 10472,
+          "cash": -114787
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -426247,
+          "cash": -426247
+        }
+      ]
+    },
+    {
+      "month": 15,
+      "openingDeposits": 24190415,
+      "closingDeposits": 23473143,
+      "netDeposits": -717272,
+      "netCash": -852299,
+      "organicOperatingReport": 16821,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -175209,
+          "cash": -290711
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -542063,
+          "cash": -542063
+        }
+      ]
+    },
+    {
+      "month": 16,
+      "openingDeposits": 23473143,
+      "closingDeposits": 22906996,
+      "netDeposits": -566147,
+      "netCash": -693844,
+      "organicOperatingReport": 16796,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -180530,
+          "cash": -294684
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -385617,
+          "cash": -385617
+        }
+      ]
+    },
+    {
+      "month": 17,
+      "openingDeposits": 22906996,
+      "closingDeposits": 22187907,
+      "netDeposits": -719089,
+      "netCash": -821177,
+      "organicOperatingReport": 20837,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -176814,
+          "cash": -215593
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -542275,
+          "cash": -542275
+        }
+      ]
+    },
+    {
+      "month": 18,
+      "openingDeposits": 22187907,
+      "closingDeposits": 21476070,
+      "netDeposits": -711837,
+      "netCash": -341902,
+      "organicOperatingReport": 66234,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -120721,
+          "cash": -263513
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -591116,
+          "cash": -63062
+        }
+      ]
+    },
+    {
+      "month": 19,
+      "openingDeposits": 21476070,
+      "closingDeposits": 20837681,
+      "netDeposits": -638389,
+      "netCash": -1,
+      "organicOperatingReport": 65211,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -66944,
+          "cash": 0
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -571445,
+          "cash": -1
+        }
+      ]
+    },
+    {
+      "month": 20,
+      "openingDeposits": 20837681,
+      "closingDeposits": 20317974,
+      "netDeposits": -519707,
+      "netCash": 1,
+      "organicOperatingReport": 20706,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -113573,
+          "cash": 1
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -406134,
+          "cash": 0
+        }
+      ]
+    },
+    {
+      "month": 21,
+      "openingDeposits": 20317974,
+      "closingDeposits": 19764862,
+      "netDeposits": -553112,
+      "netCash": -1,
+      "organicOperatingReport": 45215,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -89686,
+          "cash": -1
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -463426,
+          "cash": 0
+        }
+      ]
+    },
+    {
+      "month": 22,
+      "openingDeposits": 19764862,
+      "closingDeposits": 19253798,
+      "netDeposits": -511064,
+      "netCash": 0,
+      "organicOperatingReport": 14198,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -112702,
+          "cash": 37459
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -398362,
+          "cash": -37459
+        }
+      ]
+    },
+    {
+      "month": 23,
+      "openingDeposits": 19253798,
+      "closingDeposits": 18808257,
+      "netDeposits": -445541,
+      "netCash": 0,
+      "organicOperatingReport": 13991,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -113785,
+          "cash": 12178
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -331756,
+          "cash": -12178
+        }
+      ]
+    },
+    {
+      "month": 24,
+      "openingDeposits": 18808257,
+      "closingDeposits": 18250424,
+      "netDeposits": -557833,
+      "netCash": 1,
+      "organicOperatingReport": 13781,
+      "stages": [
+        {
+          "category": "operations",
+          "source": "operate",
+          "deposits": -118540,
+          "cash": 0
+        },
+        {
+          "category": "competition.deposits",
+          "source": "depositContest",
+          "deposits": -439293,
+          "cash": 1
+        }
+      ]
+    }
+  ]
+}

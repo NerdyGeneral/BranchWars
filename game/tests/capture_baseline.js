@@ -7,6 +7,10 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
+const {testTimeout,createEvidence}=require('../tools/gate_evidence');
+const timeoutMs=testTimeout(),evidence=createEvidence(path.join(root,'reports','baselines'),'baseline-progress',{timeoutMs});
+let baselineFinished=false;
+process.on('exit',exitCode=>{if(!baselineFinished)evidence.finish({passed:false,incomplete:true,exitCode});});
 const hash = file => crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
 const files = ['BRANCH_WARS.html', 'BRANCH_WARS_LAN_SERVER.ps1', 'tests/engine.test.js', 'tests/accounting.test.js', 'tests/accounting_activities.test.js', 'tests/accounting_persistence.test.js', 'tests/bank_identity.test.js', 'tests/regional_pilot.test.js', 'tests/regional_operations.test.js', 'tests/market_economy.test.js', 'tests/credit_lifecycle.test.js', 'tests/funding_covenants.test.js', 'tests/deposit_products.test.js', 'tests/term_funding.test.js', 'tests/retail_lifecycle.test.js', 'tests/product_deployment.test.js', 'tests/service_contracts.test.js', 'tests/service_expansion.test.js', 'tests/service_planning.test.js', 'tests/institution_management.test.js', 'tests/relationship_operations.test.js', 'reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html', 'reports/reference-builds/BRANCH_WARS_planning_0704591.html', 'tests/funding.test.js', 'tests/determinism.test.js', 'tests/ledger.test.js', 'tests/save_integrity.test.js', 'tests/transport.test.js', 'tests/github_resilience.test.js', 'tests/balance_audit.js', 'tests/lan_server.test.ps1', 'tests/capture_baseline.js'];
 files.push('tests/customer_needs.test.js','reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html','tests/customer_relationships.test.js','reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html');
@@ -85,6 +89,7 @@ files.push('tests/group_lending_comparison.test.js','tests/financial_group_balan
 files.push('tests/advertising.test.js','tests/ai_cash_planning.test.js','tests/product_draft.test.js','tests/collections.test.js','tests/segment_deposits.test.js','tests/product_programs.test.js');
 files.push('tests/specialist_workforce.test.js','tests/workforce_network.test.js','tests/release_balance.test.js');
 files.push('tools/build_game.js','tests/build.test.js');
+files.push('tools/gate_evidence.js');
 files.push(...require('../tools/build_game').assemble().files.map(file => path.relative(root, file).replace(/\\/g, '/')));
 function run(label, command, args) {
   // Trust only this already selected checkout for this invocation. Never edit
@@ -92,9 +97,12 @@ function run(label, command, args) {
   // different from the account that created the workspace.
   if(command==='git')args=['-c','safe.directory='+path.resolve(root,'..').replace(/\\/g,'/'),...args];
   process.stdout.write(`Running ${label}...\n`);
+  evidence.append('command-started',{label,command:[command,...args]});
   const start = Date.now();
-  const r = spawnSync(command, args, { cwd: root, encoding: 'utf8', windowsHide: true, timeout: 600000, maxBuffer: 8 * 1024 * 1024 });
-  return { label, command: [command, ...args], exitCode: r.status, signal: r.signal, error: r.error ? r.error.message : null, elapsedMs: Date.now() - start, stdout: r.stdout || '', stderr: r.stderr || '' };
+  const r = spawnSync(command, args, { cwd: root, encoding: 'utf8', windowsHide: true, timeout: timeoutMs, maxBuffer: 8 * 1024 * 1024 });
+  const result={ label, command: [command, ...args], exitCode: r.status, signal: r.signal, error: r.error ? r.error.message : null, elapsedMs: Date.now() - start, stdout: r.stdout || '', stderr: r.stderr || '' };
+  evidence.append('command-finished',result);
+  return result;
 }
 const report = {
   package: 'N-00', createdAt: new Date().toISOString(), node: process.version, platform: process.platform,
@@ -203,5 +211,6 @@ const dir = path.join(root, 'reports', 'baselines');
 fs.mkdirSync(dir, { recursive: true });
 const target = path.join(dir, `N-00-${report.createdAt.replace(/[:.]/g, '-')}.json`);
 fs.writeFileSync(target, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+evidence.finish({passed:report.passed,incomplete:false,report:target,sourceUnchanged:report.sourceUnchanged});baselineFinished=true;
 console.log(JSON.stringify({ passed: report.passed, sourceUnchanged: report.sourceUnchanged, balanceOutputReproduced: report.balanceOutputReproduced, report: target, tests: report.tests.map(t => ({ label: t.label, exitCode: t.exitCode, stdout: t.stdout, stderr: t.stderr })) }, null, 2));
 process.exitCode = report.passed ? 0 : 1;

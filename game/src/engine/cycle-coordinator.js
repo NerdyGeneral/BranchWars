@@ -24,7 +24,7 @@ function resolveCycle(g) {
       try {
         for(const p of g.players)beginProductPricingReview(g,p);
         const result = resolveMonthlySteps(g);
-        if (pilot(g))
+        if (pilot(g)||g.bankEconomicsVersion===2)
           for (const p of g.players) {
             p.accounting = AccountingPrototype.restore(AccountingPrototype.snapshot(p.accounting, 96));
             syncAccounts(p);

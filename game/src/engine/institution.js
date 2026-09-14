@@ -133,7 +133,7 @@ function planBudgetBase(p,plan,g=null){
  const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+extensions.cost+shared.cost+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
  const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity+extensions.capacity+shared.capacity+companyControlExecution(p,plan);
- const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*18000};
+ const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*bankBasePayroll(p)};
  if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
  if(p.facilityExtensions){quote.facilityExtensions=extensions.cost;quote.facilityExtensionsCapacity=extensions.capacity;}
  if(p.sharedPremises){quote.sharedPremises=shared.cost;quote.sharedPremisesCapacity=shared.capacity;}

@@ -340,3 +340,13 @@
 #financialGroupPanel .investment-note-table table{width:100%;border-collapse:collapse;min-width:32rem}
 #financialGroupPanel .investment-note-table caption{text-align:left;padding-bottom:.6rem;font-size:.85rem;color:#546978}
 #financialGroupPanel .investment-note-table th,#financialGroupPanel .investment-note-table td{text-align:left;padding:.55rem .65rem;border-bottom:1px solid #d9e2ea}
+/* Income review is contextual and read-only; charts never share principal axes. */
+.income-review{margin-block:1rem;padding:1rem;border:1px solid var(--line,#d5dfec);border-radius:12px;min-width:0}
+.income-review .decision-facts{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.income-review details{margin-top:.7rem}
+.income-history{margin:1rem 0;max-width:700px;color:var(--accent,#2869b5)}
+.income-history svg{display:block;width:100%;height:auto;min-width:280px}
+.income-review .table-scroll{overflow-x:auto}
+.bank-income-statement{margin-block:1rem}
+.bank-income-statement .table-scroll{overflow-x:auto}
+.bank-income-statement .statement-subtotal td{font-weight:700;border-top:1px solid var(--line,#d5dfec)}

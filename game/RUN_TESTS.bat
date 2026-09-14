@@ -7,32 +7,12 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-node tools\build_game.js --check
-if errorlevel 1 goto :sourceStale
-node tools\build_reference.js --check
-if errorlevel 1 goto :stale
-node tests\capture_baseline.js
-if errorlevel 1 goto :failed
-node tests\release_balance.test.js --report
+node tools\check.js --full
 if errorlevel 1 goto :failed
 echo.
 echo All Branch Wars tests passed.
 pause
 exit /b 0
-
-:sourceStale
-echo.
-echo BRANCH_WARS.html is out of date with the source modules.
-echo Rebuild it with:  node tools\build_game.js
-pause
-exit /b 1
-
-:stale
-echo.
-echo docs/game-reference.md is out of date with the engine.
-echo Rebuild it with:  node tools\build_reference.js
-pause
-exit /b 1
 
 :failed
 echo.

@@ -12,14 +12,18 @@ function stageCollectionsPolicy(v, share, approach,token) {
 }
 function creditFlowRows(report){
  if(!report||!['loanGrowth','principalRepaid','creditRecovery','chargeoff'].every(k=>Number.isSafeInteger(report[k]??0))||!Number.isSafeInteger(report.loanGrowth)||!Number.isSafeInteger(report.principalRepaid))return null;
- const repaid=report.principalRepaid,recovered=report.creditRecovery||0,loss=report.chargeoff||0,originations=report.loanGrowth+repaid+recovered+loss;
+ const named=report.companyCredit||{};
+ if(!['principalPaid','recoveredPrincipal','interestWrittenOff'].every(k=>Number.isSafeInteger(named[k]??0)&&(named[k]??0)>=0))return null;
+ // Named borrower servicing is outside ordinary cohort amortization. Its
+ // unpaid-interest writeoff is an income loss, never a principal movement.
+ const repaid=report.principalRepaid+(named.principalPaid||0),recovered=(report.creditRecovery||0)+(named.recoveredPrincipal||0),loss=(report.chargeoff||0)-(named.interestWrittenOff||0),originations=report.loanGrowth+repaid+recovered+loss;
  if(Math.min(repaid,recovered,loss,originations)<0)return null;
  return [originations,-repaid,-recovered,-loss,report.loanGrowth];
 }
 function renderCreditFlow(v,review){
  const next=creditFlowRows(review.operating),actual=v.me.operatingReport,prior=actual?.cycle===(v.gameOver?v.cycle:v.cycle-1)?creditFlowRows(actual):null;
  if(!next)return '<p role="status">Loan movement forecast unavailable. Review the current plan.</p>';
- const signed=n=>(n<0?'−':n>0?'+':'')+creditMoney(Math.abs(n)),labels=['New loans funded','Scheduled principal repaid','Collections principal recovered','Credit losses','Net operating loan change'];
+ const signed=n=>(n<0?'−':n>0?'+':'')+creditMoney(Math.abs(n)),labels=['New loans funded','Scheduled principal repaid','Collections principal recovered','Principal written off','Net operating loan change'];
  return '<section class="credit-policy"><h3>LOAN BOOK MOVEMENT</h3><p class="small">'+(next[4]<0?'The draft loan book contracts. Repayments return money to cash; credit losses reduce earnings.':'The draft adds to the loan book after repayments and losses.')+'</p><div class="table-scroll"><table class="forecast-table"><caption>Whole bank · operating movements only</caption><thead><tr><th>Movement</th><th>Last completed month</th><th>This draft</th></tr></thead><tbody>'+labels.map((label,i)=>'<tr><th scope="row">'+label+'</th><td>'+(prior?signed(prior[i]):'Not yet available')+'</td><td>'+signed(next[i])+'</td></tr>').join('')+'</tbody></table></div><p class="small">'+review.staffing.origination.toFixed(2)+' employee-months remain for origination after shared work ('+review.staffing.effectiveOrigination.toFixed(2)+' effective with expertise). Credit administration coverage: '+(review.staffing.administrationCoverage*100).toFixed(0)+'%. Base lending capacity (central desk + offices): '+creditMoney(review.facilityLoanCapacity)+'.</p><div class="credit-controls"><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="creditOfficeCapacity">Inspect local offices</button></div><p class="micro muted">Current economy and draft policies; not a promised closing balance. Executive events, rival actions, opportunity wins, project completions and separate regulatory/funding sales are excluded. More capacity does not guarantee borrowers or funding. New loans use cash; principal repayments are not income.</p></section>';
 }
 function renderCollections(v) {
@@ -27,8 +31,9 @@ function renderCollections(v) {
   if(!v.me.creditPerformance){$('#creditPanel').innerHTML='';if(workspaceTab==='credit')setWorkspaceTab('overview');return;}
   if(workspaceTab!=='credit')return;
   const p=v.me,policy=draft.collectionsPolicy||p.creditPerformance.policy;
-  const token=workforceEditToken(v);let prepared=null,forecast;
-  try{prepared=p.departmentFunctions?E.departmentCreditPreview(p,v,draft):null;forecast=prepared?prepared.collections:E.creditPerformanceForecast({...p,turnEffects:{}},v.economy,draft.allocation,policy);}
+  const token=workforceEditToken(v);let prepared=null,forecast,incomeStanding,incomeDraft;
+  try{prepared=p.departmentFunctions?E.departmentCreditPreview(p,v,draft):null;forecast=prepared?prepared.collections:E.creditPerformanceForecast({...p,turnEffects:{}},v.economy,draft.allocation,policy);
+   incomeStanding=E.operatingPreview(p,standingOperatingPlan(p),v.economy,v);incomeDraft=prepared?prepared.operating:E.operatingPreview(p,draft,v.economy,v);}
   catch(error){$('#creditPanel').innerHTML='<h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p role="status">Credit forecast unavailable: '+esc(error.message)+'</p><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="restoreCollectionsPolicy" '+(p.submitted?'disabled':'')+'>Restore standing collections policy</button><p class="micro">Restoring changes only this draft’s collections instructions. It does not undo other department commitments.</p>';$('#creditWorkCoverage').addEventListener('click',()=>{if(creditContextCurrent(token))setPeopleDesk('coverage',{focus:true});});$('#restoreCollectionsPolicy').addEventListener('click',()=>{if(creditContextCurrent(token,true))stageCollectionsPolicy(currentView(),p.creditPerformance.policy.share,p.creditPerformance.policy.approach,token);});return;}
   const actual=p.creditPerformance.report;
   const key=v.territories[inspectedCreditMarket]?inspectedCreditMarket:draft.focus,cohorts=p.creditBook.cohorts.filter(c=>c.market===key);
@@ -41,7 +46,7 @@ function renderCollections(v) {
     return `<tr><th>${esc(v.productPortfolios.credit.options[product].name)}<small>${term}-month new term</small></th><td>${creditMoney(performing)}</td>${late.map(n=>'<td>'+creditMoney(n)+'</td>').join('')}<td>${risk.toFixed(2)}×<small>Retained origination risk</small></td></tr>`;
   }).join('');
   const row=forecast.rows[key];
-  $('#creditPanel').innerHTML=`<div class="section-head"><div><h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p class="small muted">Today's lending becomes tomorrow's servicing workload. Current choices do not rewrite old loan terms.</p></div></div>
+  $('#creditPanel').innerHTML=renderIncomeReview(v,incomeStanding,incomeDraft)+`<div class="section-head"><div><h2>CREDIT QUALITY &amp; COLLECTIONS</h2><p class="small muted">Today's lending becomes tomorrow's servicing workload. Current choices do not rewrite old loan terms.</p></div></div>
     <div class="credit-summary"><div><span>Performing principal</span><b>${creditMoney(forecast.performing)}</b><small>Delinquent balances earn no interest in this preview.</small></div><div><span>Delinquent principal</span><b>${creditMoney(forecast.late.reduce((n,x)=>n+x,0))}</b><small>30 / 60 / 90+ day aging groups</small></div><div><span>Draft collections coverage</span><b>${pct(forecast.coverage)}</b><small>${forecast.capacity.toFixed(2)} effective Lending staff for ${forecast.demand.toFixed(2)} workload units</small></div></div>
     <section class="credit-policy"><h3>RECURRING COLLECTIONS MANDATE</h3><div class="credit-controls"><label for="collectionShare">Lending time reserved for collections<select id="collectionShare" ${disabled}>${[0,25,50,75,100].map(n=>`<option value="${n}" ${policy.share===n?'selected':''}>${n}% reserved for collections</option>`).join('')}</select></label><label for="collectionApproach">Resolution approach<select id="collectionApproach" ${disabled}>${Object.entries(E.COLLECTION_APPROACHES).map(([k,d])=>`<option value="${k}" ${policy.approach===k?'selected':''}>${esc(d.name)}</option>`).join('')}</select></label></div>
     <p class="small">${forecast.salesStaff.toFixed(2)} effective Lending bankers remain for new production. Specialists strengthen their assigned team; this split does not add staff or salary. One effective collections banker covers $1M of delinquent principal.</p>

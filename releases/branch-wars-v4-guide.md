@@ -1,6 +1,6 @@
 # Branch Wars V4 — playtest quick-start
 
-This is a guide to the **v4.0.0-rc1 playtest**, not the finished comprehensive manual.
+This is a guide to the **v4.0.0-rc2 playtest**, not the finished comprehensive manual.
 
 ## Start safely
 
@@ -9,7 +9,7 @@ This is a guide to the **v4.0.0-rc1 playtest**, not the finished comprehensive m
 3. Open `OPEN_BRANCH_WARS.bat`, or the HTML file directly.
 4. Start a fresh **Expanded** campaign to test the complete integrated rules. Choose Core for the original experience. Imported campaigns retain their original rules.
 
-V4 is the package label. New Expanded campaigns use save format9.28; do not edit a save's version number.
+V4 is the package label. New Core campaigns use save format8.19 and new Expanded campaigns use9.32; do not edit a save's version number. Older supported campaigns keep their saved rules and do not acquire new economics automatically.
 
 ## Find the work where it belongs
 
@@ -27,6 +27,17 @@ V4 is the package label. New Expanded campaigns use save format9.28; do not edit
 | Review everything before resolving | Monthly plan review; distinguish working edits, staged orders and persistent policies |
 
 ## Important banking distinctions
+
+Bank forecast now separates recorded loan interest, service fees and recurring
+costs, with actual/standing-plan/draft comparisons and income history. Expand
+the funding-movement review to distinguish organic deposits from recorded
+competition. It is a component view, not a complete change-in-cash statement:
+missing history means unavailable, and forecasts cannot know the rival's plan.
+
+Ordinary lending balance is still being tested. More loan volume is not a
+guaranteed remedy for losses: servicing uses staff, principal repayments shrink
+the portfolio, funding costs consume margin and development spending uses
+capital. Review existing workload before assigning everyone to new business.
 
 - Deposits are funding liabilities, not profit. Loan advances exchange cash for a loan asset; they are not earnings.
 - Acquiring a company, banking it and lending to it are different relationships. A business does not automatically need or qualify for every product.

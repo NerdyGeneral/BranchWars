@@ -1,13 +1,16 @@
 {
   "status": "passed",
+  "scope": "Exact extracted package smoke check; not full release certification",
   "package": "branch-wars-v4.zip",
-  "sha256": "8e7460d679ce583996462a4e3bffb65984313ae31f0acb3f88a941137310c09e",
-  "htmlSha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "release": "v4.0.0-rc2",
+  "sha256": "e19948c562b1ca12d2d8c3abcb456d8e031cb1ff60e61fb5f42439cf3867bf00",
+  "htmlSha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92",
+  "engineSha256": "b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642",
   "files": [
     {
       "name": "BRANCH_WARS.html",
-      "bytes": 2328459,
-      "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00"
+      "bytes": 2388612,
+      "sha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92"
     },
     {
       "name": "BRANCH_WARS_LAN_SERVER.ps1",
@@ -26,14 +29,20 @@
     },
     {
       "name": "README.txt",
-      "bytes": 2860,
-      "sha256": "118b632d087dec24b0af1f0bd1fa5196207295e0f9ee3407394b9d95924f02f3"
+      "bytes": 2608,
+      "sha256": "032e207ecf641a94ddab5db7fb0b65795ece6d42d20e2c02d77e21df7f20c18c"
     }
   ],
   "extractedInventory": true,
+  "cleanStagedSourceChecks": {
+    "passed": true,
+    "scope": "Git index exported to a separate directory, without local untracked diagnostics",
+    "commands": ["build freshness", "documentation links", "architecture", "reference line endings", "current edition portable compatibility (6 tests)", "funding movement UI (3 tests)", "legacy service UI (4 tests)", "release packaging regression"]
+  },
   "checks": [
     {
       "edition": "core",
+      "version": "8.19",
       "creation": true,
       "halfReadyRecovery": true,
       "resolvedMonth": true,
@@ -41,23 +50,16 @@
     },
     {
       "edition": "expanded",
+      "version": "9.32",
       "creation": true,
       "halfReadyRecovery": true,
       "resolvedMonth": true,
       "idempotentRecovery": true
     }
   ],
-  "additionalChecks": [
-    "source/build freshness",
-    "generated reference freshness",
-    "architecture and syntax",
-    "Windows root launchers",
-    "portable launcher",
-    "release packaging regression"
-  ],
-  "initialObservation": "An initial raw Core-state comparison found existing migration normalization: legacy strategy aliases removed and ledgerVersion added. Canonical resumed/control outcomes and resource/plan preservation pass.",
   "limitations": [
-    "Targeted package smoke check, not the complete Windows gate.",
-    "No browser or actual two-computer acceptance claimed."
+    "Final complete Windows gate not certified.",
+    "Conventional lending balance remains open.",
+    "No visual or physical two-computer acceptance claimed."
   ]
 }

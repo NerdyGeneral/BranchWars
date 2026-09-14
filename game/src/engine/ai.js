@@ -21,7 +21,7 @@ function planHiring(g,p,committed){
   const target=p.stats.staff<12?Math.min(2,12-p.stats.staff):p.stats.staff<22?1:0;
   let count=0;
   while(count<target){
-   const next=count+1,payroll=next*18000,cost=hireCost(p,next);
+   const next=count+1,payroll=next*bankBasePayroll(p),cost=hireCost(p,next);
    // Six months of additional gross payroll must remain in CASH; current bank
    // earnings must cover twice that run-rate. Do not reserve future payroll a
    // second time in capital: the whole-plan AI already retains its $200K equity

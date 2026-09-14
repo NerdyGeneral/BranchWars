@@ -5,6 +5,11 @@
 // import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
+  ['bankEconomicsVersion', 'bankEconomicsSupported', 1, 1, 'Service-based bank economics', 'BANK ECONOMICS'],
+  ['bankEconomicsVersion', 'coreAccountingSupported', 1, 2, 'Core balance-sheet accounting', 'CORE ACCOUNTING'],
+  ['creditWorkloadVersion', 'creditWorkloadSupported', 1, 1, 'Portfolio-based credit administration', 'CREDIT WORKLOAD'],
+  ['commercialServiceVersion', 'commercialServiceSupported', 1, 1, 'Serviced commercial income', 'COMMERCIAL SERVICING'],
+  ['incomeHistoryVersion', 'incomeHistorySupported', 1, 1, 'Persistent income reporting', 'INCOME HISTORY'],
   ['companyCreditVersion', 'companyCreditSupported', 1, 1, 'Named-company lending', 'COMPANY CREDIT'],
   ['sharedPremisesVersion', 'sharedPremisesSupported', 1, 1, 'Shared service premises', 'SHARED PREMISES'],
   ['companyControlStrategyVersion', 'companyControlStrategySupported', 1, 1, 'Competitive company strategy', 'COMPANY STRATEGY'],
@@ -87,13 +92,17 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['companyControlStrategyVersion', 'Competitive company strategy', 1, 'companyConsolidationVersion', false, false, 'Funded opponent control decisions and explicit responses to shareholder offers.'],
   ['sharedPremisesVersion', 'Shared service premises', 1, 'companyControlStrategyVersion', false, false, 'Paid multi-entity office extensions, qualified local delivery and reconciled occupancy.'],
   ['companyCreditVersion', 'Named-company lending', 1, 'sharedPremisesVersion', false, false, 'Qualified company credit, actual lender funding, persistent repayment and conserved operating deposits.'],
-  ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.']
+  ['featureRulesVersion', 'Modular combinations', 1, 'productProgramsVersion', true, false, 'Independently select Advertising and Regional growth; offers, onboarding and Financial Group are not supported in this pilot.'],
+  ['incomeHistoryVersion', 'Persistent income reporting', 1, null, false, false, 'Twelve completed months of private income, relationship and principal records retained independently of diagnostic logs.'],
+  ['commercialServiceVersion', 'Serviced commercial income', 1, 'incomeHistoryVersion', false, false, 'Opening relationships earn fees only through finite servicing; operating-step acquisitions start earning next month.'],
+  ['creditWorkloadVersion', 'Portfolio-based credit administration', 1, 'commercialServiceVersion', false, false, 'Loan administration follows principal and product-location portfolios rather than internal cohort fragmentation.'],
+  ['bankEconomicsVersion', 'Service-based bank economics', 1, 'commercialServiceVersion', false, false, 'Income comes from earning assets and delivered services, not automatic staff or upgrade bonuses; shared base payroll is $12K per banker per month.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
   peers: Object.freeze(CAMPAIGN_PEER_REQUIREMENTS.filter(peer => peer.field === field)),
-  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8,9,10]:['managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
-  requires: Object.freeze(field==='commercialAccountsVersion'?[Object.freeze({field:'financialGroupVersion',version:10})]:field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
+  versions: Object.freeze(field==='financialGroupVersion'?[0,1,2,3,4,5,6,7,8,9,10]:['bankEconomicsVersion', 'managementVersion', 'customerDemandVersion', 'productProgramsVersion'].includes(field) ? [0, 1, 2] : [0, 1]),
+  requires: Object.freeze(field==='creditWorkloadVersion'?[Object.freeze({field:'commercialServiceVersion',version:1}),Object.freeze({field:'companyCreditVersion',version:1})]:field==='commercialAccountsVersion'?[Object.freeze({field:'financialGroupVersion',version:10})]:field==='financialGroupVersion' ? [Object.freeze({field:'onboardingVersion',version:1}),Object.freeze({field:'productProgramsVersion',version:2})] : parent ? [Object.freeze({ field: parent, version: ['customerDemandVersion', 'workforceVersion'].includes(field) ? 2 : 1 })] : [])
 })));
 const CAMPAIGN_FEATURE_FIELDS = Object.freeze(CAMPAIGN_FEATURES.map(row => row.field));
 const CAMPAIGN_LEGACY_VERSIONS = Object.freeze(['6.0', '7.0', '7.1', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5', '8.6', '8.7', '8.8', '8.9', '8.10', '8.11', '8.12', '8.13']);
@@ -106,6 +115,10 @@ const CAMPAIGN_VERSION_STAGES = Object.freeze([
 // Legacy creation checks deliberately keep their historical order and wording.
 const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['companyCreditVersion', 'named-company credit version'],
+  ['incomeHistoryVersion', 'income history version'],
+  ['commercialServiceVersion', 'commercial servicing version'],
+  ['creditWorkloadVersion', 'credit workload version'],
+  ['bankEconomicsVersion', 'bank economics version'],
   ['sharedPremisesVersion', 'shared service premises version'],
   ['companyControlStrategyVersion', 'competitive company strategy version'],
   ['companyConsolidationVersion', 'controlled company reporting version'],
@@ -132,6 +145,11 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.bankEconomicsVersion===2)return '8.19';
+  if(source.bankEconomicsVersion===1)return source.companyCreditVersion===1?'9.32':'8.18';
+  if(source.creditWorkloadVersion===1)return '9.31';
+  if(source.commercialServiceVersion===1)return source.companyCreditVersion===1?'9.30':'8.17';
+  if(source.incomeHistoryVersion===1)return source.companyCreditVersion===1?'9.29':'8.16';
   if(source.companyCreditVersion===1)return '9.28';
   if(source.sharedPremisesVersion===1)return '9.27';
   if(source.companyControlStrategyVersion===1)return '9.26';
@@ -165,6 +183,10 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
+  if(version==='8.19'||version==='8.18'||version==='9.32')return true;
+  if(version==='9.31')return true;
+  if(version==='8.17'||version==='9.30')return true;
+  if(version==='8.16'||version==='9.29')return true;
   if(version==='9.28')return true;
   if(version==='9.27')return true;
   return ['9.0','9.1','9.2','9.3','9.4','9.5','9.6','9.7','9.8','9.9','9.10','9.11','9.12','9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26'].includes(version) || CAMPAIGN_LEGACY_VERSIONS.includes(version) || ['8.14','8.15'].includes(version);
@@ -206,6 +228,12 @@ function campaignRules(source, { context = 'creation' } = {}) {
   }
   if (modular) for (const field of ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion']) if (versions[field] > 0)
     issues.push({ field, code: 'unsupported_combination', message: campaignFeature(field).label + ' is not supported in the Modular combinations preview.' });
+  if(versions.bankEconomicsVersion===2&&(versions.campaignRulesVersion>0||versions.companyCreditVersion>0||source.fundingRulesVersion===1))
+    issues.push({field:'bankEconomicsVersion',code:'unsupported_combination',message:'Core balance-sheet economics requires Core with funding rules 2.'});
+  if(versions.bankEconomicsVersion===1&&versions.companyCreditVersion===1&&versions.creditWorkloadVersion!==1)
+    issues.push({field:'bankEconomicsVersion',code:'missing_dependency',message:'Expanded bank economics requires Portfolio-based credit administration.'});
+  if(versions.incomeHistoryVersion===1&&versions.companyCreditVersion!==1&&Object.entries(versions).some(([key,value])=>!['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion'].includes(key)&&value>0))
+    issues.push({field:'incomeHistoryVersion',code:'unsupported_combination',message:'Persistent income reporting requires Core or the complete integrated Expanded rules.'});
   if (saved) {
     if (!campaignVersionSupported(source.version)) issues.push({ field: 'version', code: 'unsupported_save', message: 'Unsupported campaign save version.' });
     else if ((source.featureRulesVersion === 1 || source.version === '8.14') && (!modular || source.version !== (source.productProgramsVersion === 2 ? '8.15' : '8.14')))
@@ -261,6 +289,16 @@ function previewFeatureSelection(source, { field, value }) {
       }
     } while (changed);
   }
+  // Historical custom selections remain available without being upgraded. A
+  // proposal that leaves the two reporting profiles explicitly includes removal
+  // of the reporting marker in its confirmation; saved-state validation never
+  // performs this adjustment.
+  if (options.incomeHistoryVersion === 1 && campaignRules(options, { context: 'lobby' }).issues.some(issue => issue.field === 'incomeHistoryVersion' && issue.code === 'unsupported_combination')) {
+    delete options.incomeHistoryVersion;
+    delete options.commercialServiceVersion;
+    delete options.creditWorkloadVersion;
+    delete options.bankEconomicsVersion;
+  }
   const rules = campaignRules(options, { context: 'lobby' });
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version,
@@ -269,7 +307,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -284,6 +322,18 @@ function previewCampaignEdition(source, edition) {
     };
     enableEditionPrerequisite('companyCreditVersion');
   }
+  // The player-facing setup opts into current reporting. Preserve this API's
+  // historical default for explicit old-rule construction and replay tools.
+  if (currentReporting) options.incomeHistoryVersion = 1;
+  // Explicit new-game/lobby choice, never a saved-state upgrade. Keep the
+  // reporting-only API stable for historical configurations and replay tools.
+  if (currentEconomics) {
+    options.incomeHistoryVersion=1;
+    options.commercialServiceVersion=1;
+    options.bankEconomicsVersion=edition==='core'?2:1;
+    if(edition==='expanded')options.creditWorkloadVersion=1;
+    else delete options.creditWorkloadVersion;
+  }
   const rules = validateCampaignRules(options, 'lobby');
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version, reason: 'edition selection' }));
@@ -294,7 +344,7 @@ function campaignCapabilities() {
     .flatMap(def => def.peers.map(peer => [peer.capability, peer.supported]))) };
 }
 function campaignNeedsFreshHandshake(source) {
-  return source.featureRulesVersion===1||source.productProgramsVersion===2;
+  return source.incomeHistoryVersion===1||source.featureRulesVersion===1||source.productProgramsVersion===2;
 }
 function peerRulesIssue(rules, capabilities = {}) {
   if (!rules || !rules.options || !Array.isArray(rules.issues)) throw Error('Resolve campaign rules before checking a peer.');

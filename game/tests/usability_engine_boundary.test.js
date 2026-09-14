@@ -163,6 +163,46 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // trades. The fixed withdrawal planner uses liquidity, not spending-equity
 // headroom. Four economies/12 months of immutable36 AI/human turns, RNG,
 // half-ready saves, views and rematch match exactly; legacy goldens unchanged.
-const expected='fe9fa06b26900c7c92fbcbb08c38bc04b16f3096bdf74de2acfcda2b10c34633';
+// Authorized income-stabilization checkpoint66 (September14): reporting8.16/
+// 9.29, serviced fees8.17/9.30 and explicit9.31 portfolio administration.
+// Scoped exact creation/AI/RNG/settlement/views against immutable5309a5ef and
+// 0033ac47 references preserve the older reporting/servicing versions; prior
+// Group0-9 and intermediate version replays remain separate frozen tests.
+// Three credit-investment regressions verify paid collections/risk preparation,
+// no duplicate supplier charge and exclusion of named-credit principal/interest
+// movements from ordinary projected originations. New-rule three-transport
+// recovery/privacy checks pass. No historical golden/reference was regenerated.
+// This review pin does not waive the still-open full release or balance gate.
+// Follow-through: product comparisons and staffing acceptance now share the same
+// 9.31-only principal bridge; products also use paid collection/risk preparation.
+// Four targeted regressions, four workload tests (including exact0033 replay),
+// three new-rule transports and legacy product/UI/architecture checks pass.
+// No historical fixture regenerated; long-run balance remains an open gate.
+// Reporting-only follow-through: optional numeric9.31 source terms preserve the
+// ledger contract and old reader acceptance. Three months of exact04f118ef
+// economics/AI/RNG/state (excluding only new diagnostic fields), seven UI tests,
+// four workload tests and three current simulated transports pass. No old golden
+// was regenerated; full release and long-run balance acceptance remain open.
+// Explicit8.18/9.32 service-based economics removes automatic bonuses and
+// centralizes the provisional12K salary, retaining18K on all older campaigns.
+// Three actual new-rule months match the captured private experiment; old-rule
+// creation/AI/RNG/state/views replay exactly against immutabledd9c768a. Strict
+// recovery/rematch/peer and actual recruitment UI tests pass. No golden changed.
+// Shared relationship workload preserves the original left-to-right arithmetic.
+// Fractional/offer cases, actual fee/context checks and two-month Core8.18 and
+// Expanded9.32 creation/AI/RNG/state/private-view replay match immutable225d28be.
+// No rates, rules, old reference bytes or goldens changed in this consolidation.
+// Explicit Core8.19 / bank economics2 uses the existing accounting engine for
+// funded growth, full retained earnings and backed portfolio transfers. Legacy
+// Core8.18 and Expanded9.32 replay exactly against preserved225d28be; older
+// economics also replay againstdd9c768a. Core lifecycle, pure UI/forecast,
+// transaction, three simulated transports and24 strategy cases are scoped
+// evidence only, not full release acceptance. No old golden was regenerated.
+// Existing edition buttons now select those verified economic rules. Historical
+// direct/reporting-only proposals retain their defaults. Current Core8.19 and
+// Expanded9.32 create/AI/RNG/state/private views replay exactly against unchanged
+// 3730536d explicit-rule reference; setup, cancellation and six current lobby
+// pairs pass. This changes creation choices, not settlement or old goldens.
+const expected='b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
