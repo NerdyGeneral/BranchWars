@@ -25,7 +25,11 @@ function toggleProductRetirement(v,product) {
 function renderProductPrograms(v) {
  $('#productProgramsNav').classList.toggle('hidden',!v.me.productPrograms);
  if(!v.me.productPrograms){$('#productProgramsPanel').innerHTML='';if(workspaceTab==='products')setWorkspaceTab('overview');return;}
+ if(workspaceTab==='customers'&&typeof renderCustomerGrowth==='function'){renderCustomerGrowth(v);return;}
  if(workspaceTab!=='products')return;
+ if(['relationships','onboarding'].includes(productDeskView)&&typeof selectCustomerSubject==='function'){
+  const customerDesk=productDeskView;productDeskView='development';selectCustomerSubject(customerDesk);return;
+ }
  productSelection(v);
  if(productDeskView==='relationships'&&!v.me.relationshipOffers||productDeskView==='onboarding'&&!v.me.onboarding||
   productDeskView==='advertising'&&!v.me.advertising||productDeskView==='pricing'&&v.me.productPrograms.version!==2||
@@ -34,8 +38,9 @@ function renderProductPrograms(v) {
  E.applyProductProgramPolicy(preview,policy);
  preview.policies={...preview.policies,deposit:draft.depositPolicy};
  const vendor=E.productProgramCosts(preview),book=E.segmentDepositSummary(preview,v),catalogue=['development','pricing','targets'].includes(productDeskView);
- const tabs=[['development','Product catalogue'],...(p.advertising?[['advertising','Advertising']]:[]),...(p.relationshipOffers?[['relationships','Existing customers']]:[]),...(p.onboarding?[['onboarding','Applications']]:[]),...(p.productPrograms.version===2?[['reports','Statements']]:[])];
- const head='<div class="section-head"><div><h2>PRODUCTS & CUSTOMER GROWTH</h2><p class="small muted">Select a product to manage delivery, pricing and local sales. Changes are staged, never submitted here.</p></div></div><div class="product-desk-tabs" role="group" aria-label="Product views">'+tabs.map(([key,label])=>'<button type="button" class="btn" id="product-desk-'+key+'" aria-pressed="'+(productDeskView===key||key==='development'&&catalogue)+'">'+label+'</button>').join('')+'</div>';
+ const tabs=[['development','Product catalogue'],...(p.advertising?[['advertising','Advertising']]:[]),...(p.productPrograms.version===2?[['reports','Statements']]:[])];
+ const head='<div class="section-head"><div><h2>PRODUCTS & CUSTOMER GROWTH</h2><p class="small muted">Select a product to manage delivery, pricing and local sales. Customer offers and applications are in Customers. Changes are staged, never submitted here.</p></div></div>'+
+  (typeof renderSubjectNavigation==='function'?'':'<div class="product-desk-tabs" role="group" aria-label="Product views">'+tabs.map(([key,label])=>'<button type="button" class="btn" id="product-desk-'+key+'" aria-pressed="'+(productDeskView===key||key==='development'&&catalogue)+'">'+label+'</button>').join('')+'</div>');
  let content=catalogue?productCatalogueContent(v,preview,book,vendor,token):'';
  if(productDeskView==='advertising')content=advertisingDeskContent(v,preview);
  if(productDeskView==='relationships')content=relationshipOfferContent(v,preview);
@@ -47,7 +52,7 @@ function renderProductPrograms(v) {
  if(productDeskView==='advertising')bindAdvertisingDesk(v);
  if(productDeskView==='relationships')bindRelationshipOfferDesk(v);
  if(productDeskView==='onboarding')bindOnboardingDesk(v);
- for(const [key] of tabs)$('#product-desk-'+key)?.addEventListener('click',()=>{if(!productContextCurrent(token,false))return;productDeskView=key;productWorkspace.pending=null;renderProductPrograms(currentView());$('#product-desk-'+key)?.focus?.({preventScroll:true});});
+ if(typeof renderSubjectNavigation!=='function')for(const [key] of tabs)$('#product-desk-'+key)?.addEventListener('click',()=>{if(!productContextCurrent(token,false))return;productDeskView=key;productWorkspace.pending=null;renderProductPrograms(currentView());$('#product-desk-'+key)?.focus?.({preventScroll:true});});
 }
 function productPricingCash(n){return (n<0?'-$':'$')+Math.abs(Math.round(n)).toLocaleString();}
 function productPricingReportContent(v){

@@ -203,6 +203,26 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // Expanded9.32 create/AI/RNG/state/private views replay exactly against unchanged
 // 3730536d explicit-rule reference; setup, cancellation and six current lobby
 // pairs pass. This changes creation choices, not settlement or old goldens.
-const expected='b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642';
+// Authorized V4 workflow stabilization, checkpoint67 (September14): explicit
+// finite new-human starting work, applicable AI submission validation, pure
+// loan-flow reporting, invocation-local reserve caching and the current-only
+// duplicate recovery-cost repair. No save marker, rates or score weights added.
+// v4-workflow-final67 preserves exact rc2 creation/plans/world/RNG across four
+// Core/Expanded seed profiles and12 months. Nine focused workflow checks cover
+// old defaults/saves, paid capacity, rematch, recovery and AI rollback. The48
+// legacy long campaigns also pass. Existing historical fixtures are untouched.
+// The pin records these authorized changes, not a waiver of remaining sweep,
+// gameplay, long-run strategy or physical multiplayer acceptance.
+// Checkpoint68: explicit9.33 persistent bank rivalry, new setup only. No
+// financial/rate changes. bank_rivalry.test replays old9.32 creation, AI,
+// settlement, RNG and private views against byte-checked1cb80c01; it reproduces
+// the old auction and validates new-rule persistence, receivership and privacy.
+// New/current lobby pairs and old-peer refusal pass on all three transports.
+// Follow-up terminal validation admits both existing institutional failure
+// reasons. A funded three-month covenant failure, ended save, both owner views
+// and rematch pass. Old9.32 exact replay and three transport pairs were rerun;
+// the completed120-month9.33 snapshot restores exactly under the correction.
+// This pin is not long-run strategic or physical two-computer acceptance.
+const expected='6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

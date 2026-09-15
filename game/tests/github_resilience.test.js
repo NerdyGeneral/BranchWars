@@ -11,7 +11,7 @@ function harness(side='host'){
  function elementFor(selector){
   if(elements.has(selector))return elements.get(selector);
   const el={id:selector.startsWith('#')?selector.slice(1):'',value:'',textContent:'',checked:false,disabled:false,dataset:{},listeners:{},attributes:{},
-   setAttribute(key,value){this.attributes[key]=String(value)},getAttribute(key){return this.attributes[key]??null},
+   setAttribute(key,value){this.attributes[key]=String(value)},getAttribute(key){return this.attributes[key]??null},removeAttribute(key){delete this.attributes[key]},
    focus(){},querySelector:s=>elementFor(s),
    addEventListener(event,listener){const previous=this.listeners[event];this.listeners[event]=previous?function(...args){previous.apply(this,args);listener.apply(this,args)}:listener},
    classList:{add(){},remove(){},toggle(){},contains(){return false}}};

@@ -119,6 +119,7 @@ function renderMarketInspector(v){
    return '<article><button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+esc((picked?'Remove staged: ':'Stage: ')+d.name)+'</button><div class="micro"><b>'+money(d.cost)+'</b> one-time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="micro">'+esc(proposal.status.eligible?d.desc:proposal.status.reason)+'</p>'+renderProjectEffect(p,key,market)+'</article>';
   }).join('')+'</div></details>'+
   (p.advertising?'<section><h4>Local customer acquisition</h4><p class="micro">One standing campaign per bank. Inspect its real target, recurring cost and application capacity here.</p><button type="button" class="btn" id="openMarketAdvertising">Manage local campaign</button></section>':'')+
+  (p.householdBook&&v.serviceAgreements?'<section><h4>Local business relationships</h4><p class="micro">Inspect this market’s clients in Customers. Looking does not change monthly focus or place a bid.</p>'+v.serviceAgreements.filter(c=>c.market===market&&!c.companyClosed).map(c=>'<button type="button" class="btn" data-market-client="'+esc(c.id)+'">'+esc(serviceClientPresentation(v,c).name)+' · '+esc(E.SERVICE_TYPES[c.kind].name)+'</button>').join('')+'</section>':'')+
   '<p class="micro muted">Staging changes only your monthly plan. Nothing is built, paid or submitted by inspecting this market.</p>';
  const current=()=>marketActionCurrent(token,false)&&marketWorkspace.market===market;
  $('#marketInspectorSelect')?.addEventListener('change',()=>{if(current()){inspectMarket(v,$('#marketInspectorSelect').value);$('#marketInspectorSelect')?.focus();}});
@@ -128,6 +129,7 @@ function renderMarketInspector(v){
  $('#confirmMarketAction')?.addEventListener('click',()=>{if(current())confirmMarketAction();});
  $('#cancelMarketAction')?.addEventListener('click',()=>{if(current())cancelMarketAction();});
  $('#openMarketAdvertising')?.addEventListener('click',()=>{if(current()){marketWorkspace.advertisingOpen=true;renderMarketAdvertising(currentView());focusWorkspaceTarget($('#marketCampaignHeading'));}});
+ $$('[data-market-client]').forEach(button=>button.addEventListener('click',()=>{if(current())inspectServiceAgreement(currentView(),button.dataset.marketClient);}));
  renderMarketAdvertising(v);
 }
 

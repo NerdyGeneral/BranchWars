@@ -118,6 +118,7 @@
       "engine/commercial-fee-economics.js",
       "engine/credit-workload.js",
       "engine/bank-economics.js",
+      "engine/bank-rivalry.js",
       "engine/income-history.js",
       "engine/income-review.js",
       "engine/api.js"
@@ -130,6 +131,7 @@
       "ui/features.js",
       "ui/lobby.js",
       "ui/operations-workspace.js",
+      "ui/workspace-ownership.js",
       "ui/workspace-navigation.js",
       "ui/draft.js",
       "persistence/storage-codec.js",
@@ -176,6 +178,7 @@
       "ui/regional-growth.js",
       "ui/recovery.js",
       "ui/plan-review.js",
+      "ui/monthly-workbench.js",
       "ui/bank-overview.js",
       "ui/game-help.js",
       "ui/projects.js",

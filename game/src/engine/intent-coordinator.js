@@ -129,12 +129,17 @@ function planFinalCashReserve(g, index, input) {
     }
   }
   const review = aiCashPlanningReview(g, index, plan);
+  // The owner/world are fixed during this synchronous pass. Invalidate on
+  // EVERY plan change, including nested policies; never cache across calls.
+  let excessStamp=null,excessValue=0;
   const excess = () => {
+    const stamp=JSON.stringify(plan);if(stamp===excessStamp)return excessValue;
     const budget=planBudget(p,plan,g);
     // Group5 lifecycle and final AI cleanup share the same whole-plan reserve.
     // Existing versions retain their exact raw-limit ordering and decisions.
-    return Math.max(0,budget.total-review.limit,
+    excessValue=Math.max(0,budget.total-review.limit,
       [5,6,7,8,9,10].includes(g.financialGroupVersion)?-facilityLifecycleProtectedBudget(p,plan,budget,g).remaining:0);
+    excessStamp=stamp;return excessValue;
   };
   if([6,7,8,9,10].includes(g.financialGroupVersion)&&plan.departmentFunctionsPolicy&&excess()){
     // Only uncommitted AI vendor orders may be reduced. Existing obligations,

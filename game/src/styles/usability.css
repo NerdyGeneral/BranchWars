@@ -350,3 +350,16 @@
 .bank-income-statement{margin-block:1rem}
 .bank-income-statement .table-scroll{overflow-x:auto}
 .bank-income-statement .statement-subtotal td{font-weight:700;border-top:1px solid var(--line,#d5dfec)}
+/* Focused monthly controls retain their original DOM and shared draft. */
+#monthlyEditor {border:1px solid var(--line,#b5cbe1);border-radius:12px;padding:16px;margin-top:12px;min-width:0;}
+#monthlyEditor[hidden] {display:none!important;}
+#monthlyEditorBody {min-width:0;max-width:100%;}
+#monthlyEditorBody > * {max-width:100%;}
+.quantity-control {display:flex;align-items:center;gap:5px;}
+.quantity-control input {width:5rem;min-width:0;}
+.function-economic-impact {background:var(--soft,#f0f6fc);padding:12px;border-radius:10px;margin:12px 0;}
+.subject-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.subject-tabs [aria-pressed="true"]{border-color:var(--blue,#287ad8);background:#eaf3ff;color:#174e8b}
+#peopleAllocationMount>.panel,#customerCommercialMount>.panel,#productPolicyMount>.panel{margin:0;box-shadow:none}
+#peopleAllocationMount:not([hidden]){margin-bottom:16px}
+#productPolicyMount[hidden],#productProgramsPanel[hidden],#customerHouseholdMount[hidden],#customerCommercialMount[hidden],#customerGrowthPanel[hidden],#peopleAllocationMount[hidden]{display:none!important}

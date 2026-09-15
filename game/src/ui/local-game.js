@@ -1,7 +1,7 @@
 function startLocal(which) {
   if (featureSelectionPending()) { setStartMessage('Confirm or cancel the optional-system changes before starting.'); return; }
   try {
-    const options = { ...readSetupFeatureOptions(), color1: $('#bankColor1').value, color2: $('#bankColor2').value };
+    const options = { ...readSetupFeatureOptions(), startingWorkforce:'covered', color1: $('#bankColor1').value, color2: $('#bankColor2').value };
     const created = which === 'ai' ? E.createGame({ ...options, mode: 'ai', name1: validName('#aiName'), name2: 'Synergy Holdings AI',
       scope: $('#aiScope').value, scenario: $('#aiScenario').value, difficulty: $('#aiDifficulty').value }) :
       E.createGame({ ...options, mode: 'hotseat', name1: validName('#hotName1'), name2: validName('#hotName2'),

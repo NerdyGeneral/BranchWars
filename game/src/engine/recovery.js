@@ -38,9 +38,17 @@ function bankRecoveryReview(p, plan, economy, event,g=null) {
   const budget = planBudget(p, plan,g), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
   // Campaign/training expense is already inside operating profit. It must not
   // be subtracted for a second time alongside projects, hiring and research.
-  const nonOperatingSpend = budget.total - operatingSpend;
+  // Current Expanded forecasts already post paid department vendors, leader
+  // compensation and office maintenance. Do not subtract these expenses twice
+  // in the recovery screen or AI. Earlier campaign planner arithmetic is kept.
+  const currentBank=g?.bankEconomicsVersion===1&&g.creditWorkloadVersion===1;
+  const includedOperating=currentBank?Math.min(budget.departmentFunctions||0,forecast.departmentFunctionExpense||0)+Math.min(budget.departmentLeadership||0,forecast.departmentExpense||0)+Math.min(budget.facilityLifecycle||0,forecast.facilityMaintenance||0):0;
+  const nonOperatingSpend = budget.total - operatingSpend - includedOperating;
+  // Conversion and renovation are not operating income, but the prospective
+  // owner has already paid them before its closing equity is projected.
+  const includedCapital=currentBank?(budget.facilityConversion||0)+(p.facilityLifecycle?facilityLifecycleDraftCommitment(p,plan).renovation:0):0;
   const fundingLoss = forecast.fundingLoss || 0, netOperating = forecast.profit - fundingLoss;
-  const equityAfterPlan = forecast.closingEquity - decisionExpense - nonOperatingSpend;
+  const equityAfterPlan = forecast.closingEquity - decisionExpense - nonOperatingSpend + includedCapital;
   const exposure = Math.max(1, forecast.capitalRatio && forecast.closingEquity
     ? forecast.closingEquity / forecast.capitalRatio * 100 : riskAssets(p) + (forecast.loanGrowth || 0));
   const reserve = exposure * .10 + 200000, headroom = equityAfterPlan - reserve;

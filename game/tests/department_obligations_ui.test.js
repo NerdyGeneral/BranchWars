@@ -24,7 +24,7 @@ function historicalUi(source){
   const end=source.indexOf('\nfunction ',start+marker.length);source=source.slice(0,start)+original+source.slice(end<0?source.length:end);
  }return source;
 }
-const actualUi=read('src/ui/dashboard.js')+'\n'+read('src/ui/plan-review.js')+'\n'+read('src/ui/projects.js'),ui=candidate?uiPatch(actualUi):actualUi,legacyUi=candidate?actualUi:historicalUi(actualUi);
+const actualUi=read('src/ui/dashboard.js')+'\n'+read('src/ui/plan-review.js')+'\n'+read('src/ui/monthly-workbench.js')+'\n'+read('src/ui/projects.js'),ui=candidate?uiPatch(actualUi):actualUi,legacyUi=candidate?actualUi:historicalUi(actualUi);
 const engineContext={console};vm.runInNewContext(engine,engineContext);const E=engineContext.BWEngine,copy=x=>JSON.parse(JSON.stringify(x));let checks=0;
 const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options,g=E.createGame({...options,mode:'hotseat',seed:'obligations-ui',created:1});
 function quiet(world){world.event=copy(E.EVENTS.find(e=>e.key==='quiet'));}

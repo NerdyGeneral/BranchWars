@@ -48,11 +48,13 @@ function bankAttentionItems(v,review,financial){
    (E.FacilityLifecycle.CATALOG[office.model]?.name||office.model)+' in '+(v.territories[office.market]?.name||office.market)+' · '+(record.conditionBp/100).toFixed(1)+'% condition. Inspect maintenance, renovation and temporary capacity loss.','markets','#facilityLifecyclePanel',{officeId:office.id});
  }
  if(financial.quoteError||financial.bookError)add('financial-data','watch','Financial explanation unavailable',financial.quoteError||financial.bookError,'operations','#operatingPreview',{desk:'forecast'});
+ for(const project of p.projects||[]){const remaining=project.total-project.progress;if(remaining>0&&remaining<=1)add('project-'+project.id+'-'+project.key,'upcoming',(v.projects[project.key]?.name||project.key)+' is near completion',(v.territories[project.target]?.name||'Bank-wide')+' · '+Number(remaining.toFixed(2))+' work units remain. Completion still depends on allocated execution and competing work; benefits begin after completion.','operations','#activeProject',{desk:'projects'});}
  return rows;
 }
 let bankOverviewState={owner:null,campaign:null,filter:'all',page:0};
 function navigateBankOverview(item){
  const v=currentView();if(!v)return;
+ if(item.id==='coverage'||item.functionId){openMonthlyEditor(item);return;}
  if(item.householdDesk&&v.me.householdBook)householdWorkspace=item.householdDesk;
  if(item.officeId&&v.me.facilityLifecycle?.records[item.officeId]){
   // The existing desk owns its form. Inspecting a location stages no order.
@@ -63,9 +65,9 @@ function navigateBankOverview(item){
 }
 function renderBankOverview(v,review){
  const mount=$('#attentionInbox'),finance=$('#bankFinancialOverview');if(!mount||!finance)return;
- if(workspaceTab!=='overview')return;
+
  if(bankOverviewState.owner!==v.me.id||bankOverviewState.campaign!==game)bankOverviewState={owner:v.me.id,campaign:game,filter:'all',page:0};
- const financial=bankFinancialOverview(v,review),items=bankAttentionItems(v,review,financial),selected=bankOverviewState.filter;
+ const financial=bankFinancialOverview(v,review),items=bankAttentionItems(v,review,financial).filter(row=>!review.warnings.some(w=>w.id===row.id)),selected=bankOverviewState.filter;
  const filters=[['all','All'],['watch','Watch'],['upcoming','Upcoming']];
  const shown=selected==='all'?items:items.filter(row=>row.kind===selected);
  const pages=Math.max(1,Math.ceil(shown.length/10));bankOverviewState.page=Math.min(bankOverviewState.page,pages-1);
@@ -80,10 +82,10 @@ function renderBankOverview(v,review){
  $$('[data-attention-filter]').forEach(button=>button.addEventListener('click',()=>{if(!fresh())return;bankOverviewState.filter=button.dataset.attentionFilter;bankOverviewState.page=0;redraw();$('[data-attention-filter="'+bankOverviewState.filter+'"]')?.focus?.();}));
  $$('[data-attention-page]').forEach(button=>button.addEventListener('click',()=>{if(!fresh())return;bankOverviewState.page=Math.max(0,Math.min(pages-1,bankOverviewState.page+Number(button.dataset.attentionPage)));redraw();mount.setAttribute?.('tabindex','-1');mount.focus?.({preventScroll:true});mount.scrollIntoView?.({block:'center',behavior:'auto'});}));
  $$('[data-attention-open]').forEach(button=>button.addEventListener('click',()=>{if(fresh()&&items[Number(button.dataset.attentionOpen)])navigateBankOverview(items[Number(button.dataset.attentionOpen)]);}));
- renderFinancialOverview(v,financial);
+ if(workspaceTab==='overview')renderFinancialOverview(v,financial);
 }
 function renderFinancialOverview(v,f){
- const disclosures=['financialFundingDetails','financialEarningsDetails','financialGroupDetails'],open=Object.fromEntries(disclosures.map(id=>[id,!!$('#'+id)?.open]));
+ const disclosures=['financialFundingDetails','financialEarningsDetails','financialGroupDetails','financialLoanMovement'],open=Object.fromEntries(disclosures.map(id=>[id,!!$('#'+id)?.open]));
  const stat=(label,value,note)=>'<article><span>'+label+'</span><b>'+overviewDollars(value)+'</b><p>'+esc(note)+'</p></article>';
  $('#bankFinancialOverview').innerHTML='<header class="section-head"><div><h2>WHAT THE NUMBERS MEAN</h2><p class="small">Bank balances now, spending constraints on this draft, and last completed results are different measures.</p></div></header><div class="financial-overview-grid">'+
   stat('Bank cash · now',f.cash,'Liquid bank funds. Deposits and borrowing can add cash without creating profit or equity.')+
@@ -97,5 +99,6 @@ function renderFinancialOverview(v,f){
   '<details class="financial-explanation" id="financialEarningsDetails"><summary>'+(v.me.accounting?'Retained bank earnings':'Cumulative bank earnings')+' · '+overviewDollars(f.earnings)+'</summary><p>This is the accumulated recorded bank result, not the latest operating profit and not available cash. Deposits, principal repayments and borrowing are not new earnings.</p>'+
   (f.bridge?.available?'<p>Month '+f.bridge.cycle+': opening '+overviewDollars(f.bridge.opening)+' + operating profit '+overviewDollars(f.bridge.operatingProfit)+' + other net changes '+overviewDollars(f.bridge.otherNet)+' = closing '+overviewDollars(f.bridge.closing)+'. Net change '+overviewDollars(f.bridge.change)+'.</p>':'<p>A complete monthly earnings bridge is '+(f.bridge?'unavailable for this snapshot':'not provided by this campaign version')+'. No missing history has been reconstructed here.</p>')+'</details>'+
   (f.group?'<details class="financial-explanation" id="financialGroupDetails"><summary>Financial Group · separate parent and consolidated position</summary><p>Parent cash '+overviewDollars(f.parentCash)+' is not bank spending room. Consolidated assets '+overviewDollars(f.group.assets)+' − liabilities '+overviewDollars(f.group.liabilities)+' = equity '+overviewDollars(f.group.equity)+'. Internal investment eliminated: '+overviewDollars(f.group.eliminatedInvestment)+'.</p><p>These are balance-sheet positions, not this month’s group profit. Do not add parent investments to bank/subsidiary equity a second time. A bank dividend moves resources within the group; a parent injection arrives at month end and cannot fund earlier bank orders. Review the Financial Group desks for actual subsidiary results and explicit transfers.</p></details>':'');
+ if(v.me.operatingReport)$('#bankFinancialOverview').innerHTML+='<details id="financialLoanMovement"><summary>Last month’s loan production & repayments</summary>'+renderLoanProductionBreakdown(v.me.operatingReport,v.me.operatingReport,true)+'</details>';
  for(const id of disclosures){const element=$('#'+id);if(element)element.open=open[id];}
 }

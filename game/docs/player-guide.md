@@ -2,6 +2,115 @@
 
 Executive Command · Living Bank working build
 
+## V4 workflow playtest · September 14
+
+### Where to manage your bank
+
+- **People:** bank-wide employee allocation and persistent staffing policy.
+  Department coverage and individual offices still use the same finite staff.
+- **Customers:** Households, Businesses & opportunities, and Applications &
+  relationship offers. Inspect a client and pursue its actual service agreement.
+- **Products:** Product catalogue, Pricing & bank policies, Advertising and Deposit statements.
+  Loan/deposit pricing and capital policy live here; application delivery is in
+  Customers. Pricing shortcuts open the relevant editor, not a hidden subtab.
+- **Markets:** select the location to build, convert, upgrade or staff an office.
+  Local business links open that client's relationship inspector. Selecting a
+  client does not itself submit a bid or retarget your plan.
+- **Operations:** review this month and manage project execution. Its staffing
+  shortcut leads to People; Expanded bank pricing is in Products. Core keeps its
+  simpler original controls.
+
+These screens share one draft. Moving between them does not commit spending.
+Only the selected subject's controls are shown; there is no need to open every
+policy each month. The monthly review can still open the relevant editor inline.
+
+New Expanded campaigns use persistent rivalry9.33. Market dominance and a score
+lead no longer award automatic bank control or stop play. Receivership and
+unresolved funding-covenant failure remain possible; company acquisitions still
+require the existing funded decisions.
+Older saves and their rematches retain their original ending rules; importing
+one does not convert it. Both computers need a build supporting the new rule
+to start or resume9.33 together. No additional setup checkbox is required.
+
+### Before expanding
+
+Check three different limits, not just whether the Build button is available:
+
+1. **Cash and capital today:** construction and recruitment must fit the shared
+   plan budget alongside other commitments. Construction spending and monthly
+   operating expense are different; do not count the same cost twice.
+2. **Monthly running costs:** another office adds upkeep and needs finite staff.
+   Its advertised capacity is not guaranteed customers, deposits or loan sales.
+   Existing relationships also need service coverage while you pursue growth.
+3. **Portfolio replacement and payback:** gross new lending is not net loan-book
+   growth. Scheduled principal repayments, losses and sales can outweigh new
+   production. Review the loan-flow breakdown and operating forecast together.
+
+Retained earnings, bank equity, operating profit and available cash are different
+measures. A positive equity balance does not prove that an expansion is paying
+its recurring costs. Current forecasts exclude some rival actions, events and
+future completions; use them as estimates, not guaranteed results.
+
+Start with **This month**. Required decisions appear beside Mark Ready. Review an
+executive call or work-coverage warning to open its existing editor there; you
+do not have to travel through several tabs. Preview the change, then adopt it
+into the shared draft. Closing the editor is not Discard and does not submit.
+Changing workspaces returns the editor to its usual home. Recorded risks and
+upcoming work are in a separate disclosure so they do not repeat every warning.
+
+New Expanded games assign one existing employee-month to credit administration
+and 0.25 to commercial servicing. These are allocations from the eight starting
+employees, not free staff or extra capacity. Other work can still be short, and
+requirements grow with the bank. Existing saves retain their chosen allocations.
+
+In **People**, read payroll headcount, assigned employees and work shortages as
+different things. The visible time table reconciles assigned time, teaching,
+retained work and additional function work. Its remaining column is explicitly
+before facility/sales use: it is not a promise of idle staff. One employee-month
+is one full-time employee's work for a month; 0.25 is one quarter of that time,
+not a quarter of a person recruited.
+
+In the credit or relationship editor, compare **new ordinary loans**, scheduled
+repayments, business/merchant fees and operating profit beside the allocation.
+You may choose zero new lending. Existing loans can still repay, so a shrinking
+loan book does not prove that bankers made no loans. Funding, premises, product
+choices and shared work can constrain production even with enough headcount.
+
+**Forecast & books** separates originations, named-company advances, scheduled
+principal, collections, principal losses and net operating loan movement.
+Overview offers the same breakdown for the last recorded month. Repayments
+return principal to cash, not profit. These operating components do not include
+every later trade, forced sale or market award. Missing reports are unavailable,
+not invented zeroes.
+
+Persistent policies continue. A quiet month is valid: answer its executive call,
+review important exceptions and mark ready without reopening every policy.
+Core uses one row of its six workspaces; Expanded retains subject groups.
+
+### Focused playtest checklist
+
+1. Start a new Expanded campaign. Open a coverage warning from **This month**;
+   confirm the explanation and relevant allocation are together. In Credit,
+   preview zero additional work, inspect the loan-production consequence, then
+   restore coverage. Nothing should be spent until the month resolves.
+2. In People, reconcile total employees with committed work. Check that moving
+   time changes the shortfall and economics rather than creating another banker.
+3. Select an office on Markets, edit its staffing and review/reset the change
+   without losing the location. Stage different office types in two markets when
+   the shared cash and project capacity allow it; each must keep its own target.
+4. Complete several quiet months without reopening standing policies. Export,
+   reload and Continue/import; confirm policies and bank identities persist.
+5. Repeat with a mature bank and a smaller window. Report the exact screen and
+   action if scrolling, labels or the shared plan become confusing.
+6. With a friend on two actual computers, test lobby colors/readiness, one full
+   simultaneous month, a temporary disconnect and Resume/Retry. Check that neither
+   player sees the other's unsubmitted choices or resolves the same month twice.
+   Keep both campaign exports and record the edition, package and room method.
+
+Automated network checks cannot certify your two-computer connection or whether
+the game feels fun. The current economic findings and remaining acceptance gates
+are in [release status](release-status.md).
+
 Current local new games use **Core8.19** or **Expanded9.32**. Choose the depth
 you want with those two buttons; the integrated accounting and income repairs
 do not add checkboxes. Existing campaigns keep their saved rules. The published
@@ -11,8 +120,10 @@ V3/V4 packages and their PDF manuals are older snapshots, not this working build
 
 The local income-review candidate adds **Loan income · actual & outlook** to
 the operating forecast and Credit workspace, and **Business & merchant fees ·
-actual & outlook** beside the commercial forecast. The published V4 package
-does not yet include these changes.
+actual & outlook** beside the commercial forecast. Published V4 rc2 already
+includes this income review; the newer local workflow playtest adds the staffing
+and loan-movement improvements above. Check [release status](release-status.md)
+for the exact package identity rather than relying on the V4 name alone.
 
 - **Last actual** is the last completed month's recorded operating result.
 - **Standing-policy forecast** estimates another month without changing policy.

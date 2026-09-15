@@ -5,11 +5,29 @@ This is the maintainer guide, not another implementation timeline. Use the [impl
 ## Source of truth
 
 Current player-facing creation calls `previewCampaignEdition` with
-`currentEconomics:true`, selecting Core8.19 or Expanded9.32. It composes the
+`currentEconomics:true,currentRivalry:true`, selecting Core8.19 or Expanded9.33. It composes the
 existing authoritative scalars; the proposal option itself is never saved.
 The default API and `currentReporting:true` remain historical/reporting-only
 construction paths. Save import, Continue and rematch do not opt into new rules.
 Keep edition selection in this engine proposal and DOM behavior in its UI adapter.
+
+`bankRivalryVersion:1` is an explicit new Expanded boundary, not an inferred
+upgrade. It requires current Expanded economics and the complete company-credit
+profile. `bankRivalrySupported:1` is registry-derived and required from peers.
+Initialization, private projection, save/view validation and rematch preserve the
+scalar and owner mirror. Automatic score/market bank-control endings are disabled;
+receivership, funding-covenant resolution and paid company transactions retain
+their existing implementation. Terminal validation must admit both institutional
+failure reasons (`receivership` and `funding_resolution`), but never `buyout`.
+No new wrapper or override ceiling is introduced. Old9.32 creation, views, RNG,
+economics and ending rules remain pinned to the preserved checkpoint68 reference.
+
+`ui/workspace-ownership.js` owns presentation-only subject routing and live DOM
+mounts. People owns allocation, Customers owns household/commercial relationships
+and applications, Products owns banking policies/programmes, and Markets keeps
+local inspectors/actions. Existing nodes and handlers move; no second draft is
+created. Core restores original homes. Owner/campaign changes reset transient
+selection; the monthly editor may temporarily borrow and return the same node.
 
 New explicit9.31 operating reports add optional finite `incomeSource_*` diagnostic
 fields at the source calculation, including actual opening-securities interest.

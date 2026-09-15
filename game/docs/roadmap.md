@@ -10,6 +10,33 @@ New campaigns offer Core or integrated Expanded. Supported historical modular ca
 
 ## Remaining delivery sequence
 
+The approved V4 stabilization pass continues through checkpoint68: essential starting work,
+actionable monthly review, visible workforce commitments, honest loan-flow
+explanations, guarded controls, AI accounting/performance diagnosis and exact-build
+verification. Keep subject workspaces and contextual actions; do not add a
+mandatory Facilities tab or make persistent policies require monthly approval.
+See the ledger for implementation and release status for evidence.
+
+After this playtest, prioritize measured human friction and conventional-bank
+viability before more content. In particular, distinguish a deliberate
+lending/service policy from the AI recovery allocations it may inherit; an
+early ending is not completion of the requested long horizon. National Empire
+and insurance underwriting remain deferred, and publication requires a new
+user request.
+
+The user authorized resolving automatic bank-control pacing before more
+territory. New Expanded9.33 now keeps market/score dominance nonterminal, retains
+institutional failure and paid company control, and requires matching peer
+capability. Never change an existing9.32 save or revive its ended campaign.
+Continue fresh long-run strategy trials under the new boundary: removing an
+automatic ending does not by itself improve the losing bank's recovery or make
+the economy enjoyable. Conventional lending and expansion still need cash-flow,
+portfolio and operating-profit evidence, not merely positive final equity.
+Checkpoint68's120-month mixed-bank survival and23/32-month expansion failures
+make expansion payback and the dependence on commercial service fees explicit
+next balance questions. Do not fix them by awarding free growth, suppressing
+real failure, or changing historical campaign economics without a boundary.
+
 V4 rc2 is a separately authorized playtest publication, not a scope-completion
 milestone. Resume with conventional lending/service balance, then integrated
 workforce usability, exact-build release validation and human multiplayer

@@ -82,7 +82,7 @@ function bindStrategyWorkspace(v,token){
  bind('removeStrategyModel',()=>{if(v.me.specializations[branch])return;delete draft.specializations[branch];strategyModelProposal=null;redraw();},true);
  for(const app of strategyApplications(v,branch))bind('strategy-app-'+app.key,()=>{strategyWorkspace.application=app.key;redraw();$('#strategy-app-'+app.key)?.focus?.({preventScroll:true});});
  bind('strategyDeployApplication',()=>{if(application&&toggleInitiative(application.kind==='product'?application.definition.project:application.key,currentView()))redraw('strategyDeployApplication');},true);
- bind('strategyProductLink',()=>{if(application?.kind!=='product'||!v.me.productPrograms)return;const now=currentView();productSelection(now);productWorkspace.product=application.key;productDeskView='development';setWorkspaceTab('products',now);focusWorkspaceTarget($('#productDetailTitle'));});
+ bind('strategyProductLink',()=>{if(application?.kind!=='product'||!v.me.productPrograms)return;const now=currentView();productSelection(now);productWorkspace.product=application.key;openProductDesk('development');focusWorkspaceTarget($('#productDetailTitle'));});
  bind('strategyServiceLink',()=>{const now=currentView();setWorkspaceTab('markets',now);const controls=$('#servicePricing');if(controls)controls.open=true;const input=$('[data-service-active="'+application?.definition.app+'"]'),panel=$('#commercialClientWorkspace');if(input&&!input.disabled)focusWorkspaceTarget(input);else if(panel){panel.setAttribute('tabindex','-1');focusWorkspaceTarget(panel);}});
  bind('strategyProjectsLink',()=>{setWorkspaceTab('operations');setOperationsDesk('projects');focusWorkspaceTarget($('#projectGrid'));});
 }

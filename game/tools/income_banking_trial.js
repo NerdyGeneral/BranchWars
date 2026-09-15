@@ -66,8 +66,9 @@ function bankingProposal(E,g,index,base,strategy){
 
 function main(){
  const [monthArg,name,...flags]=process.argv.slice(2),months=Number(monthArg),options={};
- for(const flag of flags){const match=/^--(scenario|seed|strategies|resume|service)=(.+)$/.exec(flag);if(!match||options[match[1]])throw Error('Unknown/repeated trial option');options[match[1]]=match[2];}
+ for(const flag of flags){const match=/^--(scenario|seed|strategies|resume|service|rivalry)=(.+)$/.exec(flag);if(!match||options[match[1]])throw Error('Unknown/repeated trial option');options[match[1]]=match[2];}
  if(options.service!==undefined&&options.service!=='protected')throw Error('Only --service=protected is supported');
+ if(options.rivalry!==undefined&&options.rivalry!=='persistent')throw Error('Only --rivalry=persistent is supported');
  let protectedService=options.service==='protected';
  let scenario=options.scenario||'balanced',seed=options.seed||'business-balance:1',strategies=(options.strategies||'ordinary,lending,commercial').split(',');
  if(!Number.isInteger(months)||months<1||months>480||!/^income-banking-[a-z0-9-]+$/.test(name||'')||!['balanced','rate','regulatory','growth'].includes(scenario)||!/^business-balance:[12]$/.test(seed)||new Set(strategies).size!==strategies.length||strategies.some(s=>!['ordinary','lending','commercial'].includes(s))||options.resume&&(!/^income-banking-[a-z0-9-]+$/.test(options.resume)||flags.length!==1))throw Error('Usage: node tools/income_banking_trial.js THROUGH_MONTH income-banking-unique [--scenario=balanced|rate|regulatory|growth] [--seed=business-balance:1|2] [--strategies=ordinary,lending,commercial] OR [--resume=income-banking-prior; no creation overrides]');
@@ -95,7 +96,7 @@ function main(){
    assert(!a.failure,'Failed predecessor must not be resumed as passing');
    const bytes=fs.readFileSync(path.join(priorFolder,a.strategy+'-closing.json.gz'));
    assert.equal(hash(bytes),a.closingSnapshotSha256);const g=E.migrateCampaign(JSON.parse(zlib.gunzipSync(bytes)));
-   E.validatePilot(g);E.validateLedger(g);assert.equal(g.version,'9.32');
+   E.validatePilot(g);E.validateLedger(g);assert.equal(g.version,g.bankRivalryVersion===1?'9.33':'9.32');
    assert(g.gameOver||g.cycle<=months,'Requested target must follow the saved month');
    const fromMonth=a.completedMonth??(a.fromMonth||0)+a.completed;
    if(!g.gameOver)assert.equal(g.cycle-1,fromMonth,'Saved month does not match the predecessor');
@@ -105,8 +106,8 @@ function main(){
  }
  fs.mkdirSync(folder);fs.writeFileSync(path.join(folder,'engine.html'),html,{flag:'wx'});
  fs.writeFileSync(path.join(folder,'trial-driver.js'),driver,{flag:'wx'});
- const opening=restored?restored[0].g:E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true}).options,mode:'hotseat',created:1,scenario,seed});
- assert.equal(opening.version,'9.32');E.validatePilot(opening);E.validateLedger(opening);
+ const opening=restored?restored[0].g:E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true,currentRivalry:options.rivalry==='persistent'}).options,mode:'hotseat',created:1,scenario,seed});
+ assert.equal(opening.version,opening.bankRivalryVersion===1?'9.33':'9.32');E.validatePilot(opening);E.validateLedger(opening);
  const initial=zlib.gzipSync(JSON.stringify(opening));fs.writeFileSync(path.join(folder,'opening.json.gz'),initial,{flag:'wx'});
  const report={trialVersion:2,driverSha256:hash(driver),portableSha256:hash(html),engineSha256:hash(source),openingSha256:hash(initial),requestedMonths:months,scenario,seed,saveVersion:opening.version,
   scope:'Ordinary AI control versus two deliberate paid banking strategies against an ordinary same-rule rival. Intentional strategies defer new discretionary research/projects, rebuild finite work, favor Lending or Business staffing, try one funded hire toward ten employees and a commercial office every six months toward three sites. Both use balanced deposit/lending/capital policies and the same buffers. Existing obligations remain. No injected resources, altered yields, changed rules, revived endings or subsidiary mandates. This is an explainable policy experiment, not optimal play, identical subsequent shocks, a pure one-variable intervention or final balance acceptance.',arms:[]};

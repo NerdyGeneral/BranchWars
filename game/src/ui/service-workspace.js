@@ -52,6 +52,7 @@ function buildServiceAgreementProposal(v,plan,review,choice){
 }
 function inspectServiceAgreement(v,id){
  if(!opportunityCurrent(opportunityToken(v),false)||!v.serviceAgreements?.some(c=>c.id===id&&!c.companyClosed))return false;
+ if(v.me.householdBook&&typeof selectCustomerSubject==='function')selectCustomerSubject('commercial');
  selectedServiceAgreement(v);serviceWorkspace.id=id;serviceWorkspace.pending=null;renderPipeline(currentView());
  focusWorkspaceTarget($('#serviceInspectorTitle'));return true;
 }

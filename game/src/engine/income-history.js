@@ -41,6 +41,7 @@ function recordIncomeHistory(g){
  g.players.forEach((p,i)=>p.incomeHistory=next[i]);
 }
 function validateIncomeHistoryCampaign(g){
+ validateBankRivalry(g,'game');
  validateBankEconomicsCampaign(g);
  validateCreditWorkloadCampaign(g);
  validateCommercialServiceCampaign(g);
@@ -50,6 +51,7 @@ function validateIncomeHistoryCampaign(g){
  for(const p of g.players)IncomeHistory.validate(p.incomeHistory,cycle);
 }
 function projectIncomeHistory(g,out,index){
+ projectBankRivalry(g,out);
  projectBankEconomics(g,out);
  projectCreditWorkload(g,out);
  projectCommercialService(g,out);
@@ -57,6 +59,7 @@ function projectIncomeHistory(g,out,index){
  out.incomeHistoryVersion=1;out.me.incomeHistory=IncomeHistory.copy(g.players[index].incomeHistory);
 }
 function validateIncomeHistoryView(v){
+ validateBankRivalry(v,'view');
  validateBankEconomicsView(v);
  validateCreditWorkloadView(v);
  validateCommercialServiceView(v);

@@ -123,7 +123,10 @@ evaluateStrategicEnd=function(g){
  // Group8 keeps receivership on pilot terms below, then defers to the base
  // rules for domination and hostile buyout. Earlier groups still zero the
  // pressure counters every cycle, so only receivership can ever end them.
- const contested=[8,9,10].includes(g.financialGroupVersion);
+ // New9.33 rivalry removes automatic score/territory endings only. Keep the
+ // economic cycle, receivership and legacy ending behavior unchanged.
+ if(g.bankRivalryVersion===1)validateCampaignRules(g,'game');
+ const contested=g.bankRivalryVersion!==1&&[8,9,10].includes(g.financialGroupVersion);
  if(!contested){g.buyoutPressure=[0,0];g.consolidationStalemate=0;}
  const failed=g.players.filter(p=>(p.distress||0)>=RECEIVERSHIP_CYCLES);
  if(!failed.length)return contested?pilotEnd(g):'';

@@ -46,7 +46,7 @@ function handleMessage(m){
   if(m.type==='plan_reveal'&&gh.active)return acceptGhReveal(m);
   if(m.type==='plan'){if(gh.active){try{send({type:'error',message:'This Repository Link client is outdated and did not seal its plan. Both players must use the current game file.'})}catch{}return}try{validateTurnMessage(m);if(game.players[1].submitted){syncPeers();return}E.submit(game,1,m.plan);syncPeers()}catch(e){turnRejection(m,e);toast(`The rival plan was rejected: ${e.message}`);syncPeers()}return}
   if(m.type==='recall'){try{validateTurnMessage(m);if(m.cycle!==undefined&&m.cycle!==game.cycle){syncPeers();return}if(gh.active&&ghIncomingCommit&&!game.players[0].submitted){ghIncomingCommit=null;outgoingTurnContext=null;}if(game.players[1].submitted&&!game.players[0].submitted){game.players[1].submitted=null;outgoingTurnContext=null;}syncPeers()}catch(e){turnRejection(m,e);syncPeers()}return}
-  if(m.type==='rematch'){try{validateTurnMessage(m);E.rematch(game,1);syncPeers()}catch(e){turnRejection(m,e);syncPeers()}return}
+  if(m.type==='rematch'){try{validateTurnMessage(m);E.rematch(game,1,{startingWorkforce:'covered'});syncPeers()}catch(e){turnRejection(m,e);syncPeers()}return}
   return
  }
  if(m.type==='hello_request'){try{send(makeFeatureHello(m))}catch(e){setConnection(`DIRECT LINK SEND FAILED // ${e.message}`,'bad')}return}

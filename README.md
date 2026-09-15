@@ -4,7 +4,7 @@ Turn-based banking strategy for solo and friend-versus-friend play.
 
 ## Test V4 Expanded
 
-The [V4 playtest ZIP](releases/branch-wars-v4.zip) contains the current integrated Expanded snapshot. Extract it before playing. Read the [V4 quick-start](releases/branch-wars-v4-guide.md) and [verification limits](releases/v4-playtest-notes.md). This is a prerelease for testing, not completion of the blueprint. V2/V3 remain preserved below.
+The [V4 rc3 playtest ZIP](releases/branch-wars-v4.zip) contains the corrected checkpoint68b snapshot. Extract it before playing; both friends should use this same build. Read the [V4 quick-start](releases/branch-wars-v4-guide.md), [current player guide](game/docs/player-guide.md) and [verification limits](releases/v4-playtest-notes.md). This is a prerelease for testing, not completion of the blueprint or a clean full-regression pass. V2/V3 remain preserved below.
 
 ## Play the frozen V3 distribution
 
@@ -15,7 +15,8 @@ This is a preserved regional banking / Financial Group preview snapshot—not co
 ## Working copy versus release
 
 - Root [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) and [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) launch the local `game/` copy, **not the frozen download**.
-- The current V4 playtest is **v4.0.0-rc2**, built from checkpoint66 source. New Core8.19 / Expanded9.32 campaigns include improved bank income reporting, shared credit/service workload and funding-flow explanations alongside company lending and contextual workspaces. Conventional lending balance, final release gates and human acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
+- The current V4 playtest is **v4.0.0-rc3**, built from corrected checkpoint68b source. New Core8.19 / Expanded9.33 campaigns include consolidated banking workspaces and persistent rivalry without automatic score/market bank-control endings. Institutional failure remains possible. Conventional lending/expansion balance, the full regression result and two-computer acceptance remain unfinished. Exact versions belong in [release status](game/docs/release-status.md#which-version-am-i-looking-at).
+- The unpacked current player package is [releases/v4-rc3](releases/v4-rc3/README.txt). [releases/v4](releases/v4/README.txt) is the preserved **rc2** compatibility reference, not the current download. Tags `v4.0.0-rc1` and `v4.0.0-rc2` retain their original packages.
 - Building source replaces the local playable HTML; it does not update the frozen ZIP or its manual. See [current artifact identities and known issues](game/docs/release-status.md) before rebuilding or sharing.
 - The [V2 stabilization RC](releases/v2-stabilization-rc1/README.txt) and [original V2 package](V2%20release/README.md) remain preserved rollback artifacts.
 

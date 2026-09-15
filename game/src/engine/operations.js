@@ -25,6 +25,19 @@ function ordinaryCreditOriginations(report){
  const adjustment=named?(named.principalPaid||0)+(named.recoveredPrincipal||0)-(named.interestWrittenOff||0)-(named.advanced||0):0;
  return Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)+adjustment));
 }
+// Read-only components of the recorded operations flow, not total portfolio
+// movement (trades, forced sales and later awards settle separately).
+function loanProductionBreakdown(report){
+ if(!report||!Number.isFinite(report.loanGrowth))return {available:false};
+ const c=report.companyCredit||{},read=(o,k)=>o[k]===undefined?0:o[k];
+ const values=[read(report,'principalRepaid'),read(report,'creditRecovery'),read(report,'chargeoff'),read(c,'principalPaid'),read(c,'recoveredPrincipal'),read(c,'interestWrittenOff'),read(c,'advanced')];
+ if(values.some(n=>!Number.isFinite(n)||n<0))return {available:false};
+ const [principal,recovery,loss,namedPrincipal,namedRecovery,namedInterest,named]=values,
+  scheduled=principal+namedPrincipal,collections=recovery+namedRecovery,losses=loss-namedInterest,
+  ordinary=report.loanGrowth+scheduled+collections+losses-named;
+ if(ordinary < -1||losses < -1)return {available:false};
+ return {available:true,ordinary:Math.max(0,Math.round(ordinary)),named,scheduled,collections,losses:Math.max(0,losses),net:report.loanGrowth};
+}
 function prepareCreditScenarioOwner(source,plan,g){
  const owner=departmentFunctionCopy(source);
  if(source.creditWorkloadVersion===1){

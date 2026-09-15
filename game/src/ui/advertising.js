@@ -82,7 +82,7 @@ function bindAdvertisingDesk(v,{scope='',refresh=null}={}) {
  });
  $('#'+controlId('advertisingApplicationsReview'))?.addEventListener('click',()=>{
   if(!workforceEditCurrent(token))return;
-  productDeskView='onboarding';setWorkspaceTab('products');renderProductPrograms(currentView());
+  openProductDesk('onboarding');
   focusWorkspaceTarget($('#onboarding-share'));
  });
  $$(scope?'[data-advertising-field][data-advertising-scope="'+scope+'"]':'[data-advertising-field][data-advertising-scope=""]').forEach(input=>input.addEventListener('change',()=>{

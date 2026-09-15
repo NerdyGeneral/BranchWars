@@ -5,7 +5,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const {execFileSync} = require('node:child_process');
+const {createHash} = require('node:crypto');
+const baselineBlobs = {"accounting.js":"c5bdac0e58a206fecd2afc60488aa8fdcbf158ee","group-accounting.js":"77b07832ca419b5b843cdf7915dae4caf187a663","accounting-adapter.js":"a461ea12c257ed0807ddf2904dd751f600193c9c","financial-group.js":"c41810f0035416b4e6e99543af6aeb2030bf8f86"};
 const game = path.resolve(__dirname, '..');
 const repo = path.dirname(game);
 const baseline = 'eea1d0068f5f4a9a963f93d5c12cccf9d1e803ef';
@@ -32,7 +33,9 @@ for (let i = 0; i < lines.length;) {
   if (line.startsWith('*** Update File: ')) {
     target = patchTarget(line.slice(17));
     const relative = path.relative(repo,target).split(path.sep).join('/');
-    const source = execFileSync('git',['-c','safe.directory='+repo,'show',baseline+':'+relative],{cwd:repo,encoding:'utf8'}).replace(/\r\n/g, '\n');
+    const source = fs.readFileSync(path.join(__dirname,'fixtures/accounting-payables-baseline',path.basename(target)),'utf8').replace(/\r\n/g, '\n');
+    const blob = createHash('sha1').update('blob '+Buffer.byteLength(source)+'\0').update(source).digest('hex');
+    assert.equal(blob,baselineBlobs[path.basename(target)],'Pinned '+baseline+' fixture bytes changed: '+relative);
     original.set(path.basename(target), source);
     sources.set(path.basename(target), source);
     continue;

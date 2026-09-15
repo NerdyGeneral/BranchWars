@@ -34,9 +34,11 @@ function createBaseCampaign(o){
 }
 function validateCreationOptions(o){
  validateCampaignCreationValues(o);
+ if(o.startingWorkforce!==undefined&&o.startingWorkforce!=='covered')throw Error('Unsupported starting workforce instruction.');
 }
 function createGame(o){
  validateCreationOptions(o);
+ if(o.bankRivalryVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
  const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
@@ -89,10 +91,25 @@ function createGame(o){
  initializeCommercialService(g,o);
  initializeCreditWorkload(g,o);
  initializeBankEconomics(g,o);
+ initializeBankRivalry(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;
+ // Creation instruction only: persisted policies are canonical. Imports and
+ // historical createGame calls never run this optional starting allocation.
+ applyStartingWorkforce(g,o.startingWorkforce);
  if(o.incomeHistoryVersion===1||o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
  return g;
 }
 function addLog(g,text,kind='WIRE'){g.logSequence=(g.logSequence||0)+1;g.log.unshift({cycle:g.cycle,text,kind,ts:g.created+g.logSequence});g.log=g.log.slice(0,100)}
+function applyStartingWorkforce(g,instruction){
+ if(instruction==='covered'&&g.bankEconomicsVersion===1&&g.creditWorkloadVersion===1){
+  for(const p of g.players){
+   const policy=DepartmentFunctions.defaultPlan(p),credit=Math.ceil(CreditWorkload.quote(p).workload),relationships=Math.ceil(commercialRelationshipWork(p.stats.business,p.stats.merchant));
+   const office=role=>Object.values(p.facilityLifecycle.records).reduce((n,r)=>n+(r.staffQuarters?.[role]||0),0);
+   if(credit>p.allocation.lending*4-office('lending')||relationships>p.allocation.business*4-office('business'))throw Error('Starting staff cannot cover essential work and existing offices.');
+   policy.quotas.credit.lending=credit;policy.quotas.relationships.business=relationships;
+   p.departmentFunctions.policy=DepartmentFunctions.validatePolicy(policy);
+  }
+ }
+}

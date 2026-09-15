@@ -31,6 +31,7 @@ function renderPeopleWorkspace(v){
  const keys=peopleDesks(v);
  if(peopleWorkspaceState.owner!==v.me.id||!keys.includes(peopleWorkspaceState.desk))peopleWorkspaceState={owner:v.me.id,campaign:game||view,desk:'overview'};
  const desk=peopleWorkspaceState.desk;
+ if($('#peopleAllocationMount'))$('#peopleAllocationMount').hidden=desk!=='overview';
  mount.dataset.peopleDesk=desk;
  nav.innerHTML='<div role="tablist" aria-label="People and Operations desks" class="people-tabs">'+keys.map(key=>'<button type="button" id="people-tab-'+key+'" class="btn" role="tab" aria-selected="'+(key===desk)+'" tabindex="'+(key===desk?'0':'-1')+'" data-people-tab="'+key+'">'+PEOPLE_DESKS[key]+'</button>').join('')+'</div><p class="micro">One shared monthly plan. Changing desks never submits orders. Training and leadership forms require explicit staging.</p>';
  $('#peopleOverview').hidden=desk!=='overview';$('#peopleRecruitment').hidden=desk!=='recruitment';$('#workforcePanel').hidden=desk!=='development';$('#departmentPanel').hidden=!['coverage','leadership'].includes(desk);

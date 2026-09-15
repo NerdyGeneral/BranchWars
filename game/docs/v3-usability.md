@@ -1,6 +1,6 @@
 # V3 implementation and acceptance ledger
 
-This is the **single current completed/remaining checklist**, reconciled through the partial checkpoint66 on September 14, 2026. “Implemented / scoped-tested” is not final release acceptance. The game remains in development.
+This is the **single current completed/remaining checklist**, reconciled through checkpoint68 on September 14, 2026. “Implemented / scoped-tested” is not final release acceptance. The game remains in development.
 
 Release-runner repair is implemented and scoped-tested: the desktop launcher now
 uses the central full suite; incremental logs and terminal receipts preserve
@@ -19,6 +19,88 @@ visual, multiplayer-human acceptance or remaining content gates.
 - [All historical records](archive/README.md): earlier roadmaps, releases, proposals and technical contracts.
 
 ## Current handoff
+
+### Checkpoint68 · subject ownership, economic diagnosis and persistent rivalry
+
+- Implemented: People owns bank allocation; Customers owns households, commercial
+  opportunities, service agreements, offers and applications; Products owns
+  catalogue/pricing/marketing/results and bank policy. Markets keeps local
+  construction, conversion, staffing and contextual client links. Existing live
+  controls move instead of creating duplicate drafts. Core homes are restored.
+- Implemented: warning/help/client/pricing/application shortcuts reveal the
+  correct subject and editor. Selection resets across owners/campaigns; shared
+  controls borrowed by the monthly review return to their management home.
+- Implemented: prospective Expanded9.33 persistent rivalry. No automatic bank
+  victory from market dominance or score pressure; existing institutional failures and
+  paid company transactions remain. No yield, cost, reserve or subsidy change.
+  Old9.32 and older campaigns/rematches retain their rules. The new scalar is
+  validated in creation, save, view and rematch and requires matching peers.
+- Scoped verification: seven ownership tests, economic-policy harness tests,
+  old-rule replay and explicit ending-boundary checks. A clean29-command receipt
+  covers the UI tranche before the ending boundary; it is not the final full
+  Windows gate. A later full run was interrupted to repair terminal validation
+  for funding-covenant resolution; an actual three-month funded failure now
+  covers save/private-view/rematch behavior. Current artifact and later gate
+  outcomes live in release status.
+- Economic evidence:143 campaign-months across two scenario/seed pairs and three
+  paid policies. Original lending/expansion failed at23 in Balanced; restricting
+  Operations allocation and deferring new expansion survived24, with only modest
+  cumulative operating profit. Rate shock remained strained. No numerical tuning
+  was justified by this small matrix. A fresh120-month commercial rivalry run
+  completes with both banks profitable in the final month; its first82 bank
+  snapshots exactly match the prior prematurely ended run. Long-run recovery
+  quality and a broader lending/expansion matrix remain separate acceptance gates.
+  The Balanced lending extension now completes: cautious policy survives120,
+  with loans roughly at opening size and significant commercial-service income;
+  the paid-expansion policies fail at23/32. All earlier71 recorded Balanced
+  months reproduce exactly. This does not establish pure-lending viability.
+- Still open: full clean final receipt, broader conventional-lending/expansion
+  payback and long-run comeback acceptance, sampled-to-complete human UI review,
+  and a real two-computer session. The user subsequently authorized publication
+  of corrected68b as V4 rc3; this does not close the pending acceptance gates or
+  authorize new national content.
+
+### Preserved checkpoint67 · V4 workflow stabilization
+
+- Implemented: new local/linked Expanded campaigns and explicitly requested UI
+  rematches start with finite credit-administration and commercial-servicing
+  allocations. Existing saves and legacy direct-creation/rematch defaults are
+  not rewritten. Zero production is still a legal player choice.
+- Implemented: This month opens the existing executive, allocation, department
+  or office editor in place. It uses one live control mount and the shared draft,
+  restores its management home on navigation, and closes on owner/month/lock
+  changes. Other contextual destinations still use their established inspectors.
+- Implemented: duplicate planning alerts are removed from the secondary inbox;
+  recorded risks, upcoming renewals and nearly completed projects sit in its
+  retained disclosure. People exposes the shared employee-time table directly.
+- Implemented: ordinary originations, company advances, repayments, recoveries,
+  principal losses and net operating loan movement are shown separately in
+  forecasts and recorded results. Credit/relationship editors show production
+  and commercial fees for the reviewed allocation.
+- Implemented: current Expanded recovery projections no longer subtract paid
+  department/office costs twice. Reserve thresholds, yields and score weights
+  are unchanged. Final AI submissions receive the human validators; rejected
+  generated plans restore the human lock and RNG.
+- Implemented: per-pass reserve-quote memoization with complete plan-key
+  invalidation; flat six-workspace Core navigation; guarded service-manager
+  quantity controls; immutable, hash-checked accounting test references that
+  do not require a Git object database.
+- Scoped acceptance: nine new regressions pass. Actual browser workflows cover
+  starting/continuing a campaign, inline zero/restored lending, a resolved month,
+  recorded loan components, restored editor mounts and 760/1280px layouts. A
+  month-121 hotseat import also completed different office types in two markets
+  through normal settlement. An overcommitted office assignment was rejected;
+  an explicit transfer of existing time between offices reviewed and staged.
+  The campaign lifecycle reference now uses the preserved checkpoint65 build,
+  retaining its original checksum instead of following the mutable V4 folder.
+  Exact final-build gate, balance evidence and package identity are maintained
+  only in [release status](release-status.md).
+- Still open: physical two-computer acceptance; broader human usability and
+  long-term strategy viability and existing bank-control ending pace. A compact
+  UI and green tests do not close the
+  remaining approved content inventory below.
+
+### Prior checkpoint66 evidence · historical, not the current candidate
 
 **Canonical UI repair integrated:** the normal portable is now`ac575394` with
 unchanged engine`b5e43119`. Supported older service-agreement campaigns no longer

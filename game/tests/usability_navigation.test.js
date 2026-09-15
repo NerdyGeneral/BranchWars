@@ -57,6 +57,7 @@ const current=h.c.workspaceTab;key(h.groups[0],'ArrowLeft');assert.equal(h.group
 h.groups[3].events.click[0]();assert.equal(h.c.workspaceTab,'strategy');assert.equal(prevented,4);
 assert.equal(h.mounts['.game-layout'].scrolls.at(-1).behavior,'auto','reduced motion honored');
 assert.equal(h.mounts['.game-layout'].style.scrollMarginTop,'120px','content clears sticky navigation');
+const core=harness();assert(core.mounts['#workspaceGroups'].hidden);assert.deepEqual(core.shown(),['overview','markets','operations','strategy','competition','intelligence']);
 const callbacks=[];h.c.requestAnimationFrame=fn=>callbacks.push(fn);h.select('operate');h.go('overview');
 const operations=h.panels.find(x=>x.dataset.workspace==='operations'),scrollCount=operations.scrolls.length;
 callbacks.forEach(fn=>fn());assert.equal(operations.scrolls.length,scrollCount,'delayed group scroll cannot drag a later selection back');
@@ -66,7 +67,7 @@ const optional=Object.keys(all);
 for(let bits=0;bits<32;bits++){
  const features=Object.fromEntries(optional.filter((_,i)=>bits&(1<<i)).map(x=>[x,{}])),x=harness(features);
  for(const group of ['bank','customers','operate','grow']){
-  x.select(group);assert(x.shown().length>=1&&x.shown().length<=3);
+  x.select(group);assert(x.shown().length>=1&&x.shown().length<=(Object.keys(features).length===0?6:3));
   for(const [tab,feature]of Object.entries({credit:'creditPerformance',group:'financialGroup',customers:'householdBook',products:'productPrograms',workforce:'workforce'}))if(!features[feature])assert(!x.shown().includes(tab));
  }
  x.go('credit');assert.equal(x.c.workspaceTab,features.creditPerformance?'credit':'overview','unsupported deep link falls back safely');

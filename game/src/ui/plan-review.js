@@ -37,7 +37,7 @@ function monthlyPlanReview(v,plan=draft){
  }
  const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
  if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
- if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+Math.max(1,Math.round(row.planned.shortfall))+' quarter-work units uncovered'+(Math.abs(row.planned.shortfall-Math.round(row.planned.shortfall))>=.05?' (exactly '+Number(row.planned.shortfall.toFixed(2))+')':'')).join(' · ')+'. Four units are one employee-month of work; this is delivery capacity, not spare headcount.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview'});}
+ if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+(Math.ceil(row.planned.shortfall)/4)+' employee-months of work uncovered').join(' · ')+'. These are work allocations, not additional hires. Review where existing employee time or paid vendors can cover the shortfall.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview',functionId:(uncovered[0].functionId||({technology:'technology',risk:'risk',treasury:'treasury',people:'people',creditAdministration:'credit',commercialRelationships:'relationships'}[uncovered[0].id]))});}
 
  // A market closes after a run of cycles below 12% share, and the last cycle of
  // that run is the one worth interrupting the plan for.
@@ -80,6 +80,9 @@ function monthlyPlanReview(v,plan=draft){
  return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
 }
 function navigatePlanReview(item){
+ if(typeof subjectRoute==='function')item=subjectRoute(item,currentView());
+ if(item.customerDesk&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.customers=item.customerDesk;if(['relationships','onboarding'].includes(productDeskView))productDeskView='development';}
+ if(item.productSubject&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.products=item.productSubject;}
  setWorkspaceTab(item.tab);
  if(item.premisesOffice)inspectLifecycleOffice(item.premisesOffice);
  if(item.serviceId)inspectServiceAgreement(currentView(),item.serviceId);
@@ -100,15 +103,16 @@ function renderMonthlyPlanReview(v,review){
  // Required work remains visible in the summary and disabled Ready explanation.
  // Redrawing a different desk must not reopen a large review over that workspace.
  // Preserve the player's explicit disclosure state instead of fighting it.
- if(summary)summary.textContent='Review this month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
- const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Go to '+esc(item.tab)+'</button></li>').join('');
+ if(summary)summary.textContent='This month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
+ const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Review '+esc(item.tab)+'</button></li>').join('');
  mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
   (locked?'<p class="small">Inspection is available. Orders cannot change while locked; use Recall when available.</p>':review.blockers.length?'<ul class="plan-review-list">'+list(review.blockers,'is-blocker')+'</ul>':'<p class="small">No listed submission blockers. Headcount allocation is separate from service coverage; check warnings before locking.</p>')+
-  (!locked&&review.blockers.length?'':review.warnings.length?'<details><summary>'+review.warnings.length+' planning warning'+(review.warnings.length===1?'':'s')+' · review tradeoffs</summary><ul class="plan-review-list">'+list(review.warnings,'is-warning')+'</ul></details>':'')+
+  (review.warnings.length?'<ul class="plan-review-list">'+list(review.warnings,'is-warning')+'</ul>':'')+
   (!locked&&review.blockers.length?'':'<details><summary>Optional opportunities · no action required</summary><p class="small">Hiring, research, new projects, relationship pursuits and special competitive actions are optional. Existing recurring commitments remain active until you change them. A quiet month is a valid choice.</p></details>')+'<div id="monthlyChanges"></div>';
  renderMonthlyChanges(v);
+ reconcileMonthlyEditor(v,review);
  const campaign=game||view,owner=v.me.id,cycle=v.cycle;
- $$('[data-plan-review]').forEach(button=>button.addEventListener('click',()=>{const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;const item=items[Number(button.dataset.planReview)];if(item)navigatePlanReview(item);}));
+ $$('[data-plan-review]').forEach(button=>button.addEventListener('click',()=>{const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;const item=items[Number(button.dataset.planReview)];if(item)openMonthlyEditor(item);}));
 }
 
 // Owner-only UI baseline: never serialized into a campaign or sent to a peer.

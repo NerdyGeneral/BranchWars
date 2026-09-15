@@ -2,9 +2,400 @@
 
 **September 14, 2026 · implementation incomplete.** This page owns artifact identity, known issues and release gates. The [implementation ledger](v3-usability.md) owns the full completed/remaining checklist. Detailed prior test narratives are in the [release archive](archive/release-history-2026-09-13.md).
 
+Detailed local diagnostics and raw campaign dumps are preserved but not bundled
+with the publication. Paths marked **local evidence** identify those retained
+files, not downloadable GitHub artifacts; published results and limitations are
+summarized here and in the V4 package verification.
+
 ## Which version am I looking at?
 
-### Current integrated repair: September14, after the frozen run
+### V4 rc3 publication candidate: checkpoint68b subject ownership and persistent rivalry
+
+The user authorized GitHub V4 publication after the local68b handoff. The target
+is `release/v4-playtest`, tag `v4.0.0-rc3`, not main. The updated V4 ZIP and
+`releases/v4-rc3` contain the corrected build; `releases/v4` remains the frozen
+rc2 compatibility reference. [Publication notes](../../releases/v4-playtest-notes.md)
+and [package verification](../../releases/v4-verification.json) distinguish this
+playtest from release acceptance. Portable SHA256
+`a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf`;
+engine SHA256 `6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33`.
+202 source inputs; Core8.19 unchanged, new Expanded9.33 explicit
+`bankRivalryVersion:1`. Earlier saves and rematches keep their old rules.
+
+- People now owns allocation; Customers owns commercial relationships, offers
+  and applications; Products owns catalogue, pricing/policies, advertising and
+  statements. Markets keeps contextual construction, conversion and staffing.
+  The same live controls and shared draft move, not copies. Core restores its
+  simpler layout. Warning/help/market/client shortcuts open the correct editor.
+- New Expanded campaigns no longer stop through automatic score or market
+  control. Receivership and funding-covenant resolution remain; company
+  acquisitions retain funded transactions.
+  An obsolete bank-takeover defense is blocked with an explanation. Matching
+  `bankRivalrySupported:1` is required on both peers. No additional checkbox.
+- No interest rate, payroll, reserve threshold, growth quota or subsidy tuning.
+  The narrow strategy evidence below does not justify calling the economy balanced.
+
+**Verification:** the UI-only tranche passed a clean
+29-command scoped gate (local evidence: `game/reports/baselines/stabilization68-scoped-2026-09-14T23-28-27-912Z-e5b5b4b1-284b-447d-9b7d-d6ffd486e016.json`)
+with unchanged inputs on portable1cb80c01 / enginebb2b38b8, before the new ending
+boundary. That receipt is preserved, not relabelled as the final candidate's full
+gate. New ending checks reproduce the old auction, preserve old9.32 seeded
+creation/AI/state/RNG/private views, reject inconsistent markers, and cover
+receivership, half-ready recovery and rematch. All three simulated transports
+refuse old peers and pass new-rule start, two months, checkpoint reload, private
+records and delayed-frame protection. Current setup/lobby tests also pass.
+
+The full Windows gate started at23:50:09 UTC was deliberately interrupted;
+journal stem
+`reports/baselines/gate-2026-09-14T23-50-09-522Z-f91ae504-b739-4f7b-b28a-fca39c60ae66`.
+It has no terminal success receipt and is not a clean pass. The new rivalry
+validator incorrectly rejected the valid `funding_resolution` ending; it now
+admits that alongside receivership. The added test borrows against securities,
+settles three actual covenant breaches, then validates the ended save, private
+views and rematch. This is a funded stress fixture, not a player-policy balance
+trial. A fresh full gate from the beginning is required on the corrected build.
+
+That fresh full run started00:35:45 UTC on September15 (September14 local),
+journal stem
+`reports/baselines/gate-2026-09-15T00-35-45-820Z-55faf473-26d7-410d-adba-8388d487419f`.
+Source/test/reference inputs are frozen during the run. Its terminal outcome is
+pending; neither a running check nor the earlier interrupted run is a pass.
+
+**Actual browser sample:** portablebbe49017 (before the terminal-validation-only
+correction) opened the existing9.32 test save and
+a fresh Expanded campaign through normal setup. The confirmation kept five
+benefit bullets, not a dependency wall. People displayed live allocation and
+shared coverage; Products had one outer desk row and its pricing shortcut opened
+the selected product's real Pricing editor. Customers' application/relationship
+controls and the Markets-to-Foundry-Works inspector were exercised on the same
+UI tranche. No final console errors were observed. These are sampled workflows,
+not every control or subjective player acceptance.
+
+| Browser candidate sample | 1280×720 | 760×800 |
+| --- | ---: | ---: |
+| Document scroll width |1265px|745px|
+| Command navigation height |74.61px|125.08px|
+| Visible native selects, bank policies |2|2|
+
+No document horizontal overflow in those samples. People overview and the
+individual product Pricing editor had zero visible native selects; this is not
+a claim that the whole game has no dropdowns. The monthly review can be collapsed
+without losing draft instructions. Real two-computer acceptance remains open.
+
+#### Controlled lending/expansion diagnosis
+
+Balanced (local evidence: `game/output/stabilization68-balanced/report.json`) and
+Rate Shock (local evidence: `game/output/stabilization68-rate/report.json`) cover143 actual
+campaign-months, not144: the original Balanced lending policy ended at23.
+Each compares the old paid policy against two-Operations staffing, with and
+without new paid hiring/construction. Both use existing finite workers and
+funded service; two Operations is not guaranteed adequate risk coverage. Every
+submitted plan, ledger and operating-income bridge validated; zero proposal
+rejections. The captured trial portable is e5baa556, with the same bb2b38b8
+economic engine as checkpoint67, not the later9.33 UI/ending build.
+
+| Scenario / policy | Months | Outcome | Closing bank equity | Cumulative operating profit | Last monthly operating profit |
+| --- | ---: | --- | ---: | ---: | ---: |
+| Balanced / prior lending |23|Receivership|−$349,876|−$1,962,384|−$142,531|
+| Balanced / controlled staffing, no new expansion |24|Ongoing|$2,738,125|$75,683|$33,398|
+| Balanced / controlled staffing, paid expansion |24|Ongoing|$1,041,346|−$1,744,346|−$5,849|
+| Rate Shock / prior lending |24|Ongoing|$1,084,669|−$1,072,976|−$114,826|
+| Rate Shock / controlled staffing, no new expansion |24|Ongoing|$1,574,285|$207,299|−$66,988|
+| Rate Shock / controlled staffing, paid expansion |24|Ongoing|$1,058,971|−$866,616|−$2,133|
+
+Interpretation: the month23 failure does not establish that conventional lending
+is impossible. Staffing and construction timing matter, and upfront affordability
+does not establish payback. Positive final equity is not operating profitability:
+events, awards and other movements also affect retained earnings. The no-expansion
+Balanced loan book still shrank from$9.5M to$8.68M. Rate Shock endings were strained,
+including zero cash in the no-expansion arm. These small samples do not establish
+120/480-month viability, optimal play or enjoyable comeback opportunities.
+
+A fresh 120-month protected-commercial trial under9.33 (local evidence: `game/output/income-banking-rivalry68-commercial/report.json`)
+completed without an execution error, rejected strategy proposal or ending.
+It starts at month1; no ended save was revived. Both banks' complete recorded
+bank snapshots (including stats, reports, plans and offices) match the prior
+checkpoint67 commercial trial exactly for its82 months. Only the new campaign
+continues afterward. This isolates the ending boundary rather than retuning
+economic results to obtain a longer game. Its captured portable2f166bc1 uses
+enginee67afb52. The current candidate subsequently corrects terminal validation
+of funding failures (not encountered in this trial) and changes the Operations
+caption. Do not relabel this as a120-month execution of the corrected engine.
+The correction exactly restores both the trial's opening and120-month closing
+snapshots, including both owner-private views; that is a compatibility check,
+not another120-month simulation.
+
+| New rivalry at month120 | Deliberate commercial bank | Ordinary AI rival |
+| --- | ---: | ---: |
+| Bank equity |$8,818,088|$2,296,132|
+| Deposits |$61,424,934|$22,316,168|
+| Loans |$14,371,618|$2,210,968|
+| Employees |26|3|
+| Last monthly operating profit |$133,718|$196,132|
+| Cumulative bank operating profit |$17,861,023|$11,279,392|
+
+The commercial bank owns73.35% of these two banks' combined deposits, not of the
+whole outside economy. Its rival remains profitable with a much smaller lending
+operation. This supports sustained play, not equally strong strategies, enjoyable
+comebacks or480-month acceptance. Retained earnings, distributions and other
+non-operating movements remain distinct from the operating-profit totals.
+
+The unchanged-rule conventional-lending extension (local evidence: `game/output/stabilization68-balanced120/report.json`)
+has completed:175 actual campaign-months across its three arms (23+120+32), not
+360. It deliberately retains9.32 to compare the same policies, not to upgrade
+an existing save or attribute economic changes to the new ending rule. All71
+months in the earlier Balanced comparison reproduce exactly before extension.
+There were zero execution failures or rejected policy proposals. All three
+closing snapshots restore exactly, with valid ledgers and both owner-private
+views, on the corrected engine. Captured portablebbe49017 / enginee67afb52;
+driver89bed811. This is not175 additional unique months beyond the prior trial.
+
+| Extended Balanced policy | Months | Outcome | Closing equity | Closing loans | Cumulative operating profit | Last monthly operating profit |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| Prior lending |23|Receivership|−$349,876|$3,656,962|−$1,962,384|−$142,531|
+| Controlled staffing, no new expansion |120|Ongoing|$3,685,394|$9,515,964|$10,478,126|$72,980|
+| Controlled staffing, paid expansion |32|Receivership|−$20,555|$6,705,324|−$2,087,806|−$71,716|
+
+At120, the cautious bank has$45,017,943 deposits,$26,003,873 cash and9 employees;
+its loan book is roughly its original$9.5M, not sustained lending-led growth.
+Its monthly commercial service income is$234,499, versus$53,749 loan income and
+$68,664 securities interest. The ordinary rival also remains profitable, but
+holds only$2,588,770 loans. The result supports a viable mixed bank in this single
+Balanced seed, not pure-lending profitability, optimal expansion or comeback
+balance across scenarios. Rate Shock still has only the shorter24-month evidence.
+
+The extended run has already overturned the24-month survival impression: the
+paid-expansion arm fails through receivership at32. At the shared month23,
+controlled expansion had$8.65M loans versus$7.78M without expansion, but monthly
+operating expense was$204,651 versus$168,205. Payroll was$132,000 versus$96,000;
+office upkeep$44,000 versus$26,400. Other costs differed too, so these are not
+isolated unit-cost estimates. The cautious bank's profit also included commercial
+service and securities income; survival does not establish a self-supporting
+pure-lending strategy. The player guide now explains cash/capital, recurring
+costs and loan-book replacement as separate expansion checks.
+
+Actual browser follow-up completed a normal new Expanded month, dismissed the
+result, reloaded and continued at cycle2 with no console errors. The temporary
+test tab and local server were closed; the user's own tabs/saves were untouched.
+
+**Superseded local package:** `BranchWars-V4-stabilization68-20260914` and its ZIP
+are preserved, but should not be used: their bbe49017 portable has the funding
+terminal-validation defect above. The user was told to hold off. Deliver the
+correction under a separately named68b package; do not overwrite that shared ZIP.
+Physical two-computer acceptance remains open; the user has confirmed that two
+computers will be available, which is not a completed test.
+
+**Corrected local playtest:** `BranchWars-V4-stabilization68b-20260914` and its
+matching ZIP contain portablea3c293cf. The six ZIP entries match the packaged
+bytes and content manifest. ZIP SHA256
+`c9850733604cbecf5a6167884f53501186b92976d9760c7d81841463692a032c`.
+No private saves, credentials, reports or development sources are included.
+Both computers must use68b for this acceptance session. GitHub-room, LAN and
+direct-link simulated pairs were rerun on this corrected build and pass
+old-peer refusal, two months, half-ready recovery, private records and delayed
+frames. The complete Windows gate is still separate and pending.
+
+#### Two-computer GitHub-room acceptance for68b
+
+Use a fresh test room and keep the previous real campaign exported and separate.
+Each person uses their own repository credential; never include a token in a
+bug report. Both use the68b package above, not a mixture of published V4 and this
+local candidate.
+
+1. Configure distinct names/colors in the lobby. Apply a host settings change
+   after readiness, check readiness clears and the guest cannot edit host rules,
+   then confirm both seats before starting Expanded.
+2. Complete two months. Check names/colors remain consistent on both screens,
+   each person controls their own bank, and both reach the same month. Different
+   private bank information is expected; the rival must not reveal hidden plans.
+3. Host exports a backup. In the next planning month, lock only the host's plan,
+   disconnect/reopen the guest and use the existing room's recovery flow. The
+   locked plan must not resolve twice or become the other player's plan.
+4. Finish that month, export again, then reload the host and resume the same
+   room. Check the guest reconnects to the same bank and the completed month is
+   neither replayed nor lost. Resolve one more month after recovery.
+5. Record build name, transport, last agreed month and the exact failing step,
+   or report all steps passed. Keep exports private. One successful session is
+   sampled acceptance, not a guarantee against every network failure.
+
+Previous runtime packages, their ZIP and frozen releases remain untouched.
+No commit, push, tag or release was made in this checkpoint.
+
+### Preserved checkpoint67 workflow stabilization
+
+September 14 local playtest, not published or committed. Portable SHA256
+`b2d142794189932a0355d881f55d7e6b7ffb164203393b800921c16be76cc63b`;
+engine SHA256 `bb2b38b8ebb8fa10eb73f5cf2f64ffc834c67a170e2864165029a8fd86bc7d79`.
+Core8.19 / Expanded9.32 remain fixed; 200 source inputs. Frozen rc2 and all
+historical references remain unchanged.
+
+- New human Expanded starts and rematches explicitly reserve finite starting
+  credit and commercial work. Existing saves and legacy raw creation/rematch
+  defaults remain unchanged. Zero production remains a valid manual choice.
+- This month opens the same executive, staffing and department controls inline,
+  without a second draft. Work warnings lead to the relevant task. People shows
+  the shared employee-time reconciliation; forecasts show the consequences of
+  credit/relationship coverage. Core uses a flat six-workspace navigation row.
+- Loan movement separates ordinary originations, named advances, repayments,
+  collections and losses, with actual/forecast/unavailable labels. It does not
+  claim to be the whole-month bridge including later asset trades and awards.
+- Recovery projections no longer subtract already-included department,
+  leadership, maintenance and facility-work costs twice in current Expanded.
+  Actual accounting settlement and reserve thresholds were not relaxed. AI
+  submissions receive applicable human-plan validation; a failure restores the
+  human lock and RNG. Reserve quoting is memoized only within one fixed context.
+- The historical payable test uses byte-verified pinned sources rather than
+  requiring an unavailable Git object in a source archive. No goldens changed.
+
+**Verification complete for this local playtest, across recorded runs:** nine
+dedicated workflow tests pass. The initial
+20:21:42 full run found an isolated renderer test missing campaign-context globals.
+Its failed/incomplete journals remain under
+`reports/baselines/gate-2026-09-14T20-21-42-435Z-b0d95fd6-9161-4025-a3bc-e2a92602dc98`.
+The fixture now supplies that context; no gameplay bytes or assertions changed.
+The engine suite then passed, including 48 legacy long campaigns. A fresh full
+Windows gate began at 20:42:58 UTC, journal stem
+`reports/baselines/gate-2026-09-14T20-42-58-436Z-3b0f515a-f305-4e30-9181-572d5ef1df4a`.
+It is not a clean terminal pass. The sweep finished at 21:44:17 UTC with 208/211
+checks passing initially. Its three failures were: an isolated department UI
+harness missing the new module; the prior integration-engine review pin; and a
+historical lifecycle reference incorrectly following the mutable V4 release
+folder. The harness was repaired, the review pin advanced only after independent
+replay evidence, and the lifecycle test pointed at the exact preserved
+checkpoint65 bytes without changing its checksum or expected behavior.
+
+All three now pass in the clean 11-command repair-validation receipt. The sweep's
+before/after inventory confirms that only those three test files changed; game,
+engine, launcher and historical reference bytes did not change during the run.
+Repeated seeded balance output matched exactly, and Windows LAN checks passed
+health, room creation, vacant-seat authentication, malformed-message rejection,
+join, relay and retry deduplication. The original full gate remains failed and
+incomplete at 3/37 top-level commands; it was not retrospectively relabelled.
+
+The verification index (local evidence: `game/output/v4-workflow-verification.json`) reconciles all
+211 sweep checks with their passing reruns and all 37 top-level command groups
+with the independently completed receipts below. It verifies the final input
+inventory and package hash. **This is complete command coverage across runs,
+not a pristine all-in-one full-gate pass**, subjective balance approval or a
+physical two-computer certification. A clean standalone gate remains desirable
+before a later production release; no publication is authorized here.
+
+| Evidence | Terminal result |
+| --- | --- |
+| Broad sweep (local evidence: `game/reports/baselines/N-00-2026-09-14T20-42-58-955Z.json`) | 208/211 initially; three repaired test issues retained as failures |
+| Final repair validation (local evidence: `game/reports/baselines/workflow67-repair-validation-2026-09-14T21-32-21-782Z-803f6b0c-5f03-4e13-81f3-8289d654eae2.json`) | 11/11 commands; unchanged inputs; includes all three failed checks, the engine/48 long campaigns, nine workflow regressions, payable fixtures, architecture and documentation |
+| Release-balance and compatibility supplement (local evidence: `game/reports/baselines/workflow67-final-supplement-2026-09-14T21-18-35-321Z-a5115795-2781-4876-acd0-a4f96add6f4e.json`) | 8/8 commands; unchanged inputs |
+| Remaining release checks (local evidence: `game/reports/baselines/gate-2026-09-14T21-18-59-363Z-d4ca3702-8175-449b-a980-6110731ba09d.json`) | 30/30 commands; unchanged inputs; explicitly a partial run |
+
+The lifecycle rerun includes 1,387 creation and 41 migration comparisons. Both
+final strategy trials have also completed, with results and limits below.
+
+The final workflow audit (local evidence: `game/output/v4-workflow-final67/report.json`) preserves
+four exact prior/current Core/Expanded seeded comparisons across three months
+each, including plans, world and RNG. Median time for two AI plans across three
+repeats changed from 1,960 to 1,762 ms at opening, and 13,586 to 12,024 ms at
+month 121. These shared-machine measurements suggest about 10–11% improvement;
+they do not establish instant mature-game response. Sampled action removal was
+in recovery, including its operating-loss stress test, not a new spending floor.
+
+**Actual browser checks:** fresh Core and Expanded human games, inline executive
+decisions, credit zero-production preview/adopt/restore, monthly resolution,
+Continue after reload, and a preserved month-121 import were exercised. Mature
+People, selected-office staffing and a signed commercial-client inspector were
+inspected. Layouts were checked at 1280×720 and 760×800; the inspected narrow
+pages had no document horizontal overflow. Keyboard office quantities and reset
+worked without leaving Markets. No final browser console errors were observed.
+This is sampled workflow coverage, not every panel/viewport or human enjoyment
+acceptance. No real two-computer session was run.
+
+A further actual hotseat workflow imported the month-121 snapshot, staged a
+Full-Service Financial Center in Industrial Corridor and a Commercial Banking
+Office in rival-held County Seat, sealed both players' plans, and resolved two
+normal months. Both projects completed in their respective destinations at
+month 122 close. The new commercial office received the normal establishment
+window, not free share. Its extra 0.25 Operations employee-month was initially
+rejected because the shared pool was full. Removing 0.25 from the existing
+Industrial Corridor ATM and assigning it to County Seat produced an eligible
+review and a staged lifecycle plan, all within Markets. This directly exercised
+finite staffing, retained multi-location orders, hotseat handoff and the existing
+office inspector. No extra people/cash were injected and no console errors were
+observed. The final staffing transfer was staged, not subsequently settled in
+this browser sample; automated lifecycle tests cover settlement.
+
+**Local package:** `BranchWars-V4-workflow-playtest-20260914` alongside the source
+repository contains the verified six-file runtime allowlist with the portable
+hash above. It excludes private saves, tokens and development reports. Publication
+requires a subsequent request. The verification index records terminal receipts
+and the matching ZIP/package identity. No commit, push, tag or release was made.
+
+ZIP SHA256: `cfb7744be5543ee2686bd21fbc6ce861121c273c5f15a1e18256f6a4d55b2b97`.
+The ZIP was extracted into a separate check directory and all six allowlisted
+files verified again. The payable fixture also passed all 13 checks in a separate
+source-only directory with no Git database. An initial incomplete copy lacked
+the four current accounting sources; supplying those normal test inputs fixed
+the test setup, not the accounting implementation.
+
+#### Comparable strategy evidence, not a claim of optimal play
+
+The final Balanced trial (local evidence: `game/output/income-banking-workflow67-final-balanced/report.json`)
+and Rate Shock trial (local evidence: `game/output/income-banking-workflow67-final-rate/report.json`)
+use the same final engine, different scenario/seed pairs, and validate each plan
+and settled accounting bridge. Intentional lending/commercial policies preserve
+existing work, defer new research/discretionary projects, retain at least two
+Operations employees (or the ordinary AI's greater allocation), distribute the
+remainder toward Lending/Business respectively, and use the same paid hiring
+and commercial-office rules with a $600K cash plus six-month incremental-payroll
+buffer. Protected service changes must be legal and improve the quoted economics.
+These are bounded policies, not optimized strategies or an isolated test of only
+one department. Recovery can make a labelled lending bank Operations-heavy.
+
+All arms can be compared through month 23, when the Balanced lending arm entered
+receivership. Figures below concern the controlled bank, not the rival. Cumulative
+operating profit is not retained earnings or the change in cash.
+
+| Scenario / policy | Month-23 loans | Month-23 equity | Operating profit, months 1–23 | Staff: Retail / Business / Lending / Operations |
+| --- | ---: | ---: | ---: | --- |
+| Balanced / ordinary | $5,441,242 | $1,856,324 | $467,989 | 4 / 1 / 2 / 2 |
+| Balanced / lending | $3,656,962 | −$349,876 | −$1,962,384 | 1 / 1 / 1 / 7 |
+| Balanced / commercial | $4,294,669 | $1,473,717 | −$901,432 | 1 / 4 / 1 / 5 |
+| Rate Shock / ordinary | $3,025,213 | $1,234,915 | −$224,742 | 4 / 2 / 1 / 2 |
+| Rate Shock / lending | $7,979,172 | $1,213,715 | −$958,150 | 1 / 1 / 3 / 4 |
+| Rate Shock / commercial | $4,498,224 | $1,323,988 | −$937,766 | 1 / 1 / 1 / 8 |
+
+The Rate Shock arms all survived month 24, but the lending bank still lost
+$114,826 operating profit that month despite its $8.00M loan book. More lending
+does not automatically pay for payroll, servicing, premises, funding and losses.
+The Balanced lending failure is a real weak-policy/viability finding, not a
+validator crash; it must not be counted as completing 120 months. No scores,
+loan yields, company catalog, capital safeguards or subsidies were tuned to
+improve these results. Broader viable strategy coverage remains unfinished.
+
+Final Balanced outcomes: ordinary AI completed 120 months with $2,226,399 bank
+equity, $2,712,966 loans, five employees and $162,068 last-month operating profit.
+The lending policy lost in receivership at month 23. The commercial policy won
+at month 82 with $7,184,226 bank equity, $9,752,170 loans, 15 employees and
+$282,990 last-month operating profit. This is 225 actual Balanced campaign-months
+plus 72 Rate Shock campaign-months, not six completed 120-month campaigns. Every
+settled month passed the trial's plan, accounting and ledger checks. Both trial
+reports have `running:false`, no execution failures and closing snapshot hashes.
+The engine's consolidated closing report (not bank plus parent equity added
+together) gives controlled group equity of $2,803,299 for ordinary, −$349,876
+for lending and $7,339,531 for commercial. All three consolidation residuals
+are zero; reading these reports preserved the saved states. Parent investment
+in the bank is eliminated, so it is not an extra asset counted twice.
+
+**Endgame pacing remains a design limitation:** the commercial terminal record
+is `buyout`, presented as BANK CONTROL VICTORY, with eight stalemate months and
+two months of buyout pressure. The rival still had positive equity ($2,066,843)
+and operating profit ($92,258). This is the existing automatic control-result
+rule, not a newly funded purchase or completed financial merger. Both final
+books remain separate, with no free asset/customer award. Thus open-ended here
+means no fixed turn limit, not guaranteed perpetual rivalry. Changing that
+approved ending behavior is outside this focused workflow pass and deserves an
+explicit game-direction review; do not count an early victory as 120-month
+survival or quietly revive it for a prettier benchmark.
+
+### Published rc2 / prior integrated repair: September 14
 
 The normal portable now has SHA256
 `ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92`.
@@ -1248,7 +1639,7 @@ set at that observation. These diagnostics do not justify a hard revenue-mix cap
 | Frozen manual PDF | `b577325f9c4fd34a2e73a3feda41acd47dc4e0ecd7b2b3c3dfec568cb5b9e1ed` |
 | Frozen packaged HTML | `4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107` |
 | Local playable HTML / checkpoint66 source | `e056eeab470d3f41e68ff12e1a93d28a085e7fa0b0547f60d217043dae6cc1f1` |
-| Frozen V4 packaged HTML | `1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00` |
+| Historical V4 rc1 packaged HTML | `1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00` |
 | Checkpoint51 Expanded artifact | `c22b610643d5b67174d0c0be0f9054e3180d6c031257435e86a726f5a5ed0bc7` |
 | Checkpoint53 earnings repair | `8bf31b8f2725074c06b7dbbc1b1ccae8372f5ec09cea6a17292e47aa2dc7a329` |
 | Checkpoint54 Credit workspace | `4a3de860a523d8754d0b2a5b2647c27f042ed375f806d1544bbeb71889ee90de` |
@@ -1295,7 +1686,7 @@ The [checkpoint62 initial report](../output/master-checkpoint62-verification.jso
 | Shared-premises final acceptance | New Expanded9.28 retains same-rule AI, peer handling and contextual office controls. Paid two-office closure/replay and qualified staff-loss tests pass; whole-campaign viability, final combined reconciliation and real-browser layout acceptance remain open. |
 | Long-run economic concerns | Explain and address cumulative losses, shrinking loans and ordinary-start diversification viability; retain legitimate dominance and no free catch-up. |
 | Remaining approved management/product/customer/research interactions | Finish the [master checklist](v3-usability.md#master-requirement-inventory-and-finish-gates); do not replace working mechanics with placeholders. |
-| Browser/UI acceptance | Inspect early and mature workflows at laptop and larger sizes. Prior local review-artifact URL access was denied; current layout acceptance remains unverified. |
+| Browser/UI acceptance | Checkpoint 67 sampled early Core/Expanded, month-121 People/office/client workflows and 1280×720/760×800 layouts in the actual browser. Wider panel/device coverage and subjective human acceptance remain open; historical URL denial is not the current result. |
 | Exact final integration / packaging | Run the final Windows, lifecycle, privacy, multiplayer, conservation, performance and120/480-month strategy gates on the delivered bytes. |
 | Final manual and local release package | Complete help/manual, render and visually inspect the PDF, package with matching reports and known issues. |
 

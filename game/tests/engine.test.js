@@ -1444,7 +1444,7 @@ const ids = [...documentMarkup.matchAll(/\bid="([^"]+)"/g)].map((item) => item[1
 assert.equal(new Set(ids).size, ids.length, 'HTML ids must be unique');
 // Execute the dynamic renderer with DOM sinks, rather than exempting its IDs.
 let managementMarkup='';
-const managementContext={E,managementNotes:[],draft:{management:E.defaultManagement(),investments:{}},
+const managementContext={E,game:null,view:null,gh:{active:false,paused:false},managementNotes:[],draft:{management:E.defaultManagement(),investments:{}},
  esc:String,money:n=>String(n),renderProjects:()=>{},renderReady:()=>{},
  $:selector=>selector==='#institutionControls'?null:selector==='#strategyTree'?{insertAdjacentHTML:(_where,markup)=>{managementMarkup=markup}}:{addEventListener:()=>{}},
  $$:()=>[]};

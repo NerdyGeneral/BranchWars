@@ -1,16 +1,17 @@
 {
   "status": "passed",
-  "scope": "Exact extracted package smoke check; not full release certification",
+  "scope": "Exact extracted package smoke; not a full regression or real multiplayer acceptance",
+  "release": "v4.0.0-rc3",
+  "checkpoint": "68b",
   "package": "branch-wars-v4.zip",
-  "release": "v4.0.0-rc2",
-  "sha256": "e19948c562b1ca12d2d8c3abcb456d8e031cb1ff60e61fb5f42439cf3867bf00",
-  "htmlSha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92",
-  "engineSha256": "b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642",
+  "sha256": "c9850733604cbecf5a6167884f53501186b92976d9760c7d81841463692a032c",
+  "htmlSha256": "a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf",
+  "engineSha256": "6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33",
   "files": [
     {
       "name": "BRANCH_WARS.html",
-      "bytes": 2388612,
-      "sha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92"
+      "bytes": 2417073,
+      "sha256": "a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf"
     },
     {
       "name": "BRANCH_WARS_LAN_SERVER.ps1",
@@ -36,8 +37,24 @@
   "extractedInventory": true,
   "cleanStagedSourceChecks": {
     "passed": true,
-    "scope": "Git index exported to a separate directory, without local untracked diagnostics",
-    "commands": ["build freshness", "documentation links", "architecture", "reference line endings", "current edition portable compatibility (6 tests)", "funding movement UI (3 tests)", "legacy service UI (4 tests)", "release packaging regression"]
+    "scope": "Separately extracted Git index, without untracked local diagnostics; not a full regression",
+    "sourceTreeAtVerification": "e21198222d096ee135c2e78ee6135c73580f13fa",
+    "commandsPassed": 13,
+    "commands": [
+      "tools/build_game.js --check",
+      "tools/build_reference.js --check",
+      "tests/build.test.js",
+      "tests/docs.test.js",
+      "tests/architecture.test.js",
+      "tests/reference-eol.test.js",
+      "tests/accounting_payables.test.js",
+      "tests/expanded_edition.test.js",
+      "tests/usability_engine_boundary.test.js",
+      "tests/workspace_ownership.test.js --portable",
+      "tests/v4_workflow_stabilization.test.js --portable",
+      "tests/bank_rivalry.test.js",
+      "tests/package_release.test.js"
+    ]
   },
   "checks": [
     {
@@ -45,21 +62,29 @@
       "version": "8.19",
       "creation": true,
       "halfReadyRecovery": true,
-      "resolvedMonth": true,
-      "idempotentRecovery": true
+      "completedMonths": 2,
+      "idempotentRecovery": true,
+      "ownerViews": true
     },
     {
       "edition": "expanded",
-      "version": "9.32",
+      "version": "9.33",
       "creation": true,
       "halfReadyRecovery": true,
-      "resolvedMonth": true,
-      "idempotentRecovery": true
+      "completedMonths": 2,
+      "idempotentRecovery": true,
+      "ownerViews": true
     }
   ],
+  "fullRegression": {
+    "status": "pending",
+    "journal": "gate-2026-09-15T00-35-45-820Z-55faf473-26d7-410d-adba-8388d487419f",
+    "previousRun": "Interrupted for funding-resolution validation repair; not a pass"
+  },
   "limitations": [
-    "Final complete Windows gate not certified.",
-    "Conventional lending balance remains open.",
-    "No visual or physical two-computer acceptance claimed."
+    "Conventional lending and expansion balance remains open.",
+    "No complete full-regression result certified by this receipt.",
+    "No physical two-computer acceptance.",
+    "Browser sampling was on the identical UI before the terminal-validation-only correction."
   ]
 }

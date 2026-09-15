@@ -42,7 +42,7 @@ test('Project and office callbacks refuse replaced connections, paused repositor
 });
 
 test('Required review remains discoverable without reopening itself over every workspace',()=>{
- const h=fresh();h.run("$('#monthlyReviewDetails').open=false;renderMonthlyPlanReview(currentView(),monthlyPlanReview(currentView()))");
+ const h=fresh();h.run("renderMonthlyPlanReview(currentView(),monthlyPlanReview(currentView()));$('#monthlyReviewDetails').open=false;renderMonthlyPlanReview(currentView(),monthlyPlanReview(currentView()))");
  assert.equal(h.elements.get('#monthlyReviewDetails').open,false);
  assert.match(h.elements.get('#monthlyReviewSummary').textContent,/1 required/);assert.equal(h.run('monthlyPlanReview(currentView()).blockers.length'),1);
  h.run("$('#monthlyReviewDetails').open=true;renderMonthlyPlanReview(currentView(),monthlyPlanReview(currentView()))");assert.equal(h.elements.get('#monthlyReviewDetails').open,true,'Explicit player inspection stays open');

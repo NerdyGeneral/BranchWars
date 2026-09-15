@@ -74,7 +74,7 @@ function bindProductCatalogue(v,token){
  bind('confirmProductRetirement',()=>{const pending=productWorkspace.pending;if(!pending||!productContextCurrent(pending.token)){productWorkspace.pending=null;toast('The plan changed. Review retirement again.');redraw();return;}productWorkspace.pending=null;toggleProductRetirement(currentView(),pending.product);},true);
  bind('productResearchLink',()=>{const branch=E.RETAIL_DEPLOYMENTS[key]?.branch;if(branch)inspectStrategyCapability(currentView(),branch);});
  bind('productCreditLink',()=>setWorkspaceTab('credit'));
- bind('productServicesLink',()=>{setWorkspaceTab('markets');const el=$('#commercialClientWorkspace')||$('#pipeline');if(el){el.setAttribute('tabindex','-1');focusWorkspaceTarget(el);}});
+ bind('productServicesLink',()=>navigatePlanReview({tab:'markets',target:'#pipeline'}));
  bind('productFundingLink',()=>{setWorkspaceTab('operations');setOperationsDesk('funding');});
  if(productDeskView==='pricing')bindProductPricingDesk(v,token);
 }

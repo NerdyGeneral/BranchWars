@@ -32,7 +32,7 @@ test('spendable funds use the existing protected quote, never cash or future inc
 test('task alerts use individual dispatch shortfalls rather than allocation totals',()=>{
  const h=fresh(),expected=h.run('monthlyPlanReview(currentView()).functions.delivery.rows.filter(x=>x.planned.shortfall>0).length');
  assert(expected>0);assert.equal(h.run('monthlyPlanReview(currentView()).unallocated'),0);
- assert(h.run('overviewItems().some(x=>x.id===\'coverage\')'));assert(!h.run('overviewItems().some(x=>x.id===\'task-coverage\')'),'shared coverage warning is not duplicated');render(h);assert.match(h.elements.get('#attentionInbox').innerHTML,/quarter-work units uncovered/);
+ assert(h.run('overviewItems().some(x=>x.id===\'coverage\')'));assert(!h.run('overviewItems().some(x=>x.id===\'task-coverage\')'),'shared coverage warning is not duplicated');render(h);assert.doesNotMatch(h.elements.get('#attentionInbox').innerHTML,/quarter-work units uncovered/,'This month already owns the coverage warning');
 });
 test('renewals are owner-only and application requests are not counted as owned deposits',()=>{
  const h=fresh();h.run(`const {v:alertView,r:alertReview,f:alertFinance}=overviewFixture();
@@ -58,11 +58,11 @@ test('physical critical condition uses the authored threshold and ignores closed
  h.run('office.closedCycle=officeView.cycle;');assert(!h.run('bankAttentionItems(officeView,officeReview,officeFinance).some(x=>x.id===\'condition-\'+office.id)'));
 });
 test('filters and pagination retain every alert without rebuilding a business form',()=>{
- const h=fresh();h.run(`const {v:manyView,r:manyReview,f:manyFinance}=overviewFixture();manyReview.warnings=Array.from({length:26},(_,i)=>({id:'need-'+i,title:'Required '+i,text:'Review only',tab:'operations',target:'#staffGrid'}));
+ const h=fresh();h.run(`const {v:manyView,r:manyReview,f:manyFinance}=overviewFixture();manyView.serviceAgreements=Array.from({length:26},(_,i)=>({id:'need-'+i,owner:manyView.me.id,kind:'payroll',market:'downtown',due:manyView.cycle+5,misses:1}));
  bankOverviewState={owner:manyView.me.id,campaign:game,filter:'watch',page:0};renderBankOverview(manyView,manyReview);`);
  // The inbox carries real watch items besides the 26 injected here, so the
  // totals are derived rather than hardcoded; the subject is paging, not the count.
- const watchTotal=h.run("bankAttentionItems(manyView,manyReview,manyFinance).filter(x=>x.kind==='watch').length");
+ const watchTotal=h.run("bankAttentionItems(manyView,manyReview,manyFinance).filter(x=>x.kind==='watch'&&!manyReview.warnings.some(w=>w.id===x.id)).length");
  assert(watchTotal>=26,'fixture should dominate the watch list');
  assert.equal((h.elements.get('#attentionInbox').innerHTML.match(/data-attention-open=/g)||[]).length,10);
  assert.match(h.elements.get('#attentionInbox').innerHTML,new RegExp('of '+watchTotal));
@@ -86,7 +86,7 @@ test('rendered text is escaped, and overview models cannot inspect the rival',()
  const html=h.elements.get('#attentionInbox').innerHTML;assert(!html.includes('<img'));assert.match(html,/&lt;img/);
 });
 test('real filter/review callbacks navigate without staging and reject stale owners',()=>{
- const h=fresh(),sets=new Map();
+ const h=fresh(),sets=new Map();h.run('Object.values(game.players[0].facilityLifecycle.records)[0].conditionBp=1000;');
  h.c.document.querySelectorAll=selector=>{
   const attr={'[data-attention-filter]':['data-attention-filter','attentionFilter'],'[data-attention-open]':['data-attention-open','attentionOpen'],'[data-attention-page]':['data-attention-page','attentionPage']}[selector];
   if(!attr)return [];

@@ -175,7 +175,7 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
-  const created=E.createGame({...s,campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  const created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
   p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
   game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
  }catch(e){$('#lobbyError').textContent=e.message}

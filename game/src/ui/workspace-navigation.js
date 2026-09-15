@@ -42,7 +42,8 @@ function reconcileWorkspaceNavigation(v){
  if(workspaceNavigationState.owner!==v.me.id||workspaceNavigationState.campaign!==game){
   workspaceNavigationState={owner:v.me.id,campaign:game,remembered:{}};
  }
- const available=availableWorkspaces(v);
+ const available=availableWorkspaces(v),compact=available.length<=6;
+ mount.hidden=compact;
  if(!available.includes(workspaceTab)){setWorkspaceTab('overview',v);return;}
  const selected=WORKSPACE_GROUPS.find(group=>group.tabs.includes(workspaceTab));
  workspaceNavigationState.remembered[selected.id]=workspaceTab;
@@ -61,7 +62,7 @@ function reconcileWorkspaceNavigation(v){
  });
  const tabs=$$('[data-workspace-tab]');
  tabs.forEach(button=>{
-  const tab=button.dataset.workspaceTab,visible=selected.tabs.includes(tab)&&available.includes(tab),active=tab===workspaceTab;
+  const tab=button.dataset.workspaceTab,visible=(compact||selected.tabs.includes(tab))&&available.includes(tab),active=tab===workspaceTab;
   button.hidden=!visible;button.classList.toggle('hidden',!available.includes(tab));
   button.setAttribute('role','tab');button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;
   if(workspaceNavigationBound.has(button))return;

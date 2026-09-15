@@ -1,36 +1,80 @@
-# V4 Expanded playtest — v4.0.0-rc2
+# V4 Expanded playtest — v4.0.0-rc3
 
-September 14, 2026. This development playtest is **not implementation-complete or balance-certified**. Source and package are published on `release/v4-playtest`; main and V2/V3 are not overwritten. The previous `v4.0.0-rc1` tag preserves the prior V4 package.
+September 14, 2026 (local). Corrected checkpoint68b. This is a **playtest, not a
+finished or balance-certified release**. V4 lives on `release/v4-playtest`; main,
+V2/V3 and the rc1/rc2 tags remain preserved. The old `releases/v4` directory is an
+rc2 compatibility reference; current unpacked files are in `releases/v4-rc3`.
 
-## What changed since rc1
+## Changes since rc2
 
-- Bank statements distinguish loan interest, commercial/service fees, sustaining expenses and legacy abstract income. Actual results, standing policies, proposed plans and history have distinct presentations.
-- Credit and commercial servicing consume shared finite workforce capacity. Current-version economic rules remove unsupported automatic income and use provisionally revised base payroll. Core has explicit balance-sheet support; older supported saves retain their original rules.
-- Funding review separates organic deposit growth from recorded competitive movements. Missing records are unavailable, not invented zeroes.
-- Contextual office/client controls and workforce explanations are refined. Historical service agreements without company profiles no longer crash the directory, inspector or bid review.
-- The Windows launcher now uses the central test gate, with incremental failure receipts and source-change detection.
+- People owns bank staff allocation and coverage. Customers owns household and
+  commercial relationships, offers and applications. Products owns the catalogue,
+  pricing/policies, advertising and statements. Markets retains contextual local
+  building, conversion and staffing. These use the same shared draft, not copies.
+- The monthly review exposes required decisions and staffing warnings, with links
+  to the relevant controls. Product-pricing and client shortcuts open the actual
+  editor. Core retains its simpler layout. New-human starting-work choices are
+  explicit, and AI planning receives guarded reserve and recovery-cost repairs.
+- New Expanded campaigns use 9.33 with `bankRivalryVersion:1`: market dominance and
+  score advantages no longer produce automatic bank-control endings. Receivership
+  and funding-covenant resolution remain real failures. Company acquisitions remain
+  funded transactions, not free bank assets. Existing campaigns/rematches keep
+  their rules; no save is upgraded automatically and no new checkbox is added.
+- Corrected terminal validation now accepts a real funding-covenant failure,
+  including its saved game, owner views and rematch. **Do not use the earlier local
+  package named `BranchWars-V4-stabilization68-20260914`; use 68b or this rc3 ZIP.**
 
-Earlier V4 features remain: multi-market construction, company deposits/loans, research and delivery, qualified departments/leadership, advertising, agency, investment businesses, shared premises and company ownership/control. The Expanded confirmation describes five benefits instead of internal prerequisites.
+No new yield, payroll, reserve, growth-quota or subsidy tuning was included in
+checkpoint68. National Empire and insurance underwriting remain deferred.
 
-## Exact game identity and evidence
+## Exact identity and verification
 
-The199-input game HTML SHA256 is `ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92`. Engine SHA256 is `b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642`. New campaigns use Core8.19 / Expanded9.32; supported older campaigns retain their saved rules.
+- Portable SHA256: `a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf`.
+- Engine SHA256: `6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33`.
+- ZIP SHA256: `c9850733604cbecf5a6167884f53501186b92976d9760c7d81841463692a032c`.
+- 202 source inputs; new Core 8.19 / Expanded 9.33. The ZIP is byte-identical to the
+  handed-over 68b ZIP and contains only six runtime files, no credentials or saves.
+- Targeted ending tests preserve old 9.32 creation, plans, settlement, RNG and
+  private views; reproduce the old premature auction; and verify new failure,
+  strict-version, half-ready recovery and rematch behavior.
+- Corrected-build GitHub-room, LAN and direct-link simulations pass old-peer
+  refusal, two completed months, reconnect/checkpoint recovery, delayed messages
+  and owner-private information checks. These are not physical two-computer tests.
+- Browser sampling used the identical UI before the terminal-validation-only
+  correction: 1280×720 and 760×800 had no document horizontal overflow. People and
+  selected-product Pricing had no visible native dropdowns; bank policies had two.
+  Normal new-game resolution/reload/Continue also worked. This is not every control
+  or a claim that the whole game has no dropdowns.
 
-- The targeted continuation completed21/21 commands with unchanged sources, including reporting, accounting/workload and simulated network/privacy checks.
-- The engine suite,18 reporting/legacy UI tests and324-turn service regression pass on the exact current portable. Service testing recorded47 ownership changes.
-- Packaging regressions verify the six-file allowlist, tamper rejection and immutable copies.
-- A separately extracted copy of the staged GitHub source passes build, documentation, architecture, reference-byte, current-edition, funding/legacy UI and packaging checks without local untracked diagnostics.
-- The preceding complete Windows baseline **failed:208/210** on the older UI artifact. The two failing areas were repaired and rechecked, but that does not create a new full-suite pass. Its original failed receipt is preserved.
+The [package verification](v4-verification.json) identifies the extracted runtime
+checks and 13 successful commands on a separately extracted Git index, without
+untracked local diagnostics. This verifies source completeness, not the full
+game. The complete Windows run beginning 00:35:45 UTC on September 15 is **still
+pending at publication preparation**. Its inputs are frozen; earlier repaired
+tests and the interrupted 23:50 run are not a clean full-gate pass. See the
+[current release status](../game/docs/release-status.md) for later outcomes.
 
-The [V4 package verification](v4-verification.json) records this ZIP's hash and exact extracted-file/runtime checks. Broader evidence and failed experiments remain in [release status](../game/docs/release-status.md); targeted checks do not certify the full release.
+## Balance findings and limits
 
-## UI, balance and outstanding checks
+| Recorded policy | Actual months | Result |
+| --- | ---: | --- |
+| Commercial under new rivalry | 120 | No ending; both banks profitable in the final month |
+| Cautious mixed bank, no new planned expansion | 120 | Survived; loan book roughly its original $9.5M |
+| Prior lending/expansion policy | 23 | Receivership |
+| Controlled staffing with paid expansion | 32 | Receivership |
 
-- UI actions and financial explanations are better connected, but workforce clarity, mature-bank density and real visual acceptance are unfinished. Automated rendering tests do not establish intuitive gameplay.
-- Conventional lending versus fee-based strategies remains the main balance concern. A cautious lender survived24 Balanced months with$9.38M cash but lost$939K cumulatively and its loan book fell to$5.42M. A separate fee-oriented Rate campaign reached120 months with much stronger fee than loan-interest income. These are policy-specific experiments, not proof that every lender fails or every commercial strategy wins. Deposit dominance is not itself a bug.
-- Automatic score/stalemate endings still prevent some solvent long campaigns from continuing; changing these rules remains a separate decision. An early-ended campaign is not a480-month pass.
-- The final complete Windows gate, mature performance checks and actual two-computer acceptance remain pending.
-- A comprehensive updated manual/PDF remains pending. The V4 quick-start is supplied; the V3 PDF is preserved with its older release.
-- National Empire and insurance underwriting are not included.
+The commercial trial's first 82 months match the prior prematurely ended bank
+snapshots exactly. Its rival's loan book still contracts sharply. The cautious
+bank depends heavily on commercial-service income; it does not prove pure-lending
+profitability. The lending comparison deliberately retains 9.32. These recorded
+trials used the pre-terminal-fix engine; their saved endpoints restore exactly on
+the corrected engine, but that is not another 120-month simulation. The earlier
+Rate Shock comparison covers only 24 months. Upfront affordability is not payback.
 
-Raw campaign/diagnostic dumps, access tokens and unrelated temporary files are not part of the release. Existing local copies remain preserved.
+Remaining acceptance: conventional lending/expansion economics, mature-turn
+performance, broader comeback/long-run strategy quality, complete UI/playability
+review and a real two-computer session. Deposit dominance alone is not a bug.
+
+Read the [updated quick-start](branch-wars-v4-guide.md) and
+[player guide](../game/docs/player-guide.md). The V3 PDF stays with its frozen
+release; a comprehensive V4 PDF is not part of this update.
