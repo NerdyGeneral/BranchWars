@@ -87,6 +87,41 @@ const STRATEGY_SPECIALIZATIONS={
  operations:{lean:{name:'Lean Delivery',desc:'Staff and facility expense fall while project teams execute more efficiently.'},resilience:{name:'Risk & Resilience',desc:'Controls, defensive actions, and disruption recovery become materially stronger.'}},
  acquisition:{dealmaker:{name:'Dealmaker',desc:'Acquisitions cost less and close with stronger market-share impact.'},integrator:{name:'Integration Discipline',desc:'Acquired customers and assets transfer more cleanly with less attention.'}}
 };
+// Core research programme content. Merged over the tables above only for
+// campaigns carrying researchProgramVersion; see engine/research-program.js.
+// Sixth branch. Operations kept expense and execution; loss, provisioning and
+// capital headroom move here so every branch owns one term of the monthly
+// result instead of competing on the same multiplier.
+const RESEARCH_PROGRAM_BRANCHES={
+ ...STRATEGY_BRANCHES,
+ risk:{name:'RISK & CAPITAL',promise:'Lower losses, cheaper capital, and standing with the regulator.',nodes:[
+  {name:'Credit Policy Desk',cost:270000,cycles:2,desc:'Underwriting discipline reduces the monthly loss rate.'},
+  {name:'Provisioning Model',cost:500000,cycles:3,desc:'Losses are anticipated and absorbed without draining capital.'},
+  {name:'Capital Planning',cost:790000,cycles:4,desc:'More production per dollar of capital held.'},
+  {name:'Supervisory Standing',cost:1190000,cycles:5,desc:'Capstone: examinations pass cleanly and restrictions lift sooner.'}
+ ]}
+};
+// Three operating models per branch. Each is a trade, never an upgrade: the
+// measured failure of the two-model version was that both options were small
+// one-directional bonuses, so the permanent choice was worth +/-400 against
+// campaign scores in the thousands.
+const RESEARCH_PROGRAM_SPECIALIZATIONS={
+ network:{...STRATEGY_SPECIALIZATIONS.network,
+  franchisePartners:{name:'Franchise Partners',desc:'Third-party sites extend reach cheaply, at a share of fees and weaker deposit retention.'}},
+ digital:{...STRATEGY_SPECIALIZATIONS.digital,
+  dataLedCredit:{name:'Data-Led Credit',desc:'Underwriting data lowers losses and widens spread, at the cost of regulatory attention.'}},
+ commercial:{...STRATEGY_SPECIALIZATIONS.commercial,
+  relationshipBanking:{name:'Relationship Banking',desc:'Fewer, larger, stickier relationships: more deposits each, lower headline counts.'}},
+ operations:{...STRATEGY_SPECIALIZATIONS.operations,
+  processRedesign:{name:'Process Redesign',desc:'Departments cover more work per head, after an upfront cost to redesign them.'}},
+ acquisition:{...STRATEGY_SPECIALIZATIONS.acquisition,
+  consolidator:{name:'Consolidator',desc:'Acquired markets keep producing for you instead of only transferring once.'}},
+ risk:{
+  provisioning:{name:'Conservative Provisioning',desc:'Losses fall and capital builds, at the cost of loan production.'},
+  capitalEfficiency:{name:'Capital Efficiency',desc:'More production per dollar of capital, on a thinner buffer.'},
+  standing:{name:'Regulatory Standing',desc:'Risk and heat fall and restrictions lift sooner, for a standing monthly cost.'}
+ }
+};
 const PROJECTS={
  branch:{name:'Full-Service Financial Center',cost:560000,cycles:3,capacity:1.5,desc:'Broad household service, local reputation, and balanced deposit capacity.',target:true,kind:'branch',facility:'retail'},
  branchCommercial:{name:'Commercial Banking Office',cost:560000,cycles:3,capacity:1.5,desc:'Business development, treasury relationships, and merchant capacity.',target:true,kind:'branch',facility:'commercial'},

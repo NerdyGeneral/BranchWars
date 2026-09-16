@@ -6,7 +6,7 @@
 // they are not bank employees, assets, money or project execution capacity.
 const DepartmentProvider=(()=>{
   const copy=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
-  const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join('|')===keys.slice().sort().join('|');
+  const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
   const CAPACITY=32,ENTITLEMENT=16,ID='department:service-network';
   function providerInitialize(cycle){
     if(!whole(cycle)||cycle<1)throw Error('A new service network requires a campaign month.');

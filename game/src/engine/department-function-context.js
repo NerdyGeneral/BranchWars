@@ -42,7 +42,7 @@
 const DepartmentFunctionContext = (() => {
   const copy=x=>JSON.parse(JSON.stringify(x)),roles=()=>Object.fromEntries(DepartmentFunctions.ROLES.map(r=>[r,0]));
   const whole=(n,max=Number.MAX_SAFE_INTEGER)=>Number.isSafeInteger(n)&&n>=0&&n<=max;
-  const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join('|')===keys.slice().sort().join('|');
+  const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
   const sum=xs=>xs.reduce((a,b)=>a+b,0);
   function functionContextWorkloads(p,training){
     const households=sum(Object.values(p.householdBook?.markets||{}).flatMap(row=>Object.values(row))),

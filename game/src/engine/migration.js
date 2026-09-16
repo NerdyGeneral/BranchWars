@@ -27,7 +27,7 @@ function repairSavedPlayer(g,p,i){
  for(const k of Object.keys(OPENING_STATS))if(!Number.isFinite(p.stats[k]))p.stats[k]=OPENING_STATS[k];
  p.upgrades={technology:0,training:0,analytics:0,wealth:0,operations:0,...p.upgrades};
  p.strategy={network:0,digital:0,commercial:0,operations:0,acquisition:0,...(p.strategy||{})};
- for(const k of Object.keys(STRATEGY_BRANCHES))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));
+ for(const k of researchBranches(p))p.strategy[k]=Math.max(0,Math.min(4,Math.round(Number(p.strategy[k])||0)));
  p.boardConcessions=Math.max(0,Math.round(Number(p.boardConcessions)||0));
  p.capitalRestriction=Math.max(0,Math.round(Number(p.capitalRestriction)||0));
  p.policies={deposit:'balanced',lending:'balanced',capital:'balanced',...p.policies};
@@ -42,7 +42,7 @@ function repairSavedPlayer(g,p,i){
  p.allocation=p.allocation&&typeof p.allocation==='object'?p.allocation:{service:3,business:2,lending:2,operations:1};
  p.marketingTurns=Number(p.marketingTurns)||0;
  p.capability=p.capability&&typeof p.capability==='object'?p.capability:{};
- for(const key of Object.keys(STRATEGY_BRANCHES)){
+ for(const key of researchBranches(p)){
   let spent=Number(p.capability[key]);
   if(!Number.isFinite(spent)||spent<0){
    const level=Math.max(0,Math.min(4,Math.round(Number(p.strategy&&p.strategy[key])||0)));

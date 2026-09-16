@@ -4,7 +4,7 @@
 // Assessment is read-only and can describe existing public company statements.
 const CompanyCredit=(()=>{
  const copy=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const PRODUCTS=['middleMarket','smallBusiness'];
  const LIMITS=Object.freeze({reserveMonths:2,maxFeeMonths:12,minPrincipal:1000,maxAnnualRateBp:1800,minAnnualRateBp:400,terms:Object.freeze([12,24,36,48]),coverage:Object.freeze({conservative:1.5,balanced:1.2,growth:1})});
  function companyCheck(c){

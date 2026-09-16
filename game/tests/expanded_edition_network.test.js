@@ -36,7 +36,7 @@ function select(h,edition='expanded'){h.c.requestedEdition=edition;h.run(`{const
  core.host.run('cancelFeatureSelectionConfirmation()');assert.deepEqual(copy(core.host.state().lobby),coreBefore);
  select(core.host,'core');assert(core.host.run('confirmFeatureSelection()'));core.host.run('applyLobbySettings()');await core.drain();
  assert.equal(core.host.state().lobby.revision,coreBefore.revision+1);assert(core.host.state().lobby.players.every(p=>!p.ready));
- await start(core);assert.equal(core.host.state().game.version,'8.19');assert.equal(core.guest.state().view.bankEconomicsVersion,2);
+ await start(core);assert.equal(core.host.state().game.version,'8.20');assert.equal(core.guest.state().view.bankEconomicsVersion,2);
  assert(core.guest.state().view.me.accounting);assert.equal(core.guest.state().view.rival.accounting,undefined);
  const cp=copy(core.host.run('game.players.map((p,i)=>E.chooseBot(game,i))'));core.host.c.plan=cp[0];core.guest.c.plan=cp[1];
  core.host.run('E.submit(game,0,plan);syncPeers()');await core.drain();

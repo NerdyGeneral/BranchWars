@@ -42,6 +42,7 @@ function recordIncomeHistory(g){
 }
 function validateIncomeHistoryCampaign(g){
  validateBankRivalry(g,'game');
+ validateResearchProgram(g,'game');
  validateBankEconomicsCampaign(g);
  validateCreditWorkloadCampaign(g);
  validateCommercialServiceCampaign(g);
@@ -52,6 +53,7 @@ function validateIncomeHistoryCampaign(g){
 }
 function projectIncomeHistory(g,out,index){
  projectBankRivalry(g,out);
+ projectResearchProgram(g,out);
  projectBankEconomics(g,out);
  projectCreditWorkload(g,out);
  projectCommercialService(g,out);
@@ -60,6 +62,7 @@ function projectIncomeHistory(g,out,index){
 }
 function validateIncomeHistoryView(v){
  validateBankRivalry(v,'view');
+ validateResearchProgram(v,'view');
  validateBankEconomicsView(v);
  validateCreditWorkloadView(v);
  validateCommercialServiceView(v);

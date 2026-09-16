@@ -24,7 +24,7 @@ test('confirmation, cancellation, hidden scalar retention and returning to Core 
  h.run('cancelFeatureSelectionConfirmation()');assert.deepEqual(copy(h.run('readSetupFeatureOptions()')),initial);
  select(h,'expanded');assert(h.confirmFeatures());assert.equal(h.run('readSetupFeatureOptions().investmentNotesVersion'),1);assert.equal(h.run('readSetupFeatureOptions().sharedPremisesVersion'),1);assert.equal(h.run('readSetupFeatureOptions().bankRivalryVersion'),1);assert.equal(h.run('E.createGame({...readSetupFeatureOptions(),seed:1,created:1}).version'),'9.33');assert.match(h.elements.get('#featureSelectionAffected').innerHTML,/brokerage and custody/);assert.match(h.elements.get('#featureSelectionAffected').innerHTML,/shared service rooms/);
  const selected=copy(h.run('readSetupFeatureOptions()'));select(h,'core');h.run('cancelFeatureSelectionConfirmation()');assert.deepEqual(copy(h.run('readSetupFeatureOptions()')),selected);
- select(h,'core');assert(h.confirmFeatures());assert.equal(h.run('E.campaignRules(readSetupFeatureOptions()).enabled.length'),3);assert.equal(h.run('readSetupFeatureOptions().incomeHistoryVersion'),1);assert.equal(h.run('readSetupFeatureOptions().investmentNotesVersion'),undefined);
+ select(h,'core');assert(h.confirmFeatures());assert.equal(h.run('E.campaignRules(readSetupFeatureOptions()).enabled.length'),4);assert.equal(h.run('readSetupFeatureOptions().incomeHistoryVersion'),1);assert.equal(h.run('readSetupFeatureOptions().investmentNotesVersion'),undefined);
 });
 test('Expanded confirmation explains the edition instead of listing internal dependencies',()=>{
  const h=harness();select(h,'expanded');const content=h.elements.get('#featureSelectionAffected').innerHTML;

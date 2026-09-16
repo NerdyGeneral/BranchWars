@@ -7,7 +7,7 @@ const FacilityNetwork = (() => {
   const RULES=Object.freeze({costShare:.35,work:2,capacity:1,disruption:.5,maxRecords:4096});
   const copy=x=>JSON.parse(JSON.stringify(x));
   const whole=n=>Number.isSafeInteger(n)&&n>=0;
-  const exact=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).sort().join()===keys.slice().sort().join();
+  const exact=(o,keys)=>{if(!o||typeof o!=='object'||Array.isArray(o))return false;const own=Object.keys(o);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
   const active=o=>o.closedCycle===null;
   function facilityDomainModels(p){return p.facilityNetwork?.version===CATALOG_VERSION?ALL_MODELS:MODELS;}
   function identifiedOffice(p,id){return p.facilityNetwork?.offices.find(o=>o.id===id)||null;}

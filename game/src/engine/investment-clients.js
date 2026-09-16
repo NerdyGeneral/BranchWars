@@ -3,7 +3,7 @@
 // wealth relationships and an explicitly funded dealer, never per-turn grants.
 const InvestmentClients=(()=>{
  const copy=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const PROVIDERS=Object.keys(InvestmentInstitution.PROVIDERS),MAX_CLIENTS=3000;
  const sum=(rows,key)=>rows.reduce((n,x)=>n+x[key],0);
  const value=(w,c)=>c.units*w.price+c.cash+(w.notes?InvestmentNotes.claims(w.notes,c.id):0)+(w.version===3?InvestmentCashRoutes.value(w.cashRoutes,c.id,w.price):0);

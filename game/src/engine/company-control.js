@@ -3,7 +3,7 @@
 // The campaign adapter must persist records and provide fresh public inputs.
 const CompanyControl = (() => {
  const copy=x=>JSON.parse(JSON.stringify(x));
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const whole=n=>Number.isSafeInteger(n)&&n>=0;
  const check=(n,label)=>{if(!whole(n))throw Error('Invalid '+label+'.');return n;};
  const fee=n=>Math.ceil(check(n*25,'fee arithmetic')/10000);

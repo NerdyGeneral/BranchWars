@@ -372,6 +372,8 @@ function projectCost(p,def,focus=p.focus,premium=1){
  }else{
   cost=def.cost;
   if(def.kind==='branch')cost*=1-strategyProgress(p,'network')*.08;
+  // Branch Integration (network 2 + acquisition 2): sites convert cheaply.
+  if(def.kind==='branch'&&researchCombination(p,'branchIntegration'))cost*=.78;
   if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
   if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
@@ -540,7 +542,7 @@ function doctrineProfile(p){
  const s=p.stats,a=p.allocation,staff=Math.max(1,s.staff),base=OPENING_STATS,BASE_MIX={service:.375,business:.25,lending:.25,operations:.125},share=k=>{const s=(a[k]||0)/staff,b=BASE_MIX[k]||.25;
 return Math.max(0,(s-b)/(1-b))};
  const cap=(x,lo,hi)=>Math.max(0,Math.min(1,(x-lo)/(hi-lo))),f=p.facilities||{};
- const capTotal=Math.max(1,Object.keys(STRATEGY_BRANCHES).reduce((t,k)=>t+capabilitySpend(p,k),0));
+ const capTotal=Math.max(1,researchBranches(p).reduce((t,k)=>t+capabilitySpend(p,k),0));
  const capShare=k=>capabilitySpend(p,k)/capTotal;
  const facTotal=3+(f.retail||0)+(f.commercial||0)+(f.digital||0);
 const payroll=Math.max(0,Number(p.payrollSpend)||0),built=Math.max(0,Number(p.buildSpend)||0),spendTotal=payroll+built+capTotal,payrollShare=spendTotal>0?payroll/spendTotal:0;
@@ -612,7 +614,7 @@ Buyout ends roughly 97% of bot-vs-bot campaigns.
 
 ```js
 function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,strategyValue=strategyTotal(p)*18+(strategyCapstone(p)?30:0);
-return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.business*.82+s.merchant*.72+s.wealth*1.15+s.reputation*1.65+s.digital*.55+s.morale*.62+s.staff*2.4+s.cash/135000+s.capital/120000+s.earnings/65000+s.influence*.68+s.momentum*.3+(u.technology+u.training+u.analytics+u.wealth+u.operations)*13+strategyValue-(p.boardConcessions||0)*35+branchLevels(p)*14+(p.achievements||[]).length*25-s.compliance-s.attention*.82-s.chargeoffs/100000+marketValue(g,index)*2.5)*10)/10}
+return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.business*.82+s.merchant*.72+s.wealth*1.15+s.reputation*1.65+s.digital*.55+s.morale*.62+s.staff*2.4+s.cash/coreCashWeight(p)+s.capital/120000+s.earnings/65000+s.influence*.68+s.momentum*.3+(u.technology+u.training+u.analytics+u.wealth+u.operations)*13+strategyValue-(p.boardConcessions||0)*35+branchLevels(p)*14+(p.achievements||[]).length*25-s.compliance-s.attention*.82-s.chargeoffs/100000+marketValue(g,index)*2.5)*10)/10}
 ```
 
 **Mandates** — campaign objectives worth a bonus at the end:

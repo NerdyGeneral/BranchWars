@@ -3,7 +3,7 @@
 // suitability, qualified work or custody. No opening endowment or bank deposit.
 const InvestmentNotes=(()=>{
  const clone=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const DENOM=120000,MAX_POSITIONS=4096;
  const products=Object.freeze({
   short:Object.freeze({label:'Six-month income note',months:6,spreadBp:-50,minimum:100,description:'Lower fixed coupon and earlier scheduled return of principal. No early redemption or deposit protection.'}),

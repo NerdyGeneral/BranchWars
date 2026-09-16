@@ -140,10 +140,26 @@ function bankRecoveryOptions(p, input, economy, event,g=null) {
   if(staffing)options.push(staffing);
   return { current, options };
 }
+function currentBankRules(g){return researchProgramRules(g);}
 function planBankRecovery(g, index, input) {
   if(![1,2].includes(g.productProgramsVersion))return input;
   const p={...g.players[index],focus:input.focus,marketSnapshot:g.marketEconomy};
   const current=bankRecoveryReview(p,input,g.economy,g.event,g);if(!current.stressed)return input;
+  // BAL-8: the advisory reserve is deliberately stricter than the rules -- 10% of
+  // exposure plus $200,000, against the actual 8% capital gate in pilotSpendingLimit.
+  // Requiring six months of operating losses to sit inside that headroom is not
+  // reachable at opening equity, so `stressed` was true in 24 of 24 measured
+  // bank-months while capital held at 14.7-16.3%, roughly twice the regulatory
+  // floor. The bot then chose "pause discretionary commitments" every month and
+  // staged nothing all campaign. Advice to a human is unchanged; the bot now acts
+  // only when the bank is genuinely constrained -- near the floor, or holding a
+  // plan it cannot actually fund.
+  // Core only. Expanded cannot take this yet: bank_rivalry.test.js contracts
+  // bankRivalryVersion as ending metadata that must not alter AI plans, and
+  // bank_economics.test.js replays bankEconomicsVersion 1 against a reference
+  // build, so shipping it to Expanded needs its own feature scalar and a save
+  // version bump. Every earlier campaign keeps the original trigger.
+  if(currentBankRules(g)&&current.capitalRatio>=10&&planBudget(p,input,g).remaining>=0)return input;
   const choices=bankRecoveryOptions(p,input,g.economy,g.event,g).options;
   choices.sort((a,b)=>b.review.netAfterSpend-a.review.netAfterSpend || a.key.localeCompare(b.key));
   return choices[0]?.plan || input;

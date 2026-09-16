@@ -139,7 +139,7 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
       const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }

@@ -12,14 +12,29 @@ function validatePlan(g,p,plan){
   const status=capitalRequestStatus(p);if(!status.eligible)throw Error(status.reason);
   if(planInitiatives(plan).some(key=>['branch','acquisition'].includes(PROJECTS[key]&&PROJECTS[key].kind)))throw Error('Board assistance cannot be combined with an expansion initiative.');
  }
+// An unrecognised operating model used to be dropped in silence by
+// applyInvestments, so a plan naming a model that does not exist resolved as if
+// the player had chosen nothing and the permanent decision was quietly lost.
+// Research-programme campaigns refuse it instead; every earlier campaign keeps
+// the original forgiving behaviour.
+ if(researchProgramRules(p)&&plan.specializations&&typeof plan.specializations==='object'){
+  const models=researchModelTable(p);
+  for(const [branch,pick] of Object.entries(plan.specializations)){
+   if(pick===undefined||pick===null)continue;
+   if(!models[branch])throw Error('That capability does not exist.');
+   if(!models[branch][pick])throw Error('That operating model does not exist.');
+   if(p.specializations&&p.specializations[branch]&&p.specializations[branch]!==pick)
+    throw Error(researchBranchTable(p)[branch].name+' already operates a permanent model.');
+  }
+ }
  const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};
  for(const key of Object.keys(investments)){
-  if(!STRATEGY_BRANCHES[key])throw Error('That capability does not exist.');
+  if(!researchBranchTable(p)[key])throw Error('That capability does not exist.');
   const amount=Number(investments[key]);
   if(!Number.isFinite(amount)||!Number.isInteger(amount))throw Error('Capability investment must be a whole dollar amount.');
   if(amount>0&&amount<1000)throw Error('Capability investment must be at least $1,000.');
   if(amount<0)throw Error('Capability investment cannot be negative.');
-  if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(STRATEGY_BRANCHES[key].name+' is already fully developed.');
+  if(amount>0&&capabilityNextCost(p,key)<=0)throw Error(researchBranchTable(p)[key].name+' is already fully developed.');
   if(amount>CAPABILITY_CAP_PER_CYCLE)throw Error(`An institution can absorb at most $${CAPABILITY_CAP_PER_CYCLE.toLocaleString()} of investment per capability each cycle.`);
   if(amount>capabilityRemaining(p,key))throw Error('That investment exceeds the remaining capability cost.');
  }

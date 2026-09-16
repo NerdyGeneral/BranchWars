@@ -3,7 +3,7 @@
 // same-month fill. Only the paired client adapter commits accounting entries.
 const InvestmentTrading=(()=>{
  const whole=n=>Number.isSafeInteger(n)&&n>=0,copy=x=>JSON.parse(JSON.stringify(x));
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const FEE=5,WORK=5;
  const reasons=Object.freeze(['','relationship','capacity','cash','holdings','suitability','dealer liquidity','dealer inventory']);
  function investmentTradingOrders(orders){

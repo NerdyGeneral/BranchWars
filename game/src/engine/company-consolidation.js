@@ -2,7 +2,7 @@
 // pure consolidation worksheet, never a transfer of spendable cash or client
 // assets, and is not a representation of comprehensive financial-reporting law.
 const CompanyConsolidation=(()=>{
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const integer=(n,signed=false)=>{if(!Number.isSafeInteger(n)||!signed&&n<0)throw Error('Invalid consolidation amount.');return n;};
  const fraction=(n,numerator,denominator)=>{integer(n,true);integer(numerator);integer(denominator);if(!denominator)throw Error('Invalid ownership denominator.');return integer(Number(BigInt(n)*BigInt(numerator)/BigInt(denominator)),true);};
  function validate(a){

@@ -6,10 +6,19 @@ function riskAssets(p){return Math.max(1,p.stats.loans+(p.accounting?p.accountin
 function capitalRatio(p){return p.stats.capital/riskAssets(p)*100}
 function capitalTier(p){const r=capitalRatio(p);return CAPITAL_TIERS.find(t=>r>=t.min)}
 function tierRank(p){return CAPITAL_TIERS.indexOf(capitalTier(p))}
-const CAPABILITY_TIERS=Object.fromEntries(Object.entries(STRATEGY_BRANCHES).map(([k,b])=>{let run=0;return[k,b.nodes.map(node=>(run+=node.cost))]}));
+// Tiers are built over the widest branch table so strategyLevel/capabilityNextCost
+// answer for the research-programme branch too. Campaigns without the marker never
+// iterate it -- researchBranches(p) is the gate -- and capabilitySpend returns 0.
+const tierRun=table=>Object.fromEntries(Object.entries(table).map(([k,b])=>{let run=0;return[k,b.nodes.map(node=>(run+=node.cost))]}));
+// Lookups answer for the research-programme branch too, so strategyLevel and
+// capabilityNextCost need no version argument. BASE_CAPABILITY_TIERS keeps the
+// historical five-branch shape for anything shipped into the owner view;
+// widening that table is what every campaign would otherwise see.
+const BASE_CAPABILITY_TIERS=tierRun(STRATEGY_BRANCHES);
+const CAPABILITY_TIERS=tierRun(RESEARCH_PROGRAM_BRANCHES);
 const CAPABILITY_CAP_PER_CYCLE=250000;
 function capabilitySpend(p,key){return Math.max(0,Number(p.capability&&p.capability[key])||0)}
-function leadCapability(p){let best=null,bestShare=0,tied=false;for(const k of Object.keys(STRATEGY_BRANCHES)){const tiers=CAPABILITY_TIERS[k],share=capabilitySpend(p,k)/tiers[tiers.length-1];if(share>bestShare+1e-9){best=k;bestShare=share;tied=false}else if(Math.abs(share-bestShare)<=1e-9&&share>0)tied=true}return bestShare>0&&!tied?best:null}
+function leadCapability(p){let best=null,bestShare=0,tied=false;for(const k of researchBranches(p)){const tiers=CAPABILITY_TIERS[k],share=capabilitySpend(p,k)/tiers[tiers.length-1];if(share>bestShare+1e-9){best=k;bestShare=share;tied=false}else if(Math.abs(share-bestShare)<=1e-9&&share>0)tied=true}return bestShare>0&&!tied?best:null}
 function strategyLevel(p,key){const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
 // Fractional capability for continuous effects only. Book version4 is the
 // Group8 marker; every earlier group keeps whole levels and is untouched.
@@ -22,16 +31,16 @@ function strategyProgress(p,key){
  return next>floor?level+Math.max(0,Math.min(1,(spent-floor)/(next-floor))):level;
 }
 function capabilityNextCost(p,key){const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
-function capabilityBenefit(p,branch){const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
-function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of Object.keys(STRATEGY_BRANCHES)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=STRATEGY_BRANCHES[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${STRATEGY_BRANCHES[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key];if(pick&&STRATEGY_SPECIALIZATIONS[key]&&STRATEGY_SPECIALIZATIONS[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${STRATEGY_SPECIALIZATIONS[key][pick].name} operating model in ${STRATEGY_BRANCHES[key].name}.`)}}}return L}
+function capabilityBenefit(p,branch){if(researchProgramRules(p)){researchTierGrant(p,branch);return}const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
+function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of researchBranches(p)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=researchBranchTable(p)[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${researchBranchTable(p)[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key],models=researchModelTable(p);if(pick&&models[key]&&models[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${models[key][pick].name} operating model in ${researchBranchTable(p)[key].name}.`)}}}return L}
 function hasSpecialization(p,branch,key){return p.specializations&&p.specializations[branch]===key}
 function productOption(p,line){if(line==='credit'&&p.creditPortfolio)return portfolioCreditOption(p);const group=PRODUCT_PORTFOLIOS[line],key=p.products&&group.options[p.products[line]]?p.products[line]:Object.keys(group.options)[0],option=group.options[key];if(line==='retail'&&(p.doctrine==='community'||hasSpecialization(p,'network','retailDensity'))){const community=p.doctrine==='community'?1.15:1,density=hasSpecialization(p,'network','retailDensity')?1.06:1;return{...option,customers:option.customers*community*density,deposits:option.deposits*community*density,funding:option.funding*(p.doctrine==='community'?.9:1),reputation:(option.reputation||0)+(density>1?.5:0)}}return option}
-function strategyTotal(p){return Object.keys(STRATEGY_BRANCHES).reduce((n,k)=>n+strategyLevel(p,k),0)}
-function strategyCapstone(p){return Object.keys(STRATEGY_BRANCHES).find(k=>strategyLevel(p,k)>=4)||null}
+function strategyTotal(p){return researchBranches(p).reduce((n,k)=>n+strategyLevel(p,k),0)}
+function strategyCapstone(p){return researchBranches(p).find(k=>strategyLevel(p,k)>=4)||null}
 function doctrineProfile(p){
  const s=p.stats,a=p.allocation,staff=Math.max(1,s.staff),base=OPENING_STATS,BASE_MIX={service:.375,business:.25,lending:.25,operations:.125},share=k=>{const s=(a[k]||0)/staff,b=BASE_MIX[k]||.25;return Math.max(0,(s-b)/(1-b))};
  const cap=(x,lo,hi)=>Math.max(0,Math.min(1,(x-lo)/(hi-lo))),f=p.facilities||{};
- const capTotal=Math.max(1,Object.keys(STRATEGY_BRANCHES).reduce((t,k)=>t+capabilitySpend(p,k),0));
+ const capTotal=Math.max(1,researchBranches(p).reduce((t,k)=>t+capabilitySpend(p,k),0));
  const capShare=k=>capabilitySpend(p,k)/capTotal;
  const facTotal=3+(f.retail||0)+(f.commercial||0)+(f.digital||0);const payroll=Math.max(0,Number(p.payrollSpend)||0),built=Math.max(0,Number(p.buildSpend)||0),spendTotal=payroll+built+capTotal,payrollShare=spendTotal>0?payroll/spendTotal:0;
  const facShare=k=>(f[k]||0)/facTotal;
@@ -174,6 +183,8 @@ function projectCost(p,def,focus=p.focus,premium=1){
  }else{
   cost=def.cost;
   if(def.kind==='branch')cost*=1-strategyProgress(p,'network')*.08;
+  // Branch Integration (network 2 + acquisition 2): sites convert cheaply.
+  if(def.kind==='branch'&&researchCombination(p,'branchIntegration'))cost*=.78;
   if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
   if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
@@ -259,6 +270,9 @@ function projectStartStatus(g,p,key,focus=p.focus){
  const terms=projectStartTerms(g,p,key,focus),def=PROJECTS[key];
  const fail=code=>({eligible:false,code,terms});
  if(!terms)return fail('unknown');
+ // Retired legacy-compatibility projects are refused by projectPlanStatus and submit;
+ // report that here too so callers cannot present them as startable.
+ if(terms.retired)return fail('retired');
  if(usedCapacity(p,[def])>executionCapacity(p))return fail('capacity');
  if(terms.running)return fail('running');
  if(projectTargetIssue(g,p,def,focus)||terms.branchFull)return fail('target');

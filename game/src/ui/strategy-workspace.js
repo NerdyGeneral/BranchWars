@@ -67,7 +67,24 @@ function renderStrategyWorkspace(v){
  const current=$('#strategyRoadmap');if(current?.dataset?.strategyDetails===branch){const set=new Set(strategyWorkspace.roadmaps);if(current.open)set.add(branch);else set.delete(branch);strategyWorkspace.roadmaps=[...set];}
  $('#strategySummary').innerHTML='<div class="strategy-budget"><span>Research staged <b>'+money(pledged)+'</b></span><span>Remaining plan budget <b>'+money(q.remaining)+'</b></span><span>Per capability / month <b>'+money(v.capabilityCap)+'</b></span></div>';
  $('#strategyTree').innerHTML='<div class="object-workspace research-workspace"><div class="object-columns"><nav class="object-directory" aria-label="Capabilities">'+Object.entries(v.strategyBranches).map(([key,d])=>{const state=strategyFundingStatus(v,key);return '<button type="button" class="object-row" id="strategy-select-'+key+'" aria-pressed="'+(key===branch)+'"><span><b>'+esc(d.name)+'</b><small>'+state.level+' / '+v.capabilityTiers[key].length+' milestones · '+money(state.spent)+' paid</small></span><span class="object-tag">'+(state.pledged?money(state.pledged)+' staged':state.done?'Complete':'Develop')+'</span></button>';}).join('')+'<p class="micro muted">All five capabilities remain open. Inspecting a capability does not fund it or change your focus market. Permanent models retain their own tradeoffs.</p></nav><section class="object-detail" data-strategy-lane="'+branch+'" aria-labelledby="strategyDetailTitle"><h3 id="strategyDetailTitle" tabindex="-1">'+esc(info.name)+'</h3><p class="small">'+esc(info.promise)+'</p><div class="workbench-toolbar" role="group" aria-label="Capability actions">'+[['milestones','Fund research'],['model','Operating model'],['applications','Deployment & use']].map(([key,label])=>'<button type="button" class="btn" id="strategy-desk-'+key+'" aria-pressed="'+(strategyWorkspace.desk===key)+'">'+label+'</button>').join('')+'</div>'+(strategyWorkspace.desk==='model'?strategyModelsContent(v,branch,s,token):strategyWorkspace.desk==='applications'?strategyDeploymentContent(v,branch,token):strategyMilestonesContent(v,branch,s,token))+'</section></div></div>';
+ renderResearchCombinations(v);
  bindStrategyWorkspace(v,token);
+}
+function renderResearchCombinations(v){
+ if(!v.researchCombinations)return;
+ const held=new Set(v.me.researchCombinations||[]);
+ const rows=Object.entries(v.researchCombinations).map(([key,def])=>{
+  const need=Object.entries(def.requires).map(([branch,level])=>{
+   const at=E.strategyLevel(v.me,branch),ok=at>=level;
+   return '<span class="'+(ok?'combo-met':'combo-missing')+'">'+esc(v.strategyBranches[branch].name)+' '+at+'/'+level+'</span>';
+  }).join(' + ');
+  return '<li class="'+(held.has(key)?'combo-active':'combo-idle')+'"><b>'+(held.has(key)?'✓ ':'')+esc(def.name)+'</b>'+
+   '<div class="micro muted">'+esc(def.desc)+'</div><div class="micro">'+need+'</div></li>';
+ }).join('');
+ $('#strategyTree').insertAdjacentHTML('beforeend',
+  '<section class="research-combinations"><h3>COMBINED CAPABILITIES</h3>'+
+  '<p class="small">Two branches together unlock what neither grants alone. These apply automatically once both tiers are funded.</p>'+
+  '<ul class="combo-list">'+rows+'</ul></section>');
 }
 function bindStrategyWorkspace(v,token){
  const branch=strategyWorkspace.branch,application=strategyApplications(v,branch).find(d=>d.key===strategyWorkspace.application);

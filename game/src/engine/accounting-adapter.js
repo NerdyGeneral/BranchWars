@@ -186,8 +186,14 @@ function planPilotReserve(g,index,plan){
  }else for(const key of planInitiatives(plan)){const cost=projectCost(p,PROJECTS[key]);if(cost<=available){projects.push(key);available-=cost}}
  plan.newProjects=projects;
  plan.newProject=projects[0]||null;
+ // The Core hire was evaluated only after the research loop above had already
+ // spent `available`, so a profitable bank could never fund a banker it had just
+ // been shown it could afford. Measured consequence: staff stayed at the opening
+ // 8 for entire 120-month campaigns and the `people` mandate (staff>=10) was
+ // unreachable. Decide the hire first and reserve its cost; research takes the rest.
+ if(researchProgramRules(g)&&![7,8,9,10].includes(g.financialGroupVersion)&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0){plan.hires=1;available-=hireCost(p,1);}
  for(const key of Object.keys(plan.investments||{})){const amount=Math.min(plan.investments[key],Math.floor(available));plan.investments[key]=amount>=1000?amount:0;available-=plan.investments[key]}
- if(![7,8,9,10].includes(g.financialGroupVersion)&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
+ if(!researchProgramRules(g)&&![7,8,9,10].includes(g.financialGroupVersion)&&forecast.profit>60000&&hireCost(p,1)<=available&&hireLimit(p)>0)plan.hires=1;
  return plan;
 }
 function validateAccountingSave(g){

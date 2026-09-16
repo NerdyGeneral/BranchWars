@@ -33,7 +33,7 @@ const DepartmentFunctions = (() => {
     people:descriptor('People management',['operations'],2400)
   });
   const IDS=Object.freeze(Object.keys(FUNCTIONS)),copy=x=>JSON.parse(JSON.stringify(x));
-  const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join('|')===keys.slice().sort().join('|');
+  const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
   const whole=(n,max=Number.MAX_SAFE_INTEGER)=>Number.isSafeInteger(n)&&n>=0&&n<=max;
   const sum=xs=>xs.reduce((n,x)=>n+x,0),roles=()=>Object.fromEntries(ROLES.map(r=>[r,0]));
   const keyed=n=>Object.fromEntries(IDS.map(id=>[id,n instanceof Function?n(id):n]));

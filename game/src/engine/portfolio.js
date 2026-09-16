@@ -3,6 +3,12 @@ function normalizePortfolioProducts(p,plan){
  if(p.termFunding){plan.termPolicy=plan.termPolicy||{...p.termFunding.policy};validateTermPolicy(plan.termPolicy)}else if(plan.termPolicy)throw Error('Term funding requires a new pilot campaign.');
  plan.products={...p.products,...(plan.products||{})};
  for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[plan.products[line]])throw Error(`Choose a valid ${group.name.toLowerCase()} product.`);
+ // Research gates the stronger options. The first option of every line stays
+ // available, so a bank without research is never left unable to trade.
+ for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS)){
+  const missing=researchProductBarred(p,line,plan.products[line]);
+  if(missing)throw Error(`${group.options[plan.products[line]].name} requires ${missing}.`);
+ }
  plan.specializations=plan.specializations&&typeof plan.specializations==='object'?plan.specializations:{};
  const def=PROJECTS[plan.newProject];
  if(def&&def.kind==='branch'&&p.branches[plan.focus]>=3)throw Error('That market already has maximum facility capacity.');

@@ -119,6 +119,7 @@
       "engine/credit-workload.js",
       "engine/bank-economics.js",
       "engine/bank-rivalry.js",
+      "engine/research-program.js",
       "engine/income-history.js",
       "engine/income-review.js",
       "engine/api.js"

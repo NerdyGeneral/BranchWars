@@ -5,7 +5,7 @@
 const DepartmentDelivery=(()=>{
   const ROLES=DepartmentFunctions.ROLES,IDS=DepartmentDispatch.IDS,FUNCTIONS=DepartmentFunctions.IDS;
   const copy=x=>JSON.parse(JSON.stringify(x)),sum=xs=>xs.reduce((a,b)=>a+b,0),near=(a,b)=>Math.abs(a-b)<1e-8;
-  const exact=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).sort().join('|')===keys.slice().sort().join('|');
+  const exact=(o,keys)=>{if(!o||typeof o!=='object'||Array.isArray(o))return false;const own=Object.keys(o);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
   const whole=(n,max=Number.MAX_SAFE_INTEGER)=>Number.isSafeInteger(n)&&n>=0&&n<=max;
   const bounded=(n,max)=>Number.isFinite(n)&&n>=0&&n<=max;
   const roles=fn=>Object.fromEntries(ROLES.map(r=>[r,fn(r)]));

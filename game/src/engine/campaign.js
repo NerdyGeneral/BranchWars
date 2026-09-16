@@ -39,6 +39,7 @@ function validateCreationOptions(o){
 function createGame(o){
  validateCreationOptions(o);
  if(o.bankRivalryVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
  const baseOptions=o.campaignRulesVersion===1?{...o,scope:'regional',fundingRulesVersion:2}:o;
@@ -92,6 +93,7 @@ function createGame(o){
  initializeCreditWorkload(g,o);
  initializeBankEconomics(g,o);
  initializeBankRivalry(g,o);
+ initializeResearchProgram(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
  if(o.featureRulesVersion===1)g.featureRulesVersion=1;

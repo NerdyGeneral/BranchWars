@@ -3,7 +3,7 @@
 // Buildings supply space, never licences, employees, customers or spendable AUM.
 const SharedPremises=(()=>{
  const copy=x=>JSON.parse(JSON.stringify(x)),whole=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const spec=(name,space,cost,work,execution,upkeep,seats,roles)=>Object.freeze({name,space,cost,work,execution,upkeep,seats,roles:Object.freeze(roles)});
  const CATALOG=Object.freeze({
   visiting:spec('Visiting-adviser desk',1,45000,1,.5,900,1,['adviser']),

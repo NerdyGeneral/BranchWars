@@ -91,16 +91,16 @@ function resolveMonthlySteps(g) {
     });
     L.push(...applyInvestments(g, p, plans[i].investments, plans[i].specializations));
     const late = plans[i].specializations || {};
-    for (const key of Object.keys(STRATEGY_BRANCHES))
+    for (const key of researchBranches(p))
       if (
         strategyLevel(p, key) >= 1 &&
         !p.specializations[key] &&
         late[key] &&
-        STRATEGY_SPECIALIZATIONS[key][late[key]]
+        researchModelTable(p)[key][late[key]]
       ) {
         p.specializations[key] = late[key];
         L.push(
-          `${p.name} adopted the ${STRATEGY_SPECIALIZATIONS[key][late[key]].name} operating model in ${STRATEGY_BRANCHES[key].name}.`
+          `${p.name} adopted the ${researchModelTable(p)[key][late[key]].name} operating model in ${researchBranchTable(p)[key].name}.`
         );
       }
     syncPrimaryStrategy(p);

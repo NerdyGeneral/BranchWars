@@ -3,7 +3,7 @@
 const CompanyControlSettlement = (() => {
  const copy=x=>JSON.parse(JSON.stringify(x)),R=CompanyControl.RULES;
  const whole=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const fee=n=>Math.ceil(n*25/10000);
  function distinct(books){const ids=new Set();for(const b of books){GroupAccounting.validate(b);if(ids.has(b.entityId))throw Error('Control counterparties must be distinct.');ids.add(b.entityId);}}
  function pending(ctx,offer,diligence){

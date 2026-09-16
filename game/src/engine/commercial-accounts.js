@@ -4,7 +4,7 @@
 // against an equal deposit liability; neither party earns income from relocation.
 const CommercialAccounts=(()=>{
  const copy=x=>JSON.parse(JSON.stringify(x)),uint=n=>Number.isSafeInteger(n)&&n>=0;
- const exact=(x,keys)=>x&&typeof x==='object'&&!Array.isArray(x)&&Object.keys(x).sort().join()===keys.slice().sort().join();
+ const exact=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x))return false;const own=Object.keys(x);if(own.length!==keys.length)return false;const set=new Set(keys);if(set.size!==keys.length)return false;for(let i=0;i<own.length;i++)if(!set.has(own[i]))return false;return true;};
  const policy=()=>({target:null,staffQuarters:0});
  function checkPolicy(value,ids){
   if(!exact(value,['target','staffQuarters'])||!Number.isInteger(value.staffQuarters)||value.staffQuarters<0||value.staffQuarters>8||
