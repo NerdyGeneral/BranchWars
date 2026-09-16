@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "hashAlgorithm": "sha256",
+  "files": [
+    {
+      "name": "BRANCH_WARS.html",
+      "bytes": 2453646,
+      "sha256": "51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5"
+    },
+    {
+      "name": "BRANCH_WARS_LAN_SERVER.ps1",
+      "bytes": 13440,
+      "sha256": "52ede2ed07ed4c6ba3fe3db4045a826f0a9a2ebc7fc8db2c48ccd9ad8e81f2d1"
+    },
+    {
+      "name": "OPEN_BRANCH_WARS.bat",
+      "bytes": 2219,
+      "sha256": "c382dbd9549771fb3f7b59fbe9f49471f5f41e8f564f771475765f170ef5cd63"
+    },
+    {
+      "name": "OPEN_LAN_GAME.bat",
+      "bytes": 213,
+      "sha256": "974fc946b54082c5ece3d85ff21a090a214f11f850c8445423dd3e01c0e43277"
+    },
+    {
+      "name": "README.txt",
+      "bytes": 4655,
+      "sha256": "8b9d6f4f4587adf7ad0d25659469bc59189fccc7d6a8d24ffb976dc0083da21b"
+    }
+  ]
+}
