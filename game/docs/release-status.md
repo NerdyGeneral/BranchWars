@@ -18,7 +18,7 @@ rc2 compatibility reference. [Publication notes](../../releases/v4-playtest-note
 and [package verification](../../releases/v4-verification.json) distinguish this
 playtest from release acceptance. Portable SHA256
 `a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf`;
-engine SHA256 `6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33`.
+engine SHA256 `96e3a14b0f94aa1a98273ab2ebeb23782bbe55d960b39ebbb1c51d0527ecf492`.
 202 source inputs; Core8.19 unchanged, new Expanded9.33 explicit
 `bankRivalryVersion:1`. Earlier saves and rematches keep their old rules.
 

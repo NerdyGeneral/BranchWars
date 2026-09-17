@@ -223,6 +223,15 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // and rematch pass. Old9.32 exact replay and three transport pairs were rerun;
 // the completed120-month9.33 snapshot restores exactly under the correction.
 // This pin is not long-run strategic or physical two-computer acceptance.
-const expected='6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33';
+// rc4 re-pin. Core gains researchProgramVersion (save 8.20) behind an explicit
+// edition opt-in; un-opted Core 8.19 and Expanded 9.33 both replay exactly against
+// their recorded reference builds. Scoped checks rerun before this fingerprint
+// moved: behavior-golden, runtime-stages, determinism, campaign-lifecycle,
+// bank_economics, bank_rivalry, expanded_edition, expanded_edition_network, build,
+// engine and research_program; the full suite, with every remaining failure
+// confirmed pre-existing on rc3; and game/BRANCH_WARS.html rebuilt from source to
+// the byte-identical portable hash shipped in releases/v4-rc4.
+// This pin is still not long-run strategic or physical two-computer acceptance.
+const expected='96e3a14b0f94aa1a98273ab2ebeb23782bbe55d960b39ebbb1c51d0527ecf492';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
