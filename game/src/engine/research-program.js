@@ -291,15 +291,3 @@ function projectResearchProgram(g,out){
  out.me.researchProductGates=Object.fromEntries(Object.entries(RESEARCH_PRODUCT_GATES).map(([line,gates])=>
   [line,Object.fromEntries(Object.keys(gates).map(k=>[k,researchProductBarred(g.players.find(p=>p.id===out.me.id),line,k)]))]));
 }
-
-// The bot picks products by doctrine and rate environment (ai.js), including the
-// gated ones. Downgrade rather than let it submit an illegal plan; the first
-// option of each line is always available, so this can never leave it productless.
-const researchPriorChooseBot=chooseBot;
-chooseBot=function(g,index){
- const plan=researchPriorChooseBot(g,index),p=g.players[index];
- if(plan&&plan.products&&researchProgramRules(p))
-  for(const [line,key] of Object.entries(plan.products))
-   if(researchProductBarred(p,line,key))plan.products[line]=Object.keys(PRODUCT_PORTFOLIOS[line].options)[0];
- return plan;
-};

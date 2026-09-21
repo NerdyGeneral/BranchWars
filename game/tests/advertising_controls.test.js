@@ -90,9 +90,12 @@ test('Product and market advertising editors use distinct IDs and one authoritat
 test('Application remedy opens the exact control, preserves instructions and rejects a stale owner',()=>{
  const h=fresh();h.run("productDeskView='advertising';destination=null;setWorkspaceTab=tab=>destination=tab;focusWorkspaceTarget=target=>focusedControl=target.id");
  h.run('bindAdvertisingDesk(currentView())');const button=h.elements.get('#advertisingApplicationsReview'),before=h.run('JSON.stringify({game,draft})');
- button.listeners.click();assert.equal(h.run('productDeskView'),'onboarding');assert.equal(h.run('destination'),'products');
+ button.listeners.click();assert.equal(h.run('subjectWorkspace.customers'),'onboarding');assert.equal(h.run('destination'),'customers');
  assert.equal(h.run('focusedControl'),'onboarding-share');assert.equal(h.run('JSON.stringify({game,draft})'),before);
- h.run("seat=1;newDraft(currentView());productDeskView='development'");button.listeners.click();assert.equal(h.run('productDeskView'),'development');
+ h.run("seat=1;newDraft(currentView());subjectWorkspace.customers='households';destination=null;focusedControl=null");
+ const otherOwner=h.run('JSON.stringify({game,draft})');button.listeners.click();
+ assert.equal(h.run('subjectWorkspace.customers'),'households');assert.equal(h.run('destination'),null);assert.equal(h.run('focusedControl'),null);
+ assert.equal(h.run('JSON.stringify({game,draft})'),otherOwner);
 });
 
 test('A reserve-paused quote does not warn that uncharged spending is still an expense',()=>{

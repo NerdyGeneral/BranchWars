@@ -38,9 +38,15 @@ substitute for an exported backup. IMPORT the export when moving to a new origin
 Only the host exports the authoritative multiplayer campaign. Never distribute
 private saves or access tokens with the game. Keep a backup before importing.
 
-OPTIONAL COMPLEXITY
-Existing optional systems and current opt-in defaults are preserved. Review
-dependency confirmations before starting. In multiplayer, the host applies the
+CAMPAIGN EDITIONS
+To start Core version 8.20, click Core edition and confirm, even if it already
+looks selected, then start your campaign. This enables six research branches
+and permanent operating models. After starting, open Research and check that
+it lists six capabilities, including RISK & CAPITAL.
+Starting without that confirmation retains Core version 8.19. Choose Expanded
+edition and confirm for version 9.33 with persistent bank rivalry. Historical
+campaigns retain their saved rules; import and rematch do not silently upgrade
+them. In multiplayer, the host applies the
 shared settings and both players confirm readiness. Campaign rules stay fixed
 after play begins. National Empire remains a future expansion.
 
@@ -66,7 +72,7 @@ function readRegular(file) {
   if (!info.isFile() || info.isSymbolicLink()) throw Error('Expected a regular package file: ' + path.basename(file));
   return fs.readFileSync(file);
 }
-function verifyPackage(directory) {
+function verifyPackage(directory, { expectedReadme } = {}) {
   const stat = fs.lstatSync(directory);
   if (!stat.isDirectory() || stat.isSymbolicLink()) throw Error('Expected a regular package directory.');
   const entries = fs.readdirSync(directory).sort();
@@ -81,8 +87,13 @@ function verifyPackage(directory) {
     const bytes = readRegular(path.join(directory, entry.name));
     if (bytes.length !== entry.bytes || hash(bytes) !== entry.sha256) throw Error('Package content hash mismatch: ' + entry.name);
   }
-  if (readRegular(path.join(directory, 'README.txt')).toString('utf8') !== README) throw Error('Package README does not match this release tool.');
-  return { directory: path.resolve(directory), portableSha256: manifest.files.find(entry => entry.name === 'BRANCH_WARS.html').sha256, files: INVENTORY.length };
+  // A manifest proves internal integrity, not the origin or currentness of bytes.
+  // Historical packages may contain a historical README. Current-candidate
+  // verification and package creation explicitly require today's generated text.
+  if (expectedReadme !== undefined && readRegular(path.join(directory, 'README.txt')).toString('utf8') !== expectedReadme) throw Error('Package README does not match the expected release text.');
+  return { directory: path.resolve(directory), portableSha256: manifest.files.find(entry => entry.name === 'BRANCH_WARS.html').sha256, files: INVENTORY.length,
+    verification: 'manifest-integrity', scope: 'Six-file manifest integrity only; no source, runtime or publisher-authenticity certification.',
+    provenanceVerified: false, sourceCompared: false, expectedReadmeVerified: expectedReadme !== undefined };
 }
 function packageRelease({ output, gameRoot = ROOT } = {}) {
   if (typeof output !== 'string' || !path.isAbsolute(output)) throw Error('Provide an explicit absolute output directory outside the repository.');
@@ -104,7 +115,7 @@ function packageRelease({ output, gameRoot = ROOT } = {}) {
   fs.writeFileSync(path.join(directory, 'README.txt'), expected.get('README.txt'), { flag: 'wx' });
   const manifest = { schemaVersion: 1, hashAlgorithm: 'sha256', files: CONTENT_FILES.map(name => ({ name, bytes: expected.get(name).length, sha256: hash(expected.get(name)) })) };
   fs.writeFileSync(path.join(directory, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', { flag: 'wx' });
-  return verifyPackage(directory);
+  return verifyPackage(directory, { expectedReadme: README });
 }
 if (require.main === module) {
   try {

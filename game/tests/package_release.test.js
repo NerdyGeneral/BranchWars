@@ -7,7 +7,8 @@ const vm = require('node:vm');
 const { spawnSync } = require('node:child_process');
 const { createHash } = require('node:crypto');
 const { build } = require('../tools/build_game');
-const { packageRelease, verifyPackage, RUNTIME_FILES, INVENTORY } = require('../tools/package_release');
+const { packageRelease, verifyPackage, RUNTIME_FILES, INVENTORY, README } = require('../tools/package_release');
+const { verify: verifyRuntime } = require('../tools/verify_v4_package');
 const gameRoot = path.resolve(__dirname, '..');
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
 function engine(bytes) {
@@ -83,7 +84,74 @@ try {
   assert.equal(cli.status, 0, cli.stderr);assert.equal(JSON.parse(cli.stdout).portableSha256, result.portableSha256);
   const missingArgument = spawnSync(process.execPath, [path.join(gameRoot, 'tools', 'package_release.js')], { encoding: 'utf8' });
   assert.notEqual(missingArgument.status, 0);assert.match(missingArgument.stderr, /Usage/);
+  // The ZIP is independently hashed here; runtime verification explicitly does
+  // not claim an archive-entry/extraction comparison. Final packaging does that.
+  const archive = path.join(temporary, 'local-review.zip');
+  fs.writeFileSync(archive, 'archive hash fixture, not an extraction test');
+  const structural = verifyPackage(output);
+  assert.equal(structural.verification, 'manifest-integrity');
+  assert.equal(structural.provenanceVerified, false);assert.equal(structural.sourceCompared, false);
+  assert.equal(structural.expectedReadmeVerified, false);
+  assert.equal(verifyPackage(output, { expectedReadme: README }).expectedReadmeVerified, true);
+  const current = verifyRuntime(output, archive, { release: 'local-packaging-test' });
+  assert.equal(current.verification, 'current-source-and-runtime');assert.equal(current.profile, 'current');
+  assert.equal(current.release, 'local-packaging-test');assert.equal(current.package, 'local-review.zip');
+  assert.equal(current.sha256, digest(fs.readFileSync(archive)));assert.equal(current.archiveContentVerified, false);
+  assert.equal(current.sourceCompared, true);assert.equal(current.sourceMatches, true);assert.equal(current.expectedReadmeVerified, true);
+  assert.equal(current.runtimeFilesCompared, true);
+  assert.equal(current.pinnedHtmlSha256, null);
+  assert.deepEqual(current.checks.map(check => [check.edition, check.version]), [['core', '8.20'], ['expanded', '9.33']]);
+  assert.equal(current.checks[0].research.legalPaidAcquisition, true);
+  assert.equal(current.checks[0].research.model, 'standing');assert.equal(current.checks[0].research.permanentChoiceEnforced, true);
+  for (const check of current.checks) {
+    assert.equal(check.halfReadyRecovery, true);assert.equal(check.ownerViewsMatch, true);assert.equal(check.rivalPrivateFieldsAbsent, true);
+    assert.equal(check.rematch.rulesPreserved, true);assert.equal(check.rematch.paidResearchReset, true);assert.equal(check.rematch.twoVotesRequired, true);
+  }
+  function replaceFixtureContent(directory, name, bytes) {
+    fs.writeFileSync(path.join(directory, name), bytes);
+    const updated = JSON.parse(fs.readFileSync(path.join(directory, 'manifest.json'), 'utf8'));
+    Object.assign(updated.files.find(entry => entry.name === name), { bytes: Buffer.byteLength(bytes), sha256: digest(bytes) });
+    fs.writeFileSync(path.join(directory, 'manifest.json'), JSON.stringify(updated, null, 2) + '\n');
+  }
+  replaceFixtureContent(second, 'README.txt', 'Historical README fixture\n');
+  assert.equal(verifyPackage(second).files, 6, 'Structural verification accepts self-consistent historical text');
+  assert.throws(() => verifyRuntime(second, archive), /README/);
+  replaceFixtureContent(second, 'README.txt', README);
+  replaceFixtureContent(second, 'BRANCH_WARS.html', Buffer.concat([sourceBytes.get('BRANCH_WARS.html'), Buffer.from('\n<!-- stale bytes -->')]));
+  assert.equal(verifyPackage(second).files, 6);
+  assert.throws(() => verifyRuntime(second, archive), /differs from current assembled source/);
+  replaceFixtureContent(second, 'BRANCH_WARS.html', sourceBytes.get('BRANCH_WARS.html'));
+  replaceFixtureContent(second, 'OPEN_LAN_GAME.bat', Buffer.concat([sourceBytes.get('OPEN_LAN_GAME.bat'), Buffer.from('\r\nrem changed fixture\r\n')]));
+  assert.equal(verifyPackage(second).files, 6);
+  assert.throws(() => verifyRuntime(second, archive), /runtime file differs from current source/);
+  assert.throws(() => verifyRuntime(output, archive, { expectedHtmlSha256: result.portableSha256 }), /must compare assembled source/);
+  assert.throws(() => verifyRuntime(output, archive, { profile: 'unknown' }), /Unknown package profile/);
+  assert.throws(() => verifyRuntime(output, archive, { profile: 'rc3' }), /explicit expected HTML SHA-256/);
+  assert.throws(() => verifyRuntime(output, archive, { profile: 'rc3', expectedHtmlSha256: '0'.repeat(64) }), /pinned historical HTML/);
+  const frozen = path.join(gameRoot, '..', 'releases', 'v4-rc3');
+  const frozenSha = digest(fs.readFileSync(path.join(frozen, 'BRANCH_WARS.html')));
+  assert.equal(frozenSha, 'a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf');
+  const historicalReport = path.join(temporary, 'historical-runtime.json');
+  const historicalCli = spawnSync(process.execPath, [path.join(gameRoot, 'tools', 'verify_v4_package.js'), frozen, archive, historicalReport,
+    '--profile', 'rc3', '--expected-html-sha256', frozenSha], { encoding: 'utf8' });
+  assert.equal(historicalCli.status, 0, historicalCli.stderr);
+  const historical = JSON.parse(fs.readFileSync(historicalReport, 'utf8'));
+  assert.equal(historical.verification, 'pinned-archive-and-runtime');assert.equal(historical.release, null);
+  assert.equal(historical.sourceCompared, false);assert.equal(historical.sourceMatches, null);assert.equal(historical.expectedReadmeVerified, false);
+  assert.equal(historical.runtimeFilesCompared, false);
+  assert.equal(historical.pinnedHtmlSha256, frozenSha);
+  assert.deepEqual(historical.checks.map(check => check.version), ['8.19', '9.33']);
+  assert(historical.checks.every(check => check.rematch === undefined), 'Historical smoke must not imply current research/rematch coverage');
+  assert.equal(digest(fs.readFileSync(path.join(frozen, 'BRANCH_WARS.html'))), frozenSha, 'Historical verification cannot modify its input');
+  const frozenRc2 = path.join(gameRoot, '..', 'releases', 'v4'),rc2Sha = digest(fs.readFileSync(path.join(frozenRc2, 'BRANCH_WARS.html')));
+  assert.throws(() => verifyRuntime(frozenRc2, archive, { profile: 'rc3', expectedHtmlSha256: rc2Sha }), /package profile version/);
+  const historicalRc2 = verifyRuntime(frozenRc2, archive, { profile: 'rc2', expectedHtmlSha256: rc2Sha });
+  assert.equal(historicalRc2.verification, 'pinned-archive-and-runtime');assert.equal(historicalRc2.release, null);
+  assert.deepEqual(historicalRc2.checks.map(check => check.version), ['8.19', '9.32']);
+  const invalidCli = spawnSync(process.execPath, [path.join(gameRoot, 'tools', 'verify_v4_package.js'), frozen, archive, path.join(temporary, 'invalid.json'), '--profile', 'rc3', '--profile', 'rc2'], { encoding: 'utf8' });
+  assert.notEqual(invalidCli.status, 0);assert.match(invalidCli.stderr, /unique/);assert(!fs.existsSync(path.join(temporary, 'invalid.json')));
   console.log('Release packaging PASS: six-file allowlist, spaced output, immutable copies, deterministic manifest, no private workspace files, stale/overwrite/in-repo rejection, extra/tamper verification, packaged creation/resume and CLI verification.');
+  console.log('Package runtime PASS: explicit current 8.20/9.33 and pinned rc3 profiles, legal research reload/permanence, two-vote rematch, half-ready/privacy, strict current README/source matching and evidence-scope receipts.');
 } finally {
   const resolved = fs.realpathSync(temporary), tempRoot = fs.realpathSync(os.tmpdir());
   assert.equal(path.dirname(resolved), tempRoot);assert(path.basename(resolved).startsWith('branchwars-package-test-'));

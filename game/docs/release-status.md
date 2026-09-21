@@ -1,5 +1,28 @@
 # Release status and known issues
 
+## September 21 — V4 rc5 Core Research & Stabilization
+
+**Verified package with complete exact command coverage across qualified runs.** [V4 rc5](https://github.com/NerdyGeneral/BranchWars/releases/tag/v4.0.0-rc5) provides the [six-file game ZIP](https://github.com/NerdyGeneral/BranchWars/releases/download/v4.0.0-rc5/branch-wars-v4-rc5.zip), byte-identical to the tested local stabilization package. [Repair status](rc4-local-repair.md) · [release notes](../../releases/v4-rc5-notes.md) · [public verification summary](../../releases/v4-rc5-verification.json) · [Claude Code review summary](../../CLAUDE_CODE_REVIEW.md). Earlier frozen releases remain unchanged.
+
+| Current artifact | Identity / evidence |
+| --- | --- |
+| `branch-wars-v4-rc5.zip` | ZIP SHA-256 `38a734cfd98e14d8512108a392a286581a0b4774fb3376f614e98e12dd60c672` |
+| Working and packaged portable | `26d9603689678aaed44ffa2c0981b65877b62cc1d3f78aa2cb43579fec1e0af3` |
+| Engine | `8bf022b18ceb1efdd646f32123b519495c5324e7609195ae1fe64b03b4369d0f` |
+| Qualified command coverage | 278 exact standard commands; original full gate remains failed at 3/44 |
+| Package verification | All six archive/extracted files match source; current-profile runtime smoke passed |
+| Actual Claude Code review | Scoped package review closed; independent fingerprint, coverage-citation and ZIP checks |
+
+The complete 214-entry baseline has 213 passes and one exact stale engine-pin failure; separate full outer tail 41/41 and standard supplement 71/71 passed with unchanged inputs. After all runs terminated and all 11 compatibility/build/research prerequisites passed, the approved engine pin/comment and package-README prose were applied and both affected complete checks passed. The failed pin row is mapped explicitly to the standalone pass; the original failed receipts remain unchanged. The qualifier checks exact schedules/arguments and two-file fingerprint reconstruction. Its `fullGatePassed:false` and `continuousStandardGatePassed:false` are intentional: this is complete command coverage across runs.
+
+The fixes retain paid research through reload and campaign rules through rematch, improve Core operating-model adoption, correct research descriptions and open the visible service controls from Strategy. Household-enabled campaigns route services to Customers/commercial; service-only campaigns without household ownership retain Markets. Explicit Core selection and confirmation starts 8.20; untouched setup stays 8.19. Check Research for six capabilities including RISK & CAPITAL. Confirmed Expanded starts 9.33; imports/rematches preserve saved rules.
+
+No browser/human or physical two-computer acceptance is claimed. Automated Windows LAN checks passed. Model reachability, valid recovery proposals and automated census runs do not establish strategic balance. The standard release-balance runner's legacy configuration must not be relabelled as current Core/Expanded balance. Sustained Expanded recovery and conventional-lending balance remain open. Full blueprint completion is outside this prerelease.
+
+## Historical release and checkpoint evidence
+
+Everything below describes its named older artifact/checkpoint, including past pending/interrupted gates and browser samples. It is preserved history, not rc5 status. The earlier September 20 candidate and joint reviews remain local historical evidence; its 50fff06d portable differs from rc5. Raw local diagnostics and review workspaces are not part of the public package.
+
 **September 14, 2026 · implementation incomplete.** This page owns artifact identity, known issues and release gates. The [implementation ledger](v3-usability.md) owns the full completed/remaining checklist. Detailed prior test narratives are in the [release archive](archive/release-history-2026-09-13.md).
 
 Detailed local diagnostics and raw campaign dumps are preserved but not bundled

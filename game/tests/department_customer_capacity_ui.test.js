@@ -6,18 +6,21 @@ const assert=require('node:assert/strict'),{harness}=require('./github_resilienc
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function fresh(version=6){
  const h=harness();h.run(`const base=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;const options=E.previewFeatureSelection(base,{field:'onboardingVersion',value:1}).options;
- game=E.createGame({...options,mode:'hotseat',seed:'customer-capacity-ui',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='products';newDraft(currentView());draft.decision='b';
+ game=E.createGame({...options,mode:'hotseat',seed:'customer-capacity-ui',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='overview';newDraft(currentView());draft.decision='b';
  draft.allocation={service:4,business:1,lending:1,operations:2};draft.householdPolicy.retention=25;draft.relationshipOfferPolicy.share=25;draft.onboardingPolicy.share=25;
  draft.management.research.enabled=false;draft.investments={};
  for(const office of Object.values(draft.facilityLifecyclePolicy.offices))for(const role of E.DepartmentFunctions.ROLES)office.staffQuarters[role]=0;
  if(draft.departmentFunctionsPolicy){for(const row of Object.values(draft.departmentFunctionsPolicy.quotas))for(const role of E.DepartmentFunctions.ROLES)row[role]=0;draft.departmentFunctionsPolicy.vendors.relationships=2;draft.departmentFunctionsPolicy.vendors.onboarding=2;}
  errors=[];toast=s=>errors.push(s);renderProducts=v=>renderProductPrograms(v);renderProjects=()=>{};renderReady=()=>{};
  const originalCustomerPreview=E.departmentCustomerPreview;customerCalls=0;E.departmentCustomerPreview=(...args)=>{customerCalls++;return originalCustomerPreview(...args);};
- `);return h;
+ `);
+ // Replacing the real owner mount removes prior descendant handlers.
+ let content='';Object.defineProperty(h.c.document.querySelector('#customerGrowthPanel'),'innerHTML',{configurable:true,get:()=>content,set(value){content=value;for(const [selector,control]of h.elements)if(selector.startsWith('#relationshipOffer-')||selector.startsWith('#onboarding-'))control.listeners={};}});
+ return h;
 }
-const panel=h=>h.elements.get('#productProgramsPanel').innerHTML;
+const panel=h=>h.elements.get('#customerGrowthPanel').innerHTML;
 const bytes=h=>h.run('JSON.stringify(game)'),draftBytes=h=>h.run('JSON.stringify(draft)');
-function desk(h,name){h.run(`productDeskView='${name}';renderProductPrograms(currentView());`);return panel(h);}
+function desk(h,name){h.run(`selectCustomerSubject('${name}');`);return panel(h);}
 test('Both desks use authoritative preparation and distinguish physical from effective work',()=>{
  const h=fresh(),before=bytes(h),draftBefore=draftBytes(h);h.run('const quoted=E.departmentCustomerPreview(currentView().me,currentView(),draft);');
  const offers=desk(h,'relationships'),onboarding=desk(h,'onboarding');

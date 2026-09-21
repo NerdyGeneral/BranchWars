@@ -44,7 +44,7 @@ if(harness().run('typeof strategyServiceUseContent')==='function')test('service 
  // UI-only specimen: no simulated award or balance claim is made by this fixture.
  h.run('game.players[0].serviceDesk.contracts=[{id:"display-only",kind:"treasury",fee:40000,due:10,misses:0}];renderStrategy(currentView())');
  assert.match(html(h),/Signed fees, if fully served<\/small><b>\$40K\/month/);assert.match(html(h),/Served under this draft<\/small><b>0 \/ 1/);
- const world=bytes(h);click(h,'strategyServiceLink');assert.equal(h.run('workspaceTab'),'markets');assert.equal(h.elements.get('#servicePricing').open,true);assert.equal(bytes(h),world);
+ const world=bytes(h);click(h,'strategyServiceLink');assert.equal(h.run('workspaceTab'),'customers');assert.equal(h.run('subjectWorkspace.customers'),'commercial');assert.equal(h.elements.get('#servicePricing').open,true);assert.equal(bytes(h),world);
  h.run('draft.departmentFunctionsPolicy.quotas.technology.operations=999;unavailableUse=strategyServiceUseContent(currentView(),"treasury")');assert.match(h.run('unavailableUse'),/Service estimate unavailable/);
 });
 test('product applications distinguish staged instructions and actual implementation',()=>{
@@ -64,5 +64,71 @@ test('inspection does not silently remove a conflicting project instruction or r
 test('selections reset by campaign and owner but remain when inspecting another desk',()=>{
  const h=fresh();click(h,'strategy-select-commercial');click(h,'strategy-desk-applications');click(h,'strategy-app-partnerTreasuryDesk');h.run('workspaceTab="markets";renderStrategy(currentView());workspaceTab="strategy";renderStrategy(currentView())');assert.equal(h.run('strategyWorkspace.application'),'partnerTreasuryDesk');
  h.run('seat=1;newDraft(currentView());renderStrategy(currentView())');assert.equal(h.run('strategyWorkspace.branch'),'network');assert.equal(h.run('strategyWorkspace.desk'),'milestones');assert.equal(h.run('strategyWorkspace.application'),null);
+});
+
+// Model the real panel parents: an open details element can still be hidden by
+// its owning customer mount, which a workspace-name-only assertion misses.
+function serviceRouteFixture(kind='expanded'){
+ const h=fresh();h.c.routeKind=kind;
+ h.run(`const routeOptions=routeKind==='legacy'
+  ?E.previewFeatureSelection({}, {field:'serviceExpansionVersion',value:1}).options
+  :E.previewCampaignEdition({},routeKind,{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true}).options;
+  game=E.createGame({...routeOptions,mode:'hotseat',seed:'strategy-service-owner',created:1});seat=0;newDraft(currentView());draft.decision='b';
+  const panel=$('#customerPipelinePanel');
+  serviceMarketHome={id:'original-market-home',insertBefore(child){child.parentElement=this;child.parentNode=this;}};serviceMarketHome.insertBefore(panel);
+  const mount=$('#customerCommercialMount');mount.insertBefore=function(child){child.parentElement=this;child.parentNode=this;};
+  $('#pipeline').parentElement=panel;$('#servicePricing').parentElement=$('#pipeline');
+  if(currentView().me.serviceDesk)renderPipeline(currentView());
+  setWorkspaceTab('strategy',currentView());renderStrategy(currentView());`);
+ click(h,'strategy-select-commercial');click(h,'strategy-desk-applications');
+ if(h.run('!!currentView().me.serviceDesk'))click(h,'strategy-app-partnerTreasuryDesk');
+ return h;
+}
+
+test('Expanded service shortcut reveals its real customer owner and renders the service controls',()=>{
+ const h=serviceRouteFixture();
+ assert.equal(h.run('game.version'),'9.33');
+ assert.match(html(h),/id="strategyServiceLink"/);
+ assert.equal(h.elements.get('#customerCommercialMount').hidden,true,'Households initially hides the commercial mount');
+ h.elements.get('#pipeline').innerHTML='';
+ const before=bytes(h);click(h,'strategyServiceLink');
+ assert.equal(h.elements.get('#customerCommercialMount').hidden,false,'Opening details must also reveal its owning mount');
+ assert.equal(h.run('workspaceTab'),'customers');assert.equal(h.run('subjectWorkspace.customers'),'commercial');
+ assert.equal(h.elements.get('#customerPipelinePanel').parentElement,h.elements.get('#customerCommercialMount'));
+ assert.match(h.elements.get('#customerSubjectNavigation').innerHTML,/data-subject-desk="commercial" aria-pressed="true"/);
+ assert.match(h.elements.get('#pipeline').innerHTML,/id="servicePricing"/);
+ assert.match(h.elements.get('#pipeline').innerHTML,/data-service-active="treasury"/);
+ assert.equal(h.elements.get('#servicePricing').open,true);
+ assert.equal(bytes(h),before,'Inspection cannot change the game or the staged plan');
+});
+
+test('legacy service-only campaigns keep their Markets-owned shortcut',()=>{
+ const h=serviceRouteFixture('legacy'),before=bytes(h);
+ assert.equal(h.run('!!currentView().me.householdBook'),false);assert.match(html(h),/id="strategyServiceLink"/);
+ click(h,'strategyServiceLink');
+ assert.equal(h.run('workspaceTab'),'markets');
+ assert.equal(h.elements.get('#customerPipelinePanel').parentElement,h.run('serviceMarketHome'));
+ assert.equal(h.elements.get('#customerPipelinePanel').getAttribute('data-workspace'),'markets');
+ assert.match(h.elements.get('#pipeline').innerHTML,/data-service-active="treasury"/);
+ assert.equal(h.elements.get('#servicePricing').open,true);assert.equal(bytes(h),before);
+});
+
+test('Core research does not expose an unsupported service shortcut',()=>{
+ const h=serviceRouteFixture('core'),before=bytes(h);assert.equal(h.run('game.version'),'8.20');
+ assert.equal(h.run('!!currentView().me.serviceDesk'),false);
+ for(const branch of h.run('Object.keys(currentView().strategyBranches)')){
+  click(h,'strategy-select-'+branch);click(h,'strategy-desk-applications');
+  assert.doesNotMatch(html(h),/id="strategyServiceLink"/);
+ }
+ assert.equal(bytes(h),before);
+});
+
+test('stale service shortcuts cannot navigate another bank, month, plan or connection',()=>{
+ for(const change of ['seat=1;newDraft(currentView())','game.cycle++','game=JSON.parse(JSON.stringify(game))','draft.hires=1','connectionAttempt++']){
+  const h=serviceRouteFixture(),handler=h.elements.get('#strategyServiceLink').listeners.click;
+  h.run(change);const before=bytes(h),navigation=h.run('JSON.stringify({workspaceTab,desk:subjectWorkspace.customers,hidden:$("#customerCommercialMount").hidden})');
+  handler();assert.equal(bytes(h),before,change);
+  assert.equal(h.run('JSON.stringify({workspaceTab,desk:subjectWorkspace.customers,hidden:$("#customerCommercialMount").hidden})'),navigation,change);
+ }
 });
 console.log(JSON.stringify({suite:'strategy-workspace',checks,scope:'Selected-capability workflow, pure inspection, model review and exact funding/deployment commands, stale contexts, lifecycle state and cross-object navigation. No new simulation rules.'}));

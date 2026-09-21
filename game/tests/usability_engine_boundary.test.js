@@ -232,6 +232,24 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // confirmed pre-existing on rc3; and game/BRANCH_WARS.html rebuilt from source to
 // the byte-identical portable hash shipped in releases/v4-rc4.
 // This pin is still not long-run strategic or physical two-computer acceptance.
-const expected='96e3a14b0f94aa1a98273ab2ebeb23782bbe55d960b39ebbb1c51d0527ecf492';
+// September 20 authorized rc4 defect repair: preserve acquired research models
+// at migration and research rules at rematch; integrate gated AI products without
+// override debt; remove unreachable Core recovery code. Final-source historical
+// bank economics/rivalry, golden behavior, runtime stages, determinism, campaign
+// lifecycle and edition/network compatibility commands passed (21 Node entries).
+// Legal acquired-model/rematch and UI/AI regression checks pass separately.
+// No preserved reference, golden or architecture ceiling was changed.
+// September 20, 2026 authorized current-Core AI model repair: the engine delta
+// is confined to ai.js. Reverting only that file and reassembling reproduces
+// 330309e8cf4c8590e7e688019e62472928aa9cea9053fa98507c24135dac3e72 exactly.
+// Current Core gains deterministic operating-context choices and earned/funded
+// adoption; older profiles retain the exact chooser and RNG. No economic
+// formula or investment priority changed. Named final-source checks passed
+// before this move: behavior-golden, runtime-stages, determinism,
+// campaign-lifecycle, bank_economics, bank_rivalry, expanded_edition,
+// expanded_edition_network, tests/build.test.js, research_program and research_bot.
+// No historical reference, golden or architecture ceiling was changed.
+// This pin does not convert a failed gate into a pass or certify game balance.
+const expected='8bf022b18ceb1efdd646f32123b519495c5324e7609195ae1fe64b03b4369d0f';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
