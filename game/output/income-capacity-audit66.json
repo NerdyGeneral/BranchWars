@@ -1,0 +1,395 @@
+{
+  "portableSha256": "e056eeab470d3f41e68ff12e1a93d28a085e7fa0b0547f60d217043dae6cc1f1",
+  "engineSha256": "b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642",
+  "scriptSha256": "b2cd0d6ed210082de988ae7279e922c1a0ddf046377833eabcca46ae97a54036",
+  "scope": "Pure standing next-month forecasts from preserved actual states. Instrumentation delegates to the original production function and records existing staffing, administration and site constraints. Forecasts must exactly equal the uninstrumented engine. No changed coefficients, settlement, hypothetical construction or invented resources.",
+  "cases": [
+    {
+      "label": "Rate opening",
+      "snapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "strategy": "ordinary",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 4,
+        "business": 1,
+        "lending": 2,
+        "operations": 1
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 9090373,
+          "allocation": {
+            "service": 4,
+            "business": 1,
+            "lending": 2,
+            "operations": 1
+          },
+          "availableSalesStaff": 1,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 400000,
+          "effectiveProductionCeiling": 95765.47199999998
+        }
+      ],
+      "forecast": {
+        "loanIncome": 55509.06535200003,
+        "commercialIncome": 66028.8,
+        "loanGrowth": -313862,
+        "principalRepaid": 409627,
+        "chargeoff": 0,
+        "creditRecovery": 0,
+        "profit": 26418,
+        "expense": 157955,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate opening",
+      "snapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "strategy": "lending",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 4,
+        "operations": 2
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 9090373,
+          "allocation": {
+            "service": 1,
+            "business": 1,
+            "lending": 4,
+            "operations": 2
+          },
+          "availableSalesStaff": 3,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 400000,
+          "effectiveProductionCeiling": 400000
+        }
+      ],
+      "forecast": {
+        "loanIncome": 57360.03109200003,
+        "commercialIncome": 66028.8,
+        "loanGrowth": -9627,
+        "principalRepaid": 409627,
+        "chargeoff": 0,
+        "creditRecovery": 0,
+        "profit": 10838,
+        "expense": 159240,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate opening",
+      "snapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "strategy": "commercial",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 4,
+        "lending": 1,
+        "operations": 2
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 9090373,
+          "allocation": {
+            "service": 1,
+            "business": 4,
+            "lending": 1,
+            "operations": 2
+          },
+          "availableSalesStaff": 0.5,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 400000,
+          "effectiveProductionCeiling": 77330
+        }
+      ],
+      "forecast": {
+        "loanIncome": 55396.90681200004,
+        "commercialIncome": 66028.8,
+        "loanGrowth": -332297,
+        "principalRepaid": 409627,
+        "chargeoff": 0,
+        "creditRecovery": 0,
+        "profit": 13875,
+        "expense": 154240,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "snapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "strategy": "ordinary",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 2,
+        "business": 1,
+        "lending": 3,
+        "operations": 3
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 7695006,
+          "allocation": {
+            "service": 2,
+            "business": 1,
+            "lending": 3,
+            "operations": 3
+          },
+          "availableSalesStaff": 2.25,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 738071,
+          "effectiveProductionCeiling": 235885.47839999996
+        }
+      ],
+      "forecast": {
+        "loanIncome": 46144.65456899999,
+        "commercialIncome": 0,
+        "loanGrowth": -72963,
+        "principalRepaid": 292866,
+        "chargeoff": 4142,
+        "creditRecovery": 11840,
+        "profit": -93761,
+        "expense": 176506,
+        "fundingLoss": 502
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "snapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "strategy": "lending",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 4,
+        "operations": 3
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 7695006,
+          "allocation": {
+            "service": 1,
+            "business": 1,
+            "lending": 4,
+            "operations": 3
+          },
+          "availableSalesStaff": 2.25,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 738071,
+          "effectiveProductionCeiling": 380952
+        }
+      ],
+      "forecast": {
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 68759.00460829493,
+        "loanGrowth": 72104,
+        "principalRepaid": 292866,
+        "chargeoff": 4142,
+        "creditRecovery": 11840,
+        "profit": -37156,
+        "expense": 176413,
+        "fundingLoss": 2977
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "snapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "strategy": "commercial",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 4,
+        "lending": 1,
+        "operations": 3
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 7695006,
+          "allocation": {
+            "service": 1,
+            "business": 4,
+            "lending": 1,
+            "operations": 3
+          },
+          "availableSalesStaff": 0.75,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 414625,
+          "effectiveProductionCeiling": 126984
+        }
+      ],
+      "forecast": {
+        "loanIncome": 45421.334126999995,
+        "commercialIncome": 124339.2,
+        "loanGrowth": -181864,
+        "principalRepaid": 292866,
+        "chargeoff": 4142,
+        "creditRecovery": 11840,
+        "profit": 16067,
+        "expense": 176740,
+        "fundingLoss": 2428
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Business after24",
+      "snapshotSha256": "8efc71d6248550aa1c80ce470ce56d4e91e71af8bbfd4bc3bfcf9e5bab99cd8e",
+      "month": 25,
+      "strategy": "ordinary",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 2,
+        "operations": 7
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 4152625,
+          "allocation": {
+            "service": 1,
+            "business": 1,
+            "lending": 2,
+            "operations": 7
+          },
+          "availableSalesStaff": 1.5,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 553797,
+          "effectiveProductionCeiling": 163236.6
+        }
+      ],
+      "forecast": {
+        "loanIncome": 25242.84957500003,
+        "commercialIncome": 160684.8,
+        "loanGrowth": -29450,
+        "principalRepaid": 169945,
+        "chargeoff": 9712,
+        "creditRecovery": 9957,
+        "profit": -6275,
+        "expense": 236979,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Business after24",
+      "snapshotSha256": "8efc71d6248550aa1c80ce470ce56d4e91e71af8bbfd4bc3bfcf9e5bab99cd8e",
+      "month": 25,
+      "strategy": "lending",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 2,
+        "operations": 7
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 4152625,
+          "allocation": {
+            "service": 1,
+            "business": 1,
+            "lending": 2,
+            "operations": 7
+          },
+          "availableSalesStaff": 1.5,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 553797,
+          "effectiveProductionCeiling": 263625
+        }
+      ],
+      "forecast": {
+        "loanIncome": 25757.237687000033,
+        "commercialIncome": 160684.8,
+        "loanGrowth": 70938,
+        "principalRepaid": 169945,
+        "chargeoff": 9712,
+        "creditRecovery": 9957,
+        "profit": -12277,
+        "expense": 234779,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    },
+    {
+      "label": "Rate Business after24",
+      "snapshotSha256": "8efc71d6248550aa1c80ce470ce56d4e91e71af8bbfd4bc3bfcf9e5bab99cd8e",
+      "month": 25,
+      "strategy": "commercial",
+      "accepted": true,
+      "reason": null,
+      "allocation": {
+        "service": 1,
+        "business": 2,
+        "lending": 1,
+        "operations": 7
+      },
+      "ceilings": [
+        {
+          "owner": "bank-d6595779",
+          "principal": 4152625,
+          "allocation": {
+            "service": 1,
+            "business": 2,
+            "lending": 1,
+            "operations": 7
+          },
+          "availableSalesStaff": 0.75,
+          "administrationCoverage": 1,
+          "facilityLoanCapacity": 406049,
+          "effectiveProductionCeiling": 131812.5
+        }
+      ],
+      "forecast": {
+        "loanIncome": 25081.832999000024,
+        "commercialIncome": 160684.8,
+        "loanGrowth": -60874,
+        "principalRepaid": 169945,
+        "chargeoff": 9712,
+        "creditRecovery": 9957,
+        "profit": -3952,
+        "expense": 225779,
+        "fundingLoss": 0
+      },
+      "pure": true,
+      "exactUninstrumentedForecast": true
+    }
+  ]
+}

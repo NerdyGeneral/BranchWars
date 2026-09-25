@@ -1,0 +1,97 @@
+{
+  "metadata": {
+    "mode": "partial",
+    "from": "tests/legacy_services_ui.test.js",
+    "portableSha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92",
+    "inputEntries": [
+      "src",
+      "tests",
+      "tools",
+      "experiments",
+      "reports/reference-builds",
+      "BRANCH_WARS.html",
+      "BRANCH_WARS_LAN_SERVER.ps1",
+      "RUN_TESTS.bat",
+      "docs/game-reference.md"
+    ],
+    "inputsSha256": "e454d48e38ebbafb97cab3973ca9a988e3ededd8afb963abdfcab60974021772",
+    "commands": [
+      [
+        "tests/legacy_services_ui.test.js"
+      ],
+      [
+        "tests/funding_movement_ui.test.js"
+      ],
+      [
+        "tests/income_review.test.js"
+      ],
+      [
+        "tests/income_review_ui.test.js"
+      ],
+      [
+        "tests/income_history.test.js"
+      ],
+      [
+        "tests/income_history_network.test.js"
+      ],
+      [
+        "tests/commercial_fee_economics.test.js"
+      ],
+      [
+        "tests/credit_workload.test.js"
+      ],
+      [
+        "tests/credit_investment_staffing.test.js"
+      ],
+      [
+        "tests/income_statement.test.js"
+      ],
+      [
+        "tests/bank_economics.test.js"
+      ],
+      [
+        "tests/bank_economics_ui.test.js"
+      ],
+      [
+        "tests/commercial_workload_shared.test.js"
+      ],
+      [
+        "tests/core_balance_sheet.test.js"
+      ],
+      [
+        "tests/core_balance_sheet_ui.test.js"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--core-balance"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--bank-economics"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--credit-workload"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--commercial"
+      ],
+      [
+        "tests/income_banking_trial.test.js"
+      ],
+      [
+        "tests/gate_evidence.test.js"
+      ]
+    ]
+  },
+  "events": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\reports\\baselines\\gate-2026-09-14T13-16-07-448Z-a3102ffc-c81e-41e2-b0a3-6b0edc595037.jsonl",
+  "log": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\reports\\baselines\\gate-2026-09-14T13-16-07-448Z-a3102ffc-c81e-41e2-b0a3-6b0edc595037.log",
+  "passed": true,
+  "incomplete": false,
+  "completed": 21,
+  "expected": 21,
+  "sourceUnchanged": true,
+  "portableAfterSha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92",
+  "inputsAfterSha256": "e454d48e38ebbafb97cab3973ca9a988e3ededd8afb963abdfcab60974021772"
+}

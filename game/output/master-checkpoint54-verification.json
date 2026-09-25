@@ -1,0 +1,41 @@
+{
+  "checkpoint": 54,
+  "scope": "Prepared Credit read model and contextual loan-flow UI. No changes to simulation, AI, saved rules or balance values.",
+  "portable": "output/BRANCH_WARS_credit54_complete.html",
+  "portableSha256": "4a3de860a523d8754d0b2a5b2647c27f042ed375f806d1544bbeb71889ee90de",
+  "engineSha256": "0c361c9efa3dbcb97643bea25774c1f8724f8123b24109dade92007633dc66ef",
+  "inputs": 187,
+  "normalPlayablePreservedSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "checks": {
+    "credit_planning_ui.test.js": "Both groups pass on complete source: real Expanded finite prepared staffing, old raw overstatement reproduced, identical operating forecast, pure world/plans, invalid quota refusal, signed flow/missing report, navigation, stale owner/draft/generation and paused GitHub guards.",
+    "credit_products_ui.test.js": "Pass on complete source: five-product allocations and terms, pure staged edits and owner guard.",
+    "earnings_bridge_expanded.test.js": "Pass on identical engine before wording-only final UI edit: actual two-month independent preserved51 AI/world/RNG equality and historical public-view equality.",
+    "architecture.test.js --source": "Pass on final complete source; ceilings unchanged.",
+    "department_ui.test.js": "Pass on same engine; funded leadership proposals, owner/sealed/stale guards.",
+    "releaseRunnerSyntax": "Pass; Credit regression added to both runners.",
+    "docs.test.js": "Pass: 66 Markdown documents and 521 local links.",
+    "exactSourceArtifact": "Final complete artifact hash matches the recorded identity and its bytes match assembled source."
+  },
+  "capturedCounterfactual": {
+    "source": "output/economics-checkpoint53-owner/closing.json.gz",
+    "month": 25,
+    "seat": 0,
+    "ordinaryEffectiveOriginationStaff": 1,
+    "alternativeEffectiveOriginationStaff": 1.5,
+    "baseCapacityBoth": 100000,
+    "ordinaryNewLoans": 100000,
+    "alternativeNewLoans": 100000,
+    "ordinaryProfit": 34154,
+    "alternativeProfit": 32554,
+    "ordinaryQuotedVendors": 6000,
+    "alternativeQuotedVendors": 11600,
+    "alternative": "Purchase two existing credit-administration work quarters, release the same physical lending quarters; no injected resources.",
+    "worldUnchanged": true,
+    "limitations": "One pure month25 comparison, not a played long-run alternative or proof of affordable/profitable facility conversion. The paid executive response has deferred consequences."
+  },
+  "olderStressRun": {"session":18698,"lastReportedRegulatoryMonths":168,"terminal":false,"artifactCheckpoint":51},
+  "fullWindowsGate": "Not run for this intermediate candidate",
+  "browserAcceptance": "Not performed",
+  "physicalTwoComputerAcceptance": "Not performed",
+  "publication": false
+}

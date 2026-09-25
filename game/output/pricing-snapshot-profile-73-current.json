@@ -1,0 +1,109 @@
+{
+  "cycle": 73,
+  "snapshotSha256": "36ca2d034eaa3c4dfce4b1a08bb6828b3cd49c635e986bd877c390c795159e01",
+  "engineSha256": "257a47f3b5b2304a89aa26bf54c2491080698dda9eeeacc4bce5427fdddd5cae",
+  "jsonBytes": 18066624,
+  "elapsedMs": 16322,
+  "scope": "Two ordinary AI plans from a real captured checkpoint; inclusive function times overlap. Instrumented and plain results/world/RNG compared exactly. No new campaign, fabricated balances or release acceptance.",
+  "largestFields": [
+    {
+      "key": "eventLedger",
+      "bytes": 17210679
+    },
+    {
+      "key": "players",
+      "bytes": 450641
+    },
+    {
+      "key": "log",
+      "bytes": 255805
+    },
+    {
+      "key": "companyEconomy",
+      "bytes": 76053
+    },
+    {
+      "key": "trend",
+      "bytes": 11518
+    },
+    {
+      "key": "regionalGrowth",
+      "bytes": 10863
+    },
+    {
+      "key": "departmentFunctionEconomy",
+      "bytes": 9534
+    },
+    {
+      "key": "lastPlans",
+      "bytes": 9205
+    }
+  ],
+  "functions": [
+    {
+      "name": "operatingPreview",
+      "calls": 107,
+      "ms": 5549
+    },
+    {
+      "name": "staffingRecoveryReview",
+      "calls": 2,
+      "ms": 5248
+    },
+    {
+      "name": "departmentFunctionsQuote",
+      "calls": 229,
+      "ms": 4386
+    },
+    {
+      "name": "facilityLifecyclePlanningContext",
+      "calls": 1279,
+      "ms": 2964
+    },
+    {
+      "name": "planFacilityInvestment",
+      "calls": 2,
+      "ms": 1476
+    },
+    {
+      "name": "planProductPricing",
+      "calls": 2,
+      "ms": 1296
+    },
+    {
+      "name": "facilityInvestmentReview",
+      "calls": 2,
+      "ms": 1167
+    },
+    {
+      "name": "prepareOperatingForecast",
+      "calls": 128,
+      "ms": 502
+    },
+    {
+      "name": "lifecycleInstructionQuote",
+      "calls": 8,
+      "ms": 293
+    },
+    {
+      "name": "productPricingSchedule",
+      "calls": 18,
+      "ms": 274
+    },
+    {
+      "name": "segmentDepositSummary",
+      "calls": 454,
+      "ms": 91
+    },
+    {
+      "name": "productPricingQuote",
+      "calls": 18,
+      "ms": 23
+    },
+    {
+      "name": "planExecutionReserve",
+      "calls": 2,
+      "ms": 0
+    }
+  ]
+}

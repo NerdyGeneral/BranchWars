@@ -77,10 +77,11 @@ function Parse-Query([string]$Query) {
 }
 
 function Get-RoomAndRole([string]$Code, [string]$Token) {
+    if ([string]::IsNullOrWhiteSpace($Token)) { throw 'Invalid room token.' }
     $normalized = $Code.Trim().ToUpperInvariant()
     if (-not $rooms.ContainsKey($normalized)) { throw 'Room not found.' }
     $room = $rooms[$normalized]
-    $role = if ($Token -eq $room.HostToken) { 'host' } elseif ($Token -eq $room.GuestToken) { 'guest' } else { '' }
+    $role = if ($room.HostToken -and $Token -ceq $room.HostToken) { 'host' } elseif ($room.GuestToken -and $Token -ceq $room.GuestToken) { 'guest' } else { '' }
     if (-not $role) { throw 'Invalid room token.' }
     return [pscustomobject]@{ Room = $room; Role = $role; Code = $normalized }
 }
@@ -142,6 +143,9 @@ function Handle-Request($Stream, $Request) {
     if ($Request.Method -eq 'POST' -and $path -eq '/api/send') {
         $payload = $Request.Body | ConvertFrom-Json
         try { $auth = Get-RoomAndRole ([string]$payload.room) ([string]$payload.token) } catch { Send-Json $Stream 403 @{ error = $_.Exception.Message }; return }
+        if (-not $payload.message -or $payload.message -isnot [pscustomobject] -or $payload.message.type -isnot [string] -or [string]::IsNullOrWhiteSpace($payload.message.type)) {
+            Send-Json $Stream 400 @{ error = 'Invalid game message.' }; return
+        }
         $clientId = ([string]$payload.clientId).Trim()
         $seen = $auth.Room.SeenIds[$auth.Role]
         if ($clientId -and $seen.ContainsKey($clientId)) {
@@ -225,9 +229,13 @@ $lanUrl = "http://${lanAddress}:$Port/"
 
 Clear-Host
 Write-Host '============================================================' -ForegroundColor DarkCyan
-Write-Host ' BRANCH WARS v8.1 // LOCAL INTRANET SERVER' -ForegroundColor Cyan
+Write-Host ' BRANCH WARS // LOCAL INTRANET SERVER' -ForegroundColor Cyan
 Write-Host '============================================================' -ForegroundColor DarkCyan
 Write-Host "Host browser:  $localUrl"
+if ($LoopbackOnly) {
+    Write-Host 'LOOPBACK TEST MODE: only this computer can connect.' -ForegroundColor Yellow
+    Write-Host 'No firewall change is needed. This address cannot be used by friends.'
+} else {
 Write-Host "Friends join:  $lanUrl" -ForegroundColor Yellow
 if ($addresses.Count -gt 1) {
     Write-Host 'Other possible addresses:'
@@ -247,6 +255,7 @@ Write-Host 'A Windows Firewall prompt may appear the first time; allow only'
 Write-Host 'the network profiles where you intend to play. If no prompt appears'
 Write-Host 'and friends cannot connect, run this once in an ADMIN PowerShell:'
 Write-Host "  New-NetFirewallRule -DisplayName 'Branch Wars LAN' -Direction Inbound -Protocol TCP -LocalPort $Port -Action Allow -Profile Domain,Private" -ForegroundColor Yellow
+}
 Write-Host '============================================================' -ForegroundColor DarkCyan
 if (-not $NoBrowser) { Start-Process $localUrl }
 

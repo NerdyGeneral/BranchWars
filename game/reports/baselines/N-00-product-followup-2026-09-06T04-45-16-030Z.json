@@ -1,0 +1,166 @@
+{
+  "createdAt": "2026-09-06T04:45:16.030Z",
+  "baseReport": "N-00-2026-09-06T04-16-13-146Z.json",
+  "sourceSha256": "011b21486a3fb5e2c725eda947734742e842803303fd5338ef24805fdab8bbdb",
+  "priorSourceSha256": "813fc740c9535210c774c4a501bcbc0914662767528b18c953a2e724f0ece325",
+  "priorPassed": 61,
+  "priorTotal": 62,
+  "checkedFingerprints": 154,
+  "changed": [
+    {
+      "file": "BRANCH_WARS.html",
+      "before": "813fc740c9535210c774c4a501bcbc0914662767528b18c953a2e724f0ece325",
+      "after": "011b21486a3fb5e2c725eda947734742e842803303fd5338ef24805fdab8bbdb"
+    },
+    {
+      "file": "src/engine/product-programs.js",
+      "before": "ccf8a81c143c706f42df798bedf0ed082299a339598974648824a2999b0ec844",
+      "after": "715a388c98664baa6b170230a63eef8d68a40b4975384bf9bc5fd765ccb8537e"
+    },
+    {
+      "file": "tests/engine.test.js",
+      "before": "c5eb019ed7674af3496b1356831c0f4c8056d46cc1093f7a2cb0294f5ecafd21",
+      "after": "2c21fe63c1bd56c589124dd1bffece515e9b5ab3f14134f1c702431777ee578d"
+    }
+  ],
+  "exactReversePatchProof": true,
+  "sourceUnchanged": true,
+  "tests": [
+    {
+      "command": [
+        "tests/engine.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/campaign-lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Campaign lifecycle passed: 1387 independent creation comparisons, 41 migration comparisons, optional-stage matrix, random consumption, sealed plans, corruption rejection and browser adapters.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/runtime-stages.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Explicit runtime stages passed: 192 operations, 864 completions, 64 fault/recovery pairs against the frozen implementation.\nPolicy/AI stages passed: 64 AI preparations, 160 policy normalizations and 416 save-validation comparisons; error order and state/RNG effects preserved.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/save_integrity.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Save integrity tests passed: real client migration/resume, idempotence, legacy histories, pruning, 13 corruption cases and non-mutating rejection.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/save-baseline.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Published-save baselines passed: three real imports match fixed pre-refactor continuation outcomes.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/behavior-golden.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Behavior gates passed: 20 fixed campaigns / 790 turns, resumed campaigns, both submit orders and three preserved half-ready saves.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/product_programs.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 96,\n  \"launches\": 14,\n  \"targetedAudienceTurns\": 1272,\n  \"checks\": [\n    \"paid rollout\",\n    \"shared capacity stalls\",\n    \"research gate\",\n    \"local fit and allocations\",\n    \"vendor cost reconciliation\",\n    \"retirement and guarantees\",\n    \"pure preview\",\n    \"sealed migration\",\n    \"corrupt saves\",\n    \"owner privacy\",\n    \"UI draft staging\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/workforce_network.test.js",
+        "--product-programs"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Workforce network passed: all three lobby transports, old-peer refusal, token-free checkpoint, paid hires/training over LAN and Direct plans, owner-only state.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/github_resilience.test.js",
+        "--product-programs"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"011b21486a3fb5e2c725eda947734742e842803303fd5338ef24805fdab8bbdb\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/build.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Portable build passed: deterministic assembly, source/output freshness, EOL parity, module inventory, invalid-source rejection and DOM-free engine execution.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/architecture.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/docs.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Documentation checks passed: 40 Markdown files, 202 local links, canonical names and generated-reference destination.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tools/build_game.js",
+        "--check"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "Portable game is current: 87 source files, no runtime dependencies.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tools/build_reference.js",
+        "--check"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "stdout": "docs/game-reference.md is current.\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "Targeted follow-up, not a fresh all-suite Windows invocation.",
+    "Long product audits precede only the legacy-save presence guard; all gameplay paths with normal project arrays are unchanged.",
+    "Automated checks do not establish physical two-PC or human balance acceptance."
+  ]
+}

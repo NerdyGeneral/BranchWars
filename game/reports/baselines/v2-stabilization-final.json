@@ -1,0 +1,791 @@
+{
+  "schemaVersion": 1,
+  "status": "release-candidate",
+  "passed": true,
+  "createdAt": "2026-09-08T01:56:02.261Z",
+  "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47",
+  "engineSha256": "3568bcfe45e24add668f1bcd5445708bd81e21bb2ad75a199e7fbe9f9ac05f94",
+  "noEconomicsChanged": true,
+  "noLegacyFixturesRegenerated": true,
+  "provenance": [
+    {
+      "file": "N-00-2026-09-08T00-49-19-138Z.json",
+      "sha256": "4bc4c4c2ee6b1c5625b75b4d5ac49cc8df0977b992f233695d40457be5c5ad03"
+    },
+    {
+      "file": "release-balance-2026-09-08T01-18-29-627Z.json",
+      "sha256": "0e8b7eeff8915e9993b23bfa78701e8f22e67f4e2052be79dab48b42e27c952c"
+    },
+    {
+      "file": "storage-capacity-1788828496251.json",
+      "sha256": "7435c823067dff289eef833c064b7b631b0292d6eac96139f9ccf079a814d910"
+    },
+    {
+      "file": "v2-stabilization-rc1.json",
+      "sha256": "a18012ebc2f7247c880cbff1a52bd6675cacc7d570ea4c3a77ded3f578d93919"
+    }
+  ],
+  "windows": {
+    "passed": true,
+    "suites": 115,
+    "sourceUnchanged": true,
+    "balanceOutputReproduced": true,
+    "tests": [
+      {
+        "label": "engine.test.js",
+        "exitCode": 0,
+        "elapsedMs": 20858
+      },
+      {
+        "label": "accounting.test.js",
+        "exitCode": 0,
+        "elapsedMs": 693
+      },
+      {
+        "label": "accounting_activities.test.js",
+        "exitCode": 0,
+        "elapsedMs": 100
+      },
+      {
+        "label": "accounting_persistence.test.js",
+        "exitCode": 0,
+        "elapsedMs": 336
+      },
+      {
+        "label": "bank_identity.test.js",
+        "exitCode": 0,
+        "elapsedMs": 142
+      },
+      {
+        "label": "regional_pilot.test.js",
+        "exitCode": 0,
+        "elapsedMs": 52114
+      },
+      {
+        "label": "regional_operations.test.js",
+        "exitCode": 0,
+        "elapsedMs": 18967
+      },
+      {
+        "label": "market_economy.test.js",
+        "exitCode": 0,
+        "elapsedMs": 30765
+      },
+      {
+        "label": "credit_lifecycle.test.js",
+        "exitCode": 0,
+        "elapsedMs": 22293
+      },
+      {
+        "label": "funding_covenants.test.js",
+        "exitCode": 0,
+        "elapsedMs": 32169
+      },
+      {
+        "label": "deposit_products.test.js",
+        "exitCode": 0,
+        "elapsedMs": 23698
+      },
+      {
+        "label": "term_funding.test.js",
+        "exitCode": 0,
+        "elapsedMs": 23384
+      },
+      {
+        "label": "retail_lifecycle.test.js",
+        "exitCode": 0,
+        "elapsedMs": 15263
+      },
+      {
+        "label": "product_deployment.test.js",
+        "exitCode": 0,
+        "elapsedMs": 13621
+      },
+      {
+        "label": "service_contracts.test.js",
+        "exitCode": 0,
+        "elapsedMs": 12024
+      },
+      {
+        "label": "service_expansion.test.js",
+        "exitCode": 0,
+        "elapsedMs": 17358
+      },
+      {
+        "label": "service_planning.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1970
+      },
+      {
+        "label": "institution_management.test.js",
+        "exitCode": 0,
+        "elapsedMs": 49740
+      },
+      {
+        "label": "relationship_operations.test.js",
+        "exitCode": 0,
+        "elapsedMs": 48289
+      },
+      {
+        "label": "funding.test.js",
+        "exitCode": 0,
+        "elapsedMs": 12092
+      },
+      {
+        "label": "determinism.test.js",
+        "exitCode": 0,
+        "elapsedMs": 510
+      },
+      {
+        "label": "ledger.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1097
+      },
+      {
+        "label": "save_integrity.test.js",
+        "exitCode": 0,
+        "elapsedMs": 279
+      },
+      {
+        "label": "transport.test.js",
+        "exitCode": 0,
+        "elapsedMs": 132
+      },
+      {
+        "label": "github_resilience.test.js",
+        "exitCode": 0,
+        "elapsedMs": 2114
+      },
+      {
+        "label": "balance_audit.js",
+        "exitCode": 0,
+        "elapsedMs": 85140
+      },
+      {
+        "label": "balance_audit.js",
+        "exitCode": 0,
+        "elapsedMs": 85424
+      },
+      {
+        "label": "service_workforce.test.js",
+        "exitCode": 0,
+        "elapsedMs": 11206
+      },
+      {
+        "label": "docs.test.js",
+        "exitCode": 0,
+        "elapsedMs": 116
+      },
+      {
+        "label": "network_lifecycle.test.js",
+        "exitCode": 0,
+        "elapsedMs": 160
+      },
+      {
+        "label": "local_session_transition.test.js",
+        "exitCode": 0,
+        "elapsedMs": 100
+      },
+      {
+        "label": "strategy_release_ui.test.js",
+        "exitCode": 0,
+        "elapsedMs": 205
+      },
+      {
+        "label": "operations_workspace.test.js",
+        "exitCode": 0,
+        "elapsedMs": 52
+      },
+      {
+        "label": "game_overlay.test.js",
+        "exitCode": 0,
+        "elapsedMs": 56
+      },
+      {
+        "label": "decision_quote.test.js",
+        "exitCode": 0,
+        "elapsedMs": 4933
+      },
+      {
+        "label": "initiative_feedback.test.js",
+        "exitCode": 0,
+        "elapsedMs": 320
+      },
+      {
+        "label": "package_release.test.js",
+        "exitCode": 0,
+        "elapsedMs": 922
+      },
+      {
+        "label": "portable-launcher.test.js",
+        "exitCode": 0,
+        "elapsedMs": 307
+      },
+      {
+        "label": "storage_capacity.test.js",
+        "exitCode": 0,
+        "elapsedMs": 127079
+      },
+      {
+        "label": "Paired controller balance smoke",
+        "exitCode": 0,
+        "elapsedMs": 2288
+      },
+      {
+        "label": "reference-eol.test.js",
+        "exitCode": 0,
+        "elapsedMs": 110
+      },
+      {
+        "label": "project-rules.test.js",
+        "exitCode": 0,
+        "elapsedMs": 279
+      },
+      {
+        "label": "campaign-lifecycle.test.js",
+        "exitCode": 0,
+        "elapsedMs": 477
+      },
+      {
+        "label": "multiplayer_lobby.test.js",
+        "exitCode": 0,
+        "elapsedMs": 154
+      },
+      {
+        "label": "features.test.js",
+        "exitCode": 0,
+        "elapsedMs": 127
+      },
+      {
+        "label": "feature_setup.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1368
+      },
+      {
+        "label": "feature_lobby.test.js",
+        "exitCode": 0,
+        "elapsedMs": 154
+      },
+      {
+        "label": "feature_network.test.js",
+        "exitCode": 0,
+        "elapsedMs": 7507
+      },
+      {
+        "label": "modular_features.test.js",
+        "exitCode": 0,
+        "elapsedMs": 32620
+      },
+      {
+        "label": "runtime-stages.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1177
+      },
+      {
+        "label": "households.test.js",
+        "exitCode": 0,
+        "elapsedMs": 9133
+      },
+      {
+        "label": "Regional demand rules",
+        "exitCode": 0,
+        "elapsedMs": 1175
+      },
+      {
+        "label": "Existing-customer offers",
+        "exitCode": 0,
+        "elapsedMs": 582
+      },
+      {
+        "label": "Existing-customer offers UI",
+        "exitCode": 0,
+        "elapsedMs": 327
+      },
+      {
+        "label": "Application pipeline",
+        "exitCode": 0,
+        "elapsedMs": 25412
+      },
+      {
+        "label": "Application pipeline UI",
+        "exitCode": 0,
+        "elapsedMs": 552
+      },
+      {
+        "label": "Application pipeline network",
+        "exitCode": 0,
+        "elapsedMs": 1619
+      },
+      {
+        "label": "Customer effects comparison",
+        "exitCode": 0,
+        "elapsedMs": 1192
+      },
+      {
+        "label": "Customer effects UI",
+        "exitCode": 0,
+        "elapsedMs": 720
+      },
+      {
+        "label": "Balance attribution invariants",
+        "exitCode": 0,
+        "elapsedMs": 1405
+      },
+      {
+        "label": "Existing-customer offers network",
+        "exitCode": 0,
+        "elapsedMs": 524
+      },
+      {
+        "label": "Existing-customer offers GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 10809
+      },
+      {
+        "label": "Regional demand UI",
+        "exitCode": 0,
+        "elapsedMs": 64
+      },
+      {
+        "label": "Regional demand network",
+        "exitCode": 0,
+        "elapsedMs": 493
+      },
+      {
+        "label": "Regional demand GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 8913
+      },
+      {
+        "label": "segment_deposits.test.js",
+        "exitCode": 0,
+        "elapsedMs": 14002
+      },
+      {
+        "label": "Advertising rules",
+        "exitCode": 0,
+        "elapsedMs": 17797
+      },
+      {
+        "label": "AI cash planning",
+        "exitCode": 0,
+        "elapsedMs": 18012
+      },
+      {
+        "label": "Bank recovery planning",
+        "exitCode": 0,
+        "elapsedMs": 510
+      },
+      {
+        "label": "Bank recovery UI",
+        "exitCode": 0,
+        "elapsedMs": 95
+      },
+      {
+        "label": "GitHub checkpoint recovery acceptance",
+        "exitCode": 0,
+        "elapsedMs": 734
+      },
+      {
+        "label": "Product draft repair",
+        "exitCode": 0,
+        "elapsedMs": 89
+      },
+      {
+        "label": "Advertising network",
+        "exitCode": 0,
+        "elapsedMs": 446
+      },
+      {
+        "label": "Advertising GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 8403
+      },
+      {
+        "label": "product_programs.test.js",
+        "exitCode": 0,
+        "elapsedMs": 17151
+      },
+      {
+        "label": "deposit_pricing.test.js",
+        "exitCode": 0,
+        "elapsedMs": 15622
+      },
+      {
+        "label": "deposit_pricing_ui.test.js",
+        "exitCode": 0,
+        "elapsedMs": 328
+      },
+      {
+        "label": "Pricing boundary books",
+        "exitCode": 0,
+        "elapsedMs": 30762
+      },
+      {
+        "label": "Pricing contract transitions",
+        "exitCode": 0,
+        "elapsedMs": 16826
+      },
+      {
+        "label": "Group entity accounting",
+        "exitCode": 0,
+        "elapsedMs": 1605
+      },
+      {
+        "label": "Explicit bank receivables",
+        "exitCode": 0,
+        "elapsedMs": 586
+      },
+      {
+        "label": "Corporate finance kernel",
+        "exitCode": 0,
+        "elapsedMs": 60167
+      },
+      {
+        "label": "Company bank funding boundary",
+        "exitCode": 0,
+        "elapsedMs": 15104
+      },
+      {
+        "label": "Live corporate banking",
+        "exitCode": 0,
+        "elapsedMs": 141833
+      },
+      {
+        "label": "Preserved group foundation",
+        "exitCode": 0,
+        "elapsedMs": 12960
+      },
+      {
+        "label": "Group capital and simultaneous lending",
+        "exitCode": 0,
+        "elapsedMs": 66506
+      },
+      {
+        "label": "Group capital UI",
+        "exitCode": 0,
+        "elapsedMs": 673
+      },
+      {
+        "label": "Group lending comparison",
+        "exitCode": 0,
+        "elapsedMs": 1263
+      },
+      {
+        "label": "Group four-scenario smoke",
+        "exitCode": 0,
+        "elapsedMs": 44833
+      },
+      {
+        "label": "Pricing nine-profile smoke",
+        "exitCode": 0,
+        "elapsedMs": 12352
+      },
+      {
+        "label": "Product programmes network",
+        "exitCode": 0,
+        "elapsedMs": 421
+      },
+      {
+        "label": "Product programmes GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 8163
+      },
+      {
+        "label": "Segment deposits network",
+        "exitCode": 0,
+        "elapsedMs": 386
+      },
+      {
+        "label": "Segment deposits GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 7564
+      },
+      {
+        "label": "collections.test.js",
+        "exitCode": 0,
+        "elapsedMs": 9175
+      },
+      {
+        "label": "Collections network",
+        "exitCode": 0,
+        "elapsedMs": 249
+      },
+      {
+        "label": "Collections GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 5556
+      },
+      {
+        "label": "Household network",
+        "exitCode": 0,
+        "elapsedMs": 234
+      },
+      {
+        "label": "Household GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 5250
+      },
+      {
+        "label": "specialist_workforce.test.js",
+        "exitCode": 0,
+        "elapsedMs": 9303
+      },
+      {
+        "label": "workforce_network.test.js",
+        "exitCode": 0,
+        "elapsedMs": 225
+      },
+      {
+        "label": "Specialist workforce GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 3770
+      },
+      {
+        "label": "build.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1284
+      },
+      {
+        "label": "architecture.test.js",
+        "exitCode": 0,
+        "elapsedMs": 690
+      },
+      {
+        "label": "behavior-golden.test.js",
+        "exitCode": 0,
+        "elapsedMs": 52854
+      },
+      {
+        "label": "save-baseline.test.js",
+        "exitCode": 0,
+        "elapsedMs": 1322
+      },
+      {
+        "label": "launcher-path.test.js",
+        "exitCode": 0,
+        "elapsedMs": 144
+      },
+      {
+        "label": "customer_needs.test.js",
+        "exitCode": 0,
+        "elapsedMs": 51559
+      },
+      {
+        "label": "Customer needs GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 3123
+      },
+      {
+        "label": "customer_relationships.test.js",
+        "exitCode": 0,
+        "elapsedMs": 54180
+      },
+      {
+        "label": "Customer relationships GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 3281
+      },
+      {
+        "label": "Relationship operations GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 3041
+      },
+      {
+        "label": "Living institution GitHub relay",
+        "exitCode": 0,
+        "elapsedMs": 3027
+      },
+      {
+        "label": "legacy funding balance audit",
+        "exitCode": 0,
+        "elapsedMs": 80459
+      },
+      {
+        "label": "Windows LAN",
+        "exitCode": 0,
+        "elapsedMs": 2710
+      }
+    ]
+  },
+  "establishedBalance": {
+    "campaigns": 16,
+    "months": 1920,
+    "maxViewBytes": 559901,
+    "skipped": [],
+    "cancelled": []
+  },
+  "strategyMatrix": {
+    "report": "v2-stabilization-rc1.json",
+    "portableSha256": "459462f82fdc1535221269416bedafa4e93214a26119190d5fbc25958d0f14b8",
+    "engineSha256": "3568bcfe45e24add668f1bcd5445708bd81e21bb2ad75a199e7fbe9f9ac05f94",
+    "campaigns": 72,
+    "months": 11498,
+    "longCampaigns": 8,
+    "earlyEnds": [
+      {
+        "seed": "stabilization:5:rate",
+        "scenario": "rate",
+        "controllers": [
+          "expansion",
+          "aggressive"
+        ],
+        "month": 98,
+        "reason": "receivership",
+        "final": [
+          {
+            "equity": 2046614,
+            "deposits": 45925325,
+            "profit": 212080,
+            "capitalRatio": 14.416300550127506,
+            "emergencyDebt": 0,
+            "staff": 5
+          },
+          {
+            "equity": -223312,
+            "deposits": 85257197,
+            "profit": 138851,
+            "capitalRatio": -6.4953891904847225,
+            "emergencyDebt": 0,
+            "staff": 10
+          }
+        ]
+      }
+    ],
+    "maximumDepositShare": 99.16485843378003,
+    "note": "Matrix preceded browser-storage repair; engine bytes match exactly. No tuning."
+  },
+  "storage": {
+    "passed": true,
+    "codecChecks": 15,
+    "syntheticRawBytes": 3242676,
+    "syntheticStoredBytes": 324860,
+    "campaignMonths": 120,
+    "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47",
+    "engineSha256": "3568bcfe45e24add668f1bcd5445708bd81e21bb2ad75a199e7fbe9f9ac05f94",
+    "browserIntegration": {
+      "quotaBytes": 5242880,
+      "localStorageBytes": 3170740,
+      "sessionStorageBytes": 3557560,
+      "checks": [
+        "actual old-path quota failure",
+        "real saveLocal/savedGame roundtrip",
+        "old raw JSON support",
+        "real host checkpoint/reload",
+        "pending retry queue retained",
+        "fresh handshake after reload",
+        "damaged compressed checkpoint refused",
+        "failed write retains prior record and warns"
+      ]
+    },
+    "packMs": 1401.7148000000016,
+    "unpackMs": 1171.854199999987,
+    "rawBytes": 14289988,
+    "storedBytes": 4356145,
+    "storageUtf16Bytes": 3170740,
+    "checkpointUtf16Bytes": 3556842,
+    "reusedFixtureMeasurements": {
+      "passed": true,
+      "codecChecks": 15,
+      "syntheticRawBytes": 3242676,
+      "syntheticStoredBytes": 324860,
+      "campaignMonths": 0,
+      "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47",
+      "engineSha256": "3568bcfe45e24add668f1bcd5445708bd81e21bb2ad75a199e7fbe9f9ac05f94",
+      "reusedGeneratedCampaign": true,
+      "fixtureCycle": 121,
+      "browserIntegration": {
+        "quotaBytes": 5242880,
+        "localStorageBytes": 3170740,
+        "sessionStorageBytes": 3557560,
+        "checks": [
+          "actual old-path quota failure",
+          "real saveLocal/savedGame roundtrip",
+          "old raw JSON support",
+          "real host checkpoint/reload",
+          "pending retry queue retained",
+          "fresh handshake after reload",
+          "damaged compressed checkpoint refused",
+          "failed write retains prior record and warns"
+        ]
+      },
+      "packMs": 1394.0990000000002,
+      "unpackMs": 1159.1170999999995,
+      "rawBytes": 14289988,
+      "storedBytes": 4356145,
+      "storageUtf16Bytes": 3170740,
+      "checkpointUtf16Bytes": 3556842
+    },
+    "guest": {
+      "passed": true,
+      "months": 24,
+      "checkpointStorageBytes": 159806,
+      "checks": [
+        "compressed view and sealed plan resume",
+        "no host game/private rival records",
+        "version/marker and corruption refusal before adoption",
+        "legacy raw v1 accepted"
+      ]
+    },
+    "actualBrowser": {
+      "rawCharacters": 14289988,
+      "rawWrite": "QuotaExceededError",
+      "compressedCharacters": 1585370,
+      "storageUtf16Bytes": 3170740,
+      "packMs": 388,
+      "localAndSessionReloadExact": true,
+      "testKeysRemoved": true,
+      "note": "Native browser proof is separate from the quota adapter used by automated suites."
+    }
+  },
+  "package": {
+    "files": 6,
+    "manifestSha256": "6efabc87d20f25d6c8870a3bb2674fa42557dcc838330ff0212258685ca2dd84",
+    "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47",
+    "checks": [
+      "fresh allowlisted package",
+      "ZIP clean extraction and manifest verification",
+      "native packaged Windows server served-byte identity/create/join/relay/dedup",
+      "native launcher parser with browser/discovery mocked",
+      "original V2 runtime hashes unchanged"
+    ]
+  },
+  "browser": {
+    "nativeLanClients": 2,
+    "cycleReached": 2,
+    "workspaces": 11,
+    "smallViewportWidth": 500,
+    "pageWideOverflow": false,
+    "checks": [
+      "distinct colors and owner labels",
+      "green connected lobby",
+      "host-only draft settings",
+      "dependency confirmation",
+      "apply clears both ready flags",
+      "both ready/start",
+      "guest submit/recall/resubmit",
+      "host submit resolves once",
+      "no captured console errors"
+    ],
+    "physicalTwoComputerAcceptance": false,
+    "browserFileAssociationAcceptance": false
+  },
+  "acceptance": {
+    "physicalTwoComputer": false,
+    "liveGithubFriendSession": false,
+    "defaultBrowserFileAssociation": false,
+    "githubChecks": "See the checks attached to PR18 for the published commit; verified separately after push."
+  },
+  "limitations": [
+    "Scripted strategies use the ordinary AI for planning and stress recovery, not human tournament play.",
+    "Deposit shares compare two players, not the finite outside institutions.",
+    "Paired assignments retain authored geography and seat-specific AI; aggregate position differences do not isolate a seat-rule bug.",
+    "Actions counted for viable low-share banks are requested plans, not necessarily successful competitive gains.",
+    "Forecast/save/reversed-submission checks run every twelve months, not quarterly.",
+    "This lab does not separately attribute company fees/losses/overhead or project payback; the three unused placeholders in the original local shard files are omitted.",
+    "Timings include concurrent validation/load and are not frame-rate measurements.",
+    "No gameplay values were tuned. Original and repaired engines are identical.",
+    "Browser storage remains bounded and quota-dependent; export before rollback to older executables.",
+    "Automation and two local browser clients do not establish human multiplayer acceptance."
+  ]
+}

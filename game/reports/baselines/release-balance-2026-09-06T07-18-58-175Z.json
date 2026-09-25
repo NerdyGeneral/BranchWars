@@ -1,0 +1,175 @@
+{
+  "passed": true,
+  "sourceSha256": "706a5853883bb6039f7b34cbfa39449ebe7a7f257916d489aca61a1fa8a3d670",
+  "regionalGrowthVersion": 1,
+  "advertisingVersion": 1,
+  "productProgramsVersion": 1,
+  "segmentDepositsVersion": 1,
+  "creditPerformanceVersion": 1,
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 20,
+  "seedCount": 1,
+  "turnLimit": 480,
+  "turns": 480,
+  "maxViewBytes": 811536,
+  "metricDefinitions": {
+    "version": 1,
+    "samples": "After each resolved month, including terminal settlement; final balances are also after settlement.",
+    "shares": "Percent of the two player banks combined, excluding outside institutions; zero total produces zero shares.",
+    "dominance": "Consecutive sampled months at or above 80% of combined-player deposits, counted separately per seat.",
+    "depositLeadChanges": "Changes between non-tied deposit leaders; intervening ties are ignored.",
+    "capitalReturnsTo10": "A below-10% capital spell followed by one sampled month at or above 10%; not necessarily sustained recovery.",
+    "households": "Exact owned household counts, available only with the household ownership preview."
+  },
+  "scenario": "balanced",
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        4376026,
+        4219734
+      ],
+      "deposits": [
+        236308576,
+        88659015
+      ],
+      "profit": [
+        154612,
+        122096
+      ],
+      "capitalRatioPercent": [
+        12.572780769413985,
+        11.273319108286227
+      ],
+      "capitalTier": [
+        "strong",
+        "strong"
+      ],
+      "cash": [
+        194759048,
+        44327590
+      ],
+      "emergencyDebt": [
+        0,
+        0
+      ],
+      "depositSharePercent": [
+        72.71758247424741,
+        27.28241752575259
+      ],
+      "households": [
+        38003,
+        24832
+      ],
+      "householdSharePercent": [
+        60.48062385613113,
+        39.51937614386886
+      ],
+      "outsideSupply": {
+        "customers": 365,
+        "deposits": 711060
+      },
+      "competition": {
+        "samples": 480,
+        "depositLeadChanges": 12,
+        "maxDepositSharePercent": [
+          75.52863903923827,
+          53.001385230789346
+        ],
+        "longestDepositDominanceMonths": [
+          0,
+          0
+        ],
+        "below10CapitalMonths": [
+          0,
+          0
+        ],
+        "longestBelow10CapitalMonths": [
+          0,
+          0
+        ],
+        "capitalReturnsTo10": [
+          0,
+          0
+        ],
+        "lossMonths": [
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "providerChanges": 38,
+      "lateProviderChanges": 31,
+      "initiatives": 581,
+      "competitiveActions": 425,
+      "regionalFlows": {
+        "arrivals": {
+          "customers": 67353,
+          "deposits": 299375991
+        },
+        "departures": {
+          "customers": 35253,
+          "deposits": 141697340
+        },
+        "clippedDepartures": {
+          "customers": 1190,
+          "deposits": 20302651
+        }
+      },
+      "advertisingSpend": 1140000,
+      "assistedDeposits": 1445250,
+      "assistedHouseholds": 878,
+      "advertisingMonths": 76,
+      "advertisingPaused": 0,
+      "plannedProductLaunches": {
+        "build": 4,
+        "partner": 3
+      },
+      "plannedProductRetirements": 0,
+      "vendorCost": 2594613,
+      "targetedAudiences": 11316,
+      "householdDepartures": 28537,
+      "householdDepositOutflow": 229082180,
+      "retentionShares": {
+        "25": 0,
+        "50": 152,
+        "75": 348,
+        "100": 460
+      },
+      "creditEntered": 50332102,
+      "creditCured": 22671945,
+      "creditRecovery": 13313568,
+      "creditLoss": 13865763,
+      "collectionsCost": 92531,
+      "collectionsPolicies": {
+        "workout": 10,
+        "balanced": 933,
+        "recovery": 17
+      },
+      "maxDelinquencyRatio": 0.04277417987445057,
+      "stagedSpecialists": 106,
+      "trainingSpend": 1089000,
+      "trainingPaused": 0,
+      "maxSpecialists": 54,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 235000
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "status": "Read-only integration audit; proposed contract, not implemented campaign behavior",
+  "boundary": {
+    "campaign": "financialGroupVersion 6 / save 9.5 only",
+    "preserve": "Groups 1-5 creation, policies, views, accounting, deterministic replay and saved field presence remain exact",
+    "existingPrototype": ["DepartmentFunctions", "DepartmentFunctionContext"],
+    "doNotTreatAsComplete": "Function workloads and a conserved physical pool do not yet implement eight functioning departments. Meaningful consumers and task-level dispatch remain necessary."
+  },
+  "requiredAPIs": [
+    {
+      "name": "departmentFunctionDraftCost(p, draft)",
+      "contract": "Pure structural sum of validated vendors[id] * vendorRate. No planBudget, staffing, workload, quote, forecast or prospective-owner invocation. Added to shared discretionary commitments exactly once."
+    },
+    {
+      "name": "departmentFunctionRawContext(openingOwner, draft, preparedBudget, vendorEntitlement)",
+      "contract": "Stage leader salaries, actual affordable teaching, original allocation and legacy policy reservations from raw primitives once. Accept the already prepared shared budget; do not re-enter planBudget. Retain separate household retention, offers, application processing, commercial contracts and collections slices plus fractional holds."
+    },
+    {
+      "name": "departmentFunctionExecution(p, policy, rawContext)",
+      "contract": "Quote the EXISTING versioned function book, not a newly initialized replacement. Return immutable role-resolved taskQuarters, vendor task units, specialist productivity allocation, production residual and facility pool. Aggregate row capacity must be dispatched once, not awarded independently to every consumer."
+    },
+    {
+      "name": "departmentFunctionResidual(p, role, explicitExecution)",
+      "contract": "Read-only lookup of physical residual quarter-FTE. Never rebuild context, settle vendors, change policies or call workforceAllocation from this accessor. Existing groups use their original code paths."
+    },
+    {
+      "name": "departmentFunctionTaskCapacity(p, task, explicitExecution)",
+      "contract": "Read the single dispatched task slice. Apply specialist productivity only to its allocated physical banker slice, not globally or to vendors. Return explicit units and coverage, not an arbitrary universal bank multiplier."
+    }
+  ],
+  "rawRetainedTaskAttribution": {
+    "basis": "S/B/L/O are actual physical departmentProductiveAllocation AFTER affordable paid teaching, not workforceAllocation productivity.",
+    "householdSupport.service": "4 * S * retention/100; onboarding function; householdServiceReview.demand * 4 workload",
+    "offerSales.service": "4 * (S - householdSupport.service/4) * offerShare/100; relationships function; eligible better-fit offer work only",
+    "applicationProcessing.service": "4 * (S - householdSupport.service/4 - offerSales.service/4) * onboardingShare/100; onboarding function; pending count / ONBOARDING_CAPACITY * 4 plus explicitly authorized new-application generation work",
+    "commercialDelivery.business": "4 * (B - commercialSalesStaff(owner)); onboarding function; contract load / 2 * 4 workload; retain existing no-serviceDesk contract deduction",
+    "collections.lending": "4 * (L - creditSalesStaff(owner,L)); collections function; late principal / 1000000 * 4 workload",
+    "compatibility": "Household support and current retail application tasks use service; current commercial delivery uses business. Do not transform one role into another merely because the aggregate onboarding function permits both.",
+    "additionalDispatch": "Preserve retained task slices first. Dispatch each manual quota/vendor unit once over compatible actual deficits using a documented priority. A function row's served figure is the SUM of dispatched task work, never an allowance independently available to every task.",
+    "rounding": "Retain exact fractions in attribution. If dispatch requires integer quarters, never floor independently and silently lose/recreate the function-level remainder; either use declared fixed-point subquarters or document a conserved deterministic apportionment within each function/role, including its rounding hold.",
+    "pipelineTrap": "Pending-application workload alone is insufficient: an empty queue still needs authorized generation work, otherwise zero backlog means zero dispatch forever. Existing onboarding uses remaining capacity to generate next-month applications; preserve that path and its finite audience/fee limits.",
+    "policyTrap": "Extra staffing does not silently enable an offer/onboarding policy whose share is zero, reopen a retired product, change target segments or unlock a closed market."
+  },
+  "consumerMappings": [
+    {
+      "function": "relationships",
+      "callsites": [
+        "src/engine/relationship-offers.js: relationshipOfferEligibility assignedStaff/capacity",
+        "src/engine/advertising.js: advertisingSalesStaff and advertisingBoost",
+        "src/engine/operations.js: calculateLegacyOperations service, bizGain, merchantGain",
+        "src/engine/services.js: commercialSalesStaff, contractPower, resolveOpportunities"
+      ],
+      "safeIntegration": "Route existing offer reservations to an offer task; route outbound sales capacity to the one retained/extra sales slice. Advertising consumes or constrains the SAME outbound channel rather than generating another pool. All acquired households/deposits still pass finite outside books and market quota settlement.",
+      "missingContract": "Prototype workload describes owned relationships while the only retained relationship time is product offers. Specify how account-care versus outbound work is dispatched before claiming this function is operational. Do not reuse one served figure for offers, ordinary acquisitions and commercial bids."
+    },
+    {
+      "function": "onboarding",
+      "callsites": [
+        "src/engine/households.js: householdServiceReview capacity and salesStaff",
+        "src/engine/onboarding.js: onboardingStaff, onboardingBudget, onboardingCalculate",
+        "src/engine/services.js: serviceLoad and serviceBidStatus",
+        "src/engine/departments.js: departmentDeliveryAllocation"
+      ],
+      "safeIntegration": "Partition retained and additional work into household support, pending application processing and commercial contract delivery. Preserve original sequential shares and priorities; dispatch extra work across actual deficits using one documented task order or mandate. Keep onboarding per-application capacity/stock/fee limits and serviceLoad whole-contract loads.",
+      "pitfalls": "The prototype aggregates all three tasks into one row; using its full capacity in all three creates staff. Onboarding budget calls onboardingStaff before the general context exists. Expired applications, locked deposits, contract misses and outside-book conservation must remain authoritative."
+    },
+    {
+      "function": "credit",
+      "callsites": [
+        "src/engine/operations.js: calculateLegacyOperations loanGain",
+        "src/engine/financial-group.js: creditProductionParts and groupLendingComparison",
+        "src/engine/credit.js: creditTerms and reconcileCredit"
+      ],
+      "safeIntegration": "Measure existing principal/vintage administration first; use explicitly available origination-processing throughput to cap new gross lending before market/accounting deltas. Store risk/terms only on NEW cohorts via creditTerms/creditProductionParts. Existing loan principal, dates, seasoning and collateral/terms must not be rewritten.",
+      "pitfalls": "LoanGrowth is net of amortization, recovery and losses, not origination throughput. Do not cap repayCredit, suppress scheduled repayment, reduce existing assets to manufacture a capacity effect, or add a second loan creation path. Workload units need a declared conversion to processed principal/cohorts."
+    },
+    {
+      "function": "collections",
+      "callsites": [
+        "src/engine/collections.js: collectionsReview capacity/coverage",
+        "src/engine/collections.js: creditPerformanceForecast and settleCreditPerformance",
+        "src/engine/collections.js: creditSalesStaff"
+      ],
+      "safeIntegration": "Replace collection capacity with its dispatched retained/additional service-or-lending work plus paid vendor case work. Reuse existing late-principal demand and policy-specific cure/recovery/severity formulas. Remaining lending production reads the shared residual once.",
+      "pitfalls": "Keep cured + resolved + recovered/loss accounting identities; automatic nonperforming resolution is not additional staff. Prototype collection vendors are separate from existing per-case third-party expense: remove no old fee unless the new contract explicitly replaces that service. Avoid charging identical vendor case handling twice."
+    },
+    {
+      "function": "technology",
+      "callsites": [
+        "src/engine/services.js: serviceApplicationActive and serviceLoad",
+        "src/engine/product-programs.js: productProgramCosts and deployment availability consumers",
+        "src/engine/projects.js: consequences outage/cyber/vendor branches"
+      ],
+      "safeIntegration": "Allocate operational support work across actual active platforms/products/offices; expose unsupported application workload and constrain only supported service throughput. Reuse existing outage/remediation and deployment machinery rather than granting a technology profit percentage. Keep persistent deployment/license ownership separate from operational availability.",
+      "pitfalls": "Do not delete deployed platforms, stop servicing existing deposit liabilities, or waive royalties/platform upkeep when support is short. Technology vendor work is not project execution and must not accelerate every project as free operations bankers. A persistent support backlog/availability rule is still needed; it is not in the prototype."
+    },
+    {
+      "function": "risk",
+      "callsites": [
+        "src/engine/collections.js: originationCreditGuard",
+        "src/engine/operations.js: calculateLegacyOperations compliance change",
+        "src/engine/projects.js: consequences audit/watchlist checks"
+      ],
+      "safeIntegration": "Use explicitly allocated control work in the existing new-origination underwriting guard and exposure-driven examination/control coverage. Existing vintages retain their origination risk. Record uncovered controls against real workload rather than directly multiplying capital, cash or every loss rate.",
+      "pitfalls": "Current generic operations bankers also supply technology resilience, project work, control reduction and facilities. Replacing one occurrence alone leaves duplicated free control work. Allocation to risk must not simultaneously remain in unrestricted operations output."
+    },
+    {
+      "function": "treasury",
+      "callsites": [
+        "src/engine/term-funding.js: prepareTermFunding new offers versus mandatory maturity/renewal settlement",
+        "src/engine/funding.js: settleFunding voluntary debt repayment policy",
+        "src/engine/financial-group.js: groupCapitalQuote and settleGroupCapital safeguards",
+        "src/engine/services.js: treasury-contract delivery remains an onboarding/service task unless explicitly moved"
+      ],
+      "safeIntegration": "Use finite treasury administration capacity for authorized new funding offers/treasury operations, while retaining the existing actual cash and capital safeguards. Existing deposit maturities, creditor obligations and emergency funding/liquidation accounting settle regardless of staffing.",
+      "pitfalls": "Never staff-gate repayment of a legal liability to make it disappear or create free liquidity. Group transfers require explicit player intent and capped parent support; managers cannot originate borrowing. Do not count corporate treasury contract load in both treasury and onboarding without moving its retained reservation. No suitable mature treasury-work queue currently exists."
+    },
+    {
+      "function": "people",
+      "callsites": [
+        "src/engine/workforce.js: workforceTrainingQuote and settleWorkforceTraining",
+        "src/engine/departments.js: departmentTeachingActive, departmentProductiveAllocation, settleDepartmentExperience",
+        "src/engine/actions.js: applyHiring",
+        "src/engine/projects.js: consequences succession/resignation"
+      ],
+      "safeIntegration": "Use finite people-administration work for paid training delivery, onboarding new recruits or persistent succession workload. Recruits remain real purchased employees that become available next cycle. Preserve appointment/salary/payable and severance consequences.",
+      "pitfalls": "People workload includes paid training roles, while teaching already reduces the pool used to staff people. Do not let same-month people coverage recursively enable a teacher who changes the pool that enabled that coverage. Freeze the opening teaching reservation or use prior closed administration coverage; document the lag. Managers never hire beyond an approved envelope or submit turns."
+    },
+    {
+      "function": "facilities and execution residual",
+      "callsites": [
+        "src/engine/facility-lifecycle-quotes.js: facilityLifecycleStagedStaff and facilityLifecyclePlanningContext",
+        "src/engine/facility-lifecycle-adapter.js: facilityLifecycleStaff and facilityLifecycleLiveContext",
+        "src/engine/institution.js: executionCapacity and projectSlots",
+        "src/engine/projects.js: advanceProjects workRate",
+        "src/engine/facility-adapter.js: advanceInstitutionProjects workRate"
+      ],
+      "safeIntegration": "Pass the frozen residual physical pool explicitly into both lifecycle planning and live metrics. Project execution/work rates must use the same residual operations allocation after functional duties, with paid specialist productivity apportioned rather than duplicated. Preserve the existing one-capacity-per-conversion/renovation reservations.",
+      "pitfalls": "Facility staffing is currently a location/channel cap on sales and lending, not a second hired workforce. Declare it as an orthogonal location allocation of residual production staff; do not subtract identical selling time twice or add office capacity to an independent copy of that same staff. Vendors never enter facilities, hiring, projectSlots or executionCapacity as headcount."
+    }
+  ],
+  "orderingContract": [
+    "Validate Group6 metadata and every input policy before mutation; reject function state/policy on older groups.",
+    "Build structural commitments, including function vendor cost, against opening cash/capital/payables and reserves. Do not invoke function consumers here.",
+    "Stage paid leadership and affordable teaching once; derive raw physical reservations and explicit fractional holds using non-function-aware primitives.",
+    "Quote/distribute both players' finite vendor entitlements against one shared monthly supply before either bank can consume it. A full supply copied into both contexts is not conserved.",
+    "Freeze one execution report with exact task slices and context cycle. Facilities and all production/services consume this same report; no lazy self-rebuilding getter.",
+    "Commit vendor bank/provider books together once, sync accounts/stats and report the expense once. If opening cash changes before payment, fail/explicitly pause unfilled vendor work rather than crediting unpaid throughput.",
+    "Resolve existing operations in their established order with the frozen role/task capacities; retain true resource transfers and existing book validators.",
+    "Close department report/history once; clear transient execution helpers in finally. Public owner view includes relevant report; rival view and rival lastPlans never expose quotas/books/vendor mandates.",
+    "At the next planning boundary recompute new workloads from real updated books. Do not reinitialize an existing function book, silently amend old plans or rewrite prior reports."
+  ],
+  "unavoidablePitfalls": [
+    "Cycle: DepartmentFunctionContext.build -> planBudget -> onboarding/offer budgets or executionCapacity -> function-aware staff getter -> DepartmentFunctionContext.build. Existing context prototype must be split before connection.",
+    "Cycle: raw context currently calls facilityLifecyclePlanningContext, whose staff computation must later consume function residuals. Extract shared raw preparation below both adapters, not mutually recursive wrappers.",
+    "Own-cost double reserve: once structural function vendor expense is included in planBudget, context.freeCash must add back only that exact pre-reserved own vendor commitment before kernel affordability comparison. All unrelated commitments/payables/reserves remain protected.",
+    "Current context builds a temporary freshly initialized book to check zero-quota residual equivalence. This is diagnostic only; using it as live validation would mask stale cycles or existing malformed books.",
+    "Mid-cycle headcount: succession choice b and talentRaid in actions.js change staff/normalize allocation before leadership and production. Later consequences/hiring change it again. A frozen opening context fails kernel headcount equality if settled after attacks; rebuilding with the original draft allocation can also exceed actual staff. Preserve authorized policy separately from deterministic delivered task capacity/shortfalls. The prototype currently lacks this runtime-disruption contract; do not throw midway, create replacement staff, or silently rewrite the submitted quota to conceal it.",
+    "Grouped function capacity is role-collapsed. Without task-level slices a vendor quarter or service banker could be counted in several tasks simultaneously.",
+    "SpecialistBonus contains productivity, not physical staff. Preserve paid teacher subtraction once and allocate specialist productivity over actual task time; never put bonuses into physicalQuarters.",
+    "Current exactRetained fractions are floored per function, then an explicit uncredited hold conserves physical time. Do not round each consumer independently or silently recycle that hold.",
+    "The current helpers householdServiceReview and collectionsReview begin with raw allocation plus specialistBonus, while raw context subtracts teaching first. Group6 integration must reconcile this discrepancy rather than merely add new capacity on top.",
+    "Current function vendor supply defaults to zero. Enabling vendors requires an authored finite supply/reset/clearing contract and paired provider ledger, not only a nonzero UI maximum.",
+    "Current function workload maximum 1000000 and function book maxHeadcount100 can reject very long or large supported games; establish an explicit supported range before Group6 is enabled.",
+    "Do not use the prototype's trial initialization or a persisted second feature map to auto-upgrade existing campaigns. Keep Group6 marker/version/capability handshake explicit and both peers fresh."
+  ],
+  "acceptance": [
+    "Exact Group1-5 baseline comparisons including human/AI, RNG, save/resume, public views and rematch.",
+    "For every role: paid teacher + retained exact work + additional task work + residual + explicit holds <= employed assigned quarters; vendor work never enters headcount.",
+    "For every function: sum of task dispatch <= its retained/additional/vendor capacity and finite actual workload; role compatibility enforced.",
+    "All function-off zero-quota plans have a documented Group6 baseline, with no hidden phantom effects or compulsory automatic selection changes.",
+    "Both simultaneous banks share one finite vendor supply, paired cash/expense conservation and deterministic allocations regardless of seat order.",
+    "Quotes remain pure and bounded in long campaigns; malformed/stale/overcommitted plans fail before any frame/hash/book mutation.",
+    "Each of eight functions has at least one actual task/obligation consumer and a visible persistent consequence where appropriate, not merely a coverage percentage panel.",
+    "Group6 network/privacy/checkpoint/reconnect and exact owner-view validation on LAN/direct/GitHub simulations; actual two-computer acceptance remains separate."
+  ]
+}

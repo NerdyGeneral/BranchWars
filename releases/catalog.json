@@ -6,28 +6,17 @@
   },
   "versions": [
     {
-      "id": "v2",
-      "source": "8338e98b0c20cbd6feb85e343497d09271f815b8",
-      "zip": "branch-wars-v2.zip",
-      "portableSha256": "1ad21f5b6822c07068e995a76f92ff1e0a4bc0c2ea695d7ed9006b9e10708c47"
-    },
-    {
-      "id": "v3",
-      "source": "c721ede4245016853f35c30761d9ff35971b154f",
-      "zip": "branch-wars-v3.zip",
-      "portableSha256": "65f469e82f2d747f12334caf84a1079ea4eade2406cfa9635239e2049416644e",
-      "distributionVersion": "3.1",
-      "zipDepth": 1,
-      "financialGroupVersion": 7,
-      "saveVersion": "9.6"
+      "id": "v4",
+      "zip": null,
+      "portableSha256": "8c65cd256b37bcb46ed7a9867e2f66e3f14ba012bc835e9ab2ca490f835a0cd4",
+      "distributionVersion": "4.0-rc4",
+      "saveVersion": "8.20",
+      "expandedSaveVersion": "9.33",
+      "package": "v4-rc4",
+      "note": "Core research programme. Expanded unchanged; un-opted Core remains 8.19."
     }
   ],
   "artifacts": {
-    "branch-wars-v2.zip": "fa27654866dcc4cac1f5f5d6f111d35ab7991628a0ca7f3ca7cb06bbf3c778f6",
-    "branch-wars-v3.zip": "6c0331570c4109158f47f9020f875c668e95a3a6f48a29201a483df67c8e706e",
-    "branch-wars-v3-manual.pdf": "0e4335caccbe6e345a6ca814e8c8929807082140ee31e02e52fd70d5bf797be8",
-    "branch-wars-v3-manual.zip": "ec53987bf3835996bb1ce7179cb33e4f2620f7d8221fd03667bd79c864428d80",
-    "v2-player-guide.md": "c369b304fc8705d1e6543c047c4b12337c3aeb8ec32ebdcaf9a2767406a6be1d",
-    "v3-release-report.md": "392b772d2ba3f0ae6355e8890c56daa1a973be2002f1bfa33c0feb536f0d44ed"
+    "v4-rc4/BRANCH_WARS.html": "8c65cd256b37bcb46ed7a9867e2f66e3f14ba012bc835e9ab2ca490f835a0cd4"
   }
 }

@@ -1,0 +1,62 @@
+{
+  "kind": "relationship-offers-browser",
+  "date": "2026-09-06",
+  "sourceSha256": "56bfb0c3a656040212b449cd6b1d1806796a8cab1602d01c64836a35f36ee45d",
+  "scope": "Isolated local Solo browser campaign; no real multiplayer or human balance certification",
+  "checks": {
+    "prerequisiteSetup": true,
+    "paidLicenseRewardsCompleted": true,
+    "localConnectedSalesEnabled": true,
+    "offerTargetIndependentOfFocus": true,
+    "quote": {
+      "month": 2,
+      "converted": 15,
+      "principal": 137114,
+      "cost": 600,
+      "runRateDelta": 68
+    },
+    "actual": {
+      "month": 2,
+      "converted": 15,
+      "principal": 137114,
+      "cost": 600,
+      "runRateDelta": 68
+    },
+    "reload": {
+      "continuedMonth": 3,
+      "policyPreserved": true,
+      "actualReportPreserved": true
+    },
+    "desktop": "Visually reviewed, no overlap in offer desk",
+    "narrow": {
+      "viewportWidth": 500,
+      "clientWidth": 485,
+      "documentScrollWidth": 485,
+      "panelWidth": 395,
+      "selectWidths": [
+        395,
+        395,
+        395,
+        395
+      ],
+      "visuallyReviewed": true
+    },
+    "consoleErrorsOrWarnings": [],
+    "cleanup": "Temporary viewport reset; QA tab and loopback server closed"
+  },
+  "crossTabRepairFollowup": {
+    "sourceSha256": "9e633281a41efe67827e69894e959222caa736a391b5ca8bd0037e54783f6176",
+    "scope": "Continued the isolated saved month-3 campaign on the rebuilt artifact; draft-only UI actions",
+    "offerShare50": { "customersSalesCapacityDisplayed": 0.38, "advertisingSalesCapacityDisplayed": 0.38, "advertisingBudget": 15000, "advertisingBonusPercentDisplayed": 10.6 },
+    "offerShare0": { "customersSalesCapacityDisplayed": 0.75, "advertisingSalesCapacityDisplayed": 0.75, "advertisingBudget": 15000, "advertisingBonusPercentDisplayed": 21.3 },
+    "retentionCapacityUnchanged": 2.25,
+    "priorActualReportStillVisible": true,
+    "cleanup": "QA tab and temporary loopback server closed; no live multiplayer room touched",
+    "limitations": "No second console-log collection or narrow-screen screenshot; initial layout QA above predates this UI-only quote repair. Selector timeouts were resolved by fresh state checks."
+  },
+  "limitations": [
+    "One manual browser path; product retirement, corruption and multiplayer handled by automated tests.",
+    "Browser selector evaluation intermittently timed out. Fresh state checks and supported read-only CDP measurement confirmed results; no game error appeared.",
+    "Existing large setup and Operations workspaces still need broader information-architecture work."
+  ]
+}

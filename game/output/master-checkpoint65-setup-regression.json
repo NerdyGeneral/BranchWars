@@ -1,0 +1,43 @@
+{
+  "artifact": "output/BRANCH_WARS_expanded65_review.html",
+  "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "checks": [
+    {
+      "args": [
+        "tests/features.test.js",
+        "--source"
+      ],
+      "code": 0,
+      "stdout": "{\"passed\":true,\"profiles\":17,\"comparedMonths\":0,\"dependencyEdges\":16,\"implicitCutoffs\":10,\"checks\":[\"registry graph\",\"pure dependency cascade\",\"implicit defaults\",\"creation roundtrip\",\"game-view agreement\",\"save validation\",\"peer capabilities\",\"optional exact frozen baseline replay\"]}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "tests/feature_setup.test.js",
+        "--source"
+      ],
+      "code": 0,
+      "stdout": "Feature setup PASS: unchanged Core default, current Expanded creation, dependency confirmation/cancellation, reverse cascades, stale revisions and mode parity. Historical modular setup is unavailable; historical persistence is checked in integrated_campaign_recovery.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "tests/feature_lobby.test.js",
+        "--source"
+      ],
+      "code": 0,
+      "stdout": "Feature lobby PASS: all three transports, confirmation/cancel, private host drafts, atomic apply/revision/readiness reset, transitive removal, stale confirmation/ready, guest authority, malformed rules, mode transitions and visible peer refusal.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "tests/feature_network.test.js",
+        "--source"
+      ],
+      "code": 0,
+      "stdout": "Integrated Group9 staffing network PASS: three simulated transports, commitment/reveal, duplicates, private books, mismatched book and old-peer refusal, two-seat checkpoint/fresh handshake.\nWithdrawal recovery PASS: Group8 state across three simulated transports; exact two-peer GitHub checkpoint, fresh handshake and owner privacy.\nFinancial Group network PASS: rules 1, three simulated transports, portfolio commitment/reveal, duplicate protection, private owner books/reports, malformed state refusal, old-peer refusal and two-peer GitHub checkpoint reload.\nFinancial Group network PASS: rules 2, three simulated transports, portfolio commitment/reveal, duplicate protection, private owner books/reports, malformed state refusal, old-peer refusal and two-peer GitHub checkpoint reload.\nFinancial Group network PASS: rules 3, three simulated transports, portfolio/agency commitment/reveal, duplicate protection, private owner books/reports, malformed state refusal, old-peer refusal and two-peer GitHub checkpoint reload.\nActive agency network PASS: conserved prior-funded fixture, paid simultaneous launches and nonzero owner reports across three transports; sealed launch and duplicate charging protection, private checkpoints. Normal-play earned funding is verified separately by agency.test.js.\nPricing network PASS: 6 simulated lobby and priced-plan workflows, GitHub commit/reveal and duplicate protection, fresh v2 challenge, old-product-peer refusal, private billed reports, malformed report refusal and reconnect fences. Physical two-computer acceptance remains separate.\nFeature network PASS: legacy peer compatibility, all three simulated transports, rule-only state rejection before adoption, immutable active rules, private checkpoint validation and resume handshake, all four marked combinations, strict old-peer refusal and stale-challenge fences.\n",
+      "stderr": ""
+    }
+  ],
+  "status": "passed"
+}

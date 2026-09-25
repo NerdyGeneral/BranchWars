@@ -1,0 +1,15 @@
+
+#gameScreen[data-tab="strategy"] .game-layout{display:flex;flex-direction:column}
+#gameScreen[data-tab="strategy"] .desk{order:-1}
+#gameScreen[data-tab="strategy"] .strategy-tree{grid-template-columns:repeat(5,minmax(0,1fr));overflow-x:visible}
+#gameScreen[data-tab="strategy"] .strategy-lane{min-width:0}
+#gameScreen[data-tab="strategy"] .projects{grid-template-columns:repeat(5,minmax(0,1fr));max-height:none}
+[data-workspace="intelligence"] details>summary{padding:4px 0;color:#263e5d}
+@media(max-width:1050px){
+  #gameScreen[data-tab="strategy"] .strategy-tree{grid-template-columns:repeat(5,190px);overflow-x:auto}
+  #gameScreen[data-tab="strategy"] .projects{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:490px){
+  #gameScreen[data-tab="strategy"] .strategy-tree{grid-template-columns:repeat(5,175px)}
+  #gameScreen[data-tab="strategy"] .projects{grid-template-columns:1fr}
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-13",
+  "checkpoint": 47,
+  "status": "partial implementation; combined campaign coordinator and enablement unfinished",
+  "artifact": "output/BRANCH_WARS_premises47_agency.html",
+  "assemblyInputs": 184,
+  "htmlSha256": "7fcc3edaa0a88155a53948258be1d5b72a19bb288959233916509c0064b5e4c1",
+  "engineSha256": "a0e1baf2e9ae3a2563bf1e5d75a5da10c7988c010c9d23b49a0f85d48bf802f6",
+  "sourceMatchesArtifact": true,
+  "scriptSyntax": "passed",
+  "creationVersion": "9.26",
+  "campaignPremisesEnabled": false,
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "commands": [
+    {"command": "node tests/shared_premises_agency.test.js", "exitCode": 0, "groups": 7},
+    {"command": "node tests/shared_premises_delivery.test.js", "exitCode": 0, "groups": 8, "consecutiveInvestmentServiceMonths": 24},
+    {"command": "node tests/shared_premises.test.js", "exitCode": 0, "groups": 8},
+    {"command": "node tests/agency_professionals.test.js", "exitCode": 0, "groups": 9, "fullEngineMonths": 3},
+    {"command": "node tests/shared_premises_boundary.test.js", "exitCode": 0, "exactScenarios": ["balanced", "rate", "regulatory", "growth"]},
+    {"command": "node tests/agency_professionals_legacy.test.js", "exitCode": 0, "profiles": 40, "comparisonMonthsTotal": 120, "scope": "Frozen Group0-9 creation, human/AI, RNG, half-ready recovery, owner views and rematch; not a 120-month current-version balance campaign"},
+    {"command": "node tests/docs.test.js", "exitCode": 0, "files": 59, "localLinks": 472}
+  ],
+  "whitespaceCheck": "passed",
+  "observedTestRepair": "Initial new test fixture omitted required corporate circulation. The actual circulation step and existing conservation validators were retained.",
+  "provisionalRules": ["Central agency acquisition uses the existing plan focus; reserved local producers can acquire locally", "Two policy acquisitions per full producer-month, rounded down per pool", "Internal occupancy creditor receives a pro-rata share of actual liquidation cash; paired write-off of unpaid remainder"],
+  "remaining": ["combined ordered bank/agency/investment coordinator", "full flow counters and consolidated eliminations", "versioned campaign and transport integration", "office controls", "full source/package gate", "current 120/480 strategy matrix", "browser and human acceptance", "final manual and local package"],
+  "publication": false,
+  "balanceAcceptance": false,
+  "fullGate": false
+}

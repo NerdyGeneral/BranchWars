@@ -1,0 +1,518 @@
+{
+  "passed": true,
+  "sourceSha256": "a2cf1aab9ddd13b48de0d4ddfd0f328da5bb294f77e21ad18cc42ec4f85174c9",
+  "advertisingVersion": 1,
+  "productProgramsVersion": 1,
+  "segmentDepositsVersion": 1,
+  "creditPerformanceVersion": 1,
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 20,
+  "seedCount": 1,
+  "turnLimit": 480,
+  "turns": 1920,
+  "maxViewBytes": 815843,
+  "metricDefinitions": {
+    "version": 1,
+    "samples": "After each resolved month, including terminal settlement; final balances are also after settlement.",
+    "shares": "Percent of the two player banks combined, excluding outside institutions; zero total produces zero shares.",
+    "dominance": "Consecutive sampled months at or above 80% of combined-player deposits, counted separately per seat.",
+    "depositLeadChanges": "Changes between non-tied deposit leaders; intervening ties are ignored.",
+    "capitalReturnsTo10": "A below-10% capital spell followed by one sampled month at or above 10%; not necessarily sustained recovery.",
+    "households": "Exact owned household counts, available only with the household ownership preview."
+  },
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        4018080,
+        2716071
+      ],
+      "deposits": [
+        59374015,
+        108625655
+      ],
+      "profit": [
+        361176,
+        19130
+      ],
+      "capitalRatioPercent": [
+        12.448818112353706,
+        10.989521198996956
+      ],
+      "capitalTier": [
+        "strong",
+        "strong"
+      ],
+      "cash": [
+        19995296,
+        82602925
+      ],
+      "emergencyDebt": [
+        0,
+        0
+      ],
+      "depositSharePercent": [
+        35.34174501652295,
+        64.65825498347705
+      ],
+      "households": [
+        15834,
+        15266
+      ],
+      "householdSharePercent": [
+        50.91318327974277,
+        49.08681672025724
+      ],
+      "competition": {
+        "samples": 480,
+        "depositLeadChanges": 21,
+        "maxDepositSharePercent": [
+          92.90621057987437,
+          71.81669753235688
+        ],
+        "longestDepositDominanceMonths": [
+          178,
+          0
+        ],
+        "below10CapitalMonths": [
+          0,
+          2
+        ],
+        "longestBelow10CapitalMonths": [
+          0,
+          2
+        ],
+        "capitalReturnsTo10": [
+          0,
+          1
+        ],
+        "lossMonths": [
+          0,
+          49
+        ]
+      }
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3759419,
+        4477547
+      ],
+      "deposits": [
+        101287683,
+        69891175
+      ],
+      "profit": [
+        262969,
+        221353
+      ],
+      "capitalRatioPercent": [
+        11.540491944673576,
+        11.55430639897738
+      ],
+      "capitalTier": [
+        "strong",
+        "strong"
+      ],
+      "cash": [
+        61351203,
+        24496530
+      ],
+      "emergencyDebt": [
+        0,
+        0
+      ],
+      "depositSharePercent": [
+        59.170673401735165,
+        40.829326598264835
+      ],
+      "households": [
+        16963,
+        14117
+      ],
+      "householdSharePercent": [
+        54.57850707850708,
+        45.42149292149292
+      ],
+      "competition": {
+        "samples": 480,
+        "depositLeadChanges": 5,
+        "maxDepositSharePercent": [
+          70.33997512639367,
+          71.306884629776
+        ],
+        "longestDepositDominanceMonths": [
+          0,
+          0
+        ],
+        "below10CapitalMonths": [
+          0,
+          0
+        ],
+        "longestBelow10CapitalMonths": [
+          0,
+          0
+        ],
+        "capitalReturnsTo10": [
+          0,
+          0
+        ],
+        "lossMonths": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        4761744,
+        4519405
+      ],
+      "deposits": [
+        126229560,
+        41766495
+      ],
+      "profit": [
+        289746,
+        297176
+      ],
+      "capitalRatioPercent": [
+        11.339233306123585,
+        12.921764966924934
+      ],
+      "capitalTier": [
+        "strong",
+        "strong"
+      ],
+      "cash": [
+        77877777,
+        190763
+      ],
+      "emergencyDebt": [
+        0,
+        0
+      ],
+      "depositSharePercent": [
+        75.13840726795638,
+        24.86159273204362
+      ],
+      "households": [
+        19022,
+        12078
+      ],
+      "householdSharePercent": [
+        61.163987138263664,
+        38.836012861736336
+      ],
+      "competition": {
+        "samples": 480,
+        "depositLeadChanges": 10,
+        "maxDepositSharePercent": [
+          75.13840726795638,
+          70.07943000498535
+        ],
+        "longestDepositDominanceMonths": [
+          0,
+          0
+        ],
+        "below10CapitalMonths": [
+          0,
+          1
+        ],
+        "longestBelow10CapitalMonths": [
+          0,
+          1
+        ],
+        "capitalReturnsTo10": [
+          0,
+          1
+        ],
+        "lossMonths": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "scenario": "growth",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        4390731,
+        18609080
+      ],
+      "deposits": [
+        124713944,
+        43196300
+      ],
+      "profit": [
+        -31262,
+        445594
+      ],
+      "capitalRatioPercent": [
+        12.528804318733133,
+        32.09269510107814
+      ],
+      "capitalTier": [
+        "strong",
+        "strong"
+      ],
+      "cash": [
+        94059583,
+        2364247
+      ],
+      "emergencyDebt": [
+        0,
+        0
+      ],
+      "depositSharePercent": [
+        74.27417233697784,
+        25.725827663022155
+      ],
+      "households": [
+        19195,
+        11905
+      ],
+      "householdSharePercent": [
+        61.72025723472668,
+        38.27974276527331
+      ],
+      "competition": {
+        "samples": 480,
+        "depositLeadChanges": 12,
+        "maxDepositSharePercent": [
+          76.77386900493805,
+          83.00494541410714
+        ],
+        "longestDepositDominanceMonths": [
+          0,
+          59
+        ],
+        "below10CapitalMonths": [
+          1,
+          0
+        ],
+        "longestBelow10CapitalMonths": [
+          1,
+          0
+        ],
+        "capitalReturnsTo10": [
+          1,
+          0
+        ],
+        "lossMonths": [
+          14,
+          0
+        ]
+      }
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "providerChanges": 46,
+      "lateProviderChanges": 39,
+      "initiatives": 676,
+      "competitiveActions": 470,
+      "advertisingSpend": 495000,
+      "assistedDeposits": 493838,
+      "assistedHouseholds": 416,
+      "advertisingMonths": 33,
+      "advertisingPaused": 0,
+      "plannedProductLaunches": {
+        "build": 4,
+        "partner": 3
+      },
+      "plannedProductRetirements": 0,
+      "vendorCost": 2138854,
+      "targetedAudiences": 11316,
+      "householdDepartures": 19801,
+      "householdDepositOutflow": 156010464,
+      "retentionShares": {
+        "25": 259,
+        "50": 236,
+        "75": 96,
+        "100": 369
+      },
+      "creditEntered": 53331606,
+      "creditCured": 24415229,
+      "creditRecovery": 14053197,
+      "creditLoss": 14337146,
+      "collectionsCost": 98329,
+      "collectionsPolicies": {
+        "workout": 8,
+        "balanced": 952,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.02129278588329636,
+      "stagedSpecialists": 159,
+      "trainingSpend": 964000,
+      "trainingPaused": 18,
+      "maxSpecialists": 77,
+      "maxSkill": 61,
+      "maxPremiumPayroll": 327000
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "providerChanges": 43,
+      "lateProviderChanges": 35,
+      "initiatives": 650,
+      "competitiveActions": 486,
+      "advertisingSpend": 420000,
+      "assistedDeposits": 846895,
+      "assistedHouseholds": 507,
+      "advertisingMonths": 28,
+      "advertisingPaused": 0,
+      "plannedProductLaunches": {
+        "build": 4,
+        "partner": 3
+      },
+      "plannedProductRetirements": 0,
+      "vendorCost": 2873685,
+      "targetedAudiences": 11352,
+      "householdDepartures": 20539,
+      "householdDepositOutflow": 166767211,
+      "retentionShares": {
+        "25": 105,
+        "50": 320,
+        "75": 142,
+        "100": 393
+      },
+      "creditEntered": 39457051,
+      "creditCured": 17904244,
+      "creditRecovery": 10377414,
+      "creditLoss": 10645747,
+      "collectionsCost": 73066,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 956,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.022769144561073477,
+      "stagedSpecialists": 118,
+      "trainingSpend": 1020000,
+      "trainingPaused": 0,
+      "maxSpecialists": 59,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 255000
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "providerChanges": 50,
+      "lateProviderChanges": 44,
+      "initiatives": 603,
+      "competitiveActions": 426,
+      "advertisingSpend": 420000,
+      "assistedDeposits": 429263,
+      "assistedHouseholds": 546,
+      "advertisingMonths": 28,
+      "advertisingPaused": 0,
+      "plannedProductLaunches": {
+        "build": 4,
+        "partner": 4
+      },
+      "plannedProductRetirements": 0,
+      "vendorCost": 4618351,
+      "targetedAudiences": 11376,
+      "householdDepartures": 14579,
+      "householdDepositOutflow": 160403765,
+      "retentionShares": {
+        "25": 214,
+        "50": 290,
+        "75": 76,
+        "100": 380
+      },
+      "creditEntered": 52106030,
+      "creditCured": 23893412,
+      "creditRecovery": 13718328,
+      "creditLoss": 13973205,
+      "collectionsCost": 96103,
+      "collectionsPolicies": {
+        "workout": 12,
+        "balanced": 948,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.023259464681290493,
+      "stagedSpecialists": 122,
+      "trainingSpend": 1152000,
+      "trainingPaused": 0,
+      "maxSpecialists": 61,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 263000
+    },
+    {
+      "scenario": "growth",
+      "seed": 20,
+      "providerChanges": 45,
+      "lateProviderChanges": 39,
+      "initiatives": 736,
+      "competitiveActions": 426,
+      "advertisingSpend": 510000,
+      "assistedDeposits": 715040,
+      "assistedHouseholds": 517,
+      "advertisingMonths": 34,
+      "advertisingPaused": 0,
+      "plannedProductLaunches": {
+        "build": 4,
+        "partner": 4
+      },
+      "plannedProductRetirements": 0,
+      "vendorCost": 3399716,
+      "targetedAudiences": 11340,
+      "householdDepartures": 20132,
+      "householdDepositOutflow": 174365325,
+      "retentionShares": {
+        "25": 223,
+        "50": 292,
+        "75": 84,
+        "100": 361
+      },
+      "creditEntered": 91180606,
+      "creditCured": 42546025,
+      "creditRecovery": 23885409,
+      "creditLoss": 23967505,
+      "collectionsCost": 167273,
+      "collectionsPolicies": {
+        "workout": 29,
+        "balanced": 931,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.02433978084546902,
+      "stagedSpecialists": 176,
+      "trainingSpend": 1156000,
+      "trainingPaused": 0,
+      "maxSpecialists": 96,
+      "maxSkill": 63,
+      "maxPremiumPayroll": 403000
+    }
+  ]
+}

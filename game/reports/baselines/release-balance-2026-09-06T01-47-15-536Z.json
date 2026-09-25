@@ -1,0 +1,895 @@
+{
+  "passed": true,
+  "sourceSha256": "491873af3e31748455463557b8d0e35d8ed9243303e0c373d747fb84cbe9cd4f",
+  "creditPerformanceVersion": 1,
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 0,
+  "seedCount": 4,
+  "turnLimit": 120,
+  "turns": 1920,
+  "maxViewBytes": 671738,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 77,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 85,
+      "seat": 1,
+      "key": "branch",
+      "notice": "Synergy Holdings AI cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 112,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    }
+  ],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1351087,
+        971061
+      ],
+      "deposits": [
+        75368443,
+        59739971
+      ],
+      "profit": [
+        45154,
+        63821
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1949340,
+        1059600
+      ],
+      "deposits": [
+        46082731,
+        64982005
+      ],
+      "profit": [
+        85225,
+        78445
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1243090,
+        1294324
+      ],
+      "deposits": [
+        18805203,
+        125899423
+      ],
+      "profit": [
+        199937,
+        75798
+      ]
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        997999,
+        1119466
+      ],
+      "deposits": [
+        119086758,
+        24502304
+      ],
+      "profit": [
+        80396,
+        181044
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1144741,
+        1819625
+      ],
+      "deposits": [
+        43109937,
+        96628406
+      ],
+      "profit": [
+        145192,
+        447929
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1617628,
+        958292
+      ],
+      "deposits": [
+        97599790,
+        43681279
+      ],
+      "profit": [
+        112382,
+        36219
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1311386,
+        1477956
+      ],
+      "deposits": [
+        86982748,
+        73338734
+      ],
+      "profit": [
+        118674,
+        179857
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1116733,
+        1414062
+      ],
+      "deposits": [
+        52009908,
+        90525001
+      ],
+      "profit": [
+        89100,
+        102784
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1422434,
+        1601584
+      ],
+      "deposits": [
+        109194952,
+        44590891
+      ],
+      "profit": [
+        189344,
+        133304
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1575848,
+        1795044
+      ],
+      "deposits": [
+        45995525,
+        87473520
+      ],
+      "profit": [
+        135010,
+        138530
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1464940,
+        1560426
+      ],
+      "deposits": [
+        85552305,
+        48258785
+      ],
+      "profit": [
+        398741,
+        295842
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1749093,
+        1157358
+      ],
+      "deposits": [
+        34394182,
+        90797676
+      ],
+      "profit": [
+        144787,
+        28022
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1518654,
+        2089113
+      ],
+      "deposits": [
+        29270198,
+        114172625
+      ],
+      "profit": [
+        146280,
+        129253
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        1628550,
+        1685173
+      ],
+      "deposits": [
+        86464958,
+        58600643
+      ],
+      "profit": [
+        123239,
+        82088
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2474622,
+        2192229
+      ],
+      "deposits": [
+        33599741,
+        101064276
+      ],
+      "profit": [
+        368825,
+        105085
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "cycle": 121,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3247447,
+        2207472
+      ],
+      "deposits": [
+        17731113,
+        126543576
+      ],
+      "profit": [
+        279447,
+        318995
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 0,
+      "providerChanges": 9,
+      "lateProviderChanges": 1,
+      "initiatives": 13,
+      "competitiveActions": 12,
+      "householdDepartures": 1933,
+      "householdDepositOutflow": 23285172,
+      "retentionShares": {
+        "25": 24,
+        "50": 79,
+        "75": 69,
+        "100": 68
+      },
+      "creditEntered": 5530335,
+      "creditCured": 2482316,
+      "creditRecovery": 1410845,
+      "creditLoss": 1449739,
+      "collectionsCost": 10321,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 240,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.017636820584017793,
+      "stagedSpecialists": 22,
+      "trainingSpend": 567000,
+      "trainingPaused": 0,
+      "maxSpecialists": 15,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 69000
+    },
+    {
+      "scenario": "balanced",
+      "seed": 1,
+      "providerChanges": 8,
+      "lateProviderChanges": 0,
+      "initiatives": 45,
+      "competitiveActions": 40,
+      "householdDepartures": 3094,
+      "householdDepositOutflow": 46550660,
+      "retentionShares": {
+        "25": 1,
+        "50": 21,
+        "75": 58,
+        "100": 160
+      },
+      "creditEntered": 6245404,
+      "creditCured": 2855257,
+      "creditRecovery": 1549472,
+      "creditLoss": 1577174,
+      "collectionsCost": 11616,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 236,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.02268015015509492,
+      "stagedSpecialists": 35,
+      "trainingSpend": 628000,
+      "trainingPaused": 0,
+      "maxSpecialists": 24,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 121500
+    },
+    {
+      "scenario": "balanced",
+      "seed": 2,
+      "providerChanges": 11,
+      "lateProviderChanges": 5,
+      "initiatives": 34,
+      "competitiveActions": 39,
+      "householdDepartures": 2351,
+      "householdDepositOutflow": 31345560,
+      "retentionShares": {
+        "25": 24,
+        "50": 68,
+        "75": 38,
+        "100": 110
+      },
+      "creditEntered": 5572994,
+      "creditCured": 2540438,
+      "creditRecovery": 1388171,
+      "creditLoss": 1415221,
+      "collectionsCost": 10433,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 236,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.022176293538653854,
+      "stagedSpecialists": 28,
+      "trainingSpend": 504000,
+      "trainingPaused": 27,
+      "maxSpecialists": 19,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 79000
+    },
+    {
+      "scenario": "balanced",
+      "seed": 3,
+      "providerChanges": 16,
+      "lateProviderChanges": 7,
+      "initiatives": 32,
+      "competitiveActions": 18,
+      "householdDepartures": 2177,
+      "householdDepositOutflow": 27914991,
+      "retentionShares": {
+        "25": 51,
+        "50": 32,
+        "75": 68,
+        "100": 89
+      },
+      "creditEntered": 4350208,
+      "creditCured": 1942748,
+      "creditRecovery": 1121150,
+      "creditLoss": 1158921,
+      "collectionsCost": 8308,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 240,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.017234197913681703,
+      "stagedSpecialists": 15,
+      "trainingSpend": 362000,
+      "trainingPaused": 7,
+      "maxSpecialists": 12,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 51000
+    },
+    {
+      "scenario": "rate",
+      "seed": 0,
+      "providerChanges": 10,
+      "lateProviderChanges": 2,
+      "initiatives": 44,
+      "competitiveActions": 34,
+      "householdDepartures": 3151,
+      "householdDepositOutflow": 41287581,
+      "retentionShares": {
+        "25": 0,
+        "50": 16,
+        "75": 70,
+        "100": 154
+      },
+      "creditEntered": 5521710,
+      "creditCured": 2544682,
+      "creditRecovery": 1360530,
+      "creditLoss": 1373089,
+      "collectionsCost": 10448,
+      "collectionsPolicies": {
+        "workout": 8,
+        "balanced": 232,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.023713520195015717,
+      "stagedSpecialists": 26,
+      "trainingSpend": 510000,
+      "trainingPaused": 0,
+      "maxSpecialists": 21,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 103000
+    },
+    {
+      "scenario": "rate",
+      "seed": 1,
+      "providerChanges": 8,
+      "lateProviderChanges": 0,
+      "initiatives": 19,
+      "competitiveActions": 8,
+      "householdDepartures": 2649,
+      "householdDepositOutflow": 30203145,
+      "retentionShares": {
+        "25": 8,
+        "50": 110,
+        "75": 38,
+        "100": 84
+      },
+      "creditEntered": 6655152,
+      "creditCured": 3056427,
+      "creditRecovery": 1693400,
+      "creditLoss": 1719187,
+      "collectionsCost": 12473,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 236,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.021079291270044927,
+      "stagedSpecialists": 28,
+      "trainingSpend": 485000,
+      "trainingPaused": 7,
+      "maxSpecialists": 19,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 84000
+    },
+    {
+      "scenario": "rate",
+      "seed": 2,
+      "providerChanges": 10,
+      "lateProviderChanges": 2,
+      "initiatives": 31,
+      "competitiveActions": 37,
+      "householdDepartures": 2944,
+      "householdDepositOutflow": 36366452,
+      "retentionShares": {
+        "25": 2,
+        "50": 66,
+        "75": 91,
+        "100": 81
+      },
+      "creditEntered": 5304510,
+      "creditCured": 2398380,
+      "creditRecovery": 1304508,
+      "creditLoss": 1327404,
+      "collectionsCost": 9876,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 236,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.02383339230418019,
+      "stagedSpecialists": 31,
+      "trainingSpend": 440000,
+      "trainingPaused": 0,
+      "maxSpecialists": 17,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 75000
+    },
+    {
+      "scenario": "rate",
+      "seed": 3,
+      "providerChanges": 6,
+      "lateProviderChanges": 0,
+      "initiatives": 18,
+      "competitiveActions": 15,
+      "householdDepartures": 2445,
+      "householdDepositOutflow": 26926475,
+      "retentionShares": {
+        "25": 6,
+        "50": 142,
+        "75": 17,
+        "100": 75
+      },
+      "creditEntered": 6107291,
+      "creditCured": 2751038,
+      "creditRecovery": 1570112,
+      "creditLoss": 1608731,
+      "collectionsCost": 11360,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 240,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.01677895907881981,
+      "stagedSpecialists": 30,
+      "trainingSpend": 352000,
+      "trainingPaused": 6,
+      "maxSpecialists": 18,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 77500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 0,
+      "providerChanges": 17,
+      "lateProviderChanges": 5,
+      "initiatives": 36,
+      "competitiveActions": 43,
+      "householdDepartures": 2813,
+      "householdDepositOutflow": 36784127,
+      "retentionShares": {
+        "25": 7,
+        "50": 59,
+        "75": 59,
+        "100": 115
+      },
+      "creditEntered": 6795231,
+      "creditCured": 3092204,
+      "creditRecovery": 1728639,
+      "creditLoss": 1759133,
+      "collectionsCost": 12622,
+      "collectionsPolicies": {
+        "workout": 2,
+        "balanced": 238,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.022461909635697584,
+      "stagedSpecialists": 26,
+      "trainingSpend": 573000,
+      "trainingPaused": 1,
+      "maxSpecialists": 16,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 69500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 1,
+      "providerChanges": 7,
+      "lateProviderChanges": 2,
+      "initiatives": 23,
+      "competitiveActions": 25,
+      "householdDepartures": 3275,
+      "householdDepositOutflow": 51951933,
+      "retentionShares": {
+        "25": 0,
+        "50": 38,
+        "75": 35,
+        "100": 167
+      },
+      "creditEntered": 5754015,
+      "creditCured": 2602858,
+      "creditRecovery": 1453775,
+      "creditLoss": 1485585,
+      "collectionsCost": 10743,
+      "collectionsPolicies": {
+        "workout": 2,
+        "balanced": 238,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.023349259911930237,
+      "stagedSpecialists": 34,
+      "trainingSpend": 906000,
+      "trainingPaused": 7,
+      "maxSpecialists": 18,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 96000
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 2,
+      "providerChanges": 19,
+      "lateProviderChanges": 6,
+      "initiatives": 49,
+      "competitiveActions": 59,
+      "householdDepartures": 4341,
+      "householdDepositOutflow": 63372190,
+      "retentionShares": {
+        "25": 0,
+        "50": 26,
+        "75": 44,
+        "100": 170
+      },
+      "creditEntered": 4763980,
+      "creditCured": 2126732,
+      "creditRecovery": 1206575,
+      "creditLoss": 1244961,
+      "collectionsCost": 8984,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 240,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.019316445355836494,
+      "stagedSpecialists": 26,
+      "trainingSpend": 886000,
+      "trainingPaused": 0,
+      "maxSpecialists": 17,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 87000
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 3,
+      "providerChanges": 7,
+      "lateProviderChanges": 0,
+      "initiatives": 13,
+      "competitiveActions": 16,
+      "householdDepartures": 1969,
+      "householdDepositOutflow": 28114064,
+      "retentionShares": {
+        "25": 1,
+        "50": 72,
+        "75": 55,
+        "100": 112
+      },
+      "creditEntered": 6311941,
+      "creditCured": 2882873,
+      "creditRecovery": 1596131,
+      "creditLoss": 1622505,
+      "collectionsCost": 11741,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 236,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.023807458705772364,
+      "stagedSpecialists": 30,
+      "trainingSpend": 540000,
+      "trainingPaused": 3,
+      "maxSpecialists": 21,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 108000
+    },
+    {
+      "scenario": "growth",
+      "seed": 0,
+      "providerChanges": 15,
+      "lateProviderChanges": 6,
+      "initiatives": 17,
+      "competitiveActions": 14,
+      "householdDepartures": 2459,
+      "householdDepositOutflow": 24889852,
+      "retentionShares": {
+        "25": 0,
+        "50": 82,
+        "75": 89,
+        "100": 69
+      },
+      "creditEntered": 6862938,
+      "creditCured": 3093422,
+      "creditRecovery": 1695716,
+      "creditLoss": 1729333,
+      "collectionsCost": 12474,
+      "collectionsPolicies": {
+        "workout": 1,
+        "balanced": 239,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.01839456984407473,
+      "stagedSpecialists": 32,
+      "trainingSpend": 502000,
+      "trainingPaused": 0,
+      "maxSpecialists": 24,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 101500
+    },
+    {
+      "scenario": "growth",
+      "seed": 1,
+      "providerChanges": 18,
+      "lateProviderChanges": 8,
+      "initiatives": 13,
+      "competitiveActions": 14,
+      "householdDepartures": 3343,
+      "householdDepositOutflow": 36211470,
+      "retentionShares": {
+        "25": 0,
+        "50": 114,
+        "75": 54,
+        "100": 72
+      },
+      "creditEntered": 8710310,
+      "creditCured": 3972650,
+      "creditRecovery": 2166834,
+      "creditLoss": 2195338,
+      "collectionsCost": 15807,
+      "collectionsPolicies": {
+        "workout": 2,
+        "balanced": 238,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.019817024809355543,
+      "stagedSpecialists": 38,
+      "trainingSpend": 512000,
+      "trainingPaused": 0,
+      "maxSpecialists": 20,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 84500
+    },
+    {
+      "scenario": "growth",
+      "seed": 2,
+      "providerChanges": 21,
+      "lateProviderChanges": 7,
+      "initiatives": 40,
+      "competitiveActions": 34,
+      "householdDepartures": 2856,
+      "householdDepositOutflow": 38780804,
+      "retentionShares": {
+        "25": 22,
+        "50": 53,
+        "75": 44,
+        "100": 121
+      },
+      "creditEntered": 10445900,
+      "creditCured": 4726193,
+      "creditRecovery": 2529592,
+      "creditLoss": 2561494,
+      "collectionsCost": 18425,
+      "collectionsPolicies": {
+        "workout": 1,
+        "balanced": 239,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.020846612394813765,
+      "stagedSpecialists": 38,
+      "trainingSpend": 472000,
+      "trainingPaused": 2,
+      "maxSpecialists": 20,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 88000
+    },
+    {
+      "scenario": "growth",
+      "seed": 3,
+      "providerChanges": 6,
+      "lateProviderChanges": 2,
+      "initiatives": 69,
+      "competitiveActions": 60,
+      "householdDepartures": 4317,
+      "householdDepositOutflow": 62730906,
+      "retentionShares": {
+        "25": 0,
+        "50": 0,
+        "75": 50,
+        "100": 190
+      },
+      "creditEntered": 7496491,
+      "creditCured": 3355917,
+      "creditRecovery": 1823721,
+      "creditLoss": 1862515,
+      "collectionsCost": 13347,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 240,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.019423370582924676,
+      "stagedSpecialists": 39,
+      "trainingSpend": 545000,
+      "trainingPaused": 8,
+      "maxSpecialists": 31,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 149500
+    }
+  ]
+}

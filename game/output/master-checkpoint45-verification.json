@@ -1,0 +1,19 @@
+{
+  "checkpoint":45,
+  "status":"shared-premises domain verified; campaign integration and master goal incomplete",
+  "sourceInputs":184,
+  "artifact":"output/BRANCH_WARS_premises45_verified_domain.html",
+  "sha256":"4b6d73bd9c13b33dcfabcf2ac2c7a9c48257d64baac3b8b3bab4bbaac5ef7ac2",
+  "engineSha256":"ad7e728d9ff4507eb9f68ba8b245a95cf3fbe055c813cb4ad5fec0c4923f2fe2",
+  "normalPortableSha256":"b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "checks":[
+    {"command":"node tests/shared_premises.test.js","result":"8 groups pass","scope":"Pure quotes; paid construction and activation; finite space/time; permissions; paired cash/claims; protected cash; stress, cancellation, closure and duplicate settlement."},
+    {"command":"node tests/shared_premises_boundary.test.js","result":"4 actual scenarios pass","scope":"Exact immutable44 creation, AI plans, half-ready restore, one month, owner views and rematch; no feature activation."},
+    {"command":"node tests/architecture.test.js","result":"pass","scope":"Normal portable37 only, not current source."},
+    {"command":"node tests/architecture.test.js --source","result":"unresolved failure","scope":"Conservative regex flags local acquisition binding as replacement of a function in a different closure. No ceiling increase; source gate not accepted."}
+  ],
+  "ordinaryBalance":{"build":44,"session":59456,"terminalExitCode":0,"report":"output/master-checkpoint44-commercial-expanded-120.json","months":120,"bankFailure":false,"validationFailure":false,"firstInvestment":[null,null],"firstCompanyControl":[null,null],"cumulativeEarnings":[-433098,-962461],"closingLoans":[2389013,1463024],"elapsedMs":1081054,"msPerMonth":9009,"acceptedBalance":false},
+  "next":"Connect shared premises to actual subsidiary time/service dispatch, facility budgets/condition, versioned lifecycle/network privacy and contextual office controls. Resolve source architecture gate classification without weakening real override checks. Remaining master balance and release scope stays active.",
+  "browserAcceptance":false,
+  "published":false
+}

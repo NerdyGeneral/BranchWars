@@ -1,0 +1,24 @@
+{
+  "release": "V3",
+  "createdAt": "2026-09-08T13:40:21.873Z",
+  "portableSha256": "cee444d3a3f0efd72f71ddf42ae19741e7ab8dce672d5d16410466a25d061135",
+  "campaignEngineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+  "inputFile": "department-group6-f9836bda-regulatory480.json",
+  "inputSha256": "ac59ce818ff470b886a0c3a8f8c1269631316bca58a0a91f4989be3215988de6",
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "spec": {
+        "scenario": "regulatory",
+        "seed": "department-A",
+        "turns": 480
+      },
+      "rawCharacters": 52227013,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(saved)\n\n    at verifyStorageRecovery (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-mainAFTRWORK9.3.26\\BranchWars-main\\game\\tests\\storage_recovery.js:10:68)\n    at main (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-mainAFTRWORK9.3.26\\BranchWars-main\\game\\tools\\verify_v3_long_save.js:13:70)\n    at Object.<anonymous> (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-mainAFTRWORK9.3.26\\BranchWars-main\\game\\tools\\verify_v3_long_save.js:21:1)\n    at Module._compile (node:internal/modules/cjs/loader:1871:14)\n    at Object..js (node:internal/modules/cjs/loader:2002:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47",
+      "elapsedMs": 486
+    }
+  ],
+  "passed": false,
+  "scope": "Final V3 actual local save and repository checkpoint/retry recovery with completed frozen same-engine campaign, under 5MiB quota adapters. Not a real browser or physical two-computer test."
+}

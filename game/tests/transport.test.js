@@ -1,19 +1,17 @@
 'use strict';
 
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
 const vm = require('node:vm');
 const { webcrypto } = require('node:crypto');
 
-const html = fs.readFileSync(path.resolve(__dirname, '..', 'BRANCH_WARS.html'), 'utf8');
-
+let extractionHarness;
 function clientFunction(name) {
-  let start = html.indexOf(`function ${name}(`);
-  assert(start >= 0, `client function ${name} must exist`);
-  if (html.slice(start - 6, start) === 'async ') start -= 6;
-  const end = html.indexOf('\nfunction ', start + 1);
-  return html.slice(start, end === -1 ? html.length : end);
+  // Use the parsed function's actual boundary. Slicing at the next plain
+  // `function` also copies intervening async functions and lexical declarations.
+  extractionHarness ||= require('./github_resilience.test.js').harness();
+  const source = extractionHarness.run(`typeof ${name}==='function'?${name}.toString():null`);
+  assert(source, `client function ${name} must exist`);
+  return source;
 }
 
 function response(status, body, headers = {}) {
@@ -138,8 +136,27 @@ async function testRepositoryQueue() {
   timers.close();
 }
 
-assert.match(clientFunction('submitPlan'), /gh\.active\)await ghCommitPlan\(plan\)/, 'Repository Link sends a commitment before revealing a plan');
 assert.match(clientFunction('handleMessage'), /This Repository Link client is outdated and did not seal its plan/, 'Repository Link rejects legacy plaintext plans');
+
+async function testRepositorySubmitOrdering() {
+  const { harness } = require('./github_resilience.test.js');
+  const h = harness('guest');
+  h.run("view={cycle:1,me:{submitted:false},rival:{submitted:false}};currentView=()=>view;planReady=()=>true;draft={cycle:1,decision:'a',privatePolicy:'owner only'};sent=[];send=message=>sent.push(message);ghPlanHash=()=>new Promise(resolve=>finishSeal=resolve)");
+  const submitting = h.run('submitPlan()');
+  assert.equal(h.run('view.me.submitted'), false, 'Ready must await hashing before marking a plan submitted');
+  assert.equal(h.run('sent.length'), 0, 'No plaintext or incomplete commitment may leave while hashing');
+  h.run("finishSeal('a'.repeat(64))");
+  await submitting;
+  assert.equal(h.run('sent.length'), 1);
+  assert.equal(h.run('sent[0].type'), 'plan_commit');
+  assert.equal(h.run('sent[0].plan'), undefined, 'The initial commitment cannot contain owner-private plan data');
+  assert.equal(h.run('view.me.submitted'), true, 'Ready is marked only after committing');
+  h.run('view.rival.submitted=true;ghRevealPlan();ghRevealPlan()');
+  assert.equal(h.run('sent.length'), 2, 'The sealed payload reveals only once');
+  assert.equal(h.run('sent[1].type'), 'plan_reveal');
+  assert.equal(h.run('sent[1].hash'), h.run('sent[0].hash'));
+  assert.equal(h.run('sent[1].plan.privatePolicy'), 'owner only');
+}
 
 async function testLanQueue() {
   const timers = quickTimers();
@@ -180,9 +197,10 @@ async function testLanQueue() {
 }
 
 (async () => {
+  await testRepositorySubmitOrdering();
   await testRepositoryQueue();
   await testLanQueue();
-  console.log('Branch Wars transport tests passed: ordered retry, lost-response reconciliation, default-branch discovery, and LAN idempotency.');
+  console.log('Branch Wars transport tests passed: awaited private commitment/reveal, ordered retry, lost-response reconciliation, default-branch discovery, and LAN idempotency.');
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

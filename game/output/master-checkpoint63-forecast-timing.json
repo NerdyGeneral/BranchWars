@@ -1,0 +1,20 @@
+{
+  "artifactSha256": "ec9a84e55a443f9c144fd14b57fc86fa32adb3df9aab5607ae4cb839b6373db4",
+  "scope": "Owner-only month3 single-offer conditional forecast, Node VM; not browser rendering or mature-game performance",
+  "samplesMs": [
+    106.29529999999977,
+    104.45180000000073,
+    101.43179999999847,
+    103.78999999999905,
+    103.39450000000033,
+    100.36759999999958,
+    100.3864999999987,
+    99.91569999999956,
+    100.77950000000055,
+    100.95659999999953
+  ],
+  "medianMs": 101.43179999999847,
+  "maxMs": 106.29529999999977,
+  "inputsAndRngUnchanged": true,
+  "resultsRepeatExactly": true
+}

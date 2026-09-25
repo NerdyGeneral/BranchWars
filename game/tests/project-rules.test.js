@@ -31,10 +31,15 @@ function validation(engine, g, p, intent) {
 const profiles = [{fundingRulesVersion: 1}, {fundingRulesVersion: 2},
   {campaignRulesVersion: 1, serviceExpansionVersion: 0},
   {campaignRulesVersion: 1, managementVersion: 2, customerDemandVersion: 2}];
+assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth','licenseHighYield','licenseRewards']);
 let compared = 0;
 for (const [index, options] of profiles.entries()) {
   const g = E.createGame({...options, seed: 'project-rules-' + index, created: 1, mode: 'hotseat'});
   const intent = plan(g);
+  for(const key of ['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth']){
+    assert.equal(E.projectCatalog(g.players[0])[key],undefined,'New institution routes stay absent from legacy catalogs');
+    assert(E.__projectBarred(g.players[0],key),'New institution routes must remain unavailable to historical campaigns');
+  }
   const focusMarkets = Object.keys(g.territories).filter(k => g.territories[k].unlock <= g.cycle).slice(0, 2);
   for (const focus of focusMarkets) for (const variation of ['normal', 'cash', 'capital', 'board', 'capacity', 'full']) {
     const p = copy(g.players[0]);
@@ -43,7 +48,8 @@ for (const [index, options] of profiles.entries()) {
     if (variation === 'board') p.capitalRestriction = 2;
     if (variation === 'capacity') p.allocation = {service: p.stats.staff, business: 0, lending: 0, operations: 0};
     if (variation === 'full') p.branches[focus] = 3;
-    for (const key of Object.keys(E.PROJECTS)) {
+    // Preserve the complete frozen project set. New opt-in routes have their own suite.
+    for (const key of Object.keys(Old.PROJECTS)) {
       const proposed = {...copy(intent), focus, allocation: copy(p.allocation), newProject: key, newProjects: [key]};
       const owner = {...p, focus}, before = JSON.stringify({p, proposed});
       const terms = E.projectTerms(p, key, focus), status = E.projectPlanStatus(p, proposed);
@@ -121,22 +127,32 @@ const node = selector => {
   return sinks.get(selector);
 };
 const c = {E, draft: copy(base), esc: String, money: String, toast() {}, capacityLine: () => '',
-  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {},
-  renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {},
+  renderProjectEffect: () => '', renderCampaignBuff() {}, renderCompetitiveActions() {}, renderWorkforce() {}, renderProductPrograms() {},
+  renderStaff() {}, renderPlanBudget() {}, renderOperatingPreview() {}, renderPipeline() {}, renderMonthlyPlanReview() {},
   unassigned: () => 0, planReady: () => true,
   $: node, $$: selector => selector === '[data-project]' ? [{dataset: {project: 'branch'}, addEventListener: (_, f) => callbacks.push(f)}] : []};
-vm.runInNewContext(source.slice(source.indexOf('function projectChoiceStatus('), source.indexOf('function renderDetails(')) +
+c.liveView=v;c.currentView=()=>c.liveView;
+Object.assign(c,{game:g,view:v,draftOwner:v.me.id,lastCycle:v.cycle,
+  featureConnectionGeneration:0,connectionAttempt:0,linkSession:null,gh:{active:false},lan:null});
+// Ready now shares the real planning review. Load that dependency rather than
+// replacing its project/budget validation with a passing stub.
+vm.runInNewContext(source.slice(source.indexOf('function opportunityToken('), source.indexOf('function opportunitySelection(')) +
+  source.slice(source.indexOf('function monthlyPlanReview('), source.indexOf('function navigatePlanReview(')) +
+  source.slice(source.indexOf('function projectEntryPriceNote('), source.indexOf('function renderDetails(')) +
   ';globalThis.choice=projectChoiceStatus;globalThis.toggle=toggleInitiative;globalThis.draw=renderProjects;globalThis.ready=renderReady;', c);
 c.draw(v); assert(sinks.get('#projectGrid').innerHTML.includes('data-project="branch"'));
 same(c.choice(v, 'branch').quote, E.projectPlanStatus(v.me, {...base, newProjects: ['branch'], newProject: 'branch'}).quote);
 c.draft.newProjects = ['branch']; c.draft.newProject = 'branch';
 const poorView = {...v, me: {...v.me, stats: {...v.me.stats, cash: 0}}};
+c.liveView=poorView;
 assert(c.choice(poorView, 'branch').eligible, 'An unaffordable selected project can be removed');
 c.toggle('branch', poorView); assert.equal(c.draft.newProjects.length, 0);
 assert(!c.choice(poorView, 'branch').eligible);
 c.toggle('branch', poorView); assert.equal(c.draft.newProjects.length, 0, 'Stale click cannot add an invalid project');
 const locked = {...v, me: {...v.me, submitted: true}};
+c.liveView=locked;
 c.toggle('branch', locked); assert.equal(c.draft.newProjects.length, 0);
+c.liveView=v;
 c.draft.newProjects = ['branch', 'branchAutomation']; c.draft.newProject = 'branch';
 c.ready(v); assert(node('#readyBtn').disabled); assert(node('#submitMsg').textContent.length > 0);
 console.log('Shared project rules passed: ' + compared + ' independent legacy comparisons, regional quotes, forged IDs, conflicts, timing, execution accounting, seat privacy and real UI handlers.');

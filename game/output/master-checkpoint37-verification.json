@@ -1,0 +1,29 @@
+{
+  "checkpoint": 37,
+  "date": "2026-09-13",
+  "campaignVersion": "9.22",
+  "portableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "engineSha256": "fe9fa06b26900c7c92fbcbb08c38bc04b16f3096bdf74de2acfcda2b10c34633",
+  "releaseAccepted": false,
+  "checks": {
+    "investment_strategy.test.js": {"passed": 4, "durationMs": 171967.5162, "fundedCampaignMonths": 16, "legacyComparisonMonths": 12, "legacyEconomies": 4},
+    "commercial_locations_ui.test.js": {"passed": 7},
+    "expanded_edition.test.js": {"passed": 2},
+    "construction_locations.test.js": {"transportsPassed": ["gh", "lan", "p2p"]},
+    "expanded_edition_network.test.js": {"transportsPassed": ["gh", "lan", "p2p"], "portable": true},
+    "architecture": "pass; ceilings unchanged",
+    "documentation": "pass; 51 Markdown files and 331 local links",
+    "portableAssembly": "current; 171 source files",
+    "reviewedEngineFingerprint": "pass",
+    "whitespace": "pass; existing line-ending notices only",
+    "browser": "1265x720: five-benefit Expanded dialog, cancellation, Continue, commercial forecast summary; user file tab untouched"
+  },
+  "fixedDuringVerification": "AI customer withdrawals used equity-capped spending headroom instead of actual cash after planned costs, payables and liquidity reserves.",
+  "limitations": [
+    "The investment regression supplies explicitly labelled external shareholder parent funding; it is not ordinary-start balance evidence.",
+    "The new ordinary-start 120-month checkpoint37 balance run is in progress, not passed.",
+    "No real two-computer session or subjective gameplay acceptance is claimed.",
+    "Full final release gate, remaining approved implementation, manual/PDF and package are unfinished.",
+    "No commit or GitHub publication was performed."
+  ]
+}

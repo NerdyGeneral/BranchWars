@@ -1,0 +1,63 @@
+{
+  "created": "2026-09-14T02:12:29.707Z",
+  "status": "passed",
+  "scope": "Expanded selection and affected-subsystem integration gate only; not full release or balance acceptance",
+  "artifact": "output/BRANCH_WARS_expanded65_review.html",
+  "sha256": "1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00",
+  "inputs": 193,
+  "distinctTests": 126,
+  "initial": {
+    "report": "output/master-checkpoint65-verification.json",
+    "passed": 119,
+    "failed": 7
+  },
+  "recheck": {
+    "report": "output/master-checkpoint65-fixture-recheck.json",
+    "passed": 9,
+    "previousFailuresCovered": 7,
+    "previouslyPassingRepeated": 2,
+    "changedTests": [
+      {
+        "path": "tests/credit_products.test.js",
+        "sha256": "0eace40cffb5e715dbb42a45d405c4bdb1689d1a7d56f18d38b29c97562c1557"
+      },
+      {
+        "path": "tests/investment_strategy.test.js",
+        "sha256": "d82ca2c8fbe63f880e270c896d846e4c96d2aa6ec97c74126d9bc3c6a9b4bf8d"
+      }
+    ]
+  },
+  "setupReport": "output/master-checkpoint65-setup-regression.json",
+  "additionalCommands": [
+    [
+      "tests/expanded_edition_network.test.js"
+    ],
+    [
+      "tests/company_credit_network.test.js"
+    ],
+    [
+      "tests/shared_premises_network.test.js"
+    ],
+    [
+      "tests/company_control_network.test.js"
+    ],
+    [
+      "tests/company_shares_network.test.js"
+    ],
+    [
+      "tests/architecture.test.js",
+      "--source"
+    ],
+    [
+      "tests/docs.test.js"
+    ]
+  ],
+  "sourceAndArtifactMatch": true,
+  "onlyRecheckedTestsChanged": true,
+  "normalPlayableUnchanged": true,
+  "notes": [
+    "The initial failed report remains preserved.",
+    "Historical fixture corrections do not alter engine code or golden files.",
+    "Actual two-computer and browser acceptance, 120/480-month balance and final Windows/package gates remain outstanding."
+  ]
+}

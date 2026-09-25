@@ -8,7 +8,7 @@ const E=engine(source),C=client(source,E),oldSource=fs.readFileSync(path.join(ro
 const options={managementVersion:2,campaignRulesVersion:1,mode:'hotseat',seed:'relationship-test',created:1};
 const fresh=()=>E.createGame(options),g=fresh(),p=g.players[0],c=g.serviceAgreements[0];
 assert.equal(g.version,'8.2');assert.throws(()=>OldClient.migrate(copy(g)),/supported/,'older client refuses new save at import');
-let hidden=true;const resumeUI={savedGame:()=>g,$:()=>({classList:{toggle:(_,value)=>hidden=value}})};
+let hidden=true;const resumeUI={E,savedGame:()=>g,$:()=>({classList:{toggle:(_,value)=>hidden=value}})};
 vm.runInNewContext(source.match(/^function updateContinue\(\).*$/m)[0]+';updateContinue()',resumeUI);assert.equal(hidden,false,'new saved campaign exposes Continue after reload');
 const original=Old.createGame({...options,managementVersion:1}),upgraded=C.migrate(original);
 assert.equal(upgraded.version,'8.2');assert.equal(upgraded.managementVersion,1);assert(!upgraded.relationshipRecords,'old mechanics are not silently upgraded');
@@ -48,5 +48,8 @@ for(const scenario of Object.keys(E.SCENARIOS)){
  }
  runs.push({scenario,turns:t,ended:game.gameOver,reason:game.endReason||null});
 }
-assert.match(source,/CLIENT RELATIONSHIPS/);assert.match(source,/DEPARTMENT WORKLOAD/);assert.match(source,/m.relationshipSupported!==1/);
+assert.match(source,/CLIENT RELATIONSHIPS/);assert.match(source,/DEPARTMENT WORKLOAD/);
+const incompatiblePeer=E.campaignCapabilities();delete incompatiblePeer.relationshipSupported;
+assert.equal(E.peerRulesIssue(E.validateCampaignRules(options),incompatiblePeer).message,'Relationship operations requires the updated game on both computers.');
+assert.equal(E.peerRulesIssue(E.validateCampaignRules(options),E.campaignCapabilities()),null);
 console.log(JSON.stringify({passed:true,sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),runs,checks:['old-build save refusal','old-mechanics retention','non-mutating import','earned service streak','miss reset','corrupt histories','reconciled scorecard','adaptive bounded quotes','locked fee preservation','half-sealed import','bounded history']},null,2));

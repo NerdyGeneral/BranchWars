@@ -1,0 +1,49 @@
+{
+  "checkpoint": 51,
+  "date": "2026-09-13",
+  "status": "shared-premises AI and new Expanded selection implemented; scoped gates passed; full release and long balance pending",
+  "sourceInputs": 187,
+  "defaultExpandedVersion": "9.27",
+  "artifact": "output/BRANCH_WARS_premises51_expanded.html",
+  "sha256": "c22b610643d5b67174d0c0be0f9054e3180d6c031257435e86a726f5a5ed0bc7",
+  "engineSha256": "9673fbce467b5cde2c001ddef98061ecf888101320f4761eca0f7b278a12dedb",
+  "normalPortableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "terminalChecks": [
+    {"test": "shared_premises_strategy.test.js", "groups": 5, "status": "pass after Expanded enablement", "durationMs": 92489.7321, "scope": "Deterministic owner-only review; affordable demand and reserve refusal; real funded construction, qualified allocation and employee release; commercial-space conflict; paid second office, two-room allocation, actual closure and identical-order replay"},
+    {"test": "shared_premises_campaign.test.js", "groups": 5, "status": "pass after Expanded enablement"},
+    {"test": "shared_premises_ui.test.js", "groups": 5, "status": "pass after making the historical fixture explicitly historical"},
+    {"test": "expanded_edition.test.js", "groups": 2, "status": "pass", "scope": "One selection, benefits summary, cancellation, hidden rule retention, unchanged Core, no free rooms or subsidiaries"},
+    {"test": "facility_extensions_ui.test.js", "groups": 2, "status": "pass"},
+    {"test": "shared_premises_boundary.test.js", "scenarios": 4, "status": "exact preserved44 comparison pass after enablement", "scope": "Creation, independent AI, half-ready recovery, resolution and rematch"},
+    {"test": "company_consolidation.test.js, company_control_campaign.test.js, company_control_strategy.test.js, company_shares.test.js, company_strategy.test.js", "groups": 21, "status": "pass", "scope": "Historical rule configurations now exclude newer premises explicitly; no golden changes"},
+    {"test": "investment_strategy.test.js", "groups": 4, "status": "pass across two scoped invocations", "scope": "Historical9.22 fixture explicitly excludes later ownership/premises fields; original9.21 boundary comparison passed separately"}
+  ],
+  "earlierSameDomainChecks": {"tests": ["shared_premises.test.js", "shared_premises_delivery.test.js", "shared_premises_agency.test.js"], "groups": 28, "status": "pass before setup enablement; domain implementations unchanged", "scope": "Qualified finite local service, 24 successive service months, combined occupancy, insolvency/wind-down and recapitalization; not a mature whole-campaign balance matrix"},
+  "transportChecks": [
+    {"test": "shared_premises_network.test.js", "transports": ["gh", "lan", "p2p"], "monthsEach": 2, "status": "pass", "scope": "Old-peer refusal, paid room, checkpoint restoration, privacy and duplicate protection"},
+    {"test": "expanded_edition_network.test.js", "transports": ["gh", "lan", "p2p"], "status": "pass", "scope": "Host-only edits, cancel/apply, readiness reset, stale readiness,9.27 start and ordinary AI settlement"},
+    {"test": "company_control_network.test.js", "transports": ["gh", "lan", "p2p"], "status": "pass for historical reviewed-control configuration"}
+  ],
+  "provisionalAiValues": {
+    "newFitoutReviewIntervalMonths": 6,
+    "centralProfessionalTimeFraction": 0.5,
+    "minimumLocalConditionBasisPoints": 6500,
+    "minimumConstructionConditionBasisPoints": 8000,
+    "upkeepReserveMonths": 12,
+    "subsidiaryPayrollReserveMonths": 3,
+    "requiredRelatedIncomeMultipleOfBaseUpkeep": 2,
+    "scope": "AI decisions only; no changes to domain prices, funding floors or growth rates. Decision fixtures prescribe past earnings in a projected view, not new saved money. Ordinary-start profitability is unproven."
+  },
+  "retainedFindings": [
+    "Earlier funded fixture could build a room just before subsidiary capital fell below advice permission. AI now checks continued permission and a subsidiary operating reserve, not headcount alone.",
+    "The first two-office replay test generated different rival decisions; it now captures both orders after AI planning and replays identical orders. No simulation rule changed.",
+    "Historical tests that used newest Expanded were no longer historical. They explicitly retain their old scalar configuration. The setup-choice API intentionally rejects hidden scalar selection; the investment9.22 fixture therefore retains explicit historical fields.",
+    "Final source architecture check still fails: acquisition 1 > 0. Read-only inspection identifies local declarators and a default parameter colliding with function names across scopes. No override ceiling was raised and no gate was bypassed."
+  ],
+  "longBalance": {"command": "node tests/commercial_accounts_balance.test.js --expanded --long --checkpoint=51", "requested": "120 Balanced and480 Regulatory ordinary-AI months; no resource injection", "status": "live at last poll:24 Balanced months reached without validation failure; not complete; inspect live process and terminal report before claiming completion", "reportPath": "output/master-checkpoint51-commercial-expanded-long.json", "launchSession": 18698},
+  "documentation": {"markdownFiles": 63, "localLinks": 502, "status": "pass"},
+  "sourceArtifactIdentity": "exact source/artifact match; normal playable fingerprint unchanged",
+  "fullWindowsGate": "not passed; source architecture diagnostic remains unresolved and normal portable is intentionally older",
+  "realBrowserAndTwoComputerAcceptance": "outstanding",
+  "publication": false
+}

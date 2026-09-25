@@ -70,6 +70,22 @@ for(const scenario of Object.keys(E.SCENARIOS)){
  }
  runs.push({scenario,turns:count,ended:campaign.gameOver,reason:campaign.endReason||null});
 }
-assert.match(source,/<input id="institutionManagement" type="checkbox">/);assert.match(source,/m.managementSupported!==1/);
+const setup=require('./github_resilience.test.js').harness(),setupBefore=setup.run('JSON.stringify(readSetupFeatureOptions())');
+assert.match(setup.elements.get('#setupFeatureOptions').innerHTML,/data-feature-field="managementVersion"/,'institution controls come from shared feature rules');
+assert.equal(setup.elements.get('#institutionManagement').checked,false,'institution management remains opt-in');
+assert.equal(setup.elements.get('#serviceExpansion').checked,false);assert.equal(setup.elements.get('#rivalryPilot').checked,false);
+setup.changeFeature('#institutionManagement',true);assert(setup.run('featureSelectionPending()'));
+assert.equal(setup.run('JSON.stringify(readSetupFeatureOptions())'),setupBefore);
+setup.run('cancelFeatureSelectionConfirmation()');assert.equal(setup.run('JSON.stringify(readSetupFeatureOptions())'),setupBefore);
+setup.changeFeature('#institutionManagement',true);assert(setup.confirmFeatures());
+assert.equal(setup.elements.get('#institutionManagement').checked,true);assert.equal(setup.elements.get('#serviceExpansion').checked,true);assert.equal(setup.elements.get('#rivalryPilot').checked,true);
+assert.equal(setup.run('readSetupFeatureOptions().managementVersion'),2,'setup retains its existing current-management version');
+setup.changeFeature('#serviceExpansion',false);assert(setup.run('featureSelectionPending()'));assert(setup.confirmFeatures());
+assert.equal(setup.elements.get('#institutionManagement').checked,false,'removing a prerequisite disables management only after consent');
+assert.equal(setup.elements.get('#rivalryPilot').checked,true);
+const managementRules=E.campaignRules(opts,{context:'creation'}),capabilities=E.campaignCapabilities();
+assert.equal(E.peerRulesIssue(managementRules,capabilities),null);
+delete capabilities.managementSupported;
+assert.equal(E.peerRulesIssue(managementRules,capabilities).field,'managementVersion','old peers still refuse institution mechanics through the shared capability gate');
 assert.match(source,/RECURRING RESEARCH & SERVICE MANAGER/);assert.match(source,/id="prepareManagement"/);
 console.log(JSON.stringify({passed:true,sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),runs,checks:['strict versioning','private mandates','bounded recurring funding','milestone stop','cash reserve','editable priorities','client differentiation','bounded service delegation','explicit bid preservation','sealed plans','saved fixed-intent replay','20-turn prior-build compatibility']},null,2));

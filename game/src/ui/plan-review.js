@@ -1,0 +1,251 @@
+// Owner-only presentation model. Quotes are read-only; never repair a plan or
+// normalize authoritative state merely to render an explanation.
+function monthlyPlanReview(v,plan=draft){
+ const blockers=[],warnings=[];
+ const cash=value=>'$'+Math.round(value).toLocaleString('en-US');
+ const add=(id,title,text,tab,desk,target)=>{if(!blockers.some(x=>x.id===id))blockers.push({id,title,text,tab,desk,target});};
+ const check=(id,title,tab,desk,target,read)=>{try{return read();}catch(error){add(id,title,error.message,tab,desk,target);return null;}};
+ const p=v.me,assigned=Object.values(plan.allocation||{}).reduce((n,x)=>n+Number(x||0),0),unallocated=p.stats.staff-assigned;
+ if(!plan.focus||!v.territories[plan.focus])add('focus','Choose a focus market','Select an open market for market-dependent orders.','markets',null,'#marketMap');
+ if(!['a','b'].includes(plan.decision))add('decision','Answer the executive call','Choose a response before submitting this month.','operations','monthly','#decisionGrid');
+ if(unallocated!==0||Object.values(plan.allocation||{}).some(x=>!Number.isInteger(x)||x<0))add('allocation','Allocate your employees',unallocated>0?unallocated+' employee'+(unallocated===1?'':'s')+' remain'+(unallocated===1?'s':'')+' unallocated.':unallocated<0?Math.abs(unallocated)+' employee'+(Math.abs(unallocated)===1?' is':'s are')+' over-allocated.':'Staff allocations must be non-negative whole numbers.','operations','monthly','#staffGrid');
+ const project=check('project-quote','Review project instructions','operations','projects','#projectGrid',()=>E.projectPlanStatus(p,plan,v));
+ const quote=project?.quote||check('budget-quote','Review shared spending','operations','forecast','#planBudget',()=>E.planBudget(p,plan,v));
+ if(quote&&(quote.discretionaryRemaining??quote.remaining)<0)add('budget','Reduce optional commitments','Optional spending exceeds available cash or capital room by '+cash(-(quote.discretionaryRemaining??quote.remaining))+'. Existing obligations remain owed.','operations','projects','#planBudget');
+ if(project&&!project.eligible)add('projects','Resolve initiative conflict',project.reason,'operations','projects','#projectGrid');
+ const lifecycle=p.facilityLifecycle?check('facility-quote','Review office instructions','markets',null,'#facilityLifecyclePanel',()=>E.lifecycleInstructionQuote(v,p,plan)):null;
+ if(lifecycle&&!lifecycle.status.eligible)add('facilities','Resolve office staffing or funding',lifecycle.status.reason,'markets',null,'#facilityLifecyclePanel');
+ if(p.facilityExtensions)check('office-suite','Review commercial suite instructions','markets',null,'#facilityLifecyclePanel',()=>E.normalizeFacilityExtensionPlan(v,p,JSON.parse(JSON.stringify(plan))));
+ if(p.sharedPremises){
+  const premises=E.sharedPremisesPlanReview(v,p,plan);
+  if(!premises.eligible&&!p.submitted&&!v.gameOver)add('shared-premises','Review shared-office instructions',premises.reason,'markets',null,'#sharedPremisesDesk');
+  const problem=blockers.find(x=>x.id==='shared-premises');if(problem)problem.premisesOffice=plan.sharedPremisesPolicy?.build?.office||p.sharedPremises.book.rooms[0]?.office;
+  for(const [i,text]of (premises.notices||[]).entries())warnings.push({id:'premises-delivery-'+i,title:'Shared-office delivery needs attention',text,tab:'markets',target:'#sharedPremisesDesk'});
+ }
+ if(p.companyControl)check('company-control','Review control funding and consent','group',null,'#financialGroupPanel',()=>E.normalizeCompanyControlPlan(v,p,JSON.parse(JSON.stringify(plan))));
+ if(p.companyCredit&&(plan.companyCreditOrders||[]).length){
+  const credit=E.companyCreditOrderReview(v,p,plan,plan.companyCreditOrders);
+  if(!credit.eligible){
+   add('company-credit','Review company loan commitments',credit.reason,'markets',null,'#companyLoanTitle');
+   const row=v.commercialAccountMarket?.rows.find(r=>r.id===plan.companyCreditOrders[0]?.companyId);
+   blockers.find(b=>b.id==='company-credit').serviceId=row?'service-'+row.market:null;
+  }
+ }
+ if(p.companyCredit&&typeof companyCreditWorkspace!=='undefined'&&opportunityCurrent(companyCreditWorkspace.token,false)){
+  const pending=Object.entries(companyCreditWorkspace.forms).find(([,f])=>f.dirty);
+  if(pending){const row=v.commercialAccountMarket?.rows.find(r=>r.id===pending[0]);warnings.push({id:'unstaged-company-loan',title:'Company loan form has unstaged edits',text:'The form is not a loan commitment. Review and stage the offer, or discard its edits.',tab:'markets',target:'#companyLoanTitle',serviceId:row?'service-'+row.market:null});}
+ }
+ const functions=p.departmentFunctions?check('functions-quote','Review department instructions','workforce',null,'#departmentPanel',()=>E.departmentFunctionsQuote(v,p,plan)):null;
+ if(functions&&!functions.status.eligible)add('functions','Resolve department capacity or funding',functions.status.reason,'workforce',null,'#departmentPanel');
+ if(functions?.delivery?.rows){const uncovered=functions.delivery.rows.filter(row=>row.planned.shortfall>0);if(uncovered.length)warnings.push({id:'coverage',title:'Allocated staff does not mean all work is covered',text:uncovered.map(row=>row.id.replace(/([a-z])([A-Z])/g,'$1 $2').toLowerCase().replace(/^./,c=>c.toUpperCase())+': '+(Math.ceil(row.planned.shortfall)/4)+' employee-months of work uncovered').join(' · ')+'. These are work allocations, not additional hires. Review where existing employee time or paid vendors can cover the shortfall.',tab:'workforce',target:'#peopleOverview',peopleDesk:'overview',functionId:(uncovered[0].functionId||({technology:'technology',risk:'risk',treasury:'treasury',people:'people',creditAdministration:'credit',commercialRelationships:'relationships'}[uncovered[0].id]))});}
+
+ // A market closes after a run of cycles below 12% share, and the last cycle of
+ // that run is the one worth interrupting the plan for.
+ const exitLimit=v.regionalEconomyVersion===1?6:3;
+ const failing=Object.entries(v.territories||{}).filter(([,t])=>((t.exitStreak&&t.exitStreak[0])||0)>=exitLimit-1&&!(t.exited&&t.exited[0]));
+ if(failing.length)warnings.push({id:'market-exit',title:'A market closes next cycle unless its share recovers',
+  text:failing.map(([,t])=>t.name+' is at '+t.shares[0].toFixed(1)+'% share, '+((t.exitStreak&&t.exitStreak[0])||0)+' of '+exitLimit+
+   ' cycles below the 12% line').join(' · ')+'. Service upgrades, deposit defense or a focus change can still hold it.',
+  tab:'markets',desk:null,target:'#marketMap'});
+ // Incumbent agreements are contested automatically, but a seat with no Business
+ // banker cannot win any of them, including the ones it already holds.
+ const held=(v.serviceAgreements||[]).filter(c=>c.owner===p.id);
+ if(held.length&&(plan.allocation?.business||0)<1)warnings.push({id:'bid-incumbent',
+  title:'No Business banker: your service agreements cannot be defended',
+  text:held.length+' agreement'+(held.length===1?'':'s')+' renew automatically only while at least one Business banker is assigned. With none, every contest is forfeited, including renewals you currently hold.',
+  tab:'operations',desk:'monthly',target:'#staffGrid'});
+ const action=check('action-quote','Review competitive action','competition',null,'#competitiveActions',()=>E.competitiveActionStatus(p,plan.competitiveAction||'none'));
+ if(action&&!action.eligible)add('action','Competitive action unavailable',action.reason,'competition',null,'#competitiveActions');
+ if(plan.contractBid){
+  if((plan.allocation?.business||0)<1)add('bid-staff','Assign a banker to the service bid','A service bid requires at least one Business banker. Your bid has been retained; assign staff or explicitly remove it.','operations','monthly','#staffGrid');
+  if(plan.opportunity)add('pursuit','Choose one relationship pursuit','Select either a service bid or a pipeline opportunity, not both.','markets',null,'#pipeline');
+ }
+ if(plan.opportunity&&!v.opportunities?.some(o=>o.id===plan.opportunity))add('opportunity','Review expired opportunity','This opportunity is no longer available. Choose another pursuit or clear it.','markets',null,'#pipeline');
+ if(E.planHires(plan)>E.hireLimit(p))add('hires','Reduce combined recruitment','Generalists and specialists share the '+E.hireLimit(p)+'-banker monthly limit.','operations','projects','#hiringPanel');
+ if(typeof pendingDepartmentForm==='function'&&pendingDepartmentForm(v))warnings.push({id:'unstaged-leaders',title:'Leadership form has unstaged edits',text:'These entries are not in your monthly plan. Preview and stage them, or explicitly discard them.',tab:'workforce',target:'#departmentPanel'});
+ if(p.workforce&&typeof workforceForm==='function'&&workforceForm(v).dirty)warnings.push({id:'unstaged-training',title:'Training form has unstaged edits',text:'Training and reserve entries are not yet in your monthly plan. Preview and stage them, or discard them.',tab:'workforce',target:'#workforcePanel'});
+ if(p.commercialAccounts){
+  const q=check('business-accounts','Review business account instructions','markets',null,'#commercialClientWorkspace',()=>E.commercialAccountReview(v,p,plan));
+  if(q&&(q.quarters<q.service||(q.policy.target&&q.development<1))){
+   const companyId=q.policy.target||Object.keys(p.commercialAccounts.accounts)[0],row=v.commercialAccountMarket.rows.find(r=>r.id===companyId);
+   warnings.push({id:'business-work',title:'Business account work is uncovered',text:q.quarters+' quarters available; '+q.service+' needed for existing accounts and one more for a selected pursuit. Development stalls without capacity; three missed service months cause deposits to leave. Restore Business capacity or revise its reservations.',
+    tab:'markets',target:'#businessAccountTitle',serviceId:row?'service-'+row.market:null});
+  }
+ }
+ if(p.agency?.version===2){
+  const agency=check('agency-plan','Review qualified agency instruction','group',null,'#agencyDesk',()=>{E.normalizeAgencyPlan(p,JSON.parse(JSON.stringify(plan)));return E.agencyQuote(p,plan.agencyPolicy);});
+  const problem=blockers.find(x=>x.id==='agency-plan');if(problem)problem.groupDesk='agency';
+  if(agency&&(p.agency.status==='active'||plan.agencyPolicy?.launch)&&agency.professional.phase!=='authorized')warnings.push({id:'agency-permission',title:'Agency delivery is not yet authorized',text:agency.professional.phase==='registration pending'?'Registration becomes ready in month '+agency.professional.readyCycle+'. Funded salaries and overhead still apply; no covers can be serviced before then.':'Registration or producer credentials are missing or overdue. Review qualified roles and maintenance. Ordinary Business bankers do not replace agency producers.',tab:'group',groupDesk:'agency',target:'#agencyDesk'});
+ }
+ return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
+}
+function navigatePlanReview(item){
+ if(typeof subjectRoute==='function')item=subjectRoute(item,currentView());
+ if(item.customerDesk&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.customers=item.customerDesk;if(['relationships','onboarding'].includes(productDeskView))productDeskView='development';}
+ if(item.productSubject&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.products=item.productSubject;}
+ setWorkspaceTab(item.tab);
+ if(item.premisesOffice)inspectLifecycleOffice(item.premisesOffice);
+ if(item.serviceId)inspectServiceAgreement(currentView(),item.serviceId);
+ if(item.desk)setOperationsDesk(item.desk);
+ if(item.groupDesk)setFinancialGroupDesk(item.groupDesk);
+ if(item.tab==='workforce'&&typeof setPeopleDesk==='function')setPeopleDesk(item.peopleDesk||(item.id==='unstaged-training'?'development':item.id==='unstaged-leaders'?'leadership':currentView().me.departmentFunctions?'coverage':'leadership'));
+ const target=$(item.target)||$('[data-workspace="'+item.tab+'"]');
+ if(!target)return;
+ for(let parent=target;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+ if(item.tab==='workforce'&&item.id==='unstaged-leaders'&&$('#departmentDesk'))$('#departmentDesk').open=true;
+ if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);
+ else {target.setAttribute?.('tabindex','-1');target.focus?.({preventScroll:true});target.scrollIntoView?.({block:'center',behavior:'auto'});}
+}
+function renderMonthlyPlanReview(v,review){
+ const mount=$('#monthlyPlanReview');if(!mount)return;
+ const locked=v.me.submitted||v.gameOver,items=[...review.blockers,...review.warnings];
+ const summary=$('#monthlyReviewSummary');
+ // Required work remains visible in the summary and disabled Ready explanation.
+ // Redrawing a different desk must not reopen a large review over that workspace.
+ // Preserve the player's explicit disclosure state instead of fighting it.
+ if(summary)summary.textContent='This month · '+(locked?'plan locked':review.blockers.length+' required')+' · '+review.warnings.length+' warning'+(review.warnings.length===1?'':'s')+' · '+monthlyChangeRows(v).length+' edited instructions';
+ const list=(rows,kind)=>rows.map(item=>'<li class="plan-review-item '+kind+'"><div><b>'+esc(item.title)+'</b><p>'+esc(item.text)+'</p></div><button type="button" class="btn" data-plan-review="'+items.indexOf(item)+'">Review '+esc(item.tab)+'</button></li>').join('');
+ mount.innerHTML='<div class="plan-review-heading"><b>'+(locked?'Plan locked':review.blockers.length?review.blockers.length+' required action'+(review.blockers.length===1?'':'s'):'Required decisions complete')+'</b><span>Current policies → edited form → staged plan → active after resolution</span></div>'+
+  (locked?'<p class="small">Inspection is available. Orders cannot change while locked; use Recall when available.</p>':review.blockers.length?'<ul class="plan-review-list">'+list(review.blockers,'is-blocker')+'</ul>':'<p class="small">No listed submission blockers. Headcount allocation is separate from service coverage; check warnings before locking.</p>')+
+  (review.warnings.length?'<ul class="plan-review-list">'+list(review.warnings,'is-warning')+'</ul>':'')+
+  (!locked&&review.blockers.length?'':'<details><summary>Optional opportunities · no action required</summary><p class="small">Hiring, research, new projects, relationship pursuits and special competitive actions are optional. Existing recurring commitments remain active until you change them. A quiet month is a valid choice.</p></details>')+'<div id="monthlyChanges"></div>';
+ renderMonthlyChanges(v);
+ reconcileMonthlyEditor(v,review);
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle;
+ $$('[data-plan-review]').forEach(button=>button.addEventListener('click',()=>{const now=currentView();if((game||view)!==campaign||now?.me.id!==owner||now?.cycle!==cycle)return;const item=items[Number(button.dataset.planReview)];if(item)openMonthlyEditor(item);}));
+}
+
+// Owner-only UI baseline: never serialized into a campaign or sent to a peer.
+// Captured after management has prepared the opening draft, so delegated
+// defaults are not mislabeled as manual edits. Undo means restore that draft.
+let monthlyChangesState={generation:0,baseline:null,owner:null,cycle:null,proposal:null,open:false,message:''};
+function resetMonthlyChanges(v){
+ monthlyChangesState={generation:monthlyChangesState.generation+1,baseline:JSON.parse(JSON.stringify(draft)),owner:v.me.id,cycle:v.cycle,proposal:null,open:false,message:''};
+}
+function monthlyChangeRows(v){
+ const state=monthlyChangesState;
+ if(!state.baseline||state.owner!==v.me.id||state.cycle!==v.cycle)return [];
+ const rows=[],walk=(before,after,path)=>{
+  if(JSON.stringify(before)===JSON.stringify(after)&&!(path.length===1&&path[0]==='newProjects'&&JSON.stringify(state.baseline.projectTargets)!==JSON.stringify(draft.projectTargets)))return;
+  // Qualified role counts and total headcount are one validated instruction.
+  // Undoing a single count would leave an impossible partly-restored team.
+  if(path.length===1&&(path[0]==='sharedPremisesPolicy'||path[0]==='investmentPolicy'||path[0]==='agencyPolicy'&&v.me.agency?.version===2)){rows.push({path,before,after});return;}
+  if(path.length===1&&path[0]==='newProjects'&&Array.isArray(before)&&Array.isArray(after)){
+   for(const key of new Set([...before,...after]))if(before.includes(key)!==after.includes(key)||state.baseline.projectTargets?.[key]!==draft.projectTargets?.[key])rows.push({path:['newProjects',key],before:before.includes(key),after:after.includes(key),initiative:true});
+   return;
+  }
+  if(before&&after&&typeof before==='object'&&typeof after==='object'&&!Array.isArray(before)&&!Array.isArray(after)){
+   for(const key of new Set([...Object.keys(before),...Object.keys(after)]))walk(before[key],after[key],[...path,key]);
+  }else rows.push({path,before,after});
+ };
+ walk(state.baseline,draft,[]);
+ // newProject is a compatibility alias for the first newProjects entry.
+ return rows.filter(row=>!['newProject','projectTargets'].includes(row.path[0]));
+}
+function monthlyChangeName(path){
+ if(path[0]==='sharedPremisesPolicy')return 'Shared office space and subsidiary time';
+ if(path[0]==='companyShareOrders')return 'Company share orders';
+ if(path[0]==='companyCreditOrders')return 'Company loan offers';
+ if(path[0]==='companyControlPolicy')return 'Company control instructions';
+ if(path[0]==='investmentPolicy')return 'Investment business instruction';
+ if(path[0]==='facilityExtensionPolicy')return 'Commercial suite construction'+(path[1]==='cancel'?' cancellation':'');
+ if(path[0]==='commercialAccountPolicy')return path[1]==='target'?'Business account pursuit':'Business account work · quarter employee-months';
+ if(path[0]==='agencyPolicy')return 'Agency instruction'+(path.length>1?' · '+path.slice(1).join(' · '):'');
+ const names={allocation:'Staff allocation',hires:'Generalist recruitment',specialistHires:'Specialist recruitment',investments:'Research funding',newProjects:'New initiatives',focus:'Action target',decision:'Executive response',competitiveAction:'Competitive action',capitalAction:'Emergency board request',departmentFunctionsPolicy:'Department delivery',facilityLifecyclePolicy:'Facility instructions',departmentPolicy:'Department budgets',leaderOrders:'Leader instructions',workforcePolicy:'Workforce policy',specializations:'Operating model',products:'Product settings',contractBid:'Service bid',contractExit:'Contract exit',opportunity:'Relationship pursuit'};
+ const words=value=>String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
+ return path.map((part,i)=>i===0?(names[part]||words(part)):words(part)).join(' · ');
+}
+function monthlyChangeValue(v,value,path){
+ if(value===undefined||value===null||value==='none'||value==='')return 'None';
+ if(path[0]==='sharedPremisesPolicy'&&path.length===1){
+  const build=value.build,office=build&&v.me.facilityNetwork.offices.find(o=>o.id===build.office),parts=[];
+  if(build)parts.push(E.SharedPremises.CATALOG[build.kind].name+' at '+(v.territories[office?.market]?.name||build.office));
+  if(value.cancel)parts.push('Cancel room '+value.cancel+' fit-out');if(value.remove)parts.push('Remove room '+value.remove);
+  if(value.allocations.length)parts.push(value.allocations.map(a=>'Room '+a.room+': '+a.quarters/4+' '+premisesRoleNames[a.role]+' employee-months').join('; '));
+  return parts.join('; ')||'No construction or local assignments';
+ }
+ if(path[0]==='companyShareOrders'&&Array.isArray(value))return value.length?value.map(o=>{const c=v.me.companySnapshot.world.companies.find(c=>c.id===o.issuer);return (o.side==='buy'?'Buy ':'Sell ')+o.shares+' '+(c?E.ANCHOR_CLIENTS[c.clientIndex].name:o.issuer)+' at $'+(o.limitCents/100).toFixed(2)+' limit';}).join('; '):'None';
+ if(path[0]==='companyCreditOrders'&&Array.isArray(value))return value.length?value.map(o=>{const c=v.me.companySnapshot.world.companies.find(c=>c.id===o.companyId);return (c?E.ANCHOR_CLIENTS[c.clientIndex].name:o.companyId)+': '+money(o.principal)+' at '+(o.annualRateBp/100).toFixed(2)+'% for '+o.months+' months';}).join('; '):'None';
+ if(path[0]==='facilityExtensionPolicy'&&typeof value==='string'){const o=v.me.facilityNetwork?.offices.find(o=>o.id===value);return o?(v.territories[o.market]?.name||o.market)+' · '+E.FacilityLifecycle.CATALOG[o.model].name:String(value);}
+ if(path[0]==='commercialAccountPolicy'&&path[1]==='target'){const company=v.commercialAccountMarket?.rows.find(r=>r.id===value),agreement=v.serviceAgreements?.find(c=>c.market===company?.market);return agreement?E.clientProfile(agreement).name:String(value);}
+ if(path.length===1&&path[0]==='agencyPolicy'&&value.roles)return agencyInstructionSummary(value);
+ if(typeof value==='boolean')return value?'Requested':'Not requested';
+ if(Array.isArray(value))return value.length?value.map(x=>monthlyChangeValue(v,x,path)).join(', '):'None';
+ if(typeof value==='object')return Object.entries(value).map(([k,x])=>monthlyChangeName([k])+': '+monthlyChangeValue(v,x,path)).join('; ');
+ if(path[0]==='focus')return v.territories[value]?.name||String(value);
+ if(path[0]==='newProjects')return v.projects[value]?.name||String(value);
+ if(path[0]==='decision')return 'Response '+String(value).toUpperCase();
+ if(path[0]==='investments')return '$'+Number(value).toLocaleString('en-US');
+ return String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
+}
+function monthlyChangeTiming(path){
+  switch(path[0]){
+   case 'sharedPremisesPolicy':return 'One reviewed premises instruction. Fit-out uses bank cash and shared execution; qualified subsidiary time is moved from central work. Occupancy costs and rent settle once per month, with no new group profit.';
+   case 'companyShareOrders':return 'One-month simultaneous auction. Existing parent cash reserves include fees and other group commitments. No immediate trade or guaranteed fill; company ownership does not award banking contracts.';
+   case 'companyCreditOrders':return 'One-month loan offers reserve bank cash and shared underwriting capacity. Principal becomes a loan asset, not an expense. Competing offers can lose; funded loans persist with repayments, arrears and possible losses.';
+   case 'companyControlPolicy':return 'Paid diligence and a later reviewed offer. Closing requires funded parent commitments and any rival seller consent. Integration uses shared execution capacity; acquisition debt remains owed when work pauses.';
+   case 'investmentPolicy':return 'Funding, qualified recruitment and client transfers are one reviewed instruction. Parent contributions and client assets remain separate. Nothing executes until month-end.';
+   case 'facilityExtensionPolicy':return 'Fit-out is paid at resolution. Shared execution completes the work; capacity and upkeep begin the following month. Cancelling unfinished work does not refund paid expense.';
+   case 'commercialAccountPolicy':return 'Standing instructions. Existing Business work is reserved; qualification and company cash allocations settle at month-end. No immediate payment, hire or guaranteed account win.';
+  case 'agencyPolicy':return 'The entire agency instruction is staged together. Recruitment, funding and permissions change only at resolution; closed agencies incur no ongoing charge without launch.';
+  case 'hires':case 'specialistHires':return 'Reports next month; recurring payroll follows. Shared recruitment limit applies.';
+  case 'investments':return 'Funding settles this month; completed capability benefits begin next month.';
+  case 'newProjects':return 'Starts at resolution if eligible; completion depends on project workload and execution capacity.';
+  case 'specializations':return 'Becomes permanent at resolution when its capability prerequisite is met.';
+  case 'focus':return 'Changes the target used by market-dependent instructions. Review those orders together.';
+  case 'allocation':return 'Shared employee pool this month; delivery, training and facility work also reserve capacity.';
+  default:return 'Staged, not yet active. Resolution applies eligibility checks; existing commitments are not cancelled by editing this draft.';
+ }
+}
+function monthlyUndoIsCurrent(v,proposal){
+ return !!proposal&&(game||view)===proposal.campaign&&monthlyChangesState.generation===proposal.generation&&v?.me.id===proposal.owner&&v?.cycle===proposal.cycle&&!v.me.submitted&&!v.gameOver&&JSON.stringify(draft)===proposal.stamp;
+}
+function proposeMonthlyUndo(v,index){
+ v=currentView();if(!v)return null;
+ if(v.me.submitted||v.gameOver)return null;
+ const row=monthlyChangeRows(v)[index];if(!row)return null;
+ const next=JSON.parse(JSON.stringify(draft));let parent=next;
+ if(row.initiative){const key=row.path[1];next.newProjects=next.newProjects.filter(x=>x!==key);if(row.before)next.newProjects.push(key);
+  if(next.projectTargets)delete next.projectTargets[key];
+  if(row.before&&monthlyChangesState.baseline.projectTargets?.[key])next.projectTargets={...(next.projectTargets||{}),[key]:monthlyChangesState.baseline.projectTargets[key]};
+  if(next.projectTargets&&!Object.keys(next.projectTargets).length)delete next.projectTargets;
+ }
+ else{
+  for(const part of row.path.slice(0,-1)){if(!parent||typeof parent!=='object')return null;parent=parent[part];}
+  const key=row.path.at(-1);if(row.before===undefined)delete parent[key];else parent[key]=JSON.parse(JSON.stringify(row.before));
+ }
+ if(row.path[0]==='newProjects')next.newProject=next.newProjects[0]||null;
+ const before=monthlyPlanReview(v,draft),after=monthlyPlanReview(v,next);
+ const previous=new Set(before.blockers.map(x=>x.id+'|'+x.text));
+ const conflicts=after.blockers.filter(x=>!previous.has(x.id+'|'+x.text));
+ const proposal={campaign:game||view,generation:monthlyChangesState.generation,owner:v.me.id,cycle:v.cycle,stamp:JSON.stringify(draft),row,next,conflicts,before:before.quote,after:after.quote};
+ monthlyChangesState.proposal=proposal;monthlyChangesState.open=true;monthlyChangesState.message='';return proposal;
+}
+function applyMonthlyUndo(v){
+ v=currentView();
+ const proposal=monthlyChangesState.proposal;
+ if(!monthlyUndoIsCurrent(v,proposal)){monthlyChangesState.proposal=null;monthlyChangesState.message='The plan or session changed. Review a fresh undo proposal.';return false;}
+ draft=JSON.parse(JSON.stringify(proposal.next));monthlyChangesState.proposal=null;
+ monthlyChangesState.message='Restored '+monthlyChangeName(proposal.row.path)+'. Other instructions were retained; review any remaining blockers.';return true;
+}
+function renderMonthlyChanges(v){
+ const mount=$('#monthlyChanges');if(!mount)return;
+ const state=monthlyChangesState,rows=monthlyChangeRows(v),locked=v.me.submitted||v.gameOver;
+ if(state.proposal&&!monthlyUndoIsCurrent(v,state.proposal)){state.proposal=null;state.message='The plan or session changed. Review a fresh undo proposal.';}
+ const proposal=state.proposal;
+ const quoteText=quote=>quote?'$'+Math.round(quote.total).toLocaleString('en-US'):'Unavailable';
+ mount.innerHTML='<details id="monthlyChangesDrawer" '+(state.open?'open':'')+'><summary>Monthly changes · '+rows.length+' edited instruction'+(rows.length===1?'':'s')+'</summary><p class="small">Compared with your opening draft, including delegated defaults. Undo restores that opening value, not necessarily last month’s policy. Unstaged form entries are excluded. Recurring commitments remain active.</p>'+
+  (rows.length?'<ol class="plan-change-list">'+rows.map((row,index)=>'<li><div><b>'+esc(monthlyChangeName(row.path))+'</b><p>'+esc(monthlyChangeValue(v,row.before,row.path))+' → <strong>'+esc(monthlyChangeValue(v,row.after,row.path))+'</strong></p><p class="micro">'+esc(monthlyChangeTiming(row.path))+'</p></div><button type="button" class="btn" data-monthly-undo="'+index+'" '+(locked?'disabled':'')+'>Review undo</button></li>').join('')+'</ol>':'<p class="small">No edits relative to the opening draft. Optional action is not required.</p>')+
+  (proposal?'<section class="monthly-undo-confirm" role="group" aria-label="Confirm instruction undo"><b>Restore '+esc(monthlyChangeName(proposal.row.path))+'?</b><p class="small">Whole-plan quoted commitments: '+quoteText(proposal.before)+' → '+quoteText(proposal.after)+'. This is not a per-order price or a forecast of every cash flow.</p>'+(proposal.conflicts.length?'<p class="bad">Undo introduces these submission conflicts. Other orders will not be removed:</p><ul>'+proposal.conflicts.map(x=>'<li>'+esc(x.text)+'</li>').join('')+'</ul>':'<p class="small">No additional conflicts found by the monthly review. Final eligibility checks still apply.</p>')+'<button class="btn" type="button" data-monthly-confirm>Confirm undo</button> <button class="btn" type="button" data-monthly-cancel>Cancel</button></section>':'')+
+  '<p role="status" class="small">'+esc(state.message)+'</p></details>';
+ const campaign=game||view,owner=v.me.id,cycle=v.cycle,stamp=JSON.stringify(draft),generation=state.generation;
+ const fresh=()=>{const now=currentView();return (game||view)===campaign&&now?.me.id===owner&&now?.cycle===cycle&&monthlyChangesState.generation===generation&&JSON.stringify(draft)===stamp&&!now.me.submitted&&!now.gameOver?now:null;};
+ $('#monthlyChangesDrawer')?.addEventListener('toggle',event=>{if(monthlyChangesState.generation===generation)monthlyChangesState.open=event.target.open;});
+ mount.onclick=event=>{
+  const button=event.target.closest?.('button');if(!button||!mount.contains(button))return;
+  const now=fresh();if(!now)return;
+  if(button.hasAttribute('data-monthly-undo')){proposeMonthlyUndo(now,Number(button.dataset.monthlyUndo));renderMonthlyChanges(now);mount.querySelector('[data-monthly-confirm]')?.focus();}
+  else if(button.hasAttribute('data-monthly-cancel')){const path=state.proposal?.row.path;state.proposal=null;state.message='Undo cancelled. Your staged plan is unchanged.';renderMonthlyChanges(now);const index=monthlyChangeRows(now).findIndex(row=>JSON.stringify(row.path)===JSON.stringify(path));mount.querySelector('[data-monthly-undo="'+index+'"]')?.focus();}
+  else if(button.hasAttribute('data-monthly-confirm')&&applyMonthlyUndo(now)){render();$('#monthlyChangesDrawer')?.querySelector('summary')?.focus();}
+ };
+}

@@ -2,42 +2,60 @@
 
 Turn-based banking strategy for solo and friend-versus-friend play.
 
-## Choose your version
+## Play
 
-The existing game on `main` is preserved. The root launch buttons below still
-open that game, not V2 or V3. The newer editions are separate, downloadable
-packages; extract a ZIP and use the launcher inside its own folder.
+Download or clone this repository, then open **[OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat)**
+on Windows, or open [game/BRANCH_WARS.html](game/BRANCH_WARS.html) in any browser. No install,
+no account, no server. Choose *Solo vs Corporate AI* or *Pass & Play* for local play.
 
-| Edition | Play/download | Matching guide |
-|---|---|---|
-| Current main game (preserved) | Root launchers below / [game](game/BRANCH_WARS.html) | [Main player guide](game/docs/player-guide.md) |
-| V2 — Company Banking, stabilization RC1 | [Download V2 ZIP](releases/branch-wars-v2.zip) / [V2 files](releases/v2/README.txt) | [V2 player guide](releases/v2-player-guide.md) |
-| V3 — V3.1 long-campaign stability update / Financial Group preview | [Download V3 ZIP](releases/branch-wars-v3.zip) / [V3 files](releases/v3/README.txt) | [Download full 51-page PDF](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.pdf) / [Manual ZIP fallback](https://github.com/NerdyGeneral/BranchWars/raw/refs/heads/main/releases/branch-wars-v3-manual.zip) |
+A packaged copy of the same build lives at **[releases/v4-rc4](releases/v4-rc4/README.txt)** if
+you would rather hand a friend one folder. Both players should use the same build.
 
-The updated manual contains six V3.1 revision pages followed by all 45 original
-V3 handbook pages. Read the revision first: new Financial Group games use
-Group 7 / save 9.6; old campaigns are not automatically upgraded.
-[GitHub's PDF preview](releases/branch-wars-v3-manual.pdf)
-initially shows five pages and requires **More Pages** to continue. If the preview
-is blank or incomplete, use the full download or extract the manual ZIP above.
+## What you are playing
 
-See the [version catalog and source links](releases/README.md) and
-[V3.1 changes, debug and balance review](releases/v3-release-report.md).
-Export your campaign before changing editions or browser addresses. Both friends
-must use the same package. A newer preview is not a guarantee of perfect balance
-or two-computer acceptance, and older executables may refuse newer saves.
+**V4 rc4.** Choosing **Core edition** in setup creates campaign save :
 
-## Play the preserved main game
+- Six capability branches, including **Risk & Capital**, each owning one part of the result.
+- Three permanent operating models per branch. Each is a trade, not an upgrade.
+- Five **combined capabilities** that need two branches at once.
+- Stronger products are earned by research; the first option on every line is always available.
+- Lending deploys the balance sheet rather than capping on headcount.
+- Commercial relationships are limited by your branch presence.
 
-Run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat) to play, or [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat) to host a local-network game.
+**Expanded edition** (save ) is the larger rule set and is unchanged in this release.
 
-- [Player guide](game/docs/player-guide.md)
-- [Current release status](game/docs/release-status.md)
-- [Blueprint roadmap](game/docs/roadmap.md)
-- [Game reference](game/docs/game-reference.md)
-- [Architecture and maintenance](game/docs/architecture.md)
-- [Documentation index](game/docs/README.md)
+Read the [rc4 notes](releases/v4-rc4-notes.md) for what changed and what is still rough. In
+game, open Help and search *loan deposit ratio*, *relationships branches capacity* or
+*combined capability*.
 
-The runnable package lives in `game/`. Its HTML, server and launchers retain their established names. Existing bookmarks or shortcuts into the old versioned folder must be updated; use the root launchers above. Export saves before switching URLs or replacing a download: browser storage belongs to its original origin. Both friends should use the same build.
+## Multiplayer
 
-Development: run `node game/tools/check.js` for the fast gate, or `node game/tools/check.js --full` for complete regression and balance checks. No Node installation or build step is required to play.
+LAN/Intranet, Direct P2P and Repository Link are all supported from the lobby. The host can
+also **resume a campaign from a save** in the lobby instead of starting a new one.
+
+## Known rough edges
+
+- An extreme lending tilt -- most bankers on Lending, almost none on Service -- scores badly.
+  A moderate lending tilt is healthy; the extreme starves the deposits that fund it.
+- Balance was measured against simulated opponents. Human playtesting is still wanted.
+- A two-computer multiplayer acceptance session remains unverified.
+
+Export your campaign before changing builds or browser addresses. Browser storage belongs to
+its original origin.
+
+## History
+
+V2 and V3 packages were removed from the working tree to keep the repository small. They
+remain available from their git tags and from this repository history.
+
+## Development starting points
+
+1. [Approved master objective](game/docs/expanded-edition-goal.md)
+2. [Current implementation checklist](game/docs/v3-usability.md#master-requirement-inventory-and-finish-gates)
+3. [Release status and gates](game/docs/release-status.md)
+4. [Roadmap and scope](game/docs/roadmap.md)
+5. [Documentation index](game/docs/README.md)
+
+[Player guide](game/docs/player-guide.md) · [Game reference](game/docs/game-reference.md) · [Architecture](game/docs/architecture.md) · [Changelog](game/docs/changelog.md)
+
+Development: `node game/tools/check.js` runs the fast gate; `node game/tools/check.js --full` runs the full required gate. Passing one build's tests does not certify newer source. Remote publication and release changes require separate approval.

@@ -1,0 +1,422 @@
+{
+  "passed": true,
+  "sourceSha256": "cc4e8366fc74ecbcbc85600b261c05acbceaaefeaffbaf0107e5794380033f3a",
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 4,
+  "seedCount": 1,
+  "turnLimit": 480,
+  "turns": 1445,
+  "maxViewBytes": 938726,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 184,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 230,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 245,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 249,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 250,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 406,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 422,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 427,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 445,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 188,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 204,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 208,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 302,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 313,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 340,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 349,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 409,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 415,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 421,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 428,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 437,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 449,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 450,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 451,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 453,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 455,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 467,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 474,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 479,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    }
+  ],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        3878321,
+        1174556
+      ],
+      "deposits": [
+        157584885,
+        8414388
+      ],
+      "profit": [
+        135355,
+        134156
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2651949,
+        6923029
+      ],
+      "deposits": [
+        170871518,
+        325599
+      ],
+      "profit": [
+        68669,
+        248781
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "cycle": 215,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 0,
+      "equity": [
+        2040246,
+        -124791
+      ],
+      "deposits": [
+        155696230,
+        8108708
+      ],
+      "profit": [
+        126012,
+        34525
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "cycle": 270,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 1,
+      "equity": [
+        234853,
+        1487581
+      ],
+      "deposits": [
+        29719140,
+        112630248
+      ],
+      "profit": [
+        -12465,
+        82350
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 4,
+      "providerChanges": 12,
+      "lateProviderChanges": 4,
+      "initiatives": 366,
+      "competitiveActions": 197,
+      "householdDepartures": 53007,
+      "householdDepositOutflow": 418388094,
+      "retentionShares": {
+        "25": 4,
+        "50": 46,
+        "75": 158,
+        "100": 752
+      },
+      "stagedSpecialists": 164,
+      "trainingSpend": 1908000,
+      "trainingPaused": 80,
+      "maxSpecialists": 104,
+      "maxSkill": 63,
+      "maxPremiumPayroll": 494000
+    },
+    {
+      "scenario": "rate",
+      "seed": 4,
+      "providerChanges": 11,
+      "lateProviderChanges": 1,
+      "initiatives": 430,
+      "competitiveActions": 258,
+      "householdDepartures": 29106,
+      "householdDepositOutflow": 212285928,
+      "retentionShares": {
+        "25": 0,
+        "50": 141,
+        "75": 226,
+        "100": 593
+      },
+      "stagedSpecialists": 167,
+      "trainingSpend": 1151000,
+      "trainingPaused": 55,
+      "maxSpecialists": 92,
+      "maxSkill": 63,
+      "maxPremiumPayroll": 429500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 4,
+      "providerChanges": 18,
+      "lateProviderChanges": 12,
+      "initiatives": 30,
+      "competitiveActions": 20,
+      "householdDepartures": 5332,
+      "householdDepositOutflow": 52610566,
+      "retentionShares": {
+        "25": 0,
+        "50": 303,
+        "75": 56,
+        "100": 71
+      },
+      "stagedSpecialists": 47,
+      "trainingSpend": 612000,
+      "trainingPaused": 1,
+      "maxSpecialists": 37,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 155500
+    },
+    {
+      "scenario": "growth",
+      "seed": 4,
+      "providerChanges": 14,
+      "lateProviderChanges": 8,
+      "initiatives": 35,
+      "competitiveActions": 39,
+      "householdDepartures": 6843,
+      "householdDepositOutflow": 115467177,
+      "retentionShares": {
+        "25": 0,
+        "50": 15,
+        "75": 52,
+        "100": 473
+      },
+      "stagedSpecialists": 78,
+      "trainingSpend": 1054000,
+      "trainingPaused": 9,
+      "maxSpecialists": 51,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 252000
+    }
+  ]
+}

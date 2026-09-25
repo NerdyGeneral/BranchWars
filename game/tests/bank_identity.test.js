@@ -19,6 +19,10 @@ const a=E.createGame({seed:'neutral',created:1,mode:'hotseat',scope:'town',color
 const normalized=x=>{const out=JSON.parse(JSON.stringify(x));out.players.forEach(p=>delete p.color);return out};
 for(let i=0;i<8&&!a.gameOver;i++){for(const seat of [0,1]){E.submit(a,seat,E.chooseBot(a,seat));E.submit(b,seat,E.chooseBot(b,seat))}assert.deepEqual(normalized(a),normalized(b))}
 assert(html.includes("color1:host.color,color2:guest.color"),'campaign adopts both confirmed lobby colors');
-assert(html.match(/type:'hello',[^}\n]*color:p2pConfig.color/g).length>=4,'all handshake paths carry selected color');
+const {harness}=require('./github_resilience.test.js'),linked=harness('guest');
+linked.run("p2pConfig={color:'#853ac4',guestName:'Purple Bank'};sent=[];send=m=>sent.push(m);handleMessage({type:'hello_request'})");
+assert.equal(linked.run('sent[0].color'),'#853ac4');assert.equal(linked.run('sent[0].name'),'Purple Bank');
+for(const handler of ['startHandshake','joinLanRoom','ghJoinRoom','handleMessage'])
+ assert(linked.run(handler+'.toString()').includes('makeFeatureHello('),handler+' must use the tested identity-preserving hello factory');
 assert(html.includes('stroke-dasharray:7 4'));assert(html.includes('aria-label="Bank identities"'));
 console.log('Bank identity tests passed: picker wiring, seat perspectives, save migration, rematches, legacy defaults, unsafe values, matching colors, handshake contracts and simulation neutrality.');

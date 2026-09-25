@@ -1,0 +1,516 @@
+{
+  "passed": true,
+  "sourceSha256": "adfe98aadf3823dfb80336608522fc25c1188b5dadf9a496c5bb5b6b0dda1e15",
+  "segmentDepositsVersion": 1,
+  "creditPerformanceVersion": 1,
+  "customerOwnershipVersion": 1,
+  "workforceVersion": 1,
+  "campaignRulesVersion": 1,
+  "serviceExpansionVersion": 1,
+  "managementVersion": 2,
+  "customerDemandVersion": 2,
+  "seedStart": 20,
+  "seedCount": 1,
+  "turnLimit": 480,
+  "turns": 1494,
+  "maxViewBytes": 794099,
+  "skippedInitiatives": [],
+  "cancelledInitiatives": [
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 180,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 213,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 324,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 379,
+      "seat": 1,
+      "key": "branch",
+      "notice": "Synergy Holdings AI cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 422,
+      "seat": 1,
+      "key": "marketing",
+      "notice": "Synergy Holdings AI cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 446,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 460,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 461,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 463,
+      "seat": 1,
+      "key": "branch",
+      "notice": "Synergy Holdings AI cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 469,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 474,
+      "seat": 1,
+      "key": "remediation",
+      "notice": "Synergy Holdings AI cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 211,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 231,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 235,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 249,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 250,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 251,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 255,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 258,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 272,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 284,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 299,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 303,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 311,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 323,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 343,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 348,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 366,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 379,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 391,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 415,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 431,
+      "seat": 0,
+      "key": "branchDigital",
+      "notice": "Unnamed Financial Empire cancelled Digital Advisory Studio: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 443,
+      "seat": 0,
+      "key": "remediation",
+      "notice": "Unnamed Financial Empire cancelled Compliance Remediation: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 450,
+      "seat": 0,
+      "key": "marketing",
+      "notice": "Unnamed Financial Empire cancelled Market-Wide Advertising: cash changed before execution. No project cost was charged; select it again in a later plan."
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 452,
+      "seat": 0,
+      "key": "branch",
+      "notice": "Unnamed Financial Empire cancelled Full-Service Financial Center: cash changed before execution. No project cost was charged; select it again in a later plan."
+    }
+  ],
+  "results": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "cycle": 293,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 1,
+      "equity": [
+        122537,
+        2169643
+      ],
+      "deposits": [
+        8206370,
+        159194532
+      ],
+      "profit": [
+        23978,
+        112502
+      ]
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2549102,
+        10147588
+      ],
+      "deposits": [
+        144597017,
+        26177198
+      ],
+      "profit": [
+        118154,
+        415947
+      ]
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "cycle": 481,
+      "ended": false,
+      "reason": null,
+      "winner": -1,
+      "equity": [
+        2195347,
+        2257419
+      ],
+      "deposits": [
+        27208310,
+        125473257
+      ],
+      "profit": [
+        124972,
+        191351
+      ]
+    },
+    {
+      "scenario": "growth",
+      "seed": 20,
+      "cycle": 241,
+      "ended": true,
+      "reason": "receivership",
+      "winner": 0,
+      "equity": [
+        2972183,
+        -171549
+      ],
+      "deposits": [
+        156388143,
+        3930572
+      ],
+      "profit": [
+        55649,
+        62728
+      ]
+    }
+  ],
+  "activity": [
+    {
+      "scenario": "balanced",
+      "seed": 20,
+      "providerChanges": 34,
+      "lateProviderChanges": 27,
+      "initiatives": 32,
+      "competitiveActions": 33,
+      "householdDepartures": 7339,
+      "householdDepositOutflow": 59858940,
+      "retentionShares": {
+        "25": 0,
+        "50": 315,
+        "75": 173,
+        "100": 98
+      },
+      "creditEntered": 16717845,
+      "creditCured": 7540835,
+      "creditRecovery": 4341671,
+      "creditLoss": 4493377,
+      "collectionsCost": 31363,
+      "collectionsPolicies": {
+        "workout": 4,
+        "balanced": 582,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.019398052431855266,
+      "stagedSpecialists": 65,
+      "trainingSpend": 702000,
+      "trainingPaused": 49,
+      "maxSpecialists": 40,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 170000
+    },
+    {
+      "scenario": "rate",
+      "seed": 20,
+      "providerChanges": 54,
+      "lateProviderChanges": 50,
+      "initiatives": 270,
+      "competitiveActions": 150,
+      "householdDepartures": 16673,
+      "householdDepositOutflow": 94597696,
+      "retentionShares": {
+        "25": 144,
+        "50": 531,
+        "75": 222,
+        "100": 63
+      },
+      "creditEntered": 37662227,
+      "creditCured": 17035787,
+      "creditRecovery": 9981581,
+      "creditLoss": 10266466,
+      "collectionsCost": 70051,
+      "collectionsPolicies": {
+        "workout": 0,
+        "balanced": 960,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.019884560265614987,
+      "stagedSpecialists": 105,
+      "trainingSpend": 881000,
+      "trainingPaused": 6,
+      "maxSpecialists": 62,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 257500
+    },
+    {
+      "scenario": "regulatory",
+      "seed": 20,
+      "providerChanges": 8,
+      "lateProviderChanges": 2,
+      "initiatives": 419,
+      "competitiveActions": 204,
+      "householdDepartures": 92313,
+      "householdDepositOutflow": 544851559,
+      "retentionShares": {
+        "25": 9,
+        "50": 128,
+        "75": 207,
+        "100": 616
+      },
+      "creditEntered": 20136065,
+      "creditCured": 8957320,
+      "creditRecovery": 5369078,
+      "creditLoss": 5640067,
+      "collectionsCost": 39045,
+      "collectionsPolicies": {
+        "workout": 7,
+        "balanced": 953,
+        "recovery": 0
+      },
+      "maxDelinquencyRatio": 0.0234625560851872,
+      "stagedSpecialists": 109,
+      "trainingSpend": 723000,
+      "trainingPaused": 247,
+      "maxSpecialists": 96,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 456000
+    },
+    {
+      "scenario": "growth",
+      "seed": 20,
+      "providerChanges": 9,
+      "lateProviderChanges": 3,
+      "initiatives": 39,
+      "competitiveActions": 19,
+      "householdDepartures": 5658,
+      "householdDepositOutflow": 45077926,
+      "retentionShares": {
+        "25": 85,
+        "50": 179,
+        "75": 151,
+        "100": 67
+      },
+      "creditEntered": 22276802,
+      "creditCured": 9357649,
+      "creditRecovery": 5942449,
+      "creditLoss": 6723260,
+      "collectionsCost": 40027,
+      "collectionsPolicies": {
+        "workout": 2,
+        "balanced": 395,
+        "recovery": 85
+      },
+      "maxDelinquencyRatio": 0.0739666584947291,
+      "stagedSpecialists": 59,
+      "trainingSpend": 503000,
+      "trainingPaused": 4,
+      "maxSpecialists": 48,
+      "maxSkill": 60,
+      "maxPremiumPayroll": 198500
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+*** Begin Patch
+*** Update File: src/engine/institution.js
+@@
+  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
++ if(p.departmentOffice){
++  const leadership=departmentLeadershipQuote(p,plan);
++  quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0);
++  quote.discretionaryCommitments=quote.total-quote.mandatoryObligations;
++  quote.discretionaryCashAvailable=Math.max(0,p.stats.cash-(p.accounting.accounts.payables||0)-quote.mandatoryObligations);
++  quote.discretionaryCapitalAvailable=Math.max(0,quote.capitalBudget-quote.mandatoryObligations);
++  quote.discretionaryRemaining=Math.min(quote.discretionaryCashAvailable,quote.discretionaryCapitalAvailable)-quote.discretionaryCommitments;
++ }
+  return quote;
+@@
+- if(owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
+- if(owner.accounting&&quote.remaining<0)return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
++ if(owner.departmentOffice?quote.discretionaryCommitments>quote.discretionaryCashAvailable:owner.stats.cash<quote.total)return fail('cash',`This plan commits $${quote.total.toLocaleString()} but only $${Math.round(owner.stats.cash).toLocaleString()} is available.`);
++ if(owner.accounting&&(owner.departmentOffice?quote.discretionaryRemaining<0:quote.remaining<0))return fail('capital-reserve','This plan breaches the 8% post-spending capital reserve. Reduce initiatives, hiring, research or competitive spend.');
+*** End Patch

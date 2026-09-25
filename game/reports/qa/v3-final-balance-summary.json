@@ -1,0 +1,3310 @@
+{
+  "release": "V3",
+  "generatedAt": "2026-09-08T13:57:05.963Z",
+  "runtime": "4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107",
+  "scope": "Engine-only long-run characterization on frozen f9836bda, whose engine is byte-identical to final V3. Final transport/storage changes are verified by the separate final full gate. No campaign state is included.",
+  "reports": [
+    {
+      "sourceFile": "department-group6-f9836bda-balanced120.json",
+      "sourceSha256": "4c898075e12c5782e683cfbe0cd8e72fafec0eedff013ce67a3af71078fc0392",
+      "sourceBytes": 14832851,
+      "status": "PASS",
+      "identity": {
+        "execution": "assembled-source",
+        "engineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+        "assembledSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableMatchesSource": true,
+        "testSha256": "4e139f627c4ad973eed46bd085d21a59f6772e504c2cbf9e21049f2e296a6c3a"
+      },
+      "sourceUnchanged": true,
+      "portableUnchanged": true,
+      "seconds": 943.807,
+      "campaigns": 1,
+      "months": 120,
+      "replayChecks": 11,
+      "failure": null,
+      "limits": "Explicit Group6 same-rule AI with real events, finite resources and no interventions or forced survival. Bank operating profit is not whole-group shareholder return. Passing invariants/survival does not establish strategic variety, enjoyable balance or physical multiplayer acceptance.",
+      "results": [
+        {
+          "scenario": "balanced",
+          "seed": "department-A",
+          "turns": 120,
+          "resolved": 120,
+          "cycle": 121,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 943.63,
+          "actions": {
+            "construction": 2,
+            "conversions": 4,
+            "renovations": 3,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 1
+          },
+          "providerPaid": 553900,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 1076667,
+              "capital": 3716738,
+              "capitalRatio": 155.40600999117424,
+              "retainedEarnings": 1816738,
+              "deposits": 7297939,
+              "depositShare": 0.3577640647357377,
+              "loans": 505036,
+              "loansByProduct": {
+                "mortgage": 465955,
+                "middleMarket": 25744,
+                "consumer": 13337
+              },
+              "loanCohorts": 216,
+              "arrears": 5728,
+              "chargeoffs": 299129,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 2223265,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 2223265,
+                "streak": 0
+              },
+              "bankProfit": 155128,
+              "staff": 5,
+              "allocation": {
+                "service": 2,
+                "business": 1,
+                "lending": 1,
+                "operations": 1
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 308700,
+              "departmentVendorExpense": 2800,
+              "officeModels": {
+                "atm": 1,
+                "retail": 1,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9940,
+              "parentCash": 0,
+              "agency": {
+                "status": "active",
+                "failures": 0,
+                "staff": 2,
+                "cash": 86265,
+                "report": {
+                  "cycle": 120,
+                  "expense": 11500,
+                  "paid": 11500,
+                  "commission": 17970,
+                  "premiums": 106000,
+                  "clients": 12,
+                  "won": 1,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 13550860,
+                "lossMonths": 0,
+                "minBankProfit": 503,
+                "maxBankProfit": 239025,
+                "minCapitalRatio": 11.345340459454945,
+                "maxShare": 0.6001575327601039,
+                "plannedVendorExpense": 308700,
+                "plannedAdditionalQuarters": 1813,
+                "monthsWithVendorOrders": 37,
+                "monthsWithAdditionalQuotas": 120,
+                "vendorByFunction": {
+                  "relationships": 11,
+                  "onboarding": 66,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 23,
+                  "risk": 2,
+                  "treasury": 0,
+                  "people": 17
+                },
+                "additionalByRole": {
+                  "service": 18,
+                  "business": 654,
+                  "lending": 388,
+                  "operations": 753
+                },
+                "allocationTotals": {
+                  "service": 151,
+                  "business": 179,
+                  "lending": 164,
+                  "operations": 233
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 273.89916666666676,
+                  "householdSupport": 744.7030666666665,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 456,
+                  "creditAdministration": 569.5025437333333,
+                  "collections": 16.247987999999996,
+                  "technology": 521.25,
+                  "risk": 82.29463637500001,
+                  "treasury": 241.7282201500001,
+                  "people": 90.875
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 50.9775,
+                  "householdSupport": 583.9836444444445,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 325.08133333333336,
+                  "creditAdministration": 567.1872629333333,
+                  "collections": 16.247987999999996,
+                  "technology": 230.41666666666669,
+                  "risk": 82.29463637500001,
+                  "treasury": 241.7282201500001,
+                  "people": 57.25
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 222.92166666666694,
+                  "householdSupport": 160.71942222222225,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 130.91866666666667,
+                  "creditAdministration": 2.3152808,
+                  "collections": 0,
+                  "technology": 290.8333333333333,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 33.625
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 1299887,
+              "capital": 867987,
+              "capitalRatio": 27.723602024415406,
+              "retainedEarnings": -2144013,
+              "deposits": 13100809,
+              "depositShare": 0.6422359352642623,
+              "loans": 746347,
+              "loansByProduct": {
+                "mortgage": 462142,
+                "middleMarket": 232268,
+                "consumer": 51937
+              },
+              "loanCohorts": 186,
+              "arrears": 9699,
+              "chargeoffs": 227845,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1089033,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1089033,
+                "streak": 0
+              },
+              "bankProfit": 194668,
+              "staff": 5,
+              "allocation": {
+                "service": 2,
+                "business": 1,
+                "lending": 1,
+                "operations": 1
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 245200,
+              "departmentVendorExpense": 14000,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8030,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 120,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 12287316,
+                "lossMonths": 2,
+                "minBankProfit": -5829,
+                "maxBankProfit": 217352,
+                "minCapitalRatio": 5.2722455827199175,
+                "maxShare": 0.6992490085216637,
+                "plannedVendorExpense": 245200,
+                "plannedAdditionalQuarters": 1687,
+                "monthsWithVendorOrders": 25,
+                "monthsWithAdditionalQuotas": 120,
+                "vendorByFunction": {
+                  "relationships": 7,
+                  "onboarding": 10,
+                  "credit": 2,
+                  "collections": 0,
+                  "technology": 50,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 9
+                },
+                "additionalByRole": {
+                  "service": 23,
+                  "business": 653,
+                  "lending": 381,
+                  "operations": 630
+                },
+                "allocationTotals": {
+                  "service": 174,
+                  "business": 172,
+                  "lending": 152,
+                  "operations": 179
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 278.9875,
+                  "householdSupport": 725.6373333333331,
+                  "applicationProcessing": 2.1999999999999997,
+                  "commercialDelivery": 128,
+                  "creditAdministration": 460.9753625333332,
+                  "collections": 13.476224000000002,
+                  "technology": 1099.25,
+                  "risk": 77.83884484999997,
+                  "treasury": 276.96093239999993,
+                  "people": 84.625
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 94.11166666666665,
+                  "householdSupport": 580.150888888889,
+                  "applicationProcessing": 0.5,
+                  "commercialDelivery": 123,
+                  "creditAdministration": 454.9475193333332,
+                  "collections": 13.476224000000002,
+                  "technology": 363.875,
+                  "risk": 77.83884484999997,
+                  "treasury": 276.96093239999993,
+                  "people": 24.5
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 184.87583333333325,
+                  "householdSupport": 145.48644444444443,
+                  "applicationProcessing": 1.7000000000000002,
+                  "commercialDelivery": 5,
+                  "creditAdministration": 6.0278432,
+                  "collections": 0,
+                  "technology": 735.375,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 60.125
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "checkpoints": [
+        {
+          "spec": {
+            "scenario": "balanced",
+            "seed": "department-A",
+            "turns": 120
+          },
+          "rawCharacters": 14820312,
+          "sha256": "ca28f6af781fbec9a1d8621acab769c57136c9e9379f641763aac6414c782f9f"
+        }
+      ]
+    },
+    {
+      "sourceFile": "department-group6-v3-f9836bda-matrix192.json",
+      "sourceSha256": "ef51222d3437c09b6de14217dab51c2fe2a6b43de81110b0110de588eb1904af",
+      "sourceBytes": 46352180,
+      "status": "PASS",
+      "identity": {
+        "execution": "assembled-source",
+        "engineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+        "assembledSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableMatchesSource": true,
+        "testSha256": "4e139f627c4ad973eed46bd085d21a59f6772e504c2cbf9e21049f2e296a6c3a"
+      },
+      "sourceUnchanged": true,
+      "portableUnchanged": true,
+      "seconds": 1060.497,
+      "campaigns": 8,
+      "months": 192,
+      "replayChecks": 24,
+      "failure": null,
+      "limits": "Explicit Group6 same-rule AI with real events, finite resources and no interventions or forced survival. Bank operating profit is not whole-group shareholder return. Passing invariants/survival does not establish strategic variety, enjoyable balance or physical multiplayer acceptance.",
+      "results": [
+        {
+          "scenario": "balanced",
+          "seed": "department-A",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 137.9,
+          "actions": {
+            "construction": 0,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 193100,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 7201651,
+              "capital": 836580,
+              "capitalRatio": 14.398930123244089,
+              "retainedEarnings": -1063420,
+              "deposits": 23295086,
+              "depositShare": 0.5697661176810822,
+              "loans": 3030015,
+              "loansByProduct": {
+                "mortgage": 2475183,
+                "middleMarket": 241315,
+                "consumer": 313517
+              },
+              "loanCohorts": 168,
+              "arrears": 59827,
+              "chargeoffs": 145501,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1583044,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1583044,
+                "streak": 0
+              },
+              "bankProfit": 36256,
+              "staff": 9,
+              "allocation": {
+                "service": 2,
+                "business": 2,
+                "lending": 2,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 141000,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9520,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 751910,
+                "lossMonths": 0,
+                "minBankProfit": 503,
+                "maxBankProfit": 64442,
+                "minCapitalRatio": 12.843808666962422,
+                "maxShare": 0.5779709664265784,
+                "plannedVendorExpense": 141000,
+                "plannedAdditionalQuarters": 409,
+                "monthsWithVendorOrders": 20,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 9,
+                  "onboarding": 38,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 2,
+                  "treasury": 0,
+                  "people": 10
+                },
+                "additionalByRole": {
+                  "service": 2,
+                  "business": 170,
+                  "lending": 37,
+                  "operations": 200
+                },
+                "allocationTotals": {
+                  "service": 37,
+                  "business": 57,
+                  "lending": 28,
+                  "operations": 75
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 33.3275,
+                  "householdSupport": 209.6512,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 126,
+                  "creditAdministration": 102.80313679999999,
+                  "collections": 8.967448000000001,
+                  "technology": 24.375,
+                  "risk": 21.630776125,
+                  "treasury": 28.734518049999995,
+                  "people": 24.625
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 21.851666666666667,
+                  "householdSupport": 176.6688888888889,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 106.08133333333335,
+                  "creditAdministration": 102.80313679999999,
+                  "collections": 8.967448000000001,
+                  "technology": 23.375,
+                  "risk": 21.630776125,
+                  "treasury": 28.734518049999995,
+                  "people": 23.625
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 11.475833333333334,
+                  "householdSupport": 32.982311111111116,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 19.918666666666663,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 1911308,
+              "capital": 787700,
+              "capitalRatio": 14.732578543515254,
+              "retainedEarnings": -1112300,
+              "deposits": 17590262,
+              "depositShare": 0.4302338823189178,
+              "loans": 2566654,
+              "loansByProduct": {
+                "mortgage": 2222579,
+                "consumer": 151484,
+                "middleMarket": 192591
+              },
+              "loanCohorts": 216,
+              "arrears": 55970,
+              "chargeoffs": 132496,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1273363,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1273363,
+                "streak": 0
+              },
+              "bankProfit": 28308,
+              "staff": 6,
+              "allocation": {
+                "service": 1,
+                "business": 3,
+                "lending": 1,
+                "operations": 1
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 52100,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9200,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 706842,
+                "lossMonths": 2,
+                "minBankProfit": -5829,
+                "maxBankProfit": 78383,
+                "minCapitalRatio": 12.223671440209639,
+                "maxShare": 0.5089511546218658,
+                "plannedVendorExpense": 52100,
+                "plannedAdditionalQuarters": 451,
+                "monthsWithVendorOrders": 7,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 7,
+                  "onboarding": 8,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 3
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 204,
+                  "lending": 90,
+                  "operations": 157
+                },
+                "allocationTotals": {
+                  "service": 33,
+                  "business": 57,
+                  "lending": 43,
+                  "operations": 49
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.35666666666667,
+                  "householdSupport": 204.57564444444446,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 120.17281759999997,
+                  "collections": 8.697952,
+                  "technology": 49.375,
+                  "risk": 20.06554055,
+                  "treasury": 25.532876700000003,
+                  "people": 22.75
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 25.781666666666663,
+                  "householdSupport": 136.09866666666667,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 86,
+                  "creditAdministration": 120.17281759999997,
+                  "collections": 8.697952,
+                  "technology": 41.625,
+                  "risk": 20.06554055,
+                  "treasury": 25.532876700000003,
+                  "people": 17.75
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 6.575000000000001,
+                  "householdSupport": 68.47697777777779,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 2,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 7.75,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 5
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "balanced",
+          "seed": "department-B",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 134.693,
+          "actions": {
+            "construction": 1,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 392500,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 8113222,
+              "capital": 878233,
+              "capitalRatio": 14.86329481241084,
+              "retainedEarnings": -1021767,
+              "deposits": 24263726,
+              "depositShare": 0.46849426417254114,
+              "loans": 3128737,
+              "loansByProduct": {
+                "mortgage": 2890525,
+                "consumer": 59565,
+                "middleMarket": 178647
+              },
+              "loanCohorts": 168,
+              "arrears": 52611,
+              "chargeoffs": 121039,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1652302,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1652302,
+                "streak": 0
+              },
+              "bankProfit": 70600,
+              "staff": 8,
+              "allocation": {
+                "service": 1,
+                "business": 4,
+                "lending": 1,
+                "operations": 2
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 269100,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9520,
+              "parentCash": 3400,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 600162,
+                "lossMonths": 2,
+                "minBankProfit": -6701,
+                "maxBankProfit": 70600,
+                "minCapitalRatio": 14.86329481241084,
+                "maxShare": 0.5046140972223547,
+                "plannedVendorExpense": 269100,
+                "plannedAdditionalQuarters": 438,
+                "monthsWithVendorOrders": 20,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 42,
+                  "onboarding": 47,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 3,
+                  "risk": 6,
+                  "treasury": 0,
+                  "people": 3
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 183,
+                  "lending": 89,
+                  "operations": 166
+                },
+                "allocationTotals": {
+                  "service": 33,
+                  "business": 53,
+                  "lending": 46,
+                  "operations": 60
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 30.856666666666676,
+                  "householdSupport": 182.1081777777778,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 146,
+                  "creditAdministration": 103.5001976,
+                  "collections": 7.973971999999999,
+                  "technology": 46.875,
+                  "risk": 21.933548874999996,
+                  "treasury": 29.108298350000002,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 30.856666666666676,
+                  "householdSupport": 153.87688888888889,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 145,
+                  "creditAdministration": 103.5001976,
+                  "collections": 7.973971999999999,
+                  "technology": 46.875,
+                  "risk": 21.933548874999996,
+                  "treasury": 29.108298350000002,
+                  "people": 23
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 0,
+                  "householdSupport": 28.231288888888894,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 1,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 11354421,
+              "capital": 796239,
+              "capitalRatio": 13.613336244390673,
+              "retainedEarnings": -1103761,
+              "deposits": 27527145,
+              "depositShare": 0.5315057358274589,
+              "loans": 3068963,
+              "loansByProduct": {
+                "mortgage": 2513779,
+                "middleMarket": 437631,
+                "consumer": 117553
+              },
+              "loanCohorts": 156,
+              "arrears": 53927,
+              "chargeoffs": 121311,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1774476,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1774476,
+                "streak": 0
+              },
+              "bankProfit": 11975,
+              "staff": 8,
+              "allocation": {
+                "service": 1,
+                "business": 3,
+                "lending": 1,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 123400,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 1,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9040,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 414094,
+                "lossMonths": 3,
+                "minBankProfit": -3534,
+                "maxBankProfit": 38657,
+                "minCapitalRatio": 11.759567900218967,
+                "maxShare": 0.5433357201621501,
+                "plannedVendorExpense": 123400,
+                "plannedAdditionalQuarters": 436,
+                "monthsWithVendorOrders": 9,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 17,
+                  "onboarding": 30,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 2,
+                  "treasury": 0,
+                  "people": 0
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 187,
+                  "lending": 63,
+                  "operations": 186
+                },
+                "allocationTotals": {
+                  "service": 35,
+                  "business": 49,
+                  "lending": 36,
+                  "operations": 72
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 30.225833333333338,
+                  "householdSupport": 233.16004444444445,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 102.9290256,
+                  "collections": 8.004476,
+                  "technology": 26.375,
+                  "risk": 23.044221649999997,
+                  "treasury": 30.8761869,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 26.22416666666667,
+                  "householdSupport": 167.04688888888887,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 102.9290256,
+                  "collections": 8.004476,
+                  "technology": 26.125,
+                  "risk": 23.044221649999997,
+                  "treasury": 30.8761869,
+                  "people": 22
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 4.001666666666667,
+                  "householdSupport": 66.11315555555558,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0.25,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "growth",
+          "seed": "department-A",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 118.114,
+          "actions": {
+            "construction": 0,
+            "conversions": 1,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 62700,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 4261045,
+              "capital": 747298,
+              "capitalRatio": 12.663717496498531,
+              "retainedEarnings": -1602702,
+              "deposits": 20534842,
+              "depositShare": 0.5134698929543937,
+              "loans": 3121095,
+              "loansByProduct": {
+                "mortgage": 2310586,
+                "middleMarket": 427824,
+                "consumer": 382685
+              },
+              "loanCohorts": 198,
+              "arrears": 52773,
+              "chargeoffs": 112838,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1400391,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1400391,
+                "streak": 0
+              },
+              "bankProfit": 41756,
+              "staff": 8,
+              "allocation": {
+                "service": 2,
+                "business": 2,
+                "lending": 1,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 8700,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 0,
+                "retail": 1,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 6000,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 306130,
+                "lossMonths": 6,
+                "minBankProfit": -18253,
+                "maxBankProfit": 41756,
+                "minCapitalRatio": 7.529751104804587,
+                "maxShare": 0.5231038398788428,
+                "plannedVendorExpense": 8700,
+                "plannedAdditionalQuarters": 373,
+                "monthsWithVendorOrders": 1,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 0,
+                  "onboarding": 0,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 148,
+                  "lending": 49,
+                  "operations": 176
+                },
+                "allocationTotals": {
+                  "service": 36,
+                  "business": 62,
+                  "lending": 32,
+                  "operations": 74
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 35.159166666666664,
+                  "householdSupport": 199.53973333333334,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 52,
+                  "creditAdministration": 108.84727440000002,
+                  "collections": 6.956292,
+                  "technology": 24,
+                  "risk": 21.157207475,
+                  "treasury": 27.42884635,
+                  "people": 25.5
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 19.833333333333336,
+                  "householdSupport": 136.5459111111111,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 52,
+                  "creditAdministration": 106.09634720000003,
+                  "collections": 6.956292,
+                  "technology": 20,
+                  "risk": 21.157207475,
+                  "treasury": 27.42884635,
+                  "people": 17.75
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 15.325833333333334,
+                  "householdSupport": 62.99382222222221,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 2.7509271999999996,
+                  "collections": 0,
+                  "technology": 4,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 7.75
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 3094218,
+              "capital": 619971,
+              "capitalRatio": 10.573915896937702,
+              "retainedEarnings": -1730029,
+              "deposits": 19457458,
+              "depositShare": 0.4865301070456063,
+              "loans": 3083211,
+              "loansByProduct": {
+                "mortgage": 2696923,
+                "middleMarket": 278245,
+                "consumer": 108043
+              },
+              "loanCohorts": 174,
+              "arrears": 51740,
+              "chargeoffs": 113188,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1282858,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1282858,
+                "streak": 0
+              },
+              "bankProfit": 21253,
+              "staff": 10,
+              "allocation": {
+                "service": 2,
+                "business": 2,
+                "lending": 3,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 54000,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 6960,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 282424,
+                "lossMonths": 6,
+                "minBankProfit": -20162,
+                "maxBankProfit": 41944,
+                "minCapitalRatio": 9.472334995825817,
+                "maxShare": 0.501072607575589,
+                "plannedVendorExpense": 54000,
+                "plannedAdditionalQuarters": 447,
+                "monthsWithVendorOrders": 8,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 8,
+                  "onboarding": 7,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 2,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 2
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 199,
+                  "lending": 110,
+                  "operations": 138
+                },
+                "allocationTotals": {
+                  "service": 37,
+                  "business": 55,
+                  "lending": 52,
+                  "operations": 76
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.836666666666666,
+                  "householdSupport": 210.26111111111118,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 138,
+                  "creditAdministration": 110.1074304,
+                  "collections": 6.97078,
+                  "technology": 24,
+                  "risk": 20.694764475000003,
+                  "treasury": 26.49642135,
+                  "people": 27.5
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 16.263333333333335,
+                  "householdSupport": 151.73666666666668,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 134,
+                  "creditAdministration": 110.1074304,
+                  "collections": 6.97078,
+                  "technology": 23,
+                  "risk": 20.694764475000003,
+                  "treasury": 26.49642135,
+                  "people": 25.5
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 16.573333333333338,
+                  "householdSupport": 58.52444444444446,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 4,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 2
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "growth",
+          "seed": "department-B",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 130.079,
+          "actions": {
+            "construction": 2,
+            "conversions": 4,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 223000,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 6280295,
+              "capital": 854734,
+              "capitalRatio": 14.210395936723277,
+              "retainedEarnings": -1495266,
+              "deposits": 22560411,
+              "depositShare": 0.539854847736427,
+              "loans": 3234850,
+              "loansByProduct": {
+                "mortgage": 2752840,
+                "consumer": 69227,
+                "middleMarket": 412783
+              },
+              "loanCohorts": 198,
+              "arrears": 51665,
+              "chargeoffs": 112707,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1555387,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1555387,
+                "streak": 0
+              },
+              "bankProfit": 58537,
+              "staff": 8,
+              "allocation": {
+                "service": 2,
+                "business": 2,
+                "lending": 1,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 61000,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 2,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8720,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 309649,
+                "lossMonths": 8,
+                "minBankProfit": -31817,
+                "maxBankProfit": 58537,
+                "minCapitalRatio": 11.316319837456195,
+                "maxShare": 0.539854847736427,
+                "plannedVendorExpense": 61000,
+                "plannedAdditionalQuarters": 446,
+                "monthsWithVendorOrders": 10,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 12,
+                  "onboarding": 7,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 4
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 188,
+                  "lending": 80,
+                  "operations": 178
+                },
+                "allocationTotals": {
+                  "service": 36,
+                  "business": 54,
+                  "lending": 43,
+                  "operations": 59
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 29.645000000000003,
+                  "householdSupport": 215.0992,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 86,
+                  "creditAdministration": 113.97920719999998,
+                  "collections": 6.93242,
+                  "technology": 29.25,
+                  "risk": 21.625331050000003,
+                  "treasury": 27.778360300000003,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 24.690833333333337,
+                  "householdSupport": 150.76186666666666,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 86,
+                  "creditAdministration": 113.97920719999998,
+                  "collections": 6.93242,
+                  "technology": 29.25,
+                  "risk": 21.625331050000003,
+                  "treasury": 27.778360300000003,
+                  "people": 20
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 4.954166666666666,
+                  "householdSupport": 64.33733333333335,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 4
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 2896144,
+              "capital": 929725,
+              "capitalRatio": 15.134849067433812,
+              "retainedEarnings": -1420275,
+              "deposits": 19229361,
+              "depositShare": 0.460145152263573,
+              "loans": 3362942,
+              "loansByProduct": {
+                "mortgage": 2744617,
+                "middleMarket": 316197,
+                "consumer": 302128
+              },
+              "loanCohorts": 234,
+              "arrears": 53469,
+              "chargeoffs": 112821,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1426330,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1426330,
+                "streak": 0
+              },
+              "bankProfit": 7943,
+              "staff": 8,
+              "allocation": {
+                "service": 1,
+                "business": 1,
+                "lending": 2,
+                "operations": 4
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 162000,
+              "departmentVendorExpense": 11000,
+              "officeModels": {
+                "atm": 2,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8720,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 96636,
+                "lossMonths": 8,
+                "minBankProfit": -37168,
+                "maxBankProfit": 29237,
+                "minCapitalRatio": 12.23917889894365,
+                "maxShare": 0.501255478784511,
+                "plannedVendorExpense": 162000,
+                "plannedAdditionalQuarters": 400,
+                "monthsWithVendorOrders": 17,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 12,
+                  "onboarding": 54,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 3
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 131,
+                  "lending": 62,
+                  "operations": 207
+                },
+                "allocationTotals": {
+                  "service": 30,
+                  "business": 34,
+                  "lending": 38,
+                  "operations": 90
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 31.03166666666667,
+                  "householdSupport": 220.99888888888893,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 118.3798548,
+                  "collections": 6.949983999999999,
+                  "technology": 29,
+                  "risk": 20.862577525000006,
+                  "treasury": 26.530191349999996,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 13.416666666666666,
+                  "householdSupport": 170.71048888888888,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 118.3798548,
+                  "collections": 6.949983999999999,
+                  "technology": 29,
+                  "risk": 20.862577525000006,
+                  "treasury": 26.530191349999996,
+                  "people": 24
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 17.615,
+                  "householdSupport": 50.28840000000002,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "regulatory",
+          "seed": "department-A",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 129.762,
+          "actions": {
+            "construction": 0,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 126500,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 125239,
+              "capital": 428221,
+              "capitalRatio": 8.30689463661252,
+              "retainedEarnings": -1471779,
+              "deposits": 15972025,
+              "depositShare": 0.40631326693671416,
+              "loans": 2375007,
+              "loansByProduct": {
+                "mortgage": 2075710,
+                "middleMarket": 299297
+              },
+              "loanCohorts": 102,
+              "arrears": 62132,
+              "chargeoffs": 138094,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1012711,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1012711,
+                "streak": 0
+              },
+              "bankProfit": 27483,
+              "staff": 9,
+              "allocation": {
+                "service": 2,
+                "business": 1,
+                "lending": 1,
+                "operations": 5
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 11400,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 6160,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 485439,
+                "lossMonths": 0,
+                "minBankProfit": 2603,
+                "maxBankProfit": 43333,
+                "minCapitalRatio": 7.868764614619114,
+                "maxShare": 0.5044355644157128,
+                "plannedVendorExpense": 11400,
+                "plannedAdditionalQuarters": 373,
+                "monthsWithVendorOrders": 3,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 0,
+                  "onboarding": 3,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 2
+                },
+                "additionalByRole": {
+                  "service": 2,
+                  "business": 140,
+                  "lending": 67,
+                  "operations": 164
+                },
+                "allocationTotals": {
+                  "service": 34,
+                  "business": 46,
+                  "lending": 30,
+                  "operations": 103
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.21,
+                  "householdSupport": 178.59275555555558,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 150,
+                  "creditAdministration": 87.1239756,
+                  "collections": 8.823275999999998,
+                  "technology": 24.25,
+                  "risk": 19.850280400000003,
+                  "treasury": 25.065816899999998,
+                  "people": 26.625
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 7.673333333333334,
+                  "householdSupport": 130.69044444444444,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 113,
+                  "creditAdministration": 87.1239756,
+                  "collections": 8.823275999999998,
+                  "technology": 23.25,
+                  "risk": 19.850280400000003,
+                  "treasury": 25.065816899999998,
+                  "people": 25.625
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 24.53666666666667,
+                  "householdSupport": 47.90231111111113,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 37,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 7497785,
+              "capital": 944749,
+              "capitalRatio": 16.678209170650344,
+              "retainedEarnings": -955251,
+              "deposits": 23337607,
+              "depositShare": 0.5936867330632859,
+              "loans": 2884571,
+              "loansByProduct": {
+                "mortgage": 2507628,
+                "middleMarket": 318877,
+                "consumer": 58066
+              },
+              "loanCohorts": 228,
+              "arrears": 66835,
+              "chargeoffs": 140625,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1639254,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1639254,
+                "streak": 0
+              },
+              "bankProfit": 64421,
+              "staff": 6,
+              "allocation": {
+                "service": 2,
+                "business": 1,
+                "lending": 1,
+                "operations": 2
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 115100,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8400,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 1019817,
+                "lossMonths": 0,
+                "minBankProfit": 20884,
+                "maxBankProfit": 64421,
+                "minCapitalRatio": 12.474623605308949,
+                "maxShare": 0.5936867330632859,
+                "plannedVendorExpense": 115100,
+                "plannedAdditionalQuarters": 365,
+                "monthsWithVendorOrders": 11,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 9,
+                  "onboarding": 35,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 2
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 119,
+                  "lending": 60,
+                  "operations": 186
+                },
+                "allocationTotals": {
+                  "service": 33,
+                  "business": 33,
+                  "lending": 35,
+                  "operations": 67
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.67416666666667,
+                  "householdSupport": 230.91977777777782,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 119.51730960000002,
+                  "collections": 9.189843999999999,
+                  "technology": 24.25,
+                  "risk": 22.093711825000003,
+                  "treasury": 28.903096250000008,
+                  "people": 21
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 8.259166666666667,
+                  "householdSupport": 165.04666666666668,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 119.51730960000002,
+                  "collections": 9.189843999999999,
+                  "technology": 23.25,
+                  "risk": 22.093711825000003,
+                  "treasury": 28.903096250000008,
+                  "people": 19.25
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 24.415,
+                  "householdSupport": 65.87311111111113,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1.75
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "regulatory",
+          "seed": "department-B",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 130.481,
+          "actions": {
+            "construction": 0,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 302000,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 8448023,
+              "capital": 855204,
+              "capitalRatio": 14.418824773488776,
+              "retainedEarnings": -1044796,
+              "deposits": 24643982,
+              "depositShare": 0.5618194738936589,
+              "loans": 3133858,
+              "loansByProduct": {
+                "mortgage": 2238170,
+                "middleMarket": 502411,
+                "consumer": 393277
+              },
+              "loanCohorts": 174,
+              "arrears": 64500,
+              "chargeoffs": 126661,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1659801,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1659801,
+                "streak": 0
+              },
+              "bankProfit": 43122,
+              "staff": 8,
+              "allocation": {
+                "service": 1,
+                "business": 2,
+                "lending": 2,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 154800,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9360,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 649366,
+                "lossMonths": 0,
+                "minBankProfit": 7070,
+                "maxBankProfit": 56857,
+                "minCapitalRatio": 13.096345095401482,
+                "maxShare": 0.5618194738936589,
+                "plannedVendorExpense": 154800,
+                "plannedAdditionalQuarters": 431,
+                "monthsWithVendorOrders": 16,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 31,
+                  "onboarding": 27,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 181,
+                  "lending": 102,
+                  "operations": 148
+                },
+                "allocationTotals": {
+                  "service": 34,
+                  "business": 50,
+                  "lending": 54,
+                  "operations": 54
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 29.652500000000003,
+                  "householdSupport": 209.86417777777777,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 126,
+                  "creditAdministration": 106.15436559999999,
+                  "collections": 9.464348000000001,
+                  "technology": 24.25,
+                  "risk": 23.56280555,
+                  "treasury": 29.7932697,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 22.78,
+                  "householdSupport": 160.22133333333335,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 124,
+                  "creditAdministration": 106.15436559999999,
+                  "collections": 9.464348000000001,
+                  "technology": 24.25,
+                  "risk": 23.56280555,
+                  "treasury": 29.7932697,
+                  "people": 24
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 6.8725000000000005,
+                  "householdSupport": 49.64284444444446,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 2,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 0
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 3035826,
+              "capital": 833538,
+              "capitalRatio": 14.131781886441603,
+              "retainedEarnings": -1066462,
+              "deposits": 19220610,
+              "depositShare": 0.43818052610634106,
+              "loans": 3118322,
+              "loansByProduct": {
+                "mortgage": 2858455,
+                "middleMarket": 259867
+              },
+              "loanCohorts": 180,
+              "arrears": 63531,
+              "chargeoffs": 124967,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1377799,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1377799,
+                "streak": 0
+              },
+              "bankProfit": 25631,
+              "staff": 8,
+              "allocation": {
+                "service": 1,
+                "business": 2,
+                "lending": 2,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 147200,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9360,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 642316,
+                "lossMonths": 0,
+                "minBankProfit": 4128,
+                "maxBankProfit": 60104,
+                "minCapitalRatio": 13.026877710623728,
+                "maxShare": 0.5000009299052665,
+                "plannedVendorExpense": 147200,
+                "plannedAdditionalQuarters": 401,
+                "monthsWithVendorOrders": 14,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 27,
+                  "onboarding": 29,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 157,
+                  "lending": 95,
+                  "operations": 149
+                },
+                "allocationTotals": {
+                  "service": 34,
+                  "business": 42,
+                  "lending": 50,
+                  "operations": 66
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.24416666666667,
+                  "householdSupport": 205.58511111111116,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 109.1171884,
+                  "collections": 9.347527999999999,
+                  "technology": 24.125,
+                  "risk": 21.34312565,
+                  "treasury": 26.6282042,
+                  "people": 24
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 25.875833333333336,
+                  "householdSupport": 162.1248888888889,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 109.1171884,
+                  "collections": 9.347527999999999,
+                  "technology": 24.125,
+                  "risk": 21.34312565,
+                  "treasury": 26.6282042,
+                  "people": 24
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 6.368333333333334,
+                  "householdSupport": 43.460222222222235,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 0
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "rate",
+          "seed": "department-A",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 144.127,
+          "actions": {
+            "construction": 0,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 94700,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 8942666,
+              "capital": 695436,
+              "capitalRatio": 13.445298217285186,
+              "retainedEarnings": -1454564,
+              "deposits": 24539566,
+              "depositShare": 0.5595107682647358,
+              "loans": 2339536,
+              "loansByProduct": {
+                "mortgage": 2068577,
+                "middleMarket": 250783,
+                "consumer": 20176
+              },
+              "loanCohorts": 102,
+              "arrears": 54409,
+              "chargeoffs": 122859,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1574696,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1574696,
+                "streak": 0
+              },
+              "bankProfit": 42754,
+              "staff": 7,
+              "allocation": {
+                "service": 1,
+                "business": 3,
+                "lending": 1,
+                "operations": 2
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 42800,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8880,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 947885,
+                "lossMonths": 0,
+                "minBankProfit": 12215,
+                "maxBankProfit": 64154,
+                "minCapitalRatio": 11.926214293903284,
+                "maxShare": 0.5648458272937631,
+                "plannedVendorExpense": 42800,
+                "plannedAdditionalQuarters": 454,
+                "monthsWithVendorOrders": 11,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 5,
+                  "onboarding": 1,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 2,
+                  "treasury": 0,
+                  "people": 8
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 208,
+                  "lending": 56,
+                  "operations": 190
+                },
+                "allocationTotals": {
+                  "service": 44,
+                  "business": 63,
+                  "lending": 27,
+                  "operations": 51
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 33.090833333333336,
+                  "householdSupport": 216.25191111111116,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 126,
+                  "creditAdministration": 95.247626,
+                  "collections": 9.519756,
+                  "technology": 56.75,
+                  "risk": 22.922522,
+                  "treasury": 31.123137500000006,
+                  "people": 23.125
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 22.296666666666663,
+                  "householdSupport": 168.18355555555556,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 119,
+                  "creditAdministration": 95.247626,
+                  "collections": 9.519756,
+                  "technology": 55.75,
+                  "risk": 22.922522,
+                  "treasury": 31.123137500000006,
+                  "people": 20.125
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 10.794166666666667,
+                  "householdSupport": 48.06835555555557,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 7,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 3
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 3128645,
+              "capital": 593476,
+              "capitalRatio": 10.477602006272692,
+              "retainedEarnings": -1556524,
+              "deposits": 19319404,
+              "depositShare": 0.44048923173526416,
+              "loans": 2860235,
+              "loansByProduct": {
+                "mortgage": 2202823,
+                "middleMarket": 162230,
+                "consumer": 495182
+              },
+              "loanCohorts": 186,
+              "arrears": 57499,
+              "chargeoffs": 123943,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1262708,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1262708,
+                "streak": 0
+              },
+              "bankProfit": 23984,
+              "staff": 9,
+              "allocation": {
+                "service": 1,
+                "business": 2,
+                "lending": 4,
+                "operations": 2
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 51900,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 8560,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 678420,
+                "lossMonths": 0,
+                "minBankProfit": 4561,
+                "maxBankProfit": 57342,
+                "minCapitalRatio": 10.477602006272692,
+                "maxShare": 0.5010703189399256,
+                "plannedVendorExpense": 51900,
+                "plannedAdditionalQuarters": 458,
+                "monthsWithVendorOrders": 9,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 9,
+                  "onboarding": 3,
+                  "credit": 1,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 5
+                },
+                "additionalByRole": {
+                  "service": 4,
+                  "business": 174,
+                  "lending": 106,
+                  "operations": 174
+                },
+                "allocationTotals": {
+                  "service": 39,
+                  "business": 56,
+                  "lending": 53,
+                  "operations": 51
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 32.79000000000001,
+                  "householdSupport": 192.22124444444447,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 88,
+                  "creditAdministration": 108.465842,
+                  "collections": 9.607131999999996,
+                  "technology": 64,
+                  "risk": 20.548263425,
+                  "treasury": 26.91881635,
+                  "people": 24.875
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 30.86583333333334,
+                  "householdSupport": 143.7266666666667,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 79,
+                  "creditAdministration": 108.465842,
+                  "collections": 9.607131999999996,
+                  "technology": 63,
+                  "risk": 20.548263425,
+                  "treasury": 26.91881635,
+                  "people": 23.75
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 1.9241666666666668,
+                  "householdSupport": 48.494577777777806,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 9,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 1,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 1.125
+                }
+              }
+            }
+          ]
+        },
+        {
+          "scenario": "rate",
+          "seed": "department-B",
+          "turns": 24,
+          "resolved": 24,
+          "cycle": 25,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 135.011,
+          "actions": {
+            "construction": 0,
+            "conversions": 2,
+            "renovations": 0,
+            "appointments": 0,
+            "specialistHires": 0,
+            "agencyLaunches": 0
+          },
+          "providerPaid": 256600,
+          "companiesActive": 6,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 7263233,
+              "capital": 831210,
+              "capitalRatio": 14.793740856360769,
+              "retainedEarnings": -1318790,
+              "deposits": 23170683,
+              "depositShare": 0.5136130033669144,
+              "loans": 2838660,
+              "loansByProduct": {
+                "mortgage": 2363387,
+                "middleMarket": 250956,
+                "consumer": 224317
+              },
+              "loanCohorts": 138,
+              "arrears": 56757,
+              "chargeoffs": 122709,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1574139,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1574139,
+                "streak": 0
+              },
+              "bankProfit": 44542,
+              "staff": 5,
+              "allocation": {
+                "service": 1,
+                "business": 1,
+                "lending": 1,
+                "operations": 2
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 105000,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9200,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 701239,
+                "lossMonths": 0,
+                "minBankProfit": 4658,
+                "maxBankProfit": 59046,
+                "minCapitalRatio": 11.725934815961555,
+                "maxShare": 0.544728797994402,
+                "plannedVendorExpense": 105000,
+                "plannedAdditionalQuarters": 386,
+                "monthsWithVendorOrders": 11,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 10,
+                  "onboarding": 18,
+                  "credit": 0,
+                  "collections": 0,
+                  "technology": 6,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 6
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 149,
+                  "lending": 104,
+                  "operations": 133
+                },
+                "allocationTotals": {
+                  "service": 31,
+                  "business": 43,
+                  "lending": 55,
+                  "operations": 39
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 29.20666666666667,
+                  "householdSupport": 206.72995555555562,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 92,
+                  "creditAdministration": 102.18091199999998,
+                  "collections": 8.842876,
+                  "technology": 78.125,
+                  "risk": 22.878640049999994,
+                  "treasury": 30.7583021,
+                  "people": 21
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 12.204166666666664,
+                  "householdSupport": 138.48933333333332,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 75.162,
+                  "creditAdministration": 102.18091199999998,
+                  "collections": 8.842876,
+                  "technology": 56,
+                  "risk": 22.878640049999994,
+                  "treasury": 30.7583021,
+                  "people": 13.25
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 17.002499999999998,
+                  "householdSupport": 68.24062222222224,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 16.838,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 22.125,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 7.75
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 6257630,
+              "capital": 795106,
+              "capitalRatio": 14.834319015490749,
+              "retainedEarnings": -1354894,
+              "deposits": 21942433,
+              "depositShare": 0.4863869966330856,
+              "loans": 2543094,
+              "loansByProduct": {
+                "mortgage": 2279299,
+                "middleMarket": 158756,
+                "consumer": 105039
+              },
+              "loanCohorts": 150,
+              "arrears": 51465,
+              "chargeoffs": 125984,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 1494674,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 1494674,
+                "streak": 0
+              },
+              "bankProfit": 41748,
+              "staff": 7,
+              "allocation": {
+                "service": 1,
+                "business": 2,
+                "lending": 1,
+                "operations": 3
+              },
+              "leaders": [],
+              "leadershipArrears": 0,
+              "departmentPaid": 151600,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 1,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 9200,
+              "parentCash": 0,
+              "agency": {
+                "status": "unopened",
+                "failures": 0,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 24,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 778633,
+                "lossMonths": 0,
+                "minBankProfit": 5199,
+                "maxBankProfit": 56347,
+                "minCapitalRatio": 11.865004540532084,
+                "maxShare": 0.5016284989925972,
+                "plannedVendorExpense": 151600,
+                "plannedAdditionalQuarters": 437,
+                "monthsWithVendorOrders": 12,
+                "monthsWithAdditionalQuotas": 24,
+                "vendorByFunction": {
+                  "relationships": 23,
+                  "onboarding": 25,
+                  "credit": 5,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 2,
+                  "treasury": 0,
+                  "people": 3
+                },
+                "additionalByRole": {
+                  "service": 0,
+                  "business": 181,
+                  "lending": 80,
+                  "operations": 176
+                },
+                "allocationTotals": {
+                  "service": 33,
+                  "business": 47,
+                  "lending": 37,
+                  "operations": 60
+                },
+                "workloadByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 31.261666666666667,
+                  "householdSupport": 208.50253333333336,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 106,
+                  "creditAdministration": 103.12037880000001,
+                  "collections": 8.752028,
+                  "technology": 48.125,
+                  "risk": 21.555668875000002,
+                  "treasury": 28.93624305,
+                  "people": 22.125
+                },
+                "servedByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 24.578333333333333,
+                  "householdSupport": 155.03622222222225,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 106,
+                  "creditAdministration": 103.12037880000001,
+                  "collections": 8.752028,
+                  "technology": 48.125,
+                  "risk": 21.555668875000002,
+                  "treasury": 28.93624305,
+                  "people": 15.125
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 6.683333333333334,
+                  "householdSupport": 53.466311111111125,
+                  "applicationProcessing": 0,
+                  "commercialDelivery": 0,
+                  "creditAdministration": 0,
+                  "collections": 0,
+                  "technology": 0,
+                  "risk": 0,
+                  "treasury": 0,
+                  "people": 7
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "checkpoints": [
+        {
+          "spec": {
+            "scenario": "balanced",
+            "seed": "department-A",
+            "turns": 24
+          },
+          "rawCharacters": 6327193,
+          "sha256": "e7ac18d661df20d973cf9d28290dc4a7b6653090e8a44561ff1161d71ad9831c"
+        },
+        {
+          "spec": {
+            "scenario": "balanced",
+            "seed": "department-B",
+            "turns": 24
+          },
+          "rawCharacters": 5654861,
+          "sha256": "054b4741c536cc14568e96f800e972dd4c6e63e91c15acf199ffe74123271031"
+        },
+        {
+          "spec": {
+            "scenario": "growth",
+            "seed": "department-A",
+            "turns": 24
+          },
+          "rawCharacters": 5224086,
+          "sha256": "84d8940dcc599a92caadf7bd69d88df3698ee6c2f56a1ec5e762595ddca707f9"
+        },
+        {
+          "spec": {
+            "scenario": "growth",
+            "seed": "department-B",
+            "turns": 24
+          },
+          "rawCharacters": 5957554,
+          "sha256": "8b021f83d3320f8f2b905db7637cb44044ed4dfcdee0803dafef05ac85e80784"
+        },
+        {
+          "spec": {
+            "scenario": "regulatory",
+            "seed": "department-A",
+            "turns": 24
+          },
+          "rawCharacters": 5466501,
+          "sha256": "5ca16319b33602b3cdcd11583c0f97596886605d2610dde5c9a5e2558bfdc497"
+        },
+        {
+          "spec": {
+            "scenario": "regulatory",
+            "seed": "department-B",
+            "turns": 24
+          },
+          "rawCharacters": 5643910,
+          "sha256": "462a84e00902fb438f0dfa90c762a52c7772aa565d6916953672d615acaeb1bb"
+        },
+        {
+          "spec": {
+            "scenario": "rate",
+            "seed": "department-A",
+            "turns": 24
+          },
+          "rawCharacters": 6231251,
+          "sha256": "43f7560201dd6d8e7025b803a73075d5c1e94810cfa0bc76f2ed268b01228a3b"
+        },
+        {
+          "spec": {
+            "scenario": "rate",
+            "seed": "department-B",
+            "turns": 24
+          },
+          "rawCharacters": 5755988,
+          "sha256": "87dbb7127daf777101f5651d453ebb47fbb5ba19455a1a79f18295b75d4fe460"
+        }
+      ]
+    },
+    {
+      "sourceFile": "department-group6-f9836bda-regulatory480.json",
+      "sourceSha256": "ac59ce818ff470b886a0c3a8f8c1269631316bca58a0a91f4989be3215988de6",
+      "sourceBytes": 52240232,
+      "status": "PASS",
+      "identity": {
+        "execution": "assembled-source",
+        "engineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+        "assembledSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableSha256": "f9836bda38aec9255dd04b6756158f853f19791304a3b7b2208df106b277950c",
+        "portableMatchesSource": true,
+        "testSha256": "4e139f627c4ad973eed46bd085d21a59f6772e504c2cbf9e21049f2e296a6c3a"
+      },
+      "sourceUnchanged": true,
+      "portableUnchanged": true,
+      "seconds": 4843.031,
+      "campaigns": 1,
+      "months": 480,
+      "replayChecks": 41,
+      "failure": null,
+      "limits": "Explicit Group6 same-rule AI with real events, finite resources and no interventions or forced survival. Bank operating profit is not whole-group shareholder return. Passing invariants/survival does not establish strategic variety, enjoyable balance or physical multiplayer acceptance.",
+      "results": [
+        {
+          "scenario": "regulatory",
+          "seed": "department-A",
+          "turns": 480,
+          "resolved": 480,
+          "cycle": 481,
+          "terminal": false,
+          "endReason": null,
+          "winnerId": null,
+          "seconds": 4842.763,
+          "actions": {
+            "construction": 64,
+            "conversions": 37,
+            "renovations": 25,
+            "appointments": 6,
+            "specialistHires": 91,
+            "agencyLaunches": 5
+          },
+          "providerPaid": 4625100,
+          "companiesActive": 0,
+          "players": [
+            {
+              "seat": 0,
+              "cash": 102666468,
+              "capital": 1240625,
+              "capitalRatio": 13.287275846534822,
+              "retainedEarnings": -1059375,
+              "deposits": 117411236,
+              "depositShare": 0.5593959761009459,
+              "loans": 7674827,
+              "loansByProduct": {
+                "mortgage": 5636376,
+                "middleMarket": 507478,
+                "consumer": 1530973
+              },
+              "loanCohorts": 531,
+              "arrears": 100488,
+              "chargeoffs": 1001132,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 6490874,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 6490874,
+                "streak": 0
+              },
+              "bankProfit": 68685,
+              "staff": 42,
+              "allocation": {
+                "service": 10,
+                "business": 11,
+                "lending": 11,
+                "operations": 10
+              },
+              "leaders": [
+                {
+                  "profile": "delivery",
+                  "experience": 3
+                },
+                {
+                  "profile": "delivery",
+                  "experience": 1
+                },
+                {
+                  "profile": "controls",
+                  "experience": 0
+                }
+              ],
+              "leadershipArrears": 0,
+              "departmentPaid": 2537300,
+              "departmentVendorExpense": 0,
+              "officeModels": {
+                "atm": 9,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 6740,
+              "parentCash": 0,
+              "agency": {
+                "status": "failed",
+                "failures": 1,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 480,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 118761660,
+                "lossMonths": 1,
+                "minBankProfit": -5637,
+                "maxBankProfit": 795085,
+                "minCapitalRatio": 7.868764614619114,
+                "maxShare": 0.7788673141140856,
+                "plannedVendorExpense": 2537300,
+                "plannedAdditionalQuarters": 12092,
+                "monthsWithVendorOrders": 242,
+                "monthsWithAdditionalQuotas": 480,
+                "vendorByFunction": {
+                  "relationships": 92,
+                  "onboarding": 47,
+                  "credit": 55,
+                  "collections": 0,
+                  "technology": 421,
+                  "risk": 36,
+                  "treasury": 0,
+                  "people": 173
+                },
+                "additionalByRole": {
+                  "service": 262,
+                  "business": 3450,
+                  "lending": 2869,
+                  "operations": 5511
+                },
+                "allocationTotals": {
+                  "service": 1997,
+                  "business": 1773,
+                  "lending": 1673,
+                  "operations": 1900
+                },
+                "workloadByTask": {
+                  "offerSales": 7.1000000000000005,
+                  "commercialRelationships": 2439.7791666666635,
+                  "householdSupport": 6826.9281999999985,
+                  "applicationProcessing": 145.00000000000006,
+                  "commercialDelivery": 1518,
+                  "creditAdministration": 2798.6713884000005,
+                  "collections": 58.269360000000006,
+                  "technology": 4623,
+                  "risk": 439.6793597749999,
+                  "treasury": 1638.7921224499994,
+                  "people": 1371.875
+                },
+                "servedByTask": {
+                  "offerSales": 7.1000000000000005,
+                  "commercialRelationships": 1203.5851082251081,
+                  "householdSupport": 5860.900155555557,
+                  "applicationProcessing": 125.49999999999999,
+                  "commercialDelivery": 1002.6666666666667,
+                  "creditAdministration": 2789.222375382223,
+                  "collections": 58.269360000000006,
+                  "technology": 3552.506944444446,
+                  "risk": 439.3270333062499,
+                  "treasury": 1595.0553926708333,
+                  "people": 668.0416666666666
+                },
+                "shortfallByTask": {
+                  "offerSales": 0,
+                  "commercialRelationships": 1236.1940584415602,
+                  "householdSupport": 966.0280444444445,
+                  "applicationProcessing": 19.500000000000004,
+                  "commercialDelivery": 515.3333333333334,
+                  "creditAdministration": 9.449013017777778,
+                  "collections": 0,
+                  "technology": 1070.4930555555557,
+                  "risk": 0.3523264687500002,
+                  "treasury": 43.73672977916668,
+                  "people": 703.8333333333334
+                }
+              }
+            },
+            {
+              "seat": 1,
+              "cash": 77919582,
+              "capital": 1463643,
+              "capitalRatio": 14.290307324358183,
+              "retainedEarnings": -836357,
+              "deposits": 92478075,
+              "depositShare": 0.4406040238990541,
+              "loans": 8797226,
+              "loansByProduct": {
+                "mortgage": 6384668,
+                "middleMarket": 1296123,
+                "consumer": 1116435
+              },
+              "loanCohorts": 530,
+              "arrears": 99178,
+              "chargeoffs": 1040678,
+              "emergencyDebt": 0,
+              "funding": {
+                "limit": 5355725,
+                "debt": 0,
+                "excess": 0,
+                "headroom": 5355725,
+                "streak": 0
+              },
+              "bankProfit": 94412,
+              "staff": 42,
+              "allocation": {
+                "service": 12,
+                "business": 9,
+                "lending": 11,
+                "operations": 10
+              },
+              "leaders": [
+                {
+                  "profile": "delivery",
+                  "experience": 0
+                },
+                {
+                  "profile": "delivery",
+                  "experience": 1
+                },
+                {
+                  "profile": "controls",
+                  "experience": 27
+                }
+              ],
+              "leadershipArrears": 0,
+              "departmentPaid": 2087800,
+              "departmentVendorExpense": 14000,
+              "officeModels": {
+                "atm": 9,
+                "retail": 0,
+                "commercial": 0,
+                "digital": 0,
+                "wealth": 0,
+                "financialCenter": 0,
+                "regionalHub": 0
+              },
+              "minimumConditionBp": 6600,
+              "parentCash": 0,
+              "agency": {
+                "status": "failed",
+                "failures": 4,
+                "staff": 0,
+                "cash": 0,
+                "report": {
+                  "cycle": 480,
+                  "expense": 0,
+                  "paid": 0,
+                  "commission": 0,
+                  "premiums": 0,
+                  "clients": 0,
+                  "won": 0,
+                  "lost": 0,
+                  "dividend": 0,
+                  "support": 0,
+                  "capital": 0,
+                  "setup": 0,
+                  "recruitment": 0,
+                  "failed": false
+                }
+              },
+              "observed": {
+                "bankProfit": 105383635,
+                "lossMonths": 1,
+                "minBankProfit": -110917,
+                "maxBankProfit": 607211,
+                "minCapitalRatio": 9.601314748310914,
+                "maxShare": 0.7771925749594963,
+                "plannedVendorExpense": 2087800,
+                "plannedAdditionalQuarters": 11445,
+                "monthsWithVendorOrders": 243,
+                "monthsWithAdditionalQuotas": 480,
+                "vendorByFunction": {
+                  "relationships": 87,
+                  "onboarding": 52,
+                  "credit": 66,
+                  "collections": 0,
+                  "technology": 258,
+                  "risk": 60,
+                  "treasury": 3,
+                  "people": 176
+                },
+                "additionalByRole": {
+                  "service": 272,
+                  "business": 2888,
+                  "lending": 2725,
+                  "operations": 5560
+                },
+                "allocationTotals": {
+                  "service": 1866,
+                  "business": 1693,
+                  "lending": 1658,
+                  "operations": 1858
+                },
+                "workloadByTask": {
+                  "offerSales": 8.850000000000001,
+                  "commercialRelationships": 2478.4624999999955,
+                  "householdSupport": 6624.007266666668,
+                  "applicationProcessing": 120.39999999999996,
+                  "commercialDelivery": 1116,
+                  "creditAdministration": 2738.8613203999994,
+                  "collections": 57.47941999999999,
+                  "technology": 4578.083333333335,
+                  "risk": 450.88784085000003,
+                  "treasury": 1682.5516015999997,
+                  "people": 1304.375
+                },
+                "servedByTask": {
+                  "offerSales": 8.5,
+                  "commercialRelationships": 1198.2831481481485,
+                  "householdSupport": 5859.698755555556,
+                  "applicationProcessing": 104.57499999999999,
+                  "commercialDelivery": 823,
+                  "creditAdministration": 2716.518630133333,
+                  "collections": 57.47941999999999,
+                  "technology": 3249.179924242423,
+                  "risk": 449.85208328977274,
+                  "treasury": 1610.5853334462122,
+                  "people": 744.0928030303031
+                },
+                "shortfallByTask": {
+                  "offerSales": 0.3500000000000001,
+                  "commercialRelationships": 1280.179351851851,
+                  "householdSupport": 764.3085111111106,
+                  "applicationProcessing": 15.825000000000001,
+                  "commercialDelivery": 293,
+                  "creditAdministration": 22.342690266666672,
+                  "collections": 0,
+                  "technology": 1328.9034090909088,
+                  "risk": 1.0357575602272735,
+                  "treasury": 71.96626815378787,
+                  "people": 560.2821969696971
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "checkpoints": [
+        {
+          "spec": {
+            "scenario": "regulatory",
+            "seed": "department-A",
+            "turns": 480
+          },
+          "rawCharacters": 52227013,
+          "sha256": "11f8aaa2453ee0307449ddc8c62dcdfe95e8061816d18db57f16d0821d925c6a"
+        }
+      ]
+    }
+  ]
+}

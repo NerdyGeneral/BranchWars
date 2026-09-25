@@ -1,0 +1,265 @@
+function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
+ let plan=chooseOpenBotCore(g,index);
+ plan=planCommercialAccounts(g,index,plan);
+ plan=planFacilityExtensions(g,index,plan);
+ plan=planGroupDevelopment(g,index,plan);
+ plan=planInvestmentStrategy(g,index,plan);
+ plan=planCompanyStrategy(g,index,plan);
+ plan=planSharedPremises(g,index,plan);
+ if(g.commercialServiceVersion===1)plan=commercialServicePlanReview(g,index,plan).plan;
+ return planCompanyCredit(g,index,plan);
+});}
+function chooseOpenBotCore(g, index) {
+  const initial = () => {
+    let plan = withRandom(g, 'aiState', () => chooseBaselinePlan(g, index));
+    if([6,7,8,9,10].includes(g.financialGroupVersion))plan.departmentFunctionsPolicy={
+      quotas:Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,Object.fromEntries(DepartmentFunctions.ROLES.map(role=>[role,0]))])),
+      vendors:Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,0]))};
+    if(identifiedInstitution(g)){
+      const draft=defaultDepartmentPlan(g.players[index]);
+      // Intermediate AI planners may add capability prerequisites. Give this
+      // uncommitted exploratory draft the legal research ceiling; planDepartments
+      // sets the actual final envelope after all proposals and reserve cuts.
+      draft.departmentPolicy.envelopes.research=DEPARTMENT_POLICY_LIMITS.research;
+      Object.assign(plan,draft);
+    }
+    plan = planPilotReserve(g, index, plan);
+    return planRegionalOffice(g, index, plan);
+  };
+  // Only initial selection needs a live market scope; later previews use snapshots.
+  let plan = g.marketEconomy ? withMarket(g, initial) : initial();
+  plan = planFundingRecovery(g, index, plan);
+  plan = planTermFunding(g, index, plan);
+  plan = planRetailMix(g, index, plan);
+  plan = planProductDeployment(g, index, plan);
+  plan = planContractBid(g, index, plan);
+  plan = planServiceDesk(g, index, plan);
+  plan = planServiceReserve(g, index, plan);
+  plan = planInstitutionManagement(g, index, plan);
+  if (g.managementVersion === 2) plan = renewalPricingPlan(g, g.players[index], plan).plan;
+  plan = customerMixPlan(g, g.players[index], plan);
+  plan = planProductPrograms(g, index, plan);
+  plan = planSpecialistWorkforce(g, index, plan);
+  plan = planHouseholdService(g, index, plan);
+  plan = planAdvertising(g, index, plan);
+  plan = planRelationshipOffers(g, index, plan);
+  plan = planOnboarding(g, index, plan);
+  plan = collectionsPlan(g, index, plan);
+  plan = planBankRecovery(g, index, plan);
+  plan = planFinalCashReserve(g, index, plan);
+  plan = reconsiderOnboardingPending(g, index, plan);
+  plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
+  plan=planFinancialGroup(g,index,plan);
+  plan=planAgency(g,index,plan);
+  plan=planFacilityNetwork(g,index,plan,![7,8,9,10].includes(g.financialGroupVersion));
+  plan=planDepartments(g,index,plan);
+  // A changed loan mix can change the loss reserve after the earlier pricing
+  // pass. Recheck only new group campaigns; old AI order remains byte-exact.
+  if([5,6,7,8,9,10].includes(g.financialGroupVersion))plan=planFacilityLifecycle(g,index,planFinalCashReserve(g,index,plan));
+  if([6,7,8,9,10].includes(g.financialGroupVersion)){
+    plan=planDepartmentFunctions(g,index,planFinalCashReserve(g,index,plan));
+    plan=planFinalCashReserve(g,index,plan);
+    if([7,8,9,10].includes(g.financialGroupVersion))plan=planExecutionReserve(g,index,plan);
+    if([7,8,9,10].includes(g.financialGroupVersion))plan=staffingRecoveryReview(g,index,plan).plan;
+    return [7,8,9,10].includes(g.financialGroupVersion)?planFacilityInvestment(g,index,plan):plan;
+  }
+  return [1,2,3,4,5,6,7,8,9,10].includes(g.financialGroupVersion)?planFinalCashReserve(g,index,plan):plan;
+}
+function planExecutionReserve(g,index,input){
+  if(![7,8,9,10].includes(g.financialGroupVersion))return input;
+  const p=g.players[index];let plan=input;
+  // Early project selection precedes paid teaching and departmental dispatch.
+  // Final physical capacity, not early headcount, must fund NEW initiatives.
+  // Existing paid work may stall under ordinary rules; never cancel it here.
+  while(planInitiatives(plan).length&&projectPlanStatus(p,plan,g).code==='capacity'){
+    plan=departmentFunctionCopy(plan);
+    plan.newProjects=[...planInitiatives(plan)];plan.newProjects.pop();
+    plan.newProject=plan.newProjects[0]||null;
+    // Releasing project cash can resume teaching. Rebuild real work quotas
+    // before forecasting, then recheck the funded capacity after reserve cuts.
+    plan=planFinalCashReserve(g,index,planDepartmentFunctions(g,index,plan));
+  }
+  return plan;
+}
+function aiCashPlanningReview(g, index, plan) {
+  if (![1, 2].includes(g.productProgramsVersion)) return null;
+  const p = g.players[index], decisionOwner = JSON.parse(JSON.stringify(p));
+  // The announced executive call is public. Dry-run its existing settlement on
+  // a private copy so this reserve cannot drift from a second table of prices.
+  // Do not count event windfalls, board aid, or hidden rival plans as funding.
+  applyDecision({ event: g.event }, decisionOwner, plan.decision);
+  const decisionExpense = Math.max(0, p.stats.capital - decisionOwner.stats.capital);
+  const forecastPlan = JSON.parse(JSON.stringify(plan));
+  if (forecastPlan.advertisingPolicy) forecastPlan.advertisingPolicy.budget = 0;
+  if (forecastPlan.relationshipOfferPolicy) forecastPlan.relationshipOfferPolicy.share = 0;
+  if (forecastPlan.onboardingPolicy) forecastPlan.onboardingPolicy.share = 0;
+  if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
+  const forecast = operatingPreview({ ...p, focus: plan.focus, marketSnapshot: g.marketEconomy }, forecastPlan, g.economy,g);
+  const operatingLoss = Math.max(0, -forecast.profit + (forecast.fundingLoss || 0));
+  const cashReserve = 250000, capitalReserve = 200000 + 2 * operatingLoss;
+  const limit = Math.max(0, Math.min(p.stats.cash - decisionExpense - cashReserve,
+    pilotSpendingLimit(p, .10, capitalReserve + decisionExpense)));
+  return { decisionExpense, cashReserve, capitalReserve, operatingLoss, limit };
+}
+function planFinalCashReserve(g, index, input) {
+  // Earlier versions keep their exact planner order and decisions. This final
+  // pass closes the reserve gap left when later product/staff planners add spend.
+  if (![1, 2].includes(g.productProgramsVersion)) return input;
+  const p = g.players[index], plan = JSON.parse(JSON.stringify(input));
+  if (plan.contractBid && p.serviceDesk) {
+    const bid = g.serviceAgreements.find(c => c.id === plan.contractBid);
+    const proposed = policy => ({ ...p, allocation: plan.allocation, serviceDesk: { ...p.serviceDesk, policy } });
+    if (!bid || bid.due !== g.cycle || bid.owner === p.id) plan.contractBid = null;
+    else if (!serviceBidStatus(proposed(plan.servicePolicy), bid).eligible) {
+      // Recovery may add Business generalists after a bid was selected. That
+      // can dilute the specialist bonus assigned to its reserved delivery staff.
+      // Reconcile the FINAL mix through shared capacity rules; no future hire or
+      // unfinished platform is treated as already available. Prefer reserving an
+      // existing banker before adding paid vendor capacity, or leave the bid out.
+      const demand = p.serviceDesk.contracts.filter(c => c.id !== bid.id).reduce((n, c) => n + SERVICE_TYPES[c.kind].load, 0) + SERVICE_TYPES[bid.kind].load;
+      let repaired = null;
+      for (let outsourcing = plan.servicePolicy.outsourcing; outsourcing <= 4 && !repaired; outsourcing++) {
+        for (let staff = plan.servicePolicy.staff; staff <= Math.min(plan.allocation.business, Math.ceil(demand / 2)); staff++) {
+          const policy = { ...plan.servicePolicy, staff, outsourcing };
+          if (serviceBidStatus(proposed(policy), bid).eligible) { repaired = policy; break; }
+        }
+      }
+      if (repaired) plan.servicePolicy = repaired;
+      else plan.contractBid = null;
+    }
+  }
+  const review = aiCashPlanningReview(g, index, plan);
+  // The owner/world are fixed during this synchronous pass. Invalidate on
+  // EVERY plan change, including nested policies; never cache across calls.
+  let excessStamp=null,excessValue=0;
+  const excess = () => {
+    const stamp=JSON.stringify(plan);if(stamp===excessStamp)return excessValue;
+    const budget=planBudget(p,plan,g);
+    // Group5 lifecycle and final AI cleanup share the same whole-plan reserve.
+    // Existing versions retain their exact raw-limit ordering and decisions.
+    excessValue=Math.max(0,budget.total-review.limit,
+      [5,6,7,8,9,10].includes(g.financialGroupVersion)?-facilityLifecycleProtectedBudget(p,plan,budget,g).remaining:0);
+    excessStamp=stamp;return excessValue;
+  };
+  if([6,7,8,9,10].includes(g.financialGroupVersion)&&plan.departmentFunctionsPolicy&&excess()){
+    // Only uncommitted AI vendor orders may be reduced. Existing obligations,
+    // employed staff and paid work are never erased to manufacture cash room.
+    for(const id of DepartmentFunctions.IDS.slice().reverse()){
+      const count=plan.departmentFunctionsPolicy.vendors[id];
+      plan.departmentFunctionsPolicy.vendors[id]=Math.max(0,count-Math.ceil(excess()/DepartmentFunctions.FUNCTIONS[id].vendorRate));
+    }
+  }
+  for (const key of Object.keys(plan.investments || {})) {
+    plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
+    if (plan.investments[key] < 1000) delete plan.investments[key];
+  }
+  if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
+  if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
+  if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
+  if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;
+  if([7,8,9,10].includes(g.financialGroupVersion)&&staffingRecoveryPriority(p)&&planHires(plan)>0){
+    // Unstarted expansion is discretionary; funded replacement staffing has
+    // priority when the existing institution is understaffed or demoralized.
+    // Never cancel work already in progress or strip a live emergency defense.
+    plan.newProjects=[...planInitiatives(plan)];
+    while(plan.newProjects.length&&excess())plan.newProjects.pop();
+    plan.newProject=plan.newProjects[0]||null;
+    if(excess()&&!staffingProtectedDefense(g,index,plan.competitiveAction))plan.competitiveAction='none';
+  }
+  if (excess()) { plan.hires = 0; if (plan.specialistHires) for (const role of Object.keys(plan.specialistHires)) plan.specialistHires[role] = 0; }
+  plan.newProjects = [...planInitiatives(plan)];
+  while (plan.newProjects.length && excess()) plan.newProjects.pop();
+  plan.newProject = plan.newProjects[0] || null;
+  if (excess()) plan.competitiveAction = 'none';
+  if (excess() && plan.facilityPolicy) plan.facilityPolicy.convert=null;
+  if (excess() && plan.leaderOrders) for(const role of Object.keys(plan.leaderOrders))if(plan.leaderOrders[role]&&plan.leaderOrders[role]!=='none')plan.leaderOrders[role]=null;
+  if (excess() && plan.productProgramPolicy) plan.productProgramPolicy.retire = [];
+  if ([5,6,7,8,9,10].includes(g.financialGroupVersion)&&excess()) {
+    plan.facilityLifecyclePolicy=plan.facilityLifecyclePolicy||defaultFacilityLifecyclePlan(p);
+    plan.facilityLifecyclePolicy.renovate=null;
+    if(excess())for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance='off';
+  }
+  if (input.advertisingPolicy?.budget && !plan.advertisingPolicy.budget) {
+    // A cancelled campaign must not leave its temporary sales-time release in
+    // place. Reprice the reserve once with the ordinary retention mandate; the
+    // zero ad budget makes this retry bounded to one additional pass.
+    return planFinalCashReserve(g, index, planHouseholdService(g, index, plan));
+  }
+  // No persistent retry queue: an unfunded initiative stays unstaged until a
+  // later plan can fund it. Execution checks still handle unpredictable shocks.
+  if([5,6,7,8,9,10].includes(g.financialGroupVersion)&&plan.facilityLifecyclePolicy)
+    plan.facilityLifecyclePolicy=facilityLifecycleStaffProposal(g,p,plan).policy;
+  return plan;
+}
+function validatePilot(g) {
+  validateIncomeHistoryCampaign(g);
+  for(const p of g.players)if(p.submitted){const issue=projectLocationsIssue(g,p,p.submitted);if(issue)throw Error(issue);}
+  if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8','9.9'].includes(g.version)) validateCampaignRules(g, 'game');
+  validateStoredDepartmentFunctionPolicies(g);
+  validateAccountingSave(g);
+  validateRegionalSave(g);
+  validateMarketSave(g);
+  validateCreditSave(g);
+  validateFundingSave(g);
+  validateDepositSave(g);
+  validateTermSave(g);
+  validateRetailSave(g);
+  validateDeploymentSave(g);
+  validateContractSave(g);
+  validateServiceSave(g);
+  validateManagementSave(g);
+  validateRelationshipSave(g);
+  validateCustomerSave(g);
+  validateGoodwillSave(g);
+  validateWorkforceSave(g);
+  validateHouseholdSave(g);
+  validateCreditPerformanceSave(g);
+  validateCreditProducts(g);
+  validateInvestmentStrategyRules(g);
+  validateSegmentDepositSave(g);
+  validateProductProgramSave(g);
+  validateAdvertisingSave(g);
+  validateInvestmentServices(g);
+  validateSharedPremises(g);
+  validateRegionalGrowthSave(g);
+  validateRelationshipOfferSave(g);
+  validateOnboardingSave(g);
+  validateFinancialGroupSave(g);
+  validateCorporateSave(g);
+  validateAgencySave(g);
+  validateFacilitySave(g);
+  validateDepartmentSave(g);
+  validateFacilityLifecycleSave(g);
+  validateDepartmentFunctionsSave(g);
+  validateCommercialAccounts(g);
+  validateFacilityExtensions(g);
+  validateCompanyShares(g);
+  validateCompanyControl(g);
+  validateCompanyConsolidation(g);
+  validateCompanyControlStrategy(g);
+  return g;
+}
+function validatePortfolioPlan(p, plan,g=null) {
+  normalizeInvestmentPlan(p,plan,g);
+  normalizeCommercialAccountPlan(p,plan);
+  const locations=projectLocationsIssue(g,p,plan);if(locations)throw Error(locations);
+  normalizeProductProgramPlan(p, plan);
+  normalizeAdvertisingPlan(p, plan);
+  normalizeRelationshipOfferPlan(p, plan);
+  normalizeOnboardingPlan(p, plan);
+  normalizePortfolioProducts(p, plan);
+  validateDeploymentPolicy(p, plan);
+  normalizeServicePolicy(p, plan);
+  normalizeManagementPolicy(p, plan);
+  normalizeWorkforcePlan(p, plan);
+  normalizeHouseholdPlan(p, plan);
+  normalizeCollectionsPlan(p, plan);
+  normalizeGroupPlan(p, plan);
+  normalizeAgencyPlan(p, plan);
+  normalizeDepartmentPlan(p, plan,g);
+  normalizeFacilityExtensionPlan(g,p,plan);
+  normalizeCompanySharePlan(g,p,plan);
+  normalizeCompanyControlPlan(g,p,plan);
+  normalizeSharedPremisesPlan(g,p,plan);
+  normalizeCompanyCreditPlan(g,p,plan);
+}

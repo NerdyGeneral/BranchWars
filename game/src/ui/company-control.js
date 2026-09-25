@@ -1,0 +1,50 @@
+// Company-local diligence, control offers and integration. All buttons stage a
+// shared monthly plan; none transfers money or votes during rendering/clicking.
+function companyControlForm(v,c){const key='control:'+c.id;if(!groupWorkspace.forms[key]){const staged=draft.companyControlPolicy?.offer,quote=v.companyShareSnapshot.issuers.find(i=>i.id===c.id);groupWorkspace.forms[key]={shares:String(staged?.issuer===c.id?staged.shares:Math.max(1,50001-v.me.companyShares.positions[c.id].shares)),price:((staged?.issuer===c.id?staged.priceCents:Math.ceil(quote.referenceCents*1.15))/100).toFixed(2),borrow:String(staged?.issuer===c.id?staged.borrow:0)};}return groupWorkspace.forms[key];}
+function companyControlCandidate(v,c,action,value){
+ const candidate=JSON.parse(JSON.stringify(draft)),policy=candidate.companyControlPolicy||E.defaultCompanyControlPlan(v.me);candidate.companyControlPolicy=policy;
+ if(action==='diligence')policy.diligence=policy.diligence===c.id?null:c.id;
+ else if(action==='offer'){
+  const d=v.me.companyControl.diligence[c.id];if(!d)throw Error('Commission diligence for this company first.');if(v.cycle<d.readyMonth)throw Error('Diligence becomes available in month '+d.readyMonth+'.');
+  const form=value,price=String(form.price).trim();if(!/^\d+(\.\d{1,2})?$/.test(price))throw Error('Offer price must be dollars with at most two decimal places.');
+  policy.offer={issuer:c.id,shares:groupWhole(form.shares,'Shares'),priceCents:Math.round(Number(price)*100),borrow:groupWhole(form.borrow,'Acquisition borrowing')};
+ }else if(action==='remove')policy.offer=null;
+ else if(action==='cancel')policy.cancel=policy.cancel===value?null:value;
+ else if(action==='pause')policy.paused=policy.paused.includes(value)?policy.paused.filter(id=>id!==value):policy.paused.concat(value);
+ else if(action==='defend')policy.defend=policy.defend===value?null:value;
+ else if(action==='consent'||action==='reject'){
+  policy.consents=policy.consents.filter(x=>x.offerId!==value.id);
+  if(action==='consent'){const shares=groupWhole(value.shares,'Tendered shares');if(!shares)throw Error('Enter the shares you consent to sell, or choose Do not tender my shares.');policy.consents.push({offerId:value.id,seller:v.me.id,shares});}
+ }else throw Error('Unknown control instruction.');
+ E.normalizeCompanyControlPlan(v,v.me,candidate);E.normalizeCompanySharePlan(v,v.me,candidate);
+ if(action==='pause'){const q=E.projectPlanStatus(v.me,candidate,v);if(!q.eligible)throw Error(q.reason);}
+ return candidate;
+}
+function companyControlEstimate(v,c,form){try{
+ const candidate=companyControlCandidate(v,c,'offer',form),o=candidate.companyControlPolicy.offer,order={...o,id:v.me.id+':control:'+v.cycle+':'+c.id,buyer:v.me.id,submittedMonth:v.cycle};
+ const q=E.CompanyControl.review(E.companyControlContext(v,v.me,c.id),order,v.me.companyControl.diligence[c.id],{allowPendingConsent:true});
+ return 'Parent equity '+money(q.equityFunding)+' + fees '+money(q.buyerFee)+'. Keep '+money(q.integrationCost)+' for integration and '+money(q.debtReserve)+' for debt service. Initial debt service: '+money(q.initialService)+'/month.'+(q.consentRequired?' Requires consent for '+integer(q.consentRequired)+' rival-owned shares.':' Outside holders can supply this quantity.');
+ }catch(error){return error.message;}}
+function companyControlWorkspaceContent(v,c){
+ if(v.companyControlVersion!==1)return '';
+ const p=v.me,policy=draft.companyControlPolicy||E.defaultCompanyControlPlan(p),d=p.companyControl.diligence[c.id],form=companyControlForm(v,c),disabled=p.submitted||v.gameOver?' disabled':'',closed=c.resolution?' disabled':disabled;
+ let diligence='Company unavailable',fee=0;try{fee=E.CompanyControl.diligenceQuote(E.companyControlCompany(v,c.id),v.cycle).fee;diligence=d?(v.cycle<d.readyMonth?'Review ready in month '+d.readyMonth:v.cycle>d.expiresMonth?'Paid review expired':'Review available through month '+d.expiresMonth):'No paid review';}catch(error){diligence=error.message;}
+ const own=p.companyControl.deals.filter(d=>d.offer.issuer===c.id&&(d.status==='review'||d.status==='closed'));
+ const incoming=v.companyControlSnapshot.offers.filter(d=>d.offer.issuer===c.id&&d.offer.buyer!==p.id);
+ return '<section class="credit-policy" aria-label="Company control"><h4>Company control</h4><p class="small">'+esc(diligence)+'. Diligence is owner-specific and becomes usable next month. A control offer has a further one-month review; changing ownership does not award customer contracts.</p>'+
+  '<button class="btn" type="button" id="controlDiligence"'+closed+'>'+(policy.diligence===c.id?'Remove staged diligence':'Commission diligence · '+money(fee))+'</button>'+
+  '<details><summary>Plan a controlling offer</summary><p>Buy more than half of the voting shares with existing parent funds and, if affordable, acquisition-only outside debt. This is an explicit strategic transaction, not a routine portfolio order.</p><div class="credit-controls"><label for="controlShares">Shares to purchase<input id="controlShares" type="number" min="1" max="100000" step="1" value="'+esc(form.shares)+'"'+closed+'></label><label for="controlPrice">Offer per share ($)<input id="controlPrice" type="number" min="0.01" step="0.01" value="'+esc(form.price)+'"'+closed+'></label><label for="controlBorrow">Outside acquisition loan ($)<input id="controlBorrow" type="number" min="0" step="1" value="'+esc(form.borrow)+'"'+closed+'></label></div>'+
+  '<p class="notice" id="controlEstimate">'+esc(companyControlEstimate(v,c,form))+'</p><div class="workbench-actions"><button class="btn primary" type="button" id="controlOffer"'+closed+'>Stage control offer</button><button class="btn" type="button" id="controlRemove"'+(policy.offer?.issuer===c.id?disabled:' disabled')+'>Remove staged offer</button></div><p class="micro">Outside tenders require a 15% reference premium. Financing is capped at 40%, costs 0.75% monthly and amortizes over36 months. It needs1.5× cash coverage and a funded lender. Prices, consent and available funding are checked again at closing. No offer is a guaranteed purchase.</p></details>'+
+  own.map((deal,index)=>'<div class="credit-policy"><b>'+(deal.status==='review'?'Offer under review':'Controlling purchase completed')+'</b><p class="small">'+(deal.status==='review'?integer(deal.offer.shares)+' shares at $'+(deal.offer.priceCents/100).toFixed(2)+'; review month '+deal.reviewMonth+(deal.defended?' (independent delay paid).':'.'):'Integration '+deal.integration.workDone+'/6 · parent debt '+money(deal.loan.original-deal.loan.principalPaid)+' · unpaid interest '+money(deal.loan.interestDue)+'.')+'</p>'+(deal.status==='review'?'<button class="btn" type="button" id="controlCancel-'+index+'"'+disabled+'>'+(policy.cancel===deal.offer.id?'Keep pending offer':'Withdraw pending offer')+'</button>':deal.integration.workDone<6?'<button class="btn" type="button" id="controlPause-'+index+'"'+disabled+'>'+(policy.paused.includes(deal.offer.id)?'Resume integration':'Pause integration')+'</button><p class="micro">Each active stage needs one shared execution unit and funded parent expenses. Pausing does not cancel acquisition debt.</p>':'')+'</div>').join('')+
+  incoming.map((deal,index)=>{const consent=policy.consents.find(x=>x.offerId===deal.offer.id);return '<div class="credit-policy"><b>Rival control offer</b><p>'+integer(deal.offer.shares)+' shares requested at $'+(deal.offer.priceCents/100).toFixed(2)+'. Your shares are not sold unless you consent. Outside holders make their own choice.</p><label for="controlTender-'+index+'">Your shares to tender<input id="controlTender-'+index+'" type="number" min="0" max="'+p.companyShares.positions[c.id].shares+'" step="1" value="'+(consent?.shares||0)+'"'+disabled+'></label><div class="workbench-actions"><button class="btn" type="button" id="controlConsent-'+index+'"'+disabled+'>Consent to this offer</button><button class="btn" type="button" id="controlReject-'+index+'"'+disabled+'>Do not tender my shares</button>'+(p.companyShares.positions[c.id].shares>50000&&!deal.defended?'<button class="btn" type="button" id="controlDefend-'+index+'"'+disabled+'>'+(policy.defend===deal.offer.id?'Remove staged delay':'Fund one-month delay · '+money(Math.ceil(c.book.accounts.equity/100)))+'</button>':'')+'</div></div>';}).join('')+
+  '<p class="small" id="controlStatus" role="status" tabindex="-1">Changes are staged for the shared monthly plan. Diligence costs are not refunded if an offer fails.</p></section>';
+}
+function bindCompanyControlControls(v,guard){
+ if(v.companyControlVersion!==1)return;
+ const c=v.me.companySnapshot.world.companies.find(c=>c.id===groupWorkspace.company),form=companyControlForm(v,c);
+ const stage=(action,value)=>{if(!guard())return;try{const now=currentView();draft=companyControlCandidate(now,c,action,value);renderFinancialGroup(now);renderReady(now);$('#controlStatus')?.focus?.({preventScroll:true});}catch(error){$('#controlStatus').textContent=error.message;}};
+ for(const [id,key]of [['controlShares','shares'],['controlPrice','price'],['controlBorrow','borrow']])$('#'+id)?.addEventListener('input',()=>{if(!guard())return;form[key]=$('#'+id).value;$('#controlEstimate').textContent=companyControlEstimate(currentView(),c,form);});
+ for(const [id,action]of [['controlDiligence','diligence'],['controlOffer','offer'],['controlRemove','remove']])$('#'+id)?.addEventListener('click',()=>stage(action,form));
+ v.me.companyControl.deals.filter(d=>d.offer.issuer===c.id&&(d.status==='review'||d.status==='closed')).forEach((d,index)=>{for(const [name,action]of [['Cancel','cancel'],['Pause','pause']])$('#control'+name+'-'+index)?.addEventListener('click',()=>stage(action,d.offer.id));});
+ v.companyControlSnapshot.offers.filter(d=>d.offer.issuer===c.id&&d.offer.buyer!==v.me.id).forEach((d,index)=>{for(const [name,action]of [['Consent','consent'],['Reject','reject']])$('#control'+name+'-'+index)?.addEventListener('click',()=>stage(action,{id:d.offer.id,shares:$('#controlTender-'+index).value}));$('#controlDefend-'+index)?.addEventListener('click',()=>stage('defend',d.offer.id));});
+}

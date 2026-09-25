@@ -1,0 +1,90 @@
+{
+  "status": "passed",
+  "scope": "Exact extracted package smoke; not a full regression or real multiplayer acceptance",
+  "release": "v4.0.0-rc3",
+  "checkpoint": "68b",
+  "package": "branch-wars-v4.zip",
+  "sha256": "c9850733604cbecf5a6167884f53501186b92976d9760c7d81841463692a032c",
+  "htmlSha256": "a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf",
+  "engineSha256": "6844c61c3457ca938c59030c8177614ddacef99afb20eeddcdfa7bb2a4812b33",
+  "files": [
+    {
+      "name": "BRANCH_WARS.html",
+      "bytes": 2417073,
+      "sha256": "a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf"
+    },
+    {
+      "name": "BRANCH_WARS_LAN_SERVER.ps1",
+      "bytes": 13440,
+      "sha256": "52ede2ed07ed4c6ba3fe3db4045a826f0a9a2ebc7fc8db2c48ccd9ad8e81f2d1"
+    },
+    {
+      "name": "OPEN_BRANCH_WARS.bat",
+      "bytes": 2219,
+      "sha256": "c382dbd9549771fb3f7b59fbe9f49471f5f41e8f564f771475765f170ef5cd63"
+    },
+    {
+      "name": "OPEN_LAN_GAME.bat",
+      "bytes": 213,
+      "sha256": "974fc946b54082c5ece3d85ff21a090a214f11f850c8445423dd3e01c0e43277"
+    },
+    {
+      "name": "README.txt",
+      "bytes": 2608,
+      "sha256": "032e207ecf641a94ddab5db7fb0b65795ece6d42d20e2c02d77e21df7f20c18c"
+    }
+  ],
+  "extractedInventory": true,
+  "cleanStagedSourceChecks": {
+    "passed": true,
+    "scope": "Separately extracted Git index, without untracked local diagnostics; not a full regression",
+    "sourceTreeAtVerification": "e21198222d096ee135c2e78ee6135c73580f13fa",
+    "commandsPassed": 13,
+    "commands": [
+      "tools/build_game.js --check",
+      "tools/build_reference.js --check",
+      "tests/build.test.js",
+      "tests/docs.test.js",
+      "tests/architecture.test.js",
+      "tests/reference-eol.test.js",
+      "tests/accounting_payables.test.js",
+      "tests/expanded_edition.test.js",
+      "tests/usability_engine_boundary.test.js",
+      "tests/workspace_ownership.test.js --portable",
+      "tests/v4_workflow_stabilization.test.js --portable",
+      "tests/bank_rivalry.test.js",
+      "tests/package_release.test.js"
+    ]
+  },
+  "checks": [
+    {
+      "edition": "core",
+      "version": "8.19",
+      "creation": true,
+      "halfReadyRecovery": true,
+      "completedMonths": 2,
+      "idempotentRecovery": true,
+      "ownerViews": true
+    },
+    {
+      "edition": "expanded",
+      "version": "9.33",
+      "creation": true,
+      "halfReadyRecovery": true,
+      "completedMonths": 2,
+      "idempotentRecovery": true,
+      "ownerViews": true
+    }
+  ],
+  "fullRegression": {
+    "status": "pending",
+    "journal": "gate-2026-09-15T00-35-45-820Z-55faf473-26d7-410d-adba-8388d487419f",
+    "previousRun": "Interrupted for funding-resolution validation repair; not a pass"
+  },
+  "limitations": [
+    "Conventional lending and expansion balance remains open.",
+    "No complete full-regression result certified by this receipt.",
+    "No physical two-computer acceptance.",
+    "Browser sampling was on the identical UI before the terminal-validation-only correction."
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "created": "2026-09-06T08:16:52.172Z",
+  "sourceSha256": "56bfb0c3a656040212b449cd6b1d1806796a8cab1602d01c64836a35f36ee45d",
+  "scope": "Temporary human-style policy audit; real paid Rewards rollout and existing rival AI. Not human acceptance or whole-campaign causal ROI.",
+  "policy": "ChooseBot base. Prioritize paid Rewards license; then target the largest remaining eligible Connected local balance. Keep 25% of non-retention sales time for offers; compare the same rule with share 0. Move no more than two existing bankers to Retail; preserve Operations, signed-service coverage and bid eligibility. Activate only with retention coverage >= 1 and projectPlanStatus eligible. Otherwise keep valid base with offers paused.",
+  "checks": {
+    "checkedSettlements": 480,
+    "activeSettlements": 44,
+    "monthlySaveValidation": 240,
+    "sourceUnchanged": true
+  },
+  "runs": [
+    {
+      "baseline": {
+        "scenario": "balanced",
+        "seed": "manual-relationships-balanced",
+        "share": 0,
+        "opening": "a0accb64d3d9ffc9ab85cdd31a2f11b3487041997f10e594271ced790e5afd75",
+        "months": 120,
+        "launchAttempts": 1,
+        "firstReadyMonth": 2,
+        "targetedMonths": 60,
+        "reallocatedMonths": 16,
+        "capacityOrBudgetFallbacks": 59,
+        "minimumActiveCoverage": 1.0005682239296387,
+        "openingQuotedCost": 0,
+        "openingNominalBudget": 0,
+        "activeOfferMonths": 0,
+        "requestedMonths": 0,
+        "pausedMonths": 9,
+        "budgetLimitedMonths": 0,
+        "converted": 0,
+        "principal": 0,
+        "cost": 0,
+        "otherBankOfferMonths": 2,
+        "minimumCash": 2876779,
+        "minimumCapitalRatio": 9.505532669562157,
+        "maximumEmergencyDebt": 0,
+        "fundingLoss": 0,
+        "negativeProfitMonths": 11,
+        "regimes": {
+          "tight": 20,
+          "expansion": 16,
+          "steady": 24,
+          "downturn": 36,
+          "recovery": 24
+        },
+        "reasons": {
+          "disabled": 111,
+          "closed": 9
+        },
+        "paidRewardsLaunches": 1,
+        "checks": 120,
+        "end": {
+          "cycle": 121,
+          "gameOver": false,
+          "reason": null,
+          "winner": null,
+          "cash": 90045626,
+          "equity": 782408,
+          "capitalRatio": 23.990296049000538,
+          "deposits": 103644570,
+          "households": 3362,
+          "staff": 6,
+          "lastProfit": 254978,
+          "emergencyDebt": 0
+        }
+      },
+      "offers": {
+        "scenario": "balanced",
+        "seed": "manual-relationships-balanced",
+        "share": 25,
+        "opening": "a0accb64d3d9ffc9ab85cdd31a2f11b3487041997f10e594271ced790e5afd75",
+        "months": 120,
+        "launchAttempts": 1,
+        "firstReadyMonth": 2,
+        "targetedMonths": 74,
+        "reallocatedMonths": 28,
+        "capacityOrBudgetFallbacks": 45,
+        "minimumActiveCoverage": 1.0005682239296387,
+        "openingQuotedCost": 15320,
+        "openingNominalBudget": 15320,
+        "activeOfferMonths": 42,
+        "requestedMonths": 42,
+        "pausedMonths": 9,
+        "budgetLimitedMonths": 0,
+        "converted": 383,
+        "principal": 4361239,
+        "cost": 15320,
+        "otherBankOfferMonths": 0,
+        "minimumCash": 2876779,
+        "minimumCapitalRatio": 9.480997618942185,
+        "maximumEmergencyDebt": 0,
+        "fundingLoss": 0,
+        "negativeProfitMonths": 11,
+        "regimes": {
+          "tight": 20,
+          "expansion": 24,
+          "steady": 44,
+          "downturn": 24,
+          "recovery": 8
+        },
+        "reasons": {
+          "disabled": 37,
+          "ready": 42,
+          "closed": 9,
+          "no-capacity": 32
+        },
+        "paidRewardsLaunches": 1,
+        "checks": 120,
+        "end": {
+          "cycle": 121,
+          "gameOver": false,
+          "reason": null,
+          "winner": null,
+          "cash": 68652496,
+          "equity": 838533,
+          "capitalRatio": 19.36908469258072,
+          "deposits": 83263197,
+          "households": 3236,
+          "staff": 5,
+          "lastProfit": 135734,
+          "emergencyDebt": 0
+        }
+      }
+    }
+  ],
+  "engineBodySha256": "b1ddc1ef53f38ac8057ce105d6fbea3c17fc70f380c6f8ef6b4862a086af82f5",
+  "limitations": [
+    "A matched fixed-policy stress comparison, not causal ROI or human balance acceptance.",
+    "Tested artifact predates a UI-only cross-tab capacity preview repair; engine identity is recorded separately.",
+    "No emergency borrowing or funding-loss stress occurred in this sample."
+  ]
+}

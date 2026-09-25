@@ -1,0 +1,36 @@
+{
+  "release": "V3",
+  "createdAt": "2026-09-08T13:57:33.512Z",
+  "portableSha256": "4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107",
+  "campaignEngineSha256": "12b73802ad5526f7629f5341a3d29fc2d1f6e591ed9e1394c8edbfd5e7e5c350",
+  "inputFile": "department-group6-f9836bda-regulatory480.json",
+  "inputSha256": "ac59ce818ff470b886a0c3a8f8c1269631316bca58a0a91f4989be3215988de6",
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "spec": {
+        "scenario": "regulatory",
+        "seed": "department-A",
+        "turns": 480
+      },
+      "rawCharacters": 52227013,
+      "quotaBytes": 5242880,
+      "localStorageBytes": 1164222,
+      "sessionStorageBytes": 1618172,
+      "checks": [
+        "actual old-path quota failure",
+        "real saveLocal/savedGame roundtrip",
+        "old raw JSON support",
+        "real host checkpoint/reload",
+        "pending retry queue retained",
+        "fresh handshake after reload",
+        "damaged compressed checkpoint refused",
+        "failed write retains prior record and warns"
+      ],
+      "status": "PASS",
+      "elapsedMs": 38442
+    }
+  ],
+  "passed": true,
+  "scope": "Final V3 actual local save and repository checkpoint/retry recovery with completed frozen same-engine campaign, under 5MiB quota adapters. Not a real browser or physical two-computer test."
+}

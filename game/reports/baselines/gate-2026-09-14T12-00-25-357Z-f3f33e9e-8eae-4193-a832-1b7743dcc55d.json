@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "mode": "full",
+    "portableSha256": "e056eeab470d3f41e68ff12e1a93d28a085e7fa0b0547f60d217043dae6cc1f1",
+    "inputEntries": [
+      "src",
+      "tests",
+      "tools",
+      "experiments",
+      "reports/reference-builds",
+      "BRANCH_WARS.html",
+      "BRANCH_WARS_LAN_SERVER.ps1",
+      "RUN_TESTS.bat",
+      "docs/game-reference.md"
+    ],
+    "inputsSha256": "1bd5fa72b2b3664947343244c9f9b134409f7a35bc4f533c98fb11093b59b3ee",
+    "commands": [
+      [
+        "tools/build_game.js",
+        "--check"
+      ],
+      [
+        "tools/build_reference.js",
+        "--check"
+      ],
+      [
+        "tests/capture_baseline.js"
+      ],
+      [
+        "tests/release_balance.test.js",
+        "--report"
+      ],
+      [
+        "tests/company_control_network.test.js",
+        "--consolidation"
+      ],
+      [
+        "tests/company_control_network.test.js",
+        "--strategy"
+      ],
+      [
+        "tests/company_consolidation_legacy.test.js",
+        "--consolidation"
+      ],
+      [
+        "tests/shared_premises.test.js"
+      ],
+      [
+        "tests/shared_premises_boundary.test.js"
+      ],
+      [
+        "tests/shared_premises_delivery.test.js"
+      ],
+      [
+        "tests/shared_premises_agency.test.js"
+      ],
+      [
+        "tests/shared_premises_campaign.test.js"
+      ],
+      [
+        "tests/shared_premises_network.test.js"
+      ],
+      [
+        "tests/shared_premises_ui.test.js"
+      ],
+      [
+        "tests/shared_premises_strategy.test.js"
+      ],
+      [
+        "tests/income_review.test.js"
+      ],
+      [
+        "tests/income_review_ui.test.js"
+      ],
+      [
+        "tests/income_history.test.js"
+      ],
+      [
+        "tests/income_history_network.test.js"
+      ],
+      [
+        "tests/commercial_fee_economics.test.js"
+      ],
+      [
+        "tests/credit_workload.test.js"
+      ],
+      [
+        "tests/credit_investment_staffing.test.js"
+      ],
+      [
+        "tests/income_statement.test.js"
+      ],
+      [
+        "tests/bank_economics.test.js"
+      ],
+      [
+        "tests/bank_economics_ui.test.js"
+      ],
+      [
+        "tests/commercial_workload_shared.test.js"
+      ],
+      [
+        "tests/core_balance_sheet.test.js"
+      ],
+      [
+        "tests/core_balance_sheet_ui.test.js"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--core-balance"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--bank-economics"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--credit-workload"
+      ],
+      [
+        "tests/income_history_network.test.js",
+        "--commercial"
+      ],
+      [
+        "tests/income_banking_trial.test.js"
+      ],
+      [
+        "tests/gate_evidence.test.js"
+      ]
+    ]
+  },
+  "events": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\reports\\baselines\\gate-2026-09-14T12-00-25-357Z-f3f33e9e-8eae-4193-a832-1b7743dcc55d.jsonl",
+  "log": "C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\reports\\baselines\\gate-2026-09-14T12-00-25-357Z-f3f33e9e-8eae-4193-a832-1b7743dcc55d.log",
+  "passed": false,
+  "incomplete": true,
+  "exitCode": 1,
+  "completed": 3,
+  "expected": 34
+}

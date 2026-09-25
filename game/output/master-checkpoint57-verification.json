@@ -1,0 +1,59 @@
+{
+  "checkpoint": 57,
+  "date": "2026-09-13",
+  "scope": "CompanyFinance version7 borrower/lender integration. Not yet campaign lending, peer enablement, full-bank simulation or release acceptance.",
+  "artifact": "output/BRANCH_WARS_credittrading57_review.html",
+  "artifactSha256": "2bc2ca41f6675d2cd0874219fffd7a24847927f27c99cd74e3c5100a4fc43cc2",
+  "engineSha256": "89574ccfa4801a53f4928cef071169c4fd20329eb6581b6e58dd476b64a5f922",
+  "sourceInputs": 188,
+  "normalPlayableSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "checks": [
+    {
+      "name": "credit-domain-trading-ui-legacy",
+      "args": [
+        "--test",
+        "tests/company_credit.test.js",
+        "tests/company_credit_trading.test.js",
+        "tests/company_credit_ui.test.js",
+        "tests/company_credit_boundary.test.js"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "durationMs": 15995,
+      "stdout": "✔ company needs use actual cash, unpaid bills and a differentiated financing profile (41.1051ms)\n✔ underwriting refuses mismatched, oversized, distressed and unsupported offers without mutation (21.73ms)\n✔ funded loans pair actual bank cash/assets and company cash/debt; deposits and equity do not change (20.1222ms)\n✔ principal and interest reconcile through 12 monthly payments with no repeated settlement (30.5478ms)\n✔ principal and interest reconcile through 24 monthly payments with no repeated settlement (49.1559ms)\n✔ principal and interest reconcile through 36 monthly payments with no repeated settlement (77.1231ms)\n✔ principal and interest reconcile through 48 monthly payments with no repeated settlement (115.3813ms)\n✔ funded customer receipts cure arrears and resume accrual without a duplicate advance (19.2722ms)\n✔ arrears become nonperforming, stop accrual and require explicit paired writeoff (16.2642ms)\n✔ two separate company loans cannot spend the same bank money and corrupt retained claims fail (21.1136ms)\n✔ a repaid register remains replayable and bounded through 120 months (246.7498ms)\n✔ historical core rules preserve creation, AI, settlement, RNG, views and recovery exactly (73.79ms)\n✔ historical expanded rules preserve creation, AI, settlement, RNG, views and recovery exactly (11346.6311ms)\n✔ actual corporate trading repays only each lender own principal and interest before dividends (9270.8413ms)\n✔ credit-enabled company worlds reject inconsistent claims, cash boundaries and missing lender books (25.2329ms)\n✔ trading stress stops dividends in arrears and resolves real funded bank claims without duplicate supplier losses (6284.0095ms)\nℹ {\"months\":120,\"demand\":0.35,\"loans\":[{\"company\":\"company:0\",\"status\":\"writtenOff\",\"resolution\":{\"month\":18,\"proceeds\":648000,\"assetLoss\":648000,\"creditorRecovery\":294345,\"creditorWriteoff\":0,\"supplierRecovery\":269437,\"supplierWriteoff\":315226,\"equityDistribution\":0,\"bankRecovery\":[0,0],\"bankWriteoff\":[0,0],\"creditRecovery\":84218,\"creditWriteoff\":98531}},{\"company\":\"company:1\",\"status\":\"writtenOff\",\"resolution\":{\"month\":17,\"proceeds\":1080000,\"assetLoss\":1080000,\"creditorRecovery\":506400,\"creditorWriteoff\":0,\"supplierRecovery\":480461,\"supplierWriteoff\":506106,\"equityDistribution\":0,\"bankRecovery\":[0,0],\"bankWriteoff\":[0,0],\"creditRecovery\":93139,\"creditWriteoff\":98110}}],\"cashConserved\":true}\n✔ an unintegrated credit world cannot be imported into an existing Expanded campaign (23.1706ms)\n✔ partial cash liquidation recovers before writing off only the unpaid lender claim (21.2592ms)\n✔ named-client financing assessment uses public company books without staging a fake loan (201.1846ms)\nℹ tests 19\nℹ suites 0\nℹ pass 19\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 15927.0499\n",
+      "stderr": ""
+    },
+    {
+      "name": "source-architecture",
+      "args": [
+        "tests/architecture.test.js",
+        "--source"
+      ],
+      "exitCode": 0,
+      "error": null,
+      "durationMs": 910,
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": ""
+    }
+  ],
+  "allPassed": true,
+  "tests": [
+    {
+      "file": "tests/company_credit.test.js",
+      "sha256": "e6803284bd5ce259ecf150d2c4d969163db79260c41dff0dd0d5dc5fff0b5921"
+    },
+    {
+      "file": "tests/company_credit_trading.test.js",
+      "sha256": "940dcc6f76471aa4992bcad59b78699a398d6c2e8357e0a9fc6062960e86d6bf"
+    },
+    {
+      "file": "tests/company_credit_ui.test.js",
+      "sha256": "a7541c8a84705788617c5bf1600d659ea2b0e237cc1023e263756f38bbdd1dd9"
+    },
+    {
+      "file": "tests/company_credit_boundary.test.js",
+      "sha256": "a8bcdefaf8e5139f1eb7df0efac7b3a3fb6c39a55cd406c6852792f356f45458"
+    }
+  ],
+  "publication": false
+}

@@ -5,23 +5,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
-const html = fs.readFileSync(path.join(root, 'BRANCH_WARS.html'), 'utf8');
+const html = process.argv.includes('--source') ? require('../tools/build_game').assemble().html : fs.readFileSync(path.join(root, 'BRANCH_WARS.html'), 'utf8');
 const engine = html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 const file = path.join(__dirname, 'fixtures', 'override-ceilings.json');
-function counts(text) {
-  // Conservative source smoke check, not a JavaScript parser. Detect assignments
-  // (including arrow replacements) to names declared with function syntax.
-  // Data-member writes such as player.stats are not assignments to the stats
-  // function. Keep counting replacements on the exported engine API.
-  const names = [...new Set([...text.matchAll(/\bfunction\s+([\w$]+)\s*\(/g)].map(m => m[1]))].sort();
-  return Object.fromEntries(names.map(name => [name,
-    [...text.matchAll(new RegExp('\\b' + name.replace(/\$/g, '\\$') + '\\s*=(?!=|>)', 'g'))]
-      .filter(match => {
-        const prefix = text.slice(0, match.index).trimEnd();
-        return !prefix.endsWith('.') || /root\.BWEngine\.$/.test(prefix);
-      }).length
-  ]).filter(([, count]) => count));
-}
+const {counts}=require('../tools/architecture_overrides');
 const current = counts(engine);
 if (process.argv.includes('--capture-ceilings')) {
   assert(!fs.existsSync(file), 'Do not overwrite the debt ceiling; ratchet individual counts down after a refactor.');
@@ -29,7 +16,7 @@ if (process.argv.includes('--capture-ceilings')) {
   console.log('Captured current override debt; this is not architectural approval.');
   process.exit(0);
 }
-assert.equal(process.argv.length, 2, 'Unknown architecture-check argument');
+assert(process.argv.length === 2 || process.argv.length === 3 && process.argv[2] === '--source', 'Unknown architecture-check argument');
 const ceiling = JSON.parse(fs.readFileSync(file, 'utf8'));
 function check(actual) {
   for (const [name, count] of Object.entries(actual)) {

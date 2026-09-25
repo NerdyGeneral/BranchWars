@@ -1,0 +1,50 @@
+{
+  "checkpoint": 53,
+  "scope": "Owner earnings projection repair; ordinary-start financial diagnosis; no balance tuning or release acceptance.",
+  "portable": "output/BRANCH_WARS_earnings53_review.html",
+  "portableSha256": "8bf31b8f2725074c06b7dbbc1b1ccae8372f5ec09cea6a17292e47aa2dc7a329",
+  "engineSha256": "16d1805296a747b3598650d5437e12c216b6baff25a662bcd68aaadaf42952bd",
+  "sourceInputs": 187,
+  "sourceComparedExactly": true,
+  "normalPlayablePreservedSha256": "b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561",
+  "checks": {
+    "earnings_bridge_expanded.test.js": "Passed: two actual current months, independent preserved51 AI/world/RNG equality, only owner summary changes, forged stage refusal, historical campaign public-view equality.",
+    "earnings_bridge.test.js": "Passed all 10 existing engine/UI checks.",
+    "shared_premises_network.test.js": "Passed simulated gh/lan/p2p: old-peer refusal, paid construction, half-ready restoration, owner privacy, duplicate protection.",
+    "architecture.test.js --source": "Passed with unchanged override ceilings.",
+    "runnerAndDiagnosticSyntax": "Passed.",
+    "docs.test.js": "Passed: 65 documents, 514 local links before adding the diagnostic usage note; no local links added by that note."
+  },
+  "diagnosis": {
+    "report": "output/economics-checkpoint53-owner/report.json",
+    "testedPortableSha256": "c22b610643d5b67174d0c0be0f9054e3180d6c031257435e86a726f5a5ed0bc7",
+    "scenario": "balanced",
+    "seed": "business-balance:1",
+    "months": 24,
+    "elapsedMs": 185930,
+    "allMonthlyCashLoanEarningsBridgesReconciled": true,
+    "allForecastObservationsPure": true,
+    "injectedResources": false,
+    "reportedOperatingProfit": [610652, 667533],
+    "closingRetainedEarnings": [-744723, -1012227],
+    "openingLoans": [9500000, 9500000],
+    "closingLoans": [3375844, 3244040],
+    "scheduledPrincipalRepaid": [7755727, 7738604],
+    "newOrdinaryLoans": [1943149, 1784159],
+    "collectionsRecoveredPrincipal": [164553, 161235],
+    "creditLosses": [147025, 140280],
+    "fundingSaleLosses": [0, 0],
+    "preservedFailedInvocation": "output/economics-checkpoint53/report.json"
+  },
+  "ongoingOlderBuild": {
+    "report": "output/master-checkpoint51-commercial-expanded-long.json",
+    "session": 18698,
+    "lastLiveProcess": 59712,
+    "balancedCompleted": 120,
+    "regulatoryLastObserved": 96,
+    "terminal": false,
+    "note": "Observation at this checkpoint, not a promise that the process remains live later. Re-poll before restart or completion claims."
+  },
+  "remaining": ["Prepared lending-capacity and executive-choice diagnosis", "Remaining approved gameplay integration", "Final exact-build full Windows and balance gates", "Real browser layouts", "Final manual/PDF and local package", "Human two-computer and enjoyment acceptance"],
+  "publication": false
+}

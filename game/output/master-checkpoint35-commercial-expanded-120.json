@@ -1,0 +1,200 @@
+{
+  "engineSha256": "e22fd0c328e7f83318cecf95fec355052b3cc9f52acb3fe2d290e5bd750ef6da",
+  "portableSha256": "ab06ac9722a481609f56bae50aa09a76f983db86330d8e6efbadf65665ad2cfa",
+  "scope": "Ordinary current AI for both seats; no injected resources. Early failures are retained. Not human or two-computer acceptance. Investment businesses are recorded even when the ordinary AI leaves them unopened.",
+  "baseline": false,
+  "expanded": true,
+  "campaigns": [
+    {
+      "scenario": "balanced",
+      "requestedMonths": 120,
+      "completed": 120,
+      "firstAccount": [
+        2,
+        86
+      ],
+      "history": [
+        {
+          "month": 24,
+          "banks": [
+            {
+              "cash": 5176609,
+              "equity": 1077964,
+              "deposits": 22844007,
+              "loans": 4341362,
+              "earnings": -822036,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 0,
+              "chargeoffs": 146884,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            },
+            {
+              "cash": 6579397,
+              "equity": 585362,
+              "deposits": 22738608,
+              "loans": 2844573,
+              "earnings": -1314638,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 127603,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            }
+          ]
+        },
+        {
+          "month": 48,
+          "banks": [
+            {
+              "cash": 6249877,
+              "equity": 843922,
+              "deposits": 21781566,
+              "loans": 1971611,
+              "earnings": -1056078,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 243702,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            },
+            {
+              "cash": 3652406,
+              "equity": 1298458,
+              "deposits": 17822747,
+              "loans": 952799,
+              "earnings": -601542,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 190011,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            }
+          ]
+        },
+        {
+          "month": 72,
+          "banks": [
+            {
+              "cash": 11604444,
+              "equity": 691079,
+              "deposits": 26448648,
+              "loans": 1131283,
+              "earnings": -1208921,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 289537,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            },
+            {
+              "cash": 2933240,
+              "equity": 903899,
+              "deposits": 18167929,
+              "loans": 1622588,
+              "earnings": -996101,
+              "businessDeposits": 0,
+              "accounts": 0,
+              "work": 1,
+              "chargeoffs": 223755,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            }
+          ]
+        },
+        {
+          "month": 96,
+          "banks": [
+            {
+              "cash": 17703238,
+              "equity": 959842,
+              "deposits": 33637143,
+              "loans": 2489747,
+              "earnings": -940158,
+              "businessDeposits": 1952273,
+              "accounts": 2,
+              "work": 2,
+              "chargeoffs": 336469,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            },
+            {
+              "cash": 6927695,
+              "equity": 1244579,
+              "deposits": 22483006,
+              "loans": 2283890,
+              "earnings": -655421,
+              "businessDeposits": 1366642,
+              "accounts": 2,
+              "work": 2,
+              "chargeoffs": 272999,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            }
+          ]
+        },
+        {
+          "month": 120,
+          "banks": [
+            {
+              "cash": 38116851,
+              "equity": 990606,
+              "deposits": 53922450,
+              "loans": 2392205,
+              "earnings": -1109394,
+              "businessDeposits": 2254657,
+              "accounts": 2,
+              "work": 2,
+              "chargeoffs": 409850,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            },
+            {
+              "cash": 5948558,
+              "equity": 1157448,
+              "deposits": 21662602,
+              "loans": 2355492,
+              "earnings": -742552,
+              "businessDeposits": 1422656,
+              "accounts": 2,
+              "work": 2,
+              "chargeoffs": 344245,
+              "investmentStatus": "unopened",
+              "investmentCash": 0,
+              "investmentEarnings": 0,
+              "clientAssets": 0
+            }
+          ]
+        }
+      ],
+      "gameOver": false,
+      "winner": null,
+      "companyClosures": 0,
+      "elapsedMs": 1243915,
+      "msPerMonth": 10366
+    }
+  ]
+}

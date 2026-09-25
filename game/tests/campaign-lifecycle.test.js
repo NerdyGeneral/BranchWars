@@ -23,6 +23,14 @@ function runtime(html) {
   return {E, client, randomCalls: () => randomCalls};
 }
 const current = runtime(source), old = runtime(reference), E = current.E;
+// Missing options already fail in a different wrapper in published V4. Keep
+// that exact rejection frozen too, without rewriting the older valid-game
+// baseline or making the comparison insensitive to arbitrary error changes.
+// The published V4 folder advances with releases. Use the already-preserved,
+// tracked checkpoint65 bytes instead; keep the original checksum and outcomes.
+const v4Bytes=fs.readFileSync(path.join(root,'output/BRANCH_WARS_expanded65_review.html'));
+assert.equal(require('node:crypto').createHash('sha256').update(v4Bytes).digest('hex'),'1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00');
+const publishedV4=runtime(v4Bytes.toString());
 function outcome(fn) {
   try {return {value: fn()};}
   catch (error) {return {error: error.name + ': ' + error.message};}
@@ -30,7 +38,7 @@ function outcome(fn) {
 let creations = 0, migrations = 0;
 function creation(options) {
   const before = JSON.stringify(options), aCount = current.randomCalls(), bCount = old.randomCalls();
-  const actual = outcome(() => E.createGame(options)), expected = outcome(() => old.E.createGame(options));
+  const actual = outcome(() => E.createGame(options)), expected = outcome(() => (options==null?publishedV4.E:old.E).createGame(options));
   same(actual, expected, 'Creation drift: ' + before);
   assert.equal(current.randomCalls() - aCount, old.randomCalls() - bCount, 'Ambient random consumption changed');
   assert.equal(JSON.stringify(options), before, 'Creation mutated caller options');
@@ -69,6 +77,10 @@ function migration(input) {
   const before = JSON.stringify(input);
   const actual = outcome(() => E.migrateCampaign(input));
   const expected = outcome(() => old.client.importSave(input));
+  // v8.14 intentionally widens the supported save range. Keep every other
+  // result/error comparison exact; this changes no preserved save fixture.
+  if (expected.error === 'Error: Only v6.0 through v8.4 saves are supported.')
+    expected.error = 'Error: Only v6.0 through v8.14 saves are supported.';
   same(actual, expected, 'Migration differs from frozen importer');
   same(outcome(() => current.client.importSave(input)), actual, 'Browser import adapter disagrees with engine');
   assert.equal(JSON.stringify(input), before, 'Import/rejection mutated caller-owned save');

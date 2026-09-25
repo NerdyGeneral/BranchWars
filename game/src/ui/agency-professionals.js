@@ -1,0 +1,32 @@
+function agencyPermissionMarkup(v,quote){
+ const p=quote.professional;if(!p)return '';
+ const label={authorized:'Authorized for staffed product lines','not applied':'Not registered','registration pending':'Registration in progress','registration expired':'Registration renewal overdue','no qualified producer':'No qualified producer available'}[p.phase];
+ return '<div class="notice"><strong>Agency permission · '+label+'</strong><p class="small">'+(p.phase==='not applied'?'Launch begins a paid two-month registration project. Forming the subsidiary does not immediately authorize sales.':p.phase==='registration pending'?'Earliest operating month: '+p.readyCycle+'. Payroll and overhead still apply during implementation.':'Current funded staffing permits: '+(p.permitted.map(k=>esc(E.AGENCY_PRODUCTS[k].name)).join(', ')||'no new or renewed covers')+'.')+'</p><p class="micro">The parent owns the agency; qualified agency employees arrange third-party cover. A bank office or ordinary Business banker does not supply a producer credential. Simplified game permissions—not legal advice.</p></div>';
+}
+function agencyProfessionalControls(v,form,disabled){
+ const total=Number(form.staff),roles=E.AGENCY_PROFESSIONAL_ROLES;
+ return '<h4>Qualified agency team · '+total+' / '+E.AGENCY_RULES.maxStaff+' planned employees</h4><p class="small">Each new employee costs '+agencyDollars(E.AGENCY_RULES.recruitment)+' recruitment; producers also require a '+agencyDollars(E.AGENCY_PROFESSIONAL_RULES.credentialCheck)+' credential check. Replacing a role recruits a new person, not a free qualification.</p>'+
+ Object.entries(roles).map(([key,role])=>'<div class="agency-role-row"><div><b>'+esc(role.name)+'</b><small>'+agencyDollars(role.salary)+'/month · '+role.units+' service units. '+(role.products.length?'Permits '+role.products.map(k=>E.AGENCY_PRODUCTS[k].name).join(' and ')+'.':'Servicing only; cannot sell or replace a qualified producer.')+'</small></div><button type="button" class="btn" id="agency-role-'+key+'-less" aria-label="Remove one '+esc(role.name)+'"'+(disabled||form.roles[key]<=0||total<=1?' disabled':'')+'>−</button><b aria-label="Planned '+esc(role.name)+' count">'+form.roles[key]+'</b><button type="button" class="btn" id="agency-role-'+key+'-more" aria-label="Add one '+esc(role.name)+'"'+(disabled||total>=E.AGENCY_RULES.maxStaff?' disabled':'')+'>+</button></div>').join('')+
+ '<label class="agency-renew-label"><input type="checkbox" id="agency-maintainCredentials"'+(form.maintainCredentials?' checked':'')+disabled+'> Maintain registration and staff credentials when due</label><p class="micro">Standing instruction: '+agencyDollars(E.AGENCY_PROFESSIONAL_RULES.education)+' per producer renewal and ¼ of their work month; '+agencyDollars(E.AGENCY_PROFESSIONAL_RULES.registrationRenewal)+' per agency renewal. The game uses twelve-month terms. Unmaintained permissions stop eligible business; wages still apply.</p>';
+}
+function bindAgencyProfessionalControls(v,guard){
+ for(const key of Object.keys(E.AGENCY_PROFESSIONAL_ROLES))for(const direction of ['less','more'])$('#agency-role-'+key+'-'+direction)?.addEventListener('click',()=>{
+  if(!guard())return;const form=groupWorkspace.forms.agency,delta=direction==='more'?1:-1,next=Number(form.roles[key])+delta,total=Number(form.staff)+delta;
+  if(next<0||total<1||total>E.AGENCY_RULES.maxStaff){toast('Keep one to four funded agency employees. Add the replacement before removing your last employee.');return;}
+  form.roles[key]=next;form.staff=String(total);groupWorkspace.dirty.agency=true;renderFinancialGroup(currentView());$('#agency-role-'+key+'-'+direction)?.focus?.({preventScroll:true});
+ });
+ $('#agency-maintainCredentials')?.addEventListener('change',()=>{if(!guard())return;groupWorkspace.forms.agency.maintainCredentials=$('#agency-maintainCredentials').checked;groupFormChanged('agency');});
+}
+function agencyProfessionalQuoteMarkup(q){
+ const p=q.professional;if(!p)return '';
+ return '<p class="notice"><b>Registration / education due with this instruction: '+agencyDollars(p.complianceExpense)+'</b><br>Proposed recruitment: '+p.hired+'; releases: '+p.released+'. '+p.renewed.length+' producers would spend ¼ month renewing credentials. '+(p.phase==='authorized'?'Permitted focus lines: '+p.permitted.map(k=>esc(E.AGENCY_PRODUCTS[k].name)).join(', ')+'.':'Delivery unavailable: '+esc(p.phase)+(p.phase==='registration pending'?' until month '+p.readyCycle:'')+'.')+' Costs apply only to a funded active or launching agency.</p>';
+}
+function agencyProfessionalResults(v){
+ const a=v.me.agency,p=a.professionals,r=p.report;
+ const employees=p.employees.map((e,i)=>{const role=E.AGENCY_PROFESSIONAL_ROLES[e.role];return '<li><b>'+esc(role.name)+' '+(i+1)+'</b> · '+agencyDollars(role.salary)+'/month · '+(role.credential?(e.credentialThrough<v.cycle?'Credential overdue':'Credential through month '+e.credentialThrough):'Servicing role; no sales authority')+'</li>';}).join('');
+ return '<details><summary>Current team & permissions · '+a.staff+' employees</summary>'+(employees?'<ul>'+employees+'</ul>':'<p>No employed agency team.</p>')+'<p class="small">'+(p.registration.appliedCycle?'Registration ready from month '+p.registration.readyCycle+'; renewal required after month '+p.registration.validThrough+'.':'Registration has not started.')+' Automatic maintenance is '+(p.maintainCredentials?'on':'off')+'.</p>'+(r?'<p class="small">Month '+r.cycle+': '+r.hired+' hired, '+r.released+' released; '+agencyDollars(r.registrationCost+r.educationCost)+' registration / education expense, included in operating results above. '+r.units+' service units available after credential and training limits.</p>':'')+'</details>';
+}
+function agencyInstructionSummary(policy){
+ const team=Object.entries(E.AGENCY_PROFESSIONAL_ROLES).filter(([key])=>policy.roles[key]>0).map(([key,role])=>policy.roles[key]+' '+role.name.toLowerCase()+(policy.roles[key]===1?'':'s')).join(', ');
+ return (policy.launch?'Launch; ':'')+team+'; focus: '+E.AGENCY_PRODUCTS[policy.target].name+'; '+['no outreach','focused outreach','intensive outreach'][policy.outreach]+'; '+(policy.maintainCredentials?'maintain credentials':'allow credentials to expire')+(policy.capital?'; parent funding '+agencyDollars(policy.capital):'')+(policy.dividend?'; agency distribution '+agencyDollars(policy.dividend):'')+'; parent support cap '+agencyDollars(policy.supportCap)+'/month';
+}

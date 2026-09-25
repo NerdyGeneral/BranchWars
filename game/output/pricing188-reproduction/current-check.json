@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "cycle": 188,
+  "snapshotSha256": "210a3ec3f9871457d96893bbed69df221a26adf40e6b947d82f9a1879aa5765f",
+  "currentPortableSha256": "5cc991f75a30357f9d359f43410be3680f2011b8337211de2989eed8216602f7",
+  "oldEndReason": "buyout",
+  "staleCells": 30,
+  "oldUnpricedDepositAddition": 31782763,
+  "examples": [
+    {
+      "owner": "bank-a15db102",
+      "key": "downtown/everyday/essential",
+      "review": 3372296,
+      "actual": 4060780
+    },
+    {
+      "owner": "bank-a15db102",
+      "key": "downtown/connected/essential",
+      "review": 667815,
+      "actual": 807416
+    },
+    {
+      "owner": "bank-a15db102",
+      "key": "downtown/connected/rewards",
+      "review": 3464597,
+      "actual": 4395269
+    },
+    {
+      "owner": "bank-a15db102",
+      "key": "downtown/reserve/essential",
+      "review": 1188488,
+      "actual": 1776802
+    }
+  ],
+  "current": {
+    "ended": true,
+    "endReason": "buyout",
+    "winner": "bank-a15db102",
+    "balances": [
+      {
+        "id": "bank-a15db102",
+        "deposits": 53060882,
+        "loans": 5221803,
+        "cash": 32888722,
+        "capital": 1411615
+      },
+      {
+        "id": "bank-6036bb84",
+        "deposits": 44142726,
+        "loans": 5771746,
+        "cash": 25139824,
+        "capital": 1570717
+      }
+    ]
+  },
+  "checks": [
+    "captured old-build failure",
+    "original unmodified AI orders",
+    "current pricing/book validation",
+    "current owner-private views",
+    "exact half-ready recovery",
+    "same winning result"
+  ],
+  "scope": "One real captured terminal turn, not a new 188-month current-build campaign or broad balance acceptance."
+}

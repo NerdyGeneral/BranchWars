@@ -1,0 +1,2547 @@
+{
+  "portableSha256": "e056eeab470d3f41e68ff12e1a93d28a085e7fa0b0547f60d217043dae6cc1f1",
+  "engineSha256": "b5e431190d86109aaa4a3fc6dd6a47ddd0d5b5a4557bec107f1ba95857641642",
+  "scriptSha256": "5c2842c78c007441676510fe3a6e252219a0fb2adfcdc1875c66deeddab385c0",
+  "scope": "Same-state one-month actual settlements with fixed rival plans and identical pre-submission RNG. Retail-supported lender reserves three existing service employees, preserves the prior Operations reservation, and assigns the remaining employees to lending. Uses the same authoritative preparation and protected paid relationship provider. No injected resources, changed rules, hypothetical future capacity or ending suppression. Forecasts exclude competition and events. Different decisions may consume different normal resolution draws; not a long-campaign or optimal-policy claim.",
+  "running": false,
+  "cases": [
+    {
+      "label": "Rate opening",
+      "name": "ordinary",
+      "sourceSnapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "allocation": {
+        "service": 4,
+        "business": 1,
+        "lending": 2,
+        "operations": 1
+      },
+      "depositPolicy": "margin",
+      "opening": {
+        "cash": 4250000,
+        "capital": 2050000,
+        "deposits": 25600000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 4878231,
+        "capital": 2176418,
+        "deposits": 25787951,
+        "loans": 9186138,
+        "earnings": 26418,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 54,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": 628231,
+        "capital": 126418,
+        "deposits": 187951,
+        "loans": -313862,
+        "earnings": 26418,
+        "staff": 0,
+        "morale": 0,
+        "reputation": -8,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": 26418,
+        "loanIncome": 55509.06535200003,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 208416,
+        "loanGrowth": -313862,
+        "fundingCost": 21861,
+        "expense": 157955,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": 26418,
+        "loanIncome": 55509.06535200003,
+        "commercialIncome": 66028.8,
+        "fundingCost": 21861,
+        "expense": 157955,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -5900,
+            "cash": -5900,
+            "earnings": -5900
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 208416,
+            "rateSensitiveDeposits": 2084,
+            "fundingCost": 21861,
+            "loans": -313862,
+            "capital": 35486,
+            "customers": 19,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": 557764,
+            "compliance": -3,
+            "earnings": 35486,
+            "lastProfit": 35486
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -20465,
+            "rateSensitiveDeposits": 1,
+            "customers": -2,
+            "cash": -20465
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -30,
+            "reputation": -6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -5900
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate opening",
+      "name": "previous-lending",
+      "sourceSnapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 4,
+        "operations": 2
+      },
+      "depositPolicy": "balanced",
+      "opening": {
+        "cash": 4250000,
+        "capital": 2050000,
+        "deposits": 25600000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 3399399,
+        "capital": 2031282,
+        "deposits": 25234490,
+        "loans": 9490373,
+        "earnings": -118718,
+        "staff": 9,
+        "morale": 66,
+        "reputation": 54,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": -850601,
+        "capital": -18718,
+        "deposits": -365510,
+        "loans": -9627,
+        "earnings": -118718,
+        "staff": 1,
+        "morale": -2,
+        "reputation": -8,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": 10838,
+        "loanIncome": 57360.03109200003,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 79719,
+        "loanGrowth": -9627,
+        "fundingCost": 38007,
+        "expense": 159240,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": 10838,
+        "loanIncome": 57360.03109200003,
+        "commercialIncome": 66028.8,
+        "fundingCost": 38007,
+        "expense": 159240,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -7400,
+            "cash": -7400,
+            "earnings": -7400
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "project.start",
+          "deltas": {
+            "cash": -476000
+          }
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 79719,
+            "rateSensitiveDeposits": 4783,
+            "fundingCost": 38007,
+            "loans": -9627,
+            "capital": 21406,
+            "customers": 5,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "morale": -2,
+            "cash": 110752,
+            "compliance": 2,
+            "earnings": 21406,
+            "lastProfit": 21406
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -445229,
+            "rateSensitiveDeposits": -68,
+            "customers": -47,
+            "cash": -445229
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "project.advance",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -30,
+            "reputation": -6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "staff.hiring",
+          "deltas": {
+            "capital": -129556,
+            "staff": 1,
+            "cash": -129556,
+            "earnings": -129556
+          }
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -7400
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate opening",
+      "name": "supported-margin",
+      "sourceSnapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 2
+      },
+      "depositPolicy": "margin",
+      "opening": {
+        "cash": 4250000,
+        "capital": 2050000,
+        "deposits": 25600000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 3678651,
+        "capital": 2051281,
+        "deposits": 25403063,
+        "loans": 9399693,
+        "earnings": -98719,
+        "staff": 9,
+        "morale": 68,
+        "reputation": 54,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": -571349,
+        "capital": 1281,
+        "deposits": -196937,
+        "loans": -100307,
+        "earnings": -98719,
+        "staff": 1,
+        "morale": 0,
+        "reputation": -8,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": 30837,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 121172,
+        "loanGrowth": -100307,
+        "fundingCost": 21786,
+        "expense": 154910,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": 30837,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "fundingCost": 21786,
+        "expense": 154910,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -3000,
+            "cash": -3000,
+            "earnings": -3000
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "project.start",
+          "deltas": {
+            "cash": -476000
+          }
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 121172,
+            "rateSensitiveDeposits": 1212,
+            "fundingCost": 21786,
+            "loans": -100307,
+            "capital": 37005,
+            "customers": 9,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": 258484,
+            "compliance": 2,
+            "earnings": 37005,
+            "lastProfit": 37005
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -318109,
+            "rateSensitiveDeposits": -11,
+            "customers": -33,
+            "cash": -318109
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "project.advance",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -30,
+            "reputation": -6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "staff.hiring",
+          "deltas": {
+            "capital": -129556,
+            "staff": 1,
+            "cash": -129556,
+            "earnings": -129556
+          }
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -3000
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate opening",
+      "name": "supported-balanced",
+      "sourceSnapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 2
+      },
+      "depositPolicy": "balanced",
+      "opening": {
+        "cash": 4250000,
+        "capital": 2050000,
+        "deposits": 25600000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 3768594,
+        "capital": 2034882,
+        "deposits": 25509405,
+        "loans": 9399693,
+        "earnings": -115118,
+        "staff": 9,
+        "morale": 68,
+        "reputation": 54,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": -481406,
+        "capital": -15118,
+        "deposits": -90595,
+        "loans": -100307,
+        "earnings": -115118,
+        "staff": 1,
+        "morale": 0,
+        "reputation": -8,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": 14438,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 159437,
+        "loanGrowth": -100307,
+        "fundingCost": 38123,
+        "expense": 154972,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": 14438,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "fundingCost": 38123,
+        "expense": 154972,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -3000,
+            "cash": -3000,
+            "earnings": -3000
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "project.start",
+          "deltas": {
+            "cash": -476000
+          }
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 159437,
+            "rateSensitiveDeposits": 9566,
+            "fundingCost": 38123,
+            "loans": -100307,
+            "capital": 20606,
+            "customers": 9,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": 280350,
+            "compliance": 2,
+            "earnings": 20606,
+            "lastProfit": 20606
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -250032,
+            "rateSensitiveDeposits": -97,
+            "customers": -26,
+            "cash": -250032
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "project.advance",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -30,
+            "reputation": -6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "staff.hiring",
+          "deltas": {
+            "capital": -129556,
+            "staff": 1,
+            "cash": -129556,
+            "earnings": -129556
+          }
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -3000
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate opening",
+      "name": "supported-aggressive",
+      "sourceSnapshotSha256": "0243955579c0c250e73e501d8d176d3f428c20d6126d6cc1b21180c25796974b",
+      "month": 1,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 2
+      },
+      "depositPolicy": "aggressive",
+      "opening": {
+        "cash": 4250000,
+        "capital": 2050000,
+        "deposits": 25600000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 4018295,
+        "capital": 2013003,
+        "deposits": 25780985,
+        "loans": 9399693,
+        "earnings": -136997,
+        "staff": 9,
+        "morale": 68,
+        "reputation": 54,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": -231705,
+        "capital": -36997,
+        "deposits": 180985,
+        "loans": -100307,
+        "earnings": -136997,
+        "staff": 1,
+        "morale": 0,
+        "reputation": -8,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -7441,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 199297,
+        "loanGrowth": -100307,
+        "fundingCost": 59933,
+        "expense": 155041,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": -7441,
+        "loanIncome": 56808.33397200001,
+        "commercialIncome": 66028.8,
+        "fundingCost": 59933,
+        "expense": 155041,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -3000,
+            "cash": -3000,
+            "earnings": -3000
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "project.start",
+          "deltas": {
+            "cash": -476000
+          }
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 199297,
+            "rateSensitiveDeposits": 59789,
+            "fundingCost": 59933,
+            "loans": -100307,
+            "capital": -1273,
+            "customers": 9,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": 298331,
+            "compliance": 2,
+            "earnings": -1273,
+            "lastProfit": -1273
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -18312,
+            "rateSensitiveDeposits": -142,
+            "customers": -2,
+            "cash": -18312
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "project.advance",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -30,
+            "reputation": -6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "staff.hiring",
+          "deltas": {
+            "capital": -129556,
+            "staff": 1,
+            "cash": -129556,
+            "earnings": -129556
+          }
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -3000
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "name": "ordinary",
+      "sourceSnapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "allocation": {
+        "service": 2,
+        "business": 1,
+        "lending": 3,
+        "operations": 3
+      },
+      "depositPolicy": "margin",
+      "opening": {
+        "cash": 1,
+        "capital": 1084669,
+        "deposits": 18246438,
+        "loans": 8003854,
+        "earnings": -1065331,
+        "staff": 9,
+        "morale": 18,
+        "reputation": 4,
+        "business": 102,
+        "merchant": 80
+      },
+      "closing": {
+        "cash": 0,
+        "capital": 987605,
+        "deposits": 18105383,
+        "loans": 7930891,
+        "earnings": -1162395,
+        "staff": 9,
+        "morale": 9,
+        "reputation": 0,
+        "business": 103,
+        "merchant": 81
+      },
+      "change": {
+        "cash": -1,
+        "capital": -97064,
+        "deposits": -141055,
+        "loans": -72963,
+        "earnings": -97064,
+        "staff": 0,
+        "morale": -9,
+        "reputation": -4,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -93761,
+        "loanIncome": 46144.65456899999,
+        "commercialIncome": 0,
+        "depositGrowth": 105663,
+        "loanGrowth": -72963,
+        "fundingCost": 17669,
+        "expense": 176506,
+        "chargeoff": 4142
+      },
+      "actual": {
+        "profit": -93761,
+        "loanIncome": 46144.65456899999,
+        "commercialIncome": 0,
+        "fundingCost": 17669,
+        "expense": 176506,
+        "chargeoff": 4142
+      },
+      "deltas": [
+        {
+          "category": "companies.shares",
+          "deltas": {}
+        },
+        {
+          "category": "departments.functions",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 81081,
+            "rateSensitiveDeposits": -2235,
+            "fundingCost": 4738,
+            "depositRunoff": 2394,
+            "loans": -72963,
+            "capital": -94263,
+            "customers": 5,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "morale": -1,
+            "cash": 84865,
+            "compliance": -4,
+            "earnings": -94263,
+            "lastProfit": 21065,
+            "chargeoffs": 4142
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -222136,
+            "rateSensitiveDeposits": -250,
+            "capital": -2801,
+            "customers": -23,
+            "cash": -84866,
+            "earnings": -2801
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "markets.exit",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {}
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -35,
+            "reputation": -2,
+            "morale": -8,
+            "compliance": 4,
+            "attention": 6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "name": "previous-lending",
+      "sourceSnapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 4,
+        "operations": 3
+      },
+      "depositPolicy": "balanced",
+      "opening": {
+        "cash": 1,
+        "capital": 1084669,
+        "deposits": 18246438,
+        "loans": 8003854,
+        "earnings": -1065331,
+        "staff": 9,
+        "morale": 18,
+        "reputation": 4,
+        "business": 102,
+        "merchant": 80
+      },
+      "closing": {
+        "cash": 1,
+        "capital": 1038657,
+        "deposits": 17921762,
+        "loans": 8075958,
+        "earnings": -1111343,
+        "staff": 9,
+        "morale": 8,
+        "reputation": 0,
+        "business": 103,
+        "merchant": 81
+      },
+      "change": {
+        "cash": 0,
+        "capital": -46012,
+        "deposits": -324676,
+        "loans": 72104,
+        "earnings": -46012,
+        "staff": 0,
+        "morale": -10,
+        "reputation": -4,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -37156,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 68759.00460829493,
+        "depositGrowth": 82384,
+        "loanGrowth": 72104,
+        "fundingCost": 30355,
+        "expense": 176413,
+        "chargeoff": 4142
+      },
+      "actual": {
+        "profit": -37156,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 68759.00460829493,
+        "fundingCost": 30355,
+        "expense": 176413,
+        "chargeoff": 4142
+      },
+      "deltas": [
+        {
+          "category": "companies.shares",
+          "deltas": {}
+        },
+        {
+          "category": "departments.functions",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": -36598,
+            "rateSensitiveDeposits": 4005,
+            "fundingCost": 17424,
+            "depositRunoff": 67,
+            "loans": 72104,
+            "capital": -40133,
+            "customers": -2,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "morale": -2,
+            "cash": -1,
+            "compliance": 1,
+            "earnings": -40133,
+            "lastProfit": 77670,
+            "chargeoffs": 4142
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -288078,
+            "rateSensitiveDeposits": -320,
+            "capital": -5879,
+            "customers": -29,
+            "cash": 1,
+            "earnings": -5879
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "markets.exit",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {}
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -35,
+            "reputation": -2,
+            "morale": -8,
+            "compliance": 4,
+            "attention": 6
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "name": "supported-margin",
+      "sourceSnapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 3
+      },
+      "depositPolicy": "margin",
+      "opening": {
+        "cash": 1,
+        "capital": 1084669,
+        "deposits": 18246438,
+        "loans": 8003854,
+        "earnings": -1065331,
+        "staff": 9,
+        "morale": 18,
+        "reputation": 4,
+        "business": 102,
+        "merchant": 80
+      },
+      "closing": {
+        "cash": 1320001,
+        "capital": 985697,
+        "deposits": 19420702,
+        "loans": 8075958,
+        "earnings": -1164303,
+        "staff": 9,
+        "morale": 10,
+        "reputation": 0,
+        "business": 103,
+        "merchant": 81
+      },
+      "change": {
+        "cash": 1320000,
+        "capital": -98972,
+        "deposits": 1174264,
+        "loans": 72104,
+        "earnings": -98972,
+        "staff": 0,
+        "morale": -8,
+        "reputation": -4,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -92636,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "depositGrowth": 44514,
+        "loanGrowth": 72104,
+        "fundingCost": 17607,
+        "expense": 176407,
+        "chargeoff": 4142
+      },
+      "actual": {
+        "profit": -92636,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "fundingCost": 17607,
+        "expense": 176407,
+        "chargeoff": 4142
+      },
+      "deltas": [
+        {
+          "category": "companies.shares",
+          "deltas": {}
+        },
+        {
+          "category": "departments.functions",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 19932,
+            "rateSensitiveDeposits": -2847,
+            "fundingCost": 4676,
+            "depositRunoff": 2394,
+            "loans": 72104,
+            "capital": -95592,
+            "customers": 1,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": -1,
+            "compliance": 1,
+            "earnings": -95592,
+            "lastProfit": 22190,
+            "chargeoffs": 4142
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -165668,
+            "rateSensitiveDeposits": -239,
+            "capital": -3380,
+            "customers": -17,
+            "cash": 1,
+            "earnings": -3380
+          }
+        },
+        {
+          "category": "relationships",
+          "deltas": {
+            "deposits": 1320000,
+            "wealth": 4,
+            "reputation": 3,
+            "cash": 1320000,
+            "influence": 3,
+            "momentum": 4,
+            "opportunityWins": 1
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "markets.exit",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {}
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -35,
+            "reputation": -5,
+            "morale": -8
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "name": "supported-balanced",
+      "sourceSnapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 3
+      },
+      "depositPolicy": "balanced",
+      "opening": {
+        "cash": 1,
+        "capital": 1084669,
+        "deposits": 18246438,
+        "loans": 8003854,
+        "earnings": -1065331,
+        "staff": 9,
+        "morale": 18,
+        "reputation": 4,
+        "business": 102,
+        "merchant": 80
+      },
+      "closing": {
+        "cash": 1320001,
+        "capital": 973462,
+        "deposits": 19465999,
+        "loans": 8075958,
+        "earnings": -1176538,
+        "staff": 9,
+        "morale": 10,
+        "reputation": 0,
+        "business": 103,
+        "merchant": 81
+      },
+      "change": {
+        "cash": 1320000,
+        "capital": -111207,
+        "deposits": 1219561,
+        "loans": 72104,
+        "earnings": -111207,
+        "staff": 0,
+        "morale": -8,
+        "reputation": -4,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -105532,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "depositGrowth": 61948,
+        "loanGrowth": 72104,
+        "fundingCost": 30479,
+        "expense": 176431,
+        "chargeoff": 4142
+      },
+      "actual": {
+        "profit": -105532,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "fundingCost": 30479,
+        "expense": 176431,
+        "chargeoff": 4142
+      },
+      "deltas": [
+        {
+          "category": "companies.shares",
+          "deltas": {}
+        },
+        {
+          "category": "departments.functions",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 37366,
+            "rateSensitiveDeposits": 2779,
+            "fundingCost": 17548,
+            "depositRunoff": 67,
+            "loans": 72104,
+            "capital": -108395,
+            "customers": 1,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "compliance": 1,
+            "earnings": -108395,
+            "lastProfit": 9294,
+            "chargeoffs": 4142
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -137805,
+            "rateSensitiveDeposits": -293,
+            "capital": -2812,
+            "customers": -15,
+            "earnings": -2812
+          }
+        },
+        {
+          "category": "relationships",
+          "deltas": {
+            "deposits": 1320000,
+            "wealth": 4,
+            "reputation": 3,
+            "cash": 1320000,
+            "influence": 3,
+            "momentum": 4,
+            "opportunityWins": 1
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "markets.exit",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {}
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -35,
+            "reputation": -5,
+            "morale": -8
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Rate Lending after24",
+      "name": "supported-aggressive",
+      "sourceSnapshotSha256": "8d42061a185f0116d44c4def051d67c1ff8204e10ce2cb6a67c4f75c2ebf30f0",
+      "month": 25,
+      "allocation": {
+        "service": 3,
+        "business": 0,
+        "lending": 3,
+        "operations": 3
+      },
+      "depositPolicy": "aggressive",
+      "opening": {
+        "cash": 1,
+        "capital": 1084669,
+        "deposits": 18246438,
+        "loans": 8003854,
+        "earnings": -1065331,
+        "staff": 9,
+        "morale": 18,
+        "reputation": 4,
+        "business": 102,
+        "merchant": 80
+      },
+      "closing": {
+        "cash": 1320000,
+        "capital": 957495,
+        "deposits": 19544775,
+        "loans": 8075958,
+        "earnings": -1192505,
+        "staff": 9,
+        "morale": 10,
+        "reputation": 0,
+        "business": 103,
+        "merchant": 81
+      },
+      "change": {
+        "cash": 1319999,
+        "capital": -127174,
+        "deposits": 1298337,
+        "loans": 72104,
+        "earnings": -127174,
+        "staff": 0,
+        "morale": -8,
+        "reputation": -4,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -122755,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "depositGrowth": 78349,
+        "loanGrowth": 72104,
+        "fundingCost": 47675,
+        "expense": 176458,
+        "chargeoff": 4142
+      },
+      "actual": {
+        "profit": -122755,
+        "loanIncome": 47108.18958300001,
+        "commercialIncome": 0,
+        "fundingCost": 47675,
+        "expense": 176458,
+        "chargeoff": 4142
+      },
+      "deltas": [
+        {
+          "category": "companies.shares",
+          "deltas": {}
+        },
+        {
+          "category": "departments.functions",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {}
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "deposits": 53767,
+            "rateSensitiveDeposits": 23272,
+            "fundingCost": 34744,
+            "depositRunoff": -598,
+            "loans": 72104,
+            "capital": -125635,
+            "customers": 1,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "cash": -1,
+            "compliance": 1,
+            "earnings": -125635,
+            "lastProfit": -7929,
+            "chargeoffs": 4142
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -75430,
+            "rateSensitiveDeposits": -388,
+            "capital": -1539,
+            "customers": -5,
+            "earnings": -1539
+          }
+        },
+        {
+          "category": "relationships",
+          "deltas": {
+            "deposits": 1320000,
+            "wealth": 4,
+            "reputation": 3,
+            "cash": 1320000,
+            "influence": 3,
+            "momentum": 4,
+            "opportunityWins": 1
+          }
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "markets.exit",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {}
+        },
+        {
+          "category": "risk.consequences",
+          "deltas": {
+            "customers": -35,
+            "reputation": -5,
+            "morale": -8
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Balanced opening",
+      "name": "ordinary",
+      "sourceSnapshotSha256": "2a63e5a03597599ec39162309c6ca358e16069dccd079a7bfe8ffbd339ade5d0",
+      "month": 1,
+      "allocation": {
+        "service": 2,
+        "business": 2,
+        "lending": 3,
+        "operations": 1
+      },
+      "depositPolicy": "margin",
+      "opening": {
+        "cash": 2400000,
+        "capital": 1800000,
+        "deposits": 24000000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 2510673,
+        "capital": 1901622,
+        "deposits": 23889200,
+        "loans": 9380149,
+        "earnings": 1622,
+        "staff": 8,
+        "morale": 70,
+        "reputation": 60,
+        "business": 60,
+        "merchant": 39
+      },
+      "change": {
+        "cash": 110673,
+        "capital": 101622,
+        "deposits": -110800,
+        "loans": -119851,
+        "earnings": 1622,
+        "staff": 0,
+        "morale": 2,
+        "reputation": -2,
+        "business": 2,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": 1622,
+        "loanIncome": 49785.77311600001,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 0,
+        "loanGrowth": -119851,
+        "fundingCost": 12215,
+        "expense": 163508,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": 1622,
+        "loanIncome": 49785.77311600001,
+        "commercialIncome": 66028.8,
+        "fundingCost": 12215,
+        "expense": 163508,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -5900,
+            "cash": -5900,
+            "earnings": -5900
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "group.portfolio",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {
+            "morale": 4
+          }
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "fundingCost": 12215,
+            "loans": -119851,
+            "capital": 10690,
+            "business": 2,
+            "merchant": 1,
+            "reputation": -2,
+            "morale": -2,
+            "cash": 130541,
+            "compliance": -3,
+            "earnings": 10690,
+            "lastProfit": 10690
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -110800,
+            "customers": -13,
+            "cash": -110800
+          }
+        },
+        {
+          "category": "relationships",
+          "deltas": {}
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -5900
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    },
+    {
+      "label": "Balanced opening",
+      "name": "previous-lending",
+      "sourceSnapshotSha256": "2a63e5a03597599ec39162309c6ca358e16069dccd079a7bfe8ffbd339ade5d0",
+      "month": 1,
+      "allocation": {
+        "service": 1,
+        "business": 1,
+        "lending": 4,
+        "operations": 2
+      },
+      "depositPolicy": "balanced",
+      "opening": {
+        "cash": 2400000,
+        "capital": 1800000,
+        "deposits": 24000000,
+        "loans": 9500000,
+        "earnings": 0,
+        "staff": 8,
+        "morale": 68,
+        "reputation": 62,
+        "business": 58,
+        "merchant": 38
+      },
+      "closing": {
+        "cash": 1663990,
+        "capital": 1763055,
+        "deposits": 23766397,
+        "loans": 9489462,
+        "earnings": -136945,
+        "staff": 9,
+        "morale": 70,
+        "reputation": 60,
+        "business": 59,
+        "merchant": 39
+      },
+      "change": {
+        "cash": -736010,
+        "capital": -36945,
+        "deposits": -233603,
+        "loans": -10538,
+        "earnings": -136945,
+        "staff": 1,
+        "morale": 2,
+        "reputation": -2,
+        "business": 1,
+        "merchant": 1
+      },
+      "forecast": {
+        "profit": -7389,
+        "loanIncome": 50420.225768000026,
+        "commercialIncome": 66028.8,
+        "depositGrowth": 0,
+        "loanGrowth": -10538,
+        "fundingCost": 22560,
+        "expense": 162808,
+        "chargeoff": 0
+      },
+      "actual": {
+        "profit": -7389,
+        "loanIncome": 50420.225768000026,
+        "commercialIncome": 66028.8,
+        "fundingCost": 22560,
+        "expense": 162808,
+        "chargeoff": 0
+      },
+      "deltas": [
+        {
+          "category": "departments.functions",
+          "deltas": {
+            "capital": -5200,
+            "cash": -5200,
+            "earnings": -5200
+          }
+        },
+        {
+          "category": "facilities.lifecycle",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.instructions",
+          "deltas": {}
+        },
+        {
+          "category": "group.portfolio",
+          "deltas": {}
+        },
+        {
+          "category": "products.policy",
+          "deltas": {}
+        },
+        {
+          "category": "decision",
+          "deltas": {
+            "morale": 4
+          }
+        },
+        {
+          "category": "departments.leadership",
+          "deltas": {}
+        },
+        {
+          "category": "departments.dispatch",
+          "deltas": {}
+        },
+        {
+          "category": "project.start",
+          "deltas": {
+            "cash": -476000
+          }
+        },
+        {
+          "category": "companies.settlement",
+          "deltas": {}
+        },
+        {
+          "category": "operations",
+          "deltas": {
+            "fundingCost": 22560,
+            "loans": -10538,
+            "capital": 979,
+            "business": 1,
+            "merchant": 1,
+            "reputation": -2,
+            "morale": -2,
+            "cash": 11517,
+            "compliance": 2,
+            "earnings": 979,
+            "lastProfit": 979
+          }
+        },
+        {
+          "category": "competition.deposits",
+          "deltas": {
+            "deposits": -233603,
+            "customers": -26,
+            "cash": -233603
+          }
+        },
+        {
+          "category": "relationships",
+          "deltas": {}
+        },
+        {
+          "category": "markets.competition",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.progress",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renovation",
+          "deltas": {}
+        },
+        {
+          "category": "project.advance",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.maintenance",
+          "deltas": {
+            "capital": -3168,
+            "cash": -3168,
+            "earnings": -3168,
+            "lastProfit": -3168
+          }
+        },
+        {
+          "category": "staff.training",
+          "deltas": {}
+        },
+        {
+          "category": "departments.experience",
+          "deltas": {}
+        },
+        {
+          "category": "staff.hiring",
+          "deltas": {
+            "capital": -129556,
+            "staff": 1,
+            "cash": -129556,
+            "earnings": -129556
+          }
+        },
+        {
+          "category": "milestones",
+          "deltas": {
+            "capital": 100000,
+            "cash": 100000,
+            "influence": 3
+          }
+        },
+        {
+          "category": "economy.external",
+          "deltas": {}
+        },
+        {
+          "category": "group.premises",
+          "deltas": {}
+        },
+        {
+          "category": "departments.delivery",
+          "deltas": {
+            "lastProfit": -5200
+          }
+        },
+        {
+          "category": "campaign.ending",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.activation",
+          "deltas": {}
+        },
+        {
+          "category": "facilities.renewal",
+          "deltas": {}
+        }
+      ],
+      "gameOver": false,
+      "endReason": null,
+      "pure": true,
+      "reconciled": true
+    }
+  ],
+  "failure": "Error: Assign at least one Business banker to bid for a service agreement.\n    at Object.validatePlan (evalmachine.<anonymous>:1321:39)\n    at prepare (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\output\\franchise_allocation_audit66.js:17:43)\n    at Object.<anonymous> (C:\\Users\\xande\\Downloads\\Branch_Wars_Executive_Command_v6_No_Server\\BranchWars-v3-usability\\game\\output\\franchise_allocation_audit66.js:33:71)\n    at Module._compile (node:internal/modules/cjs/loader:1871:14)\n    at Object..js (node:internal/modules/cjs/loader:2002:10)\n    at Module.load (node:internal/modules/cjs/loader:1594:32)\n    at Module._load (node:internal/modules/cjs/loader:1396:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)\n    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)\n    at node:internal/main/run_main_module:33:47"
+}

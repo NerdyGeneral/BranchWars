@@ -55,6 +55,34 @@ Markets unlock over time and the contest sharpens by act.
 
 ## 2. The monthly plan
 
+### Capital recovery comparisons (product-programme campaigns)
+
+Overview now offers a draft-only recovery comparison for v8.9/v8.10. Choose an
+executive response, then compare postponing discretionary spending, a lower-cost
+response supported by existing controls, and limited spare-Retail-to-Business
+reallocation. Each option lists its changes and estimated equity effect. Stage
+only edits the draft; Undo restores it until a later manual edit or turn lock.
+Existing work and signed obligations continue, and no rescue money is created.
+
+The estimate uses the current economy and owner books. It subtracts the known
+executive equity expense and non-operating commitments from the operating
+forecast. Advertising/training already appear in operating profit and are not
+subtracted twice. It does not predict uncertain executive effects, rival moves,
+opportunity awards, regulatory sales, future project benefits or board aid.
+Cash and deposits are not equity. Deposit-share leadership is not solvency.
+
+Product-programme AI runs this review after product/staff/collections planning
+and before the final cash/bid eligibility pass. It acts only below 10% current
+capital, below its forecast 10%-exposure plus $200K cushion, or when losses
+threaten that cushion. It requires over $1K estimated improvement and protects
+household/signed-service coverage. Staffing choices move at most two Retail
+bankers, preserve Lending/Operations and require 105% household coverage.
+Executive alternatives check existing resilience/control thresholds with
+conservative workload buffers; they are not guarantees against rival shocks.
+Healthy plans and pre-product-programme AI retain their previous path. This is
+an AI/advisory repair, not a new save-rule version or rubber-band subsidy.
+
+
 A plan is one object. Everything in it is optional except a focus market, a
 staff allocation covering every banker, and an answer to any executive call.
 
@@ -69,6 +97,10 @@ staff allocation covering every banker, and an answer to any executive call.
 | `opportunity` | One contested deal to pursue. |
 | `newProjects` | Initiatives to start, limited by execution capacity and cash. |
 | `hires` | Bankers to recruit this cycle. |
+| `specialistHires` | Workforce preview: additional hires by specialty. Generalists and specialists together may not exceed six. |
+| `householdPolicy` | Household ownership preview: recurring retention time share and relative service priorities for Everyday, Connected and Reserve households. |
+| `collectionsPolicy` | Credit performance preview: recurring Lending time share and workout/balanced/recovery approach. |
+| `workforcePolicy` | Workforce preview: persistent department training ceilings and protected cash reserve. |
 | `investments` | Money into capability lanes, capped per lane per cycle. |
 | `specializations` | Operating model per capability lane, permanent once set. |
 | `capitalAction` | Emergency board capital request. |
@@ -99,7 +131,7 @@ exactly as `resolveCycle` runs it.
 13. **Franchise dividends** — income from absorbed franchises.
 14. **Advance initiatives** — work in flight progresses, or stalls if capacity was withdrawn.
 15. **Consequences** — outages, cyber incidents, compliance and morale effects.
-16. **Capability investment** — money lands, tiers unlock, operating models are adopted, character is re-read, then hiring.
+16. **Workforce development, capability investment and hiring** — paid specialist training matures, capability money lands, and new bankers arrive. Their benefits apply next month.
 17. **Milestones and act change**.
 18. **Ending check** — receivership, domination or buyout.
 
@@ -160,6 +192,30 @@ initiative does not consume budget, so a smaller one behind it may still proceed
 **Recruiting** — cost rises with headcount, and hiring several at once dilutes morale.
 
 <!--{{SRC_hireCost}}-->
+
+**Specialist workforce preview (N-05, save v8.5)** — optional for new customer
+relationships campaigns; older campaigns keep their existing workforce rules.
+Specialists are included in total headcount and share the six-recruit monthly
+limit with generalists. Recruitment pays the normal combined-headcount fee plus
+the premiums below. New recruits arrive after operations, at skill 20.
+
+<!--{{SPECIALISTS}}-->
+
+Only qualified staff assigned to their specialty add effective capacity:
+`min(qualified, assigned) × (0.10 + 0.003 × skill)`. Business expertise is split
+between reserved service delivery and sales, never counted twice. Salaries add
+the listed premium to normal base pay; efficiency discounts do not reduce
+specialist premiums.
+
+Each department has a recurring training ceiling. A whole skill point costs
+$1,000 per existing specialist; at most four points per month, up to skill 100.
+Paid training improves skills for the following month, before new recruits
+dilute the department average. A bank-wide cash reserve and capital limit protect
+ordinary operating losses and later recruiting/research commitments: when the
+combined training bill is unaffordable, all departments pause together.
+Training is an operating expense, not a second fee or an event-multiplied benefit.
+The Workforce tab shows forecast spend, capacity and realized costs; events,
+project completions and rival actions can still change the final result.
 
 ---
 
@@ -537,6 +593,487 @@ limits, and grants no current-turn staff. Review the next turn's allocation afte
 recruits arrive. Previews exclude events, rival actions, opportunities and project
 completions. The comparison is calculated only while the panel is open.
 
-This is decision support for existing workforce rules, not specialist careers,
-new training budgets, or a new simulation/save version. See roadmap.md
+This original staffing planner does not itself change saved rules. Specialist
+workforce and household ownership are separate opt-in previews. See roadmap.md
 for the remaining package-level work.
+
+### Household ownership and retention — v8.6 preview
+
+Requires Specialist workforce and its prerequisites. Existing campaigns keep
+their saved rules. The public market pools and the two private bank books track
+exact household counts for Everyday, Connected and Reserve segments; each
+segment is conserved across all four owners in every market. Ordinary intake,
+departures, raids and book acquisitions transfer actual existing households.
+Organic intake favors the bank's open-product suitability, capped to available
+segment counts. Changing an offer never relabels the existing customer book.
+
+Customers has the recurring mandate, local ownership and a workload drilldown.
+Retention reserves 25/50/75/100% of effective Retail staff; the remainder supports
+banker-led acquisition. Existing office sales reach remains. Legacy training
+adds 0.3 retention capacity per level. Priorities 0–3 weight that finite capacity
+by segment workload; at least one priority must be positive. A specialist's
+effective time is split once, not credited in full to both retention and sales.
+
+<!--{{HOUSEHOLD_WORKLOAD}}-->
+
+Workload is count / 900 times the segment factor. A retail office reduces local
+Everyday demand by 10%; a digital office reduces Connected demand by 20%. Each
+local service upgrade reduces demand by 10% (two-level existing cap). Priorities
+allocate proportionally to weighted demand; over-service is not auto-reassigned.
+Goodwill uses the same coverage bands and existing-local-product fit thresholds
+as the prior rules, but owned segment counts now weight the bank's deposit pull.
+The separate flat goodwill bonus from local upgrades is replaced by workload
+relief; an empty segment drifts toward neutral 50.
+
+Before monthly maturities and production, goodwill below 45 produces a departure
+rate of min(1.5%, (45 - goodwill) / 2000), floored to whole households. Coverage
+at least 100% cuts that rate by 60%, not instantly to zero. Departures go to
+community banks and credit unions in a 3:2 split and reopen finite prospects.
+The bank's local-average deposit estimate leaves with them, capped to unlocked
+funding. Deposits remain **pooled by market**, not genuinely segment-owned or
+person-owned financial accounts. Locked term balances remain in place.
+
+Cash and deposit liabilities fall together: outflows are not operating expense.
+Necessary funding sales can realize losses; those appear separately and are
+included in forecast funding-loss totals. Reports and the causal ledger record
+actual departures/outflows. Private priorities and goodwill are not exposed in
+rival views or rival last plans. The AI selects the lowest retention share that
+covers 105% of current aggregate workload, or 100% if none can; it does not yet
+optimize segment priorities or fully solve staffing recovery. Delayed loan
+delinquency and collections require the separate preview below; household
+incomes and cross-selling remain ahead.
+
+## Credit performance preview (v8.7)
+
+Opt-in for new campaigns only, requiring Household ownership and its earlier
+prerequisites. Both linked clients must support credit performance. Old saves
+retain their credit-loss rules; they are never automatically upgraded.
+
+Each loan cohort retains product, monthly rate, risk and remaining term, plus
+three principal-at-risk aging buckets: 30, 60 and 90+ days. These are fictional
+whole-balance groups, not individual invoices or overdue installments. New
+loans have two monthly seasoning reviews before entering arrears. Opening loans
+are already seasoned. Product and lending standards, Operations expertise and
+risk-control research determine new origination risk; switching them later does
+not rewrite existing loans. The economy and executive credit shocks affect new
+missed payments from the performing book.
+
+Monthly entry = floor(performing principal × min(4%, 0.6% × retained risk / 10000
+× economic credit pressure × executive credit multiplier)), after seasoning.
+Uncured early balances advance exactly one bucket per review. Existing 90+ day
+balances may resolve; new arrivals cannot resolve in that same review.
+
+Reserve 0/25/50/75/100% of effective Lending staff for collections. Generalists
+and assigned Credit analyst expertise share the split once; the remainder drives
+new-loan production. One effective collections banker covers $1M of delinquent
+principal. Coverage caps at 100%; extra allocation is not a free bonus. No
+additional salary is charged solely for changing the split.
+
+<!--{{COLLECTION_APPROACHES}}-->
+
+Early cure rates scale with coverage. Resolved 90+ principal = ceil(opening 90+
+principal × approach resolution rate × (25% + 75% × coverage)), capped to the
+owned balance. Writeoff is rounded resolved principal × severity; the remainder
+returns to cash as principal recovery, not income. Cures resume performing
+status without inventing accrued/back-interest. All delinquent balances cease
+interest and scheduled principal; maturity never silently deletes unpaid loans.
+
+Case costs are ceil((cured + resolved principal) × approach cost / $1M), computed
+by market and posted once as operating expense, outside event profit multipliers.
+Case costs are payable, not an optional training ceiling, and cash shortages can
+force asset sales. Automatic recovery still has external handling costs at zero
+staff allocation. Repayment/recovery changes cash and loan assets; writeoffs
+reduce loan assets and equity, not cash. Foregone interest is not a second expense.
+Monthly production no longer applies the legacy immediate proportional chargeoff
+in these campaigns; reported aging losses were already posted at resolution.
+Explicit exceptional watchlist events may still cause direct losses later.
+
+Acquisitions preserve aging and seasoning. Funding sales and other partial book
+removals reduce performing and delinquent principal proportionally. Forced loan
+sale discounts are no longer flat for these campaigns: the base 6% funding / 7%
+regulatory discount adds the whole-book weighted 10 / 30 / 70 percentage-point
+penalties on 30 / 60 / 90+ day principal, rounded to basis points. Performing
+principal adds no distress penalty. Thus a fully 90+ book sells at a 76% funding
+discount, not near par. Pricing is independent of the chosen collections policy;
+changing the mandate cannot reprice an existing default. The funding waterfall
+sells enough face value at this quote or borrows for the remaining cash gap.
+These are fictional simplified sale quotes, not market valuation or collateral
+models. Previous rules retain their flat discounts. The causal
+credit summary includes aging totals; owner reports retain actual market cures,
+recoveries, losses and costs. Credit mandates and detailed books remain private.
+The Credit workspace compares policies without retargeting initiatives or
+submitting a plan. Forecasts use the opening book and current economy; executive
+events, rival moves and funding sales can change actual results.
+
+For v8.7 live views, the newest owner-only causal events have a 256 KiB UTF-8
+budget within the existing 200-entry limit. `causalView` reports omitted entries
+from that window and the first included ID. This changes only the history
+projection: current loan books, the complete trend and the host's retained
+journal in saves/exports are untouched. It prevents historical detail from
+crowding out the current bank on long-session multiplayer updates.
+
+The AI reserves the smallest offered share that covers its opening delinquent
+book. It prefers recovery above 2.5% 90+ exposure, workouts above 1% early/late
+exposure, otherwise balanced handling. This is a bounded workload rule, not
+optimal borrower triage, recovery management or proven strategic balance.
+Individual borrowers, negotiated restructurings, collateral-specific recovery,
+allowance/provision accounting and broader underwriting remain future scope.
+
+## Segment-owned deposit accounts — v8.8 opt-in
+
+Enable Segment deposits preview for a new campaign. It requires the v8.7 credit
+and earlier previews. Existing saves do not adopt the new accounting rules.
+Customer counts remain segmented; each deposit cohort now also retains its
+Everyday, Connected or Reserve owner through intake, competitive transfers,
+acquisitions, promotion expiry and term maturity. Whole-dollar balances are
+conserved separately for each segment across both players and outside banks.
+Opening balances use fictional relative weights of 1 / 1.5 / 4 per relationship,
+then deterministic rounding. These are scenario assumptions, not banking data.
+
+Outside deposit intake selects from finite segment balances using owned supply
+and product preference. New accounts choose offered products using that segment's
+product fit and sales emphasis. Existing accounts are never relabeled by a new
+sales mix. Local servicing goodwill uses the segment's own existing product mix.
+Counts and balances remain separate aggregate resources: deposits can top up or
+move without a one-to-one customer transfer. This is not an individual-account
+or separate commercial/household balance-sheet model.
+
+Service-related departures withdraw floor(unlocked segment balance × departing
+relationships / current segment relationships). Locked balances instead mark
+floor(still-active locked principal × departing / current) for future exit.
+Marked balances cannot be marked twice. At contractual maturity, they return to
+outside institutions before optional renewal; the remaining active principal
+obeys the ordinary renewal policy. Competitive book purchases carry these exit
+obligations and promised rates. Principal payouts reduce cash and deposit
+liabilities equally, not profit. Funding-sale losses are recognized separately.
+
+Interest uses retained promotional/term rates or the current variable rate.
+One primary-account billing equivalent per active relationship is split across
+that segment's products by active principal, rather than charging a full fee for
+every product. Fees and service costs use the existing product tables; servicing
+also costs 0.006% of principal. A departed locked balance earns its promised
+interest but generates no active-relationship fee. Active product platform costs
+are charged once and allocated by product balances. A platform with no balances
+remains a central expense, not a fabricated segment.
+
+Customers now has separate Service & retention and Deposit accounts views. The
+financial table is a current-book monthly run rate, not full segment profit:
+it excludes loan income, shared staff/office costs, onboarding and event effects.
+It shows owned/locked principal, costs, product mix, projected unlocked departure
+exposure and pending maturity exits. Market inspection never retargets a plan.
+Detailed books stay owner-only; the public snapshot omits total segment deposit
+pools so it cannot reconstruct the rival's segment balances by subtraction.
+The causal ledger records compact segment principal, locked and pending totals.
+Individual household finance, cross-selling, full product development/retirement
+and subsidiary/group accounting remain future scope.
+
+## Retail product programmes — v8.9 opt-in
+
+Enable Product programmes preview when creating a campaign. It requires the
+segment-deposit preview and its prerequisites; existing campaigns retain their
+rules. Both peers must use a supporting build. Products has separate Development
+& retirement and Local sales targets views; business, credit and term-funding
+policies remain in Operations.
+
+Rewards Checking and High-Yield Savings now have two delivery routes. In-house
+development requires completed Branch Network or Digital Platform tier one,
+respectively, and uses the existing $180,000 / $220,000, three-base-month,
+two-capacity rollout. Licensing costs $90,000, takes one base month and one
+execution capacity, without internal research. Existing project modifiers,
+cash/capital limits and Operations capacity apply. Delivery creates no customers
+or deposits. New sales stay closed until explicitly targeted in a later plan.
+Only one rollout per product can be staged or active.
+
+A licensed platform costs $12,000 per month while available, even if every sales
+target is closed, plus 0.01% per month of its existing non-term deposit balances.
+These vendor costs are additional to ordinary product-platform/account servicing.
+They enter deposit servicing and bank profit exactly once and are allocated to
+the product's balance-bearing segments; an empty platform remains central.
+Converting a licensed platform in-house requires the ordinary research, capital
+and delivery time. Completion ends vendor charges from the following month,
+without repricing or replacing existing accounts.
+
+Each of the six pilot markets has independent Everyday, Connected and Reserve
+sales instructions. Each available offer receives relative emphasis 0–4; zero
+closes new sales, and every audience must retain at least one available offer.
+Local fit changes prospective response and incoming balances split by emphasis
+times segment suitability. Bank-wide acquisition modifiers are weighted by
+reachable outside market/segment supply, not the maximum emphasis anywhere.
+Targeting a tiny or unreachable audience cannot activate a bank-wide bonus.
+These are sales instructions, not advertising budgets or guaranteed demand.
+Existing balances retain their product and contractual guarantees. Customer
+retention priorities remain separate and compete for service capacity.
+
+Retiring an available product costs $25,000, shares the plan's cash/capital
+budget, closes its sales everywhere and ends availability fees. It does not
+refund development, convert checking accounts, or cancel promotional/term
+promises. Existing licensed balances continue paying vendor balance charges.
+When locally closed promotional savings reaches guarantee expiry, it moves to
+the highest-emphasis available local offer. Ordinary term maturity uses the same
+local fallback after pending customer exits and optional renewal. Retirement
+cannot overlap a rollout. Reopening requires another paid rollout. Canceling a
+staged retirement keeps its sales targets closed; reopen them explicitly.
+
+The Products quotes hold today's book fixed and exclude shared payroll, loan
+income, new intake and one-time spending. Operations supplies the broader
+forecast; events, competitors, maturity and funding can change actual results.
+Policy changes and retirement expense are recorded in the owner-only causal
+ledger. Saved/sealed plans, rematches and all three multiplayer transports carry
+the new rules; detailed targeting and delivery state remain private.
+
+The AI compares local-fit targets against the current plan using forecast
+profit, funding loss and a small value for deposit intake. A growth mandate can
+accept lower current earnings when forecast profit remains positive and at least
+half the current-policy forecast, cash is at least $500,000, funding is not
+stressed, and extra intake exceeds $5,000 and 5%. This is an explicit growth
+budget, not a multi-month earnings forecast. It can license before
+research, convert in-house, and retire an uneconomic licensed platform while
+losing money. Rollouts preserve an extra $250,000 planning headroom. This is a
+heuristic, not proven optimal play. A final v8.9+ cash-planning safeguard now reserves the announced executive-call expense, $250,000 cash and a 10% exposure/capital cushion plus $200,000 and two forecast operating losses. It trims unfunded research, training, advertising, hires and initiatives after all planners have run; it does not inspect hidden rival plans or count expected windfalls.
+Authored new product families, configurable terms, per-customer cross-selling,
+the wider advertising funnel and subsidiary/group accounting remain future scope.
+## Local advertising and attribution — v8.10 opt-in
+
+Enable Advertising attribution preview for a new campaign; setup enables Product
+programmes and its prerequisites. Existing v8.9 and older games keep their rules.
+Both peers must update. In Products, Advertising & attribution stages one standing
+market/audience/offer campaign per bank. Budgets are $0, $15,000, $40,000 or $80,000
+per month. Pausing costs nothing; closing the advertised offer automatically
+pauses that campaign. Known but closed products cannot receive a targeting bonus.
+
+Awareness is separate for all six markets, three segments and three offers.
+Each month 75% survives; new spending reaches up to the finite outside audience
+at fictional contact costs of $15 Everyday, $12 Connected or $30 Reserve.
+Repeat reach has diminishing returns as awareness saturates. Awareness raises
+acquisition weights according to local offer fit and Retail sales time, capped
+at a 50% weight bonus. A bonus is not a conversion probability. Zero sales time
+means no bonus; retention and sales still compete for Retail staffing.
+
+Advertising redistributes ordinary acquisition inside the existing market and
+bank-wide monthly quotas. It never adds customers or deposit money, expands
+frozen quotas, or attributes rival raids, book acquisitions, term renewals or
+commercial mandates. The observed segment and product deposits are measured
+during actual intake. Household counts are observed by segment; their product
+split is modelled because the game does not yet link individual accounts.
+
+The assisted share is observed intake times bonus / (1 + bonus), rounded down.
+It is an attribution model, not a causal comparison, incremental lift, profit,
+return on advertising or a guarantee of growth. Recent awareness can keep
+assisting intake after paid spending stops. The current report exposes expense,
+reach, awareness, observed intake and the assisted portion separately.
+
+Advertising reserves its requested budget with other commitments. Actual expense
+is charged once through operating profit and the reconciled accounts; it can
+pause when cash/capital and the training reserve cannot support the campaign.
+Training also reserves campaign expense. The planner quote precedes executive
+events, competition and operating cash changes; actuals can differ. Advertising
+does not buy retention or excuse poor servicing; use Customers to manage that.
+
+The AI only funds modest periodic campaigns with spare sales capacity, positive
+profit and cash headroom. It can release retention time only when the remaining
+service capacity covers demand. This is a bounded policy, not an optimal marketer.
+Detailed awareness, plans and attribution remain owner-private across saved,
+sealed and linked games. No new runtime wrapper or external service is required.
+
+This is an attribution-first slice. Named channels, delayed application queues,
+creative testing, cross-selling, tracked lifetime value and richer product designs
+remain future work; it does not complete N-08.
+
+## Regional arrivals and departures — v8.11 opt-in
+
+Regional demand preview is a new-campaign option requiring Advertising attribution
+and its prerequisites. Both peers must support v8.11; old campaigns retain their
+existing rules. This is still the six-market, two-region pilot, not a national map.
+
+After both banks finish a month, outside community banks and credit unions receive
+households and savings arriving from outside the modeled area, and lose available
+households and savings that leave it. Banks do not receive free accounts, income or
+equity. Arrivals become available for ordinary competition next month; current
+operating previews and frozen acquisition quotas do not count them early.
+
+Fictional monthly rates below use the immutable opening outside books as their
+scale, so a depleted pool can replenish. Rates are basis points (100 bp = 1%),
+with a 1.2x arrival multiplier in Growth Coast. Departures are applied first and
+capped to each closing outside institution/segment balance. Unfilled departures
+do not become future debt. Fractional household/dollar remainders carry forward.
+
+| Regime just resolved | Arrivals, bp/month | Requested departures, bp/month |
+|---|---:|---:|
+| Expansion | 70 | 15 |
+| Steady growth | 50 | 20 |
+| Tight money | 30 | 35 |
+| Downturn | 20 | 60 |
+| Recovery | 60 | 20 |
+
+Customers and savings remain separate aggregate resources. Both segment and
+market totals reconcile to their opening world plus actual external arrivals
+minus actual departures. Player books, account cohorts, locked term promises,
+businesses, merchants and wealth are not changed by this boundary.
+
+Markets shows current outside supply, the last completed closing and a conditional
+quote for the active month's closing. The quote uses today's outside balances;
+acquisition, customer exits and maturing accounts can change departures before
+closing. The report labels the regime that actually settled, even when a new
+regime starts next month. There is no future quote after a campaign ends.
+
+Private conservation anchors and fractional counters remain out of player views.
+Shared actual totals appear in the causal ledger. This is an external population
+and savings boundary, not cross-selling, a national GDP model, employment/income
+simulation or newly created bank money. Rates still require human calibration.
+
+## Optional complexity and Modular combinations — v8.14 opt-in
+
+All preview options remain unchecked by default. Preview is a maturity label,
+not a promise that optional complexity later becomes compulsory. Expand
+**Optional systems** during setup to see prerequisites, selection summary and
+the explicit Regional Rivalry override: two regions and six markets, regardless
+of the campaign-size selector.
+
+Selecting a system proposes its missing foundations. Turning a foundation off
+proposes removing its dependants. A confirmation lists the affected systems;
+Cancel leaves the selection unchanged. Changes affecting only the chosen system
+apply directly. A stale confirmation must be reviewed again against current rules.
+
+In LAN, Direct and GitHub rooms, only the host edits the feature draft. Guests
+see committed settings read-only. **Apply settings** publishes all changes
+atomically and clears both readiness confirmations; **Discard changes** restores
+the shared rules. Unapplied drafts and incompatible peers block starting. Resume
+requires fresh peer compatibility, not capabilities remembered in a checkpoint.
+Rules cannot change during a campaign.
+
+**Modular combinations preview** is a small compatibility pilot over Product
+programmes and its current foundations, not unrestricted modularity or a preset.
+Advertising and Regional growth can independently be off/off, on/off, off/on or
+on/on. Advertising uses current finite supply without adding regional arrivals;
+Growth changes outside supply without requiring advertising spend. When both are
+enabled they use the same finite outside books. Costs, growth rates and quotas
+are unchanged. Disabled systems create no empty policies, books or expenses.
+
+Relationship offers and Customer onboarding are unavailable inside this pilot.
+Entering it confirms their removal if selected; leaving a Growth-only pilot
+proposes restoring the legacy Advertising prerequisite. Use the unchanged
+cumulative setup to play with offers and onboarding. Every pilot pair requires
+both peers to support the new rules, including off/off. Pilot saves are v8.14
+with `featureRulesVersion: 1`; existing saves are never upgraded automatically.
+Continue, export/import, reconnect and rematch preserve the chosen rules.
+
+## Existing-customer product offers — v8.12 opt-in
+
+Relationship offers preview requires Regional demand and its prerequisites in a
+new campaign. Both players must use a supporting build. Existing saves keep their
+original rules. Products → Existing customers holds the standing instruction:
+choose a market, an existing household segment, an open target product, and the
+share of non-retention Retail time to use. This selection does not change focus.
+
+<!--{{RELATIONSHIP_OFFERS}}-->
+
+Only owned, unlocked balances without outstanding rate guarantees can switch,
+and only to a strictly better-fitting product for the selected segment. Product
+development and local sales instructions therefore matter to the existing book,
+not just new intake. Closing or retiring the target pauses its standing offer.
+An active instruction reserves its sales time even if no customers can switch;
+retention time itself is untouched. Revised product fit feeds the existing
+goodwill and retention rules, not an immediate loyalty grant.
+
+The model allocates account equivalents from the segment's household count and
+its eligible share of deposit principal. These are not identified people or
+additional account owners. Switching moves existing principal between product
+cohorts, never cash between institutions or money into equity. There is no new
+deposit growth, household award or acquisition commission. High-yield switches
+start the normal six-month guarantee; term deposits and active guarantees cannot
+be broken by an offer.
+
+Offers settle after household retention and term preparation, but before ordinary
+repricing and production. Conversion expense cannot exceed the opening draft
+ceiling or remaining cash/capital capacity after protected commitments,
+advertising and training. A later maturity cannot silently increase the bill.
+The actual cost is included once in operating profit; capital-recovery and
+delivery comparisons do not subtract it again as investment spending.
+
+The Products view compares same-book direct costs (interest plus servicing minus
+fees, including applicable vendor costs), not lifetime value or total bank profit.
+A better fit may cost more to provide. Operations includes the reduced new-sales
+time and full current operating forecast. Actuals may differ because executive
+effects, rival actions, retention and maturities occur before settlement.
+Owner reports, standing instructions and submitted policies remain private.
+
+This is voluntary **product switching**, not multiple-product ownership,
+individual customer finance, delayed onboarding or full cross-selling. The AI
+uses bounded affordability and retention preferences, not an optimal lifetime
+value model. Calibration and human acceptance remain necessary.
+
+### Applications and onboarding — v8.13 opt-in
+
+Products → Applications & onboarding reserves 0/25/50% of Retail time remaining
+after retention and existing-customer offers. Twenty work units per effective
+assigned banker cover both generation and activation (one each per request).
+Older eligible requests process first, across previous targets; new work uses the
+current market/segment/open-product instruction. Creating a request transfers
+neither customers nor money. Requested principal is the outside segment average
+capped at $12,500 per request, with at most 1,000 requests per batch/three batches.
+
+Requests made in M activate only in M+1/M+2; unfilled requests expire in M+3.
+Pausing does not suspend expiry. Closed/retired products cancel pending work.
+Actual activation jointly consumes finite outside segment households and deposits
+within the same monthly quotas as ordinary intake, remaining staff work and the
+reserved acquisition-expense ceiling. It opens the requested product at current
+terms after repricing/repayment but before ordinary production. High-yield promises
+start at activation. Expense is the existing segment rate on funded principal,
+not on pending requests; inflow is funding, not earnings.
+
+Application response is bounded by selected product fit and origin-month audience
+awareness. Later activations retain their source month and do not become current
+advertising-attributed ordinary intake. This is an aggregate pilot, not exclusive
+identified applicants, underwriting, multiple-product ownership or a universal
+queue for all acquisitions. New rules require both peers to support v8.13; old
+saves retain their rules. Queues/reports stay private to their bank.
+
+The v8.13 AI follow-through policy is conservative, not a lifetime-value model.
+It requires at least 1.05 service coverage to initiate a channel, then checks
+the private operating forecast's closing customer workload against ordinary
+next-month retention needs. Remaining eligible applications must fit the same
+staffing and a reserved activation-fee budget; current one-time commitments are
+accounted for once, not repeated next month. It credits no future hires, finished
+projects, outside arrivals or guaranteed revenue. Existing pending work must
+actually activate in the current forecast, not merely attract another batch;
+only pending work can justify trying the 50% setting after 25%. Current cash,
+capital, positive-profit and bounded acquisition-cost guards still apply.
+This is conditional capacity/affordability planning: future outside customers,
+deposits, rival actions and service demand can still change. Human choices and
+the underlying activation, fee, expiry and optional-rule contracts are unchanged.
+
+After final AI spending cuts, one pending-only reconsideration can recover
+affordable processing that an earlier planning stage paused. It may change only
+the onboarding instruction: staffing, retention, projects, advertising and every
+other finalized field stay fixed. It must activate accounts without generating
+new requests, preserve the original final cash/capital limit and all other quoted
+spending, and pass the same continuation safeguards. There is no recursive
+re-trimming or revival of cancelled commitments.
+
+### Compare customer effects — advisory, same v8.12 rules
+
+Products → Existing customers can compare the draft with offers paused, the
+selected offer, one available Business banker reassigned to Retail, and their
+combination. The comparison runs only when requested. It changes no accounts,
+orders, random state or saved rules. Stage applies only the shown staffing and
+offer-policy changes; Undo is available until the draft or source books change.
+
+Opening/closing fit, service coverage, goodwill and departure counts describe
+the selected market and customer segment. Operating profit, funding-sale loss,
+loan growth and plan limits describe the whole bank. Retained deposit principal
+is customer funding, not profit. A legal option is not necessarily beneficial;
+moving a banker can protect households while reducing commercial production.
+
+Current-month retention occurs before product switching. Closing estimates
+include ordinary operating intake, which can change the comparison's fit and
+goodwill; a same-book offer quote alone is not a measured retention benefit.
+The next retention probe holds the estimated closing book and staffing fixed.
+It excludes intervening rival actions, opportunities, economic changes and
+other future activity. It is conditional, not a promised result or lifetime value.
+
+Only a spare existing Business banker can be suggested. Existing specialist
+assignments, reserved commercial delivery, served contracts and bid capacity
+must remain supported. Operations, Lending and the retention split do not move;
+new hires are not available early. Unsafe scenarios show a reason rather than
+invented zero-cost or zero-departure results. No AI preference, price, share cap,
+failure threshold or save version changes with this advisory feature.

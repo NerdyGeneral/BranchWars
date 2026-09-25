@@ -1,0 +1,365 @@
+.workspace-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;margin-bottom:.45rem}.workspace-groups button{font:inherit;font-weight:700;line-height:1.3;border:1px solid #bbcadd;border-radius:7px;background:#f5f8fc;color:#354960;padding:.5rem .65rem;min-width:0}.workspace-groups button.active{background:#215f9f;border-color:#215f9f;color:#fff}.workspace-nav #workspaceTabs{display:flex;flex-wrap:wrap;gap:.4rem}.workspace-nav #workspaceTabs .workspace-tab{min-height:0;padding:.4rem .65rem;font-size:.85rem;flex:0 1 auto}.workspace-nav #workspaceTabs .workspace-tab span{font-size:.75rem;color:#536b85}.workspace-nav [hidden]{display:none!important}.workspace-nav button:focus-visible{outline:3px solid #124d91;outline-offset:3px}.plan-budget-panel{padding:.6rem 1rem}.plan-budget-panel .plan-budget{margin:0}
+@media(max-width:700px){.workspace-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-nav #workspaceTabs .workspace-tab{flex:1 1 130px}}
+@media(min-width:901px){#gameScreen .workspace-nav{position:sticky;top:8px}}
+/* Compact only campaign chrome; setup/lobby and business forms keep their space. */
+.shell:has(#gameScreen:not(.hidden))>.mast{padding:.5rem .9rem;margin-bottom:.4rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-mark{width:32px;height:32px;font-size:.9rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-sub,.shell:has(#gameScreen:not(.hidden))>.mast .mast-meta{display:none}#gameScreen>.panel:has(>.statusbar),#gameScreen>.panel:has(>.summary-grid){padding:.55rem .8rem;margin-bottom:.6rem}#gameScreen>.panel>.summary-grid{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.45rem}#gameScreen>.panel>.summary-grid .summary{min-height:55px;padding:.4rem .55rem}#gameScreen>.panel>.summary-grid .summary b{font-size:1rem}#gameScreen .workspace-nav{margin-bottom:.6rem}
+.plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
+.workspace-destinations{display:flex;align-items:center;gap:.7rem}.workspace-destinations .workspace-tabs{flex:1;min-width:0}.workspace-destinations>#gameHelpOpen{flex-shrink:0}
+.game-help-dialog{width:min(780px,calc(100vw - 2rem));max-height:calc(100dvh - 2rem);box-sizing:border-box;border:1px solid #9eafc5;border-radius:12px;background:#f7f9fc;color:#20354f;padding:1.1rem;box-shadow:0 15px 60px #142b4c55}.game-help-dialog[open]{display:flex;flex-direction:column}.game-help-dialog::backdrop{background:#12264188}.game-help-dialog .section-head{margin:0;gap:1rem}.game-help-dialog .section-head h2{font-size:1.1rem}.game-help-dialog>p{margin:.6rem 0;font-size:.9rem;line-height:1.45}.game-help-dialog>label{font-size:.9rem}.game-help-dialog>input{width:100%;box-sizing:border-box;min-height:42px;flex-shrink:0}.game-help-results{overflow:auto;min-height:80px;overscroll-behavior:contain;padding:.2rem .3rem .2rem 0}.game-help-topic{padding:.9rem;border:1px solid #c5d2e2;border-radius:8px;background:#fff;margin-bottom:.65rem}.game-help-topic h3{margin:0;font-size:1rem}.game-help-topic p{font-size:.95rem;line-height:1.55;margin:.5rem 0}.game-help-topic .micro{font-size:.82rem}.game-help-dialog :focus-visible{outline:3px solid #276fc1;outline-offset:3px}.contextual-help{margin:.3rem 0 .7rem}
+@media(max-width:700px){.workspace-destinations{flex-wrap:wrap}.workspace-destinations .workspace-tabs{flex-basis:100%}.workspace-destinations>#gameHelpOpen{width:100%}.game-help-dialog{padding:.8rem}.game-help-dialog .section-head{align-items:flex-start}.game-help-dialog .section-head h2{max-width:60%}}
+.attention-filters{display:flex;flex-wrap:wrap;gap:.5rem}.attention-filters [aria-pressed="true"]{background:#215f9f;color:#fff}.attention-list{list-style:none;padding:0;display:grid;gap:.65rem}.attention-item{display:flex;gap:1rem;align-items:center;justify-content:space-between;border:1px solid #cad6e4;border-left:4px solid #b0781c;border-radius:8px;padding:.75rem}.attention-item.is-required{border-left-color:#ba3545}.attention-item.is-upcoming{border-left-color:#307db9}.attention-kind{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:#51687f}.attention-item p{font-size:.9rem;line-height:1.5;margin:.3rem 0 0;max-width:90ch}.attention-item .btn{flex-shrink:0}.attention-clear{padding:1rem;background:#f2f7fa;border-radius:8px}.financial-overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.financial-overview-grid article{padding:.85rem;border:1px solid #cad6e4;border-radius:8px;background:#f5f8fc}.financial-overview-grid span,.financial-overview-grid b{display:block}.financial-overview-grid b{font-size:1.2rem;margin:.4rem 0}.financial-overview-grid p{font-size:.85rem;line-height:1.5;margin:0}.financial-explanation,#attentionInbox details{margin-top:.6rem}.financial-explanation summary,#attentionInbox summary,#monthlyReviewSummary{padding:.55rem 0;cursor:pointer}.financial-explanation p{max-width:100ch;font-size:.9rem;line-height:1.6}.attention-pagination{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem}
+@media(max-width:1000px){.financial-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:550px){.financial-overview-grid{grid-template-columns:1fr}.attention-item{align-items:flex-start;flex-direction:column}}
+.attention-filters .btn[aria-pressed="true"],.attention-filters .btn[aria-pressed="true"]:hover,.attention-filters .btn[aria-pressed="true"]:focus-visible{background:#215f9f;color:#fff;border-color:#215f9f}
+.people-tabs{display:flex;flex-wrap:wrap;gap:.5rem}.people-tabs [aria-selected="true"]{background:#e7f1ff;border-color:#2878e0;color:#124e8f}.people-tabs button:focus-visible{outline:3px solid #2878e0;outline-offset:3px}.people-recruit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0}#peopleWorkspace [hidden]{display:none!important}#peopleWorkspace .department-functions-nav{display:none}#peopleWorkspace>div[role="tabpanel"]{min-width:0}#workforceFormPreview table{width:100%}
+@media(max-width:700px){.people-recruit-grid{grid-template-columns:1fr}}
+.people-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}.people-summary>div{border:1px solid #c5d2e2;border-radius:8px;padding:.8rem;background:#f5f8fc}.people-summary span,.people-summary small{display:block}.people-summary b{display:block;font-size:1.25rem;margin:.35rem 0}.people-summary small{color:var(--muted);line-height:1.45}.people-shortcuts{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}#peopleOverview details{margin:.8rem 0}#peopleOverview .table-scroll{overflow:auto}#peopleOverview summary{cursor:pointer;padding:.5rem 0}#peopleOverview h3{margin:1rem 0 .5rem}
+@media(max-width:900px){.people-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:500px){.people-summary{grid-template-columns:1fr}}
+.plan-review-heading span{font-size:.85rem;color:var(--muted)}
+.plan-review-list{list-style:none;padding:0;margin:.6rem 0;display:grid;gap:.5rem}
+.plan-review-item{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem;border:1px solid #c5d2e2;border-left:4px solid #b86c12;border-radius:8px;background:#fff}
+.plan-review-item.is-blocker{border-left-color:#bd3541}
+.plan-review-item p{font-size:.9rem;line-height:1.45;margin:.3rem 0 0;max-width:80ch}
+.plan-review-item .btn{flex-shrink:0}
+.plan-change-list{padding-left:1.4rem;display:grid;gap:.5rem}.plan-change-list li{display:flex;gap:1rem;align-items:start;justify-content:space-between;border-bottom:1px solid #ccd6e3;padding:.6rem 0}.plan-change-list p{margin:.3rem 0;overflow-wrap:anywhere}.plan-change-list .btn{flex-shrink:0}.monthly-undo-confirm{border:2px solid #af741d;border-radius:8px;padding:1rem;margin:.75rem 0;background:#fffaf0}
+@media(max-width:700px){.plan-change-list li{flex-direction:column}.plan-change-list .btn{align-self:flex-start}}
+#monthlyPlanReview details{margin-top:.55rem}#monthlyPlanReview summary{cursor:pointer;font-size:.9rem;line-height:1.4;padding:.45rem 0}
+@media(max-width:700px){.plan-review-item{align-items:stretch;flex-direction:column}.plan-review-item .btn{align-self:flex-start}}
+
+/* Campaign chrome budget. A player must be able to see a workspace without
+   scrolling on a 1280x720 screen, so once a campaign is running the framing
+   collapses to one command bar, the destinations and the plan bar. Setup,
+   lobby and results keep their full presentation. */
+.shell:has(#gameScreen:not(.hidden))>.mast{display:none}
+.shell:has(#gameScreen:not(.hidden)) #gameScreen>.panel{margin-bottom:.35rem;padding:.4rem .7rem}
+.command-bar-row{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.command-bar-status{display:flex;flex-direction:column;gap:.02rem;min-width:0;flex:1 1 340px}
+.command-bar-status .kicker{line-height:1.2}
+.command-bar-status .bank-identity{margin:0;font-size:.7rem;display:flex;gap:.6rem;flex-wrap:nowrap;overflow:hidden;white-space:nowrap}
+.command-bar-status .bank-identity .bank-label{overflow:hidden;text-overflow:ellipsis}
+.command-bar-status>.small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.command-bar-actions{margin-left:auto;flex:0 0 auto;align-items:center;gap:.4rem;flex-wrap:nowrap;min-width:0}
+.command-bar .headline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;flex:1 1 290px;min-width:0;overflow:hidden}
+.command-bar .headline-grid .summary{padding:0;border:0;background:none;min-height:0;overflow:hidden;box-shadow:none;min-width:0}
+.command-bar .headline-grid .summary span{font-size:.62rem;letter-spacing:.04em}
+.command-bar .headline-grid .summary b{display:block;font-size:1rem;margin:0;line-height:1.2}
+.command-bar .summary-more{margin-top:.3rem}
+.command-bar .summary-more>summary{cursor:pointer;font-size:.72rem;color:var(--muted);padding:.1rem 0}
+.command-bar .summary-more .summary-grid{grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.45rem;margin-top:.3rem}
+/* Task groups and destinations share one compact band. */
+@media(min-width:901px){
+ .workspace-nav{padding:.4rem .7rem}
+ .workspace-nav .workspace-groups{gap:.3rem;margin-bottom:.3rem}
+ .workspace-nav .workspace-groups button{padding:.28rem .5rem;font-size:.82rem}
+ .workspace-nav #workspaceTabs .workspace-tab{padding:.28rem .55rem;line-height:1.2}
+ .workspace-nav #workspaceTabs .workspace-tab>span{display:none}
+}
+/* The plan bar keeps its controls but stops reserving a full block. */
+#gameScreen .readybar{gap:.6rem;align-items:center;flex-wrap:wrap}
+#gameScreen .readybar .checklist{font-size:.72rem;line-height:1.25}
+#gameScreen #monthlyPlanReview>summary{padding:.25rem 0;font-size:.84rem}
+@media(max-width:900px){
+ .command-bar-row{gap:.5rem}
+ .command-bar-actions{margin-left:0;width:100%}
+ .command-bar .headline-grid{flex-basis:100%}
+}
+/* Keep the bar on one line on desktop; the figures shrink before it wraps. */
+@media(min-width:1100px){.command-bar-row{flex-wrap:nowrap}}
+.workspace-nav .workspace-destinations{align-items:center;gap:.5rem}
+@media(min-width:901px){
+ .workspace-nav #gameHelpOpen{padding:.28rem .55rem;font-size:.82rem}
+ #gameScreen .readybar>div:first-child{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+ #gameScreen .readybar .checklist{display:flex;gap:.7rem;flex-wrap:wrap;margin:0}
+}
+/* Single-line plan bar and destinations. */
+@media(min-width:901px){
+ #gameScreen .readybar{flex-wrap:nowrap}
+ #gameScreen .readybar>div:first-child{min-width:0;flex:1 1 auto}
+ #gameScreen .readybar .row{flex:0 0 auto}
+ #gameScreen .readybar>.small{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .workspace-nav .workspace-destinations>#gameHelpOpen{align-self:center}
+}
+.command-bar .summary-more>summary{line-height:1.15}
+/* Campaign controls shrink to a single compact row. Setup, lobby and results
+   keep full-size buttons; only the persistent framing is reduced. */
+@media(min-width:901px){
+ #gameScreen .readybar{padding:0;min-height:0}
+ #gameScreen .command-bar-actions .btn,#gameScreen .readybar .btn,.workspace-nav #gameHelpOpen{
+  padding:.32rem .6rem;min-height:0;line-height:1.25}
+ .workspace-nav #workspaceTabs .workspace-tab{min-height:0}
+ #gameScreen #monthlyReviewDetails>summary{padding:.25rem 0}
+}
+@media(min-width:901px){
+ .command-bar-status .kicker{font-size:.68rem}
+ #gameScreen .readybar>div:first-child b{font-size:.9rem}
+}
+/* Final campaign framing budget: tighter shell padding, gaps and line heights so
+   the first workspace clears a 720px viewport without scrolling. */
+@media(min-width:901px){
+ .shell:has(#gameScreen:not(.hidden)){padding-top:.5rem}
+ .shell:has(#gameScreen:not(.hidden)) #gameScreen>.panel{margin-bottom:.3rem;padding:.35rem .7rem}
+ #gameScreen .command-bar-status .kicker,#gameScreen .command-bar-status>.small{line-height:1.2}
+ #gameScreen .command-bar .summary-more{margin-top:.15rem}
+ #gameScreen .readybar>div:first-child{gap:.5rem}
+ #gameScreen .readybar .checklist{line-height:1.2}
+ #gameScreen #monthlyReviewDetails{margin-top:.15rem}
+ #gameScreen #monthlyReviewDetails>summary{padding:.2rem 0;line-height:1.3}
+}
+/* Inline disclosure: collapsed it costs no band; open it wraps to a full row. */
+.command-bar-row>.summary-more{flex:0 0 auto;margin:0}
+.command-bar-row>.summary-more[open]{flex-basis:100%;margin-top:.3rem}
+.command-bar-row>.summary-more:not([open])>summary{white-space:nowrap}
+/* The open disclosure asks for a full row of its own, which only works while the
+   row wraps. Above 1100px the row is nowrap, so flex-basis:100% with no shrink
+   crushed the seat/status block and the headline figures to zero width and ran
+   the tiles outside the panel. Let the row wrap for as long as it is open. */
+@media(min-width:1100px){.command-bar-row:has(>.summary-more[open]){flex-wrap:wrap}}
+/* Bank names identify the seats and must stay readable; the planning/connection
+   text is the part that may shorten when the row is tight. */
+@media(min-width:901px){
+ .command-bar-status{flex:1 1 380px}
+ .command-bar-actions>#readyState,.command-bar-actions>#linkState{
+  min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .command-bar-actions{min-width:0}
+}
+/* Narrow layouts keep the wrapped command bar and the per-destination
+   descriptions, but the oversized controls and padding are campaign chrome at
+   every width. */
+@media(max-width:900px){
+ #gameScreen .readybar{padding:0;min-height:0}
+ #gameScreen .command-bar-actions .btn,#gameScreen .readybar .btn,.workspace-nav #gameHelpOpen{
+  padding:.32rem .6rem;min-height:0;line-height:1.25}
+ .workspace-nav .workspace-groups button{padding:.3rem .5rem}
+ .workspace-nav #workspaceTabs .workspace-tab{min-height:0;padding:.3rem .55rem}
+ #gameScreen #monthlyReviewDetails>summary{padding:.2rem 0}
+ .command-bar-status{flex:1 1 100%}
+}
+/* The seat name must survive truncation; the "solid / circle" map legend that
+   follows it is the part that may be clipped when the bar is tight. */
+@media(min-width:901px){
+ .command-bar-status{flex:1 1 420px}
+ .command-bar-status .bank-identity .bank-label{display:inline-flex;align-items:center;gap:.25rem;min-width:0}
+ .command-bar-status .bank-identity .bank-label b{flex:0 0 auto}
+ .command-bar-row>.summary-grid{margin-right:.35rem}
+ .command-bar-actions{gap:.5rem}
+}
+@media(min-width:901px){
+ .command-bar .headline-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .command-bar-row>.summary-grid{margin-right:.75rem}
+ .command-bar .headline-grid .summary b,.command-bar .headline-grid .summary span{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+}
+/* Market risk on the board. Losing a market is the most consequential thing that
+   happens to a seat; it should be visible where the markets are, not only as a
+   low-severity line on a separate intelligence tab. */
+.market-risk{margin-top:.3rem;font-size:.64rem;font-weight:700;letter-spacing:.03em;
+ border-radius:4px;padding:.15rem .35rem;text-align:center;white-space:nowrap;
+ overflow:hidden;text-overflow:ellipsis}
+.market-risk.warning{background:#fdf1d8;color:#8a6100;border:1px solid #e2c68a}
+.market-risk.critical{background:#fbe2e2;color:#a52a2a;border:1px solid #e0a2a2}
+.market-risk.withdrawn{background:#eef1f4;color:#5a6672;border:1px solid #cbd4dd;font-weight:600}
+.market-node.at-risk{box-shadow:0 0 0 2px #e2c68a inset}
+.market-node.critical-risk,.market-node.at-risk:has(.market-risk.critical){box-shadow:0 0 0 2px #d98d8d inset}
+.market-node.withdrawn{opacity:.72;filter:grayscale(.55)}
+/* A market and its controls share one workspace. Office-wide ledgers remain
+   below it, reachable from an identified office without visiting Operations. */
+.market-workbench{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:1rem;align-items:start}
+.market-workbench .map{min-width:0;margin:0}
+.market-workbench .map-board:after{content:"MARKET MAP · SELECT TO INSPECT"}
+.market-inspector{min-width:0;padding:1rem;border:1px solid #bbcbd7;border-radius:10px;background:#f6f9fb;color:#203648}
+.market-inspector h3{font-size:1.2rem;margin:.2rem 0}
+.market-inspector h4{margin:.8rem 0 .4rem}
+.market-inspector select{width:100%;margin:.3rem 0}
+.market-local-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.7rem 0}
+.market-local-metrics dt{font-size:.72rem;color:#526777}
+.market-local-metrics dd{font-weight:700;margin:0}
+.market-office-list{list-style:none;padding:0;margin:0}
+.market-office-list li{padding:.6rem 0;border-bottom:1px solid #cfdae3}
+.market-office-list .micro{display:block;margin-top:.2rem}
+.market-office-actions{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.4rem}
+.market-inspector .btn{white-space:normal;text-align:left;padding:.45rem .65rem;min-height:34px}
+.market-action-confirm{padding:.75rem;margin-top:.7rem;background:#fff5dc;border:1px solid #c3a465;border-radius:6px}
+.market-action-confirm ul{font-size:.8rem;padding-left:1.2rem}
+.market-local-projects article{padding:.65rem 0;border-bottom:1px solid #cfdae3}
+.project-entry-price{padding:.4rem .5rem;border-left:3px solid #a57929;background:#fff5dc;color:#5d471d}
+.market-local-projects .btn:disabled{opacity:1;color:#657180;background:#edf1f4}
+.market-workspace>#facilityNetworkPanel,.market-workspace>#facilityLifecyclePanel{margin-top:.75rem}
+@media(min-width:1200px){.market-workbench .market-node{width:106px;padding:7px}.market-workbench .market-name{font-size:.71rem}.market-workbench .node-meta{font-size:.49rem}.market-workbench .map-board{min-height:500px}}
+@media(max-width:1199px){.market-workbench{grid-template-columns:1fr}.market-inspector{grid-row:1}.market-office-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1rem}.market-local-projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.8rem}.market-local-metrics{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){.market-local-metrics{grid-template-columns:1fr 1fr}.market-inspector{padding:.75rem}}
+/* Keep the market visible beside a long catalog rather than growing a blank
+   map column. One scrollable inspector owns its related actions on desktop;
+   stacked layouts constrain only the optional construction comparison. */
+@media(min-width:1200px){.market-inspector{max-height:min(74vh,720px);overflow-y:auto;scrollbar-gutter:stable;scroll-padding-block:.8rem}}
+@media(max-width:1199px){.market-local-projects{max-height:55vh;overflow-y:auto;padding-right:.4rem}}
+.market-campaign-panel{margin-top:1rem;padding:1rem;border:1px solid #bdcbd7;border-radius:8px;background:#f6f9fc}
+.market-campaign-panel .advertising-controls{grid-template-columns:repeat(4,minmax(0,1fr))}
+.advertising-comparison{margin:.8rem 0;border:1px solid #bdcbd7;border-radius:6px;padding:.7rem}
+.advertising-comparison summary{cursor:pointer;font-weight:650;min-height:24px}
+.advertising-comparison tr.selected{background:#dfedf9}
+.advertising-outcome{padding:.8rem;background:#eaf0f5;border-left:3px solid #52748e;margin:.8rem 0}
+.advertising-outcome h4{margin:0 0 .4rem}
+.advertising-decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;margin:.8rem 0}
+.advertising-decision-grid>section{min-width:0}
+.advertising-decision-grid .advertising-outcome{margin-top:0}
+.advertising-decision-grid .advertising-funnel{padding:.7rem;margin:0 0 .6rem;gap:.4rem}
+.advertising-decision-grid .advertising-funnel>div{min-width:0}
+.advertising-method{border-top:1px solid #cad5df;padding:.65rem 0;margin-top:.5rem}
+.advertising-method summary{cursor:pointer;min-height:24px;font-weight:600}
+.market-campaign-panel .product-desk-summary{margin:.65rem 0}
+.market-campaign-panel .product-desk-summary>div{padding:.65rem}
+@media(max-width:1000px){.advertising-decision-grid{grid-template-columns:1fr}}
+@media(max-width:900px){.market-campaign-panel .advertising-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.market-campaign-panel .advertising-controls{grid-template-columns:1fr}}
+.opportunity-inspector{grid-column:1/-1;border:1px solid var(--line,#c8d7e5);border-radius:12px;padding:16px;background:var(--panel,#fff);scroll-margin-top:100px;}
+.opportunity-inspector .section-head{align-items:start;gap:12px;}
+.opportunity-inspector .section-head h3{margin:0;}
+.opportunity-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.opportunity-confirm{margin-top:14px;}
+.opportunity-confirm li{margin:6px 0;}
+.opportunity.selected .opp-value{color:#14633f;}
+.opportunity-detail-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;margin-bottom:12px;}
+.opportunity-detail-grid h4{margin:8px 0;}
+.opportunity-detail-grid p{margin:8px 0;}
+@media(max-width:999px){.opportunity-detail-grid{grid-template-columns:1fr;gap:12px;}}
+/* Object workspaces: a compact directory and one readable decision surface. */
+#projectGrid.projects{display:block}
+.project-status-band{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;margin:12px 0}
+.project-status-band>div{margin:0}.project-status-band .hiring-panel .btn{width:auto;padding:8px 12px}.project-status-band .capacity-readout{padding:8px;margin:8px 0 0}
+.object-workspace{width:100%;min-width:0;color:#263d4b}
+.workbench-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+.workbench-toolbar .btn[aria-pressed="true"]{background:#294c60;color:#fff;border-color:#294c60}
+.object-columns{display:grid;grid-template-columns:minmax(240px,31%) minmax(0,1fr);gap:20px;align-items:start}
+.object-directory{display:flex;flex-direction:column;gap:6px;min-width:0;max-height:64vh;overflow:auto;scrollbar-gutter:stable;padding:2px 5px 2px 2px}
+.object-row{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;padding:12px;border:1px solid #d3dce1;border-radius:8px;background:#f5f7f8;color:#29414f;cursor:pointer;font:inherit;min-height:66px}
+.object-row:hover{background:#eaf0f3}.object-row[aria-pressed="true"]{background:#e6eff3;border-color:#406c83;box-shadow:inset 3px 0 #406c83}
+.object-row b{font-size:.9rem;display:block}.object-row small{display:block;margin-top:5px;color:#596e7b;font-size:.76rem}
+.object-tag{font-size:.68rem;white-space:nowrap;font-weight:600;color:#4c6777}
+.object-detail{min-width:0;background:#fff;border:1px solid #d2dce2;border-radius:10px;padding:22px}
+.object-detail h3{font-size:1.3rem;margin:4px 0 12px}.object-detail p{line-height:1.5}
+.eyebrow{font-size:.68rem;letter-spacing:.08em;color:#607785;font-weight:700}
+.decision-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}
+.commercial-snapshot .decision-facts{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+.commercial-snapshot .decision-facts .micro{display:block;margin-top:6px}
+.decision-facts>div{padding:12px;border-radius:6px;background:#f1f5f6}.decision-facts small,.decision-facts b{display:block}.decision-facts small{color:#5b717f;font-size:.75rem}.decision-facts b{font-size:1.1rem;margin-top:5px}
+.decision-outcome{border-left:3px solid #78958a;background:#f1f6f2;padding:12px 15px;margin:16px 0}.decision-outcome h4{margin:0 0 8px}
+.workbench-empty{padding:30px;border:1px dashed #acbec9;border-radius:8px;color:#5a6d7a}
+.object-detail .notice.warn{color:#694316;background:#fff8e8;border-color:#d6b778}
+.operations-navigation{padding:10px 14px}
+.operations-navigation .operations-tabs>button{min-height:44px;padding:8px 10px}
+.operations-navigation .operations-tabs>button span{display:none}
+.project-workspace-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.project-workspace-heading h2{margin:0}.project-workspace-heading .btn{font-size:.78rem;padding:6px 9px}
+#projectDeliveryStatus{margin-top:20px;padding-top:12px;border-top:1px solid #d7e1e8;scroll-margin-top:105px}
+.operations-context{display:flex;align-items:center;gap:10px;margin-top:8px}
+.operations-context #operationsDeskHint{margin:0;flex:1;font-size:.76rem}
+.operations-context .btn{flex-shrink:0;padding:6px 9px;font-size:.76rem}
+.project-status-band .notice,.project-status-band .capital-action{margin:0;padding:10px 12px}
+.project-status-band .capacity-readout{padding:6px 8px;margin-top:6px}
+.project-status-band .capacity-readout>.micro.muted{display:none}
+.project-status-band p{margin:5px 0;font-size:.78rem}
+.project-status-band .btn{padding:6px 9px;font-size:.8rem}
+@media(max-width:700px){.operations-context{flex-wrap:wrap}.operations-context #operationsDeskHint{flex-basis:100%}}
+.object-detail .table-scroll{max-width:100%;overflow:auto}.object-detail .micro{font-size:.78rem}.object-detail .small{font-size:.86rem}
+.office-staff-row{display:grid;grid-template-columns:minmax(160px,1fr) 115px minmax(100px,.8fr);gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #dce4e8}
+.office-staff-row label{margin:0!important}.office-staff-row input{width:100%!important;margin:0!important}.office-staff-row small{display:block;color:#5b717f;font-size:.75rem}
+.office-staff-row input[type="number"]{font-size:1rem;padding:10px}.office-controls-row{display:flex;gap:16px;align-items:end;flex-wrap:wrap}.office-controls-row label{flex:1;min-width:180px}
+.workbench-actions{display:flex;flex-wrap:wrap;gap:8px;padding:14px 0;position:sticky;bottom:0;background:#fff;border-top:1px solid #dae2e7;z-index:1}
+.workbench-actions .btn{padding:8px 10px;font-size:.8rem;min-height:36px}
+.object-detail .notice ul{margin:5px 0;padding-left:18px}
+.function-effects{display:grid;gap:8px;margin:12px 0}.function-effects>div{display:grid;grid-template-columns:1fr auto;gap:5px 12px;padding:12px;background:#f1f5f6;border-radius:6px}.function-effects small{grid-column:1/-1;color:#536c7b}.function-effects .warn{color:#825320}
+.object-action-strip{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.object-action-strip .btn{font-size:.8rem;padding:8px 10px}
+.department-functions-desk>details,.leadership-workspace>details{margin:18px 0;border-top:1px solid #d4dfe5;padding-top:12px}
+.department-functions-desk .object-detail p,.development-workspace .object-detail p{margin:10px 0}.department-functions-desk .object-detail h4{margin:16px 0 8px}.department-functions-desk .credit-controls{gap:10px 16px}.department-functions-desk .df-field label{margin:0 0 5px}.department-functions-desk .df-field input{margin:0}
+.workforce-evidence{border-top:1px solid #d4dfe5;margin-top:18px;padding-top:12px}.development-workspace .object-detail section{padding:0;margin:0 0 14px}
+.development-workspace .credit-controls>div{min-width:0}.development-workspace label{display:block;font-size:.85rem;margin:0 0 6px}.development-workspace input,.development-workspace select{box-sizing:border-box;width:100%;min-width:0;min-height:40px;padding:8px 10px;border:1px solid #b8cada;border-radius:7px;font:inherit;background:#fff;color:#25384b}
+.people-risk-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.people-risk-list .object-row{align-items:start}.people-risk-list .object-tag{white-space:normal;text-align:right;color:#825320}
+.leadership-workspace .object-detail>.credit-policy{border:0;padding:0;margin:0}.leadership-workspace .object-detail>.credit-policy h4{font-size:1.2rem;margin-top:0}
+@media(max-width:700px){.people-risk-list{grid-template-columns:1fr}.function-effects>div{grid-template-columns:1fr}.function-effects small{grid-column:auto}}
+.office-ledger,.service-desk-tools{margin-top:18px;border-top:1px solid #d2dde4;padding-top:12px}
+@media(max-width:850px){.object-columns{grid-template-columns:1fr}.object-directory{max-height:230px}.object-detail{padding:16px}.office-staff-row{grid-template-columns:minmax(120px,1fr) 90px minmax(90px,.7fr)}}
+@media(max-width:700px){.project-status-band{grid-template-columns:1fr}}
+@media(max-width:480px){.decision-facts{grid-template-columns:1fr 1fr}.object-row{padding:10px}.object-tag{white-space:normal}.office-staff-row{grid-template-columns:1fr 90px}.office-staff-row>small{grid-column:1/-1}}
+.product-workspace .object-detail h3{margin-top:6px}
+.product-workspace .object-directory{max-height:none}
+.product-workspace .object-tag{max-width:105px;white-space:normal;text-align:right}
+.product-workspace .workbench-toolbar{margin:16px 0}
+.product-delivery-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product-delivery-options article{padding:14px;border:1px solid var(--line,#cbd8e5);border-radius:10px;background:#f8fafc;display:flex;flex-direction:column}
+.product-delivery-options h4{margin:0}.product-delivery-options .btn{margin-top:auto}
+.product-route-facts{line-height:1.6}.product-choice-strip{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.product-choice-strip .btn{min-height:38px;white-space:normal;font-size:12px}
+.product-choice-strip .btn[aria-pressed="true"],.product-desk-tabs .btn[aria-pressed="true"]{background:#31586b;color:#fff;border-color:#31586b;box-shadow:inset 0 0 0 1px #31586b}
+.product-choice-strip .btn:focus-visible,.product-desk-tabs .btn:focus-visible{outline:3px solid #2878e0;outline-offset:2px}
+.product-mix{display:grid;gap:10px;padding:12px;background:#f3f7fb;border-radius:8px}
+.product-mix>div{display:grid;grid-template-columns:minmax(120px,1fr) minmax(40px,1fr) 70px;gap:8px;font-size:12px;align-items:center}
+.product-mix meter{width:100%}.product-bank-summary{margin-top:18px;border-top:1px solid var(--line,#cbd8e5);padding-top:14px}
+.product-bank-summary summary{cursor:pointer;font-size:12px;font-weight:650}
+@media(max-width:650px){.product-delivery-options{grid-template-columns:1fr}.product-mix>div{grid-template-columns:minmax(90px,1fr) minmax(35px,.6fr) 65px}}
+#gameScreen[data-tab="strategy"] #strategyTree{display:block;overflow:visible;grid-template-columns:none;padding:0}
+#strategyTree .research-workspace{font-size:14px}
+#strategyTree .object-directory{max-height:none}
+#strategyTree .object-detail h3{font-size:21px;letter-spacing:0;margin:4px 0 12px}
+#strategyTree .object-detail h4{font-size:16px;letter-spacing:0;margin:12px 0}
+#strategyTree .object-detail .strategy-next{margin-top:18px}
+#strategyTree .object-tag{max-width:95px;white-space:normal;text-align:right}
+#strategyTree .object-detail p{line-height:1.65}
+#strategyTree .research-funding-actions,#strategyTree .research-app-choices{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+#strategyTree .research-model-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+#strategyTree .research-model-options .specialization-option{padding:18px;font-size:14px}
+#strategyTree .research-app-choices .btn[aria-pressed="true"]{background:#31586b;color:#fff;border-color:#31586b}
+#strategyTree .object-detail .capability-bar{height:12px;margin:16px 0}
+#strategyTree .object-detail .decision-facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+#strategyTree .research-funding-actions .btn{white-space:normal}
+#strategyTree .object-detail #strategyRoadmap{margin:20px 0 12px}
+@media(max-width:650px){#strategyTree .research-model-options{grid-template-columns:1fr}#strategyTree .research-funding-actions .btn{flex:1 1 140px}#strategyTree .object-detail .decision-facts{grid-template-columns:1fr}}
+/* Group businesses use one selected decision, with costs beside the controls. */
+#financialGroupPanel .group-agency-workspace{max-width:none;padding:1rem}
+#financialGroupPanel .group-business-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin:.8rem 0}
+#financialGroupPanel .group-business-strip>div{padding:.6rem .8rem;border-radius:6px;background:#edf3f5}
+#financialGroupPanel .group-business-strip span{display:block;font-size:.78rem;color:#465f6d}
+#financialGroupPanel .group-business-strip b{display:block;font-size:1.15rem;margin-top:.2rem}
+#financialGroupPanel .agency-role-row{display:grid;grid-template-columns:minmax(0,1fr) 42px 25px 42px;align-items:center;gap:.5rem;padding:.8rem 0;border-bottom:1px solid #d5e0e7}
+#financialGroupPanel .agency-role-row small{display:block;font-size:.8rem;line-height:1.5;margin-top:.25rem;color:#465f6d}
+#financialGroupPanel .agency-role-row .btn{padding:.5rem;min-height:42px}
+#financialGroupPanel .agency-renew-label{display:flex;align-items:center;gap:.6rem;margin:1rem 0 .5rem;font-weight:600}
+#financialGroupPanel .agency-renew-label input{width:18px;height:18px;min-height:0;min-width:0;margin:0;padding:0;flex:0 0 18px;accent-color:#2878e0}
+#financialGroupPanel h3[id]{scroll-margin-top:110px;font-size:1.25rem}
+#financialGroupPanel .group-choice{border:0;padding:0;margin:1rem 0}
+#financialGroupPanel .group-choice legend{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+#financialGroupPanel .group-choice>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:.5rem}
+#financialGroupPanel .group-choice .btn{height:100%;text-align:left;padding:.7rem;white-space:normal}
+#financialGroupPanel .group-choice small{display:block;font-weight:400;line-height:1.5;margin-top:.3rem}
+#financialGroupPanel .group-choice [aria-pressed="true"],#financialGroupPanel .workbench-toolbar [aria-pressed="true"]{background:#284d5c;color:white;border-color:#284d5c}
+#financialGroupPanel .credit-summary{margin:.8rem 0}
+#financialGroupPanel .credit-summary small{line-height:1.5}
+#financialGroupPanel .group-support{margin:.75rem 0;padding:.6rem;background:#f4f7f8;border-radius:.5rem}
+#financialGroupPanel .group-support input{max-width:24rem}
+#financialGroupPanel .workbench-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+#financialGroupPanel input[type="number"]{font-size:1rem;min-height:42px}
+#financialGroupPanel .investment-note-table{overflow-x:auto;margin:.8rem 0}
+#financialGroupPanel .investment-note-table table{width:100%;border-collapse:collapse;min-width:32rem}
+#financialGroupPanel .investment-note-table caption{text-align:left;padding-bottom:.6rem;font-size:.85rem;color:#546978}
+#financialGroupPanel .investment-note-table th,#financialGroupPanel .investment-note-table td{text-align:left;padding:.55rem .65rem;border-bottom:1px solid #d9e2ea}
+/* Income review is contextual and read-only; charts never share principal axes. */
+.income-review{margin-block:1rem;padding:1rem;border:1px solid var(--line,#d5dfec);border-radius:12px;min-width:0}
+.income-review .decision-facts{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.income-review details{margin-top:.7rem}
+.income-history{margin:1rem 0;max-width:700px;color:var(--accent,#2869b5)}
+.income-history svg{display:block;width:100%;height:auto;min-width:280px}
+.income-review .table-scroll{overflow-x:auto}
+.bank-income-statement{margin-block:1rem}
+.bank-income-statement .table-scroll{overflow-x:auto}
+.bank-income-statement .statement-subtotal td{font-weight:700;border-top:1px solid var(--line,#d5dfec)}
+/* Focused monthly controls retain their original DOM and shared draft. */
+#monthlyEditor {border:1px solid var(--line,#b5cbe1);border-radius:12px;padding:16px;margin-top:12px;min-width:0;}
+#monthlyEditor[hidden] {display:none!important;}
+#monthlyEditorBody {min-width:0;max-width:100%;}
+#monthlyEditorBody > * {max-width:100%;}
+.quantity-control {display:flex;align-items:center;gap:5px;}
+.quantity-control input {width:5rem;min-width:0;}
+.function-economic-impact {background:var(--soft,#f0f6fc);padding:12px;border-radius:10px;margin:12px 0;}
+.subject-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.subject-tabs [aria-pressed="true"]{border-color:var(--blue,#287ad8);background:#eaf3ff;color:#174e8b}
+#peopleAllocationMount>.panel,#customerCommercialMount>.panel,#productPolicyMount>.panel{margin:0;box-shadow:none}
+#peopleAllocationMount:not([hidden]){margin-bottom:16px}
+#productPolicyMount[hidden],#productProgramsPanel[hidden],#customerHouseholdMount[hidden],#customerCommercialMount[hidden],#customerGrowthPanel[hidden],#peopleAllocationMount[hidden]{display:none!important}

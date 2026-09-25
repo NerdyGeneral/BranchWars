@@ -1,0 +1,948 @@
+{
+  "package": "N-00",
+  "createdAt": "2026-09-05T20:58:23.657Z",
+  "node": "v24.18.1",
+  "platform": "win32",
+  "filesBefore": {
+    "BRANCH_WARS.html": "87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "33a39e2c5acbff17db8edbaafab7de7a4258ae9850fab1cbcfbb5409aca6d0ee",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "e121444d90a8e62b4020c399f5c4ef755f9a9bb06f2f7f3bb95fc4be39d29359",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "f08ca37943dae7496a7cf01569f3e2760c6d1a0b0acb380777541fd3cdfd5727",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "a3e40427d0ad73867b0a33f7934e0a9245da59f76d83c79560562155a8d8340c",
+    "tests/github_resilience.test.js": "f1b13460b1751b8fc9894a865e8dbb964b3a3c8aa6c6eba32d48b364dc9cb031",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "474672c9ebd3d362a8a108a4a8319f2905ab607116a297eb66d442d164b097d3",
+    "tests/customer_needs.test.js": "a34c605d1b6f019ffa67d07d16ecb57345db3cf88e7c467f12546adf169fe0e0",
+    "reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "tests/customer_relationships.test.js": "e7462b5d85e6ca7dcde3b947898d8df0ce54ceced78ac05b238ee680a0b28cad",
+    "reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html": "2d7bbca84b30100cb710c7a44d36dc5ab9f3f13a2e21c9f624f60fd63fe972b3",
+    "tests/service_workforce.test.js": "45d4e7d79fca121f9320eb8a234dc1bc8a886ec196593c3aaa5079bc852ff944",
+    "reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html": "0ae290ef37cc65951396abadb04e175cd3e975dcd49ac48ca30c239643491f53",
+    "tests/docs.test.js": "e9986a259ec8c002835dc4a13069863c6f9c38428c8ac0afb7e20b076418d018",
+    "tools/build_reference.js": "fc3e9db7cfdef26428b7e3af1c8f665d5d0db7e00fcda22201a40c1dc7b724c5",
+    "tools/reference-template.md": "6cba2b1eae3f7a7076273e88c2e8dcaae1366b89176d8b94066548f41cd0ba2d",
+    "docs/game-reference.md": "3a241e78aa30dcfa687fc62502c60140b1521448e07796fd81fdf8768b1802ba",
+    "tests/behavior-golden.test.js": "5d793d00cea0ed3f0a1f3d07252d5945055e827c659693dffa870126a706a13a",
+    "tests/architecture.test.js": "64387dfcdaa0e961b8d90656a4d756c467ed5fbeea7302d64228aa52fe83b0fc",
+    "tests/fixtures/behavior-golden.json": "dad8fa7bc079a3915cf8aa110576ac68c4349763ba1bbe09d5c2f43ef262c1f4",
+    "tests/fixtures/override-ceilings.json": "c732dea6fe47406d1fa5e27adab335c50bebe342780c9c684d2d26a200ab625b",
+    "tests/fixtures/legacy-half-ready.json": "6498fd868a5e10f32b8a6b9754a631b1fd9769583eb670cf008c91e282c2e0ae",
+    "tests/fixtures/pilot-half-ready.json": "41eee660124dfce310acafcf11418423e8a4bdf2a6e6041229c1deb7dcf869a0",
+    "tests/fixtures/goodwill-half-ready.json": "3f393b35ede3c1452dab06b8070c2e7b3ac6f46c0fc5e4bd961169ca60cd59d2",
+    "tools/check.js": "a0fba6830d2f87bdd043a3e49441b2036778f626e46158e3a53cb6ea669f67c9",
+    "tests/save-baseline.test.js": "44e31120289c25f104637defbd2c995b9be4e746368d3edfb99883be59454769",
+    "tests/launcher-path.test.js": "090d780e84d51a65a4913a75a4d12198058afb2a6bc53b25f0b0968b53eb0f61",
+    "tests/fixtures/save-continuation.json": "7b9f2c71b2f9e339cc88d1726ffd1c1bb41ee77ee1f37845dba16177cf57699b",
+    "tests/reference-eol.test.js": "85f9eff579ec371b3a98346501473ac6344ca0eba43bb421400fb32cda5b12f5",
+    "tests/project-rules.test.js": "3420ef7ebc70abf52868a708862934f7dfcd5caad43705c13e8a3891e8ceafb9",
+    "tests/campaign-lifecycle.test.js": "727b4ebf5da0b3a05bb96d2889f775e859c1e18e9e74b2ab9648c3653883c592",
+    "tests/multiplayer_lobby.test.js": "b18a8af48069842d3e4baebd404268671fbcb12ee229ea00a7c153c3ee28cd57",
+    "tests/runtime-stages.test.js": "13d6563a35ac63cc0999a12ca89df56b3a93e93f7964bcb5c36712f06c670b95",
+    "tools/build_game.js": "9cada8b1bb5b67e7af63e3323a5518e5fc3e840062e3f709c2579700a2a193ef",
+    "tests/build.test.js": "795dddbd1486e940eab9aad59d9a08c95eb321bffca704099a8e4068ac3b464b",
+    "src/manifest.json": "4de4a836ef9cc688beb5fe8a623f8b125f1d9c53312c38f6e4121d0a792fa3ab",
+    "src/page.html": "6d8b602666a71df660b570d1759903446af672a7e54b26df4ddb434f13b13cfb",
+    "src/engine/primitives.js": "d4832bc87c768afe0754b22087e898331bc606716f50a589a9b439e1015c239f",
+    "src/content/catalog.js": "956416d9bf48222a167fc3705723e570e8993ab1690f7bdd2c549dbfac2f66dd",
+    "src/engine/institution.js": "12c3f1c1266d1ffd1f3d99c52193285817772c6bb3c746f101d6c97f6ba7c1ed",
+    "src/engine/territories.js": "68425d3331db3963ed053292132b671870dc416a260c5b55a1f201681abbc70b",
+    "src/engine/campaign.js": "449786559e7a7e50038f412bdedc022f94546f205dca61da724eb7224541349b",
+    "src/engine/actions.js": "ec483df16775f3349876bfe6bb56f89dacd6f365f5c9ef761962056c2064d0bf",
+    "src/engine/operations.js": "2d3e1d1b2ab2fe2901c64ede312bd37de202e65d4f099cc157bdfd31e2fa5830",
+    "src/engine/competition.js": "9632c2de8b08c288cd0834fa776d9861bb00ce507cf59ad6bcbd49514f37a88d",
+    "src/engine/projects.js": "98e0e217d9bb9771c0a4a7b5feddd906932290647ca320fc9fd1492edc3fd5be",
+    "src/engine/ai.js": "4f1741a38edb62e6a732601ad2a3ac3cafe493f1de4dab985da9466a6568009a",
+    "src/engine/plans.js": "c660b539e9990f56f9e1486ee1fa95d1f47a44a25112e84e0391e7f82868384f",
+    "src/engine/monthly.js": "f5f0c534984cf6fc6649573852a066065d18605f7369f7c63523fb352cd573f2",
+    "src/engine/portfolio.js": "cd2ce4b1876f3d84730ad279c0df440dd4fa727350f260b95edbe1e42b397350",
+    "src/engine/session.js": "3493892c3075a45223b39ba47fb5f4cb7373dcbc7607380d372b516e9ea79394",
+    "src/engine/accounting-adapter.js": "006823d78d33d4983f62cfb130f57a74de8ebcbef9610889e767798b5c912228",
+    "src/content/regional-markets.js": "b069d3b61fc09a16e9f1b1875a64550364f1d2c697c270cce740fff829c29317",
+    "src/engine/regional.js": "e97ac3b4914fb5e3482df7cac8bb31074f83051fb537b99b10dae898f3dac07d",
+    "src/engine/market-economy.js": "29593c314b0859eccf3bd9e60a338c26ecf7a3cad2652218f0d5c0f8a9d3d7f4",
+    "src/engine/credit.js": "b3efe88ca10bea49e5088e0508c97ad80901ecfbc29bb78fad6cfa6c2434b76b",
+    "src/engine/funding.js": "a76e1be1e7d21096b72579a44127463a09c113bea91a403fd8bfbc5e3c20252d",
+    "src/engine/deposits.js": "77709abbea24f8e911837efbb787a3e706a8610eef53222236d280e417290a84",
+    "src/engine/term-funding.js": "bd696a4372e6bfad37627d7a8e9987e8968f2d0a8250cd658dac592ccffe99e5",
+    "src/engine/retail.js": "3bfd242b2eee8e6b990799b05518c6e9f0aab43ff53c319526796df7ab17b47d",
+    "src/engine/deployment.js": "99be85aa93383284325436523f55ba42d6d5f0d6d5768cfb52a2a94588ae281a",
+    "src/engine/contracts.js": "396be5efa539d77b95e62d39426ede25aeb6520eef937fae2d10c0dfa751e733",
+    "src/engine/services.js": "6e041f0da109b4a663b11b057b20532c922212da57fa62e6d2eae0ff00270507",
+    "src/content/anchor-clients.js": "70e4d3f37facdfdcfc5da910833a3957c53022ca6b8712eade6c1160baf9934a",
+    "src/engine/management.js": "24e23c23d716afe45672c33ac4c8ba1a2f5f74ca3ed0623a748d0bf9c2ce6421",
+    "src/engine/relationships.js": "86ccbae2a1abb7268054c45e05b0ef11d89db5d05d1f60a27a7d3c2f4a2c2fbf",
+    "src/content/customer-markets.js": "65d50314084195ad0bc3e1defd09a1e97cd63d11b6944a9e807b71bb092d9762",
+    "src/engine/customer-demand.js": "d58dfe64669b7036038d72d0960708d1b0c65ed33523138688c39488e9653349",
+    "src/engine/customer-relationships.js": "ca9793a6ce07ca935cc0f12275b3a61a05403f331d8e94b1893968207ef33380",
+    "src/engine/ledger.js": "8e15a338f525ec800c1fcbe810d2c3309a09e894ca8e0bcbf240a7bd6281f6a8",
+    "src/engine/accounting.js": "c943316a2f7ba85b911fd190c744d3c62869c334aa9e702702f348d93e3fb43b",
+    "src/engine/migration.js": "c0f93c0cedb559c6ee959e49594bbd7050a4c1840f8ad1bc9579c0491d5c796f",
+    "src/engine/operation-coordinator.js": "48366472ace81cee1559d2017eee3444b7f6fbdc7e1fba95de2c3d4d1cfc6dc2",
+    "src/engine/project-coordinator.js": "014e9ed4919d9a100f6cf88ca155d3abb2c7203a94e8ef37c12b3f2235e90048",
+    "src/engine/cycle-coordinator.js": "786fc78ffb34e9e4a3c63ba35bff950d862161ee20185007eb08c70ee8a2ecb4",
+    "src/engine/intent-coordinator.js": "588117e46d9cc9379bc89d4dce41f357249cb9a52022c30c8c7ab94503ed0b49",
+    "src/engine/api.js": "d0730b09e825f754539fc37bbd5d344ce4cb2a75a543e4b8d1732ec17065dd68",
+    "src/engine/shell.js": "6bc991d1c2d29e2b8966f0f635f595f55c854896ee5b620eddff95cf9556d39d",
+    "src/ui/state.js": "a61210a9159ff85f530fd190981a33679e50b83355c6414af051afd45b991745",
+    "src/ui/lobby.js": "f833e4775676ca4e8eb74eeb116b59fff0bb75d8f8f6c1d8937c71b2d675c4fb",
+    "src/ui/draft.js": "e7f1c78d853b958905b402b6c280ab9a873999861585b01d2481680e0b7bd382",
+    "src/persistence/saves.js": "992471852ff108136ff96659ca9942830f9595a8bf346687dabdb8e15775a29a",
+    "src/ui/local-game.js": "449d2b199b54e583e096ee79b3740e004f951296c0534e8fed34e57aa7863a9d",
+    "src/network/lan.js": "998146c2a89a078959fd51158fe6779d1c71d58aa869de7c586915484ca4db72",
+    "src/network/repository.js": "72e9f0b50db5d7c19d76dd98029f91598b2d1a398e567870e1c9a97db1a9a88b",
+    "src/network/peer-codecs.js": "ca61fe9bd8396e5919be74a44eb97521d5766a1e5fa060930097dbf3b94e0016",
+    "src/network/direct.js": "79948c41d4f7f195eb8515a73854d7418320dc4c6c270e940971ec9b57d8eddd",
+    "src/network/protocol.js": "a32e0c0089734d1a1d9bb09b9c0d9fcc9682e919868aef8c187d5775d5f0c39c",
+    "src/ui/dashboard.js": "affc60694eb5e3c8167cd411d5e8d8660f0f703ede8a4ad807fa9f148f3e2df2",
+    "src/ui/services.js": "a1d1360d225e3abcad3ba8cda381f18aa78d87545bb66f1d8c56328440c5db99",
+    "src/ui/management.js": "983df8aaad3ed51dbd5f69408a459e0deec5f66ad0eceb86bfb70a44fec5a116",
+    "src/ui/products.js": "63b632fe72467138379ac3722e028367112acd3d8850498cd1a9544b787cc968",
+    "src/ui/projects.js": "0994f315c72630b5c7c18899eb16279ccbd28b536d446fc7c6fe5ec3f9bfbc20",
+    "src/ui/results.js": "5adac280f59329d980edd21701fd53cf72e4e3b059c863c852119d5ae989f4b8",
+    "src/ui/bootstrap.js": "ea6ee446522e3b178d9be7685ff762042de18a7b3af0479812924fbaaf270d1f",
+    "src/ui/shell.js": "bf3651cb1de19735ff57bb02b1eb49a121799ae78578dd4c67acd0e7a26530ea",
+    "src/styles/base.css": "f9f1ca602a89af06df8bf7a0edac04c2ec4e92296e103cf17e4a5682b471f74b",
+    "src/styles/visual-overhaul.css": "612ba55a9ec97152e44abeedbc45c220aac1f109ce04fa1f10a0f8602469c74c",
+    "src/styles/isometric-city-overhaul.css": "f9cdb3f25b175feebf21c055d4e7e6c5e11e187605cd54376709862b37ff379c",
+    "src/styles/isometric-city-polish.css": "7c1eeb266a3482916c47ae5b699f28c422c5083d44bcc1bb01610196563c776a",
+    "src/styles/funding-strategy-ui.css": "fae699afb1abfa87c7e873793447e3b0d94370397d5ebc6ef822d168e5f525c6",
+    "src/styles/portfolio-depth-ui.css": "3683cfc621841e7fcb45be6fcb6b6c08ed92522d56cc2bbfa85113168a431f55",
+    "src/styles/workspace-ui.css": "5813307af9225b4175cecb884d9807a1316390551894fce91682bba6fd34fb40",
+    "src/styles/workspace-polish.css": "5e7a5acbc522a9094384b128f5088a8216568dcb9a63fb98b9aec370fb8908e8",
+    "src/styles/planning-repair-ui.css": "4ceeb347447168ee1fe47768e050a5eff5518f09cd97a351acd2141612b3eb3b",
+    "src/styles/bank-identity-ui.css": "1521b6cfd7f68e9a01f40edd7eda371abd7dd3c7d7891b4c64ee0a958c7511ed",
+    "src/styles/region-summary.css": "67f3e32757c392646dcb754a6e08fc8248dcf2df86b6ebba140581d82a6b4a4f",
+    "src/styles/lobby-ui.css": "5a3059db9eccc6531dc914fc7fb4a6e0557069f0be085ce6a2e85c71b8cc6a72"
+  },
+  "head": {
+    "label": "git HEAD",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 44,
+    "stdout": "d624336d4f26ba36b6cc695c247b289c1c68fc4a\n",
+    "stderr": ""
+  },
+  "statusBefore": {
+    "label": "git status",
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 44,
+    "stdout": "?? ARCHITECTURE_PLAN.md\n",
+    "stderr": ""
+  },
+  "diffStat": {
+    "label": "git diff stat",
+    "command": [
+      "git",
+      "diff",
+      "--stat"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "error": null,
+    "elapsedMs": 46,
+    "stdout": "",
+    "stderr": ""
+  },
+  "tests": [
+    {
+      "label": "engine.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\engine.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 22121,
+      "stdout": "Branch Wars engine tests passed: 48 long-run campaigns plus open-ended endings, capability, validation, migration, rematch, AI-coverage, direct-link session, UI contract and generated-reference checks.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\accounting.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 703,
+      "stdout": "Accounting prototype tests passed: opening reconciliation, atomic postings, transfers, loan funding, retained profits, noncash losses, debt, securities sales, 27 real previews and 2000 reconciled stress postings. Campaign rules remain unchanged.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_activities.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\accounting_activities.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 86,
+      "stdout": "Accounting activity tests passed: expense/capital classification, 24 live opportunity rewards, 20 live acquisition comparisons, two-sided settlements, debt conservation, penalties, franchise funding and atomic batches. Campaign economy remains v1/v2.\n",
+      "stderr": ""
+    },
+    {
+      "label": "accounting_persistence.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\accounting_persistence.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 335,
+      "stdout": "Accounting persistence tests passed: 256-entry snapshots, checkpoint reconciliation, exact continuation, repeated pruning, 15 corruptions, invalid histories and no campaign migration.\n",
+      "stderr": ""
+    },
+    {
+      "label": "bank_identity.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\bank_identity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 118,
+      "stdout": "Bank identity tests passed: picker wiring, seat perspectives, save migration, rematches, legacy defaults, unsafe values, matching colors, handshake contracts and simulation neutrality.\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_pilot.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\regional_pilot.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 60091,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"sourceUnchanged\": true,\n  \"turns\": 1920,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 37,\n      \"reentries\": 48,\n      \"depositContests\": 149,\n      \"maxViewBytes\": 278976\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 36,\n      \"reentries\": 41,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 268334\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 40,\n      \"reentries\": 39,\n      \"depositContests\": 148,\n      \"maxViewBytes\": 270906\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 35,\n      \"reentries\": 32,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 262431\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 35,\n      \"depositContests\": 141,\n      \"maxViewBytes\": 282420\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 41,\n      \"reentries\": 45,\n      \"depositContests\": 159,\n      \"maxViewBytes\": 282354\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 29,\n      \"reentries\": 36,\n      \"depositContests\": 156,\n      \"maxViewBytes\": 266474\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 26,\n      \"reentries\": 31,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 273083\n    },\n    {\n      \"seed\": 8,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 34,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 267610\n    },\n    {\n      \"seed\": 9,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 28,\n      \"reentries\": 35,\n      \"depositContests\": 158,\n      \"maxViewBytes\": 283270\n    },\n    {\n      \"seed\": 10,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 33,\n      \"reentries\": 33,\n      \"depositContests\": 152,\n      \"maxViewBytes\": 269798\n    },\n    {\n      \"seed\": 11,\n      \"cycle\": 161,\n      \"ended\": false,\n      \"reason\": null,\n      \"withdrawals\": 27,\n      \"reentries\": 30,\n      \"depositContests\": 155,\n      \"maxViewBytes\": 271580\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "regional_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\regional_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 21961,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"sourceUnchanged\": true,\n  \"mainLoopTurns\": 800,\n  \"additionalResumeTurns\": 8,\n  \"withdrawals\": 66,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 102,\n      \"ended\": false\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 102,\n      \"ended\": false\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "market_economy.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\market_economy.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 35170,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"sourceUnchanged\": true,\n  \"turns\": 968,\n  \"maxViewBytes\": 357799,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        158119682,\n        9596448\n      ],\n      \"outsideDeposits\": 283870\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 7,\n      \"playerDeposits\": [\n        20927475,\n        146615463\n      ],\n      \"outsideDeposits\": 457062\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        145246617,\n        22579790\n      ],\n      \"outsideDeposits\": 173593\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        157145185,\n        10346729\n      ],\n      \"outsideDeposits\": 508086\n    },\n    {\n      \"seed\": 4,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 5,\n      \"playerDeposits\": [\n        8784848,\n        159017469\n      ],\n      \"outsideDeposits\": 197683\n    },\n    {\n      \"seed\": 5,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 4,\n      \"playerDeposits\": [\n        8009010,\n        159855182\n      ],\n      \"outsideDeposits\": 135808\n    },\n    {\n      \"seed\": 6,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 9,\n      \"playerDeposits\": [\n        27098962,\n        140882596\n      ],\n      \"outsideDeposits\": 18442\n    },\n    {\n      \"seed\": 7,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"withdrawn\": 3,\n      \"playerDeposits\": [\n        19423583,\n        148390905\n      ],\n      \"outsideDeposits\": 185512\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "credit_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\credit_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 23759,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 484,\n  \"maxBytes\": 447633,\n  \"maxCohorts\": 727,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 59465241,\n      \"loans\": [\n        29971885,\n        30062840\n      ],\n      \"deposits\": [\n        90306025,\n        77564970\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 62596446,\n      \"loans\": [\n        15415989,\n        24097182\n      ],\n      \"deposits\": [\n        159509887,\n        8304383\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 45134148,\n      \"loans\": [\n        14857316,\n        16261214\n      ],\n      \"deposits\": [\n        25471678,\n        142497092\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"repayments\": 43849531,\n      \"loans\": [\n        21211180,\n        20302097\n      ],\n      \"deposits\": [\n        157863521,\n        9921776\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding_covenants.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\funding_covenants.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 37520,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 726,\n  \"maxBytes\": 437419,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        24438057,\n        143503421\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161298998,\n        6459102\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        13935143,\n        153990939\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        28356558,\n        139579370\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        161834583,\n        5979129\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"stressedSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"winner\": null,\n      \"debts\": [\n        0,\n        0\n      ],\n      \"streaks\": [\n        0,\n        0\n      ],\n      \"deposits\": [\n        11598430,\n        155978939\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "deposit_products.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\deposit_products.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 28898,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 595,\n  \"maxBytes\": 424487,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"serviceSeat\": -1,\n      \"cycle\": 66,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        85799567,\n        67350236\n      ],\n      \"equity\": [\n        86848,\n        2402223\n      ],\n      \"profits\": [\n        62202,\n        172407\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        124908002,\n        41771287\n      ],\n      \"equity\": [\n        895162,\n        2692756\n      ],\n      \"profits\": [\n        284885,\n        395547\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"serviceSeat\": 1,\n      \"cycle\": 45,\n      \"ended\": true,\n      \"reason\": \"receivership\",\n      \"deposits\": [\n        39678305,\n        97051431\n      ],\n      \"equity\": [\n        1149689,\n        -106050\n      ],\n      \"profits\": [\n        83647,\n        23075\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": -1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        32894333,\n        134634275\n      ],\n      \"equity\": [\n        2925598,\n        2599791\n      ],\n      \"profits\": [\n        368565,\n        366196\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 0,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        131319814,\n        36612390\n      ],\n      \"equity\": [\n        856649,\n        5837434\n      ],\n      \"profits\": [\n        258049,\n        526500\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"serviceSeat\": 1,\n      \"cycle\": 122,\n      \"ended\": false,\n      \"deposits\": [\n        18237581,\n        149303329\n      ],\n      \"equity\": [\n        7713352,\n        538811\n      ],\n      \"profits\": [\n        328861,\n        160811\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "term_funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\term_funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 27607,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 484,\n  \"maxBytes\": 461369,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        29082704,\n        0\n      ],\n      \"equity\": [\n        3037363,\n        3425818\n      ],\n      \"profit\": [\n        347363,\n        468903\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        32119825\n      ],\n      \"equity\": [\n        4770427,\n        2712317\n      ],\n      \"profit\": [\n        427084,\n        353792\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 0,\n      \"cycle\": 122,\n      \"locked\": [\n        13420995,\n        0\n      ],\n      \"equity\": [\n        3210025,\n        2842340\n      ],\n      \"profit\": [\n        431926,\n        369585\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"seat\": 1,\n      \"cycle\": 122,\n      \"locked\": [\n        0,\n        37332344\n      ],\n      \"equity\": [\n        4150611,\n        1574527\n      ],\n      \"profit\": [\n        693235,\n        176680\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "retail_lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\retail_lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 17750,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 323,\n  \"maxBytes\": 472473,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 0,\n      \"cycle\": 40,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        50135924,\n        71120955\n      ],\n      \"equity\": [\n        14772,\n        785058\n      ],\n      \"profit\": [\n        -47904,\n        -9557\n      ]\n    },\n    {\n      \"seed\": 0,\n      \"mixedSeat\": 1,\n      \"cycle\": 41,\n      \"ending\": \"receivership\",\n      \"deposits\": [\n        64069676,\n        57267276\n      ],\n      \"equity\": [\n        -189474,\n        426604\n      ],\n      \"profit\": [\n        -5922,\n        22376\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 0,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        121159200,\n        45445189\n      ],\n      \"equity\": [\n        2300820,\n        2756662\n      ],\n      \"profit\": [\n        210254,\n        361643\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"mixedSeat\": 1,\n      \"cycle\": 122,\n      \"ending\": null,\n      \"deposits\": [\n        97725889,\n        67196410\n      ],\n      \"equity\": [\n        3039835,\n        2775869\n      ],\n      \"profit\": [\n        635084,\n        451950\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "product_deployment.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\product_deployment.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 15299,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 320,\n  \"maxBytes\": 445587,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 81,\n      \"ready\": [\n        {\n          \"rewards\": true,\n          \"highYield\": false\n        },\n        {\n          \"rewards\": false,\n          \"highYield\": true\n        }\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_contracts.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\service_contracts.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 11670,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 281,\n  \"maxBytes\": 437044,\n  \"changes\": 89,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        1,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        0,\n        1\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"contracts\": [\n        3,\n        0\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 38,\n      \"ended\": true,\n      \"contracts\": [\n        0,\n        0\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_expansion.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\service_expansion.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 17140,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"turns\": 324,\n  \"maxViewBytes\": 504998,\n  \"changes\": 47,\n  \"results\": [\n    {\n      \"seed\": 0,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        4,\n        0\n      ]\n    },\n    {\n      \"seed\": 1,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 2,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        }\n      ],\n      \"contracts\": [\n        1,\n        2\n      ]\n    },\n    {\n      \"seed\": 3,\n      \"cycle\": 82,\n      \"ended\": false,\n      \"applications\": [\n        {\n          \"payroll\": true,\n          \"treasury\": null\n        },\n        {\n          \"payroll\": false,\n          \"treasury\": \"build\"\n        }\n      ],\n      \"contracts\": [\n        3,\n        2\n      ]\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_planning.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\service_planning.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1947,
+      "stdout": "{\n  \"passed\": true,\n  \"turns\": 35,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"pure advisory forecasts\",\n    \"capacity alternatives\",\n    \"hypothetical locked quotes\",\n    \"treasury prerequisites\",\n    \"whole-book capacity\",\n    \"recovery without free capital\",\n    \"final AI reserve\",\n    \"fixed-intent replay\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "institution_management.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\institution_management.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 54722,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"strict versioning\",\n    \"private mandates\",\n    \"bounded recurring funding\",\n    \"milestone stop\",\n    \"cash reserve\",\n    \"editable priorities\",\n    \"client differentiation\",\n    \"bounded service delegation\",\n    \"explicit bid preservation\",\n    \"sealed plans\",\n    \"saved fixed-intent replay\",\n    \"20-turn prior-build compatibility\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "relationship_operations.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\relationship_operations.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 57255,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false,\n      \"reason\": null\n    }\n  ],\n  \"checks\": [\n    \"old-build save refusal\",\n    \"old-mechanics retention\",\n    \"non-mutating import\",\n    \"earned service streak\",\n    \"miss reset\",\n    \"corrupt histories\",\n    \"reconciled scorecard\",\n    \"adaptive bounded quotes\",\n    \"locked fee preservation\",\n    \"half-sealed import\",\n    \"bounded history\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "funding.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\funding.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 13828,
+      "stdout": "Funding rules tests passed: v1 compatibility, v2 transfer/settlement reconciliation, small outflows, signed losses, explicit debt/interest/repayment, dual failure and 24 modern campaigns (1927 turns).\n",
+      "stderr": ""
+    },
+    {
+      "label": "determinism.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\determinism.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 489,
+      "stdout": "Determinism tests passed: explicit creation, independent/interleaved campaigns, save/resume, preview purity, separate AI stream, privacy, legacy initialization and validation.\n",
+      "stderr": ""
+    },
+    {
+      "label": "ledger.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\ledger.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1040,
+      "stdout": "Ledger tests passed: 276 resolved turns; stat reconciliation, phase attribution, sealed-plan silence, owner privacy, deep copies and bounded history. Categories: campaign.ending, competition.actions, competition.deposits, decision, funding.settlement, markets.competition, markets.dividend, markets.exit, milestones, operations, project.advance, project.start, relationships, research.investment, risk.consequences, staff.hiring\n",
+      "stderr": ""
+    },
+    {
+      "label": "save_integrity.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\save_integrity.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 261,
+      "stdout": "Save integrity tests passed: real client migration/resume, idempotence, legacy histories, pruning, 13 corruption cases and non-mutating rejection.\n",
+      "stderr": ""
+    },
+    {
+      "label": "transport.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\transport.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 120,
+      "stdout": "Branch Wars transport tests passed: ordered retry, lost-response reconciliation, default-branch discovery, and LAN idempotency.\n",
+      "stderr": ""
+    },
+    {
+      "label": "github_resilience.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\github_resilience.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 762,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 90183,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "balance_audit.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests\\balance_audit.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 96939,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.2% wins (664/1406); actions depositRaid:12160, liquidityDefense:10349, commercialRaid:3070, retentionDefense:2054, relationshipDefense:668, talentRaid:405, takeoverDefense:42\ncommercial  68.4% wins (13/19); actions depositRaid:144, liquidityDefense:94, retentionDefense:46, commercialRaid:16, relationshipDefense:3, talentRaid:2, takeoverDefense:0\ndigital     79.6% wins (117/147); actions depositRaid:1308, retentionDefense:877, liquidityDefense:312, commercialRaid:296, relationshipDefense:9, talentRaid:7, takeoverDefense:4\nefficiency  21.4% wins (6/28); actions depositRaid:131, commercialRaid:115, liquidityDefense:114, retentionDefense:79, takeoverDefense:4, relationshipDefense:1, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":771,\"domination\":29}\nLength: median 59, p90 85, max 235\ntown        median 60, p90 83, max 126; Act III median 13, combined strategy 5\nregional    median 58, p90 91, max 147; Act III median 13, combined strategy 4\nstate       median 54, p90 82, max 186; Act III median 15, combined strategy 5\nnational    median 62, p90 83, max 235; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "service_workforce.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/service_workforce.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 12692,
+      "stdout": "{\"passed\":true,\"sourceSha256\":\"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\"checks\":[\"pure engine forecasts\",\"staff conservation\",\"commercial reservations\",\"explicit bid protection\",\"project capacity\",\"hiring timing cost and limit\",\"invalid allocation\",\"draft-only UI handlers\",\"locked plan guard\",\"four scenarios 20-turn full-state compatibility\"]}\n",
+      "stderr": ""
+    },
+    {
+      "label": "docs.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/docs.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 110,
+      "stdout": "Documentation checks passed: 40 Markdown files, 173 local links, canonical names and generated-reference destination.\n",
+      "stderr": ""
+    },
+    {
+      "label": "reference-eol.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/reference-eol.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 89,
+      "stdout": "Reference checks passed for all eight LF/CRLF source, template and output combinations.\n",
+      "stderr": ""
+    },
+    {
+      "label": "project-rules.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/project-rules.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 281,
+      "stdout": "Shared project rules passed: 1296 independent legacy comparisons, regional quotes, forged IDs, conflicts, timing, execution accounting, seat privacy and real UI handlers.\n",
+      "stderr": ""
+    },
+    {
+      "label": "campaign-lifecycle.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/campaign-lifecycle.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 473,
+      "stdout": "Campaign lifecycle passed: 1387 independent creation comparisons, 41 migration comparisons, optional-stage matrix, random consumption, sealed plans, corruption rejection and browser adapters.\n",
+      "stderr": ""
+    },
+    {
+      "label": "multiplayer_lobby.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/multiplayer_lobby.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 115,
+      "stdout": "Multiplayer lobby/status checks passed: all three transports, identities, readiness, authority, revisions, reconnects, preview rules, reload, idle polling and failure states.\n",
+      "stderr": ""
+    },
+    {
+      "label": "runtime-stages.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/runtime-stages.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1197,
+      "stdout": "Explicit runtime stages passed: 192 operations, 864 completions, 64 fault/recovery pairs against the frozen implementation.\nPolicy/AI stages passed: 64 AI preparations, 160 policy normalizations and 416 save-validation comparisons; error order and state/RNG effects preserved.\n",
+      "stderr": ""
+    },
+    {
+      "label": "build.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/build.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1215,
+      "stdout": "Portable build passed: deterministic assembly, source/output freshness, EOL parity, module inventory, invalid-source rejection and DOM-free engine execution.\n",
+      "stderr": ""
+    },
+    {
+      "label": "architecture.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/architecture.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 231,
+      "stdout": "Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.\n",
+      "stderr": ""
+    },
+    {
+      "label": "behavior-golden.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/behavior-golden.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 60780,
+      "stdout": "Behavior gates passed: 20 fixed campaigns / 790 turns, resumed campaigns, both submit orders and three preserved half-ready saves.\n",
+      "stderr": ""
+    },
+    {
+      "label": "save-baseline.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/save-baseline.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1276,
+      "stdout": "Published-save baselines passed: three real imports match fixed pre-refactor continuation outcomes.\n",
+      "stderr": ""
+    },
+    {
+      "label": "launcher-path.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/launcher-path.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 152,
+      "stdout": "Windows root launchers passed: spaced paths, unrelated working directory, target forwarding and exit codes.\n",
+      "stderr": ""
+    },
+    {
+      "label": "customer_needs.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/customer_needs.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 60437,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false\n    }\n  ],\n  \"checks\": [\n    \"authored prospect differences\",\n    \"macro sensitivity\",\n    \"closed offers\",\n    \"non-mutating preview\",\n    \"exact acquisition cost reconciliation\",\n    \"finite empty supply\",\n    \"old campaign exact continuation\",\n    \"half-sealed import\",\n    \"old importer rejection\",\n    \"Continue version\",\n    \"corrupt state rejection\",\n    \"rematch\",\n    \"120-turn accounting and payload gates\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Customer needs GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/github_resilience.test.js",
+        "--customer-needs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1203,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "customer_relationships.test.js",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/customer_relationships.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 61493,
+      "stdout": "{\n  \"passed\": true,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"runs\": [\n    {\n      \"scenario\": \"balanced\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"rate\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"regulatory\",\n      \"turns\": 120,\n      \"ended\": false\n    },\n    {\n      \"scenario\": \"growth\",\n      \"turns\": 120,\n      \"ended\": false\n    }\n  ],\n  \"checks\": [\n    \"service improvement and neglect\",\n    \"existing book not sales mix\",\n    \"bounded competition effect\",\n    \"non-mutating preview\",\n    \"rival privacy\",\n    \"old campaign exact continuation\",\n    \"half-sealed save\",\n    \"version refusal\",\n    \"Continue\",\n    \"corrupt relationship rejection\",\n    \"rematch\",\n    \"120-turn accounting and payload\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Customer relationships GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/github_resilience.test.js",
+        "--customer-relationships"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1208,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Relationship operations GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/github_resilience.test.js",
+        "--relationships"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1128,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "Living institution GitHub relay",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/github_resilience.test.js",
+        "--management"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 1077,
+      "stdout": "{\n  \"passed\": true,\n  \"relayTurns\": 12,\n  \"acceptedWrites\": 66,\n  \"lostResponses\": 9,\n  \"sourceSha256\": \"87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac\",\n  \"checks\": [\n    \"oversized rooms\",\n    \"snapshot compaction\",\n    \"rate cooldown\",\n    \"authentication pause\",\n    \"request timeout\",\n    \"stale sessions\",\n    \"conflicting writers\",\n    \"seat ownership\",\n    \"sealed timeout\",\n    \"live engine commit/reveal\",\n    \"duplicate reveal\",\n    \"reload checkpoint\",\n    \"ordered async polling\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "label": "legacy funding balance audit",
+      "command": [
+        "C:\\Users\\xande\\AppData\\Local\\Microsoft\\WinGet\\Packages\\OpenJS.NodeJS.LTS_Microsoft.Winget.Source_8wekyb3d8bbwe\\node-v24.18.1-win-x64\\node.exe",
+        "tests/balance_audit.js",
+        "--legacy-funding"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 80361,
+      "stdout": "Emergent character audit: 800 games; 0 unfinished at cycle 500; 0 exceeded cycle 250.\ncommunity   47.5% wins (674/1419); actions depositRaid:11621, liquidityDefense:10440, commercialRaid:3054, retentionDefense:2097, relationshipDefense:674, talentRaid:362, takeoverDefense:66\ncommercial  80.0% wins (16/20); actions depositRaid:201, liquidityDefense:113, retentionDefense:78, commercialRaid:22, talentRaid:6, relationshipDefense:4, takeoverDefense:0\ndigital     75.8% wins (100/132); actions depositRaid:1013, retentionDefense:722, commercialRaid:340, liquidityDefense:285, relationshipDefense:9, talentRaid:4, takeoverDefense:2\nefficiency  34.5% wins (10/29); actions liquidityDefense:114, depositRaid:113, commercialRaid:85, retentionDefense:74, takeoverDefense:4, relationshipDefense:2, talentRaid:0\npeople        --   wins (0/0); actions depositRaid:0, commercialRaid:0, talentRaid:0, liquidityDefense:0, relationshipDefense:0, retentionDefense:0, takeoverDefense:0\nEndings: {\"buyout\":781,\"receivership\":6,\"domination\":13}\nLength: median 56, p90 81, max 186\ntown        median 60, p90 80, max 146; Act III median 13, combined strategy 5\nregional    median 55, p90 87, max 150; Act III median 13, combined strategy 4\nstate       median 55, p90 79, max 186; Act III median 15, combined strategy 5\nnational    median 55, p90 70, max 158; Act III median 31, combined strategy 13\n",
+      "stderr": ""
+    },
+    {
+      "label": "Windows LAN",
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "tests/lan_server.test.ps1"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "elapsedMs": 3117,
+      "stdout": "Branch Wars PowerShell LAN server tests passed: health, create, join, relay, and retry deduplication.\n",
+      "stderr": ""
+    }
+  ],
+  "filesAfter": {
+    "BRANCH_WARS.html": "87af2287e599092c787b3baffbc3e58d3904e1e92227cfda0330c06223b2d4ac",
+    "BRANCH_WARS_LAN_SERVER.ps1": "f2a8851a69fc67e8be09729d662406aceb079651e4ac8c12a0e0e2699d31a45d",
+    "tests/engine.test.js": "33a39e2c5acbff17db8edbaafab7de7a4258ae9850fab1cbcfbb5409aca6d0ee",
+    "tests/accounting.test.js": "86dc2dc7db3361812bcef0a5ab56cb0fcbdbdcc8673bf94fb2e1508c153ce3fd",
+    "tests/accounting_activities.test.js": "af0bde9a9ed7af4bdb6c7920ae4b989cca8375bcb22c90220111573714e61684",
+    "tests/accounting_persistence.test.js": "268f8f3c1434d169584c8e9deb15bdb434806e041e5ef3580264a22d3dddbcdb",
+    "tests/bank_identity.test.js": "e121444d90a8e62b4020c399f5c4ef755f9a9bb06f2f7f3bb95fc4be39d29359",
+    "tests/regional_pilot.test.js": "211a4c7f63b15b161ae1426d3341a52a4de5f8f67b3a3067a0a4fe02244c29db",
+    "tests/regional_operations.test.js": "5b9dc1e2ab965043a46fa48cc124f0c27b19e8543eabd8a5bae66a89c73fc3aa",
+    "tests/market_economy.test.js": "6068410d6ecf958203ec9a594236523007576bce62a7bda19509ff30eb82bd34",
+    "tests/credit_lifecycle.test.js": "1ceabbb67aeab2c964222d5b754229aa09032ab322ade6938168b114ffe3d18d",
+    "tests/funding_covenants.test.js": "7198b43a1ba10a9bada70a1feaf67f28ca561ee5376c9e2e3ee0de6f7479ac5e",
+    "tests/deposit_products.test.js": "e5c79fd97286536bdae062ad335aad554df5a6a470663065cb67a17e75a79810",
+    "tests/term_funding.test.js": "f3ead2a2144571ff9153f36b374bd731c6d7dce7900109c1548c1e45cfd6e156",
+    "tests/retail_lifecycle.test.js": "b11de0e212badca1ed50f4e557fd9ce23a055a6bcd4bae00648b8ed614a7a476",
+    "tests/product_deployment.test.js": "9c61f3e56a2e42d3b024cb92ec45718f6b99c80e1a037ea210584105cd2e631e",
+    "tests/service_contracts.test.js": "09f68a5c8515d7afb37c4d5851d8f44837c47330f6a736d236c9d54a2dbd4ac1",
+    "tests/service_expansion.test.js": "f08ca37943dae7496a7cf01569f3e2760c6d1a0b0acb380777541fd3cdfd5727",
+    "tests/service_planning.test.js": "9ddaa016aec02822a36c55797c144edadcd048f32853a478c20308d0778316ab",
+    "tests/institution_management.test.js": "2cc031eadf327cc6281bb167f3dc71cbafda10adcadf3866f5cf378d77b8a296",
+    "tests/relationship_operations.test.js": "030e90107b6e26bad79fbb7360eba79684126f90edbea6e9e4e4c6d819cc2b16",
+    "reports/reference-builds/BRANCH_WARS_institution_c1c10b4.html": "c1c10b4402613531c8a2341f7c45aa2dd0b51cbe953fa9798629369ef100e854",
+    "reports/reference-builds/BRANCH_WARS_planning_0704591.html": "0704591cc274b02936521b36c53f1353f44b9d6da55624c104ad897d1f1e1d90",
+    "tests/funding.test.js": "0416b8cbdcbc653819a336b27e5f1d477907db483f5fd4c7411c75adad0ad3ed",
+    "tests/determinism.test.js": "261ae1a5114175ac5cb98e9a80d623920e48c3da4d96022e8c431b06e75517ec",
+    "tests/ledger.test.js": "3c66c4049ee4e447262334bebc86964c5970fe7249d09704b2d301f04c9b5511",
+    "tests/save_integrity.test.js": "4aabc6d9d58f07404fa00b9135b2c1d5f1c1397ce23c8ce360a9e2fb55be6483",
+    "tests/transport.test.js": "a3e40427d0ad73867b0a33f7934e0a9245da59f76d83c79560562155a8d8340c",
+    "tests/github_resilience.test.js": "f1b13460b1751b8fc9894a865e8dbb964b3a3c8aa6c6eba32d48b364dc9cb031",
+    "tests/balance_audit.js": "15b4308e12b81e9da81e1aa6938bffccd7ef1debf17dd7cbb461af85a340d220",
+    "tests/lan_server.test.ps1": "03e887d6e1549689062b321df6869e571a740b0c4bc3afc8caf2666c09696265",
+    "tests/capture_baseline.js": "474672c9ebd3d362a8a108a4a8319f2905ab607116a297eb66d442d164b097d3",
+    "tests/customer_needs.test.js": "a34c605d1b6f019ffa67d07d16ecb57345db3cf88e7c467f12546adf169fe0e0",
+    "reports/reference-builds/BRANCH_WARS_relationship_c0a9ee1.html": "c0a9ee1398327ce91e640ed2a1adeb127a28c393fb9844bf5ac9af5c0cfe0f02",
+    "tests/customer_relationships.test.js": "e7462b5d85e6ca7dcde3b947898d8df0ce54ceced78ac05b238ee680a0b28cad",
+    "reports/reference-builds/BRANCH_WARS_customer_2d7bbca.html": "2d7bbca84b30100cb710c7a44d36dc5ab9f3f13a2e21c9f624f60fd63fe972b3",
+    "tests/service_workforce.test.js": "45d4e7d79fca121f9320eb8a234dc1bc8a886ec196593c3aaa5079bc852ff944",
+    "reports/reference-builds/BRANCH_WARS_goodwill_0ae290e.html": "0ae290ef37cc65951396abadb04e175cd3e975dcd49ac48ca30c239643491f53",
+    "tests/docs.test.js": "e9986a259ec8c002835dc4a13069863c6f9c38428c8ac0afb7e20b076418d018",
+    "tools/build_reference.js": "fc3e9db7cfdef26428b7e3af1c8f665d5d0db7e00fcda22201a40c1dc7b724c5",
+    "tools/reference-template.md": "6cba2b1eae3f7a7076273e88c2e8dcaae1366b89176d8b94066548f41cd0ba2d",
+    "docs/game-reference.md": "3a241e78aa30dcfa687fc62502c60140b1521448e07796fd81fdf8768b1802ba",
+    "tests/behavior-golden.test.js": "5d793d00cea0ed3f0a1f3d07252d5945055e827c659693dffa870126a706a13a",
+    "tests/architecture.test.js": "64387dfcdaa0e961b8d90656a4d756c467ed5fbeea7302d64228aa52fe83b0fc",
+    "tests/fixtures/behavior-golden.json": "dad8fa7bc079a3915cf8aa110576ac68c4349763ba1bbe09d5c2f43ef262c1f4",
+    "tests/fixtures/override-ceilings.json": "c732dea6fe47406d1fa5e27adab335c50bebe342780c9c684d2d26a200ab625b",
+    "tests/fixtures/legacy-half-ready.json": "6498fd868a5e10f32b8a6b9754a631b1fd9769583eb670cf008c91e282c2e0ae",
+    "tests/fixtures/pilot-half-ready.json": "41eee660124dfce310acafcf11418423e8a4bdf2a6e6041229c1deb7dcf869a0",
+    "tests/fixtures/goodwill-half-ready.json": "3f393b35ede3c1452dab06b8070c2e7b3ac6f46c0fc5e4bd961169ca60cd59d2",
+    "tools/check.js": "a0fba6830d2f87bdd043a3e49441b2036778f626e46158e3a53cb6ea669f67c9",
+    "tests/save-baseline.test.js": "44e31120289c25f104637defbd2c995b9be4e746368d3edfb99883be59454769",
+    "tests/launcher-path.test.js": "090d780e84d51a65a4913a75a4d12198058afb2a6bc53b25f0b0968b53eb0f61",
+    "tests/fixtures/save-continuation.json": "7b9f2c71b2f9e339cc88d1726ffd1c1bb41ee77ee1f37845dba16177cf57699b",
+    "tests/reference-eol.test.js": "85f9eff579ec371b3a98346501473ac6344ca0eba43bb421400fb32cda5b12f5",
+    "tests/project-rules.test.js": "3420ef7ebc70abf52868a708862934f7dfcd5caad43705c13e8a3891e8ceafb9",
+    "tests/campaign-lifecycle.test.js": "727b4ebf5da0b3a05bb96d2889f775e859c1e18e9e74b2ab9648c3653883c592",
+    "tests/multiplayer_lobby.test.js": "b18a8af48069842d3e4baebd404268671fbcb12ee229ea00a7c153c3ee28cd57",
+    "tests/runtime-stages.test.js": "13d6563a35ac63cc0999a12ca89df56b3a93e93f7964bcb5c36712f06c670b95",
+    "tools/build_game.js": "9cada8b1bb5b67e7af63e3323a5518e5fc3e840062e3f709c2579700a2a193ef",
+    "tests/build.test.js": "795dddbd1486e940eab9aad59d9a08c95eb321bffca704099a8e4068ac3b464b",
+    "src/manifest.json": "4de4a836ef9cc688beb5fe8a623f8b125f1d9c53312c38f6e4121d0a792fa3ab",
+    "src/page.html": "6d8b602666a71df660b570d1759903446af672a7e54b26df4ddb434f13b13cfb",
+    "src/engine/primitives.js": "d4832bc87c768afe0754b22087e898331bc606716f50a589a9b439e1015c239f",
+    "src/content/catalog.js": "956416d9bf48222a167fc3705723e570e8993ab1690f7bdd2c549dbfac2f66dd",
+    "src/engine/institution.js": "12c3f1c1266d1ffd1f3d99c52193285817772c6bb3c746f101d6c97f6ba7c1ed",
+    "src/engine/territories.js": "68425d3331db3963ed053292132b671870dc416a260c5b55a1f201681abbc70b",
+    "src/engine/campaign.js": "449786559e7a7e50038f412bdedc022f94546f205dca61da724eb7224541349b",
+    "src/engine/actions.js": "ec483df16775f3349876bfe6bb56f89dacd6f365f5c9ef761962056c2064d0bf",
+    "src/engine/operations.js": "2d3e1d1b2ab2fe2901c64ede312bd37de202e65d4f099cc157bdfd31e2fa5830",
+    "src/engine/competition.js": "9632c2de8b08c288cd0834fa776d9861bb00ce507cf59ad6bcbd49514f37a88d",
+    "src/engine/projects.js": "98e0e217d9bb9771c0a4a7b5feddd906932290647ca320fc9fd1492edc3fd5be",
+    "src/engine/ai.js": "4f1741a38edb62e6a732601ad2a3ac3cafe493f1de4dab985da9466a6568009a",
+    "src/engine/plans.js": "c660b539e9990f56f9e1486ee1fa95d1f47a44a25112e84e0391e7f82868384f",
+    "src/engine/monthly.js": "f5f0c534984cf6fc6649573852a066065d18605f7369f7c63523fb352cd573f2",
+    "src/engine/portfolio.js": "cd2ce4b1876f3d84730ad279c0df440dd4fa727350f260b95edbe1e42b397350",
+    "src/engine/session.js": "3493892c3075a45223b39ba47fb5f4cb7373dcbc7607380d372b516e9ea79394",
+    "src/engine/accounting-adapter.js": "006823d78d33d4983f62cfb130f57a74de8ebcbef9610889e767798b5c912228",
+    "src/content/regional-markets.js": "b069d3b61fc09a16e9f1b1875a64550364f1d2c697c270cce740fff829c29317",
+    "src/engine/regional.js": "e97ac3b4914fb5e3482df7cac8bb31074f83051fb537b99b10dae898f3dac07d",
+    "src/engine/market-economy.js": "29593c314b0859eccf3bd9e60a338c26ecf7a3cad2652218f0d5c0f8a9d3d7f4",
+    "src/engine/credit.js": "b3efe88ca10bea49e5088e0508c97ad80901ecfbc29bb78fad6cfa6c2434b76b",
+    "src/engine/funding.js": "a76e1be1e7d21096b72579a44127463a09c113bea91a403fd8bfbc5e3c20252d",
+    "src/engine/deposits.js": "77709abbea24f8e911837efbb787a3e706a8610eef53222236d280e417290a84",
+    "src/engine/term-funding.js": "bd696a4372e6bfad37627d7a8e9987e8968f2d0a8250cd658dac592ccffe99e5",
+    "src/engine/retail.js": "3bfd242b2eee8e6b990799b05518c6e9f0aab43ff53c319526796df7ab17b47d",
+    "src/engine/deployment.js": "99be85aa93383284325436523f55ba42d6d5f0d6d5768cfb52a2a94588ae281a",
+    "src/engine/contracts.js": "396be5efa539d77b95e62d39426ede25aeb6520eef937fae2d10c0dfa751e733",
+    "src/engine/services.js": "6e041f0da109b4a663b11b057b20532c922212da57fa62e6d2eae0ff00270507",
+    "src/content/anchor-clients.js": "70e4d3f37facdfdcfc5da910833a3957c53022ca6b8712eade6c1160baf9934a",
+    "src/engine/management.js": "24e23c23d716afe45672c33ac4c8ba1a2f5f74ca3ed0623a748d0bf9c2ce6421",
+    "src/engine/relationships.js": "86ccbae2a1abb7268054c45e05b0ef11d89db5d05d1f60a27a7d3c2f4a2c2fbf",
+    "src/content/customer-markets.js": "65d50314084195ad0bc3e1defd09a1e97cd63d11b6944a9e807b71bb092d9762",
+    "src/engine/customer-demand.js": "d58dfe64669b7036038d72d0960708d1b0c65ed33523138688c39488e9653349",
+    "src/engine/customer-relationships.js": "ca9793a6ce07ca935cc0f12275b3a61a05403f331d8e94b1893968207ef33380",
+    "src/engine/ledger.js": "8e15a338f525ec800c1fcbe810d2c3309a09e894ca8e0bcbf240a7bd6281f6a8",
+    "src/engine/accounting.js": "c943316a2f7ba85b911fd190c744d3c62869c334aa9e702702f348d93e3fb43b",
+    "src/engine/migration.js": "c0f93c0cedb559c6ee959e49594bbd7050a4c1840f8ad1bc9579c0491d5c796f",
+    "src/engine/operation-coordinator.js": "48366472ace81cee1559d2017eee3444b7f6fbdc7e1fba95de2c3d4d1cfc6dc2",
+    "src/engine/project-coordinator.js": "014e9ed4919d9a100f6cf88ca155d3abb2c7203a94e8ef37c12b3f2235e90048",
+    "src/engine/cycle-coordinator.js": "786fc78ffb34e9e4a3c63ba35bff950d862161ee20185007eb08c70ee8a2ecb4",
+    "src/engine/intent-coordinator.js": "588117e46d9cc9379bc89d4dce41f357249cb9a52022c30c8c7ab94503ed0b49",
+    "src/engine/api.js": "d0730b09e825f754539fc37bbd5d344ce4cb2a75a543e4b8d1732ec17065dd68",
+    "src/engine/shell.js": "6bc991d1c2d29e2b8966f0f635f595f55c854896ee5b620eddff95cf9556d39d",
+    "src/ui/state.js": "a61210a9159ff85f530fd190981a33679e50b83355c6414af051afd45b991745",
+    "src/ui/lobby.js": "f833e4775676ca4e8eb74eeb116b59fff0bb75d8f8f6c1d8937c71b2d675c4fb",
+    "src/ui/draft.js": "e7f1c78d853b958905b402b6c280ab9a873999861585b01d2481680e0b7bd382",
+    "src/persistence/saves.js": "992471852ff108136ff96659ca9942830f9595a8bf346687dabdb8e15775a29a",
+    "src/ui/local-game.js": "449d2b199b54e583e096ee79b3740e004f951296c0534e8fed34e57aa7863a9d",
+    "src/network/lan.js": "998146c2a89a078959fd51158fe6779d1c71d58aa869de7c586915484ca4db72",
+    "src/network/repository.js": "72e9f0b50db5d7c19d76dd98029f91598b2d1a398e567870e1c9a97db1a9a88b",
+    "src/network/peer-codecs.js": "ca61fe9bd8396e5919be74a44eb97521d5766a1e5fa060930097dbf3b94e0016",
+    "src/network/direct.js": "79948c41d4f7f195eb8515a73854d7418320dc4c6c270e940971ec9b57d8eddd",
+    "src/network/protocol.js": "a32e0c0089734d1a1d9bb09b9c0d9fcc9682e919868aef8c187d5775d5f0c39c",
+    "src/ui/dashboard.js": "affc60694eb5e3c8167cd411d5e8d8660f0f703ede8a4ad807fa9f148f3e2df2",
+    "src/ui/services.js": "a1d1360d225e3abcad3ba8cda381f18aa78d87545bb66f1d8c56328440c5db99",
+    "src/ui/management.js": "983df8aaad3ed51dbd5f69408a459e0deec5f66ad0eceb86bfb70a44fec5a116",
+    "src/ui/products.js": "63b632fe72467138379ac3722e028367112acd3d8850498cd1a9544b787cc968",
+    "src/ui/projects.js": "0994f315c72630b5c7c18899eb16279ccbd28b536d446fc7c6fe5ec3f9bfbc20",
+    "src/ui/results.js": "5adac280f59329d980edd21701fd53cf72e4e3b059c863c852119d5ae989f4b8",
+    "src/ui/bootstrap.js": "ea6ee446522e3b178d9be7685ff762042de18a7b3af0479812924fbaaf270d1f",
+    "src/ui/shell.js": "bf3651cb1de19735ff57bb02b1eb49a121799ae78578dd4c67acd0e7a26530ea",
+    "src/styles/base.css": "f9f1ca602a89af06df8bf7a0edac04c2ec4e92296e103cf17e4a5682b471f74b",
+    "src/styles/visual-overhaul.css": "612ba55a9ec97152e44abeedbc45c220aac1f109ce04fa1f10a0f8602469c74c",
+    "src/styles/isometric-city-overhaul.css": "f9cdb3f25b175feebf21c055d4e7e6c5e11e187605cd54376709862b37ff379c",
+    "src/styles/isometric-city-polish.css": "7c1eeb266a3482916c47ae5b699f28c422c5083d44bcc1bb01610196563c776a",
+    "src/styles/funding-strategy-ui.css": "fae699afb1abfa87c7e873793447e3b0d94370397d5ebc6ef822d168e5f525c6",
+    "src/styles/portfolio-depth-ui.css": "3683cfc621841e7fcb45be6fcb6b6c08ed92522d56cc2bbfa85113168a431f55",
+    "src/styles/workspace-ui.css": "5813307af9225b4175cecb884d9807a1316390551894fce91682bba6fd34fb40",
+    "src/styles/workspace-polish.css": "5e7a5acbc522a9094384b128f5088a8216568dcb9a63fb98b9aec370fb8908e8",
+    "src/styles/planning-repair-ui.css": "4ceeb347447168ee1fe47768e050a5eff5518f09cd97a351acd2141612b3eb3b",
+    "src/styles/bank-identity-ui.css": "1521b6cfd7f68e9a01f40edd7eda371abd7dd3c7d7891b4c64ee0a958c7511ed",
+    "src/styles/region-summary.css": "67f3e32757c392646dcb754a6e08fc8248dcf2df86b6ebba140581d82a6b4a4f",
+    "src/styles/lobby-ui.css": "5a3059db9eccc6531dc914fc7fb4a6e0557069f0be085ce6a2e85c71b8cc6a72"
+  },
+  "sourceUnchanged": true,
+  "balanceOutputReproduced": true,
+  "passed": true,
+  "limitations": [
+    "Passing regression suites does not certify accounting correctness or strategic balance.",
+    "Repeated seeded harness output does not prove saved-game RNG/replay determinism.",
+    "No browser or physical two-computer acceptance was performed by this runner."
+  ]
+}

@@ -4,7 +4,7 @@
 
 - Start short-lived `feat/`, `fix/`, `refactor/` or `docs/` branches from current `main`. One coherent change per PR; do not keep adding releases to merged branches.
 - Delete a merged branch only after checking its latest tip. Preserve unmatched history with a verified archive tag before deleting a name.
-- Edit the runnable package in `game/`. Do not edit frozen engines in `game/reports/reference-builds/` or dated external backups.
+- Edit `game/src/` and rebuild with `node game/tools/build_game.js`. `game/BRANCH_WARS.html` is the generated, portable release, not a second editable source. Do not edit frozen engines in `game/reports/reference-builds/` or dated external backups.
 - Do not publish local saves, tokens or diagnostic dumps. New baseline reports are ignored by default; explicitly stage selected, inspected release evidence.
 
 ## Rules and architecture
@@ -24,7 +24,7 @@ node game/tools/check.js
 node game/tools/check.js --full
 ```
 
-The full Windows gate includes the local LAN server suite. The fast gate is not release acceptance.
+The full Windows gate includes the local LAN server suite. The fast gate is not release acceptance. Both reject a stale portable build; neither silently regenerates it. Source order is explicit in `game/src/manifest.json`; new source files must be listed. Engine/content modules must not depend on DOM, storage, timers or transports. The build uses only Node built-ins and preserves a double-clickable single HTML file.
 
 Golden fixtures are committed expectations, not two current runs agreeing. Never regenerate them just to make a failing refactor pass. For an intentional mechanics change, explain the affected scenarios and rule version in the PR, then run `node game/tests/behavior-golden.test.js --update-goldens` and review the fixture diff. This command does not update preserved save fixtures.
 
