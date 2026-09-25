@@ -673,7 +673,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
       <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><div id="lobbyFeatureOptions" aria-label="Shared optional campaign systems"></div><p id="lobbyFeatureSummary" class="small muted" role="status"></p><button id="lobbySettings" class="btn">Apply settings</button><button id="lobbyDiscardSettings" class="btn hidden">Discard changes</button></div>
     </div>
     <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
-    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
+    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><label id="lobbyResumeLabel" class="btn" for="lobbyResumeFile">Resume from save</label><input id="lobbyResumeFile" type="file" accept="application/json,.json" hidden><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
     <p class="micro muted">Changes to either identity or the campaign settings clear both confirmations. Repository health describes access to GitHub, not proof that your friend's browser is still open.</p>
   </section>
 
@@ -723,23 +723,20 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
       <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
       <div class="panel operations-navigation">
         <div class="operations-tabs" role="tablist" aria-label="Operations desks">
-          <button id="operationsTab-monthly" type="button" role="tab" aria-selected="true" aria-controls="operationsPanel-monthly" data-operations-tab="monthly">Monthly plan<span>Executive decision &amp; staff</span></button>
-          <button id="operationsTab-funding" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-funding" tabindex="-1" data-operations-tab="funding">Products &amp; funding<span>Offers, pricing &amp; risk</span></button>
-          <button id="operationsTab-projects" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-projects" tabindex="-1" data-operations-tab="projects">Projects &amp; construction<span>Capacity &amp; commitments</span></button>
-          <button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
+          <button id="operationsTab-plan" type="button" role="tab" aria-selected="true" aria-controls="operationsPanel-monthly" data-operations-tab="plan">Monthly plan<span>Decision, staff, products &amp; projects</span></button><button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
         </div>
         <div class="operations-context"><p id="operationsDeskHint" class="small muted" role="status"></p><button id="operationsDecisionShortcut" type="button" class="btn">Executive decision</button><button type="button" class="btn contextual-help" data-help-topic="planning">Planning help</button></div>
       </div>
-      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-monthly" data-operations-panel="monthly">
+      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="monthly">
           <section class="panel"><div class="event"><span class="micro muted">EXECUTIVE CALL // DECISION REQUIRED</span><strong id="eventName"></strong><div id="eventText"></div><div id="decisionGrid" class="decision-grid"></div></div></section>
           <section class="panel" id="staffAllocationPanel"><div class="kicker">YOUR MONTHLY STAFF PLAN</div><div class="small muted">Allocate existing bankers, then review work coverage. Recruitment adds employees next month. Offices are built and staffed at their location in Markets.</div><div class="rule"></div><div class="pool"><b>STAFF ALLOCATION</b><br><span id="staffPool" class="small"></span></div><div id="staffGrid" class="staff-grid"></div></section>
           <section id="peopleOwnershipShortcut" class="panel" hidden><h3>People owns staffing</h3><p>Allocate existing employees, review shared work coverage, recruit and develop your team in People. This month can open required staffing controls inline.</p><button type="button" class="btn" data-subject-action="staffing">Review employee allocation</button></section>
       </div>
-      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-funding" data-operations-panel="funding" hidden>
+      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="funding" hidden><h3 class="operations-section-head">PRODUCTS, PRICING &amp; RISK</h3>
           <section class="panel" id="bankProductsPanel"><div class="kicker">PRODUCT &amp; BALANCE-SHEET DESIGN</div><div class="small muted">Choose what the bank actually sells. These products alter customer growth, funding cost, fee income, loan production, and credit losses every cycle.</div><div id="productPortfolio" class="portfolio-lines"></div><div id="portfolioBridge" class="portfolio-bridge micro"></div></section>
           <section class="panel" id="bankPricingPanel"><div class="kicker">PRICING &amp; RISK POLICIES</div><label>DEPOSIT PRICING</label><div id="depositPolicies" class="button-group"></div><label style="margin-top:8px">LENDING STANDARDS</label><div id="lendingPolicies" class="button-group"></div><label style="margin-top:8px">CAPITAL STRATEGY</label><div id="capitalPolicies" class="button-group"></div></section>
       </div>
-      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-projects" data-operations-panel="projects" hidden>
+      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="projects" hidden><h3 class="operations-section-head">PROJECTS &amp; CONSTRUCTION</h3>
           <section class="panel"><div class="project-workspace-heading"><h2>Initiatives</h2><a class="btn" href="#projectDeliveryStatus">Current work &amp; recruitment</a></div><div id="projectGrid" class="projects"></div><section id="projectDeliveryStatus" aria-label="Current work and recruitment"><h3>Current work &amp; recruitment</h3><div class="project-status-band"><div id="activeProject" class="notice"></div><div id="capitalAction" class="capital-action"></div><div id="hiringPanel" class="capital-action hiring-panel"></div></div></section></section>
       </div>
       <div id="operationsPanel-forecast" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-forecast" data-operations-panel="forecast" hidden>
@@ -1112,6 +1109,13 @@ function previewFeatureSelection(source, { field, value }) {
     delete options.creditWorkloadVersion;
     delete options.bankEconomicsVersion;
   }
+  // The research programme is Core-only. A modular selection that moves the
+  // campaign off Core economics used to make the whole proposal INVALID, which
+  // stopped the dependent-feature confirmation flow from engaging at all. Drop
+  // the marker instead, exactly as the reporting markers above are dropped, so a
+  // default new-game draft can carry it safely.
+  if (options.researchProgramVersion === 1 && options.bankEconomicsVersion !== 2)
+    delete options.researchProgramVersion;
   const rules = campaignRules(options, { context: 'lobby' });
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version,
@@ -17558,7 +17562,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
@@ -17739,6 +17743,39 @@ function renderLobby(){
  $('#lobbyError').textContent=lobby.error||'';
  renderLobbyControls();paintLink();
 }
+// Resuming a multiplayer campaign. Exporting one has always worked, but every
+// route back ran through resumeLocalCampaign, which coerces lan/p2p to hotseat --
+// so a Repository Link or LAN game could only ever come back single-player, and
+// the lobby had no load control at all. The host now stages a save here and the
+// campaign starts from it instead of from createGame; the guest receives it
+// through the same syncPeers path a fresh campaign uses.
+let lobbyResumeCampaign=null;
+function clearLobbyResume(message){
+ lobbyResumeCampaign=null;
+ const input=$('#lobbyResumeFile');if(input)input.value='';
+ if(message)$('#lobbyError').textContent=message;
+ renderLobbyControls();
+}
+function stageLobbyResume(file){
+ if(!file)return;
+ if(p2pRole!=='host'){clearLobbyResume('Only the host can resume a campaign from a save.');return}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const restored=migrateGame(JSON.parse(reader.result));
+   if(!restored||!Array.isArray(restored.players)||restored.players.length!==2)throw Error('That file is not a two-bank campaign save.');
+   if(restored.gameOver)throw Error('That campaign is already complete. Start a new one.');
+   // The save carries its own campaign rules; the peer must support them.
+   E.validateCampaignRules(restored,'game');
+   lobbyResumeCampaign=restored;
+   $('#lobbyError').textContent='';
+   $('#lobbyNote').textContent='Resuming cycle '+restored.cycle+' of the loaded campaign. Both players must confirm ready.';
+   renderLobbyControls();
+  }catch(e){clearLobbyResume('That save could not be loaded: '+e.message)}
+ };
+ reader.onerror=()=>clearLobbyResume('That save file could not be read.');
+ reader.readAsText(file);
+}
 function startLobbyCampaign(){
  try{
   if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty||featureSelectionPending())return;
@@ -17747,7 +17784,18 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
-  const created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  const transport=(lan.active||gh.active)?'lan':'p2p';
+  let created;
+  if(lobbyResumeCampaign){
+   // Keep the campaign exactly as saved; only its transport and the two seat
+   // identities follow the current lobby.
+   created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
+   created.mode=transport;
+   created.players[0].name=host.name;created.players[0].color=host.color;
+   created.players[1].name=guest.name;created.players[1].color=guest.color;
+  }else{
+  created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  }
   p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
   game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
  }catch(e){$('#lobbyError').textContent=e.message}
@@ -17758,6 +17806,7 @@ $('#lobbyColor').addEventListener('input',markLobbyDirty);
 $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
+$('#lobbyResumeFile')?.addEventListener('change',e=>{stageLobbyResume(e.target.files&&e.target.files[0])});
 $('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
 $('#lobbySettings').addEventListener('click',applyLobbySettings);
 $('#lobbyDiscardSettings').addEventListener('click',discardLobbySettings);
@@ -17765,20 +17814,36 @@ $('#lobbyStart').addEventListener('click',startLobbyCampaign);
 $('#lobbyRetry').addEventListener('click',ghRetry);
 $('#lobbyLeave').addEventListener('click',leaveGame);
 // Presentation-only navigation. No campaign field, draft copy or simulation hook.
-const OPERATIONS_DESKS=['monthly','funding','projects','forecast'];
-let operationsDesk='monthly',operationsDeskOwner=null;
+// Operations carried four sub-tabs, but three of them -- the executive call and
+// staffing, products and pricing, and projects -- are all parts of the SAME monthly
+// submission, and the player had to cross tabs to finish one decision. They are now
+// one desk with labelled sections; Forecast stays separate because it is what you
+// read after deciding, not part of deciding.
+const OPERATIONS_DESKS=['plan','forecast'];
+const OPERATIONS_PANELS={plan:['monthly','funding','projects'],forecast:['forecast']};
+// plan-review, facility-lifecycle and the decision shortcut still ask for the old
+// desk names. Keep honouring them and route each to the desk holding its section.
+const OPERATIONS_DESK_ALIAS={monthly:'plan',funding:'plan',projects:'plan',plan:'plan',forecast:'forecast'};
+let operationsDesk='plan',operationsDeskOwner=null,operationsFundingSuppressed=false;
 const operationsBoundControls=new WeakSet();
 function setOperationsDesk(key,{focus=false}={}){
  if(key==='funding'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.productsEnabled&&typeof selectProductSubject==='function'){operationsDesk='monthly';selectProductSubject('policies');return;}
- operationsDesk=OPERATIONS_DESKS.includes(key)?key:'monthly';
+ const requested=key;
+ operationsDesk=OPERATIONS_DESK_ALIAS[key]||'plan';
  const mount=$('#operationsWorkspace');if(!mount)return;
  mount.dataset.operationsDesk=operationsDesk;
  $$('[data-operations-tab]').forEach(button=>{const active=button.dataset.operationsTab===operationsDesk;button.setAttribute('aria-selected',active?'true':'false');button.tabIndex=active?0:-1;button.classList.toggle('active',active);if(active&&focus)button.focus()});
- $$('[data-operations-panel]').forEach(panel=>{panel.hidden=panel.dataset.operationsPanel!==operationsDesk});
- const hints={monthly:'Answer the executive call and allocate all staff. Optional hiring, research and projects are not required to submit.',funding:'Your offers and pricing share the monthly draft with staff, projects and research. Existing balances retain their contractual terms.',projects:'New initiatives and recruits share your cash budget. Executive capacity constrains project delivery; new hires report next cycle.',forecast:'These books and estimates use your current draft. Review spending in the shared plan budget; projected income is not available cash.'};
+ const shown=(OPERATIONS_PANELS[operationsDesk]||[]).filter(id=>id!=='funding'||!operationsFundingSuppressed);
+ $$('[data-operations-panel]').forEach(panel=>{panel.hidden=!shown.includes(panel.dataset.operationsPanel)});
+ // A caller that asked for one section by its old name gets it brought into view.
+ if(requested&&requested!==operationsDesk&&OPERATIONS_PANELS[operationsDesk]?.includes(requested)){
+  const section=$('#operationsPanel-'+requested);
+  if(section&&!section.hidden&&focus)section.scrollIntoView({block:'start'});
+ }
+ const hints={plan:'Answer the executive call, allocate staff, set products and pricing, and commit projects -- all one monthly submission. Optional spending is not required to submit.',forecast:'These books and estimates use your current draft. Review spending in the shared plan budget; projected income is not available cash.'};
  $('#operationsDeskHint').textContent=hints[operationsDesk];
- if(operationsDesk==='monthly'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled)$('#operationsDeskHint').textContent='Answer the executive call here. People owns staffing; This month opens required work inline. Optional spending is not required to submit.';
- const subtitle=$('#operationsTab-monthly')?.querySelector?.('span');if(subtitle)subtitle.textContent=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled?'Executive decision':'Executive decision & staff';
+ if(operationsDesk==='plan'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled)$('#operationsDeskHint').textContent='Answer the executive call here. People owns staffing; This month opens required work inline. Optional spending is not required to submit.';
+ const subtitle=$('#operationsTab-plan')?.querySelector?.('span');if(subtitle)subtitle.textContent=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled?'Decision, products & projects':'Decision, staff, products & projects';
 }
 function operationsDeskKey(event,key){
  const keys=OPERATIONS_DESKS.filter(id=>!$('#operationsTab-'+id)?.hidden),at=keys.indexOf(key);let next;
@@ -17793,11 +17858,11 @@ function reconcileOperationsWorkspace(){
  const mount=$('#operationsWorkspace');if(!mount)return;
  const owner=typeof draftOwner==='undefined'?null:draftOwner;
  const products=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.productsEnabled;
- if($('#operationsTab-funding'))$('#operationsTab-funding').hidden=!!products;
- if(products&&operationsDesk==='funding')operationsDesk='monthly';
+ operationsFundingSuppressed=!!products;
+ if(products&&operationsDesk==='funding')operationsDesk='plan';
  if(owner!==operationsDeskOwner){operationsDeskOwner=owner;operationsDesk='monthly'}
  $$('[data-operations-tab]').forEach(button=>{if(operationsBoundControls.has(button))return;operationsBoundControls.add(button);button.addEventListener('click',()=>setOperationsDesk(button.dataset.operationsTab));button.addEventListener('keydown',event=>operationsDeskKey(event,button.dataset.operationsTab))});
- const shortcut=$('#operationsDecisionShortcut');if(shortcut&&!operationsBoundControls.has(shortcut)){operationsBoundControls.add(shortcut);shortcut.addEventListener('click',()=>{setOperationsDesk('monthly');$('#decisionGrid')?.querySelector?.('button:not(:disabled)')?.focus()})}
+ const shortcut=$('#operationsDecisionShortcut');if(shortcut&&!operationsBoundControls.has(shortcut)){operationsBoundControls.add(shortcut);shortcut.addEventListener('click',()=>{setOperationsDesk('plan');$('#decisionGrid')?.querySelector?.('button:not(:disabled)')?.focus()})}
  setOperationsDesk(operationsDesk);
 }
 // Presentation ownership only. Move existing controls, never clone a draft or

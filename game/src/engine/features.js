@@ -312,6 +312,13 @@ function previewFeatureSelection(source, { field, value }) {
     delete options.creditWorkloadVersion;
     delete options.bankEconomicsVersion;
   }
+  // The research programme is Core-only. A modular selection that moves the
+  // campaign off Core economics used to make the whole proposal INVALID, which
+  // stopped the dependent-feature confirmation flow from engaging at all. Drop
+  // the marker instead, exactly as the reporting markers above are dropped, so a
+  // default new-game draft can carry it safely.
+  if (options.researchProgramVersion === 1 && options.bankEconomicsVersion !== 2)
+    delete options.researchProgramVersion;
   const rules = campaignRules(options, { context: 'lobby' });
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version,

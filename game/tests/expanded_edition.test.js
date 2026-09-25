@@ -8,7 +8,7 @@ function select(h,edition,container='#setupFeatureOptions',prefix=''){
 }
 test('one Expanded choice exposes the complete investment stack without opening a subsidiary or mutating Core',()=>{
  const h=harness(),E=h.c.window.BWEngine,core=copy(h.run('readSetupFeatureOptions()')),before=JSON.stringify(core);
- assert.equal(core.incomeHistoryVersion,1);assert.equal(E.createGame({...core,seed:73,created:1}).version,'8.19');
+ assert.equal(core.incomeHistoryVersion,1);assert.equal(E.createGame({...core,seed:73,created:1}).version,'8.20');
  assert.equal(E.createGame({seed:73,created:1}).version,'8.1','Legacy direct creation is unchanged');
  const q=E.previewCampaignEdition(core,'expanded',{currentEconomics:true});assert.equal(JSON.stringify(core),before);assert.equal(q.rules.version,'9.32');assert(q.requiresConfirmation);
  for(const suffix of ['Services','Assets','Cash','Sweep','Choice','Income','Suitability','Trading','Notes'])assert.equal(q.options['investment'+suffix+'Version'],1);
@@ -16,7 +16,7 @@ test('one Expanded choice exposes the complete investment stack without opening 
  const caps=E.campaignCapabilities();delete caps.companyCreditSupported;
  assert.equal(E.peerRulesIssue(q.rules,caps).field,'companyCreditVersion','Peers cannot silently omit the new lending rules');
  for(const mode of ['ai','hotseat']){const g=E.createGame({...q.options,mode,seed:73,created:1});assert.equal(g.version,'9.32');assert.equal(Object.keys(g.territories).length,6);assert(g.players.every(p=>p.investmentBusiness.status==='unopened'&&p.investmentBusiness.book.accounts.cash===0&&p.sharedPremises.book.rooms.length===0&&p.incomeHistory.records.length===0));assert.equal(g.investmentEconomy.world.notes.issued,0);E.validatePilot(g);}
- const reset=E.previewCampaignEdition(q.options,'core',{currentEconomics:true});assert.deepEqual(copy(reset.rules.enabled),['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion']);assert.deepEqual(copy(E.createGame({...reset.options,mode:'ai',seed:73,created:1})),copy(E.createGame({...core,mode:'ai',seed:73,created:1})));
+ const reset=E.previewCampaignEdition(q.options,'core',{currentEconomics:true});assert.deepEqual(copy(reset.rules.enabled),['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion']);assert.deepEqual(copy(E.createGame({...reset.options,mode:'ai',seed:73,created:1})),copy(E.createGame({...core,researchProgramVersion:undefined,mode:'ai',seed:73,created:1})));
  assert.throws(()=>E.previewCampaignEdition(core,'unknown'));
 });
 test('confirmation, cancellation, hidden scalar retention and returning to Core work through setup',()=>{

@@ -232,6 +232,12 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // confirmed pre-existing on rc3; and game/BRANCH_WARS.html rebuilt from source to
 // the byte-identical portable hash shipped in releases/v4-rc4.
 // This pin is still not long-run strategic or physical two-computer acceptance.
-const expected='96e3a14b0f94aa1a98273ab2ebeb23782bbe55d960b39ebbb1c51d0527ecf492';
+// rc4 fixes re-pin. Default Core setup now opts into the research programme, and
+// previewFeatureSelection drops that Core-only marker when a selection moves off
+// Core economics instead of invalidating the whole proposal. Scoped checks rerun:
+// behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics,
+// bank_rivalry, expanded_edition, expanded_edition_network, feature_setup,
+// github_resilience, build, engine and research_program.
+const expected='7b1a0556c828fb51739d26c7f101e9594b7b1d4233ece150e28a4f93637590a5';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

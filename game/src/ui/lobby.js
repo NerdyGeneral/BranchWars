@@ -167,6 +167,39 @@ function renderLobby(){
  $('#lobbyError').textContent=lobby.error||'';
  renderLobbyControls();paintLink();
 }
+// Resuming a multiplayer campaign. Exporting one has always worked, but every
+// route back ran through resumeLocalCampaign, which coerces lan/p2p to hotseat --
+// so a Repository Link or LAN game could only ever come back single-player, and
+// the lobby had no load control at all. The host now stages a save here and the
+// campaign starts from it instead of from createGame; the guest receives it
+// through the same syncPeers path a fresh campaign uses.
+let lobbyResumeCampaign=null;
+function clearLobbyResume(message){
+ lobbyResumeCampaign=null;
+ const input=$('#lobbyResumeFile');if(input)input.value='';
+ if(message)$('#lobbyError').textContent=message;
+ renderLobbyControls();
+}
+function stageLobbyResume(file){
+ if(!file)return;
+ if(p2pRole!=='host'){clearLobbyResume('Only the host can resume a campaign from a save.');return}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const restored=migrateGame(JSON.parse(reader.result));
+   if(!restored||!Array.isArray(restored.players)||restored.players.length!==2)throw Error('That file is not a two-bank campaign save.');
+   if(restored.gameOver)throw Error('That campaign is already complete. Start a new one.');
+   // The save carries its own campaign rules; the peer must support them.
+   E.validateCampaignRules(restored,'game');
+   lobbyResumeCampaign=restored;
+   $('#lobbyError').textContent='';
+   $('#lobbyNote').textContent='Resuming cycle '+restored.cycle+' of the loaded campaign. Both players must confirm ready.';
+   renderLobbyControls();
+  }catch(e){clearLobbyResume('That save could not be loaded: '+e.message)}
+ };
+ reader.onerror=()=>clearLobbyResume('That save file could not be read.');
+ reader.readAsText(file);
+}
 function startLobbyCampaign(){
  try{
   if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty||featureSelectionPending())return;
@@ -175,7 +208,18 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
-  const created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  const transport=(lan.active||gh.active)?'lan':'p2p';
+  let created;
+  if(lobbyResumeCampaign){
+   // Keep the campaign exactly as saved; only its transport and the two seat
+   // identities follow the current lobby.
+   created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
+   created.mode=transport;
+   created.players[0].name=host.name;created.players[0].color=host.color;
+   created.players[1].name=guest.name;created.players[1].color=guest.color;
+  }else{
+  created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  }
   p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
   game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
  }catch(e){$('#lobbyError').textContent=e.message}
@@ -186,6 +230,7 @@ $('#lobbyColor').addEventListener('input',markLobbyDirty);
 $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
+$('#lobbyResumeFile')?.addEventListener('change',e=>{stageLobbyResume(e.target.files&&e.target.files[0])});
 $('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
 $('#lobbySettings').addEventListener('click',applyLobbySettings);
 $('#lobbyDiscardSettings').addEventListener('click',discardLobbySettings);

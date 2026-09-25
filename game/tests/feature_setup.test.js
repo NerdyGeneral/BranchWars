@@ -8,7 +8,7 @@ const ids = { campaignRulesVersion: 'rivalryPilot', serviceExpansionVersion: 'se
   advertisingVersion: 'advertisingPreview', regionalGrowthVersion: 'regionalGrowthPreview', relationshipOffersVersion: 'relationshipOffersPreview', onboardingVersion: 'onboardingPreview' };
 const read = peer => copy(peer.run('readSetupFeatureOptions()'));
 const initial = read(h), markup = peer => peer.elements.get('#setupFeatureOptions').innerHTML;
-assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 18);
+assert.equal(h.run('Object.keys(readSetupFeatureOptions()).length'), 19);
 assert.equal(initial.incomeHistoryVersion,1,'New Core setup records actual income without enabling Expanded systems.');
 assert.equal(initial.facilityExtensionsVersion,0,'Office suites require explicit new-campaign selection, never an old-save upgrade.');
 assert.equal(initial.commercialAccountsVersion,0,'Company operating accounts are never selected implicitly for old configurations.');
@@ -74,7 +74,7 @@ assert(h.run('featureSelectionPending()')); assert.deepEqual(read(h), full);
 assert.match(h.elements.get('#featureSelectionAffected').innerHTML, /Living institution/);
 assert.match(h.elements.get('#featureSelectionAffected').innerHTML, /Customer needs/);
 assert(h.confirmFeatures());
-const historicalCore={...initial};delete historicalCore.incomeHistoryVersion;delete historicalCore.commercialServiceVersion;delete historicalCore.bankEconomicsVersion;
+const historicalCore={...initial};delete historicalCore.incomeHistoryVersion;delete historicalCore.commercialServiceVersion;delete historicalCore.bankEconomicsVersion;delete historicalCore.researchProgramVersion;
 assert.deepEqual(read(h),historicalCore,'Historical custom-rule cascade does not silently add the current reporting marker.');
 h.changeFeature('#institutionManagement', true); assert(h.confirmFeatures());
 h.changeFeature('#serviceExpansion', false);

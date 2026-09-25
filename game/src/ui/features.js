@@ -160,7 +160,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
