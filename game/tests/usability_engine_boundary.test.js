@@ -277,6 +277,13 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // engine, research_program(+_ui), research_bot, feature_setup, github_resilience,
 // agency_legacy_compat, agency_peer_compat, v31_version_boundary, strategy_workspace,
 // package_release and income_review. No reference build, golden or ceiling changed.
-const expected='678af36463e2caa400c1ecdce16abf4648b9c14dc47621b1ebfe04ada52030a9';
+// Display-name re-pin. The 8.20 combined capability "Deposit Franchise" shared its
+// name with the long-standing Network tier-3 milestone; it is now "Stable Funding
+// Base". Its key, requirements and effects are unchanged. Scoped checks rerun:
+// behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics,
+// bank_rivalry, expanded_edition(+_network), research_program(+_ui), research_bot,
+// build, engine, strategy_release_ui, strategy_workspace, income_review_ui and
+// usability_help. No reference build, golden or ceiling changed.
+const expected='b34f582cf133042b74f8e856fba2556221338a2d08f2069c85827590160f00c3';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
