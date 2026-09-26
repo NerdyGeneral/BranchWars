@@ -57,7 +57,7 @@ not a120-month current-version balance campaign. No golden was regenerated.
 
 ## Artifact and remaining work
 
-- [Development artifact](../../output/BRANCH_WARS_premises47_agency.html),184 inputs.
+- [Development artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises47_agency.html),184 inputs.
 - HTML SHA-256 `7fcc3edaa0a88155a53948258be1d5b72a19bb288959233916509c0064b5e4c1`.
 - Engine SHA-256 `a0e1baf2e9ae3a2563bf1e5d75a5da10c7988c010c9d23b49a0f85d48bf802f6`.
 - [Exact-build verification report](../../output/master-checkpoint47-verification.json).

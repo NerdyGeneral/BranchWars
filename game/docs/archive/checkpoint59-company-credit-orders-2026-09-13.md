@@ -25,7 +25,7 @@ The inherited borrower-domain stress test still records actual company failures 
 
 ## Exact identity and preservation
 
-- Review artifact: [BRANCH_WARS_creditorders59_review.html](../../output/BRANCH_WARS_creditorders59_review.html), 190 assembly inputs.
+- Review artifact: [BRANCH_WARS_creditorders59_review.html](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditorders59_review.html), 190 assembly inputs.
 - Artifact SHA-256: `1b4d0a594e964ada574813fb88640c10cde2205c7a777cc5b4377b80d5e3b214`.
 - Engine SHA-256: `cce4f9f4694f6dcbfe3387f51563aceb764f9f568425ad9f8f83844c93395328`.
 - Normal playable remains checkpoint37: `b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561`.

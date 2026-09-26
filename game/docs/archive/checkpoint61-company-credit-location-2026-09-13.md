@@ -14,7 +14,7 @@ No growth rates, borrowing prices, qualification rules, servicing quotas, takeov
 
 ## Verification
 
-[Exact artifact and test report](../../output/master-checkpoint61-verification.json): 31 passing test results across two commands, plus source architecture/syntax checks. Source assembly and the separate [review artifact](../../output/BRANCH_WARS_creditlocations61_review.html) match SHA-256 `b6bbcfcf1ba2518c5aa74fb701d80985a56874068e7540de4572e399af2a6ea7`; 190 assembly inputs. Engine SHA-256: `6fcd14a997ca139b07b8b59bc55833df89d31d2d7297346105134c4515131aa4`.
+[Exact artifact and test report](../../output/master-checkpoint61-verification.json): 31 passing test results across two commands, plus source architecture/syntax checks. Source assembly and the separate [review artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditlocations61_review.html) match SHA-256 `b6bbcfcf1ba2518c5aa74fb701d80985a56874068e7540de4572e399af2a6ea7`; 190 assembly inputs. Engine SHA-256: `6fcd14a997ca139b07b8b59bc55833df89d31d2d7297346105134c4515131aa4`.
 
 - Loan order, borrower forecast and exact historical Core/Expanded boundary checks pass.
 - Frozen Group10 comparison covers four economies and 12 total resolved months, plus creation, human/AI instructions, RNG, half-ready recovery, private views and rematch. No goldens changed.

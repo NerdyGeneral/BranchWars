@@ -14,7 +14,7 @@ The all-funded scenario is not a prediction that the player wins every borrower.
 
 ## Exact artifact and verification
 
-- Review artifact: [BRANCH_WARS_creditdesk63_review.html](../../output/BRANCH_WARS_creditdesk63_review.html), 192 assembly inputs.
+- Review artifact: [BRANCH_WARS_creditdesk63_review.html](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditdesk63_review.html), 192 assembly inputs.
 - Artifact SHA-256: `ec9a84e55a443f9c144fd14b57fc86fa32adb3df9aab5607ae4cb839b6373db4`.
 - Engine SHA-256: `31b1e3e5937e9e6c9a4dab5059fe3facbe58e4352e28499d23ecdca6b60bc664`.
 - [Verification record](../../output/master-checkpoint63-verification.json): 41 targeted tests pass across credit domain, forecasts, campaign, inspector UI, orders, historical Core/Expanded boundaries and deposit location. Seven existing monthly-plan checks, source architecture/syntax and all three simulated transports also pass. The report records source input hashes and checks that they remain unchanged.

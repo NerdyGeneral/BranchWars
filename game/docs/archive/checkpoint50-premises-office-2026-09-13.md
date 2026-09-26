@@ -52,7 +52,7 @@ estimates, not guarantees about future permissions, cash or rival actions.
 
 ## Exact artifact and evidence
 
-[Developer artifact](../../output/BRANCH_WARS_premises50_office.html),186 assembly
+[Developer artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises50_office.html),186 assembly
 inputs, SHA-256:
 `a38dc54533b86bf54c1d58bc6559d45ea3d58cbf8067244132ffbb550da3069b`.
 Engine SHA-256:

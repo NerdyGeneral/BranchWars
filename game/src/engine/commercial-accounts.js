@@ -70,7 +70,6 @@ const CommercialAccounts=(()=>{
 function commercialAccountBalance(p,market=null){
  return p.commercialAccounts?Object.values(p.commercialAccounts.accounts).filter(r=>market===null||r.market===market).reduce((n,r)=>n+r.balance,0):0;
 }
-function commercialMarketDeposits(g,market){return (g.players||[]).reduce((n,p)=>n+commercialAccountBalance(p,market),0);}
 function initializeCommercialAccounts(g,o){
  if(o.commercialAccountsVersion!==1)return;
  if(g.financialGroupVersion!==10)throw Error('Business operating accounts require the current Expanded foundation.');

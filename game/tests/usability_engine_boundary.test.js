@@ -284,6 +284,15 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // bank_rivalry, expanded_edition(+_network), research_program(+_ui), research_bot,
 // build, engine, strategy_release_ui, strategy_workspace, income_review_ui and
 // usability_help. No reference build, golden or ceiling changed.
-const expected='b34f582cf133042b74f8e856fba2556221338a2d08f2069c85827590160f00c3';
+// Dead-code re-pin. agencyReview (an alias of agencyQuote), commercialMarketDeposits
+// and departmentPlanTrainingQuote were referenced nowhere, tests included; removing
+// them changes no behaviour. Scoped checks rerun: behavior-golden, runtime-stages,
+// determinism, campaign-lifecycle, bank_economics, bank_rivalry, expanded_edition,
+// research_program, research_bot, build, engine, architecture(+_scope), agency(+_ui,
+// _legacy_compat, _peer_compat), commercial_accounts(+_ui), departments,
+// department_obligations, department_ai_affordability, department_functions_ui,
+// accounting_payables, company_auction_kernel, shared_premises_boundary,
+// company_consolidation_legacy(+ --consolidation), v31_version_boundary and docs.
+const expected='5eae3d75244430296f88b3bad1e8fde15207ac3de2073317b5c14a8770764bf8';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

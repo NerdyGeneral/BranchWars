@@ -65,7 +65,7 @@ artifact is preserved as failed-test evidence, not a release candidate.
 | `investment_institution.test.js` | 9 groups /61 aggregate domain months |
 | Source assembly |184 inputs; engine/client syntax passed; separate final artifact equals assembled source |
 
-Final artifact: [premises48 verified snapshot](../../output/BRANCH_WARS_premises48_verified.html).
+Final artifact: [premises48 verified snapshot](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises48_verified.html).
 SHA-256: `c12fef86e2a5ec8b763cae9e064dcc2ea4873d931129944087335ec890f4218f`.
 Engine SHA-256: `21fe68979c7fde0c623422bd84a215cbef1064ae36cc9d15d7e93bab430ae213`.
 The [machine-readable record](../../output/master-checkpoint48-verification.json)

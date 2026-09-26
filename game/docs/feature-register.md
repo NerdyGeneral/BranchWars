@@ -278,8 +278,9 @@ before deleting anything.
 
 ## Layout
 
-Measured in a real browser at 1280x720, 900x720 and 700x720; the repo's own
-`tools/measure_navigation.js` stubs `offsetHeight`, so it cannot see layout.
+Measured in a real browser at 1280x720, 900x720 and 700x720. The former
+`tools/measure_navigation.js` stubbed `offsetHeight`, so it could not see layout; it has
+been removed. Measure layout in a real browser.
 
 **Chrome before content** — top of viewport to the bottom of the workspace nav, in a
 running Group 8 Expanded campaign. The masthead correctly hides itself in-game at every

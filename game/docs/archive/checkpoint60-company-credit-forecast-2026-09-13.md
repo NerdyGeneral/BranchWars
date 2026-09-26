@@ -32,7 +32,7 @@ Initial test harness failures were corrected without changing simulation rules: 
 
 ## Exact identity and preservation
 
-- [Review HTML](../../output/BRANCH_WARS_creditforecast60_review.html), 190 assembly inputs.
+- [Review HTML](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditforecast60_review.html), 190 assembly inputs.
 - Artifact SHA-256: `0788b9570739bafd7db1725e4406f72d0fc383ecc91dff359da68fde10b5ec90`.
 - Engine SHA-256: `f610e77f746047c0de87490bdb62f85b45a484f90687d2d37f0e96293ce47190`.
 - Normal playable remains checkpoint37: `b4351e85160586e72a63519a1eb2fe6fecdfe9cba1c94cbdd8577231f5c78561`.

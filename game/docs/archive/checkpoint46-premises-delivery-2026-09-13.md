@@ -59,7 +59,7 @@ corrected invocation completed and checked all script syntax.
 
 ## Exact artifact
 
-- [Assembled development artifact](../../output/BRANCH_WARS_premises46_delivery.html)
+- [Assembled development artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises46_delivery.html)
 - 184 inputs; HTML SHA-256 `5458546589c36e64c9bc89f314d7a15a9f32d2138625a5b6aeea6c1e9f73c42e`
 - Engine SHA-256 `44393194fbd0004a828ac4dd0a6da32640c34d55a57e8104c7ca4d3bdb49f93d`
 - [Machine-readable scope record](../../output/master-checkpoint46-verification.json)

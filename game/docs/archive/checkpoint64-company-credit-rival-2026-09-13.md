@@ -20,7 +20,7 @@ These are ending-boundary cases, not proof that an ordinary strategy naturally f
 
 ## Artifact and verification
 
-- Review artifact: [BRANCH_WARS_creditrival64_review.html](../../output/BRANCH_WARS_creditrival64_review.html),193 assembly inputs.
+- Review artifact: [BRANCH_WARS_creditrival64_review.html](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditrival64_review.html),193 assembly inputs.
 - Artifact SHA-256: `59b0a937acbebb28e93c699041a6d9aa70b7cf0ff5ef999b8aec5df6d3cf4b40`.
 - Engine SHA-256: `63c03557ccbc172ff373200dac2d7079fe533effcad6ab0d52d65e24d5622cba`.
 - [Exact-build verification record](../../output/master-checkpoint64-verification.json) is terminal and passing:28 targeted tests across strategy/ending, campaign, UI, historical boundaries, orders and forecasts, plus source architecture and all three simulated transports. Source and280 top-level test-file hashes remain unchanged after the run. These are scoped checks, not the final Windows/release or long-run balance gate.

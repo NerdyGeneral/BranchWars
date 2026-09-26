@@ -37,7 +37,7 @@ The first diagnostic invocation failed before month1 because the tool passed raw
 
 ## Exact-build checks and limits
 
-- [Checkpoint53 review HTML](../../output/BRANCH_WARS_earnings53_review.html): SHA-256 `8bf31b8f2725074c06b7dbbc1b1ccae8372f5ec09cea6a17292e47aa2dc7a329`;187 inputs. Engine `16d1805296a747b3598650d5437e12c216b6baff25a662bcd68aaadaf42952bd`.
+- [Checkpoint53 review HTML](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_earnings53_review.html): SHA-256 `8bf31b8f2725074c06b7dbbc1b1ccae8372f5ec09cea6a17292e47aa2dc7a329`;187 inputs. Engine `16d1805296a747b3598650d5437e12c216b6baff25a662bcd68aaadaf42952bd`.
 - Current source matches that artifact. Source architecture, existing10 earnings checks, new Expanded exact-state comparison, and GitHub/LAN/P2P simulated shared-premises lifecycle/privacy/duplicate checks passed. New regression is registered in both release runners. Runner/tool syntax checks passed.
 - No balance rules, prices, settlement, saved fields or campaign markers changed. The checkpoint51 long process remains its own older exact-build evidence: Balanced120 complete, Regulatory last observed96 and process still live. This is not a terminal480 result.
 - Normal playable checkpoint37 and frozen ZIP/manual remain unchanged. No publication, full Windows gate, real browser acceptance or physical two-computer playtest occurred in this checkpoint.

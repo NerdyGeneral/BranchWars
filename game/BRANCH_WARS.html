@@ -9610,7 +9610,6 @@ const CommercialAccounts=(()=>{
 function commercialAccountBalance(p,market=null){
  return p.commercialAccounts?Object.values(p.commercialAccounts.accounts).filter(r=>market===null||r.market===market).reduce((n,r)=>n+r.balance,0):0;
 }
-function commercialMarketDeposits(g,market){return (g.players||[]).reduce((n,p)=>n+commercialAccountBalance(p,market),0);}
 function initializeCommercialAccounts(g,o){
  if(o.commercialAccountsVersion!==1)return;
  if(g.financialGroupVersion!==10)throw Error('Business operating accounts require the current Expanded foundation.');
@@ -9850,7 +9849,6 @@ function agencyQuote(p, input = defaultAgencyPlan(p), companies = p.companySnaps
     reserveRequired: 3 * monthlyExpense, estimatedCommission, cash: a.book.accounts.cash,
     equity: a.book.accounts.equity, payables: a.book.accounts.payables,...(professional?{professional}: {}) };
 }
-function agencyReview(p) { return agencyQuote(p); }
 function normalizeAgencyPlan(p, plan) {
   if (!p.agency) {
     if (plan.agencyPolicy !== undefined) throw Error('Agency instructions require Financial Group rules 3.');
@@ -11033,9 +11031,6 @@ function departmentPlanOperatingQuote(p,input,base) {
     Math.max(0,base-cost-departmentLeadershipQuote(p,plan).total));
   owner._workforceCosts={training};
   return {owner,training};
-}
-function departmentPlanTrainingQuote(p,input,base) {
-  return departmentPlanOperatingQuote(p,input,base).training;
 }
 function departmentTeacherEligible(p, role, policy=p.workforce?.policy, allocation=p.allocation) {
   if(!p.departmentOffice||!p._departmentTeaching?.[role]||!p.departmentOffice.leaders[role])return false;

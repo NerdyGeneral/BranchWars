@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
 const consolidation=process.argv.includes('--consolidation');
-const bytes=fs.readFileSync(require('node:path').join(__dirname,consolidation?'../output/BRANCH_WARS_consolidation43_review.html':'../output/BRANCH_WARS_control42_review.html'));
+const bytes=fs.readFileSync(require('node:path').join(__dirname,consolidation?'../reports/reference-builds/BRANCH_WARS_consolidation43_review.html':'../reports/reference-builds/BRANCH_WARS_control42_review.html'));
 assert.equal(createHash('sha256').update(bytes).digest('hex'),consolidation?'00c37a32ea5c092fc8abbdc1b2ae97aca6edd4614c04ef55f21ff5ea4986226f':'de6c18ffa3f515ee1b038b8c93dcb45c8ec8df083d6f147b55a72667bf351ffd','The preserved control build must not change.');
 function load(html){const math=Object.create(Math);math.random=()=>.375;const c={Math:math,Date:class extends Date{static now(){return 123456;}}};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);return c.BWEngine;}
 const engines=[load(bytes.toString()),load(require('../tools/build_game').assemble().html)],copy=x=>JSON.parse(JSON.stringify(x));

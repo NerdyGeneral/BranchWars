@@ -717,8 +717,8 @@ subtotals within the combined competition stage.
 | [Local playable HTML](../BRANCH_WARS.html) | Checkpoint66; normal Core8.19 / Expanded9.32 | Matches the V4 rc2 package. Reporting and economic corrections are selected by the existing edition buttons. Not a full release gate pass. |
 | [V4 rc2 playtest package](https://github.com/NerdyGeneral/BranchWars/blob/v4.0.0-rc2/releases/branch-wars-v4.zip) | Checkpoint66 / Core8.19 / Expanded9.32 /199 inputs | September14 playtest update; previous V4 is preserved at the rc1 tag. |
 | [Current source](../src/manifest.json) | Checkpoint66 /199 inputs; normal Expanded starts9.32 | Integrated reporting, serviced income, credit workload, payroll and Core funding corrections. Balance and release gates remain open. |
-| [Checkpoint65 review artifact](../output/BRANCH_WARS_expanded65_review.html) | Preserved integrated Expanded lending /193 inputs | No longer matches current source. Not a final player release or full gate pass. |
-| [Checkpoint64 review artifact](../output/BRANCH_WARS_creditrival64_review.html) | Preserved company-credit rival workflow /193 inputs; no longer matches current source | Developer review artifact; company lending here still requires explicit9.28 creation. Not a player release or full gate pass. |
+| [Checkpoint65 review artifact](../reports/reference-builds/BRANCH_WARS_expanded65_review.html) | Preserved integrated Expanded lending /193 inputs | No longer matches current source. Not a final player release or full gate pass. |
+| [Checkpoint64 review artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditrival64_review.html) | Preserved company-credit rival workflow /193 inputs; no longer matches current source | Developer review artifact; company lending here still requires explicit9.28 creation. Not a player release or full gate pass. |
 
 The existing published PDF matches the frozen V3 package; it is **not the comprehensive manual for V4**. Historical archive/tag/publication statements describe their original checkpoints; the September14 V4 publication is recorded above.
 

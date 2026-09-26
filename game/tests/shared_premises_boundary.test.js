@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),path=require('node:path');
-const old=fs.readFileSync(path.join(__dirname,'../output/BRANCH_WARS_competition44_review.html'),'utf8');
+const old=fs.readFileSync(path.join(__dirname,'../reports/reference-builds/BRANCH_WARS_competition44_review.html'),'utf8');
 assert.equal(createHash('sha256').update(old).digest('hex'),'5edab8933b03bd7d0b04cbb324062334a2bc1d67fcacfa0a08c73c23439c55eb','Preserved44 reference must remain immutable');
 const load=html=>{const math=Object.create(Math);math.random=()=>.375;const c={Math:math,Date:class extends Date{static now(){return 123456;}}};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);return c.BWEngine;};
 const a=load(old),b=load(require('../tools/build_game').assemble().html),copy=x=>JSON.parse(JSON.stringify(x));

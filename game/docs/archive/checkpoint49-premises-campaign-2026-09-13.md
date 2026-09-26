@@ -38,7 +38,7 @@ qualified shared delivery and retained funding/default cases. The full objective
 ## Terminal evidence
 
 Final source assembles185 inputs into
-[checkpoint49 campaign artifact](../../output/BRANCH_WARS_premises49_campaign.html).
+[checkpoint49 campaign artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises49_campaign.html).
 SHA-256: `9832d2ca315e68ce61a3bd0c0a79bd9e5a1dc59523dba7759ad580845d1ebd7a`.
 Engine SHA-256: `7347850181574d866903facec80c11a217660ad990333f6c75f26f0b55376f7c`.
 

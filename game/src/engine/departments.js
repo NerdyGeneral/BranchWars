@@ -204,9 +204,6 @@ function departmentPlanOperatingQuote(p,input,base) {
   owner._workforceCosts={training};
   return {owner,training};
 }
-function departmentPlanTrainingQuote(p,input,base) {
-  return departmentPlanOperatingQuote(p,input,base).training;
-}
 function departmentTeacherEligible(p, role, policy=p.workforce?.policy, allocation=p.allocation) {
   if(!p.departmentOffice||!p._departmentTeaching?.[role]||!p.departmentOffice.leaders[role])return false;
   const row=p.workforce?.departments[role];
