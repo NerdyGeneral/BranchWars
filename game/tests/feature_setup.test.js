@@ -13,6 +13,16 @@ assert.equal(initial.incomeHistoryVersion,1,'New Core setup records actual incom
 assert.equal(initial.facilityExtensionsVersion,0,'Office suites require explicit new-campaign selection, never an old-save upgrade.');
 assert.equal(initial.commercialAccountsVersion,0,'Company operating accounts are never selected implicitly for old configurations.');
 assert.equal(initial.financialGroupVersion,0,'The approved group preview remains unchecked.');
+// rc5 playtest defect: without clicking Core edition, setup silently created Core
+// 8.19 and the research programme never appeared. Both the local start and the
+// multiplayer lobby, which filters setup through its own peer contract, must
+// create 8.20 with the sixth branch from an untouched setup.
+assert.equal(initial.researchProgramVersion,1,'An untouched setup opts into the current Core research programme.');
+assert.equal(h.run("E.createGame({...readSetupFeatureOptions(),startingWorkforce:'covered',mode:'hotseat',seed:1,created:1}).version"),'8.20');
+const defaultLobby=h.run(`(()=>{p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),scope:'national',scenario:'balanced'};
+ const s=lobbyOptions(),g=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:'gh',seed:1,created:1});
+ return {version:g.version,branches:E.researchBranches(g.players[0]).length};})()`);
+assert.deepEqual(copy(defaultLobby),{version:'8.20',branches:6},'An untouched multiplayer lobby creates the current Core research campaign.');
 assert.equal(h.elements.get('#financialGroupPreview').checked,false);
 const groupSetup=harness();
 groupSetup.changeFeature('#financialGroupPreview',true);
