@@ -126,6 +126,7 @@ function receiveLobby(message){
  next.players.forEach(lobbyIdentity);
  if(!next.settings||!['town','regional','state','national'].includes(next.settings.scope)||!['balanced','rate','regulatory','growth'].includes(next.settings.scenario))throw Error('Invalid lobby settings.');
  validateIncomingFeatureRules(next.settings,'lobby');
+ if(next.resume!==undefined&&!validLobbyResume(next.resume))throw Error('Invalid lobby snapshot.');
  if(!receiveDepartmentPeer(next.settings))return;
  if(lobby&&next.revision<lobby.revision)return;
  if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
@@ -141,6 +142,8 @@ function renderLobbyControls(){
  $('#lobbySettings').disabled=i!==0||confirmation;
  $('#lobbyDiscardSettings').disabled=i!==0||confirmation||!lobbySettingsDirty;
  $('#lobbyReady').textContent=me.ready?'Not ready':'Confirm ready';
+ $('#lobbyResumeLabel').classList.toggle('hidden',i!==0);$('#lobbyResumeLabel').textContent=lobby.resume?'Choose a different save':'Resume from save';
+ $('#lobbyResumeClear').classList.toggle('hidden',i!==0||!lobby.resume);$('#lobbyResumeClear').disabled=blocked;
  $('#lobbyStart').disabled=i!==0||blocked||lobbyDirty||lobbySettingsDirty||confirmation||!compatibility.compatible||!lobby.players.every(p=>p.ready);
  $('#lobbyProgress').textContent=confirmation?'Confirm or cancel the proposed feature changes before starting.':!compatibility.compatible?compatibility.reason:lobbySettingsDirty?'Apply or discard the host draft before confirming.':lobbyDirty?'Save your identity changes before confirming.':lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(i===0?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';
 }
@@ -150,7 +153,7 @@ function renderLobby(){
   lobbyFeatureDraft=null;lobbySettingsDirty=false;
  }
  show('#lobbyScreen');const host=p2pRole==='host',i=host?0:1,settings=lobby.settings;
- $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3><span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
+ $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3>'+(lobby.resume?'<span class="small">Plays saved bank <strong>'+esc(lobby.resume.banks[n])+'</strong></span> ':'')+'<span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
  if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color}
  if(!lobbySettingsDirty){$('#lobbyScope').value=settings.scope;$('#lobbyScenario').value=settings.scenario}
  $('#lobbyScope').disabled=!host||settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=!host;
@@ -163,7 +166,7 @@ function renderLobby(){
  $('#lobbyFeatureOptions').innerHTML=renderFeatureSelection(host?lobbyDraftSettings():settings,{prefix:'lobbyFeature-',disabled:!host});
  bindFeatureSelection($('#lobbyFeatureOptions'),{read:()=>lobbyDraftSettings(),commit:stageLobbyFeatures,getRevision:()=>lobby&&lobby.revision,
   canEdit:()=>!!lobby&&!game&&!view&&p2pRole==='host',onError:message=>{$('#lobbyError').textContent=message},onPendingChange:renderLobbyControls});
- $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
+ $('#lobbyNote').textContent=lobby.resume?lobbyResumeNote(lobby):lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
  $('#lobbyError').textContent=lobby.error||'';
  renderLobbyControls();paintLink();
 }
@@ -173,10 +176,33 @@ function renderLobby(){
 // the lobby had no load control at all. The host now stages a save here and the
 // campaign starts from it instead of from createGame; the guest receives it
 // through the same syncPeers path a fresh campaign uses.
+// A staged save changes what both players are agreeing to, so it is published in
+// the lobby: the guest sees which saved bank each seat plays, and both players
+// must confirm again. Only this summary is shared before the start; the campaign
+// itself still travels through syncPeers. The host always holds seat 0, so the
+// saved banks keep their names and seats rather than being relabelled after
+// whoever hosts today; the note warns when that would hand a player the other bank.
 let lobbyResumeCampaign=null;
+function validLobbyResume(r){
+ return !!r&&typeof r==='object'&&Number.isSafeInteger(r.cycle)&&r.cycle>=1&&typeof r.version==='string'&&r.version.length<=16&&
+  Array.isArray(r.banks)&&r.banks.length===2&&r.banks.every(name=>typeof name==='string'&&name.length<=80);
+}
+function lobbyResumeSummary(g){return {cycle:g.cycle,version:String(g.version||''),banks:g.players.map(p=>String(p.name||''))}}
+function lobbyResumeNote(l){
+ const r=l.resume,[host,guest]=l.players;
+ let note='Resuming a saved '+r.version+' campaign at month '+r.cycle+'. '+host.name+' (host) plays '+r.banks[0]+'; '+guest.name+' plays '+r.banks[1]+'. The save keeps its own rules; the settings below apply only to a new campaign.';
+ if(host.name===r.banks[1]||guest.name===r.banks[0])note+=' The banks look swapped: the host always plays the first saved bank. To keep your own bank, let its original host host this lobby.';
+ return note;
+}
+function publishLobbyResume(summary){
+ if(summary)lobby.resume=summary;else delete lobby.resume;
+ lobby.revision++;lobby.players.forEach(p=>p.ready=false);lobby.error='';
+ publishLobby();
+}
 function clearLobbyResume(message){
  lobbyResumeCampaign=null;
  const input=$('#lobbyResumeFile');if(input)input.value='';
+ if(lobby&&lobby.resume&&p2pRole==='host'&&!game)publishLobbyResume(null);
  if(message)$('#lobbyError').textContent=message;
  renderLobbyControls();
 }
@@ -193,8 +219,7 @@ function stageLobbyResume(file){
    E.validateCampaignRules(restored,'game');
    lobbyResumeCampaign=restored;
    $('#lobbyError').textContent='';
-   $('#lobbyNote').textContent='Resuming cycle '+restored.cycle+' of the loaded campaign. Both players must confirm ready.';
-   renderLobbyControls();
+   publishLobbyResume(lobbyResumeSummary(restored));
   }catch(e){clearLobbyResume('That save could not be loaded: '+e.message)}
  };
  reader.onerror=()=>clearLobbyResume('That save file could not be read.');
@@ -208,15 +233,16 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
+  // Both players confirmed the lobby as published. If the host no longer holds the
+  // save it announced (a reload, say), refuse rather than start something else.
+  if(!!lobby.resume!==!!lobbyResumeCampaign){clearLobbyResume('The announced save is no longer loaded here. Choose it again with Resume from save.');return}
   const transport=(lan.active||gh.active)?'lan':'p2p';
   let created;
   if(lobbyResumeCampaign){
-   // Keep the campaign exactly as saved; only its transport and the two seat
-   // identities follow the current lobby.
+   // Keep the campaign exactly as saved, bank names and colors included; only its
+   // transport follows the current lobby.
    created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
    created.mode=transport;
-   created.players[0].name=host.name;created.players[0].color=host.color;
-   created.players[1].name=guest.name;created.players[1].color=guest.color;
   }else{
   created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
   }
@@ -231,6 +257,7 @@ $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLo
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
 $('#lobbyResumeFile')?.addEventListener('change',e=>{stageLobbyResume(e.target.files&&e.target.files[0])});
+$('#lobbyResumeClear')?.addEventListener('click',()=>clearLobbyResume(''));
 $('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
 $('#lobbySettings').addEventListener('click',applyLobbySettings);
 $('#lobbyDiscardSettings').addEventListener('click',discardLobbySettings);
