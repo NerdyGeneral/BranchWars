@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),Module=require('node:module');
 const assert=require('node:assert/strict'),{createHash}=require('node:crypto');
 const root=path.resolve(__dirname,'..'),copy=x=>JSON.parse(JSON.stringify(x));
-const released=path.resolve(root,'../V2 release/BRANCH_WARS.html');
+const released=path.resolve(root,'reports/reference-builds/BRANCH_WARS_v2_release_b041ed53.html');
 assert.equal(createHash('sha256').update(fs.readFileSync(released)).digest('hex'),
  'b041ed53394575872e32888f542232225e15b61deef73a07e7f20b020f25e1e4','Actual old peer fixture changed');
 // Use the current fake DOM/relay harness, but execute BOTH the engine and complete
