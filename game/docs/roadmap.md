@@ -37,6 +37,15 @@ make expansion payback and the dependence on commercial service fees explicit
 next balance questions. Do not fix them by awarding free growth, suppressing
 real failure, or changing historical campaign economics without a boundary.
 
+Expanded 9.34 (`balanceSheetLendingVersion:1`) makes conventional lending pay without free
+growth. Lending bankers deploy part of the funded deposit gap beyond office capacity. The AI
+keeps its full-service office, and it no longer retreats into cautious lending for a thin
+month. Over 36 lab months, loans rise from about 13% of deposits to 30–41%, and month-36
+operating profit rises by a quarter to four-fifths, with capital strong. Next, in order:
+teach the AI to defend deposit share (a losing bot keeps Margin pricing and one Service
+banker), soften the first-year dip in Balanced play, then close the deposit-scale gap to
+Core. Measure each step with `tools/edition_balance_lab.js` against the committed reports.
+
 V4 rc2 is a separately authorized playtest publication, not a scope-completion
 milestone. Resume with conventional lending/service balance, then integrated
 workforce usability, exact-build release validation and human multiplayer

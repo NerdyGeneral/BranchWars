@@ -1,0 +1,1119 @@
+{
+ "name": "floor-10",
+ "portableSha256": "bbfc7b5b6aea0518d3cd07b7035408c3719fbec7cda7afe7c438bfc01c6dd900",
+ "engineSha256": "cf330dd34dcd628a7a88fe1deec798f7d43b6e489b0ed64b865a06d7bed65724",
+ "tune": {
+  "liquidityFloor": 0.1
+ },
+ "months": 36,
+ "seeds": [
+  1,
+  2
+ ],
+ "scenarios": [
+  "balanced",
+  "rate"
+ ],
+ "variants": [
+  "expanded"
+ ],
+ "elapsedSeconds": 862,
+ "scope": "Ordinary same-rule AI for both seats; no injected resources. Diagnostic, not optimal-play or human-balance evidence.",
+ "results": [
+  {
+   "variant": "expanded",
+   "scenario": "balanced",
+   "seed": 1,
+   "version": "9.34",
+   "requestedMonths": 36,
+   "completed": 36,
+   "checkpoints": [
+    {
+     "month": 1,
+     "banks": [
+      {
+       "deposits": 23931647,
+       "loans": 9588760,
+       "cash": 2307735,
+       "loanToDeposit": 40.1,
+       "capitalRatio": 15.1,
+       "lastOperatingProfit": 24848,
+       "loanIncomeShare": 27.8,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 309320,
+       "officeCapacity": 399550,
+       "fundingRoom": 1111153,
+       "centralCapacity": 0,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23931735,
+       "loans": 9588760,
+       "cash": 2312751,
+       "loanToDeposit": 40.1,
+       "capitalRatio": 15.1,
+       "lastOperatingProfit": 29776,
+       "loanIncomeShare": 27.8,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 309320,
+       "officeCapacity": 312181,
+       "fundingRoom": 1116164,
+       "centralCapacity": 0,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 3,
+     "banks": [
+      {
+       "deposits": 23778877,
+       "loans": 9573055,
+       "cash": 2246714,
+       "loanToDeposit": 40.3,
+       "capitalRatio": 15.7,
+       "lastOperatingProfit": 47572,
+       "loanIncomeShare": 25,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 271746,
+       "officeCapacity": 398650,
+       "fundingRoom": 1057770,
+       "centralCapacity": 0,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23806248,
+       "loans": 9598377,
+       "cash": 2254666,
+       "loanToDeposit": 40.3,
+       "capitalRatio": 15.7,
+       "lastOperatingProfit": 49644,
+       "loanIncomeShare": 24.1,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 271746,
+       "officeCapacity": 311544,
+       "fundingRoom": 1064354,
+       "centralCapacity": 0,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 6,
+     "banks": [
+      {
+       "deposits": 23417258,
+       "loans": 9355383,
+       "cash": 2516281,
+       "loanToDeposit": 40,
+       "capitalRatio": 19.4,
+       "lastOperatingProfit": 37906,
+       "loanIncomeShare": 25.6,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 329699,
+       "officeCapacity": 571855,
+       "fundingRoom": 1345418,
+       "centralCapacity": 174555,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23487115,
+       "loans": 9374519,
+       "cash": 2563609,
+       "loanToDeposit": 39.9,
+       "capitalRatio": 19.3,
+       "lastOperatingProfit": 34513,
+       "loanIncomeShare": 23.9,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 365142,
+       "officeCapacity": 525486,
+       "fundingRoom": 1389253,
+       "centralCapacity": 214898,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 12,
+     "banks": [
+      {
+       "deposits": 25079881,
+       "loans": 9917420,
+       "cash": 2780215,
+       "loanToDeposit": 39.5,
+       "capitalRatio": 12,
+       "lastOperatingProfit": 55436,
+       "loanIncomeShare": 25.5,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 415877,
+       "officeCapacity": 415877,
+       "fundingRoom": 1526221,
+       "centralCapacity": 272227,
+       "binding": "office"
+      },
+      {
+       "deposits": 24805837,
+       "loans": 8788398,
+       "cash": 3831061,
+       "loanToDeposit": 35.4,
+       "capitalRatio": 14.8,
+       "lastOperatingProfit": 52996,
+       "loanIncomeShare": 19.3,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 496158,
+       "officeCapacity": 496158,
+       "fundingRoom": 2590769,
+       "centralCapacity": 364857,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 24,
+     "banks": [
+      {
+       "deposits": 19898524,
+       "loans": 5762567,
+       "cash": 1070692,
+       "loanToDeposit": 29,
+       "capitalRatio": 9.8,
+       "lastOperatingProfit": -45391,
+       "loanIncomeShare": 32.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 0,
+       "officeCapacity": 136360,
+       "fundingRoom": 0,
+       "centralCapacity": 0,
+       "binding": "funding"
+      },
+      {
+       "deposits": 24332830,
+       "loans": 7885070,
+       "cash": 3305415,
+       "loanToDeposit": 32.4,
+       "capitalRatio": 7.1,
+       "lastOperatingProfit": -76433,
+       "loanIncomeShare": 31.9,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0,
+       "capacity": 0,
+       "officeCapacity": 127285,
+       "fundingRoom": 872132,
+       "centralCapacity": 0,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 36,
+     "banks": [
+      {
+       "deposits": 20855087,
+       "loans": 2635491,
+       "cash": 4981198,
+       "loanToDeposit": 12.6,
+       "capitalRatio": 12.2,
+       "lastOperatingProfit": -39576,
+       "loanIncomeShare": 20,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0,
+       "capacity": 0,
+       "officeCapacity": 129070,
+       "fundingRoom": 4564096,
+       "centralCapacity": 0,
+       "binding": "staff"
+      },
+      {
+       "deposits": 26798511,
+       "loans": 5854646,
+       "cash": 8767755,
+       "loanToDeposit": 21.8,
+       "capitalRatio": 20,
+       "lastOperatingProfit": 84835,
+       "loanIncomeShare": 11.7,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 530213,
+       "officeCapacity": 530213,
+       "fundingRoom": 8231785,
+       "centralCapacity": 405032,
+       "binding": "office"
+      }
+     ]
+    }
+   ],
+   "cumulativeOperatingProfit": [
+    123244,
+    285021
+   ],
+   "bindingMonths": [
+    {
+     "staff": 22,
+     "office": 6,
+     "funding": 8
+    },
+    {
+     "staff": 20,
+     "funding": 5,
+     "office": 11
+    }
+   ],
+   "gameOver": false,
+   "endReason": null,
+   "elapsedSeconds": 639
+  },
+  {
+   "variant": "expanded",
+   "scenario": "balanced",
+   "seed": 2,
+   "version": "9.34",
+   "requestedMonths": 36,
+   "completed": 36,
+   "checkpoints": [
+    {
+     "month": 1,
+     "banks": [
+      {
+       "deposits": 23931539,
+       "loans": 9687425,
+       "cash": 2238651,
+       "loanToDeposit": 40.5,
+       "capitalRatio": 15.2,
+       "lastOperatingProfit": -5463,
+       "loanIncomeShare": 28.9,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 386650,
+       "officeCapacity": 399550,
+       "fundingRoom": 1042074,
+       "centralCapacity": 0,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23949123,
+       "loans": 9687425,
+       "cash": 2261161,
+       "loanToDeposit": 40.5,
+       "capitalRatio": 15.2,
+       "lastOperatingProfit": -537,
+       "loanIncomeShare": 28.9,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 312181,
+       "officeCapacity": 312181,
+       "fundingRoom": 1063705,
+       "centralCapacity": 0,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 3,
+     "banks": [
+      {
+       "deposits": 24383304,
+       "loans": 9743783,
+       "cash": 2533689,
+       "loanToDeposit": 40,
+       "capitalRatio": 14.3,
+       "lastOperatingProfit": 4371,
+       "loanIncomeShare": 27.8,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 385346,
+       "officeCapacity": 494009,
+       "fundingRoom": 1314524,
+       "centralCapacity": 95359,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23440658,
+       "loans": 9525683,
+       "cash": 1914975,
+       "loanToDeposit": 40.6,
+       "capitalRatio": 15.4,
+       "lastOperatingProfit": 18124,
+       "loanIncomeShare": 22.5,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 300488,
+       "officeCapacity": 311544,
+       "fundingRoom": 742942,
+       "centralCapacity": 0,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 6,
+     "banks": [
+      {
+       "deposits": 24958001,
+       "loans": 9800823,
+       "cash": 3070175,
+       "loanToDeposit": 39.3,
+       "capitalRatio": 14.4,
+       "lastOperatingProfit": -3416,
+       "loanIncomeShare": 26.7,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 371281,
+       "officeCapacity": 637462,
+       "fundingRoom": 1822275,
+       "centralCapacity": 240162,
+       "binding": "staff"
+      },
+      {
+       "deposits": 22751351,
+       "loans": 8724935,
+       "cash": 1922002,
+       "loanToDeposit": 38.3,
+       "capitalRatio": 15.6,
+       "lastOperatingProfit": 26094,
+       "loanIncomeShare": 20.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 131588,
+       "officeCapacity": 131588,
+       "fundingRoom": 784434,
+       "centralCapacity": 0,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 12,
+     "banks": [
+      {
+       "deposits": 26235394,
+       "loans": 9413916,
+       "cash": 4493414,
+       "loanToDeposit": 35.9,
+       "capitalRatio": 12.9,
+       "lastOperatingProfit": 44607,
+       "loanIncomeShare": 23.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 330895,
+       "officeCapacity": 366222,
+       "fundingRoom": 3968706,
+       "centralCapacity": 223652,
+       "binding": "staff"
+      },
+      {
+       "deposits": 21375574,
+       "loans": 7068862,
+       "cash": 2050040,
+       "loanToDeposit": 33.1,
+       "capitalRatio": 16.7,
+       "lastOperatingProfit": 31955,
+       "loanIncomeShare": 15.3,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 131301,
+       "officeCapacity": 131301,
+       "fundingRoom": 1622529,
+       "centralCapacity": 0,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 24,
+     "banks": [
+      {
+       "deposits": 22618611,
+       "loans": 9427908,
+       "cash": 1106677,
+       "loanToDeposit": 41.7,
+       "capitalRatio": 14.9,
+       "lastOperatingProfit": 68595,
+       "loanIncomeShare": 19.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 226945,
+       "officeCapacity": 226945,
+       "fundingRoom": 654305,
+       "centralCapacity": 0,
+       "binding": "office"
+      },
+      {
+       "deposits": 24656251,
+       "loans": 8235263,
+       "cash": 4106484,
+       "loanToDeposit": 33.4,
+       "capitalRatio": 14.4,
+       "lastOperatingProfit": 47151,
+       "loanIncomeShare": 16.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 872996,
+       "officeCapacity": 872996,
+       "fundingRoom": 3613359,
+       "centralCapacity": 742651,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 36,
+     "banks": [
+      {
+       "deposits": 23391355,
+       "loans": 8583565,
+       "cash": 2900521,
+       "loanToDeposit": 36.7,
+       "capitalRatio": 17.5,
+       "lastOperatingProfit": 105279,
+       "loanIncomeShare": 15.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 263886,
+       "officeCapacity": 423480,
+       "fundingRoom": 1730953,
+       "centralCapacity": 170480,
+       "binding": "staff"
+      },
+      {
+       "deposits": 26660559,
+       "loans": 9425683,
+       "cash": 5042152,
+       "loanToDeposit": 35.4,
+       "capitalRatio": 14,
+       "lastOperatingProfit": 94881,
+       "loanIncomeShare": 16.3,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 747950,
+       "officeCapacity": 747950,
+       "fundingRoom": 3709124,
+       "centralCapacity": 618944,
+       "binding": "office"
+      }
+     ]
+    }
+   ],
+   "cumulativeOperatingProfit": [
+    1635050,
+    1379235
+   ],
+   "bindingMonths": [
+    {
+     "staff": 28,
+     "office": 7,
+     "funding": 1
+    },
+    {
+     "staff": 19,
+     "office": 17
+    }
+   ],
+   "gameOver": false,
+   "endReason": null,
+   "elapsedSeconds": 793
+  },
+  {
+   "variant": "expanded",
+   "scenario": "rate",
+   "seed": 1,
+   "version": "9.34",
+   "requestedMonths": 36,
+   "completed": 36,
+   "checkpoints": [
+    {
+     "month": 1,
+     "banks": [
+      {
+       "deposits": 25527088,
+       "loans": 9721119,
+       "cash": 4080169,
+       "loanToDeposit": 38.1,
+       "capitalRatio": 17.4,
+       "lastOperatingProfit": 24200,
+       "loanIncomeShare": 28.1,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 756603,
+       "officeCapacity": 846833,
+       "fundingRoom": 2803815,
+       "centralCapacity": 447283,
+       "binding": "staff"
+      },
+      {
+       "deposits": 25527182,
+       "loans": 9721119,
+       "cash": 4085190,
+       "loanToDeposit": 38.1,
+       "capitalRatio": 17.4,
+       "lastOperatingProfit": 29127,
+       "loanIncomeShare": 28.1,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 756606,
+       "officeCapacity": 759467,
+       "fundingRoom": 2808831,
+       "centralCapacity": 447286,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 3,
+     "banks": [
+      {
+       "deposits": 25353236,
+       "loans": 9850543,
+       "cash": 3660322,
+       "loanToDeposit": 38.9,
+       "capitalRatio": 16.3,
+       "lastOperatingProfit": 47376,
+       "loanIncomeShare": 25.5,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 594582,
+       "officeCapacity": 594582,
+       "fundingRoom": 2392660,
+       "centralCapacity": 466584,
+       "binding": "office"
+      },
+      {
+       "deposits": 25380636,
+       "loans": 9862263,
+       "cash": 3705290,
+       "loanToDeposit": 38.9,
+       "capitalRatio": 16.5,
+       "lastOperatingProfit": 47709,
+       "loanIncomeShare": 24.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 572123,
+       "officeCapacity": 572123,
+       "fundingRoom": 2436258,
+       "centralCapacity": 452291,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 6,
+     "banks": [
+      {
+       "deposits": 24915255,
+       "loans": 9264418,
+       "cash": 3806239,
+       "loanToDeposit": 37.2,
+       "capitalRatio": 17.1,
+       "lastOperatingProfit": 42869,
+       "loanIncomeShare": 25.9,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 199673,
+       "officeCapacity": 275937,
+       "fundingRoom": 2560476,
+       "centralCapacity": 131342,
+       "binding": "staff"
+      },
+      {
+       "deposits": 25001220,
+       "loans": 9214700,
+       "cash": 3956599,
+       "loanToDeposit": 36.9,
+       "capitalRatio": 17.3,
+       "lastOperatingProfit": 31689,
+       "loanIncomeShare": 24.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 220187,
+       "officeCapacity": 276970,
+       "fundingRoom": 2706538,
+       "centralCapacity": 145382,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 12,
+     "banks": [
+      {
+       "deposits": 30454375,
+       "loans": 8388052,
+       "cash": 10253355,
+       "loanToDeposit": 27.5,
+       "capitalRatio": 18.9,
+       "lastOperatingProfit": 44508,
+       "loanIncomeShare": 19.5,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 368085,
+       "officeCapacity": 417370,
+       "fundingRoom": 8730636,
+       "centralCapacity": 273180,
+       "binding": "staff"
+      },
+      {
+       "deposits": 26917117,
+       "loans": 8368554,
+       "cash": 6641830,
+       "loanToDeposit": 31.1,
+       "capitalRatio": 18.2,
+       "lastOperatingProfit": 40557,
+       "loanIncomeShare": 19,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 404247,
+       "officeCapacity": 415668,
+       "fundingRoom": 5295974,
+       "centralCapacity": 284367,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 24,
+     "banks": [
+      {
+       "deposits": 33097499,
+       "loans": 9512697,
+       "cash": 12092143,
+       "loanToDeposit": 28.7,
+       "capitalRatio": 19.8,
+       "lastOperatingProfit": 59587,
+       "loanIncomeShare": 21.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 677621,
+       "officeCapacity": 751573,
+       "fundingRoom": 10437268,
+       "centralCapacity": 510588,
+       "binding": "staff"
+      },
+      {
+       "deposits": 27354363,
+       "loans": 9423684,
+       "cash": 6338873,
+       "loanToDeposit": 34.5,
+       "capitalRatio": 19.3,
+       "lastOperatingProfit": 59307,
+       "loanIncomeShare": 20.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 505718,
+       "officeCapacity": 505718,
+       "fundingRoom": 4971155,
+       "centralCapacity": 374990,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 36,
+     "banks": [
+      {
+       "deposits": 40502997,
+       "loans": 13611560,
+       "cash": 15975646,
+       "loanToDeposit": 33.6,
+       "capitalRatio": 20.7,
+       "lastOperatingProfit": 78673,
+       "loanIncomeShare": 24.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.5,
+       "capacity": 550850,
+       "officeCapacity": 698582,
+       "fundingRoom": 13950496,
+       "centralCapacity": 460229,
+       "binding": "staff"
+      },
+      {
+       "deposits": 23531141,
+       "loans": 10192838,
+       "cash": 2409856,
+       "loanToDeposit": 43.3,
+       "capitalRatio": 22.4,
+       "lastOperatingProfit": 62222,
+       "loanIncomeShare": 18.1,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 223242,
+       "officeCapacity": 254742,
+       "fundingRoom": 1233299,
+       "centralCapacity": 56742,
+       "binding": "staff"
+      }
+     ]
+    }
+   ],
+   "cumulativeOperatingProfit": [
+    2165784,
+    1611653
+   ],
+   "bindingMonths": [
+    {
+     "staff": 30,
+     "office": 6
+    },
+    {
+     "staff": 19,
+     "office": 17
+    }
+   ],
+   "gameOver": false,
+   "endReason": null,
+   "elapsedSeconds": 862
+  },
+  {
+   "variant": "expanded",
+   "scenario": "rate",
+   "seed": 2,
+   "version": "9.34",
+   "requestedMonths": 36,
+   "completed": 36,
+   "checkpoints": [
+    {
+     "month": 1,
+     "banks": [
+      {
+       "deposits": 25533955,
+       "loans": 9806935,
+       "cash": 3884257,
+       "loanToDeposit": 38.4,
+       "capitalRatio": 16.3,
+       "lastOperatingProfit": -2763,
+       "loanIncomeShare": 29.1,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 855961,
+       "officeCapacity": 904011,
+       "fundingRoom": 2607559,
+       "centralCapacity": 504461,
+       "binding": "staff"
+      },
+      {
+       "deposits": 25552710,
+       "loans": 9806935,
+       "cash": 3907939,
+       "loanToDeposit": 38.4,
+       "capitalRatio": 16.4,
+       "lastOperatingProfit": 2164,
+       "loanIncomeShare": 29.1,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 2,
+       "capacity": 817355,
+       "officeCapacity": 817355,
+       "fundingRoom": 2630303,
+       "centralCapacity": 505174,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 3,
+     "banks": [
+      {
+       "deposits": 26005762,
+       "loans": 10256617,
+       "cash": 3735542,
+       "loanToDeposit": 39.4,
+       "capitalRatio": 14.5,
+       "lastOperatingProfit": 9118,
+       "loanIncomeShare": 28.8,
+       "offices": {
+        "retail": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 750355,
+       "officeCapacity": 750355,
+       "fundingRoom": 2435254,
+       "centralCapacity": 501030,
+       "binding": "office"
+      },
+      {
+       "deposits": 24983901,
+       "loans": 10370770,
+       "cash": 2639575,
+       "loanToDeposit": 41.5,
+       "capitalRatio": 14.6,
+       "lastOperatingProfit": 24518,
+       "loanIncomeShare": 24.1,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 261017,
+       "officeCapacity": 261017,
+       "fundingRoom": 1390380,
+       "centralCapacity": 141185,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 6,
+     "banks": [
+      {
+       "deposits": 27761163,
+       "loans": 10412097,
+       "cash": 5408961,
+       "loanToDeposit": 37.5,
+       "capitalRatio": 14.9,
+       "lastOperatingProfit": 21463,
+       "loanIncomeShare": 24.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 351100,
+       "officeCapacity": 517148,
+       "fundingRoom": 4020903,
+       "centralCapacity": 238768,
+       "binding": "staff"
+      },
+      {
+       "deposits": 24180046,
+       "loans": 10156487,
+       "cash": 2169464,
+       "loanToDeposit": 42,
+       "capitalRatio": 15.8,
+       "lastOperatingProfit": 49998,
+       "loanIncomeShare": 20.9,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 131588,
+       "officeCapacity": 131588,
+       "fundingRoom": 960462,
+       "centralCapacity": 0,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 12,
+     "banks": [
+      {
+       "deposits": 26312966,
+       "loans": 9782337,
+       "cash": 4665639,
+       "loanToDeposit": 37.2,
+       "capitalRatio": 16.2,
+       "lastOperatingProfit": 28182,
+       "loanIncomeShare": 26.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 441666,
+       "officeCapacity": 441666,
+       "fundingRoom": 3349991,
+       "centralCapacity": 297476,
+       "binding": "office"
+      },
+      {
+       "deposits": 26804582,
+       "loans": 9270441,
+       "cash": 5728789,
+       "loanToDeposit": 34.6,
+       "capitalRatio": 17.4,
+       "lastOperatingProfit": 28613,
+       "loanIncomeShare": 21.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 452674,
+       "officeCapacity": 452674,
+       "fundingRoom": 4388560,
+       "centralCapacity": 321373,
+       "binding": "office"
+      }
+     ]
+    },
+    {
+     "month": 24,
+     "banks": [
+      {
+       "deposits": 31823570,
+       "loans": 11521610,
+       "cash": 8345403,
+       "loanToDeposit": 36.2,
+       "capitalRatio": 13.6,
+       "lastOperatingProfit": 64740,
+       "loanIncomeShare": 28.9,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.5,
+       "capacity": 290549,
+       "officeCapacity": 468827,
+       "fundingRoom": 6754224,
+       "centralCapacity": 229597,
+       "binding": "staff"
+      },
+      {
+       "deposits": 32923864,
+       "loans": 9187874,
+       "cash": 11642992,
+       "loanToDeposit": 27.9,
+       "capitalRatio": 15.2,
+       "lastOperatingProfit": 30327,
+       "loanIncomeShare": 19.8,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.8,
+       "capacity": 339810,
+       "officeCapacity": 479643,
+       "fundingRoom": 9996799,
+       "centralCapacity": 256733,
+       "binding": "staff"
+      }
+     ]
+    },
+    {
+     "month": 36,
+     "banks": [
+      {
+       "deposits": 38986320,
+       "loans": 11206370,
+       "cash": 16287892,
+       "loanToDeposit": 28.7,
+       "capitalRatio": 17.2,
+       "lastOperatingProfit": 70595,
+       "loanIncomeShare": 22.4,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 0.5,
+       "capacity": 710481,
+       "officeCapacity": 741511,
+       "fundingRoom": 14338576,
+       "centralCapacity": 599481,
+       "binding": "staff"
+      },
+      {
+       "deposits": 35985357,
+       "loans": 13069896,
+       "cash": 11290443,
+       "loanToDeposit": 36.3,
+       "capitalRatio": 14.6,
+       "lastOperatingProfit": 79448,
+       "loanIncomeShare": 22.5,
+       "offices": {
+        "digital": 1
+       },
+       "lendingStaff": 1.5,
+       "capacity": 947510,
+       "officeCapacity": 947510,
+       "fundingRoom": 9491175,
+       "centralCapacity": 817356,
+       "binding": "office"
+      }
+     ]
+    }
+   ],
+   "cumulativeOperatingProfit": [
+    1793602,
+    1590671
+   ],
+   "bindingMonths": [
+    {
+     "staff": 23,
+     "office": 13
+    },
+    {
+     "staff": 18,
+     "office": 18
+    }
+   ],
+   "gameOver": false,
+   "endReason": null,
+   "elapsedSeconds": 858
+  }
+ ]
+}

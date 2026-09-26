@@ -1,5 +1,76 @@
 # Release status and known issues
 
+## September 26 — Expanded 9.34: lending from the balance sheet
+
+New Expanded campaigns start at save `9.34` (`balanceSheetLendingVersion:1`). Every 9.33 and
+earlier campaign keeps its rules: `balance_sheet_lending` replays 9.33 against the frozen rc4
+package, and the lab's 9.33 numbers below equal the committed baseline exactly. Nothing is
+republished; the rc5 ZIP starts Expanded at 9.33 and cannot join a 9.34 campaign.
+
+| Working artifact | Identity |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `9a1a39dd1aa6347a9914925d5e7ebb4d65c35e3c1d49838b748fb515b6a2109c` |
+| Engine | `3eb11003a82539c9964bd98e3647ed0cab82a6d7079bcbada2aa9b77206b896e` |
+
+**Why.** The balance lab (`game/tools/edition_balance_lab.js`, baseline
+`game/output/edition-balance-baseline-933.json`) showed a 9.33 bank holding about $30M of
+deposits with a $3.7M loan book and $13–16M of idle cash. Local office capacity bound lending
+almost every month, and every bot converted its only retail branch into an ATM, because its
+valuation counted the upkeep saved but not the deposits and loan capacity given up.
+
+**What changed, 9.34 only.**
+
+- Lending bankers deploy 10% a month of the gap between the loan book and 80% of deposits,
+  beyond local office capacity. Staffing at least four on Lending gives the full rate. Spare
+  cash, credit administration coverage and the lending multipliers still apply.
+- The AI never converts away its last full-service office, and it values an office
+  conversion's deposit growth at the lending margin as well as its upkeep.
+- The AI's recovery search no longer forces cautious lending and a liquid capital policy for
+  a thin month when capital is at least 10% and funding is covered. One month of income cannot
+  see the interest new loans earn, and every Expanded bank starts under the $60K trigger.
+- Credit shows what central deployment adds; help and the shrinking-loan notice explain it.
+
+**Measured** (`game/output/edition-balance-expanded-934.json`, 36 months, seeds 1–3, six banks
+per scenario, same-rule AI in both seats; means at month 36):
+
+| | 9.33 Balanced | 9.34 Balanced | 9.33 Rate | 9.34 Rate |
+| --- | --- | --- | --- | --- |
+| Loans / deposits | 13.4% | 30.0% | 12.9% | 40.8% |
+| Loans | $3.7M | $9.4M | $3.8M | $13.1M |
+| Cash | $13.5M | $9.6M | $15.7M | $8.3M |
+| Capital ratio (lowest bank) | 30.2% (21.5%) | 15.8% (10.1%) | 32.1% (25.5%) | 17.8% (14.5%) |
+| Operating profit, month 36 | $47K | $60K | $48K | $87K |
+| Cumulative operating profit | $1.7M | $1.3M | $1.3M | $1.9M |
+| Only retail branch converted to | ATM | digital | ATM | digital |
+
+No campaign failed or ended. Every 9.34 bot kept a full-service office.
+
+**Rejected alternatives, kept as evidence.** A 20% deployment rate
+(`edition-balance-lending-934-c.json`, seeds 1–2) cut cash to about $4M, took one bank's capital
+ratio to 8.4% and lowered month-36 profit to $66–75K a month. A cash floor under central
+deployment at 6% or 10% of deposits (`edition-balance-floor-06.json`, `-10.json`; tried and
+reverted on this branch) did not stop a bank losing deposit share, and at 10% capital dipped
+to 7.1%.
+
+**Known issues.**
+
+- One of the twelve 9.34 bots (Balanced, seed 1) loses deposit share to its rival, falling
+  from $23.9M to $12.5M of deposits, and ends with −$0.2M cumulative operating profit. 9.33
+  shows the same split more mildly. The losing bot never defends its deposits: it stays on
+  Margin pricing with one Service banker. This is an AI deposit-competition problem, next.
+- Balanced 9.34 banks earn less in their first year while the book builds (month 12: $13K
+  against $44K a month), so three-year cumulative profit is still below 9.33 there.
+- Expanded remains far smaller than Core. Core 8.20 banks reach about $98M of deposits and a
+  61% loan-to-deposit ratio in the same 36 months; Expanded deposits stay near $30M.
+
+**Verification so far:** balance_sheet_lending, behavior-golden, runtime-stages, determinism,
+campaign-lifecycle, bank_economics(+_ui), bank_rivalry, expanded_edition(+_network),
+research_program(+_ui), research_bot, research_delivery_expanded, build, engine,
+v31_version_boundary, package_release, income_review(+_ui), facility_conversion_lifecycle,
+facility_lifecycle_legacy_compat, facility_extensions_ui, department_runtime,
+department_ai_lending, usability_help, architecture(+_scope), docs and the engine pin. The
+complete fast gate runs on the pull request.
+
 ## September 26 — main carries the rc5 repairs
 
 The published rc5 repair (tag `v4.0.0-rc5`, branch `release/v4-stabilized`) was never merged
