@@ -14,12 +14,17 @@ for(const match of operations.matchAll(/<\/?[a-z][^>]*>/g)){
 }
 assert.equal(stack.length,0,'Operations markup has balanced containers');
 for(const[key,mounts]of Object.entries(groups))for(const id of mounts){assert(ids.includes(id));assert.equal(mountGroups[id],key,id+' retained in intended desk')}
-assert.equal((operations.match(/role="tab"/g)||[]).length,4);
+// Two desks over four sections: the executive call and staffing, products and
+// pricing, and projects are one monthly submission, so one tab owns all three.
+const desks={plan:['monthly','funding','projects'],forecast:['forecast']};
+assert.equal((operations.match(/role="tab"/g)||[]).length,2);
 assert.equal((operations.match(/role="tabpanel"/g)||[]).length,4);
+for(const[desk,sections]of Object.entries(desks))for(const section of sections)
+ assert(new RegExp('id="operationsPanel-'+section+'"[^>]*aria-labelledby="operationsTab-'+desk+'"').test(operations),section+' is labelled by the '+desk+' desk');
 assert(operations.includes('id="operationsDecisionShortcut"'),'required executive decision has a persistent shortcut');
 assert(!script.includes('innerHTML'),'navigation must not recreate module mounts');
 function node(id,dataset={}){const attributes={},events={},classes=new Set();return {id,dataset,attributes,events,hidden:false,tabIndex:0,textContent:'',focusCount:0,setAttribute:(k,v)=>attributes[k]=v,focus(){this.focusCount++},addEventListener(k,fn){(events[k]||=[]).push(fn)},classList:{toggle(k,on){on?classes.add(k):classes.delete(k)},contains:k=>classes.has(k)},querySelector(){return null}}}
-const elements=new Map(),buttons=Object.keys(groups).map(k=>node('operationsTab-'+k,{operationsTab:k})),panels=Object.keys(groups).map(k=>node('operationsPanel-'+k,{operationsPanel:k}));
+const elements=new Map(),buttons=Object.keys(desks).map(k=>node('operationsTab-'+k,{operationsTab:k})),panels=Object.keys(groups).map(k=>node('operationsPanel-'+k,{operationsPanel:k}));
 for(const n of [...buttons,...panels,node('operationsWorkspace',{workspace:'operations'}),node('operationsDeskHint'),node('operationsDecisionShortcut'),node('decisionGrid'),node('gameScreen')])elements.set('#'+n.id,n);
 const focusDecision=node('firstDecision');elements.get('#decisionGrid').querySelector=()=>focusDecision;
 const mainTabs=['overview','operations','strategy'].map(k=>node('main-'+k,{workspaceTab:k})),workspaces=[elements.get('#operationsWorkspace'),node('strategy',{workspace:'strategy'})];
@@ -27,28 +32,41 @@ const frozenDraft=Object.freeze({decision:'a',investments:Object.freeze({digital
 const c={draftOwner:'bank-a',draft:frozenDraft,game:frozenGame,workspaceTab:'operations',$:s=>elements.get(s)||null,$$:s=>({'[data-operations-tab]':buttons,'[data-operations-panel]':panels,'[data-workspace-tab]':mainTabs,'[data-workspace]':workspaces}[s]||[])};
 vm.createContext(c);vm.runInContext(script,c);
 const run=s=>vm.runInContext(s,c),select=k=>run('setOperationsDesk('+JSON.stringify(k)+')');
+const visible=()=>panels.filter(p=>!p.hidden).map(p=>p.dataset.operationsPanel);
 run('reconcileOperationsWorkspace()');
-assert.equal(run('operationsDesk'),'monthly');
-for(const key of Object.keys(groups)){
- select(key);assert.equal(panels.filter(p=>!p.hidden).length,1);assert.equal(panels.find(p=>!p.hidden).dataset.operationsPanel,key);
+assert.equal(run('operationsDesk'),'plan');assert.deepEqual(visible(),desks.plan,'the plan desk shows all three monthly sections');
+for(const key of Object.keys(desks)){
+ select(key);assert.deepEqual(visible(),desks[key]);
  assert.equal(buttons.filter(b=>b.attributes['aria-selected']==='true').length,1);assert.equal(buttons.find(b=>b.tabIndex===0).dataset.operationsTab,key);
  run('reconcileOperationsWorkspace()');assert.equal(run('operationsDesk'),key,'redraw retains desk');
  assert.equal(c.draft,frozenDraft);assert.equal(c.game,frozenGame,'navigation changes no engine or draft object');
 }
+// plan-review, facility-lifecycle, strategy and products still ask for the old desk
+// names; each must land on the desk that now holds that section.
+for(const old of desks.plan){select('forecast');select(old);assert.equal(run('operationsDesk'),'plan',old+' routes to the plan desk');assert.deepEqual(visible(),desks.plan)}
 for(const b of buttons){assert.equal(b.events.click.length,1);assert.equal(b.events.keydown.length,1)}
-let prevented=0;buttons[3].events.keydown[0]({key:'ArrowRight',preventDefault(){prevented++}});
-assert.equal(run('operationsDesk'),'monthly');assert.equal(buttons[0].focusCount,1);
+let prevented=0;buttons[1].events.keydown[0]({key:'ArrowRight',preventDefault(){prevented++}});
+assert.equal(run('operationsDesk'),'plan');assert.equal(buttons[0].focusCount,1);
 buttons[0].events.keydown[0]({key:'End',preventDefault(){prevented++}});assert.equal(run('operationsDesk'),'forecast');
-buttons[3].events.keydown[0]({key:'Home',preventDefault(){prevented++}});assert.equal(run('operationsDesk'),'monthly');
+buttons[1].events.keydown[0]({key:'Home',preventDefault(){prevented++}});assert.equal(run('operationsDesk'),'plan');
 buttons[0].events.keydown[0]({key:'ArrowLeft',preventDefault(){prevented++}});assert.equal(run('operationsDesk'),'forecast');
+buttons[1].events.keydown[0]({key:'Tab',preventDefault(){prevented++}});assert.equal(run('operationsDesk'),'forecast','other keys are left to the browser');
 assert.equal(prevented,4);
-buttons[1].events.click[0]();assert.equal(run('operationsDesk'),'funding');
-elements.get('#operationsDecisionShortcut').events.click[0]();assert.equal(run('operationsDesk'),'monthly');assert.equal(focusDecision.focusCount,1);
-select('projects');c.draftOwner='bank-b';run('reconcileOperationsWorkspace()');assert.equal(run('operationsDesk'),'monthly','another hotseat bank does not inherit prior desk');
-select('bogus');assert.equal(run('operationsDesk'),'monthly');
+buttons[0].events.click[0]();assert.equal(run('operationsDesk'),'plan');
+buttons[1].events.click[0]();assert.equal(run('operationsDesk'),'forecast');
+elements.get('#operationsDecisionShortcut').events.click[0]();assert.equal(run('operationsDesk'),'plan');assert.equal(focusDecision.focusCount,1);
+select('forecast');c.draftOwner='bank-b';run('reconcileOperationsWorkspace()');assert.equal(run('operationsDesk'),'plan','another hotseat bank does not inherit prior desk');
+select('bogus');assert.equal(run('operationsDesk'),'plan');
+// When the Products workspace owns pricing, the funding section leaves the plan desk
+// and a request for it opens Products instead of an empty section.
+const productSubjects=[];c.subjectWorkspace={productsEnabled:true};c.selectProductSubject=k=>productSubjects.push(k);
+run('reconcileOperationsWorkspace()');assert.deepEqual(visible(),['monthly','projects']);
+select('funding');assert.deepEqual(productSubjects,['policies']);
+run('reconcileOperationsWorkspace()');assert.equal(run('operationsDesk'),'plan');assert.deepEqual(visible(),['monthly','projects']);
+delete c.subjectWorkspace;delete c.selectProductSubject;run('reconcileOperationsWorkspace()');assert.deepEqual(visible(),desks.plan);
 // Exercise the actual setWorkspaceTab integration without starting or mutating a campaign.
 vm.runInContext(draftScript,c);select('forecast');run("setWorkspaceTab('strategy');setWorkspaceTab('operations')");
 assert.equal(run('operationsDesk'),'forecast','main-tab round trip retains the same owner desk');
 assert(elements.get('#operationsWorkspace').classList.contains('active'));
 assert.equal(c.draft,frozenDraft);assert.equal(c.game,frozenGame);
-console.log('Operations workspace passed: unique preserved mounts, four task desks, exact nested grouping, keyboard/ARIA focus, single listener binding, required-decision shortcut, hotseat owner reset, draft purity and actual main-tab round trip.');
+console.log('Operations workspace passed: unique preserved mounts, two task desks over four sections, old desk names, Products-owned pricing, exact nested grouping, keyboard/ARIA focus, single listener binding, required-decision shortcut, hotseat owner reset, draft purity and actual main-tab round trip.');
