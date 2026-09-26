@@ -238,6 +238,16 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics,
 // bank_rivalry, expanded_edition, expanded_edition_network, feature_setup,
 // github_resilience, build, engine and research_program.
-const expected='7b1a0556c828fb51739d26c7f101e9594b7b1d4233ece150e28a4f93637590a5';
+// Mandate rescale re-pin. Every mandate threshold was set for the old economy and sat
+// far below the 25th percentile of a finished bank (deposits $40M against p25 $580M),
+// so all 12 measured campaigns achieved theirs. Thresholds now sit near the measured
+// median; achievement across the eight mandates ranges 30-75% instead of 100%. The
+// engine-level chooseBot override added for product gating was also removed: bot
+// policy moved into ai.js, which architecture.test.js requires. Scoped checks rerun:
+// behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics,
+// bank_rivalry, expanded_edition(+_network), campaign-lifecycle, build, engine,
+// architecture, feature_setup, github_resilience, research_program, agency_legacy_compat,
+// agency_peer_compat and v31_version_boundary.
+const expected='c2e3fb478e3f5a188de962eb0fbc82740f316a8b25db1b210cc991c4bedc0636';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

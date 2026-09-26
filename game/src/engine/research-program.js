@@ -254,6 +254,19 @@ function researchProductBarred(p,line,key){
  if(!missing.length)return '';
  return missing.map(([branch,level])=>researchBranchTable(p)[branch].name+' tier '+level).join(' and ');
 }
+// The bot chooses products by doctrine and rate environment, including gated ones.
+// This returns a legal selection instead of letting an illegal plan reach submit.
+// It lives here, called from ai.js, rather than wrapping chooseBot: architecture
+// .test.js caps engine overrides of chooseBot at zero, and bot policy belongs in
+// the bot. The first option of every line is always available, so this can never
+// leave the bank without a product.
+function researchAllowedProducts(p,products){
+ if(!researchProgramRules(p)||!products)return products;
+ const out={...products};
+ for(const [line,key] of Object.entries(out))
+  if(researchProductBarred(p,line,key))out[line]=Object.keys(PRODUCT_PORTFOLIOS[line].options)[0];
+ return out;
+}
 function initializeResearchProgram(g,o){
  if(o.researchProgramVersion!==1)return;
  g.researchProgramVersion=1;
@@ -291,15 +304,3 @@ function projectResearchProgram(g,out){
  out.me.researchProductGates=Object.fromEntries(Object.entries(RESEARCH_PRODUCT_GATES).map(([line,gates])=>
   [line,Object.fromEntries(Object.keys(gates).map(k=>[k,researchProductBarred(g.players.find(p=>p.id===out.me.id),line,k)]))]));
 }
-
-// The bot picks products by doctrine and rate environment (ai.js), including the
-// gated ones. Downgrade rather than let it submit an illegal plan; the first
-// option of each line is always available, so this can never leave it productless.
-const researchPriorChooseBot=chooseBot;
-chooseBot=function(g,index){
- const plan=researchPriorChooseBot(g,index),p=g.players[index];
- if(plan&&plan.products&&researchProgramRules(p))
-  for(const [line,key] of Object.entries(plan.products))
-   if(researchProductBarred(p,line,key))plan.products[line]=Object.keys(PRODUCT_PORTFOLIOS[line].options)[0];
- return plan;
-};
