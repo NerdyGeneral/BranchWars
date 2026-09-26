@@ -7,7 +7,7 @@
 // deposits kept a $6M loan book and $14M of idle cash. The AI also converted its
 // only retail branch into an ATM, because its valuation counted the upkeep saved
 // but not the deposit growth, service and loan capacity given up.
-const BALANCE_SHEET_LENDING_RULES=Object.freeze({targetLoanToDeposit:.8,deploymentRate:.1,deploymentDesk:4});
+const BALANCE_SHEET_LENDING_RULES=Object.freeze({targetLoanToDeposit:.8,deploymentRate:.1,deploymentDesk:4,liquidityFloor:.08});
 function balanceSheetLendingRules(source){return source?.balanceSheetLendingVersion===1}
 function initializeBalanceSheetLending(g,o){
  if(o.balanceSheetLendingVersion!==1)return;
@@ -31,12 +31,21 @@ function projectBalanceSheetLending(g,out){
 // bankers can lend part of the funded deposit gap without a local office. It
 // falls to nothing as the loan book approaches the target. Administering the
 // book is not counted twice: loanProductionCapacity scales this by credit
-// administration coverage, so a book the staff cannot administer stops growing,
-// and it also stops at the cash reserve.
+// administration coverage, so a book the staff cannot administer stops growing.
 function balanceSheetDeploymentCapacity(p,lendingStaff){
  if(!balanceSheetLendingRules(p))return 0;
  const R=BALANCE_SHEET_LENDING_RULES,gap=Math.max(0,p.stats.deposits*R.targetLoanToDeposit-p.stats.loans);
  return gap*R.deploymentRate*Math.min(1,Math.max(0,lendingStaff)/R.deploymentDesk);
+}
+// The cash central deployment may lend: only what is above a fixed share of
+// deposits, whatever the capital policy. Local office lending keeps the policy
+// reserve. Measured without this floor: under the Reinvest policy (a 2% reserve)
+// two of six Balanced banks lent their cash to about $0.1-0.3M by month 12, then
+// paid every deposit withdrawal by running off loans, and their books fell by
+// nearly half by month 24.
+function balanceSheetDeploymentCash(p){
+ if(!balanceSheetLendingRules(p))return 0;
+ return Math.max(0,p.stats.cash-p.stats.deposits*BALANCE_SHEET_LENDING_RULES.liquidityFloor);
 }
 
 // An office that both gathers deposits and originates loans. The catalog owns

@@ -32,8 +32,9 @@ function loanProductionCapacity(g,p,parts=null){
   ? Math.max(0,p.stats.cash-Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[cp]||.05)*researchReserveMultiplier(p)))
   : Infinity;
  // Expanded 9.34 central deployment is lent without a local office, so it adds
- // to both the staff capacity and the office capacity. Zero for every other rule set.
- const central=balanceSheetLendingRules(p)?balanceSheetDeploymentCapacity(p,workforceAllocation(p).lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'):0,
+ // to both the staff capacity and the office capacity, and only from cash above
+ // its liquidity floor. Zero for every other rule set.
+ const central=balanceSheetLendingRules(p)?Math.min(balanceSheetDeploymentCash(p),balanceSheetDeploymentCapacity(p,workforceAllocation(p).lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration')):0,
   staff=(lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration')+central,
   office=regionalOperations(p)?regionalBranchMetrics(p).loanCapacity+central:Infinity;
  // Read-only detail for diagnostics and the AI's office valuation.
