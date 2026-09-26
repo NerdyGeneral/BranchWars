@@ -13,7 +13,7 @@ you would rather hand a friend one folder. Both players should use the same buil
 
 ## What you are playing
 
-**V4 rc4.** Choosing **Core edition** in setup creates campaign save :
+**V4 rc4.** Choosing **Core edition** in setup creates campaign save `8.20`:
 
 - Six capability branches, including **Risk & Capital**, each owning one part of the result.
 - Three permanent operating models per branch. Each is a trade, not an upgrade.
@@ -22,7 +22,7 @@ you would rather hand a friend one folder. Both players should use the same buil
 - Lending deploys the balance sheet rather than capping on headcount.
 - Commercial relationships are limited by your branch presence.
 
-**Expanded edition** (save ) is the larger rule set and is unchanged in this release.
+**Expanded edition** (save `9.33`) is the larger rule set and is unchanged in this release.
 
 Read the [rc4 notes](releases/v4-rc4-notes.md) for what changed and what is still rough. In
 game, open Help and search *loan deposit ratio*, *relationships branches capacity* or
