@@ -78,7 +78,7 @@ function loanBookNotice(v){
  const shrink=money(Math.abs(Math.round(r.loanGrowth)));
  return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Net operating principal fell by '+shrink+' last month; repayments and credit losses can both contribute'
   +(Number.isFinite(capacity)?'; local origination capacity is '+money(Math.round(capacity))+' against a book of '+money(Math.round(v.me.stats.loans)):'')
-  +(v.me.balanceSheetLendingVersion===1?'. Lending bankers also deploy part of the unlent deposit base while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits and cash stays above '+Math.round(E.BALANCE_SHEET_LENDING_RULES.liquidityFloor*100)+'% of deposits. Add Lending staff, keep credit administration covered, or open another office, to originate more.</p>'
+  +(v.me.balanceSheetLendingVersion===1?'. Lending bankers also deploy part of the unlent deposit base while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits, if cash above the reserve allows. Add Lending staff, keep credit administration covered, or open another office, to originate more.</p>'
    :'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>');
 }
 let operatingForecastView={owner:null,desk:'bank'};

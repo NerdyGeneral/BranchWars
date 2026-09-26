@@ -59,11 +59,6 @@ test('central deployment follows the funded deposit gap and still needs credit s
  assert.equal(E.loanProductionCentralCapacity(lent,lent.players[0]),0,'Nothing is deployed once the book reaches the target');
  const dry=copy(g),q=dry.players[0];q.stats.cash=Math.round(q.stats.deposits*.05)-1;
  assert.equal(E.loanProductionCapacity(dry,q),0,'Lending stops at the liquidity reserve');
- const floor=copy(g),f=floor.players[0];f.stats.cash=Math.round(f.stats.deposits*R.liquidityFloor);
- assert.equal(E.loanProductionCentralCapacity(floor,f),0,'Central deployment keeps its liquidity floor');
- assert(E.loanProductionCapacity(floor,f)>0,'Office lending still runs down to the policy reserve');
- f.stats.cash+=1000;assert(E.loanProductionCentralCapacity(floor,f)>0&&E.loanProductionCentralCapacity(floor,f)<=1000,'Deployment lends only cash above the floor');
- const floorLegacy=plain(copy(floor));assert.equal(E.loanProductionCentralCapacity(floorLegacy,floorLegacy.players[0]),0);
  const dryLegacy=plain(copy(dry));assert.equal(E.loanProductionCapacity(dryLegacy,dryLegacy.players[0]),before,'9.33 keeps its office-bound capacity');
 });
 
@@ -116,7 +111,7 @@ test('the Credit panel and help explain central deployment only in 9.34 campaign
   const h=harness();h.c.lendingOptions=options(lending);
   h.run(`game=E.createGame(lendingOptions);seat=0;workspaceTab='credit';newDraft(currentView());renderReady=()=>renderCollections(currentView());document.querySelector('#creditPanel').insertAdjacentHTML=function(where,html){this.innerHTML=html+this.innerHTML;};renderCollections(currentView());`);
   const html=h.elements.get('#creditPanel').innerHTML;assert.match(html,/Base lending capacity/);assert.doesNotMatch(html,/NaN|undefined/);
-  if(lending)assert.match(html,new RegExp('Balance-sheet deployment adds \\$[0-9.,]+[KM]? while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits and cash stays above '+Math.round(E.BALANCE_SHEET_LENDING_RULES.liquidityFloor*100)+'% of deposits'));else assert.doesNotMatch(html,/Balance-sheet deployment/);
+  if(lending)assert.match(html,new RegExp('Balance-sheet deployment adds \\$[0-9.,]+[KM]? while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits'));else assert.doesNotMatch(html,/Balance-sheet deployment/);
   assert.equal(h.run(`gameHelpAvailable(GAME_HELP_TOPICS.find(topic=>topic.id==='balance-sheet-lending'),gameHelpProfile(currentView()))`),lending);
  }
 });

@@ -34,8 +34,7 @@ to start or resume 9.34 together. No additional setup checkbox is required.
 
 Expanded 9.34 also lets your Lending bankers lend part of the gap between your loan
 book and 80% of deposits, beyond what your offices can originate. Spare cash, credit
-staff and credit administration still limit it, and it stops while cash is below 8% of
-deposits. Credit shows what it adds each month;
+staff and credit administration still limit it. Credit shows what it adds each month;
 in Help, search *balance-sheet lending*. A 9.33 save keeps its old lending rules.
 
 ### Before expanding
