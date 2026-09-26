@@ -443,5 +443,6 @@ function departmentCreditPreview(p,v,draft){
   return {collections:{...collections,salesStaff},operating,
     staffing:{available:execution.physical.available.lending/4,origination:execution.remainingPools.lending/4,
       effectiveOrigination:salesStaff,administrationCoverage:departmentFunctionCoverage(owner,'creditAdministration')},
-    facilityLoanCapacity:regionalBranchMetrics(owner).loanCapacity};
+    facilityLoanCapacity:regionalBranchMetrics(owner).loanCapacity,
+    ...(balanceSheetLendingRules(owner)?{centralLoanCapacity:loanProductionCentralCapacity(v,owner)}:{})};
 }

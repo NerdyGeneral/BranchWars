@@ -12,7 +12,7 @@ function harness(features={}){
  run('reconcileGameHelp()');return {c,run,$,routes,groups,event,views:()=>views};
 }
 const all={investmentTradingVersion:1,investmentBusiness:{},workforce:{},departmentFunctions:{},departmentOffice:{},productPrograms:{version:2},advertising:{},relationshipOffers:{},onboarding:{},householdBook:{},creditBook:{},creditPerformance:{},facilityNetwork:{},facilityLifecycle:{},facilityExtensions:{},serviceDesk:{},financialGroup:{},agency:{},commercialAccounts:{}};
-all.investmentNotesVersion=1;all.researchProgramVersion=1;
+all.investmentNotesVersion=1;all.researchProgramVersion=1;all.balanceSheetLendingVersion=1;
 all.companyControl={};all.companyConsolidation={};all.sharedPremises={};
 let checks=0;const test=(name,fn)=>{try{fn();checks++;}catch(error){throw Error(name+': '+error.stack)}};
 test('catalog, markup and canonical feature filtering',()=>{

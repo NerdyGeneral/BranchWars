@@ -88,6 +88,18 @@ do not substitute for visual review or real two-computer acceptance.
   count actual resolved rows, including a terminal month that does not increment
   the campaign clock. Different early endings are not equal-horizon comparisons.
 
+- `edition_balance_lab.js NAME` plays ordinary same-rule AI in both seats of
+  current Core and Expanded setups (`--variants=expanded,expanded-933,core`,
+  default 36 months, seeds 1-3, Balanced and Rate) and records, per checkpoint,
+  deposits, loans, cash, loan-to-deposit ratio, capital ratio, operating profit,
+  offices by model and which lending cap binds (staff, spare cash or offices).
+  `--tune=targetLoanToDeposit=.7,deploymentRate=.15` measures 9.34 constants in
+  a private copy; the report records the tuning and the engine hash measured.
+  Each campaign runs in its own process and refuses to start if the source
+  changed after the run began. Expanded AI turns take seconds, so a 36-month
+  campaign takes about ten minutes. Writes `output/edition-balance-NAME.json`
+  and never replaces an earlier report.
+
 These tools are not full release gates. Unique output names preserve failed
 experiments and their actual build hashes alongside successful runs.
 

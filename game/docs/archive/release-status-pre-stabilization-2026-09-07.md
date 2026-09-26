@@ -30,8 +30,8 @@ V2 is published on feat/relationship-offers at
 committed; existing uncommitted source/tests/docs and stopped agency work remain
 preserved. Remote ref, folder inventory and every fetched package blob match the
 verified local bytes. Package engine, native LAN and browser turn acceptance
-passed. See [V2 verification](../../../V2%20release/VERIFICATION.md) and
-[blueprint status](../../../V2%20release/RELEASE_NOTES.md). This release goal stops
+passed. See [V2 verification](https://github.com/NerdyGeneral/BranchWars/blob/e2abf403e0997a2499aa300e2eb49a64238c4c20/V2%20release/VERIFICATION.md) and
+[blueprint status](https://github.com/NerdyGeneral/BranchWars/blob/e2abf403e0997a2499aa300e2eb49a64238c4c20/V2%20release/RELEASE_NOTES.md). This release goal stops
 here; no next feature batch has started. Physical two-computer play and human
 fun/comeback acceptance remain pending.
 

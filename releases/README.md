@@ -20,17 +20,19 @@ Core save on reload, and keeps research rules through a rematch.
 - [Research design, and what is still rough](v4-rc4-notes.md)
 - [Quick-start guide](branch-wars-v4-guide.md)
 
-Core campaigns carry save version `8.20`; Expanded carries `9.33`. Un-opted Core remains
+Core campaigns carry save version `8.20`; Expanded carries `9.34`. Un-opted Core remains
 `8.19`. Every earlier save format still loads.
 
 `catalog.json` records the hash of each published portable build.
 
 ## Retained as test fixtures
 
-`branch-wars-v3.zip` and the `V2 release/` folder are not advertised downloads. They are
-compatibility reference builds that `v31_version_boundary`, `agency_legacy_compat`,
-`agency_peer_compat` and `expanded_edition_network` load to prove old peers and old saves
-are still refused or migrated correctly. Deleting them breaks those tests.
+`branch-wars-v3.zip` is not an advertised download. It is a compatibility reference build
+that `v31_version_boundary` loads to prove old peers and old saves are still refused or
+migrated correctly. The V2 build that `agency_legacy_compat` and
+`agency_peer_compat` load for the same reason is kept with the other reference builds as
+`game/reports/reference-builds/BRANCH_WARS_v2_release_b041ed53.html`. Deleting either breaks
+those tests.
 
 `v4/` (frozen rc2) and `v4-rc3/` are fixtures for the same reason. `income_review` replays
 the rc2 engine; `research_bot` proves older campaigns keep rc3's exact bot choices and random

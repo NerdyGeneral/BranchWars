@@ -4,7 +4,7 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const assert=require('node:assert/strict'),{createHash}=require('node:crypto');
 const root=path.resolve(__dirname,'..'),copy=x=>JSON.parse(JSON.stringify(x));
-const baselinePath=path.join(root,'../V2 release/BRANCH_WARS.html');
+const baselinePath=path.join(root,'reports/reference-builds/BRANCH_WARS_v2_release_b041ed53.html');
 const baseline=fs.readFileSync(baselinePath,'utf8');
 assert.equal(createHash('sha256').update(fs.readFileSync(baselinePath)).digest('hex'),
  'b041ed53394575872e32888f542232225e15b61deef73a07e7f20b020f25e1e4',
@@ -61,4 +61,4 @@ for(const rules of [1,2])for(const scenario of ['balanced','rate','regulatory','
  assert.equal(games[1].financialGroupVersion,rules);assert.equal(games[1].agencyEconomy,undefined);profiles++;
 }
 console.log(JSON.stringify({passed:true,profiles,months,humanMonths,
- baseline:'V2 release/BRANCH_WARS.html',scope:'Exact retained Group 1/2 creation, AI/human resolution, RNG, owner views, half-ready resume and rematch; fixtures unchanged.'}));
+ baseline:'reports/reference-builds/BRANCH_WARS_v2_release_b041ed53.html',scope:'Exact retained Group 1/2 creation, AI/human resolution, RNG, owner views, half-ready resume and rematch; fixtures unchanged.'}));

@@ -7,7 +7,8 @@ const {verifyPackage,README,RUNTIME_FILES}=require('./package_release'),{assembl
 const digest=b=>createHash('sha256').update(b).digest('hex');
 const copy=v=>JSON.parse(JSON.stringify(v));
 const PROFILES=Object.freeze({
- current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true},versions:{core:'8.20',expanded:'9.33'}},
+ current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true},versions:{core:'8.20',expanded:'9.34'}},
+ rc4:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true},versions:{core:'8.20',expanded:'9.33'}},
  rc2:{flags:{currentEconomics:true},versions:{core:'8.19',expanded:'9.32'}},
  rc3:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true},versions:{core:'8.19',expanded:'9.33'}}
 });
@@ -137,7 +138,7 @@ function main(args){
  assert([directory,zip,report].every(p=>p&&path.isAbsolute(p)),'Provide absolute extracted directory, ZIP and new report paths.');
  for(let i=0;i<flags.length;i+=2){
   const flag=flags[i],value=flags[i+1],key={'--profile':'profile','--release':'release','--expected-html-sha256':'expectedHtmlSha256'}[flag];
-  assert(key&&value&&!seen.has(flag),'Use unique --profile current|rc2|rc3, --release LABEL, --expected-html-sha256 HASH options.');
+  assert(key&&value&&!seen.has(flag),'Use unique --profile current|rc2|rc3|rc4, --release LABEL, --expected-html-sha256 HASH options.');
   seen.add(flag);options[key]=value;
  }
  const result=verify(directory,zip,options);

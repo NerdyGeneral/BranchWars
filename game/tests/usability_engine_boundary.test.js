@@ -293,6 +293,18 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // department_obligations, department_ai_affordability, department_functions_ui,
 // accounting_payables, company_auction_kernel, shared_premises_boundary,
 // company_consolidation_legacy(+ --consolidation), v31_version_boundary and docs.
-const expected='5eae3d75244430296f88b3bad1e8fde15207ac3de2073317b5c14a8770764bf8';
+// Expanded 9.34 re-pin. balanceSheetLendingVersion:1 adds central deployment of the
+// funded deposit gap, the AI's last-full-service-office guard, deposit growth in its
+// conversion value and a recovery search that keeps lending through a thin month.
+// Every change is gated on the marker: balance_sheet_lending replays 9.33 against the
+// frozen rc4 package. Scoped checks rerun: behavior-golden, runtime-stages,
+// determinism, campaign-lifecycle, bank_economics(+_ui), bank_rivalry,
+// expanded_edition(+_network), research_program(+_ui), research_bot,
+// research_delivery_expanded, build, engine, v31_version_boundary, balance_sheet_lending,
+// package_release, income_review(+_ui), facility_conversion_lifecycle,
+// facility_lifecycle_legacy_compat, facility_extensions_ui, department_runtime,
+// department_ai_lending, usability_help, architecture(+_scope) and docs. No reference
+// build, golden or ceiling changed.
+const expected='3eb11003a82539c9964bd98e3647ed0cab82a6d7079bcbada2aa9b77206b896e';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

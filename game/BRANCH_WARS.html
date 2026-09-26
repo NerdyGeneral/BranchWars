@@ -814,6 +814,7 @@ const pick=a=>a[Math.floor(simulationRandom()*a.length)];
 // import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
+  ['balanceSheetLendingVersion', 'balanceSheetLendingSupported', 1, 1, 'Balance-sheet lending', 'BALANCE-SHEET LENDING'],
   ['researchProgramVersion', 'researchProgramSupported', 1, 1, 'Core research programme', 'RESEARCH PROGRAMME'],
   ['bankRivalryVersion', 'bankRivalrySupported', 1, 1, 'Persistent bank rivalry', 'BANK RIVALRY'],
   ['bankEconomicsVersion', 'bankEconomicsSupported', 1, 1, 'Service-based bank economics', 'BANK ECONOMICS'],
@@ -909,7 +910,8 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['creditWorkloadVersion', 'Portfolio-based credit administration', 1, 'commercialServiceVersion', false, false, 'Loan administration follows principal and product-location portfolios rather than internal cohort fragmentation.'],
   ['bankEconomicsVersion', 'Service-based bank economics', 1, 'commercialServiceVersion', false, false, 'Income comes from earning assets and delivered services, not automatic staff or upgrade bonuses; shared base payroll is $12K per banker per month.'],
   ['bankRivalryVersion', 'Persistent bank rivalry', 1, 'bankEconomicsVersion', false, false, 'Market dominance and score advantages do not automatically end the campaign. Institutional failure remains consequential; company acquisitions still require funded transactions.'],
-  ['researchProgramVersion', 'Core research programme', 1, 'bankEconomicsVersion', false, false, 'Six capability branches with three permanent operating models each. Research is shared knowledge; the operating model decides how the bank applies it, and gates the products and platforms it can run.']
+  ['researchProgramVersion', 'Core research programme', 1, 'bankEconomicsVersion', false, false, 'Six capability branches with three permanent operating models each. Research is shared knowledge; the operating model decides how the bank applies it, and gates the products and platforms it can run.'],
+  ['balanceSheetLendingVersion', 'Balance-sheet lending', 1, 'bankRivalryVersion', false, false, 'Credit staff can lend part of the funded deposit gap beyond local office capacity. Lending stays bounded by spare cash, credit staff and credit administration.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
@@ -930,6 +932,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['companyCreditVersion', 'named-company credit version'],
   ['bankRivalryVersion', 'bank rivalry version'],
   ['researchProgramVersion', 'research programme version'],
+  ['balanceSheetLendingVersion', 'balance-sheet lending version'],
   ['incomeHistoryVersion', 'income history version'],
   ['commercialServiceVersion', 'commercial servicing version'],
   ['creditWorkloadVersion', 'credit workload version'],
@@ -961,6 +964,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
   if(source.researchProgramVersion===1)return '8.20';
+  if(source.balanceSheetLendingVersion===1)return '9.34';
   if(source.bankRivalryVersion===1)return '9.33';
   if(source.bankEconomicsVersion===2)return '8.19';
   if(source.bankEconomicsVersion===1)return source.companyCreditVersion===1?'9.32':'8.18';
@@ -1000,7 +1004,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  if(version==='9.33')return true;
+  if(version==='9.33'||version==='9.34')return true;
   if(version==='8.20'||version==='8.19'||version==='8.18'||version==='9.32')return true;
   if(version==='9.31')return true;
   if(version==='8.17'||version==='9.30')return true;
@@ -1136,7 +1140,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false } = {}) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -1167,6 +1171,10 @@ function previewCampaignEdition(source, edition, { currentReporting = false, cur
   // their ending rules; the UI has no additional complexity checkbox.
   if(currentRivalry&&edition==='expanded')options.bankRivalryVersion=1;
   if(edition==='core')delete options.bankRivalryVersion;
+  // Explicit new setup only, like rivalry: 9.33 construction and replay tools
+  // that do not ask for it keep the office-bound lending rules.
+  if(currentLending&&currentRivalry&&edition==='expanded')options.balanceSheetLendingVersion=1;
+  if(edition!=='expanded'||!currentLending||!currentRivalry)delete options.balanceSheetLendingVersion;
   if(currentResearch&&currentEconomics&&edition==='core')options.researchProgramVersion=1;
   if(edition!=='core'||!currentResearch)delete options.researchProgramVersion;
   const rules = validateCampaignRules(options, 'lobby');
@@ -1775,7 +1783,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.bankRivalryVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
@@ -1830,6 +1838,7 @@ function createGame(o){
  initializeCreditWorkload(g,o);
  initializeBankEconomics(g,o);
  initializeBankRivalry(g,o);
+ initializeBalanceSheetLending(g,o);
  initializeResearchProgram(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.
@@ -1900,7 +1909,7 @@ function operatingWorkloadMorale(p,a=workforceAllocation(p)){
 }
 // Shared gross origination capacity. A named-company underwriting reservation
 // consumes this same capacity; it is not extra production on top of bank loans.
-function loanProductionCapacity(g,p){
+function loanProductionCapacity(g,p,parts=null){
  const lending=creditSalesStaff(p,workforceAllocation(p).lending),lp=p.policies.lending,cp=p.policies.capital,
   macro=g.economy||MACRO_REGIMES.steady,commercial=strategyProgress(p,'commercial'),creditProduct=productOption(p,'credit'),
   training=(1+p.upgrades.training*.08)*(p.doctrine==='people'?1.1:1),capitalGrowth={liquid:.86,balanced:1,reinvest:1.13}[cp],
@@ -1911,13 +1920,21 @@ function loanProductionCapacity(g,p){
  // while the book grew 10.7M -> 33.6M. It stayed profitable, but it could no longer
  // fund projects, hires or research, and cash is the largest single score term.
  // Cap production at the liquidity the bank actually has spare, using the same
- // reserve rate settleFunding applies. Core only; every earlier campaign keeps
- // its exact arithmetic.
- const fundingRoom=researchProgramRules(p)
+ // reserve rate settleFunding applies. Core 8.20 and Expanded 9.34 only; every
+ // earlier campaign keeps its exact arithmetic.
+ const fundingRoom=researchProgramRules(p)||balanceSheetLendingRules(p)
   ? Math.max(0,p.stats.cash-Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[cp]||.05)*researchReserveMultiplier(p)))
   : Infinity;
- return Math.min((lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'),fundingRoom,regionalOperations(p)?regionalBranchMetrics(p).loanCapacity:Infinity);
+ // Expanded 9.34 central deployment is lent without a local office, so it adds
+ // to both the staff capacity and the office capacity. Zero for every other rule set.
+ const central=balanceSheetLendingRules(p)?balanceSheetDeploymentCapacity(p,workforceAllocation(p).lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'):0,
+  staff=(lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration')+central,
+  office=regionalOperations(p)?regionalBranchMetrics(p).loanCapacity+central:Infinity;
+ // Read-only detail for diagnostics and the AI's office valuation.
+ if(parts)Object.assign(parts,{staff,funding:fundingRoom,office,central});
+ return Math.min(staff,fundingRoom,office);
 }
+function loanProductionCentralCapacity(g,p){const parts={};loanProductionCapacity(g,p,parts);return parts.central;}
 function availableLoanProduction(g,p){
  const capacity=loanProductionCapacity(g,p);
  return p._companyCreditOrigination===undefined?capacity:Math.max(0,capacity-p._companyCreditOrigination);
@@ -2548,8 +2565,8 @@ submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resol
 
 const rematchCore=rematch;
 rematch=function(g,...args){if(args[1]?.startingWorkforce!==undefined&&args[1].startingWorkforce!=='covered')throw Error('Invalid starting workforce instruction.');return withRandom(g,'state',()=>{
- const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,researchProgramVersion=g.researchProgramVersion,result=rematchCore(g,...args);
- if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});initializeResearchProgram(g,{researchProgramVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
+ const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,balanceSheetLendingVersion=g.balanceSheetLendingVersion,researchProgramVersion=g.researchProgramVersion,result=rematchCore(g,...args);
+ if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});initializeBalanceSheetLending(g,{balanceSheetLendingVersion});initializeResearchProgram(g,{researchProgramVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
  return result;
 })};
 
@@ -3831,12 +3848,16 @@ function serviceDeliveryOptions(p,plan,economy,mandate=null,g=null){
 function serviceRecoveryPlan(p,plan,economy,g=null){
  const initial=servicePlanReview(p,plan,economy,g),stressed=capitalRatio(p)<10||initial.netOperating<60000||fundingPosition(p).excess>0;
  if(!stressed)return plan;
+ // Expanded 9.34: a thin month with healthy capital and funding does not cut
+ // lending or hoard cash. One month of income cannot see the interest new loans
+ // earn, so this search otherwise ratchets a small bank into a shrinking book.
+ const keepLending=balanceSheetLendingRules(p)&&capitalRatio(p)>=10&&!(fundingPosition(p).excess>0);
  // Evaluate only standing, reversible policies. No event or concealed rival intent
  // is inspected, and a loss is never cancelled or repaid with invented capital.
  let best=plan,bestScore=initial.netOperating;
  const candidates=[plan];
  for(const deposit of ['margin','balanced']){
-  const next={...plan,allocation:{...plan.allocation},depositPolicy:deposit,capitalPolicy:'liquid',lendingPolicy:'conservative',termPolicy:{offer:'off',maturity:'release'},retailMix:{essential:4,rewards:0,highYield:0}};
+  const next={...plan,allocation:{...plan.allocation},depositPolicy:deposit,capitalPolicy:keepLending?plan.capitalPolicy:'liquid',lendingPolicy:keepLending?plan.lendingPolicy:'conservative',termPolicy:{offer:'off',maturity:'release'},retailMix:{essential:4,rewards:0,highYield:0}};
   candidates.push(next);
   if(next.allocation.service>2){const sales={...next,allocation:{...next.allocation}};const moved=Math.min(2,sales.allocation.service-2);sales.allocation.service-=moved;sales.allocation.business+=moved;candidates.push(sales)}
   if(capitalRatio(p)<8&&next.allocation.lending>0){const runoff={...next,allocation:{...next.allocation}};runoff.allocation.operations+=runoff.allocation.lending;runoff.allocation.lending=0;candidates.push(runoff)}
@@ -4037,7 +4058,7 @@ function renewalPricingPlan(g,p,input){
 
 function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
-const reportingRules=g.incomeHistoryVersion===1&&['9.29','9.30','9.31','9.32','9.33'].includes(g.version)&&validateCampaignRules(g,'game').valid;
+const reportingRules=g.incomeHistoryVersion===1&&['9.29','9.30','9.31','9.32','9.33','9.34'].includes(g.version)&&validateCampaignRules(g,'game').valid;
 if(!reportingRules&&g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8)||(g.version==='9.8'&&g.financialGroupVersion===9)||(g.version==='9.9'&&g.financialGroupVersion===10)||(g.version==='9.10'&&g.financialGroupVersion===10&&g.commercialAccountsVersion===1)||(g.version==='9.11'&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(['9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26','9.27','9.28'].includes(g.version)&&g.investmentAssetsVersion===1&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(g.version==='9.12'&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
  if(!records||Object.keys(records).sort().join()!==ids.join())throw Error('Invalid relationship roster');
@@ -13652,7 +13673,8 @@ function departmentCreditPreview(p,v,draft){
   return {collections:{...collections,salesStaff},operating,
     staffing:{available:execution.physical.available.lending/4,origination:execution.remainingPools.lending/4,
       effectiveOrigination:salesStaff,administrationCoverage:departmentFunctionCoverage(owner,'creditAdministration')},
-    facilityLoanCapacity:regionalBranchMetrics(owner).loanCapacity};
+    facilityLoanCapacity:regionalBranchMetrics(owner).loanCapacity,
+    ...(balanceSheetLendingRules(owner)?{centralLoanCapacity:loanProductionCentralCapacity(v,owner)}:{})};
 }
 // Group7 AI proposal, not a new morale rule or a saved staffing mandate.
 // Move at most one already-employed banker; compare the fully funded plan and
@@ -13745,6 +13767,11 @@ function facilityInvestmentDraft(input){const plan=departmentFunctionCopy(input)
 function facilityInvestmentGross(report,owner=null){
  return owner?.creditWorkloadVersion===1?ordinaryCreditOriginations(report):Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));
 }
+// Highest monthly coupon the plan's credit products would book.
+function facilityInvestmentCoupon(g,p,plan){
+ const owner={...p,allocation:plan.allocation,policies:{...p.policies,lending:plan.lendingPolicy},products:plan.products};
+ return Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000));
+}
 function facilityInvestmentCreditOwner(source,plan,g){
  return prepareCreditScenarioOwner(source,plan,g);
 }
@@ -13835,11 +13862,13 @@ function facilityInvestmentReview(g,index,input,request){
   baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before)),undefined,g),
   futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost,g);
  if(futureStream.rows.some(row=>row.cash<0||row.capitalRatio<10))return {...reject('The funded long-run scenario breaches cash or capital protection.'),quote,before,during,after,baseStream,futureStream};
- const value=futureStream.value-baseStream.value-quote.cost;
+ // Expanded 9.34 also prices the deposit growth the office adds or gives up.
+ const depositValue=balanceSheetLendingRules(p)?balanceSheetDepositGrowthValue(p,before,month=>month<=constructionMonths?during:after,facilityInvestmentCoupon(g,p,plan),months):0,
+  value=futureStream.value-baseStream.value-quote.cost+depositValue;
  return {eligible:true,ready,reason:ready?'':'Accumulate protected capital before committing this conversion.',quote,
   plan:{...plan,facilityPolicy:ready?{convert:{...request},cancel:null}:defaultFacilityPolicy()},before,during,after,horizon:months,constructionMonths,value,
   beforeOriginations:baseFlows.at(-1),afterOriginations:futureFlows.at(-1),beforePrincipal:baseStream.rows.at(-1).principal,afterPrincipal:futureStream.rows.at(-1).principal,
-  baseStream,futureStream,
+  baseStream,futureStream,...(balanceSheetLendingRules(p)?{depositValue}:{}),
   assumption:'Frozen economy, staff, collections and non-credit operating earnings; projected loans capped by cash and 10% capital plus buffers. No borrowing, future hiring or deposit/customer growth. Unstarted research/projects deferred. Principal repayment is not profit; this is not a future earnings guarantee.'};
 }
 function planFacilityInvestment(g,index,input){
@@ -13854,13 +13883,13 @@ function planFacilityInvestment(g,index,input){
  const context=facilityContext(g,p,draft),budget=planBudget(p,draft,g),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
   current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
-  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity,
-  owner={...p,allocation:draft.allocation,policies:{...p.policies,lending:draft.lendingPolicy},products:draft.products},
-  coupon=Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000)),horizon=FACILITY_INVESTMENT_HORIZON;
+  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity+(balanceSheetLendingRules(p)?loanProductionCentralCapacity(g,p):0),
+  coupon=facilityInvestmentCoupon(g,p,draft),horizon=FACILITY_INVESTMENT_HORIZON;
  context.officeMetrics=metrics;
  // Screen cheaply, then forecast at most two DISTINCT models. Do not let two
  // expensive financial centers crowd every commercial/retail alternative out.
  for(const office of p.facilityNetwork.offices.filter(o=>o.closedCycle===null))for(const model of FacilityNetwork.models(p)){
+  if(!balanceSheetKeepsFullService(p,office.id,model))continue;
   const request={officeId:office.id,model},q=FacilityNetwork.quote(p,request,context);if(!q.eligible)continue;
   const gain=Math.max(0,q.after.loanCapacity-q.before.loanCapacity),lost=Math.max(0,gross-Math.max(0,capacity+q.after.loanCapacity-q.before.loanCapacity)),
    score=(q.before.expense-q.after.expense)*horizon+(gain-lost)*coupon*horizon*(horizon+1)/2-q.cost;
@@ -17222,6 +17251,75 @@ function projectResearchProgram(g,out){
  out.me.researchProductGates=Object.fromEntries(Object.entries(RESEARCH_PRODUCT_GATES).map(([line,gates])=>
   [line,Object.fromEntries(Object.keys(gates).map(k=>[k,researchProductBarred(g.players.find(p=>p.id===out.me.id),line,k)]))]));
 }
+// Expanded 9.34 lending rules, for new campaigns only. Every 9.33 and earlier
+// campaign keeps its loan capacity and AI office valuation exactly: each
+// accessor below returns the old value (0 or true) without the marker.
+//
+// Measured on 9.33 with tools/edition_balance_lab.js: local office capacity
+// bound loan production in almost every month, so a bank holding $30M of
+// deposits kept a $6M loan book and $14M of idle cash. The AI also converted its
+// only retail branch into an ATM, because its valuation counted the upkeep saved
+// but not the deposit growth, service and loan capacity given up.
+const BALANCE_SHEET_LENDING_RULES=Object.freeze({targetLoanToDeposit:.8,deploymentRate:.1,deploymentDesk:4});
+function balanceSheetLendingRules(source){return source?.balanceSheetLendingVersion===1}
+function initializeBalanceSheetLending(g,o){
+ if(o.balanceSheetLendingVersion!==1)return;
+ g.balanceSheetLendingVersion=1;for(const p of g.players)p.balanceSheetLendingVersion=1;
+}
+function validateBalanceSheetLending(source,context){
+ const enabled=source.balanceSheetLendingVersion===1;
+ if(source.version==='9.34'&&!enabled)throw Error('Missing balance-sheet lending rules.');
+ if(source.balanceSheetLendingVersion!==undefined&&!enabled)throw Error('Unsupported balance-sheet lending rules.');
+ if(enabled)validateCampaignRules(source,context);
+ const owners=context==='game'?source.players:[source.me];
+ if(owners.some(p=>p.balanceSheetLendingVersion!==(enabled?1:undefined))||source.rival?.balanceSheetLendingVersion!==undefined)
+  throw Error('Invalid balance-sheet lending owner rules.');
+}
+function projectBalanceSheetLending(g,out){
+ if(g.balanceSheetLendingVersion!==1)return;
+ out.balanceSheetLendingVersion=1;out.me.balanceSheetLendingVersion=1;
+}
+
+// Central deployment, before the lending multipliers: the assigned Lending
+// bankers can lend part of the funded deposit gap without a local office. It
+// falls to nothing as the loan book approaches the target. Administering the
+// book is not counted twice: loanProductionCapacity scales this by credit
+// administration coverage, so a book the staff cannot administer stops growing,
+// and it also stops at the cash reserve.
+function balanceSheetDeploymentCapacity(p,lendingStaff){
+ if(!balanceSheetLendingRules(p))return 0;
+ const R=BALANCE_SHEET_LENDING_RULES,gap=Math.max(0,p.stats.deposits*R.targetLoanToDeposit-p.stats.loans);
+ return gap*R.deploymentRate*Math.min(1,Math.max(0,lendingStaff)/R.deploymentDesk);
+}
+
+// An office that both gathers deposits and originates loans. The catalog owns
+// the capacities; an ATM and a wealth office do neither of these fully.
+function balanceSheetFullServiceModel(model){
+ const d=FacilityLifecycle.CATALOG[model];
+ return !!d&&d.capacity.depositCapacity>0&&d.capacity.loanCapacity>0;
+}
+// AI only: never convert away the bank's last full-service office. A player may
+// still choose to; the conversion quote shows what the office gives up.
+function balanceSheetKeepsFullService(p,officeId,model){
+ if(!balanceSheetLendingRules(p)||balanceSheetFullServiceModel(model))return true;
+ const office=p.facilityNetwork.offices.find(o=>o.id===officeId);
+ if(!office||!balanceSheetFullServiceModel(office.model))return true;
+ return p.facilityNetwork.offices.some(o=>o.id!==officeId&&o.closedCycle===null&&balanceSheetFullServiceModel(o.conversion?.model??o.model));
+}
+// AI only: the deposit growth an office conversion adds or gives up, from the
+// same one-month forecasts the conversion review already makes (office deposit
+// capacity and branch service both feed deposit growth). Each month's change
+// persists for the rest of the horizon and is valued as funding lent at the
+// target loan-to-deposit ratio, net of what the bank pays for deposits. Frozen
+// like the review's loan stream: no market growth, runoff change or hiring.
+function balanceSheetDepositGrowthValue(p,before,monthReport,coupon,horizon){
+ if(!balanceSheetLendingRules(p))return 0;
+ const depositRate=Math.max(0,before.depositInterest||0)/Math.max(1,p.stats.deposits),
+  margin=Math.max(0,coupon*BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit-depositRate);
+ let value=0;
+ for(let month=1;month<=horizon;month++)value+=((monthReport(month).depositGrowth||0)-(before.depositGrowth||0))*margin*(horizon-month+1);
+ return value;
+}
 // Reporting-only saved records. No funds, inferred old income or forecast values.
 const IncomeHistory=(()=>{
  const fields=['loanIncome','commercialIncome','depositIncome','otherIncome','fundingCost','expense','chargeoff','eventAdjustment','corporateInvoiceLoss','profit','loanGrowth','contractFees'];
@@ -17266,6 +17364,7 @@ function recordIncomeHistory(g){
 }
 function validateIncomeHistoryCampaign(g){
  validateBankRivalry(g,'game');
+ validateBalanceSheetLending(g,'game');
  validateResearchProgram(g,'game');
  validateBankEconomicsCampaign(g);
  validateCreditWorkloadCampaign(g);
@@ -17277,6 +17376,7 @@ function validateIncomeHistoryCampaign(g){
 }
 function projectIncomeHistory(g,out,index){
  projectBankRivalry(g,out);
+ projectBalanceSheetLending(g,out);
  projectResearchProgram(g,out);
  projectBankEconomics(g,out);
  projectCreditWorkload(g,out);
@@ -17286,6 +17386,7 @@ function projectIncomeHistory(g,out,index){
 }
 function validateIncomeHistoryView(v){
  validateBankRivalry(v,'view');
+ validateBalanceSheetLending(v,'view');
  validateResearchProgram(v,'view');
  validateBankEconomicsView(v);
  validateCreditWorkloadView(v);
@@ -17408,7 +17509,7 @@ const IncomeReview=(()=>{
  }
  return {change,history,compare,principalHistory,relationshipChange,reconciliation,statement};
 })();
-root.BWEngine={researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
+root.BWEngine={BALANCE_SHEET_LENDING_RULES,balanceSheetLendingRules,loanProductionCentralCapacity,researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
 Object.assign(root.BWEngine,{bankBasePayroll,IncomeReview,IncomeHistory,validateIncomeHistoryView,CreditWorkload,CommercialFeeEconomics,commercialServicePlanReview:(g,index,plan)=>withCorporateForecast(g,()=>commercialServicePlanReview(g,index,plan))});
@@ -17600,7 +17701,7 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
       const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }
@@ -17621,7 +17722,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
@@ -19180,7 +19281,8 @@ function loanBookNotice(v){
  const shrink=money(Math.abs(Math.round(r.loanGrowth)));
  return '<p class="small bad" role="status"><b>Loan book shrinking.</b> Net operating principal fell by '+shrink+' last month; repayments and credit losses can both contribute'
   +(Number.isFinite(capacity)?'; local origination capacity is '+money(Math.round(capacity))+' against a book of '+money(Math.round(v.me.stats.loans)):'')
-  +'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>';
+  +(v.me.balanceSheetLendingVersion===1?'. Lending bankers also deploy part of the unlent deposit base while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits, if cash above the reserve allows. Add Lending staff, keep credit administration covered, or open another office, to originate more.</p>'
+   :'. Staff your offices for Lending and Operations, or open another office, to originate more.</p>');
 }
 let operatingForecastView={owner:null,desk:'bank'};
 function renderCoreLoanIncome(v,before,after){
@@ -20940,7 +21042,7 @@ function renderCreditFlow(v,review){
  const next=creditFlowRows(review.operating),actual=v.me.operatingReport,prior=actual?.cycle===(v.gameOver?v.cycle:v.cycle-1)?creditFlowRows(actual):null;
  if(!next)return '<p role="status">Loan movement forecast unavailable. Review the current plan.</p>';
  const signed=n=>(n<0?'−':n>0?'+':'')+creditMoney(Math.abs(n)),labels=['New loans funded','Scheduled principal repaid','Collections principal recovered','Principal written off','Net operating loan change'];
- return '<section class="credit-policy"><h3>LOAN BOOK MOVEMENT</h3><p class="small">'+(next[4]<0?'The draft loan book contracts. Repayments return money to cash; credit losses reduce earnings.':'The draft adds to the loan book after repayments and losses.')+'</p><div class="table-scroll"><table class="forecast-table"><caption>Whole bank · operating movements only</caption><thead><tr><th>Movement</th><th>Last completed month</th><th>This draft</th></tr></thead><tbody>'+labels.map((label,i)=>'<tr><th scope="row">'+label+'</th><td>'+(prior?signed(prior[i]):'Not yet available')+'</td><td>'+signed(next[i])+'</td></tr>').join('')+'</tbody></table></div><p class="small">'+review.staffing.origination.toFixed(2)+' employee-months remain for origination after shared work ('+review.staffing.effectiveOrigination.toFixed(2)+' effective with expertise). Credit administration coverage: '+(review.staffing.administrationCoverage*100).toFixed(0)+'%. Base lending capacity (central desk + offices): '+creditMoney(review.facilityLoanCapacity)+'.</p><div class="credit-controls"><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="creditOfficeCapacity">Inspect local offices</button></div><p class="micro muted">Current economy and draft policies; not a promised closing balance. Executive events, rival actions, opportunity wins, project completions and separate regulatory/funding sales are excluded. More capacity does not guarantee borrowers or funding. New loans use cash; principal repayments are not income.</p></section>';
+ return '<section class="credit-policy"><h3>LOAN BOOK MOVEMENT</h3><p class="small">'+(next[4]<0?'The draft loan book contracts. Repayments return money to cash; credit losses reduce earnings.':'The draft adds to the loan book after repayments and losses.')+'</p><div class="table-scroll"><table class="forecast-table"><caption>Whole bank · operating movements only</caption><thead><tr><th>Movement</th><th>Last completed month</th><th>This draft</th></tr></thead><tbody>'+labels.map((label,i)=>'<tr><th scope="row">'+label+'</th><td>'+(prior?signed(prior[i]):'Not yet available')+'</td><td>'+signed(next[i])+'</td></tr>').join('')+'</tbody></table></div><p class="small">'+review.staffing.origination.toFixed(2)+' employee-months remain for origination after shared work ('+review.staffing.effectiveOrigination.toFixed(2)+' effective with expertise). Credit administration coverage: '+(review.staffing.administrationCoverage*100).toFixed(0)+'%. Base lending capacity (central desk + offices): '+creditMoney(review.facilityLoanCapacity)+'.'+(Number.isFinite(review.centralLoanCapacity)?' Balance-sheet deployment adds '+creditMoney(Math.round(review.centralLoanCapacity))+' while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits.':'')+'</p><div class="credit-controls"><button type="button" class="btn" id="creditWorkCoverage">Review credit work coverage</button><button type="button" class="btn" id="creditOfficeCapacity">Inspect local offices</button></div><p class="micro muted">Current economy and draft policies; not a promised closing balance. Executive events, rival actions, opportunity wins, project completions and separate regulatory/funding sales are excluded. More capacity does not guarantee borrowers or funding. New loans use cash; principal repayments are not income.</p></section>';
 }
 function renderCollections(v) {
   $('#creditNav').classList.toggle('hidden',!v.me.creditPerformance);
@@ -22967,6 +23069,7 @@ const GAME_HELP_TOPICS=[
  {id:'recruitment',title:'Recruitment: signing cost and arrival timing',words:'hire generalist specialist salary payroll employee new banker',requires:['workforce'],tab:'workforce',peopleDesk:'recruitment',target:'#peopleRecruitment',text:'Generalists and specialists share the monthly hiring limit and spending room. The next-recruit quote is the extra signing cost, not the full future payroll. Staged recruits arrive next month; they cannot cover the work being settled now. Specialist expertise and recurring salary premiums differ from headcount.'},
  {id:'training',title:'Training, reserves and productive time',words:'workforce expertise development skill course teaching budget preview',requires:['workforce'],tab:'workforce',peopleDesk:'development',target:'#workforcePanel',text:'Choose a specialist department to inspect its skills and recurring training. Preview compares all edited training amounts against the staged plan, including requested and effective limits. Department ceilings and shared reserves can restrict spending. Switching departments retains unfinished entries but does not stage them. Training uses cash and sometimes teaching time now for later benefits; bank-wide costs and morale remain below the inspector.'},
  {id:'leadership',title:'Leadership, budgets and bounded delegation',words:'manager department leader compensation objectives training caps reserve automate',requires:['workforce','departmentOffice'],tab:'workforce',peopleDesk:'leadership',target:'#departmentPanel',text:'Leadership and budgets set organizational commitments and spending ceilings, not a second pool of employees or money. Review proposal changes and their whole-plan costs. Delegation works within supported limits; it does not authorize a manager to submit turns or make major strategic transactions for you.'},
+ {id:'balance-sheet-lending',title:'Deposits fund lending beyond your offices',words:'loan deposit ratio deployment origination capacity lending staff office central balance sheet cash reserve expanded',requires:['balanceSheetLendingVersion'],tab:'operations',target:'#productPortfolio',text:'Offices originate local loans up to their capacity. Your Lending bankers can also lend part of the gap between your deposits and your loan book without another office; the pace falls as loans approach the target share of deposits, and with nobody assigned to Lending nothing is deployed. Every new loan is paid from cash, so lending stops at the liquidity reserve set by your capital policy, and weak credit administration coverage slows it. More loans also use capital: watch the capital ratio.'},
  {id:'deployment',title:'Deposits fund lending; lending is most of the balance sheet',words:'loan deposit ratio deployment origination capacity lending staff balance sheet cash idle',requires:['researchProgramVersion'],tab:'operations',target:'#productPortfolio',text:'Your lending desk no longer caps the book on headcount alone. Each cycle the bank deploys part of the gap between its deposits and its loan book, at a pace your Lending bankers set: with nobody assigned to Lending nothing is deployed. A healthy bank runs most of its deposits as loans rather than holding them as cash, and loans are roughly a quarter of final standing. Cash still matters for projects, research and hiring, so the judgement is how much to keep spare.'},
  {id:'relationships',title:'Commercial relationships need somewhere to be served from',words:'business merchant relationships branches capacity fees commercial saturation',requires:['researchProgramVersion'],tab:'markets',target:'#marketMap',text:'Business and merchant relationships are won against your physical presence. Past what your branch network can carry, new relationships arrive far more slowly however many Business bankers you assign, and fee income per relationship is already throttled by servicing capacity. Building offices raises the ceiling; staffing alone does not.'},
  {id:'combinations',title:'Two capabilities together unlock what neither grants alone',words:'combination combined capability cross branch digital treasury structured credit stable funding base deposit franchise integration straight through',requires:['researchProgramVersion'],tab:'strategy',target:'#strategyTree',text:'Six capability branches each carry three permanent operating models, and certain pairs of branches unlock a combined capability once both reach the required tier. Combined capabilities apply automatically and are listed under COMBINED CAPABILITIES in Research. Stronger products are also gated: the first option on every line is always available, and the rest are earned by research.'},

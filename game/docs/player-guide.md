@@ -24,13 +24,18 @@ These screens share one draft. Moving between them does not commit spending.
 Only the selected subject's controls are shown; there is no need to open every
 policy each month. The monthly review can still open the relevant editor inline.
 
-New Expanded campaigns use persistent rivalry9.33. Market dominance and a score
+New Expanded campaigns (save 9.34) use persistent rivalry. Market dominance and a score
 lead no longer award automatic bank control or stop play. Receivership and
 unresolved funding-covenant failure remain possible; company acquisitions still
 require the existing funded decisions.
 Older saves and their rematches retain their original ending rules; importing
 one does not convert it. Both computers need a build supporting the new rule
-to start or resume9.33 together. No additional setup checkbox is required.
+to start or resume 9.34 together. No additional setup checkbox is required.
+
+Expanded 9.34 also lets your Lending bankers lend part of the gap between your loan
+book and 80% of deposits, beyond what your offices can originate. Spare cash, credit
+staff and credit administration still limit it. Credit shows what it adds each month;
+in Help, search *balance-sheet lending*. A 9.33 save keeps its old lending rules.
 
 ### Before expanding
 
