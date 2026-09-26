@@ -32,8 +32,10 @@ jobs:
     # one runner cannot finish inside a job limit. Each shard runs every eighth
     # command on its own runner (no shared output files) and every shard also
     # proves the portable build matches source. The gate passes only when all
-    # eight shards pass; fail-fast is off so every shard reports.
-    timeout-minutes: 60
+    # eight shards pass; fail-fast is off so every shard reports. The slowest
+    # shard took 56 minutes on its first green run (integrated_staffing alone
+    # is ~13), so allow 90 rather than fail a passing shard on runner speed.
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
