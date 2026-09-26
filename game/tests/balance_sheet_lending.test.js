@@ -1,4 +1,5 @@
 'use strict';
+if(!process.argv.includes('--source'))process.argv.push('--source');
 const {test}=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path'),{createHash}=require('node:crypto');
 const copy=x=>JSON.parse(JSON.stringify(x));
 function load(html,internals=''){const c={};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.BWEngine={'+internals),c);return c.BWEngine;}
@@ -6,7 +7,7 @@ function load(html,internals=''){const c={};vm.runInNewContext(html.match(/<scri
 const release=fs.readFileSync(path.join(__dirname,'../../releases/v4-rc4/BRANCH_WARS.html'));
 assert.equal(createHash('sha256').update(release).digest('hex'),'51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5');
 const old=load(release.toString('utf8')),E=load(require('../tools/build_game').assemble().html,
- 'BALANCE_SHEET_LENDING_RULES,balanceSheetDeploymentCapacity,balanceSheetKeepsFullService,balanceSheetDepositGrowthValue,loanProductionCapacity,loanProductionCentralCapacity,');
+ 'balanceSheetDeploymentCapacity,balanceSheetKeepsFullService,balanceSheetDepositGrowthValue,loanProductionCapacity,');
 const CURRENT={currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true};
 const options=(lending=true,scenario='balanced')=>({...E.previewCampaignEdition({},'expanded',{...CURRENT,currentLending:lending}).options,mode:'hotseat',seed:'balance-sheet-lending',scenario,created:1,startingWorkforce:'covered'});
 const plain=g=>{delete g.balanceSheetLendingVersion;for(const p of g.players)delete p.balanceSheetLendingVersion;g.version='9.33';return g;};
@@ -90,4 +91,15 @@ test('real resolution, half-ready restore, owner privacy and rematch keep the 9.
  const leaked=copy(E.publicState(g,1));leaked.rival.balanceSheetLendingVersion=1;assert.throws(()=>E.validateIncomeHistoryView(leaked),/balance-sheet lending/);
  g.gameOver=true;g.endReason='receivership';g.cycle--;E.rematch(g,0);E.rematch(g,1);
  assert.equal(g.version,'9.34');assert.equal(g.balanceSheetLendingVersion,1);assert(g.players.every(p=>p.balanceSheetLendingVersion===1));E.validatePilot(g);
+});
+
+test('the Credit panel and help explain central deployment only in 9.34 campaigns',()=>{
+ const {harness}=require('./github_resilience.test');
+ for(const lending of [true,false]){
+  const h=harness();h.c.lendingOptions=options(lending);
+  h.run(`game=E.createGame(lendingOptions);seat=0;workspaceTab='credit';newDraft(currentView());renderReady=()=>renderCollections(currentView());document.querySelector('#creditPanel').insertAdjacentHTML=function(where,html){this.innerHTML=html+this.innerHTML;};renderCollections(currentView());`);
+  const html=h.elements.get('#creditPanel').innerHTML;assert.match(html,/Base lending capacity/);assert.doesNotMatch(html,/NaN|undefined/);
+  if(lending)assert.match(html,new RegExp('Balance-sheet deployment adds \\$[0-9.,]+[KM]? while loans stay below '+Math.round(E.BALANCE_SHEET_LENDING_RULES.targetLoanToDeposit*100)+'% of deposits'));else assert.doesNotMatch(html,/Balance-sheet deployment/);
+  assert.equal(h.run(`gameHelpAvailable(GAME_HELP_TOPICS.find(topic=>topic.id==='balance-sheet-lending'),gameHelpProfile(currentView()))`),lending);
+ }
 });
