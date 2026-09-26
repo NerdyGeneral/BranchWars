@@ -31,7 +31,7 @@ if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'
   ['tests/department_ai_affordability.test.js'], ['tests/department_obligations.test.js'], ['tests/department_obligations_ui.test.js'],
   ['tests/institution_legacy_compat.test.js'], ['tests/institution_network.test.js'],
   ['tests/facility_catalog.test.js','--integrated'], ['tests/facility_lifecycle_legacy_compat.test.js'],
-  ['tests/facility_lifecycle_integration.test.js'], ['tests/facility_conversion_lifecycle.test.js'], ['tests/facility_hub_transitions.test.js'], ['tests/facility_lifecycle_network.test.js'], ['tests/facility_lifecycle_ui.test.js'], ['tests/facility_submission.test.js']);
+  ['tests/facility_lifecycle_integration.test.js'], ['tests/facility_lifecycle_quotes.test.js'], ['tests/facility_conversion_lifecycle.test.js'], ['tests/facility_hub_transitions.test.js'], ['tests/facility_lifecycle_network.test.js'], ['tests/facility_lifecycle_ui.test.js'], ['tests/facility_submission.test.js']);
 if (!args.includes('--full')) commands.push(...[
 'integrated_campaign_recovery.test.js',
 'integrated_staffing.test.js',
