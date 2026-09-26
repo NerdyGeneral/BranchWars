@@ -1,15 +1,15 @@
 'use strict';
-// Actual assembled engine + unintegrated adapters, injected before its public API
-// inside the same closure. Prices, spending limits and staffing helpers are real.
-// Broader-model and experienced-specialist rosters below are labelled schema
-// fixtures, not a claim that those new offices can already be built in gameplay.
-const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
-const root=path.resolve(__dirname,'..'),copy=x=>JSON.parse(JSON.stringify(x)),ctx={console};
+// Owner-only facility lifecycle quotes on the assembled engine alone. A Group5
+// campaign creates the lifecycle book itself; prices, spending limits and
+// staffing helpers are the engine's own. Broader-model and experienced-specialist
+// rosters below are labelled schema fixtures, not a claim that those offices can
+// be built from these states.
+const vm=require('node:vm'),assert=require('node:assert/strict');
+const copy=x=>JSON.parse(JSON.stringify(x)),ctx={console};
 const html=require('../tools/build_game').assemble().html;
-const experimental=['facility-lifecycle.js','facility-lifecycle-quotes.js'].map(f=>fs.readFileSync(path.join(root,'experiments/institution',f),'utf8')).join('\n');
 const api='FacilityLifecycle,lifecycleInstructionQuote,defaultFacilityLifecyclePlan,facilityLifecycleStaffProposal,facilityLifecycleDraftCommitment,facilityLifecycleModelTerms,facilityLifecyclePlanningContext,facilityLifecycleNearby,departmentPlanOperatingQuote,departmentProductiveAllocation,';
-vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={',experimental+'\nroot.BWEngine={'+api),ctx);
-const E=ctx.BWEngine,L=E.FacilityLifecycle,options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options;
+vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.BWEngine={'+api),ctx);
+const E=ctx.BWEngine,L=E.FacilityLifecycle,options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;
 const same=(a,b)=>assert.deepEqual(copy(a),copy(b));let checks=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function fixture(){
@@ -18,8 +18,7 @@ function fixture(){
  q.newProjects=[];q.newProject=null;q.investments={};q.hires=0;q.specialistHires=E.emptySpecialistOrders();
  q.competitiveAction='none';q.facilityPolicy=E.defaultFacilityPolicy();Object.assign(q,E.defaultDepartmentPlan(p));
  q.agencyPolicy=E.defaultAgencyPlan(p);q.groupPolicy.bankDividend=0;q.groupPolicy.bankSupport=0;
- // Explicit prototype init only, not a migration or actual creation claim.
- g.players[0]=L.initialize(p,1,true);q.allocation=copy(p.allocation);q.servicePolicy.staff=0;
+ q.allocation=copy(p.allocation);q.servicePolicy.staff=0;
  q.householdPolicy.retention=25;q.relationshipOfferPolicy.share=0;q.onboardingPolicy.share=0;q.collectionsPolicy.share=0;
  q.facilityLifecyclePolicy=E.defaultFacilityLifecyclePlan(g.players[0]);
  return {g,p:g.players[0],q};
@@ -27,7 +26,7 @@ function fixture(){
 function worn(p){const id=p.facilityNetwork.offices[0].id;p.facilityLifecycle.records[id].conditionBp=8000;return id;}
 function staffed(g,p,q){q.facilityLifecyclePolicy=E.facilityLifecycleStaffProposal(g,p,q).policy;return q;}
 
-test('Actual new Group4 owner quotes are pure; the legacy owner never gains a lifecycle book',()=>{
+test('Actual new Group5 owner quotes are pure; the legacy owner never gains a lifecycle book',()=>{
  const {g,p,q}=fixture(),before=JSON.stringify(g),draft=JSON.stringify(q);
  const a=E.lifecycleInstructionQuote(g,p,q),b=E.lifecycleInstructionQuote(g,p,q);
  assert(a.status.eligible,a.status.reason);same(a,b);assert.equal(JSON.stringify(g),before);assert.equal(JSON.stringify(q),draft);
@@ -49,14 +48,17 @@ test('Retained office quote uses exact actual project pricing, local upgrades an
 });
 test('Budget field presence includes lifecycle costs and capacity exactly once, not by saved flags',()=>{
  const {g,p,q}=fixture();q.facilityLifecyclePolicy.renovate=worn(p);
- const b=E.planBudget(p,q),cost=E.facilityLifecycleDraftCommitment(p,q),missing=E.facilityLifecyclePlanningContext(g,p,q,b);
- const integrated={...b,total:b.total+cost.total,remaining:b.remaining-cost.total,freeCapacity:b.freeCapacity-cost.capacity,
-  facilityLifecycle:cost.total,facilityLifecycleCapacity:cost.capacity};
- const present=E.facilityLifecyclePlanningContext(g,p,q,integrated);
+ // planBudget carries the lifecycle fields itself. The same budget with them
+ // removed must leave the same free cash and execution: the cost counts once.
+ const b=E.planBudget(p,q,g),cost=E.facilityLifecycleDraftCommitment(p,q);
+ assert.equal(b.facilityLifecycle,cost.total);assert.equal(b.facilityLifecycleCapacity,cost.capacity);
+ const without={...b,total:b.total-cost.total,remaining:b.remaining+cost.total,freeCapacity:b.freeCapacity+cost.capacity};
+ delete without.facilityLifecycle;delete without.facilityLifecycleCapacity;
+ const present=E.facilityLifecyclePlanningContext(g,p,q,b),missing=E.facilityLifecyclePlanningContext(g,p,q,without);
  assert.equal(present.context.freeCash,missing.context.freeCash);assert.equal(present.context.freeExecution,missing.context.freeExecution);
  assert.equal(cost.total,cost.renovation+cost.maintenance);assert.equal(cost.capacity,1);
- assert.throws(()=>E.facilityLifecyclePlanningContext(g,p,q,{...integrated,facilityLifecycle:0}),/disagrees/);
- assert.throws(()=>E.facilityLifecyclePlanningContext(g,p,q,{...integrated,facilityLifecycleCapacity:0}),/disagrees/);
+ assert.throws(()=>E.facilityLifecyclePlanningContext(g,p,q,{...b,facilityLifecycle:0}),/disagrees/);
+ assert.throws(()=>E.facilityLifecyclePlanningContext(g,p,q,{...b,facilityLifecycleCapacity:0}),/disagrees/);
  // Structural helper itself is independent of allocation/teacher/forecast rules.
  same(E.facilityLifecycleDraftCommitment(p,{facilityLifecyclePolicy:q.facilityLifecyclePolicy}),cost);
 });
@@ -70,6 +72,8 @@ test('Other research and recruitment spend and actual reserves block renovation 
 });
 test('Physical staffing subtracts retention, offers, onboarding, contracts and collections exactly once',()=>{
  const {g,p,q}=fixture();q.allocation={service:4,business:2,lending:1,operations:1};
+ // Group5's default plan already staffs the office; this measures what remains.
+ for(const office of Object.values(q.facilityLifecyclePolicy.offices))for(const role of L.ROLES)office.staffQuarters[role]=0;
  q.householdPolicy.retention=50;q.relationshipOfferPolicy.share=50;q.onboardingPolicy.share=50;
  q.servicePolicy.staff=1;q.collectionsPolicy.share=50;
  const r=E.lifecycleInstructionQuote(g,p,q);assert(r.status.eligible,r.status.reason);
@@ -179,4 +183,4 @@ test('Hub selector shows only owned authored neighbors without promising unsuppo
  same(r.nearbyHubIds[id],[p.id+':office:2']);same(r.nearbyHubIds[p.id+':office:2'],[]);
  q.facilityLifecyclePolicy.offices[id].hubId=p.id+':office:3';assert.equal(E.lifecycleInstructionQuote(g,p,q).status.eligible,false);
 });
-console.log(JSON.stringify({status:'PASS',checks,scope:'Actual assembled engine quote adapter; no production integration or broad-model construction claim'}));
+console.log(JSON.stringify({status:'PASS',checks,scope:'Group5 facility lifecycle quotes on the assembled engine; no broad-model construction claim'}));
