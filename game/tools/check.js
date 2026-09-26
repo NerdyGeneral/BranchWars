@@ -184,10 +184,18 @@ for (const command of expected) {
   console.log('Checking ' + command.join(' '));
   evidence.append('command-started',{command});
   fs.writeSync(evidence.logFd,'\nChecking '+command.join(' ')+'\n');
+  const outputStart=fs.fstatSync(evidence.logFd).size;
   const result = spawnSync(process.execPath, command, {cwd: root, stdio: ['ignore',evidence.logFd,evidence.logFd], windowsHide: true});
   completed++;evidence.append('command-finished',{command,exitCode:result.status,signal:result.signal,error:result.error?.message||null});
   if (result.error) throw result.error;
-  if (result.status !== 0) process.exit(result.status || 1);
+  if (result.status !== 0) {
+    // Command output goes only to the durable log; CI shows only this console,
+    // so repeat the failing command's own tail here or the failure is unreadable.
+    const size=fs.fstatSync(evidence.logFd).size,length=Math.min(size-outputStart,64*1024),tail=Buffer.alloc(Math.max(0,length));
+    if(length>0)fs.readSync(fs.openSync(evidence.log,'r'),tail,0,length,size-length);
+    console.error('\nFAILED '+command.join(' ')+' (exit '+(result.status??result.signal)+'). Last output:\n'+tail.toString('utf8').split('\n').slice(-80).join('\n'));
+    process.exit(result.status || 1);
+  }
 }
 const after=fingerprint(),inputsAfter=fingerprintFiles(root,inputEntries),sourceUnchanged=before===after&&inputsBefore===inputsAfter;
 evidence.finish({passed:sourceUnchanged,incomplete:false,completed,expected:expected.length,sourceUnchanged,portableAfterSha256:after,inputsAfterSha256:inputsAfter});gateFinished=true;
