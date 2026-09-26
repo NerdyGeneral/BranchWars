@@ -72,7 +72,15 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .department-functions-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .department-functions-nav [aria-selected="true"]{background:#e6f0ff;border-color:#3280d9;color:#164d88}
 </style>
-<style id="workspace-ui">.workspace-nav{position:sticky;top:8px;z-index:18;padding:9px 10px;background:rgba(255,255,255,.96);backdrop-filter:blur(12px)}.workspace-tabs{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:7px}.workspace-tab{min-height:48px;border:1px solid #d4deea;border-radius:10px;background:#f8fafc;color:#52657b;font-weight:750;text-align:left;padding:8px 11px}.workspace-tab span{display:block;font-size:.66rem;font-weight:500;color:#8592a3;margin-top:2px}.workspace-tab.active{border-color:#3b8de7;background:linear-gradient(135deg,#eaf5ff,#f8fbff);color:#1d5fa7;box-shadow:inset 0 0 0 1px #9dc8f1}.workspace-view{display:none}.workspace-view.active{display:block}#gameScreen[data-tab="overview"] .game-layout,#gameScreen[data-tab="markets"] .game-layout,#gameScreen[data-tab="competition"] .game-layout,#gameScreen[data-tab="intelligence"] .game-layout{grid-template-columns:1fr}.competitive-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.competitive-action{width:100%;text-align:left;border:1px solid #d5dfe9;background:#fff;border-radius:10px;padding:11px;color:#26364d}.competitive-action:hover:not(:disabled){border-color:#6aa5e9;background:#f4f9ff}.competitive-action.selected{border-color:#2f82df;background:#eaf4ff;box-shadow:inset 0 0 0 1px #93c0ee}.competitive-action .action-head{display:flex;justify-content:space-between;gap:8px;font-weight:750}.competitive-action .action-meta{display:block;font-size:.69rem;color:#738397;margin-top:4px}.competitive-brief{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}.competitive-brief>div{background:#f5f9fd;border:1px solid #d7e2ec;border-radius:9px;padding:9px}.competitive-brief span{display:block;font-size:.65rem;color:#77879a}.threat-board{display:grid;gap:6px;margin-top:9px}.threat-line{border-left:4px solid #7fa8d5;background:#f4f8fc;padding:7px 9px;font-size:.72rem}.threat-line.hot{border-color:#df5864;background:#fff2f3}.threat-line.watch{border-color:#d99b31;background:#fff8e8}@media(max-width:1050px){.workspace-tabs{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.workspace-nav{position:static}.competitive-grid{grid-template-columns:1fr}}@media(max-width:600px){.workspace-tabs{grid-template-columns:1fr 1fr}.workspace-tab{min-width:0}.competitive-brief{grid-template-columns:1fr}}</style>
+<style id="workspace-ui">.workspace-nav{position:sticky;top:8px;z-index:18;padding:9px 10px;background:rgba(255,255,255,.96);backdrop-filter:blur(12px)}.workspace-tabs{display:grid;grid-template-columns:repeat(6,minmax(110px,1fr));gap:7px}.workspace-tab{min-height:48px;border:1px solid #d4deea;border-radius:10px;background:#f8fafc;color:#52657b;font-weight:750;text-align:left;padding:8px 11px}.workspace-tab span{display:block;font-size:.66rem;font-weight:500;color:#8592a3;margin-top:2px}.workspace-tab.active{border-color:#3b8de7;background:linear-gradient(135deg,#eaf5ff,#f8fbff);color:#1d5fa7;box-shadow:inset 0 0 0 1px #9dc8f1}.workspace-view{display:none}.workspace-view.active{display:block}#gameScreen[data-tab="overview"] .game-layout,#gameScreen[data-tab="markets"] .game-layout,#gameScreen[data-tab="competition"] .game-layout,#gameScreen[data-tab="intelligence"] .game-layout{grid-template-columns:1fr}.competitive-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.competitive-action{width:100%;text-align:left;border:1px solid #d5dfe9;background:#fff;border-radius:10px;padding:11px;color:#26364d}.competitive-action:hover:not(:disabled){border-color:#6aa5e9;background:#f4f9ff}.competitive-action.selected{border-color:#2f82df;background:#eaf4ff;box-shadow:inset 0 0 0 1px #93c0ee}.competitive-action .action-head{display:flex;justify-content:space-between;gap:8px;font-weight:750}.competitive-action .action-meta{display:block;font-size:.69rem;color:#738397;margin-top:4px}.competitive-brief{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}.competitive-brief>div{background:#f5f9fd;border:1px solid #d7e2ec;border-radius:9px;padding:9px}.competitive-brief span{display:block;font-size:.65rem;color:#77879a}.threat-board{display:grid;gap:6px;margin-top:9px}.threat-line{border-left:4px solid #7fa8d5;background:#f4f8fc;padding:7px 9px;font-size:.72rem}.threat-line.hot{border-color:#df5864;background:#fff2f3}.threat-line.watch{border-color:#d99b31;background:#fff8e8}@media(max-width:1050px){.workspace-tabs{grid-template-columns:repeat(3,1fr)}}@media(max-width:900px){.workspace-nav{position:static}.competitive-grid{grid-template-columns:1fr}}@media(max-width:600px){.workspace-tabs{grid-template-columns:1fr 1fr}.workspace-tab{min-width:0}.competitive-brief{grid-template-columns:1fr}}
+/* Research directory and combined capabilities. */
+.research-workspace .object-row small.strategy-model{display:block;color:var(--good,#1f7a4d);font-weight:600}
+.strategy-progress,.combo-bar{display:block;height:4px;margin-top:6px;border-radius:2px;background:rgba(40,120,224,.14);overflow:hidden}
+.strategy-progress>span,.combo-bar>span{display:block;height:100%;background:var(--blue,#2878e0)}
+.research-combinations .combo-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.research-combinations .combo-card{border:1px solid rgba(40,120,224,.2);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.research-combinations .combo-card.combo-active{border-color:var(--good,#1f7a4d);background:rgba(31,122,77,.06)}
+</style>
 <style id="workspace-polish">
 #gameScreen[data-tab="strategy"] .game-layout{display:flex;flex-direction:column}
 #gameScreen[data-tab="strategy"] .desk{order:-1}
@@ -247,6 +255,10 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 <style id="operations-workspace-ui">.operations-workspace{min-width:0}.operations-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.operations-tabs>button{padding:11px 12px;min-height:58px;border:1px solid #cbd9e8;border-radius:9px;background:#f6f9fc;color:#34506f;text-align:left;font-weight:700;font-size:.85rem}.operations-tabs>button span{display:block;font-weight:400;font-size:.72rem;margin-top:4px;color:#62768c}.operations-tabs>button[aria-selected="true"]{background:#eaf3ff;border-color:#3386dc;box-shadow:inset 0 0 0 1px #3386dc;color:#174e86}.operations-tabs>button:focus-visible,#operationsDecisionShortcut:focus-visible{outline:3px solid #1c72cd;outline-offset:3px}.operations-pane{min-width:0}.operations-pane[hidden]{display:none!important}.operations-two-column{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,1fr);gap:14px;align-items:start}.operations-pane .panel{min-width:0}.operations-pane .event{margin:0}#operationsDeskHint{margin:10px 0 0;line-height:1.5}#operationsPanel-projects .projects{grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));max-height:none}#operationsPanel-projects .notice,#operationsPanel-projects .capital-action{max-width:none}#gameScreen[data-tab="operations"]>.game-layout{display:none}#operationsPanel-forecast .operating-preview{border-top:0;margin-top:0}#operationsPanel-forecast .forecast-table{font-size:.8rem}
 @media(max-width:950px){.operations-two-column{grid-template-columns:1fr}.operations-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.operations-navigation .section-head{align-items:flex-start;flex-wrap:wrap}}
 @media(max-width:480px){.operations-tabs{gap:6px}.operations-tabs>button{padding:9px;font-size:.8rem}.operations-tabs>button span{font-size:.68rem}.operations-navigation .section-head{display:block}#operationsDecisionShortcut{margin-top:8px;width:100%}}
+
+/* Section heads inside the combined monthly desk span the whole grid; as ordinary
+   grid items they took a column and pushed the section beside them. */
+.operations-two-column>.operations-section-head,.operations-pane>.operations-section-head{grid-column:1/-1;margin:4px 0 0}
 </style>
 <style id="usability-ui">.workspace-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;margin-bottom:.45rem}.workspace-groups button{font:inherit;font-weight:700;line-height:1.3;border:1px solid #bbcadd;border-radius:7px;background:#f5f8fc;color:#354960;padding:.5rem .65rem;min-width:0}.workspace-groups button.active{background:#215f9f;border-color:#215f9f;color:#fff}.workspace-nav #workspaceTabs{display:flex;flex-wrap:wrap;gap:.4rem}.workspace-nav #workspaceTabs .workspace-tab{min-height:0;padding:.4rem .65rem;font-size:.85rem;flex:0 1 auto}.workspace-nav #workspaceTabs .workspace-tab span{font-size:.75rem;color:#536b85}.workspace-nav [hidden]{display:none!important}.workspace-nav button:focus-visible{outline:3px solid #124d91;outline-offset:3px}.plan-budget-panel{padding:.6rem 1rem}.plan-budget-panel .plan-budget{margin:0}
 @media(max-width:700px){.workspace-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-nav #workspaceTabs .workspace-tab{flex:1 1 130px}}
@@ -673,7 +685,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
       <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><div id="lobbyFeatureOptions" aria-label="Shared optional campaign systems"></div><p id="lobbyFeatureSummary" class="small muted" role="status"></p><button id="lobbySettings" class="btn">Apply settings</button><button id="lobbyDiscardSettings" class="btn hidden">Discard changes</button></div>
     </div>
     <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
-    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><label id="lobbyResumeLabel" class="btn" for="lobbyResumeFile">Resume from save</label><input id="lobbyResumeFile" type="file" accept="application/json,.json" hidden><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
+    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><label id="lobbyResumeLabel" class="btn" for="lobbyResumeFile">Resume from save</label><input id="lobbyResumeFile" type="file" accept="application/json,.json" hidden><button id="lobbyResumeClear" type="button" class="btn hidden">New campaign instead</button><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
     <p class="micro muted">Changes to either identity or the campaign settings clear both confirmations. Repository health describes access to GitHub, not proof that your friend's browser is still open.</p>
   </section>
 
@@ -17137,7 +17149,7 @@ const RESEARCH_COMBINATIONS=Object.freeze({
   desc:'Work clears without handling; every banker covers materially more.'},
  structuredCredit:{name:'Structured Credit',requires:{risk:2,commercial:2},
   desc:'Priced and tranched lending: wider spread at lower loss.'},
- depositFranchise:{name:'Deposit Franchise',requires:{network:3,risk:2},
+ depositFranchise:{name:'Stable Funding Base',requires:{network:3,risk:2},
   desc:'Relationships stay through a rate cycle, and funding costs less.'}
 });
 function researchCombination(p,key){
@@ -17754,6 +17766,7 @@ function receiveLobby(message){
  next.players.forEach(lobbyIdentity);
  if(!next.settings||!['town','regional','state','national'].includes(next.settings.scope)||!['balanced','rate','regulatory','growth'].includes(next.settings.scenario))throw Error('Invalid lobby settings.');
  validateIncomingFeatureRules(next.settings,'lobby');
+ if(next.resume!==undefined&&!validLobbyResume(next.resume))throw Error('Invalid lobby snapshot.');
  if(!receiveDepartmentPeer(next.settings))return;
  if(lobby&&next.revision<lobby.revision)return;
  if(lobbyPending&&(next.guestAck===lobbyPending.id||next.revision!==lobbyPending.revision)){lobbyPending=null;lobbyDirty=false}
@@ -17769,6 +17782,8 @@ function renderLobbyControls(){
  $('#lobbySettings').disabled=i!==0||confirmation;
  $('#lobbyDiscardSettings').disabled=i!==0||confirmation||!lobbySettingsDirty;
  $('#lobbyReady').textContent=me.ready?'Not ready':'Confirm ready';
+ $('#lobbyResumeLabel').classList.toggle('hidden',i!==0);$('#lobbyResumeLabel').textContent=lobby.resume?'Choose a different save':'Resume from save';
+ $('#lobbyResumeClear').classList.toggle('hidden',i!==0||!lobby.resume);$('#lobbyResumeClear').disabled=blocked;
  $('#lobbyStart').disabled=i!==0||blocked||lobbyDirty||lobbySettingsDirty||confirmation||!compatibility.compatible||!lobby.players.every(p=>p.ready);
  $('#lobbyProgress').textContent=confirmation?'Confirm or cancel the proposed feature changes before starting.':!compatibility.compatible?compatibility.reason:lobbySettingsDirty?'Apply or discard the host draft before confirming.':lobbyDirty?'Save your identity changes before confirming.':lobbyPending?'Saving your confirmation through the link…':lobby.players.every(p=>p.ready)?(i===0?'Both players confirmed. You can start the campaign.':'Both players confirmed. Waiting for the host to start.'):'Waiting for both players to confirm this setup.';
 }
@@ -17778,7 +17793,7 @@ function renderLobby(){
   lobbyFeatureDraft=null;lobbySettingsDirty=false;
  }
  show('#lobbyScreen');const host=p2pRole==='host',i=host?0:1,settings=lobby.settings;
- $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3><span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
+ $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3>'+(lobby.resume?'<span class="small">Plays saved bank <strong>'+esc(lobby.resume.banks[n])+'</strong></span> ':'')+'<span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
  if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color}
  if(!lobbySettingsDirty){$('#lobbyScope').value=settings.scope;$('#lobbyScenario').value=settings.scenario}
  $('#lobbyScope').disabled=!host||settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=!host;
@@ -17791,7 +17806,7 @@ function renderLobby(){
  $('#lobbyFeatureOptions').innerHTML=renderFeatureSelection(host?lobbyDraftSettings():settings,{prefix:'lobbyFeature-',disabled:!host});
  bindFeatureSelection($('#lobbyFeatureOptions'),{read:()=>lobbyDraftSettings(),commit:stageLobbyFeatures,getRevision:()=>lobby&&lobby.revision,
   canEdit:()=>!!lobby&&!game&&!view&&p2pRole==='host',onError:message=>{$('#lobbyError').textContent=message},onPendingChange:renderLobbyControls});
- $('#lobbyNote').textContent=lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
+ $('#lobbyNote').textContent=lobby.resume?lobbyResumeNote(lobby):lobby.note||'Each player controls their own identity. The host controls the shared campaign settings.';
  $('#lobbyError').textContent=lobby.error||'';
  renderLobbyControls();paintLink();
 }
@@ -17801,10 +17816,33 @@ function renderLobby(){
 // the lobby had no load control at all. The host now stages a save here and the
 // campaign starts from it instead of from createGame; the guest receives it
 // through the same syncPeers path a fresh campaign uses.
+// A staged save changes what both players are agreeing to, so it is published in
+// the lobby: the guest sees which saved bank each seat plays, and both players
+// must confirm again. Only this summary is shared before the start; the campaign
+// itself still travels through syncPeers. The host always holds seat 0, so the
+// saved banks keep their names and seats rather than being relabelled after
+// whoever hosts today; the note warns when that would hand a player the other bank.
 let lobbyResumeCampaign=null;
+function validLobbyResume(r){
+ return !!r&&typeof r==='object'&&Number.isSafeInteger(r.cycle)&&r.cycle>=1&&typeof r.version==='string'&&r.version.length<=16&&
+  Array.isArray(r.banks)&&r.banks.length===2&&r.banks.every(name=>typeof name==='string'&&name.length<=80);
+}
+function lobbyResumeSummary(g){return {cycle:g.cycle,version:String(g.version||''),banks:g.players.map(p=>String(p.name||''))}}
+function lobbyResumeNote(l){
+ const r=l.resume,[host,guest]=l.players;
+ let note='Resuming a saved '+r.version+' campaign at month '+r.cycle+'. '+host.name+' (host) plays '+r.banks[0]+'; '+guest.name+' plays '+r.banks[1]+'. The save keeps its own rules; the settings below apply only to a new campaign.';
+ if(host.name===r.banks[1]||guest.name===r.banks[0])note+=' The banks look swapped: the host always plays the first saved bank. To keep your own bank, let its original host host this lobby.';
+ return note;
+}
+function publishLobbyResume(summary){
+ if(summary)lobby.resume=summary;else delete lobby.resume;
+ lobby.revision++;lobby.players.forEach(p=>p.ready=false);lobby.error='';
+ publishLobby();
+}
 function clearLobbyResume(message){
  lobbyResumeCampaign=null;
  const input=$('#lobbyResumeFile');if(input)input.value='';
+ if(lobby&&lobby.resume&&p2pRole==='host'&&!game)publishLobbyResume(null);
  if(message)$('#lobbyError').textContent=message;
  renderLobbyControls();
 }
@@ -17821,8 +17859,7 @@ function stageLobbyResume(file){
    E.validateCampaignRules(restored,'game');
    lobbyResumeCampaign=restored;
    $('#lobbyError').textContent='';
-   $('#lobbyNote').textContent='Resuming cycle '+restored.cycle+' of the loaded campaign. Both players must confirm ready.';
-   renderLobbyControls();
+   publishLobbyResume(lobbyResumeSummary(restored));
   }catch(e){clearLobbyResume('That save could not be loaded: '+e.message)}
  };
  reader.onerror=()=>clearLobbyResume('That save file could not be read.');
@@ -17836,15 +17873,16 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
+  // Both players confirmed the lobby as published. If the host no longer holds the
+  // save it announced (a reload, say), refuse rather than start something else.
+  if(!!lobby.resume!==!!lobbyResumeCampaign){clearLobbyResume('The announced save is no longer loaded here. Choose it again with Resume from save.');return}
   const transport=(lan.active||gh.active)?'lan':'p2p';
   let created;
   if(lobbyResumeCampaign){
-   // Keep the campaign exactly as saved; only its transport and the two seat
-   // identities follow the current lobby.
+   // Keep the campaign exactly as saved, bank names and colors included; only its
+   // transport follows the current lobby.
    created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
    created.mode=transport;
-   created.players[0].name=host.name;created.players[0].color=host.color;
-   created.players[1].name=guest.name;created.players[1].color=guest.color;
   }else{
   created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
   }
@@ -17859,6 +17897,7 @@ $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLo
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
 $('#lobbyResumeFile')?.addEventListener('change',e=>{stageLobbyResume(e.target.files&&e.target.files[0])});
+$('#lobbyResumeClear')?.addEventListener('click',()=>clearLobbyResume(''));
 $('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
 $('#lobbySettings').addEventListener('click',applyLobbySettings);
 $('#lobbyDiscardSettings').addEventListener('click',discardLobbySettings);
@@ -19228,11 +19267,20 @@ function renderCommercialForecast(v,before,after){
 function renderActualBankOperatingResult(v){
  const actual=v.me.operatingReport;
  const bridge=E.IncomeReview.reconciliation(actual);
- const items=actual?[['Loan interest',actual.loanIncome],[v.me.depositBook?'Deposit account fees':'Legacy deposit-linked earnings (abstract)',actual.depositIncome],['Business & merchant fees',actual.commercialIncome],['Other modeled income',actual.otherIncome],['Funding expense',-actual.fundingCost],['Operating expenses (including payroll & facilities)',-actual.expense],['Credit losses',-actual.chargeoff],['Profit event adjustment',actual.eventAdjustment]]:[];
+ // When the recorded source detail reconciles, name what "other income" actually
+ // is. In both current editions it is securities interest (plus billed service
+ // contracts in Expanded) with no legacy bonus or unexplained residual, so a
+ // single "Other modeled income" line overstated how opaque the result was.
+ const statement=actual?E.IncomeReview.statement(actual):null,detail=statement&&statement.available?Object.fromEntries(statement.rows.map(([key,,value])=>[key,value])):null;
+ const other=detail?[['Securities interest',detail.securitiesInterest],['Service contract revenue',detail.contractFees],['Legacy modeled bonuses',detail.abstract],['Other unclassified income',detail.unclassified]].filter(([,value],i)=>i===0||Math.abs(value)>=1)
+  :actual?[['Other modeled income',actual.otherIncome]]:[];
+ const items=actual?[['Loan interest',actual.loanIncome],[v.me.depositBook?'Deposit account fees':'Deposit margin (modeled)',actual.depositIncome],['Business & merchant fees',actual.commercialIncome],...other,['Funding expense',-actual.fundingCost],['Operating expenses (including payroll & facilities)',-actual.expense],['Credit losses',-actual.chargeoff],...(Math.abs(actual.eventAdjustment||0)>=1?[['Profit event adjustment',actual.eventAdjustment]]:[])]:[];
  if(bridge?.invoiceLoss)items.push(['Corporate invoice losses',-bridge.invoiceLoss]);
- if(bridge?.residual)items.push([bridge.reconciled?'Report rounding':'Unreconciled report difference',bridge.residual]);
+ if(bridge?.residual&&(!bridge.reconciled||Math.abs(bridge.residual)>=1))items.push([bridge.reconciled?'Report rounding':'Unreconciled report difference',bridge.residual]);
  if(actual)items.push(['Operating profit',actual.profit]);
- $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${items.map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${incomeAmount(value)}</b></div>`).join('')}</div>${bridge&&!bridge.reconciled?'<p class="bad" role="status">This report does not reconcile. The difference is shown for investigation, not treated as earned income.</p>':''}<p class="micro muted">Operating stage only. Other modeled income can include earning-asset returns, service fees and legacy abstract bonuses; it is not necessarily all non-interest income. Deposits are liabilities, not revenue. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
+ const note=detail?'Operating stage only. Securities interest is earned on the bank\u2019s cash and securities.'+(v.me.depositBook?'':' Deposit margin is the modeled return on your deposit base; it rises with interest rates and a margin-first pricing policy.')+' Deposits are liabilities, not revenue. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.'
+  :'Operating stage only. Other modeled income can include earning-asset returns, service fees and legacy abstract bonuses; it is not necessarily all non-interest income. Deposits are liabilities, not revenue. Construction, recruitment, funding transfers, and later events are reported separately in the cycle results.';
+ $('#operatingReport').innerHTML=actual?`<h3>CYCLE ${integer(actual.cycle)} · OPERATING RESULT</h3><div class="report-grid">${items.map(([name,value])=>`<div><span>${name}</span><b class="${value<0?'bad':''}">${incomeAmount(name==='Report rounding'||name==='Unreconciled report difference'?value:Math.round(value))}</b></div>`).join('')}</div>${bridge&&!bridge.reconciled?'<p class="bad" role="status">This report does not reconcile. The difference is shown for investigation, not treated as earned income.</p>':''}<p class="micro muted">${note}</p>`:'<p class="micro muted">Complete a cycle to see the income, expense, and credit-loss breakdown here.</p>';
  if([6,7,8,9,10].includes(v.financialGroupVersion)&&typeof renderBankEarningsBridge==='function')$('#operatingReport').innerHTML+=renderBankEarningsBridge(v);
 }
 
@@ -22926,7 +22974,7 @@ const GAME_HELP_TOPICS=[
  {id:'leadership',title:'Leadership, budgets and bounded delegation',words:'manager department leader compensation objectives training caps reserve automate',requires:['workforce','departmentOffice'],tab:'workforce',peopleDesk:'leadership',target:'#departmentPanel',text:'Leadership and budgets set organizational commitments and spending ceilings, not a second pool of employees or money. Review proposal changes and their whole-plan costs. Delegation works within supported limits; it does not authorize a manager to submit turns or make major strategic transactions for you.'},
  {id:'deployment',title:'Deposits fund lending; lending is most of the balance sheet',words:'loan deposit ratio deployment origination capacity lending staff balance sheet cash idle',requires:['researchProgramVersion'],tab:'operations',target:'#productPortfolio',text:'Your lending desk no longer caps the book on headcount alone. Each cycle the bank deploys part of the gap between its deposits and its loan book, at a pace your Lending bankers set: with nobody assigned to Lending nothing is deployed. A healthy bank runs most of its deposits as loans rather than holding them as cash, and loans are roughly a quarter of final standing. Cash still matters for projects, research and hiring, so the judgement is how much to keep spare.'},
  {id:'relationships',title:'Commercial relationships need somewhere to be served from',words:'business merchant relationships branches capacity fees commercial saturation',requires:['researchProgramVersion'],tab:'markets',target:'#marketMap',text:'Business and merchant relationships are won against your physical presence. Past what your branch network can carry, new relationships arrive far more slowly however many Business bankers you assign, and fee income per relationship is already throttled by servicing capacity. Building offices raises the ceiling; staffing alone does not.'},
- {id:'combinations',title:'Two capabilities together unlock what neither grants alone',words:'combination combined capability cross branch digital treasury structured credit deposit franchise integration straight through',requires:['researchProgramVersion'],tab:'strategy',target:'#strategyTree',text:'Six capability branches each carry three permanent operating models, and certain pairs of branches unlock a combined capability once both reach the required tier. Combined capabilities apply automatically and are listed under COMBINED CAPABILITIES in Research. Stronger products are also gated: the first option on every line is always available, and the rest are earned by research.'},
+ {id:'combinations',title:'Two capabilities together unlock what neither grants alone',words:'combination combined capability cross branch digital treasury structured credit stable funding base deposit franchise integration straight through',requires:['researchProgramVersion'],tab:'strategy',target:'#strategyTree',text:'Six capability branches each carry three permanent operating models, and certain pairs of branches unlock a combined capability once both reach the required tier. Combined capabilities apply automatically and are listed under COMBINED CAPABILITIES in Research. Stronger products are also gated: the first option on every line is always available, and the rest are earned by research.'},
  {id:'research',title:'Research is not the same as implementation',words:'strategy capability tree unlock specialization operating model build buy license partner',tab:'strategy',target:'#strategyTree',text:'Choose a capability in the directory. Fund research shows its next milestone, paid versus staged progress and full roadmap. Operating model compares permanent choices; review and confirm before staging, or remove an uncommitted choice. Deployment & use shows related products and service platforms, their prerequisites, actual delivery and ongoing costs. Product links open the exact offer. Research alone does not activate a platform, assign staff or win customers. All five capabilities and historical campaign rules remain available.'},
  {id:'projects',title:'Project progress and Operations capacity',words:'initiative stalled timing duration completion queue execution work units',tab:'operations',desk:'projects',target:'#activeProject',text:'Base work units are not a guaranteed number of calendar months. Shared Operations capacity, active commitments and campaign capabilities affect delivery. Review active progress and new initiative capacity together. Hiring for next month does not repair this month’s execution shortage.'},
  {id:'deposit-policy',title:'Deposit strategy and rate-sensitive funding',words:'pricing interest margin growth runoff cost savings bank funding',tab:'operations',desk:'funding',target:'#depositPolicies',text:'Aggressive deposit pricing trades funding cost and rate-sensitive exposure for acquisition strength. Repricing toward margin can cause runoff. Compare your current-book funding profile with the draft forecast; attracting deposits adds a liability as well as cash, not free profit.'},
@@ -23222,12 +23270,12 @@ function renderReady(v){
 }
 // Capability selection is presentation only. Research, models and rollout orders
 // retain the existing engine authority and canonical monthly-plan fields.
-let strategyWorkspace={identity:null,owner:null,branch:'network',desk:'milestones',application:null,roadmaps:[]};
+let strategyWorkspace={identity:null,owner:null,branch:'network',desk:'milestones',application:null,roadmapsClosed:[]};
 function strategyContext(v){return {...opportunityToken(v),attempt:connectionAttempt};}
 function strategyContextCurrent(token,write=true){return opportunityCurrent(token,write)&&token.attempt===connectionAttempt&&token.stamp===JSON.stringify(draft);}
 function strategyWriteAllowed(v){const now=currentView();return !!(now&&v?.me&&!v.me.submitted&&now.me.id===v.me.id&&now.cycle===v.cycle&&strategyContextCurrent(strategyContext(v)));}
 function strategySelection(v){
- if(strategyWorkspace.identity!==(game||view)||strategyWorkspace.owner!==v.me.id){strategyWorkspace={identity:game||view,owner:v.me.id,branch:'network',desk:'milestones',application:null,roadmaps:[]};strategyModelProposal=null;}
+ if(strategyWorkspace.identity!==(game||view)||strategyWorkspace.owner!==v.me.id){strategyWorkspace={identity:game||view,owner:v.me.id,branch:'network',desk:'milestones',application:null,roadmapsClosed:[]};strategyModelProposal=null;}
  if(strategyModelProposal&&!strategyContextCurrent(strategyModelProposal.token))strategyModelProposal=null;
  return strategyWorkspace.branch;
 }
@@ -23257,7 +23305,7 @@ function strategyMilestonesContent(v,branch,s,token){
  const info=v.strategyBranches[branch],tiers=v.capabilityTiers[branch],floor=s.level?tiers[s.level-1]:0,span=s.done?1:s.next-floor,pct=s.done?100:Math.max(0,Math.min(100,(s.spent-floor)/span*100)),pledgePct=s.done?0:Math.min(100-pct,s.pledged/span*100),writable=strategyContextCurrent(token);
  return '<div class="strategy-next">'+(s.done?'<h4>All research milestones complete</h4>':'<span class="eyebrow">NEXT MILESTONE</span><h4>'+esc(info.nodes[s.level].name)+'</h4><p class="small">'+esc(strategyMilestoneDescription(v,branch,s.level))+'</p>')+'</div><div class="capability-bar" role="img" aria-label="'+Math.round(pct)+' percent of current milestone paid; '+Math.round(pledgePct)+' percent staged"><span class="filled" style="width:'+pct+'%"></span><span class="pledged" style="width:'+pledgePct+'%"></span></div><div class="decision-facts"><div><small>Paid over the campaign</small><b>'+money(s.spent)+'</b></div><div><small>Staged this month</small><b>'+money(s.pledged)+'</b></div><div><small>'+(s.done?'Milestones complete':'Still needed after this draft')+'</small><b>'+(s.done?s.level+' / '+tiers.length:money(s.toNext))+'</b></div></div>'+
  (!s.done?'<div class="research-funding-actions"><button id="fund-'+branch+'-less" type="button" class="btn" '+(!writable||!s.pledged?'disabled':'')+'>− up to $50K</button><button id="fund-'+branch+'-more" type="button" class="btn" '+(!writable||s.reason?'disabled':'')+'>+ up to $50K</button><button id="fund-'+branch+'-max" type="button" class="btn primary" '+(!writable||s.reason?'disabled':'')+'>'+((s.maximum>=s.remaining)?'Stage to milestone':'Stage monthly maximum')+' · '+money(s.maximum)+'</button></div><p class="micro">'+esc(s.reason||(s.maximum<s.remaining?'The monthly limit and remaining cash/capital budget only fund part of this milestone.':'This stages the remaining cost; it does not pay or submit the plan.'))+'</p>':'<p class="small">No further research spending. You can still choose an operating model if none is permanent.</p>')+
- '<details id="strategyRoadmap" data-strategy-details="'+branch+'" '+(strategyWorkspace.roadmaps.includes(branch)?'open':'')+'><summary>Full roadmap · '+tiers.length+' milestones</summary><ol class="strategy-milestones">'+info.nodes.map((node,i)=>'<li class="capability-milestone '+(i<s.level?'reached':i===s.level?'next':'')+'"><b>'+esc(node.name)+'</b><span>'+(i<s.level?'COMPLETED · ':'')+money(tiers[i])+' cumulative</span><p class="micro">'+esc(strategyMilestoneDescription(v,branch,i))+'</p></li>').join('')+'</ol></details><p class="micro muted">Solid progress is paid; striped progress is only staged. Milestone effects begin next cycle. A related product or service may still require paid implementation, activation, staffing and maintenance.</p>';
+ '<details id="strategyRoadmap" data-strategy-details="'+branch+'" '+(strategyWorkspace.roadmapsClosed.includes(branch)?'':'open')+'><summary>Full roadmap · '+tiers.length+' milestones</summary><ol class="strategy-milestones">'+info.nodes.map((node,i)=>'<li class="capability-milestone '+(i<s.level?'reached':i===s.level?'next':'')+'"><b>'+esc(node.name)+'</b><span>'+(i<s.level?'COMPLETED · ':'')+money(tiers[i])+' cumulative</span><p class="micro">'+esc(strategyMilestoneDescription(v,branch,i))+'</p></li>').join('')+'</ol></details><p class="micro muted">Solid progress is paid; striped progress is only staged. Milestone effects begin next cycle. A related product or service may still require paid implementation, activation, staffing and maintenance.</p>';
 }
 function strategyModelsContent(v,branch,s,token){
  const locked=v.me.specializations[branch],picked=locked||draft.specializations[branch],canModel=strategyContextCurrent(token)&&!locked&&s.spent+s.pledged>=v.capabilityTiers[branch][0],pending=strategyModelProposal?.branch===branch?strategyModelProposal:null;
@@ -23286,11 +23334,21 @@ function strategyDeploymentContent(v,branch,token){
 }
 function renderStrategyWorkspace(v){
  const branch=strategySelection(v),token=strategyContext(v),s=strategyFundingStatus(v,branch),info=v.strategyBranches[branch],q=E.planBudget(v.me,draft,v),pledged=Object.values(draft.investments||{}).reduce((n,x)=>n+Math.max(0,Math.round(x||0)),0);
- const current=$('#strategyRoadmap');if(current?.dataset?.strategyDetails===branch){const set=new Set(strategyWorkspace.roadmaps);if(current.open)set.add(branch);else set.delete(branch);strategyWorkspace.roadmaps=[...set];}
+ const current=$('#strategyRoadmap');if(current?.dataset?.strategyDetails===branch){const set=new Set(strategyWorkspace.roadmapsClosed);if(current.open)set.delete(branch);else set.add(branch);strategyWorkspace.roadmapsClosed=[...set];}
  $('#strategySummary').innerHTML='<div class="strategy-budget"><span>Research staged <b>'+money(pledged)+'</b></span><span>Remaining plan budget <b>'+money(q.remaining)+'</b></span><span>Per capability / month <b>'+money(v.capabilityCap)+'</b></span></div>';
- $('#strategyTree').innerHTML='<div class="object-workspace research-workspace"><div class="object-columns"><nav class="object-directory" aria-label="Capabilities">'+Object.entries(v.strategyBranches).map(([key,d])=>{const state=strategyFundingStatus(v,key);return '<button type="button" class="object-row" id="strategy-select-'+key+'" aria-pressed="'+(key===branch)+'"><span><b>'+esc(d.name)+'</b><small>'+state.level+' / '+v.capabilityTiers[key].length+' milestones · '+money(state.spent)+' paid</small></span><span class="object-tag">'+(state.pledged?money(state.pledged)+' staged':state.done?'Complete':'Develop')+'</span></button>';}).join('')+'<p class="micro muted">All '+(v.researchProgramVersion===1?'six':'five')+' capabilities remain open. Inspecting a capability does not fund it or change your focus market. Permanent models retain their own tradeoffs.</p></nav><section class="object-detail" data-strategy-lane="'+branch+'" aria-labelledby="strategyDetailTitle"><h3 id="strategyDetailTitle" tabindex="-1">'+esc(info.name)+'</h3><p class="small">'+esc(info.promise)+'</p><div class="workbench-toolbar" role="group" aria-label="Capability actions">'+[['milestones','Fund research'],['model','Operating model'],['applications','Deployment & use']].map(([key,label])=>'<button type="button" class="btn" id="strategy-desk-'+key+'" aria-pressed="'+(strategyWorkspace.desk===key)+'">'+label+'</button>').join('')+'</div>'+(strategyWorkspace.desk==='model'?strategyModelsContent(v,branch,s,token):strategyWorkspace.desk==='applications'?strategyDeploymentContent(v,branch,token):strategyMilestonesContent(v,branch,s,token))+'</section></div></div>';
+ $('#strategyTree').innerHTML='<div class="object-workspace research-workspace"><div class="object-columns"><nav class="object-directory" aria-label="Capabilities">'+Object.entries(v.strategyBranches).map(([key,d])=>{const state=strategyFundingStatus(v,key);return '<button type="button" class="object-row" id="strategy-select-'+key+'" aria-pressed="'+(key===branch)+'"><span><b>'+esc(d.name)+'</b><small>'+state.level+' / '+v.capabilityTiers[key].length+' milestones · '+money(state.spent)+' paid</small>'+strategyDirectoryModel(v,key)+strategyDirectoryProgress(v,key,state)+'</span><span class="object-tag">'+(state.pledged?money(state.pledged)+' staged':state.done?'Complete':'Develop')+'</span></button>';}).join('')+'<p class="micro muted">All '+(v.researchProgramVersion===1?'six':'five')+' capabilities remain open. Inspecting a capability does not fund it or change your focus market. Permanent models retain their own tradeoffs.</p></nav><section class="object-detail" data-strategy-lane="'+branch+'" aria-labelledby="strategyDetailTitle"><h3 id="strategyDetailTitle" tabindex="-1">'+esc(info.name)+'</h3><p class="small">'+esc(info.promise)+'</p><div class="workbench-toolbar" role="group" aria-label="Capability actions">'+[['milestones','Fund research'],['model','Operating model'],['applications','Deployment & use']].map(([key,label])=>'<button type="button" class="btn" id="strategy-desk-'+key+'" aria-pressed="'+(strategyWorkspace.desk===key)+'">'+label+'</button>').join('')+'</div>'+(strategyWorkspace.desk==='model'?strategyModelsContent(v,branch,s,token):strategyWorkspace.desk==='applications'?strategyDeploymentContent(v,branch,token):strategyMilestonesContent(v,branch,s,token))+'</section></div></div>';
  renderResearchCombinations(v);
  bindStrategyWorkspace(v,token);
+}
+// The directory shows what each capability has become, not only what was paid:
+// the permanent model once adopted, and progress toward the final milestone.
+function strategyDirectoryModel(v,key){
+ const model=v.me.specializations&&v.me.specializations[key],def=model&&v.strategySpecializations[key]&&v.strategySpecializations[key][model];
+ return def?'<small class="strategy-model">Model: '+esc(def.name)+'</small>':'';
+}
+function strategyDirectoryProgress(v,key,state){
+ const tiers=v.capabilityTiers[key],last=tiers[tiers.length-1]||1;
+ return '<span class="strategy-progress" aria-hidden="true"><span style="width:'+Math.min(100,Math.round(100*state.spent/last))+'%"></span></span>';
 }
 function renderResearchCombinations(v){
  if(!v.researchCombinations)return;
@@ -23307,7 +23365,9 @@ function renderResearchCombinations(v){
    const at=E.strategyLevel(v.me,branch),ok=at>=level;
    return '<span class="'+(ok?'combo-met':'combo-missing')+'">'+esc(v.strategyBranches[branch].name)+' '+at+'/'+level+'</span>';
   }).join(' + ');
-  return '<li class="'+(held.has(key)?'combo-active':'combo-idle')+'"><b>'+(held.has(key)?'✓ ':'')+esc(def.name)+'</b>'+
+  const steps=Object.entries(def.requires),met=steps.reduce((n,[branch,level])=>n+Math.min(level,E.strategyLevel(v.me,branch)),0),total=steps.reduce((n,[,level])=>n+level,0);
+  return '<li class="combo-card '+(held.has(key)?'combo-active':'combo-idle')+'"><b>'+(held.has(key)?'✓ ':'')+esc(def.name)+'</b>'+
+   '<span class="micro">'+(held.has(key)?'Active':met+' of '+total+' milestones')+'</span><span class="combo-bar"><span style="width:'+Math.round(100*met/Math.max(1,total))+'%"></span></span>'+
    '<div class="micro muted">'+esc(descriptions[key]||def.desc)+'</div><div class="micro">'+need+'</div></li>';
  }).join('');
  $('#strategyTree').insertAdjacentHTML('beforeend',

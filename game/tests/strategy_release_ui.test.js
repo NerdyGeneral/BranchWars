@@ -14,7 +14,14 @@ for(const branch of h.run('Object.keys(E.STRATEGY_BRANCHES)')){h.c.inspectedBran
 assert.equal(milestoneCount,20,'all existing milestones remain reachable by capability');
 h.run("strategyWorkspace.branch='network';renderStrategy(view)");
 assert(markup.includes('Stage monthly maximum · $250K'),'monthly cap is not represented as guaranteed milestone completion');
-assert(!markup.includes('data-strategy-details="network" open'),'roadmaps begin collapsed, current milestone is visible');
+assert(markup.includes('data-strategy-details="network" open'),'the full roadmap begins open (playtest: expand Research)');
+// The capability list shows what each branch has become: its permanent model, and progress.
+assert(!markup.includes('class="strategy-model"'),'no model is shown before one is adopted');
+assert.equal((markup.match(/class="strategy-progress"/g)||[]).length,h.run('Object.keys(view.strategyBranches).length'));
+{const key=h.run("Object.keys(view.strategySpecializations.network)[0]"),name=h.run("view.strategySpecializations.network[Object.keys(view.strategySpecializations.network)[0]].name");
+ h.run("view.me.specializations={...view.me.specializations,network:"+JSON.stringify(key)+"};renderStrategy(view)");
+ assert(h.elements.get('#strategyTree').innerHTML.includes('<small class="strategy-model">Model: '+name+'</small>'));
+ h.run("delete view.me.specializations.network;renderStrategy(view)");}
 assert.equal(h.run('JSON.stringify(game)'),world,'render is world/RNG pure');
 assert.equal(h.run('JSON.stringify(draft)'),initial,'render does not stage spending');
 assert.equal(h.run("proposeStrategyModel(view,'network','retailDensity')"),false,'tier-zero models cannot stage before tier 1 is funded');
@@ -49,7 +56,9 @@ assert(h.run("proposeStrategyModel(view,'network','retailDensity')"),'maxed capa
 assert(h.run('confirmStrategyModel(view)'));
 assert.equal(h.run('draft.investments.network'),undefined,'late adoption requires no invented research charge');
 // Capability details are local UI state and must survive funding re-renders.
-h.run("strategyWorkspace.branch='digital';strategyWorkspace.desk='milestones';strategyWorkspace.roadmaps=['digital'];renderStrategy(view)");
+h.run("strategyWorkspace.branch='digital';strategyWorkspace.desk='milestones';strategyWorkspace.roadmapsClosed=['digital'];renderStrategy(view)");
+assert(!h.elements.get('#strategyTree').innerHTML.includes('data-strategy-details="digital" open'),'a roadmap the player collapsed stays collapsed');
+h.run("strategyWorkspace.roadmapsClosed=[];renderStrategy(view)");
 assert(h.elements.get('#strategyTree').innerHTML.includes('data-strategy-details="digital" open'));
 // Cash/capital bounds come from the engine, not a separately invented UI budget.
 h.run("view.me.stats.cash=1500;draft.investments={};renderStrategy(view)");

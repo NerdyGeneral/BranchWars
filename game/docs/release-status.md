@@ -34,8 +34,13 @@ behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics
 bank_rivalry, expanded_edition(+_network), engine, research_program(+_ui), research_bot,
 feature_setup, github_resilience, agency_legacy_compat, agency_peer_compat,
 v31_version_boundary, strategy_workspace, package_release, income_review, docs, both
-release-catalog checks and the engine pin. The complete 278-command fast gate was still
-running when this was recorded; its result is not claimed here.
+release-catalog checks and the engine pin. The complete 278-command fast gate then
+passed on GitHub CI for PR #22, split over eight runners. That needed two more CI fixes:
+the gate had grown to about three sequential hours, past the 60-minute job limit, and
+three replay tests read old builds from git history that the default shallow checkout
+lacks. The full Windows baseline did not finish inside its 180-minute limit and has never
+passed for V4, so by the owner's decision it runs on demand and weekly instead of on
+every pull request; a local Windows run remains the release gate.
 
 ## September 21 — V4 rc5 Core Research & Stabilization
 

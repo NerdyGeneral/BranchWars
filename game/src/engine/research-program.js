@@ -226,7 +226,7 @@ const RESEARCH_COMBINATIONS=Object.freeze({
   desc:'Work clears without handling; every banker covers materially more.'},
  structuredCredit:{name:'Structured Credit',requires:{risk:2,commercial:2},
   desc:'Priced and tranched lending: wider spread at lower loss.'},
- depositFranchise:{name:'Deposit Franchise',requires:{network:3,risk:2},
+ depositFranchise:{name:'Stable Funding Base',requires:{network:3,risk:2},
   desc:'Relationships stay through a rate cycle, and funding costs less.'}
 });
 function researchCombination(p,key){

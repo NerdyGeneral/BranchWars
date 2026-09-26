@@ -35,8 +35,13 @@ for (const launcher of ['OPEN_BRANCH_WARS.bat', 'OPEN_LAN_GAME.bat']) {
   assert(wrapper.includes('call "%~dp0game\\' + launcher + '"'), 'Root launcher must target the packaged launcher');
   assert(fs.existsSync(path.join(root, launcher)));
 }
-const workflow = fs.readFileSync(path.join(root, '../.github/workflows/checks.yml'), 'utf8');
-assert(workflow.includes('contents: read'));
-assert(!workflow.includes('pull_request_target'));
-for (const match of workflow.matchAll(/uses: ([^\s]+)/g)) assert(/@[a-f0-9]{40}$/.test(match[1]), 'Pin action to a verified commit');
+// Every workflow, not only the pull-request gate, holds the same safety contract.
+const workflowDir = path.join(root, '../.github/workflows'), workflows = fs.readdirSync(workflowDir).filter(name => /\.ya?ml$/.test(name));
+assert(workflows.includes('checks.yml') && workflows.includes('full-windows.yml'), 'Pull-request and full Windows workflows are present');
+for (const name of workflows) {
+  const workflow = fs.readFileSync(path.join(workflowDir, name), 'utf8');
+  assert(workflow.includes('contents: read'), name + ' must be read-only');
+  assert(!workflow.includes('pull_request_target'), name);
+  for (const match of workflow.matchAll(/uses: ([^\s]+)/g)) assert(/@[a-f0-9]{40}$/.test(match[1]), name + ': pin action to a verified commit');
+}
 console.log('Architecture checks passed: override ceilings, gate sensitivity, script syntax, root launchers and CI safety contract.');

@@ -1,0 +1,50 @@
+name: Branch Wars full Windows gate
+
+# The full release baseline and LAN server suite. It is too long to gate every
+# pull request (the V4 baseline runs for hours on a hosted runner), so it runs on
+# demand from the Actions tab and weekly on main. Pull requests are gated by
+# checks.yml: the release catalog and the complete fast gate in eight shards.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  full-windows:
+    runs-on: windows-latest
+    # Run21 took 14.4 minutes for work taking 5.6 locally (~2.6x).
+    # V3's retained local baseline alone took 41 minutes before outer balance.
+    # At the measured hosted multiplier, 90 minutes is insufficient headroom.
+    # Keep every gate and per-test timeout; allow final evidence upload.
+    # The V4 baseline (~214 entries plus outer balance) exceeds the old 180-minute
+    # limit on hosted Windows, so this is the hosted maximum. It has not yet
+    # passed for V4 anywhere; a local Windows run remains the release gate.
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node tools/check-release-catalog.js
+      - run: node tools/check-release-catalog.test.js
+      - run: node game/tools/check.js --full
+      - name: Keep regression evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: windows-regression-evidence
+          path: |
+            game/reports/baselines/*.json
+            game/reports/baselines/*.jsonl
+            game/reports/baselines/*.log
+          retention-days: 7

@@ -53,7 +53,19 @@ test('Core and Expanded income reviews use authoritative reports, preserve draft
   h.run('E.submit(game,0,E.chooseBot(game,0));E.submit(game,1,E.chooseBot(game,1));newDraft(currentView());saved=JSON.stringify({game,draft});renderOperatingPreview(currentView())');
   assert.equal(h.run('JSON.stringify({game,draft})'),h.run('saved'));html=h.elements.get('#operatingPreview').innerHTML;
   assert(html.includes(h.run('incomeAmount(currentView().me.operatingReport.loanIncome)')));assert.match(html,/Solid = actual/);assert.match(html,/Retained actual records/);assert.match(html,/Month 1/);
-  const result=h.elements.get('#operatingReport').innerHTML;assert.match(result,/Operating expenses/);assert.match(result,/Other modeled income/);assert.doesNotMatch(result,/NaN|undefined/);
+  const result=h.elements.get('#operatingReport').innerHTML;assert.match(result,/Operating expenses/);assert.match(result,/Other modeled income/,'without recorded source detail the result keeps one honest residual line');assert.doesNotMatch(result,/\\$[0-9,]+\\.[0-9]/,'whole dollars');assert.doesNotMatch(result,/NaN|undefined/);
+ }
+});
+test('current editions name the sources of other income instead of one opaque line',()=>{
+ for(const edition of ['core','expanded']){
+  const h=harness();h.run(`game=E.createGame({...E.previewCampaignEdition({},'${edition}',{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true}).options,mode:'hotseat',seed:'income-ui',created:1,startingWorkforce:'covered'});seat=0;newDraft(currentView());renderBankRecovery=()=>{};`);
+  h.run('E.submit(game,0,E.chooseBot(game,0));E.submit(game,1,E.chooseBot(game,1));newDraft(currentView());renderActualBankOperatingResult(currentView())');
+  const result=h.elements.get('#operatingReport').innerHTML,report=h.run('currentView().me.operatingReport'),st=h.run('E.IncomeReview.statement(currentView().me.operatingReport)');
+  assert(st.available,edition+' records reconciled source detail');
+  assert.match(result,/Securities interest/);assert.doesNotMatch(result,/Other modeled income|legacy abstract bonuses/,edition);
+  assert.doesNotMatch(result,/\\$[0-9,]+\\.[0-9]/,edition+' whole dollars');assert.doesNotMatch(result,/NaN|undefined/);
+  assert.equal(result.includes('Service contract revenue'),Math.abs(report.contractFees||0)>=1,edition+' contract revenue listed only when billed');
+  assert.equal(result.includes('Profit event adjustment'),Math.abs(report.eventAdjustment)>=1,edition+' zero event adjustment hidden');
  }
 });
 test('history graphs break missing-month lines and expose negative, zero and forecast amounts in accessible content',()=>{
