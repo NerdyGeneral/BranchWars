@@ -5,7 +5,8 @@ This is the maintainer guide, not another implementation timeline. Use the [impl
 ## Source of truth
 
 Current player-facing creation calls `previewCampaignEdition` with
-`currentEconomics:true,currentRivalry:true`, selecting Core8.19 or Expanded9.33. It composes the
+`currentReporting`, `currentEconomics`, `currentRivalry`, `currentResearch` and
+`currentLending` all true, selecting Core 8.20 or Expanded 9.34. It composes the
 existing authoritative scalars; the proposal option itself is never saved.
 The default API and `currentReporting:true` remain historical/reporting-only
 construction paths. Save import, Continue and rematch do not opt into new rules.
@@ -21,6 +22,14 @@ their existing implementation. Terminal validation must admit both institutional
 failure reasons (`receivership` and `funding_resolution`), but never `buyout`.
 No new wrapper or override ceiling is introduced. Old9.32 creation, views, RNG,
 economics and ending rules remain pinned to the preserved checkpoint68 reference.
+
+`balanceSheetLendingVersion:1` (Expanded 9.34) is the same kind of boundary on top of
+rivalry, with `balanceSheetLendingSupported:1` required from peers. Its rules live in
+`engine/balance-sheet-lending.js`, and every accessor there returns the old value without
+the marker. Loan production adds central deployment of the funded deposit gap. The AI
+keeps its last full-service office, prices deposit growth into office conversions and keeps
+lending through a thin month when capital and funding are healthy. `balance_sheet_lending`
+replays 9.33 against the frozen rc4 package.
 
 `ui/workspace-ownership.js` owns presentation-only subject routing and live DOM
 mounts. People owns allocation, Customers owns household/commercial relationships

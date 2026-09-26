@@ -27,7 +27,11 @@ multiplayer-resume and mandate work. A new **Core edition** campaign creates sav
 - Lending deploys the balance sheet rather than capping on headcount.
 - Commercial relationships are limited by your branch presence.
 
-**Expanded edition** (save `9.33`) is the larger rule set and is unchanged in this release.
+**Expanded edition** (save `9.34`) is the larger rule set. New Expanded campaigns now lend
+from the balance sheet as well: Lending bankers can lend part of the gap between loans and
+deposits beyond what offices originate, and the computer opponent no longer converts its last
+full-service branch into an ATM. A `9.33` save keeps its old rules. The rc5 ZIP still starts
+Expanded at `9.33` and cannot join a `9.34` campaign.
 
 Paid research and operating models survive save and reload, and a rematch keeps the campaign's
 rules. The Core bot chooses among all 18 operating models from its operating context.
