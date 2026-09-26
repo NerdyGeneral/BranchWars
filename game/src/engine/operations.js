@@ -33,7 +33,7 @@ function loanProductionCapacity(g,p,parts=null){
   : Infinity;
  // Expanded 9.34 central deployment is lent without a local office, so it adds
  // to both the staff capacity and the office capacity. Zero for every other rule set.
- const central=balanceSheetLendingRules(p)?balanceSheetDeploymentCapacity(p,lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'):0,
+ const central=balanceSheetLendingRules(p)?balanceSheetDeploymentCapacity(p,workforceAllocation(p).lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'):0,
   staff=(lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration')+central,
   office=regionalOperations(p)?regionalBranchMetrics(p).loanCapacity+central:Infinity;
  // Read-only detail for diagnostics and the AI's office valuation.

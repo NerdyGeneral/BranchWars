@@ -27,10 +27,12 @@ function projectBalanceSheetLending(g,out){
  out.balanceSheetLendingVersion=1;out.me.balanceSheetLendingVersion=1;
 }
 
-// Central deployment, before the lending multipliers: credit staff can lend part
-// of the funded deposit gap without a local office. It falls to nothing as the
-// loan book approaches the target, and it still needs credit staff, credit
-// administration and spare cash (loanProductionCapacity applies all three).
+// Central deployment, before the lending multipliers: the assigned Lending
+// bankers can lend part of the funded deposit gap without a local office. It
+// falls to nothing as the loan book approaches the target. Administering the
+// book is not counted twice: loanProductionCapacity scales this by credit
+// administration coverage, so a book the staff cannot administer stops growing,
+// and it also stops at the cash reserve.
 function balanceSheetDeploymentCapacity(p,lendingStaff){
  if(!balanceSheetLendingRules(p))return 0;
  const R=BALANCE_SHEET_LENDING_RULES,gap=Math.max(0,p.stats.deposits*R.targetLoanToDeposit-p.stats.loans);

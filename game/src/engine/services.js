@@ -161,12 +161,16 @@ function serviceDeliveryOptions(p,plan,economy,mandate=null,g=null){
 function serviceRecoveryPlan(p,plan,economy,g=null){
  const initial=servicePlanReview(p,plan,economy,g),stressed=capitalRatio(p)<10||initial.netOperating<60000||fundingPosition(p).excess>0;
  if(!stressed)return plan;
+ // Expanded 9.34: a thin month with healthy capital and funding does not cut
+ // lending or hoard cash. One month of income cannot see the interest new loans
+ // earn, so this search otherwise ratchets a small bank into a shrinking book.
+ const keepLending=balanceSheetLendingRules(p)&&capitalRatio(p)>=10&&!(fundingPosition(p).excess>0);
  // Evaluate only standing, reversible policies. No event or concealed rival intent
  // is inspected, and a loss is never cancelled or repaid with invented capital.
  let best=plan,bestScore=initial.netOperating;
  const candidates=[plan];
  for(const deposit of ['margin','balanced']){
-  const next={...plan,allocation:{...plan.allocation},depositPolicy:deposit,capitalPolicy:'liquid',lendingPolicy:'conservative',termPolicy:{offer:'off',maturity:'release'},retailMix:{essential:4,rewards:0,highYield:0}};
+  const next={...plan,allocation:{...plan.allocation},depositPolicy:deposit,capitalPolicy:keepLending?plan.capitalPolicy:'liquid',lendingPolicy:keepLending?plan.lendingPolicy:'conservative',termPolicy:{offer:'off',maturity:'release'},retailMix:{essential:4,rewards:0,highYield:0}};
   candidates.push(next);
   if(next.allocation.service>2){const sales={...next,allocation:{...next.allocation}};const moved=Math.min(2,sales.allocation.service-2);sales.allocation.service-=moved;sales.allocation.business+=moved;candidates.push(sales)}
   if(capitalRatio(p)<8&&next.allocation.lending>0){const runoff={...next,allocation:{...next.allocation}};runoff.allocation.operations+=runoff.allocation.lending;runoff.allocation.lending=0;candidates.push(runoff)}

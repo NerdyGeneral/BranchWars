@@ -7,7 +7,7 @@ function load(html,internals=''){const c={};vm.runInNewContext(html.match(/<scri
 const release=fs.readFileSync(path.join(__dirname,'../../releases/v4-rc4/BRANCH_WARS.html'));
 assert.equal(createHash('sha256').update(release).digest('hex'),'51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5');
 const old=load(release.toString('utf8')),E=load(require('../tools/build_game').assemble().html,
- 'balanceSheetDeploymentCapacity,balanceSheetKeepsFullService,balanceSheetDepositGrowthValue,loanProductionCapacity,');
+ 'balanceSheetDeploymentCapacity,balanceSheetKeepsFullService,balanceSheetDepositGrowthValue,loanProductionCapacity,capitalRatio,');
 const CURRENT={currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true};
 const options=(lending=true,scenario='balanced')=>({...E.previewCampaignEdition({},'expanded',{...CURRENT,currentLending:lending}).options,mode:'hotseat',seed:'balance-sheet-lending',scenario,created:1,startingWorkforce:'covered'});
 const plain=g=>{delete g.balanceSheetLendingVersion;for(const p of g.players)delete p.balanceSheetLendingVersion;g.version='9.33';return g;};
@@ -80,6 +80,18 @@ test('the AI keeps its last full-service office and prices deposit growth, only 
  assert(Math.abs(value-expected)<1e-3*Math.abs(expected));assert(value<-(22000-4500)*horizon,'The deposit growth given up outweighs five years of retail-to-ATM upkeep saved');
  assert.equal(E.balanceSheetDepositGrowthValue(p,before,()=>before,coupon,horizon),0);
  assert.equal(E.balanceSheetDepositGrowthValue(legacy,before,()=>after,coupon,horizon),0);
+});
+
+test('a thin month does not make a healthy 9.34 bank cut lending or hoard cash',()=>{
+ // The opening Expanded bank earns under the AI's $60K recovery trigger with a
+ // 14.7% capital ratio. 9.33 answers by cutting lending and hoarding cash.
+ const policies=plan=>[plan.lendingPolicy,plan.capitalPolicy];
+ const g=E.createGame(options()),legacy=E.createGame(options(false));assert(E.capitalRatio(g.players[0])>=10);
+ assert.deepEqual(policies(E.chooseBot(g,0)),['balanced','balanced']);
+ assert.deepEqual(policies(E.chooseBot(legacy,0)),['conservative','liquid']);
+ // Real capital stress (tier still Well Capitalized, ratio under 10%) keeps the cautious search.
+ const weak=E.createGame(options());weak.players[0].stats.capital=Math.round(weak.players[0].stats.capital*.62);
+ assert(E.capitalRatio(weak.players[0])<10);assert.deepEqual(policies(E.chooseBot(weak,0)),['conservative','liquid']);
 });
 
 test('real resolution, half-ready restore, owner privacy and rematch keep the 9.34 boundary',()=>{
