@@ -27,8 +27,8 @@ submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resol
 
 const rematchCore=rematch;
 rematch=function(g,...args){if(args[1]?.startingWorkforce!==undefined&&args[1].startingWorkforce!=='covered')throw Error('Invalid starting workforce instruction.');return withRandom(g,'state',()=>{
- const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,result=rematchCore(g,...args);
- if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
+ const incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,researchProgramVersion=g.researchProgramVersion,result=rematchCore(g,...args);
+ if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});initializeResearchProgram(g,{researchProgramVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
  return result;
 })};
 

@@ -158,6 +158,7 @@ commands.push(['tests/gate_evidence.test.js']);
 commands.push(['tests/v4_workflow_stabilization.test.js','--portable']);
 commands.push(['tests/workspace_ownership.test.js','--portable'],['tests/stabilization_banking_trial.test.js']);
 commands.push(['tests/bank_rivalry.test.js'],['tests/income_history_network.test.js','--bank-rivalry']);
+commands.push(['tests/research_program.test.js'],['tests/research_bot.test.js'],['tests/research_program_ui.test.js']);
 const from=fromArgs[0]?.slice('--from='.length),start=from===undefined?0:commands.findIndex(command=>command[0]===from);
 if(start<0)throw Error('Unknown resume point: '+from);
 const fingerprint=()=>crypto.createHash('sha256').update(require('./build_game').assemble().html).digest('hex');

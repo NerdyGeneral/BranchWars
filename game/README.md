@@ -10,7 +10,7 @@ A turn-based banking strategy game with Solo AI, Pass & Play, LAN and Repository
 
 New campaigns present Core or integrated Expanded. Historical modular saves retain their original rules; there is no automatic upgrade. The visible edition label and the version stored in a campaign save are different identifiers; neither means the national blueprint is complete. See the current release status for the latest preview and its acceptance limits.
 
-The local playable HTML and source are different development checkpoints; neither is the frozen V3 download. See [artifact identities](docs/release-status.md#which-version-am-i-looking-at) before rebuilding or sharing. The packaged [V3 ZIP/manual](../releases/v3/README.txt) remain separate preserved artifacts.
+The local playable HTML and source are different development checkpoints; neither is the frozen V3 download. See [artifact identities](docs/release-status.md#which-version-am-i-looking-at) before rebuilding or sharing. The packaged [V3 ZIP/manual](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/v3/README.txt) remain separate preserved artifacts.
 
 ## Read
 

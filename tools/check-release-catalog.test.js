@@ -13,9 +13,16 @@ function run(change){
  return check(name=>name==='node:fs'?adapter:require(name),__dirname,{log(){}});
 }
 run();
-assert.throws(()=>run(c=>c.versions.find(v=>v.id==='v3').zipDepth=2),/Unexpected ZIP nesting/);
-assert.throws(()=>run(c=>c.versions.find(v=>v.id==='v2').zipDepth=1),/Unexpected ZIP nesting/);
-assert.throws(()=>run(c=>c.versions.find(v=>v.id==='v3').zipDepth=0),/Unsupported package layout/);
-assert.throws(()=>run(c=>c.artifacts['branch-wars-v3-manual.pdf']='0'.repeat(64)),/manual.pdf changed/);
-assert.throws(()=>run(c=>c.versions.find(v=>v.id==='v3').portableSha256='0'.repeat(64)),/Expected values to be strictly equal/);
-console.log('PASS: exact catalog, flat V3.1 and wrapped V2 layouts; wrong layout, manual hash and runtime hash rejected. No files changed.');
+const rc4=c=>c.versions.find(v=>v.id==='v4-rc4');
+assert.throws(()=>run(c=>c.schemaVersion=1),/Expected values to be strictly equal/);
+assert.throws(()=>run(c=>rc4(c).portableSha256='0'.repeat(64)),/v4-rc4 portable changed/);
+assert.throws(()=>run(c=>c.artifacts['branch-wars-v3.zip']='0'.repeat(64)),/branch-wars-v3.zip changed/);
+assert.throws(()=>run(c=>c.versions=c.versions.filter(v=>v.id!=='v4-rc3')),/must be catalogued/);
+assert.throws(()=>run(c=>c.versions.push({...rc4(c)})),/Duplicate catalogued package/);
+assert.throws(()=>run(c=>rc4(c).role='current'),/unknown role/);
+// The wrapped V3 archive exercises the ZIP parser: wrong nesting, bad layout, and
+// a well-formed archive whose bytes do not match the folder are all rejected.
+assert.throws(()=>run(c=>Object.assign(rc4(c),{zip:'branch-wars-v3.zip',zipDepth:1})),/Unexpected ZIP nesting/);
+assert.throws(()=>run(c=>Object.assign(rc4(c),{zip:'branch-wars-v3.zip',zipDepth:0})),/Unsupported package layout/);
+assert.throws(()=>run(c=>rc4(c).zip='branch-wars-v3.zip'),/v4-rc4 ZIP mismatch/);
+console.log('PASS: exact schema-2 catalog; wrong schema, portable hash, fixture hash, uncatalogued or duplicate package, unknown role, ZIP nesting/layout and ZIP-folder mismatch rejected. No files changed.');

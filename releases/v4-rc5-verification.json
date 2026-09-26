@@ -1,0 +1,4002 @@
+{
+  "schemaVersion": 1,
+  "release": "v4.0.0-rc5",
+  "title": "Branch Wars V4 rc5 — Core Research & Stabilization",
+  "createdAt": "2026-09-21T13:20:22.414Z",
+  "status": "verified-package-with-qualified-command-coverage",
+  "prerelease": true,
+  "source": {
+    "tag": "v4.0.0-rc5",
+    "branch": "release/v4-stabilized",
+    "baseCommit": "f6ff634d7cbc8d7164f0fe02853cac5d7a3da5be",
+    "portableSha256": "26d9603689678aaed44ffa2c0981b65877b62cc1d3f78aa2cb43579fec1e0af3",
+    "engineSha256": "8bf022b18ceb1efdd646f32123b519495c5324e7609195ae1fe64b03b4369d0f",
+    "qualifiedLocalInputsSha256": "e66a913f847ec64e29d361fe68530b49acc260d72eed84d767474ac922994e5d",
+    "note": "The qualified input fingerprint identifies raw files in the tested Windows working copy. Git text normalization can change file line endings; the portable HTML and assembled engine are pinned independently."
+  },
+  "package": {
+    "file": "branch-wars-v4-rc5.zip",
+    "sha256": "38a734cfd98e14d8512108a392a286581a0b4774fb3376f614e98e12dd60c672",
+    "bytes": 664812,
+    "archiveEntriesMatchSource": true,
+    "extractionMatchesSource": true,
+    "files": [
+      {
+        "name": "BRANCH_WARS_LAN_SERVER.ps1",
+        "bytes": 13440,
+        "sha256": "52ede2ed07ed4c6ba3fe3db4045a826f0a9a2ebc7fc8db2c48ccd9ad8e81f2d1"
+      },
+      {
+        "name": "BRANCH_WARS.html",
+        "bytes": 2461048,
+        "sha256": "26d9603689678aaed44ffa2c0981b65877b62cc1d3f78aa2cb43579fec1e0af3"
+      },
+      {
+        "name": "manifest.json",
+        "bytes": 838,
+        "sha256": "cc7983b1777f66edbbf7ff891d2b570396f5ffddf78d451259134bfcdd3da821"
+      },
+      {
+        "name": "OPEN_BRANCH_WARS.bat",
+        "bytes": 2219,
+        "sha256": "c382dbd9549771fb3f7b59fbe9f49471f5f41e8f564f771475765f170ef5cd63"
+      },
+      {
+        "name": "OPEN_LAN_GAME.bat",
+        "bytes": 213,
+        "sha256": "974fc946b54082c5ece3d85ff21a090a214f11f850c8445423dd3e01c0e43277"
+      },
+      {
+        "name": "README.txt",
+        "bytes": 3015,
+        "sha256": "5c823ff781c177eb752acd0eebcaf10600cebb7df2db691711a586f4f62042a0"
+      }
+    ]
+  },
+  "verification": {
+    "fullGatePassed": false,
+    "continuousStandardGatePassed": false,
+    "completeStandardCommandCoverage": 278,
+    "originalFull": {
+      "passed": false,
+      "incomplete": true,
+      "completed": 3,
+      "expected": 44
+    },
+    "baseline": {
+      "tests": 214,
+      "passed": 213,
+      "failed": 1,
+      "soleFailure": "Obsolete expected engine digest in usability_engine_boundary.test.js; resolved by the separately recorded post-change test.",
+      "sourceUnchanged": true,
+      "balanceOutputReproduced": true,
+      "gitMetadataCaptured": true,
+      "windowsLanPassed": true
+    },
+    "fullTail": {
+      "passed": 41,
+      "expected": 41
+    },
+    "standardSupplement": {
+      "passed": 71,
+      "expected": 71
+    },
+    "scopedChanges": [
+      {
+        "file": "tests/usability_engine_boundary.test.js",
+        "beforeSha256": "fedcd082e4d00ffcf7b51ea76c9eed8e6dcfffcfb67772436289e6811a62aec5",
+        "afterSha256": "900d2b3b6b53d49417b080e2a26fc95a341e934ab4da763a8d659c79bdbcd69c"
+      },
+      {
+        "file": "tools/package_release.js",
+        "beforeSha256": "ab8969d7b502cf5a294970ac77a29c9c698a142d7f004353095a1818403ac638",
+        "afterSha256": "fb8e46cace77546806c23dfb33bf25834c04bb7301a9600b0520cbb7023e5cab"
+      }
+    ],
+    "affectedChecks": [
+      {
+        "command": [
+          "tests/usability_engine_boundary.test.js"
+        ],
+        "exitCode": 0,
+        "logSha256": "c759c6d8f6fd3b411a44d8594002e7705821e41ced2aaab917905a55b0c8bffc"
+      },
+      {
+        "command": [
+          "tests/package_release.test.js"
+        ],
+        "exitCode": 0,
+        "logSha256": "e11fa3dc1b142a9e98f4a557c4ff6e0a7c62fdb561c518162eb5835158952acc"
+      }
+    ],
+    "prerequisiteCommands": [
+      {
+        "command": [
+          "tests/behavior-golden.test.js"
+        ],
+        "fileSha256": "318c7cdf58a6555e71201f8129dc1e8783dac99f47ae190fa6998c18fcdd4efd",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 204,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/runtime-stages.test.js"
+        ],
+        "fileSha256": "970d5633a1c137c12aff21fe5fa6ace0a1fa0340b06cf88ab3a94b06cf3a4eea",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 143,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/determinism.test.js"
+        ],
+        "fileSha256": "772ddfdfe5e6b9196936769d83e0448934e8f51da28a72460d17406199f699de",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 21,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/campaign-lifecycle.test.js"
+        ],
+        "fileSha256": "4ec90dc2af9a22eba3960e88788066129bc56479d9543439094c77fa2fbc9eda",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 137,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/bank_economics.test.js"
+        ],
+        "fileSha256": "ae638f4dfecc6668a8564331629bfd813ec765f6af71e4f903e040521567e497",
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 23,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/bank_rivalry.test.js"
+        ],
+        "fileSha256": "aee1512a3016d47d86fa600a467b9834d9680ca364c296ea5e50f9e2fd31f65b",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 78,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          },
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 37,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/expanded_edition.test.js"
+        ],
+        "fileSha256": "f35de8b3bb4840cd99a8b487204d34112262973dbb762740f9aeeb8eade8d233",
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 35,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/expanded_edition_network.test.js"
+        ],
+        "fileSha256": "38b05c3112b212fd557796a939a373113ec9bcf87c5f4f2dab75f150da4b9e7e",
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 36,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/build.test.js"
+        ],
+        "fileSha256": "f235246c157ef51f51fd7a1a1ce79f2dc9ed37e6f72b9e642dbbece0b0818137",
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 201,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/research_program.test.js"
+        ],
+        "fileSha256": "f603029c8693e9a8eddb1b2b9db0da6326834e0a63da39782c170c9383abd5b5",
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 39,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "command": [
+          "tests/research_bot.test.js"
+        ],
+        "fileSha256": "e4d49a555a21720aca74ec9b3c93591a45d7f187cf0d311b0b730bb6b4cab262",
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 40,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      }
+    ],
+    "standardCommandCoverage": [
+      {
+        "index": 1,
+        "command": [
+          "tools/build_game.js",
+          "--check"
+        ],
+        "evidence": [
+          {
+            "receipt": "gate-2026-09-20T23-23-11-650Z-4ae495c9-9f76-4a44-8d93-03082d19afc9.json",
+            "index": 1,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 2,
+        "command": [
+          "tests/build.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 201,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 3,
+        "command": [
+          "tools/build_reference.js",
+          "--check"
+        ],
+        "evidence": [
+          {
+            "receipt": "gate-2026-09-20T23-23-11-650Z-4ae495c9-9f76-4a44-8d93-03082d19afc9.json",
+            "index": 2,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 4,
+        "command": [
+          "tests/reference-eol.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 135,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 5,
+        "command": [
+          "tests/docs.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 122,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 6,
+        "command": [
+          "tests/architecture_scope.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 202,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 7,
+        "command": [
+          "tests/architecture.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 203,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 8,
+        "command": [
+          "tests/group_accounting.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 173,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 9,
+        "command": [
+          "tests/accounting_receivables.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 174,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 10,
+        "command": [
+          "tests/company_finance.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 175,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 11,
+        "command": [
+          "tests/company_bank_funding.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 181,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 12,
+        "command": [
+          "tests/corporate_income.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 182,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 13,
+        "command": [
+          "tests/group_foundation_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 183,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 14,
+        "command": [
+          "tests/financial_group.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 184,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 15,
+        "command": [
+          "tests/financial_group_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 185,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 16,
+        "command": [
+          "tests/group_lending_comparison.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 186,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 17,
+        "command": [
+          "tests/deposit_pricing.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 169,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 18,
+        "command": [
+          "tests/deposit_pricing_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 170,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 19,
+        "command": [
+          "tests/features.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 139,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 20,
+        "command": [
+          "tests/feature_setup.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 140,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 21,
+        "command": [
+          "tests/feature_lobby.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 141,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 22,
+        "command": [
+          "tests/feature_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 142,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 23,
+        "command": [
+          "tests/network_lifecycle.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 123,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 24,
+        "command": [
+          "tests/local_session_transition.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 124,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 25,
+        "command": [
+          "tests/strategy_release_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 125,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 26,
+        "command": [
+          "tests/operations_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 126,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 27,
+        "command": [
+          "tests/game_overlay.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 127,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 28,
+        "command": [
+          "tests/decision_quote.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 128,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 29,
+        "command": [
+          "tests/initiative_feedback.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 129,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 30,
+        "command": [
+          "tests/package_release.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 130,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          },
+          {
+            "receipt": "scoped-command-qualification.json",
+            "index": 2,
+            "inputsSha256": "e66a913f847ec64e29d361fe68530b49acc260d72eed84d767474ac922994e5d"
+          }
+        ]
+      },
+      {
+        "index": 31,
+        "command": [
+          "tests/paired_release_balance.test.js",
+          "--quick"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 134,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 32,
+        "command": [
+          "tests/project-rules.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 136,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 33,
+        "command": [
+          "tests/campaign-lifecycle.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 137,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 34,
+        "command": [
+          "tests/runtime-stages.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 143,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 35,
+        "command": [
+          "tests/behavior-golden.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 204,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 36,
+        "command": [
+          "tests/save-baseline.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 205,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 37,
+        "command": [
+          "tests/launcher-path.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 206,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 38,
+        "command": [
+          "tests/portable-launcher.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 131,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 39,
+        "command": [
+          "tests/storage_capacity.test.js",
+          "--quick"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 1,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 40,
+        "command": [
+          "tests/determinism.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 21,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 41,
+        "command": [
+          "tests/save_integrity.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 23,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 42,
+        "command": [
+          "tests/transport.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 24,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 43,
+        "command": [
+          "tests/multiplayer_lobby.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 138,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 44,
+        "command": [
+          "tests/specialist_workforce.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 198,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 45,
+        "command": [
+          "tests/workforce_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 199,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 46,
+        "command": [
+          "tests/households.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 144,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 47,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--households"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 196,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 48,
+        "command": [
+          "tests/collections.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 193,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 49,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--collections"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 194,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 50,
+        "command": [
+          "tests/segment_deposits.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 159,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 51,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--segment-deposits"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 191,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 52,
+        "command": [
+          "tests/product_programs.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 168,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 53,
+        "command": [
+          "tests/product_draft.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 165,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 54,
+        "command": [
+          "tests/ai_cash_planning.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 161,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 55,
+        "command": [
+          "tests/recovery_planning.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 162,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 56,
+        "command": [
+          "tests/recovery_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 163,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 57,
+        "command": [
+          "tests/github_recovery_acceptance.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 164,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 58,
+        "command": [
+          "tests/onboarding.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 148,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 59,
+        "command": [
+          "tests/onboarding_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 149,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 60,
+        "command": [
+          "tests/onboarding_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 150,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 61,
+        "command": [
+          "tests/customer_effects.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 151,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 62,
+        "command": [
+          "tests/customer_effects_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 152,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 63,
+        "command": [
+          "tests/release_balance.test.js",
+          "--relationship-offers",
+          "--attribution",
+          "--scenario",
+          "regulatory",
+          "--seeds",
+          "1",
+          "--turns",
+          "3"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 153,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 64,
+        "command": [
+          "tests/relationship_offers.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 146,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 65,
+        "command": [
+          "tests/relationship_offers_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 147,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 66,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--relationship-offers"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 154,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 67,
+        "command": [
+          "tests/github_resilience.test.js",
+          "--relationship-offers"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 155,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 68,
+        "command": [
+          "tests/regional_growth.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 145,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 69,
+        "command": [
+          "tests/regional_growth_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 156,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 70,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--regional-growth"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 157,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 71,
+        "command": [
+          "tests/github_resilience.test.js",
+          "--regional-growth"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 158,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 72,
+        "command": [
+          "tests/advertising.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 160,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 73,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--advertising"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 166,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 74,
+        "command": [
+          "tests/workforce_network.test.js",
+          "--product-programs"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 189,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 75,
+        "command": [
+          "tests/investment_trading_network.test.js",
+          "--notes"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 2,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 76,
+        "command": [
+          "tests/company_agency_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 176,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 77,
+        "command": [
+          "tests/agency.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 177,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 78,
+        "command": [
+          "tests/agency_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 178,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 79,
+        "command": [
+          "tests/agency_legacy_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 179,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 80,
+        "command": [
+          "tests/agency_peer_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 180,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 81,
+        "command": [
+          "tests/accounting_payables.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 29,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 82,
+        "command": [
+          "tests/facility_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 30,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 83,
+        "command": [
+          "tests/facilities_integration.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 31,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 84,
+        "command": [
+          "tests/facility_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 32,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 85,
+        "command": [
+          "tests/facility_ai_conflicts.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 33,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 86,
+        "command": [
+          "tests/departments.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 34,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 87,
+        "command": [
+          "tests/department_expanded_acceptance.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 42,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 88,
+        "command": [
+          "tests/departments_integration.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 35,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 89,
+        "command": [
+          "tests/department_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 36,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 90,
+        "command": [
+          "tests/department_workforce_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 37,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 91,
+        "command": [
+          "tests/department_execution.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 38,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 92,
+        "command": [
+          "tests/balance_sheet_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 39,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 93,
+        "command": [
+          "tests/department_ai_affordability.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 57,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 94,
+        "command": [
+          "tests/department_obligations.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 58,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 95,
+        "command": [
+          "tests/department_obligations_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 59,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 96,
+        "command": [
+          "tests/institution_legacy_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 40,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 97,
+        "command": [
+          "tests/institution_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 41,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 98,
+        "command": [
+          "tests/facility_catalog.test.js",
+          "--integrated"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 121,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 99,
+        "command": [
+          "tests/facility_lifecycle_legacy_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 60,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 100,
+        "command": [
+          "tests/facility_lifecycle_integration.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 61,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 101,
+        "command": [
+          "tests/facility_conversion_lifecycle.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 62,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 102,
+        "command": [
+          "tests/facility_hub_transitions.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 63,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 103,
+        "command": [
+          "tests/facility_lifecycle_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 64,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 104,
+        "command": [
+          "tests/facility_lifecycle_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 65,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 105,
+        "command": [
+          "tests/facility_submission.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 66,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 106,
+        "command": [
+          "tests/integrated_campaign_recovery.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 3,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 107,
+        "command": [
+          "tests/integrated_staffing.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 4,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 108,
+        "command": [
+          "tests/advertising_controls.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 5,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 109,
+        "command": [
+          "tests/advertising_integrated.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 6,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 110,
+        "command": [
+          "tests/market_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 7,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 111,
+        "command": [
+          "tests/commercial_locations_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 8,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 112,
+        "command": [
+          "tests/commercial_accounts.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 9,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 113,
+        "command": [
+          "tests/facility_extensions.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 10,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 114,
+        "command": [
+          "tests/facility_extensions_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 11,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 115,
+        "command": [
+          "tests/facility_extensions_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 12,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 116,
+        "command": [
+          "tests/commercial_accounts_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 13,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 117,
+        "command": [
+          "tests/commercial_accounts_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 14,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 118,
+        "command": [
+          "tests/commercial_ending_integrity.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 15,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 119,
+        "command": [
+          "tests/pricing_terminal_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 16,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 120,
+        "command": [
+          "tests/pricing_captured_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 17,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 121,
+        "command": [
+          "tests/investment_institution.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 18,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 122,
+        "command": [
+          "tests/investment_clients.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 19,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 123,
+        "command": [
+          "tests/investment_closure.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 20,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 124,
+        "command": [
+          "tests/investment_corporate_market.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 21,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 125,
+        "command": [
+          "tests/investment_bank_funding.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 22,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 126,
+        "command": [
+          "tests/investment_campaign.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 23,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 127,
+        "command": [
+          "tests/investment_assets.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 24,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 128,
+        "command": [
+          "tests/investment_cash.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 25,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 129,
+        "command": [
+          "tests/investment_cash_routes.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 26,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 130,
+        "command": [
+          "tests/investment_sweeps.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 27,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 131,
+        "command": [
+          "tests/investment_choice.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 28,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 132,
+        "command": [
+          "tests/investment_income.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 29,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 133,
+        "command": [
+          "tests/investment_suitability.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 30,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 134,
+        "command": [
+          "tests/investment_trading.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 31,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 135,
+        "command": [
+          "tests/investment_trading_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 32,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 136,
+        "command": [
+          "tests/investment_notes.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 33,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 137,
+        "command": [
+          "tests/investment_notes_campaign.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 34,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 138,
+        "command": [
+          "tests/expanded_edition.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 35,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 139,
+        "command": [
+          "tests/expanded_edition_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 36,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 140,
+        "command": [
+          "tests/credit_products.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 37,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 141,
+        "command": [
+          "tests/credit_products_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 38,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 142,
+        "command": [
+          "tests/credit_planning_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 43,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 143,
+        "command": [
+          "tests/research_delivery_expanded.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 44,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 144,
+        "command": [
+          "tests/company_credit.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 46,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 145,
+        "command": [
+          "tests/company_credit_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 47,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 146,
+        "command": [
+          "tests/company_credit_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 48,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 147,
+        "command": [
+          "tests/company_credit_trading.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 49,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 148,
+        "command": [
+          "tests/company_credit_bank.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 50,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 149,
+        "command": [
+          "tests/company_credit_orders.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 51,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 150,
+        "command": [
+          "tests/company_credit_forecast.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 52,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 151,
+        "command": [
+          "tests/company_credit_locations.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 53,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 152,
+        "command": [
+          "tests/company_credit_campaign.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 54,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 153,
+        "command": [
+          "tests/company_credit_strategy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 55,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 154,
+        "command": [
+          "tests/company_credit_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 56,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 155,
+        "command": [
+          "tests/investment_strategy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 39,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 156,
+        "command": [
+          "tests/company_auction_kernel.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 40,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 157,
+        "command": [
+          "tests/company_shares.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 41,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 158,
+        "command": [
+          "tests/company_shares_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 42,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 159,
+        "command": [
+          "tests/company_shares_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 43,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 160,
+        "command": [
+          "tests/company_strategy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 44,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 161,
+        "command": [
+          "tests/company_control.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 45,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 162,
+        "command": [
+          "tests/company_control_campaign.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 46,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 163,
+        "command": [
+          "tests/company_control_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 47,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 164,
+        "command": [
+          "tests/company_control_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 48,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 165,
+        "command": [
+          "tests/company_consolidation.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 49,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 166,
+        "command": [
+          "tests/company_consolidation_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 50,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 167,
+        "command": [
+          "tests/company_control_strategy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 51,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 168,
+        "command": [
+          "tests/company_consolidation_legacy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 52,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 169,
+        "command": [
+          "tests/investment_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 53,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 170,
+        "command": [
+          "tests/investment_cash_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 54,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 171,
+        "command": [
+          "tests/investment_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 55,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 172,
+        "command": [
+          "tests/commercial_accounts_legacy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 56,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 173,
+        "command": [
+          "tests/construction_locations.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 57,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 174,
+        "command": [
+          "tests/opportunity_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 58,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 175,
+        "command": [
+          "tests/commercial_opportunity.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 59,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 176,
+        "command": [
+          "tests/service_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 60,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 177,
+        "command": [
+          "tests/group_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 61,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 178,
+        "command": [
+          "tests/agency_professionals.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 62,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 179,
+        "command": [
+          "tests/agency_professionals_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 63,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 180,
+        "command": [
+          "tests/agency_professionals_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 64,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 181,
+        "command": [
+          "tests/agency_professionals_legacy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 65,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 182,
+        "command": [
+          "tests/agency_professionals_balance.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 66,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 183,
+        "command": [
+          "tests/object_workspaces.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 67,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 184,
+        "command": [
+          "tests/project_reentry_quote.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 68,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 185,
+        "command": [
+          "tests/usability_forms.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 79,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 186,
+        "command": [
+          "tests/usability_plan_review.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 67,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 187,
+        "command": [
+          "tests/usability_changes.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 68,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 188,
+        "command": [
+          "tests/usability_people.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 69,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 189,
+        "command": [
+          "tests/usability_people_workflows.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 70,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 190,
+        "command": [
+          "tests/people_object_workspaces.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 69,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 191,
+        "command": [
+          "tests/product_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 70,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 192,
+        "command": [
+          "tests/strategy_workspace.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 45,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 193,
+        "command": [
+          "tests/usability_navigation.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 71,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 194,
+        "command": [
+          "tests/usability_bank_overview.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 72,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 195,
+        "command": [
+          "tests/usability_help.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 73,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 196,
+        "command": [
+          "tests/usability_engine_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "scoped-command-qualification.json",
+            "index": 1,
+            "inputsSha256": "e66a913f847ec64e29d361fe68530b49acc260d72eed84d767474ac922994e5d"
+          }
+        ]
+      },
+      {
+        "index": 197,
+        "command": [
+          "tests/v31_facility_conflicts.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 117,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 198,
+        "command": [
+          "tests/v31_training_deferral.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 118,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 199,
+        "command": [
+          "tests/v31_execution_reserve.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 119,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 200,
+        "command": [
+          "tests/v31_final_results.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 120,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 201,
+        "command": [
+          "tests/v31_version_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 80,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 202,
+        "command": [
+          "tests/v31_funded_origination.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 81,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 203,
+        "command": [
+          "tests/v31_circulation.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 82,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 204,
+        "command": [
+          "tests/v31_recruitment.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 83,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 205,
+        "command": [
+          "tests/v31_staffing_recovery.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 84,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 206,
+        "command": [
+          "tests/v31_staffing_priority.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 85,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 207,
+        "command": [
+          "tests/v31_facility_planning.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 86,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 208,
+        "command": [
+          "tests/v31_facility_investment.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 87,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 209,
+        "command": [
+          "tests/v31_facility_cash.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 88,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 210,
+        "command": [
+          "tests/v31_budget_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 89,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 211,
+        "command": [
+          "tests/v31_forecast_copy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 90,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 212,
+        "command": [
+          "tests/v31_stability_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 91,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 213,
+        "command": [
+          "tests/v31_staffing_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 92,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 214,
+        "command": [
+          "tests/v31_adversarial_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 93,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 215,
+        "command": [
+          "tests/department_functions.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 94,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 216,
+        "command": [
+          "tests/department_provider.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 95,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 217,
+        "command": [
+          "tests/department_function_context.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 96,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 218,
+        "command": [
+          "tests/department_dispatch.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 97,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 219,
+        "command": [
+          "tests/department_delivery.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 98,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 220,
+        "command": [
+          "tests/department_functions_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 99,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 221,
+        "command": [
+          "tests/department_functions_live_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 100,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 222,
+        "command": [
+          "tests/earnings_bridge.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 101,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 223,
+        "command": [
+          "tests/earnings_bridge_expanded.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 102,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 224,
+        "command": [
+          "tests/department_ai_lending.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 103,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 225,
+        "command": [
+          "tests/facility_staff_planning.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 104,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 226,
+        "command": [
+          "tests/doctrine_resume.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 105,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 227,
+        "command": [
+          "tests/department_planning_contract.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 106,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 228,
+        "command": [
+          "tests/department_runtime.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 107,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 229,
+        "command": [
+          "tests/department_group5_compat.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 108,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 230,
+        "command": [
+          "tests/department_functions_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 109,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 231,
+        "command": [
+          "tests/department_customer_capacity.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 110,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 232,
+        "command": [
+          "tests/department_customer_capacity_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 111,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 233,
+        "command": [
+          "tests/department_staffing_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 112,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 234,
+        "command": [
+          "tests/department_captured_replay.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 113,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 235,
+        "command": [
+          "tests/department_storage_capacity.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 114,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 236,
+        "command": [
+          "tests/department_storage_recovery.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 115,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 237,
+        "command": [
+          "tests/department_long_storage.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 116,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 238,
+        "command": [
+          "tests/commercial_accounts_legacy.test.js",
+          "--accounts"
+        ],
+        "evidence": [
+          {
+            "receipt": "standard-gap-2026-09-20T23-30-09-090Z-db18adc8-4060-40da-9837-3304e7fbdb20.json",
+            "index": 71,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 239,
+        "command": [
+          "tests/company_control_network.test.js",
+          "--consolidation"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 2,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 240,
+        "command": [
+          "tests/company_control_network.test.js",
+          "--strategy"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 3,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 241,
+        "command": [
+          "tests/company_consolidation_legacy.test.js",
+          "--consolidation"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 4,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 242,
+        "command": [
+          "tests/shared_premises.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 5,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 243,
+        "command": [
+          "tests/shared_premises_boundary.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 6,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 244,
+        "command": [
+          "tests/shared_premises_delivery.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 7,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 245,
+        "command": [
+          "tests/shared_premises_agency.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 8,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 246,
+        "command": [
+          "tests/shared_premises_campaign.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 9,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 247,
+        "command": [
+          "tests/shared_premises_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 10,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 248,
+        "command": [
+          "tests/shared_premises_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 11,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 249,
+        "command": [
+          "tests/shared_premises_strategy.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 12,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 250,
+        "command": [
+          "tests/legacy_services_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 13,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 251,
+        "command": [
+          "tests/funding_movement_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 14,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 252,
+        "command": [
+          "tests/income_review.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 15,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 253,
+        "command": [
+          "tests/income_review_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 16,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 254,
+        "command": [
+          "tests/income_history.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 17,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 255,
+        "command": [
+          "tests/income_history_network.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 18,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 256,
+        "command": [
+          "tests/commercial_fee_economics.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 19,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 257,
+        "command": [
+          "tests/credit_workload.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 20,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 258,
+        "command": [
+          "tests/credit_investment_staffing.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 21,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 259,
+        "command": [
+          "tests/income_statement.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 22,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 260,
+        "command": [
+          "tests/bank_economics.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 23,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 261,
+        "command": [
+          "tests/bank_economics_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 24,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 262,
+        "command": [
+          "tests/commercial_workload_shared.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 25,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 263,
+        "command": [
+          "tests/core_balance_sheet.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 26,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 264,
+        "command": [
+          "tests/core_balance_sheet_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 27,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 265,
+        "command": [
+          "tests/income_history_network.test.js",
+          "--core-balance"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 28,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 266,
+        "command": [
+          "tests/income_history_network.test.js",
+          "--bank-economics"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 29,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 267,
+        "command": [
+          "tests/income_history_network.test.js",
+          "--credit-workload"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 30,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 268,
+        "command": [
+          "tests/income_history_network.test.js",
+          "--commercial"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 31,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 269,
+        "command": [
+          "tests/income_banking_trial.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 32,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 270,
+        "command": [
+          "tests/gate_evidence.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 33,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 271,
+        "command": [
+          "tests/v4_workflow_stabilization.test.js",
+          "--portable"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 34,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 272,
+        "command": [
+          "tests/workspace_ownership.test.js",
+          "--portable"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 35,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 273,
+        "command": [
+          "tests/stabilization_banking_trial.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 77,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          },
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 36,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 274,
+        "command": [
+          "tests/bank_rivalry.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "N-00-2026-09-20T23-23-12-166Z.json",
+            "index": 78,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          },
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 37,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 275,
+        "command": [
+          "tests/income_history_network.test.js",
+          "--bank-rivalry"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 38,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 276,
+        "command": [
+          "tests/research_program.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 39,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 277,
+        "command": [
+          "tests/research_bot.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 40,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      },
+      {
+        "index": 278,
+        "command": [
+          "tests/research_program_ui.test.js"
+        ],
+        "evidence": [
+          {
+            "receipt": "full-tail-2026-09-20T23-57-06-461Z-779dd8ca-9400-437c-9a23-5121142cfe69.json",
+            "index": 41,
+            "inputsSha256": "ad12d3c70588893ba2d24263ef529777de6cda76bb2f2a72b275d884028a3bc2"
+          }
+        ]
+      }
+    ],
+    "explanation": "Exact maintained command coverage is reconciled across frozen runs and two affected retests. The original full and baseline failure receipts remain failed; this is not a continuous full or standard gate pass."
+  },
+  "runtime": {
+    "status": "passed",
+    "verification": "current-source-and-runtime",
+    "profile": "current",
+    "sourceMatches": true,
+    "expectedReadmeVerified": true,
+    "checks": [
+      {
+        "edition": "core",
+        "version": "8.20",
+        "creation": true,
+        "halfReadyRecovery": true,
+        "resolvedMonth": true,
+        "idempotentRecovery": true,
+        "ownerViewsMatch": true,
+        "rivalPrivateFieldsAbsent": true,
+        "research": {
+          "branch": "risk",
+          "model": "standing",
+          "legalPaidAcquisition": true,
+          "reloadPreservesPaidProgress": true,
+          "permanentChoiceEnforced": true
+        },
+        "rematch": {
+          "rulesPreserved": true,
+          "paidResearchReset": true,
+          "twoVotesRequired": true,
+          "fixture": "natural-bot-ending",
+          "endReason": "buyout"
+        }
+      },
+      {
+        "edition": "expanded",
+        "version": "9.33",
+        "creation": true,
+        "halfReadyRecovery": true,
+        "resolvedMonth": true,
+        "idempotentRecovery": true,
+        "ownerViewsMatch": true,
+        "rivalPrivateFieldsAbsent": true,
+        "rematch": {
+          "rulesPreserved": true,
+          "paidResearchReset": true,
+          "twoVotesRequired": true,
+          "fixture": "funded-covenant-stress",
+          "endReason": "funding_resolution"
+        }
+      }
+    ]
+  },
+  "independentReview": {
+    "reviewer": "Claude Code",
+    "status": "Scoped local-package review closed with no remaining blocker",
+    "personallyExecuted": "Six focused test files, 72 Core campaigns and 8325 resolved months, AI/reload/rematch probes and an independent Specialized Credit witness.",
+    "finalAudit": "Independently reconstructed original and revised input fingerprints, cross-checked all 278 coverage claims against primary receipts, parsed and hashed all six ZIP entries, and ran the read-only qualification verifier.",
+    "localOriginalReportSha256": "f1bd60d22c4f75ca13baff78ed25b8d16cf5645ff3d53157ef5321fb02f8a1ca"
+  },
+  "provenance": {
+    "kind": "Sanitized summary derived from retained local terminal receipts; original raw logs and private working-directory metadata are not included.",
+    "localReceiptSha256": {
+      "scoped-command-qualification.json": "112ec08ea0a8f019aff84bb15d02a78dce8f37ec67f622e1e7dab5bce6f68f10",
+      "package-qualified-archive.json": "f0964b91d169231e0fe6268a370b539678290fecb2533bf32577b0d521806e69",
+      "package-qualified-runtime.json": "e6603d026098c3f496993a6b9556380cc66eb185f19d631fce24f28362e3bea8"
+    }
+  },
+  "limitations": [
+    "No continuous full-gate or standard-gate pass",
+    "No browser visual acceptance or human gameplay acceptance",
+    "No physical two-computer acceptance",
+    "No long-run strategy, balance or enjoyment certification",
+    "No Linux CI result",
+    "Full Expanded blueprint remains outside this stabilization release"
+  ]
+}

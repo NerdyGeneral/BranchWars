@@ -9,23 +9,23 @@ const options = { relationshipOffersVersion: 1, regionalGrowthVersion: 1, advert
  mode: 'hotseat', seed: 42, created: 1 };
 function setup(share = 25, enabled = true) {
  const h = harness(); h.c.options = { ...options, relationshipOffersVersion: enabled ? 1 : 0 }; h.c.offerShare = share;
- const panel = h.c.document.querySelector('#productProgramsPanel'); let content = '';
+ const panel = h.c.document.querySelector('#customerGrowthPanel'); let content = '';
  // Replacing innerHTML discards old descendant listeners in a real browser.
  Object.defineProperty(panel, 'innerHTML', { configurable: true, get: () => content, set(value) {
   content = value;
   for (const [selector, control] of h.elements) if (selector.startsWith('#relationshipOffer-')) control.listeners = {};
  } });
- h.run("game=E.createGame(options);seat=0;workspaceTab='products';productDeskView='relationships';" +
+ h.run("game=E.createGame(options);seat=0;workspaceTab='overview';" +
   "E.finishProject(game,game.players[0],{key:'licenseRewards'});" +
   "for(const row of Object.values(game.players[0].productPrograms.markets))row.connected={essential:1,rewards:4,highYield:0};" +
   "game.players[0].allocation={service:4,business:1,lending:1,operations:2};game.players[0].householdBook.policy.retention=25;" +
   "if(game.players[0].relationshipOffers)game.players[0].relationshipOffers.policy={market:'downtown',segment:'connected',product:'rewards',share:offerShare};" +
   "newDraft(E.publicState(game,0));draft.decision='b';draft.management.research.enabled=false;draft.investments={};" +
   "renderProducts=v=>renderProductPrograms(v);renderProjects=()=>{};renderReady=()=>{};" +
-  "renderProductPrograms(E.publicState(game,0));");
+  "selectCustomerSubject('relationships');");
  return h;
 }
-const html = h => h.elements.get('#productProgramsPanel').innerHTML;
+const html = h => h.elements.get('#customerGrowthPanel').innerHTML;
 function change(h, field, value) {
  const control = h.elements.get('#relationshipOffer-' + field);
  assert(control?.listeners.change, 'actual rendered control registers its change handler: ' + field);
@@ -33,13 +33,15 @@ function change(h, field, value) {
 }
 
 const legacy = setup(0, false);
-assert.equal(legacy.run('productDeskView'), 'development', 'a stale new subview falls back for older campaigns');
+assert.equal(legacy.run('subjectWorkspace.customers'), 'households', 'an unavailable customer desk falls back for older campaigns');
+assert.doesNotMatch(legacy.elements.get('#customerSubjectNavigation').innerHTML, /data-subject-desk="relationships"/);
 assert.doesNotMatch(html(legacy), /data-product-view="relationships"|EXISTING CUSTOMER OFFERS/);
-assert.match(html(legacy), /Product catalogue/);
 const legacyWorld = legacy.run('JSON.stringify(game)');
-legacy.run("productDeskView='advertising';renderProductPrograms(E.publicState(game,0))");
-assert.match(html(legacy), /3\.00 banker equivalents/, 'older campaigns keep their full post-retention advertising time');
-legacy.run("workspaceTab='customers';renderHouseholds(E.publicState(game,0))");
+legacy.run("selectProductSubject('catalogue')");
+assert.match(legacy.elements.get('#productSubjectNavigation').innerHTML, /Product catalogue/);
+legacy.run("selectProductSubject('advertising')");
+assert.match(legacy.elements.get('#productProgramsPanel').innerHTML, /3\.00 banker equivalents/, 'older campaigns keep their full post-retention advertising time');
+legacy.run("selectCustomerSubject('households')");
 assert.match(legacy.elements.get('#householdPanel').innerHTML, /Retention \/ sales capacity/);
 assert.equal(legacy.run('JSON.stringify(game)'), legacyWorld);
 
@@ -48,7 +50,7 @@ const world = h.run('JSON.stringify(game)'), draftBefore = h.run('JSON.stringify
 h.run('renderProductPrograms(E.publicState(game,0))');
 assert.equal(h.run('JSON.stringify(game)'), world, 'review must not mutate accounts, policies or RNG');
 assert.equal(h.run('JSON.stringify(draft)'), draftBefore, 'review must not mutate the draft');
-assert.match(html(h), /id="product-desk-relationships"[^>]*>Existing customers/);
+assert.match(h.elements.get('#customerSubjectNavigation').innerHTML, /data-subject-desk="relationships" aria-pressed="true">Relationship offers/);
 assert.match(html(h), /Eligible existing balances|Locked \/ guaranteed balances excluded/);
 assert.match(html(h), /conversion equivalents/);
 assert.match(html(h), /CURRENT-BOOK QUOTE/);
@@ -67,7 +69,7 @@ crossTab.run("draft.allocation={service:1,business:2,lending:2,operations:3};dra
 change(crossTab, 'share', 50);
 crossTab.run("const sharedAdQuote=E.advertisingPreview,sharedHouseholdReview=E.householdServiceReview;seenAdQuote=null;seenHouseholdReview=null;E.advertisingPreview=(p,g,q)=>{seenAdQuote={share:p.relationshipOffers?.policy.share,...sharedAdQuote(p,g,q)};return seenAdQuote};E.householdServiceReview=(p,a,q)=>{seenHouseholdReview={share:p.relationshipOffers?.policy.share,...sharedHouseholdReview(p,a,q)};return seenHouseholdReview}");
 const crossWorld = crossTab.run('JSON.stringify(game)'), crossDraft = crossTab.run('JSON.stringify(draft)');
-crossTab.run("view=E.publicState(game,0);crossViewBefore=JSON.stringify(view);productDeskView='advertising';renderProductPrograms(view);workspaceTab='customers';renderHouseholds(view)");
+crossTab.run("view=E.publicState(game,0);crossViewBefore=JSON.stringify(view);selectProductSubject('advertising');renderProductPrograms(view);selectCustomerSubject('households');renderHouseholds(view)");
 assert.equal(crossTab.run('seenAdQuote.share'), 50);
 assert.equal(crossTab.run('seenAdQuote.staff'), .375, 'Advertising reserves the staged offer time after retention');
 assert.equal(crossTab.run('seenHouseholdReview.salesStaff'), .375, 'Customers shows the same staged acquisition capacity');
@@ -76,13 +78,13 @@ assert(activeBoost > 0);
 assert.equal(crossTab.run('JSON.stringify(view)'), crossTab.run('crossViewBefore'));
 assert.equal(crossTab.run('JSON.stringify(game)'), crossWorld);
 assert.equal(crossTab.run('JSON.stringify(draft)'), crossDraft);
-crossTab.run("workspaceTab='products';productDeskView='relationships';renderProductPrograms(view)");
+crossTab.run("selectCustomerSubject('relationships');renderCustomerSubject(view)");
 change(crossTab, 'share', 0);
-crossTab.run("productDeskView='advertising';renderProductPrograms(view);workspaceTab='customers';renderHouseholds(view)");
+crossTab.run("selectProductSubject('advertising');renderProductPrograms(view);selectCustomerSubject('households');renderHouseholds(view)");
 assert.equal(crossTab.run('seenAdQuote.staff'), .75, 'Pausing restores draft advertising sales time');
 assert.equal(crossTab.run('seenAdQuote.boost'), activeBoost * 2, 'Targeting boost uses residual time rather than the previous instruction');
 assert.equal(crossTab.run('seenHouseholdReview.salesStaff'), .75);
-crossTab.run("draft.relationshipOfferPolicy.share=50;view.me.submitted=true;crossViewBefore=JSON.stringify(view);workspaceTab='products';renderProductPrograms(view);workspaceTab='customers';renderHouseholds(view)");
+crossTab.run("draft.relationshipOfferPolicy.share=50;view.me.submitted=true;crossViewBefore=JSON.stringify(view);selectProductSubject('advertising');renderProductPrograms(view);selectCustomerSubject('households');renderHouseholds(view)");
 assert.equal(crossTab.run('seenAdQuote.staff'), .375, 'Sealed draft previews retain the submitted offer split');
 assert.equal(crossTab.run('seenHouseholdReview.salesStaff'), .375);
 assert.equal(crossTab.run('JSON.stringify(view)'), crossTab.run('crossViewBefore'));

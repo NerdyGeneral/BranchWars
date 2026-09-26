@@ -43,8 +43,20 @@ test('old group and agency controls reject all stale campaign and transport cont
 test('company inspection retains all six statements and opens the exact banking relationship',()=>{
  const h=fresh();click(h,'groupTab-companies');const before=bytes(h);
  for(let i=0;i<6;i++){click(h,'group-company-'+i);assert.equal((html(h).match(/id="groupCompanyTitle"/g)||[]).length,1);assert(html(h).includes('All company statements'));assert.equal(h.run('groupWorkspace.company'),'company:'+i);}
- click(h,'groupCompanyMandate');assert.equal(h.run('workspaceTab'),'markets');assert.equal(h.run('serviceWorkspace.id'),h.run('currentView().serviceAgreements.find(c=>c.clientIndex===5).id'));assert.equal(bytes(h),before);
+ click(h,'groupCompanyMandate');assert.equal(h.run('workspaceTab'),'customers');assert.equal(h.run('subjectWorkspace.customers'),'commercial');
+ assert.equal(h.run('subjectWorkspace.owner'),h.run('currentView().me.id'));assert.equal(h.elements.get('#customerCommercialMount').hidden,false);
+ assert.match(h.elements.get('#customerSubjectNavigation').innerHTML,/data-subject-desk="commercial" aria-pressed="true">Businesses & opportunities/);
+ assert.equal(h.run('serviceWorkspace.id'),h.run('currentView().serviceAgreements.find(c=>c.clientIndex===5).id'));assert.equal(bytes(h),before);
 });
+
+test('stale company inspection callbacks cannot change the customer route or selected agreement',()=>{
+ for(const change of ['seat=1;newDraft(currentView())','game=JSON.parse(JSON.stringify(game))','game.cycle++','connectionAttempt++','renderFinancialGroup(currentView())']){
+  const h=fresh();click(h,'groupTab-companies');click(h,'group-company-5');const inspect=h.elements.get('#groupCompanyMandate').listeners.click;
+  h.run(change);const before=bytes(h),route=h.run('JSON.stringify({tab:workspaceTab,subject:subjectWorkspace.customers,agreement:serviceWorkspace.id})');
+  inspect();assert.equal(bytes(h),before,change);assert.equal(h.run('JSON.stringify({tab:workspaceTab,subject:subjectWorkspace.customers,agreement:serviceWorkspace.id})'),route,change);
+ }
+});
+
 test('forms and company selections isolate replacement campaigns and owners',()=>{
  const h=fresh();input(h,'groupBankSupport',45000);click(h,'group-company-4');h.run('seat=1;newDraft(currentView());renderFinancialGroup(currentView())');assert.equal(h.elements.get('#groupBankSupport').value,'0');assert.equal(h.run('groupWorkspace.company'),'company:0');assert.equal(h.run('financialGroupDesk'),'capital');
  h.run('game=JSON.parse(JSON.stringify(game));renderFinancialGroup(currentView())');assert.equal(h.run('groupWorkspace.dirty.capital'),undefined);

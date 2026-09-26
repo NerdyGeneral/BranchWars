@@ -232,6 +232,24 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // confirmed pre-existing on rc3; and game/BRANCH_WARS.html rebuilt from source to
 // the byte-identical portable hash shipped in releases/v4-rc4.
 // This pin is still not long-run strategic or physical two-computer acceptance.
+// September 20 authorized rc4 defect repair: preserve acquired research models
+// at migration and research rules at rematch; integrate gated AI products without
+// override debt; remove unreachable Core recovery code. Final-source historical
+// bank economics/rivalry, golden behavior, runtime stages, determinism, campaign
+// lifecycle and edition/network compatibility commands passed (21 Node entries).
+// Legal acquired-model/rematch and UI/AI regression checks pass separately.
+// No preserved reference, golden or architecture ceiling was changed.
+// September 20, 2026 authorized current-Core AI model repair: the engine delta
+// is confined to ai.js. Reverting only that file and reassembling reproduces
+// 330309e8cf4c8590e7e688019e62472928aa9cea9053fa98507c24135dac3e72 exactly.
+// Current Core gains deterministic operating-context choices and earned/funded
+// adoption; older profiles retain the exact chooser and RNG. No economic
+// formula or investment priority changed. Named final-source checks passed
+// before this move: behavior-golden, runtime-stages, determinism,
+// campaign-lifecycle, bank_economics, bank_rivalry, expanded_edition,
+// expanded_edition_network, tests/build.test.js, research_program and research_bot.
+// No historical reference, golden or architecture ceiling was changed.
+// This pin does not convert a failed gate into a pass or certify game balance.
 // rc4 fixes re-pin. Default Core setup now opts into the research programme, and
 // previewFeatureSelection drops that Core-only marker when a selection moves off
 // Core economics instead of invalidating the whole proposal. Scoped checks rerun:
@@ -248,6 +266,17 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // bank_rivalry, expanded_edition(+_network), campaign-lifecycle, build, engine,
 // architecture, feature_setup, github_resilience, research_program, agency_legacy_compat,
 // agency_peer_compat and v31_version_boundary.
-const expected='c2e3fb478e3f5a188de962eb0fbc82740f316a8b25db1b210cc991c4bedc0636';
+// rc5 merge re-pin. The published rc5 repair (tag v4.0.0-rc5, never merged to main)
+// joins main's later work. ai.js keeps main's shared researchAllowedProducts gate and
+// takes rc5's context-based chooser for all 18 Core models; migration validates models
+// against the campaign's own table, so reload no longer strips Risk & Capital or third
+// models; rematch re-initialises the research marker; unreachable Core recovery code is
+// removed. research_bot proves plans and RNG match the published rc4 bot except for the
+// model choice. Scoped checks rerun: build, architecture, behavior-golden, runtime-stages,
+// determinism, campaign-lifecycle, bank_economics, bank_rivalry, expanded_edition(+_network),
+// engine, research_program(+_ui), research_bot, feature_setup, github_resilience,
+// agency_legacy_compat, agency_peer_compat, v31_version_boundary, strategy_workspace,
+// package_release and income_review. No reference build, golden or ceiling changed.
+const expected='678af36463e2caa400c1ecdce16abf4648b9c14dc47621b1ebfe04ada52030a9';
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

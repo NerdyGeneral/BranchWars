@@ -17,13 +17,13 @@ const options = { onboardingVersion: 1, relationshipOffersVersion: 1, regionalGr
  mode: 'hotseat', seed: 42, created: 1 };
 function setup(share = 25, enabled = true) {
  const h = harness(); h.c.options = { ...options, onboardingVersion: enabled ? 1 : 0 }; h.c.initialShare = share;
- const panel = h.c.document.querySelector('#productProgramsPanel'); let content = '';
+ const panel = h.c.document.querySelector('#customerGrowthPanel'); let content = '';
  // Real innerHTML replacement discards listeners on removed descendants.
  Object.defineProperty(panel, 'innerHTML', { configurable: true, get: () => content, set(value) {
   content = value;
   for (const [selector, control] of h.elements) if (selector.startsWith('#onboarding-')) control.listeners = {};
  } });
- h.run("game=E.createGame(options);seat=0;workspaceTab='products';productDeskView='onboarding';" +
+ h.run("game=E.createGame(options);seat=0;workspaceTab='overview';" +
   "E.finishProject(game,game.players[0],{key:'licenseRewards'});" +
   "for(const row of Object.values(game.players[0].productPrograms.markets))row.connected={essential:1,rewards:4,highYield:0};" +
   "game.players[0].allocation={service:4,business:1,lending:1,operations:2};game.players[0].householdBook.policy.retention=25;" +
@@ -33,10 +33,10 @@ function setup(share = 25, enabled = true) {
   "renderProducts=v=>renderProductPrograms(v);renderProjects=()=>{};renderReady=()=>{};" +
   "const originalOnboardingReview=E.onboardingReview;onboardingCalls=0;seenOnboardingQuote=null;seenOnboardingDraft=null;" +
   "E.onboardingReview=(p,g,q)=>{onboardingCalls++;seenOnboardingDraft=JSON.parse(JSON.stringify(p));seenOnboardingQuote=originalOnboardingReview(p,g,q);return seenOnboardingQuote};" +
-  "renderProductPrograms(currentView());");
+  "selectCustomerSubject('onboarding');");
  return h;
 }
-const html = h => h.elements.get('#productProgramsPanel').innerHTML;
+const html = h => h.elements.get('#customerGrowthPanel').innerHTML;
 function change(h, field, value) {
  const control = h.elements.get('#onboarding-' + field);
  assert(control?.listeners.change, 'actual rendered control has a handler: ' + field);
@@ -47,7 +47,8 @@ function dueBatch(h) {
 }
 
 const legacy = setup(0, false);
-assert.equal(legacy.run('productDeskView'), 'development');
+assert.equal(legacy.run('subjectWorkspace.customers'), 'households');
+assert.doesNotMatch(legacy.elements.get('#customerSubjectNavigation').innerHTML, /data-subject-desk="onboarding"/);
 assert.equal(legacy.run('onboardingCalls'), 0);
 assert.doesNotMatch(html(legacy), /data-product-view="onboarding"|APPLICATIONS &amp; ONBOARDING/);
 assert.equal(legacy.run("stageOnboarding(currentView(),'share',25)"), false);
@@ -58,7 +59,11 @@ h.run('view=currentView();sourceView=JSON.stringify(view);renderProductPrograms(
 assert.equal(h.run('JSON.stringify(game)'), world, 'rendering cannot mutate accounts, pending requests, policies or RNG');
 assert.equal(h.run('JSON.stringify(view)'), h.run('sourceView'));
 assert.equal(h.run('JSON.stringify(draft)'), before);
-assert.match(html(h), /id="product-desk-onboarding"[^>]*>Applications/);
+assert.equal(h.run('workspaceTab'), 'customers');
+assert.equal(h.run('subjectWorkspace.customers'), 'onboarding');
+assert.match(h.elements.get('#customerSubjectNavigation').innerHTML, /data-subject-desk="onboarding" aria-pressed="true">Applications/);
+assert.match(html(h), /APPLICATIONS &amp; ONBOARDING/);
+assert.doesNotMatch(h.elements.get('#productProgramsPanel').innerHTML, /id="onboarding-/);
 assert.match(html(h), /Pending applications are not owned households or deposits/);
 assert.match(html(h), /do not reserve outside customers or funds/);
 assert.match(html(h), /No same-month activation/);
@@ -89,16 +94,16 @@ crossTab.run("draft.allocation={service:2,business:2,lending:2,operations:2};dra
 assert(change(crossTab, 'share', 50));
 crossTab.run("const originalAdPreview=E.advertisingPreview,originalHouseholdReview=E.householdServiceReview,originalOfferReview=E.relationshipOfferReview;seenAdStaff=null;seenHouseholdStaff=null;seenOfferStaff=null;E.advertisingPreview=(...args)=>{const q=originalAdPreview(...args);seenAdStaff=q.staff;return q};E.householdServiceReview=(...args)=>{const q=originalHouseholdReview(...args);seenHouseholdStaff=q.salesStaff;return q};E.relationshipOfferReview=(...args)=>{const q=originalOfferReview(...args);seenOfferStaff=q.salesStaff;return q}");
 const crossWorld = crossTab.run('JSON.stringify(game)'), crossDraft = crossTab.run('JSON.stringify(draft)');
-crossTab.run("view=currentView();crossViewBefore=JSON.stringify(view);productDeskView='advertising';renderProductPrograms(view);productDeskView='relationships';renderProductPrograms(view);workspaceTab='customers';renderHouseholds(view)");
+crossTab.run("view=currentView();crossViewBefore=JSON.stringify(view);selectProductSubject('advertising');selectCustomerSubject('relationships');renderHouseholds(view)");
 assert.equal(crossTab.run('seenAdStaff'), .25, 'Advertising uses post-retention, post-offer, post-onboarding Retail time');
 assert.equal(crossTab.run('seenHouseholdStaff'), .25, 'Customers shows the same residual acquisition time');
 assert.equal(crossTab.run('seenOfferStaff'), .5, 'the saved offer report retains its pre-onboarding residual contract');
 assert.match(html(crossTab), /0\.25 bankers left for new customers/, 'Existing customers displays the post-onboarding acquisition residual');
 assert.equal(crossTab.run('JSON.stringify(view)'), crossTab.run('crossViewBefore'));
 assert.equal(crossTab.run('JSON.stringify(game)'), crossWorld); assert.equal(crossTab.run('JSON.stringify(draft)'), crossDraft);
-crossTab.run("workspaceTab='products';productDeskView='onboarding';renderProductPrograms(view)");
+crossTab.run("selectCustomerSubject('onboarding')");
 assert(change(crossTab, 'share', 0));
-crossTab.run("productDeskView='advertising';renderProductPrograms(view);productDeskView='relationships';renderProductPrograms(view);workspaceTab='customers';renderHouseholds(view)");
+crossTab.run("selectProductSubject('advertising');selectCustomerSubject('relationships');renderHouseholds(view)");
 assert.equal(crossTab.run('seenAdStaff'), .5); assert.equal(crossTab.run('seenHouseholdStaff'), .5); assert.equal(crossTab.run('seenOfferStaff'), .5);
 assert.match(html(crossTab), /0\.50 bankers left for new customers/, 'pausing onboarding restores the same acquisition time in Existing customers');
 

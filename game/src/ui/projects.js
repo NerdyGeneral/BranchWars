@@ -72,6 +72,11 @@ let strategyModelProposal=null;
 // Presentation corrections only: the original content remains part of saved views.
 // These descriptions follow the complete project/operation settlement chain.
 function strategyMilestoneDescription(v,branch,index){
+ if(v.researchProgramVersion===1){
+  if(branch==='digital')return 'Builds digital adoption, service production and deposit acquisition. At this milestone, Digital reduces the base operating-expense multiplier by '+((index+1)*4.5)+'% and raises Retail & Service and Lending banker throughput by '+((index+1)*5.5)+'%, before separate model and combined-capability effects. Funding and market capacity still limit actual growth.';
+  if(branch==='risk')return 'Each effective Risk level reduces modeled credit losses and recurring compliance pressure. Completing this milestone also reduces compliance pressure by 6 and executive attention by 3, each with a floor of zero. Capital buffers and funding constraints still apply.';
+  if(branch==='operations'&&index===3)return 'Operations strengthens expense efficiency and project execution. Recurring credit-loss and compliance benefits belong to Risk & Capital; completing this tier still grants compliance relief and morale.';
+ }
  const corrections={
   'network:1':'Branch projects require one fewer work unit; this does not stack with Regional Hubs. Staffing and execution capacity still determine completion time.',
   'digital:1':'Builds digital adoption, service production and deposit acquisition. Operating-expense savings require the separate Back-Office Automation model; this tier alone does not reduce expense.',
@@ -84,6 +89,29 @@ function strategyMilestoneDescription(v,branch,index){
  return corrections[branch+':'+index]||v.strategyBranches[branch].nodes[index].desc;
 }
 function strategyModelDescription(v,branch,key){
+ if(v.researchProgramVersion===1){
+  const researchDescriptions={
+   'network:retailDensity':'Raises service capacity and retail customer/deposit conversion, with stronger reputation benefits. Base staff and facility operating expense rises by 4%. Growth remains subject to funding and market limits.',
+   'network:regionalHub':'Raises deposit conversion by 26%. Branch projects require one fewer work unit; that reduction does not stack with Network tier 2.',
+   'network:franchisePartners':'Reduces base operating expense by 30% and raises service capacity by 15%. Commercial fees fall by 14%, deposit funding cost rises by 8%, and rate-sensitive deposit runoff rises by 60%.',
+   'digital:customerExperience':'Raises service capacity by 18% and the deposit-conversion multiplier by 19.84% in total. Rate-sensitive deposit runoff also rises by 8%.',
+   'digital:automation':'Reduces base staff and facility operating expense by 24.56% in total and raises Retail & Service and Lending banker throughput by 24%. Digital tier benefits apply separately. It does not directly reduce project cost or work units.',
+   'digital:dataLedCredit':'Raises loan-production capacity and loan yield while reducing modeled credit losses. Executive attention rises by 0.7 each month; cash and reserve limits still constrain new lending.',
+   'commercial:treasury':'Raises commercial fee income and business/merchant acquisition, subject to relationship capacity. Retail & Service and Lending banker throughput falls by 7%.',
+   'commercial:specializedCredit':'Raises loan-production capacity and loan yield, with higher modeled credit losses and recurring compliance pressure. More capacity does not guarantee funded loans.',
+   'commercial:relationshipBanking':'Raises deposit conversion and commercial fees and reduces rate-sensitive deposit runoff. Service capacity falls by 2%; it does not directly reduce relationship counts.',
+   'operations:lean':'Reduces base staff and facility operating expense by 28% in total and project costs by 15%. The project discount does not stack with Operations tier 3. It does not add execution capacity.',
+   'operations:resilience':'Reduces the modeled credit-loss multiplier by 36.04% in total. It does not directly improve deposit defense, talent retention or event resilience.',
+   'operations:processRedesign':'Raises Retail & Service and Lending banker throughput by 34% and reduces base operating expense by 14%. Once tier 1 is funded, adopting this permanent model has no additional upfront charge.',
+   'acquisition:dealmaker':'Reduces acquisition project cost by another 10 percentage points of its base cost, alongside Acquisition research, and pushes acquired-market share toward your bank. Other project discounts apply separately.',
+   'acquisition:integrator':'Reduces attention by 3 after an acquisition and uses a commercial facility when the deal adds an office. It does not increase the quantity of transferred customers or assets.',
+   'acquisition:consolidator':'Raises ongoing business and merchant relationship acquisition by 14%, subject to relationship capacity. Executive attention rises by 0.8 each month.',
+   'risk:provisioning':'Reduces modeled credit losses and deposit runoff while holding a larger liquidity reserve. Deposit conversion, loan-production capacity and loan yield are lower.',
+   'risk:capitalEfficiency':'Raises loan-production capacity by 26% and reduces the liquidity reserve held back from lending by 22%. Modeled credit losses, deposit funding cost and recurring compliance pressure rise; the capital gate still applies.',
+   'risk:standing':'Reduces deposit funding cost by 18% and lowers compliance pressure and executive attention each month. Base operating expense rises by 2%. It does not directly lift capital restrictions.'
+  };
+  if(researchDescriptions[branch+':'+key])return researchDescriptions[branch+':'+key];
+ }
  const corrections={
   'network:regionalHub':'Branch projects require one fewer work unit, the same non-stacking reduction as Network tier 2. This model does not increase regional deposit or loan capacity.',
   'digital:customerExperience':'Raises the organic deposit-acquisition multiplier by 7%, subject to supply and capacity limits. It does not directly add a household-acquisition bonus.',

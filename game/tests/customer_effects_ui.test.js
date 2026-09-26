@@ -15,18 +15,18 @@ const options = { relationshipOffersVersion:1, regionalGrowthVersion:1, advertis
  managementVersion:2, serviceExpansionVersion:1, campaignRulesVersion:1, mode:'hotseat', seed:42, created:1 };
 function setup(enabled = true) {
  const h = harness();h.c.options={...options,relationshipOffersVersion:enabled?1:0};
- let html='';const panel=h.c.document.querySelector('#productProgramsPanel');
+ let html='';const panel=h.c.document.querySelector('#customerGrowthPanel');
  Object.defineProperty(panel,'innerHTML',{configurable:true,get:()=>html,set(value){html=value;for(const [selector,el]of h.elements)if(selector.startsWith('#customerEffects')||selector.startsWith('#relationshipOffer-'))el.listeners={};}});
- h.run("game=E.createGame(options);seat=0;workspaceTab='products';productDeskView='relationships';"+
+ h.run("game=E.createGame(options);seat=0;workspaceTab='overview';"+
   "E.finishProject(game,game.players[0],{key:'licenseRewards'});for(const row of Object.values(game.players[0].productPrograms.markets))row.connected={essential:1,rewards:4,highYield:0};"+
   "game.players[0].allocation={service:3,business:3,lending:1,operations:1};game.players[0].householdBook.policy.retention=50;"+
   "if(game.players[0].relationshipOffers)game.players[0].relationshipOffers.policy={market:'downtown',segment:'connected',product:'rewards',share:25};"+
   "newDraft(E.publicState(game,0));draft.decision='b';draft.management.research.enabled=false;draft.investments={};"+
   "renderProducts=v=>renderProductPrograms(v);renderProjects=()=>{};renderReady=()=>{};render=()=>renderProductPrograms(currentView());"+
-  "const originalCustomerEffects=E.customerEffectsComparison;comparisonCalls=0;E.customerEffectsComparison=(...args)=>{comparisonCalls++;return originalCustomerEffects(...args)};renderProductPrograms(currentView());");
+  "const originalCustomerEffects=E.customerEffectsComparison;comparisonCalls=0;E.customerEffectsComparison=(...args)=>{comparisonCalls++;return originalCustomerEffects(...args)};selectCustomerSubject('relationships');");
  return h;
 }
-const markup = h => h.elements.get('#productProgramsPanel').innerHTML;
+const markup = h => h.elements.get('#customerGrowthPanel').innerHTML;
 function click(h,id){const el=h.elements.get(id);assert(el?.listeners.click,'actual control has a click handler: '+id);return el.listeners.click();}
 function compare(h){click(h,'#customerEffectsCompare');assert(h.run('customerEffectsCache!==null'));}
 const legacy=setup(false);

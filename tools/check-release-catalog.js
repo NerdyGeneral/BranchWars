@@ -5,8 +5,10 @@ const root=path.resolve(__dirname,'..'),release=path.join(root,'releases');
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 const catalog=JSON.parse(fs.readFileSync(path.join(release,'catalog.json')));
 const inventory=['BRANCH_WARS.html','BRANCH_WARS_LAN_SERVER.ps1','OPEN_BRANCH_WARS.bat','OPEN_LAN_GAME.bat','README.txt','manifest.json'].sort();
-assert.equal(catalog.schemaVersion,1);
-assert.equal(hash(fs.readFileSync(path.join(root,'game/BRANCH_WARS.html'),'utf8').replace(/\r\n/g,'\n')),catalog.preservedMain.normalizedGameSha256,'The default main game changed');
+// Schema 2: main is the development line, so game/BRANCH_WARS.html is checked for
+// freshness against source by game/tools/check.js rather than pinned here. This
+// catalog pins only what releases/ stores: frozen packages and test fixtures.
+assert.equal(catalog.schemaVersion,2);
 for(const [name,expected] of Object.entries(catalog.artifacts))assert.equal(hash(fs.readFileSync(path.join(release,name))),expected,name+' changed');
 function zipEntries(bytes,expected=inventory,depth=2){
  const end=bytes.lastIndexOf(Buffer.from([0x50,0x4b,0x05,0x06]));assert(end>=0,'Missing ZIP directory');
@@ -23,20 +25,25 @@ function zipEntries(bytes,expected=inventory,depth=2){
  }
  assert.deepEqual([...entries.keys()].sort(),expected);return entries;
 }
-const manualName='branch-wars-v3-manual.pdf';
-const manualZip=zipEntries(fs.readFileSync(path.join(release,'branch-wars-v3-manual.zip')),[manualName],1);
-assert.deepEqual(manualZip.get(manualName),fs.readFileSync(path.join(release,manualName)),'Manual ZIP must contain the complete unchanged PDF');
+const packages=catalog.versions.map(version=>version.package);
+assert.equal(new Set(packages).size,packages.length,'Duplicate catalogued package');
+assert.deepEqual(fs.readdirSync(release,{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>e.name).sort(),[...packages].sort(),'Every package folder in releases/ must be catalogued');
 for(const version of catalog.versions){
- const dir=path.join(release,version.id);assert.deepEqual(fs.readdirSync(dir).sort(),inventory);
+ assert(['published','fixture'].includes(version.role),version.id+': unknown role');
+ const dir=path.join(release,version.package);assert.deepEqual(fs.readdirSync(dir).sort(),inventory,version.id+' package inventory');
  const manifest=JSON.parse(fs.readFileSync(path.join(dir,'manifest.json')));assert.equal(manifest.schemaVersion,1);assert.equal(manifest.hashAlgorithm,'sha256');
  assert.deepEqual(manifest.files.map(f=>f.name).sort(),inventory.filter(n=>n!=='manifest.json'));
  // Original V2/V3 archives use a wrapper folder; the verified V3.1 archive is
  // flat. Pin the expected shape per edition instead of accepting arbitrary paths.
- const zipDepth=version.zipDepth??2;assert([1,2].includes(zipDepth),'Unsupported package layout');
- const zipped=zipEntries(fs.readFileSync(path.join(release,version.zip)),inventory,zipDepth);
- for(const name of inventory)assert.deepEqual(zipped.get(name),fs.readFileSync(path.join(dir,name)),version.id+' ZIP mismatch: '+name);
- for(const f of manifest.files){const bytes=fs.readFileSync(path.join(dir,f.name));assert.equal(bytes.length,f.bytes);assert.equal(hash(bytes),f.sha256);}
- assert.equal(hash(fs.readFileSync(path.join(dir,'BRANCH_WARS.html'))),version.portableSha256);
+ // A version may be folder-only (zip:null); a catalogued ZIP must match the folder.
+ if(version.zip!==null){
+  const zipDepth=version.zipDepth??2;assert([1,2].includes(zipDepth),'Unsupported package layout');
+  const zipped=zipEntries(fs.readFileSync(path.join(release,version.zip)),inventory,zipDepth);
+  // Buffer.equals, not deepEqual: diffing two multi-megabyte buffers exhausts memory.
+  for(const name of inventory)assert(zipped.get(name).equals(fs.readFileSync(path.join(dir,name))),version.id+' ZIP mismatch: '+name);
+ }
+ for(const f of manifest.files){const bytes=fs.readFileSync(path.join(dir,f.name));assert.equal(bytes.length,f.bytes,version.id+' manifest size: '+f.name);assert.equal(hash(bytes),f.sha256,version.id+' manifest hash: '+f.name);}
+ assert.equal(hash(fs.readFileSync(path.join(dir,'BRANCH_WARS.html'))),version.portableSha256,version.id+' portable changed');
 }
 let links=0;
 for(const file of ['README.md',...fs.readdirSync(release).filter(n=>n.endsWith('.md')).map(n=>'releases/'+n)]){
@@ -44,4 +51,4 @@ for(const file of ['README.md',...fs.readdirSync(release).filter(n=>n.endsWith('
   const url=m[1].replace(/^<|>$/g,'');if(/^(?:[a-z]+:|#)/i.test(url))continue;const dest=decodeURIComponent(url.split('#')[0]);if(!dest)continue;assert(fs.existsSync(path.resolve(root,path.dirname(file),dest)),file+': broken link '+dest);links++;
  }
 }
-console.log(JSON.stringify({passed:true,preservedMain:catalog.preservedMain.commit,versions:catalog.versions.map(v=>v.id),packageFiles:12,exactZipEntries:13,manualZipMatchesPdf:true,artifacts:Object.keys(catalog.artifacts).length,localLinks:links,scope:'Integrity and unchanged default game; no new gameplay or physical multiplayer acceptance.'},null,2));
+console.log(JSON.stringify({passed:true,versions:catalog.versions.map(v=>v.id),packageFiles:catalog.versions.length*inventory.length,artifacts:Object.keys(catalog.artifacts).length,localLinks:links,scope:'Integrity of frozen packages and pinned fixtures; no gameplay or physical multiplayer acceptance.'},null,2));

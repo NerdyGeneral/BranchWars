@@ -4,15 +4,24 @@ Only the current V4 package is kept here. V2 and V3 packages were removed to kee
 repository small; they remain reachable from their git tags and from this repository's
 history.
 
-## V4 rc4 (current)
+## V4 rc5 (current prerelease)
 
-- [Unpacked player files](v4-rc4/README.txt) -- keep the folder together and open
-  `OPEN_BRANCH_WARS.bat`, or `BRANCH_WARS.html` directly.
-- [What changed, and what is still rough](v4-rc4-notes.md)
+The rc5 package is published as a GitHub release asset rather than stored here:
+[branch-wars-v4-rc5.zip](https://github.com/NerdyGeneral/BranchWars/releases/download/v4.0.0-rc5/branch-wars-v4-rc5.zip).
+It repairs rc4's save loader, which stripped Risk & Capital and third operating models from a
+Core save on reload, and keeps research rules through a rematch.
+
+- [What rc5 repaired](v4-rc5-notes.md) and its [verification summary](v4-rc5-verification.json)
+
+## V4 rc4 (frozen)
+
+- [Unpacked player files](v4-rc4/README.txt) -- kept for reference. Do not use it for a
+  campaign you intend to reload: see the loader defect above.
+- [Research design, and what is still rough](v4-rc4-notes.md)
 - [Quick-start guide](branch-wars-v4-guide.md)
 
-Core campaigns created from this build carry save version `8.20`; Expanded carries `9.33`.
-Un-opted Core remains `8.19`. Every earlier save format still loads.
+Core campaigns carry save version `8.20`; Expanded carries `9.33`. Un-opted Core remains
+`8.19`. Every earlier save format still loads.
 
 `catalog.json` records the hash of each published portable build.
 
@@ -22,3 +31,8 @@ Un-opted Core remains `8.19`. Every earlier save format still loads.
 compatibility reference builds that `v31_version_boundary`, `agency_legacy_compat`,
 `agency_peer_compat` and `expanded_edition_network` load to prove old peers and old saves
 are still refused or migrated correctly. Deleting them breaks those tests.
+
+`v4/` (frozen rc2) and `v4-rc3/` are fixtures for the same reason. `income_review` replays
+the rc2 engine; `research_bot` proves older campaigns keep rc3's exact bot choices and random
+draws; `package_release` verifies both as pinned historical packages. Their bytes are pinned
+by hash and must not be rebuilt.

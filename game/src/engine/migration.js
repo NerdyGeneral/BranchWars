@@ -75,7 +75,8 @@ function repairSavedPortfolio(g,p){
  p.products={retail:'essential',business:'relationship',credit:'mortgage',...(p.products||{})};
  for(const[line,group]of Object.entries(PRODUCT_PORTFOLIOS))if(!group.options[p.products[line]])p.products[line]=Object.keys(group.options)[0];
  p.specializations=p.specializations&&typeof p.specializations==='object'?p.specializations:{};
- for(const[branch,key]of Object.entries(p.specializations))if(!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][key])delete p.specializations[branch];
+ const models=researchModelTable(p);
+ for(const[branch,key]of Object.entries(p.specializations))if(!models[branch]||!models[branch][key])delete p.specializations[branch];
  p.facilityMarkets=p.facilityMarkets&&typeof p.facilityMarkets==='object'?p.facilityMarkets:{};
  for(const market of Object.keys(g.territories)){
   const expected=Math.max(0,p.branches[market]||0);
@@ -88,7 +89,7 @@ function repairSavedPortfolio(g,p){
  p.projects.forEach(project=>{
   if(project.specialization){
    const def=PROJECTS[project.key],branch=def&&def.strategy;
-   if(!branch||!STRATEGY_SPECIALIZATIONS[branch]||!STRATEGY_SPECIALIZATIONS[branch][project.specialization])delete project.specialization;
+   if(!branch||!models[branch]||!models[branch][project.specialization])delete project.specialization;
   }
  });
 }
