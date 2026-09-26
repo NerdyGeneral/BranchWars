@@ -13,11 +13,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fast:
+  catalog:
     runs-on: ubuntu-latest
-    # V3 adds complete Group6 compatibility/storage checks to the source gate.
-    # Retain every regression and allow hosted execution headroom.
-    timeout-minutes: 60
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -27,7 +25,30 @@ jobs:
           node-version: '24'
       - run: node tools/check-release-catalog.js
       - run: node tools/check-release-catalog.test.js
-      - run: node game/tools/check.js
+
+  fast:
+    runs-on: ubuntu-latest
+    # V4 grew the fast gate to 278 commands, roughly three sequential hours, so
+    # one runner cannot finish inside a job limit. Each shard runs every eighth
+    # command on its own runner (no shared output files) and every shard also
+    # proves the portable build matches source. The gate passes only when all
+    # eight shards pass; fail-fast is off so every shard reports.
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          # integrated_staffing, facility_staff_planning and commercial_opportunity
+          # replay frozen builds read with git show from main's history (~38MB).
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node game/tools/check.js --shard=${{ matrix.shard }}/8
 
   full-windows:
     runs-on: windows-latest
@@ -40,6 +61,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '24'

@@ -1,22 +1,42 @@
 {
-  "schemaVersion": 1,
-  "preservedMain": {
-    "commit": "10652ccec4712ab53738761c88f1364f960cce3a",
-    "normalizedGameSha256": "0155cf7b9610bc0b4000c272b798d8cd783096fdd849a23f62642f9edecacb10"
-  },
+  "schemaVersion": 2,
+  "note": "Frozen packages and pinned fixtures stored in this folder. The working game/ build is development source, checked by game/tools/check.js, not catalogued here. rc5 is published as a GitHub release asset, not stored here.",
   "versions": [
     {
-      "id": "v4",
+      "id": "v4-rc4",
+      "package": "v4-rc4",
       "zip": null,
-      "portableSha256": "8c65cd256b37bcb46ed7a9867e2f66e3f14ba012bc835e9ab2ca490f835a0cd4",
+      "portableSha256": "51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5",
       "distributionVersion": "4.0-rc4",
       "saveVersion": "8.20",
       "expandedSaveVersion": "9.33",
-      "package": "v4-rc4",
-      "note": "Core research programme. Expanded unchanged; un-opted Core remains 8.19."
+      "role": "published",
+      "note": "Core research programme as published. Its loader strips Risk & Capital and third operating models on reload; rc5 repairs that."
+    },
+    {
+      "id": "v4-rc3",
+      "package": "v4-rc3",
+      "zip": null,
+      "portableSha256": "a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf",
+      "distributionVersion": "4.0-rc3",
+      "saveVersion": "8.19",
+      "expandedSaveVersion": "9.33",
+      "role": "fixture",
+      "note": "Loaded by research_bot and package_release as the pinned historical rc3 build."
+    },
+    {
+      "id": "v4-rc2",
+      "package": "v4",
+      "zip": null,
+      "portableSha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92",
+      "distributionVersion": "4.0-rc2",
+      "saveVersion": "8.19",
+      "expandedSaveVersion": "9.32",
+      "role": "fixture",
+      "note": "Loaded by income_review and package_release as the pinned historical rc2 build."
     }
   ],
   "artifacts": {
-    "v4-rc4/BRANCH_WARS.html": "8c65cd256b37bcb46ed7a9867e2f66e3f14ba012bc835e9ab2ca490f835a0cd4"
+    "branch-wars-v3.zip": "85dae43104c4c68f106b371b6ead8891a453bd08a4198162133a493e3a7ab28f"
   }
 }

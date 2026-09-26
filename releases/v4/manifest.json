@@ -4,8 +4,8 @@
   "files": [
     {
       "name": "BRANCH_WARS.html",
-      "bytes": 2453646,
-      "sha256": "51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5"
+      "bytes": 2388612,
+      "sha256": "ac5753947ebbc9106c4fff5df2c0fcd893476826b52c202c477bade61e288f92"
     },
     {
       "name": "BRANCH_WARS_LAN_SERVER.ps1",
@@ -24,8 +24,8 @@
     },
     {
       "name": "README.txt",
-      "bytes": 4655,
-      "sha256": "8b9d6f4f4587adf7ad0d25659469bc59189fccc7d6a8d24ffb976dc0083da21b"
+      "bytes": 2608,
+      "sha256": "032e207ecf641a94ddab5db7fb0b65795ece6d42d20e2c02d77e21df7f20c18c"
     }
   ]
 }

@@ -673,7 +673,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
       <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><div id="lobbyFeatureOptions" aria-label="Shared optional campaign systems"></div><p id="lobbyFeatureSummary" class="small muted" role="status"></p><button id="lobbySettings" class="btn">Apply settings</button><button id="lobbyDiscardSettings" class="btn hidden">Discard changes</button></div>
     </div>
     <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
-    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><label id="lobbyResumeLabel" class="btn" for="lobbyResumeFile">Resume from save</label><input id="lobbyResumeFile" type="file" accept="application/json,.json" hidden><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
+    <div class="lobby-footer"><p id="lobbyProgress" class="small" role="status"></p><div class="row"><button id="lobbyReady" class="btn">Confirm ready</button><button id="lobbyStart" class="btn primary">Start campaign</button><button id="lobbyRetry" class="btn hidden">Retry repository link</button><button id="lobbyLeave" class="btn danger">Leave lobby</button></div></div>
     <p class="micro muted">Changes to either identity or the campaign settings clear both confirmations. Repository health describes access to GitHub, not proof that your friend's browser is still open.</p>
   </section>
 
@@ -723,20 +723,23 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
       <section class="panel plan-budget-panel" aria-label="Shared monthly spending"><div id="planBudget" class="plan-budget" aria-live="polite"></div></section>
       <div class="panel operations-navigation">
         <div class="operations-tabs" role="tablist" aria-label="Operations desks">
-          <button id="operationsTab-plan" type="button" role="tab" aria-selected="true" aria-controls="operationsPanel-monthly" data-operations-tab="plan">Monthly plan<span>Decision, staff, products &amp; projects</span></button><button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
+          <button id="operationsTab-monthly" type="button" role="tab" aria-selected="true" aria-controls="operationsPanel-monthly" data-operations-tab="monthly">Monthly plan<span>Executive decision &amp; staff</span></button>
+          <button id="operationsTab-funding" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-funding" tabindex="-1" data-operations-tab="funding">Products &amp; funding<span>Offers, pricing &amp; risk</span></button>
+          <button id="operationsTab-projects" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-projects" tabindex="-1" data-operations-tab="projects">Projects &amp; construction<span>Capacity &amp; commitments</span></button>
+          <button id="operationsTab-forecast" type="button" role="tab" aria-selected="false" aria-controls="operationsPanel-forecast" tabindex="-1" data-operations-tab="forecast">Forecast &amp; books<span>Expected results &amp; balances</span></button>
         </div>
         <div class="operations-context"><p id="operationsDeskHint" class="small muted" role="status"></p><button id="operationsDecisionShortcut" type="button" class="btn">Executive decision</button><button type="button" class="btn contextual-help" data-help-topic="planning">Planning help</button></div>
       </div>
-      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="monthly">
+      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-monthly" data-operations-panel="monthly">
           <section class="panel"><div class="event"><span class="micro muted">EXECUTIVE CALL // DECISION REQUIRED</span><strong id="eventName"></strong><div id="eventText"></div><div id="decisionGrid" class="decision-grid"></div></div></section>
           <section class="panel" id="staffAllocationPanel"><div class="kicker">YOUR MONTHLY STAFF PLAN</div><div class="small muted">Allocate existing bankers, then review work coverage. Recruitment adds employees next month. Offices are built and staffed at their location in Markets.</div><div class="rule"></div><div class="pool"><b>STAFF ALLOCATION</b><br><span id="staffPool" class="small"></span></div><div id="staffGrid" class="staff-grid"></div></section>
           <section id="peopleOwnershipShortcut" class="panel" hidden><h3>People owns staffing</h3><p>Allocate existing employees, review shared work coverage, recruit and develop your team in People. This month can open required staffing controls inline.</p><button type="button" class="btn" data-subject-action="staffing">Review employee allocation</button></section>
       </div>
-      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="funding" hidden><h3 class="operations-section-head">PRODUCTS, PRICING &amp; RISK</h3>
+      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-funding" data-operations-panel="funding" hidden>
           <section class="panel" id="bankProductsPanel"><div class="kicker">PRODUCT &amp; BALANCE-SHEET DESIGN</div><div class="small muted">Choose what the bank actually sells. These products alter customer growth, funding cost, fee income, loan production, and credit losses every cycle.</div><div id="productPortfolio" class="portfolio-lines"></div><div id="portfolioBridge" class="portfolio-bridge micro"></div></section>
           <section class="panel" id="bankPricingPanel"><div class="kicker">PRICING &amp; RISK POLICIES</div><label>DEPOSIT PRICING</label><div id="depositPolicies" class="button-group"></div><label style="margin-top:8px">LENDING STANDARDS</label><div id="lendingPolicies" class="button-group"></div><label style="margin-top:8px">CAPITAL STRATEGY</label><div id="capitalPolicies" class="button-group"></div></section>
       </div>
-      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="projects" hidden><h3 class="operations-section-head">PROJECTS &amp; CONSTRUCTION</h3>
+      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-projects" data-operations-panel="projects" hidden>
           <section class="panel"><div class="project-workspace-heading"><h2>Initiatives</h2><a class="btn" href="#projectDeliveryStatus">Current work &amp; recruitment</a></div><div id="projectGrid" class="projects"></div><section id="projectDeliveryStatus" aria-label="Current work and recruitment"><h3>Current work &amp; recruitment</h3><div class="project-status-band"><div id="activeProject" class="notice"></div><div id="capitalAction" class="capital-action"></div><div id="hiringPanel" class="capital-action hiring-panel"></div></div></section></section>
       </div>
       <div id="operationsPanel-forecast" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-forecast" data-operations-panel="forecast" hidden>
@@ -1109,13 +1112,6 @@ function previewFeatureSelection(source, { field, value }) {
     delete options.creditWorkloadVersion;
     delete options.bankEconomicsVersion;
   }
-  // The research programme is Core-only. A modular selection that moves the
-  // campaign off Core economics used to make the whole proposal INVALID, which
-  // stopped the dependent-feature confirmation flow from engaging at all. Drop
-  // the marker instead, exactly as the reporting markers above are dropped, so a
-  // default new-game draft can carry it safely.
-  if (options.researchProgramVersion === 1 && options.bankEconomicsVersion !== 2)
-    delete options.researchProgramVersion;
   const rules = campaignRules(options, { context: 'lobby' });
   const changes = rules.features.filter(def => def.version !== before.features.find(old => old.field === def.field).version)
     .map(def => ({ field: def.field, label: def.label, from: before.features.find(old => old.field === def.field).version, to: def.version,
@@ -1670,10 +1666,7 @@ function projectStartStatus(g,p,key,focus=p.focus){
 }
 function projectCatalog(p,g=null){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
-// The Physical Empire mandate asked for 3-6 branch levels, but a finished bank holds a
-// median of 19, so it was a free bonus. Programme campaigns scale it with the measured
-// distribution; every earlier campaign keeps the original goal.
-function networkGoal(g){const base={town:3,regional:4,state:5,national:6}[g.scope]||6;return researchProgramRules(g)?base*4:base}
+function networkGoal(g){return{town:3,regional:4,state:5,national:6}[g.scope]||6}
 function branchGoal(g){return{town:4,regional:5,state:6,national:8}[g.scope]||8}
 function milestoneDefinitions(g){return{...MILESTONES,builder:{...MILESTONES.builder,desc:`Operate ${branchGoal(g)} branch levels.`}}}
 function activeTerritories(g){return Object.entries(g.territories)}
@@ -1695,28 +1688,7 @@ function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,stra
 // projects, which no current campaign can start, so both were unreachable. Current
 // Core reads the capability lanes instead; earlier saves keep the original test.
 function currentMandateRules(g){return researchProgramRules(g);}
-// Measured over 20 finished campaigns (4 scenarios x 5 seeds, 120 months):
-//   deposits p50 $1,153M | earnings p50 $94.8M | business p50 350 | merchant p50 305
-//   markets held p50 7/12 | morale p50 93 | staff p50 45 | charge-off ratio p50 3.2%
-// Pre-programme campaigns keep the original thresholds so recorded results stand.
-const MANDATE_TARGETS={deposits:1150000000,earnings:95000000,business:320,merchant:280,
- morale:90,staff:40,operations:3,digitalLevel:4,lossRatio:.03};
-function mandateTarget(g,key,legacyValue){return currentMandateRules(g)?MANDATE_TARGETS[key]:legacyValue}
-function mandateStatus(g,index){const p=g.players[index],s=p.stats,m={...MANDATES[p.mandate]},total=activeTerritories(g).length;if(p.mandate==='network')m.desc=`Operate at least ${networkGoal(g)} total branch levels across the map.`;
- // A mandate must state the target it is actually judged against. Programme
- // thresholds differ from the historical ones, so describe them here rather than
- // editing MANDATES, which every earlier campaign still reads.
- if(currentMandateRules(g)){
-  const money=v=>v>=1e9?'$'+(v/1e9).toFixed(2)+'B':'$'+Math.round(v/1e6)+'M';
-  const t=MANDATE_TARGETS,say={
-   deposits:`Finish with at least ${money(t.deposits)} in deposits.`,
-   earnings:`Generate at least ${money(t.earnings)} in cumulative earnings.`,
-   commercial:`Finish with ${t.business} business relationships and ${t.merchant} merchant clients.`,
-   clean:`Finish with risk 18 or less, attention below 30, and lifetime credit losses under ${(t.lossRatio*100).toFixed(0)}% of the loan book.`,
-   people:`Finish with morale ${t.morale}+, staff ${t.staff}+, and Operational Excellence tier ${t.operations}+.`,
-   digital:`Finish with digital adoption 85+, Digital Platform tier ${t.digitalLevel}, and Straight-Through Processing running.`};
-  if(say[p.mandate])m.desc=say[p.mandate];
- }let achieved=false,progress='';switch(p.mandate){case'map':achieved=controlledCount(g,index)>total/2;progress=`${controlledCount(g,index)} / ${Math.floor(total/2)+1} markets`;break;case'deposits':achieved=s.deposits>=mandateTarget(g,'deposits',40000000);progress=`$${(s.deposits/1e6).toFixed(1)}M / $40M`;break;case'commercial':achieved=s.business>=mandateTarget(g,'business',105)&&s.merchant>=mandateTarget(g,'merchant',80);progress=`${s.business}/105 business // ${s.merchant}/80 merchant`;break;case'earnings':achieved=s.earnings>=mandateTarget(g,'earnings',2200000);progress=`$${(s.earnings/1e6).toFixed(2)}M / $2.2M`;break;case'clean':achieved=s.compliance<=18&&s.attention<30&&(!currentMandateRules(g)||s.loans<=0||s.chargeoffs/s.loans<=mandateTarget(g,'lossRatio',1));progress=currentMandateRules(g)?`risk ${s.compliance}/18 // heat ${s.attention}/30 // losses ${(s.loans>0?s.chargeoffs/s.loans*100:0).toFixed(1)}%/${(MANDATE_TARGETS.lossRatio*100).toFixed(0)}%`:`risk ${s.compliance}/18 // heat ${s.attention}/30`;break;case'people':achieved=s.morale>=mandateTarget(g,'morale',82)&&s.staff>=mandateTarget(g,'staff',10)&&(currentMandateRules(g)?strategyLevel(p,'operations'):p.upgrades.training)>=mandateTarget(g,'operations',2);progress=currentMandateRules(g)?`morale ${s.morale}/${mandateTarget(g,'morale',82)} // staff ${s.staff}/${mandateTarget(g,'staff',10)} // operations capability ${strategyLevel(p,'operations')}/${mandateTarget(g,'operations',2)}`:`morale ${s.morale}/82 // staff ${s.staff}/10 // training ${p.upgrades.training}/2`;break;case'digital':achieved=s.digital>=85&&(currentMandateRules(g)?strategyLevel(p,'digital'):p.upgrades.technology)>=mandateTarget(g,'digitalLevel',2)&&(!currentMandateRules(g)||researchCombination(p,'straightThrough'));progress=currentMandateRules(g)?`digital ${s.digital}/85 // digital capability ${strategyLevel(p,'digital')}/${mandateTarget(g,'digitalLevel',2)}`:`digital ${s.digital}/85 // technology ${p.upgrades.technology}/2`;break;case'network':achieved=branchLevels(p)>=networkGoal(g);progress=`${branchLevels(p)} / ${networkGoal(g)} branch levels`}return{key:p.mandate,...m,achieved,progress}}
+function mandateStatus(g,index){const p=g.players[index],s=p.stats,m={...MANDATES[p.mandate]},total=activeTerritories(g).length;if(p.mandate==='network')m.desc=`Operate at least ${networkGoal(g)} total branch levels across the map.`;let achieved=false,progress='';switch(p.mandate){case'map':achieved=controlledCount(g,index)>total/2;progress=`${controlledCount(g,index)} / ${Math.floor(total/2)+1} markets`;break;case'deposits':achieved=s.deposits>=40000000;progress=`$${(s.deposits/1e6).toFixed(1)}M / $40M`;break;case'commercial':achieved=s.business>=105&&s.merchant>=80;progress=`${s.business}/105 business // ${s.merchant}/80 merchant`;break;case'earnings':achieved=s.earnings>=2200000;progress=`$${(s.earnings/1e6).toFixed(2)}M / $2.2M`;break;case'clean':achieved=s.compliance<=18&&s.attention<30;progress=`risk ${s.compliance}/18 // heat ${s.attention}/30`;break;case'people':achieved=s.morale>=82&&s.staff>=10&&(currentMandateRules(g)?strategyLevel(p,'operations'):p.upgrades.training)>=2;progress=currentMandateRules(g)?`morale ${s.morale}/82 // staff ${s.staff}/10 // operations capability ${strategyLevel(p,'operations')}/2`:`morale ${s.morale}/82 // staff ${s.staff}/10 // training ${p.upgrades.training}/2`;break;case'digital':achieved=s.digital>=85&&(currentMandateRules(g)?strategyLevel(p,'digital'):p.upgrades.technology)>=2;progress=currentMandateRules(g)?`digital ${s.digital}/85 // digital capability ${strategyLevel(p,'digital')}/2`:`digital ${s.digital}/85 // technology ${p.upgrades.technology}/2`;break;case'network':achieved=branchLevels(p)>=networkGoal(g);progress=`${branchLevels(p)} / ${networkGoal(g)} branch levels`}return{key:p.mandate,...m,achieved,progress}}
 function finalScore(g,index){const m=mandateStatus(g,index);return Math.round((baseScore(g,index)+(m.achieved?m.bonus:0))*10)/10}
 function captureTrend(g,cycle=0){g.trend=g.trend||[];const point={cycle,scores:[baseScore(g,0),baseScore(g,1)],deposits:g.players.map(p=>Math.round(p.stats.deposits)),loans:g.players.map(p=>Math.round(p.stats.loans)),cash:g.players.map(p=>Math.round(p.stats.cash)),profits:g.players.map(p=>Math.round(p.stats.lastProfit)),markets:[controlledCount(g,0),controlledCount(g,1)]};const prior=g.trend[g.trend.length-1];if(prior&&prior.cycle===cycle)g.trend[g.trend.length-1]=point;else g.trend.push(point);return point}
 function normalizeAllocation(p){reconcileSpecialistHeadcount(p);for(const k of Object.keys(ROLES))p.allocation[k]=Math.max(0,Math.round(Number(p.allocation[k])||0));let sum=Object.values(p.allocation).reduce((a,b)=>a+b,0);while(sum>p.stats.staff){const k=Object.keys(p.allocation).sort((a,b)=>p.allocation[b]-p.allocation[a])[0];if(!p.allocation[k])break;p.allocation[k]--;sum--}while(sum<p.stats.staff){p.allocation.service++;sum++}}
@@ -2224,7 +2196,7 @@ function planHiring(g,p,committed){
  if(tierRank(p)>=2||p.stats.morale<45||p.stats.lastProfit<=0)return 0;const spare=p.stats.cash-committed;if(spare<900000)return 0;const target=p.stats.staff<12?2:p.stats.staff<22?1:0;let count=0;while(count<target&&hireCost(p,count+1)<=spare*.22)count++;return count
 }
 function chooseCompetitiveAction(g,index){const p=g.players[index],r=g.players[1-index],cash=p.stats.cash,liquidity=p.stats.cash/Math.max(1,p.stats.deposits),last=r.lastCompetitiveAction||'none',pressure=(g.buyoutPressure&&g.buyoutPressure[1-index])||0,candidates=[];const add=(key,weight)=>{const status=competitiveActionStatus(p,key);if(status.eligible&&cash-COMPETITIVE_ACTIONS[key].cost>=220000&&staffingActionAffordable(g,index,key))candidates.push([key,weight])};if(pressure||tierRank(p)>=2)add('takeoverDefense',10+pressure*5);if(liquidity<.025||last==='depositRaid')add('liquidityDefense',8);if(last==='commercialRaid'||r.stats.business>p.stats.business*1.18)add('relationshipDefense',6);if(last==='talentRaid'||p.stats.morale<48)add('retentionDefense',7);if(r.stats.cash/Math.max(1,r.stats.deposits)<.035||tierRank(r)>=1)add('depositRaid',7+strategyLevel(p,'digital'));if(r.stats.business+r.stats.merchant>p.stats.business+p.stats.merchant*.9)add('commercialRaid',5+strategyLevel(p,'commercial'));if(r.stats.staff>6&&p.stats.influence>=20&&p.stats.morale>=45)add('talentRaid',3+strategyLevel(p,'acquisition'));if(!candidates.length)return'none';candidates.sort((a,b)=>b[1]-a[1]);const chance=g.difficulty==='analyst'?.35:g.difficulty==='chairman'?.82:.62;return simulationRandom()<chance?pick(candidates.slice(0,Math.min(2,candidates.length)))[0]:'none'}
-function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);const opportunities=[...g.opportunities].sort((a,b)=>marketOpportunityScore(g,p,b)-marketOpportunityScore(g,p,a)),opp=g.difficulty==='analyst'&&simulationRandom()<.3?null:opportunities[0],open=activeTerritories(g).filter(([,t])=>unlocked(g,t)),focus=opp?opp.market:[...open].sort((a,b)=>a[1].shares[index]-b[1].shares[index]+(b[1].value-a[1].value)/5)[0][0],allocation={...p.allocation};const opsTarget=Math.min(4,1+Math.floor(p.stats.staff/9));let desired=(allocation.operations<opsTarget)?'operations':(operationsLevel(p)>=2&&allocation.operations<2)?'operations':opp?opp.dept:p.stats.compliance>40?'operations':g.economy.key==='downturn'?'lending':'service';if(g.difficulty==='analyst')desired=pick(Object.keys(ROLES));const donor=Object.keys(allocation).filter(k=>k!==desired).sort((a,b)=>allocation[b]-allocation[a])[0];if(allocation[donor]>1){allocation[donor]--;allocation[desired]++}const deposit=g.event.key==='ratewar'||g.economy.key==='tight'?'aggressive':p.stats.cash<500000?'margin':g.scenario==='growth'?'aggressive':'balanced',lending=tierRank(p)>=1||g.economy.credit>1.3||p.stats.compliance>45?'conservative':g.scenario==='growth'?'growth':'balanced',liquidity=p.stats.cash/p.stats.deposits*100,capital=tierRank(p)>=1?'liquid':liquidity<2?'liquid':g.economy.key==='expansion'?'reinvest':'balanced',decision=(p.stats.cash<350000&&['ratewar','community','outage','talent','viral','manager'].includes(g.event.key))?'b':(p.stats.compliance>45&&['audit','fraud','cyber','losses'].includes(g.event.key))?'a':simulationRandom()<.62?'a':'b',capitalAction=capitalRequestStatus(p).eligible&&(tierRank(p)>=2||liquidity<1.25)&&simulationRandom()<.82,competitiveAction=chooseCompetitiveAction(g,index);const actionCost=COMPETITIVE_ACTIONS[competitiveAction].cost;const staffingHires=[7,8,9,10].includes(g.financialGroupVersion)?planHiring(g,p,actionCost):0,staffingReserve=hireCost(p,staffingHires);const investments=planInvestments(g,p,actionCost+staffingReserve);const investTotal=Object.values(investments).reduce((s,x)=>s+x,0);let newProjects=planPortfolio(g,p,focus,allocation,actionCost+investTotal+staffingReserve);if(capitalAction)newProjects=newProjects.filter(k=>!['branch','acquisition'].includes(PROJECTS[k].kind));let running=actionCost+investTotal+staffingReserve;newProjects=newProjects.filter(k=>{const c=[9,10].includes(g.financialGroupVersion)?projectStartTerms(g,p,k,focus).cost:projectCost(p,PROJECTS[k]);if(running+c>p.stats.cash)return false;running+=c;return true});const hires=[7,8,9,10].includes(g.financialGroupVersion)?staffingHires:planHiring(g,p,running);const newProject=newProjects[0]||null;const products=researchAllowedProducts(p,{retail:g.economy.key==='tight'&&liquidity<2.5?'highYield':p.doctrine==='digital'||p.doctrine==='commercial'?'rewards':'essential',business:p.doctrine==='commercial'&&desired==='business'?'treasury':p.doctrine==='digital'?'entrepreneur':'relationship',credit:tierRank(p)>=1||g.economy.credit>1.3?'mortgage':g.economy.key==='expansion'&&['commercial','efficiency'].includes(p.doctrine)?'middleMarket':g.scenario==='growth'&&p.doctrine==='digital'?'consumer':'mortgage'}),specializations={...p.specializations};for(const branch of Object.keys(investments)){if(strategyLevel(p,branch)>=1&&!p.specializations[branch]&&!specializations[branch]){const doctrineChoice={community:{network:'retailDensity'},commercial:{commercial:'treasury',acquisition:'dealmaker'},digital:{digital:'customerExperience'},efficiency:{operations:'lean'},people:{network:'regionalHub'}}[p.doctrine]||{};specializations[branch]=doctrineChoice[branch]||Object.keys(researchModelTable(p)[branch]||{})[index%2]||Object.keys(researchModelTable(p)[branch]||{})[0]}}return{focus,allocation,depositPolicy:deposit,lendingPolicy:lending,capitalPolicy:capital,products,specializations,opportunity:opp?opp.id:null,newProject,newProjects,investments,hires,capitalAction,competitiveAction,decision}}
+function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);const opportunities=[...g.opportunities].sort((a,b)=>marketOpportunityScore(g,p,b)-marketOpportunityScore(g,p,a)),opp=g.difficulty==='analyst'&&simulationRandom()<.3?null:opportunities[0],open=activeTerritories(g).filter(([,t])=>unlocked(g,t)),focus=opp?opp.market:[...open].sort((a,b)=>a[1].shares[index]-b[1].shares[index]+(b[1].value-a[1].value)/5)[0][0],allocation={...p.allocation};const opsTarget=Math.min(4,1+Math.floor(p.stats.staff/9));let desired=(allocation.operations<opsTarget)?'operations':(operationsLevel(p)>=2&&allocation.operations<2)?'operations':opp?opp.dept:p.stats.compliance>40?'operations':g.economy.key==='downturn'?'lending':'service';if(g.difficulty==='analyst')desired=pick(Object.keys(ROLES));const donor=Object.keys(allocation).filter(k=>k!==desired).sort((a,b)=>allocation[b]-allocation[a])[0];if(allocation[donor]>1){allocation[donor]--;allocation[desired]++}const deposit=g.event.key==='ratewar'||g.economy.key==='tight'?'aggressive':p.stats.cash<500000?'margin':g.scenario==='growth'?'aggressive':'balanced',lending=tierRank(p)>=1||g.economy.credit>1.3||p.stats.compliance>45?'conservative':g.scenario==='growth'?'growth':'balanced',liquidity=p.stats.cash/p.stats.deposits*100,capital=tierRank(p)>=1?'liquid':liquidity<2?'liquid':g.economy.key==='expansion'?'reinvest':'balanced',decision=(p.stats.cash<350000&&['ratewar','community','outage','talent','viral','manager'].includes(g.event.key))?'b':(p.stats.compliance>45&&['audit','fraud','cyber','losses'].includes(g.event.key))?'a':simulationRandom()<.62?'a':'b',capitalAction=capitalRequestStatus(p).eligible&&(tierRank(p)>=2||liquidity<1.25)&&simulationRandom()<.82,competitiveAction=chooseCompetitiveAction(g,index);const actionCost=COMPETITIVE_ACTIONS[competitiveAction].cost;const staffingHires=[7,8,9,10].includes(g.financialGroupVersion)?planHiring(g,p,actionCost):0,staffingReserve=hireCost(p,staffingHires);const investments=planInvestments(g,p,actionCost+staffingReserve);const investTotal=Object.values(investments).reduce((s,x)=>s+x,0);let newProjects=planPortfolio(g,p,focus,allocation,actionCost+investTotal+staffingReserve);if(capitalAction)newProjects=newProjects.filter(k=>!['branch','acquisition'].includes(PROJECTS[k].kind));let running=actionCost+investTotal+staffingReserve;newProjects=newProjects.filter(k=>{const c=[9,10].includes(g.financialGroupVersion)?projectStartTerms(g,p,k,focus).cost:projectCost(p,PROJECTS[k]);if(running+c>p.stats.cash)return false;running+=c;return true});const hires=[7,8,9,10].includes(g.financialGroupVersion)?staffingHires:planHiring(g,p,running);const newProject=newProjects[0]||null;const products={retail:g.economy.key==='tight'&&liquidity<2.5?'highYield':p.doctrine==='digital'||p.doctrine==='commercial'?'rewards':'essential',business:p.doctrine==='commercial'&&desired==='business'?'treasury':p.doctrine==='digital'?'entrepreneur':'relationship',credit:tierRank(p)>=1||g.economy.credit>1.3?'mortgage':g.economy.key==='expansion'&&['commercial','efficiency'].includes(p.doctrine)?'middleMarket':g.scenario==='growth'&&p.doctrine==='digital'?'consumer':'mortgage'},specializations={...p.specializations};for(const branch of Object.keys(investments)){if(strategyLevel(p,branch)>=1&&!p.specializations[branch]&&!specializations[branch]){const doctrineChoice={community:{network:'retailDensity'},commercial:{commercial:'treasury',acquisition:'dealmaker'},digital:{digital:'customerExperience'},efficiency:{operations:'lean'},people:{network:'regionalHub'}}[p.doctrine]||{};specializations[branch]=doctrineChoice[branch]||Object.keys(researchModelTable(p)[branch]||{})[index%2]||Object.keys(researchModelTable(p)[branch]||{})[0]}}return{focus,allocation,depositPolicy:deposit,lendingPolicy:lending,capitalPolicy:capital,products,specializations,opportunity:opp?opp.id:null,newProject,newProjects,investments,hires,capitalAction,competitiveAction,decision}}
 function chooseBaselinePlan(g,index){const plan=chooseBot(g,index),territory=g.territories[plan.focus];if(territory&&territory.exited&&territory.exited[index]){const open=activeTerritories(g).filter(([,t])=>unlocked(g,t)&&!(t.exited&&t.exited[index])).sort((a,b)=>a[1].shares[index]-b[1].shares[index]);if(open.length)plan.focus=open[0][0]}if(plan.opportunity){const opportunity=g.opportunities.find(o=>o.id===plan.opportunity),market=opportunity&&g.territories[opportunity.market];if(market&&market.exited&&market.exited[index])plan.opportunity=null}if(Array.isArray(plan.newProjects)&&(g.players[index].branches[plan.focus]||0)>=3)plan.newProjects=plan.newProjects.filter(k=>PROJECTS[k].kind!=='branch');plan.newProject=(plan.newProjects&&plan.newProjects[0])||null;return plan}
 function validatePlan(g,p,plan){
  if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');
@@ -17138,19 +17110,6 @@ function researchProductBarred(p,line,key){
  if(!missing.length)return '';
  return missing.map(([branch,level])=>researchBranchTable(p)[branch].name+' tier '+level).join(' and ');
 }
-// The bot chooses products by doctrine and rate environment, including gated ones.
-// This returns a legal selection instead of letting an illegal plan reach submit.
-// It lives here, called from ai.js, rather than wrapping chooseBot: architecture
-// .test.js caps engine overrides of chooseBot at zero, and bot policy belongs in
-// the bot. The first option of every line is always available, so this can never
-// leave the bank without a product.
-function researchAllowedProducts(p,products){
- if(!researchProgramRules(p)||!products)return products;
- const out={...products};
- for(const [line,key] of Object.entries(out))
-  if(researchProductBarred(p,line,key))out[line]=Object.keys(PRODUCT_PORTFOLIOS[line].options)[0];
- return out;
-}
 function initializeResearchProgram(g,o){
  if(o.researchProgramVersion!==1)return;
  g.researchProgramVersion=1;
@@ -17188,6 +17147,18 @@ function projectResearchProgram(g,out){
  out.me.researchProductGates=Object.fromEntries(Object.entries(RESEARCH_PRODUCT_GATES).map(([line,gates])=>
   [line,Object.fromEntries(Object.keys(gates).map(k=>[k,researchProductBarred(g.players.find(p=>p.id===out.me.id),line,k)]))]));
 }
+
+// The bot picks products by doctrine and rate environment (ai.js), including the
+// gated ones. Downgrade rather than let it submit an illegal plan; the first
+// option of each line is always available, so this can never leave it productless.
+const researchPriorChooseBot=chooseBot;
+chooseBot=function(g,index){
+ const plan=researchPriorChooseBot(g,index),p=g.players[index];
+ if(plan&&plan.products&&researchProgramRules(p))
+  for(const [line,key] of Object.entries(plan.products))
+   if(researchProductBarred(p,line,key))plan.products[line]=Object.keys(PRODUCT_PORTFOLIOS[line].options)[0];
+ return plan;
+};
 // Reporting-only saved records. No funds, inferred old income or forecast values.
 const IncomeHistory=(()=>{
  const fields=['loanIncome','commercialIncome','depositIncome','otherIncome','fundingCost','expense','chargeoff','eventAdjustment','corporateInvoiceLoss','profit','loanGrowth','contractFees'];
@@ -17587,7 +17558,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
@@ -17768,39 +17739,6 @@ function renderLobby(){
  $('#lobbyError').textContent=lobby.error||'';
  renderLobbyControls();paintLink();
 }
-// Resuming a multiplayer campaign. Exporting one has always worked, but every
-// route back ran through resumeLocalCampaign, which coerces lan/p2p to hotseat --
-// so a Repository Link or LAN game could only ever come back single-player, and
-// the lobby had no load control at all. The host now stages a save here and the
-// campaign starts from it instead of from createGame; the guest receives it
-// through the same syncPeers path a fresh campaign uses.
-let lobbyResumeCampaign=null;
-function clearLobbyResume(message){
- lobbyResumeCampaign=null;
- const input=$('#lobbyResumeFile');if(input)input.value='';
- if(message)$('#lobbyError').textContent=message;
- renderLobbyControls();
-}
-function stageLobbyResume(file){
- if(!file)return;
- if(p2pRole!=='host'){clearLobbyResume('Only the host can resume a campaign from a save.');return}
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const restored=migrateGame(JSON.parse(reader.result));
-   if(!restored||!Array.isArray(restored.players)||restored.players.length!==2)throw Error('That file is not a two-bank campaign save.');
-   if(restored.gameOver)throw Error('That campaign is already complete. Start a new one.');
-   // The save carries its own campaign rules; the peer must support them.
-   E.validateCampaignRules(restored,'game');
-   lobbyResumeCampaign=restored;
-   $('#lobbyError').textContent='';
-   $('#lobbyNote').textContent='Resuming cycle '+restored.cycle+' of the loaded campaign. Both players must confirm ready.';
-   renderLobbyControls();
-  }catch(e){clearLobbyResume('That save could not be loaded: '+e.message)}
- };
- reader.onerror=()=>clearLobbyResume('That save file could not be read.');
- reader.readAsText(file);
-}
 function startLobbyCampaign(){
  try{
   if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty||featureSelectionPending())return;
@@ -17809,18 +17747,7 @@ function startLobbyCampaign(){
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
   const [host,guest]=lobby.players,s=lobby.settings;
   E.validateCampaignRules(s,'lobby');
-  const transport=(lan.active||gh.active)?'lan':'p2p';
-  let created;
-  if(lobbyResumeCampaign){
-   // Keep the campaign exactly as saved; only its transport and the two seat
-   // identities follow the current lobby.
-   created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
-   created.mode=transport;
-   created.players[0].name=host.name;created.players[0].color=host.color;
-   created.players[1].name=guest.name;created.players[1].color=guest.color;
-  }else{
-  created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
-  }
+  const created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:(lan.active||gh.active)?'lan':'p2p',name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
   p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
   game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
  }catch(e){$('#lobbyError').textContent=e.message}
@@ -17831,7 +17758,6 @@ $('#lobbyColor').addEventListener('input',markLobbyDirty);
 $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));
-$('#lobbyResumeFile')?.addEventListener('change',e=>{stageLobbyResume(e.target.files&&e.target.files[0])});
 $('#lobbyReady').addEventListener('click',()=>{if(lobby)editLobbyIdentity(!lobby.players[p2pRole==='host'?0:1].ready)});
 $('#lobbySettings').addEventListener('click',applyLobbySettings);
 $('#lobbyDiscardSettings').addEventListener('click',discardLobbySettings);
@@ -17839,36 +17765,20 @@ $('#lobbyStart').addEventListener('click',startLobbyCampaign);
 $('#lobbyRetry').addEventListener('click',ghRetry);
 $('#lobbyLeave').addEventListener('click',leaveGame);
 // Presentation-only navigation. No campaign field, draft copy or simulation hook.
-// Operations carried four sub-tabs, but three of them -- the executive call and
-// staffing, products and pricing, and projects -- are all parts of the SAME monthly
-// submission, and the player had to cross tabs to finish one decision. They are now
-// one desk with labelled sections; Forecast stays separate because it is what you
-// read after deciding, not part of deciding.
-const OPERATIONS_DESKS=['plan','forecast'];
-const OPERATIONS_PANELS={plan:['monthly','funding','projects'],forecast:['forecast']};
-// plan-review, facility-lifecycle and the decision shortcut still ask for the old
-// desk names. Keep honouring them and route each to the desk holding its section.
-const OPERATIONS_DESK_ALIAS={monthly:'plan',funding:'plan',projects:'plan',plan:'plan',forecast:'forecast'};
-let operationsDesk='plan',operationsDeskOwner=null,operationsFundingSuppressed=false;
+const OPERATIONS_DESKS=['monthly','funding','projects','forecast'];
+let operationsDesk='monthly',operationsDeskOwner=null;
 const operationsBoundControls=new WeakSet();
 function setOperationsDesk(key,{focus=false}={}){
  if(key==='funding'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.productsEnabled&&typeof selectProductSubject==='function'){operationsDesk='monthly';selectProductSubject('policies');return;}
- const requested=key;
- operationsDesk=OPERATIONS_DESK_ALIAS[key]||'plan';
+ operationsDesk=OPERATIONS_DESKS.includes(key)?key:'monthly';
  const mount=$('#operationsWorkspace');if(!mount)return;
  mount.dataset.operationsDesk=operationsDesk;
  $$('[data-operations-tab]').forEach(button=>{const active=button.dataset.operationsTab===operationsDesk;button.setAttribute('aria-selected',active?'true':'false');button.tabIndex=active?0:-1;button.classList.toggle('active',active);if(active&&focus)button.focus()});
- const shown=(OPERATIONS_PANELS[operationsDesk]||[]).filter(id=>id!=='funding'||!operationsFundingSuppressed);
- $$('[data-operations-panel]').forEach(panel=>{panel.hidden=!shown.includes(panel.dataset.operationsPanel)});
- // A caller that asked for one section by its old name gets it brought into view.
- if(requested&&requested!==operationsDesk&&OPERATIONS_PANELS[operationsDesk]?.includes(requested)){
-  const section=$('#operationsPanel-'+requested);
-  if(section&&!section.hidden&&focus)section.scrollIntoView({block:'start'});
- }
- const hints={plan:'Answer the executive call, allocate staff, set products and pricing, and commit projects -- all one monthly submission. Optional spending is not required to submit.',forecast:'These books and estimates use your current draft. Review spending in the shared plan budget; projected income is not available cash.'};
+ $$('[data-operations-panel]').forEach(panel=>{panel.hidden=panel.dataset.operationsPanel!==operationsDesk});
+ const hints={monthly:'Answer the executive call and allocate all staff. Optional hiring, research and projects are not required to submit.',funding:'Your offers and pricing share the monthly draft with staff, projects and research. Existing balances retain their contractual terms.',projects:'New initiatives and recruits share your cash budget. Executive capacity constrains project delivery; new hires report next cycle.',forecast:'These books and estimates use your current draft. Review spending in the shared plan budget; projected income is not available cash.'};
  $('#operationsDeskHint').textContent=hints[operationsDesk];
- if(operationsDesk==='plan'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled)$('#operationsDeskHint').textContent='Answer the executive call here. People owns staffing; This month opens required work inline. Optional spending is not required to submit.';
- const subtitle=$('#operationsTab-plan')?.querySelector?.('span');if(subtitle)subtitle.textContent=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled?'Decision, products & projects':'Decision, staff, products & projects';
+ if(operationsDesk==='monthly'&&typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled)$('#operationsDeskHint').textContent='Answer the executive call here. People owns staffing; This month opens required work inline. Optional spending is not required to submit.';
+ const subtitle=$('#operationsTab-monthly')?.querySelector?.('span');if(subtitle)subtitle.textContent=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.workforceEnabled?'Executive decision':'Executive decision & staff';
 }
 function operationsDeskKey(event,key){
  const keys=OPERATIONS_DESKS.filter(id=>!$('#operationsTab-'+id)?.hidden),at=keys.indexOf(key);let next;
@@ -17883,11 +17793,11 @@ function reconcileOperationsWorkspace(){
  const mount=$('#operationsWorkspace');if(!mount)return;
  const owner=typeof draftOwner==='undefined'?null:draftOwner;
  const products=typeof subjectWorkspace!=='undefined'&&subjectWorkspace.productsEnabled;
- operationsFundingSuppressed=!!products;
- if(products&&operationsDesk==='funding')operationsDesk='plan';
+ if($('#operationsTab-funding'))$('#operationsTab-funding').hidden=!!products;
+ if(products&&operationsDesk==='funding')operationsDesk='monthly';
  if(owner!==operationsDeskOwner){operationsDeskOwner=owner;operationsDesk='monthly'}
  $$('[data-operations-tab]').forEach(button=>{if(operationsBoundControls.has(button))return;operationsBoundControls.add(button);button.addEventListener('click',()=>setOperationsDesk(button.dataset.operationsTab));button.addEventListener('keydown',event=>operationsDeskKey(event,button.dataset.operationsTab))});
- const shortcut=$('#operationsDecisionShortcut');if(shortcut&&!operationsBoundControls.has(shortcut)){operationsBoundControls.add(shortcut);shortcut.addEventListener('click',()=>{setOperationsDesk('plan');$('#decisionGrid')?.querySelector?.('button:not(:disabled)')?.focus()})}
+ const shortcut=$('#operationsDecisionShortcut');if(shortcut&&!operationsBoundControls.has(shortcut)){operationsBoundControls.add(shortcut);shortcut.addEventListener('click',()=>{setOperationsDesk('monthly');$('#decisionGrid')?.querySelector?.('button:not(:disabled)')?.focus()})}
  setOperationsDesk(operationsDesk);
 }
 // Presentation ownership only. Move existing controls, never clone a draft or

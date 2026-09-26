@@ -1,5 +1,9 @@
 # V4 rc4 — Core research programme playtest
 
+**September 20 correction:** the frozen rc4 package has confirmed save/reload and rematch defects. The local source repair is documented in [repair status](../game/docs/rc4-local-repair.md); use the source launcher for that repair. The package and hash below still identify the original release. Balance measurements below are historical, not new acceptance results.
+
+**Original frozen rc4 bot limitation, superseded by [rc5](v4-rc5-notes.md):** the seat-based model selector in this original package never chooses the third operating model in any branch and may delay adoption until a later investment. The stabilized rc5 source supports all 18 paid models at earned/funded tier boundaries. Research investment priorities remain unchanged; model reachability and lifecycle tests do not establish strategic balance. All economics tables below describe the original rc4 experiments.
+
 Built from `v4.0.0-rc3` source. Core save version **8.20**, behind an explicit edition
 opt-in ("Core edition" in setup). Expanded stays at **9.33** and un-opted Core stays at
 **8.19**; both remain replay-pinned against their recorded reference builds and replay
@@ -127,7 +131,7 @@ ending is *suppressing* it, not inflating it -- so removing buyouts would make b
 Left alone deliberately.
 ---
 
-## 3. Results, 12 campaigns per arm, 120 months
+## 3. Historical results before Phase 2 — superseded by section 3b
 
 | | rc3 | 8.20 |
 | --- | --- | --- |
@@ -137,7 +141,7 @@ Left alone deliberately.
 | campaigns reaching the 120-month cap (`base`) | 9/12 | **12/12** |
 | `tiltLending` | 243, 0W-12L | **2,369**, above `idle` |
 
-`tiltLending` — the trap this work started from — is no longer a trap.
+The earlier conclusion that lending was no longer a trap was superseded by the Phase 2 regression recorded in section 3b. These two experiments must not be presented as results from one final build.
 
 ---
 
@@ -149,14 +153,9 @@ Left alone deliberately.
 - **`depMargin` and `tiltBusiness` are dominant** (36,376 and 37,837). Making deposits
   deployable amplified these more than intended. This was introduced by this work and
   should be addressed before release.
-- **`laneDigital` is still the weakest lane** (5,504 vs `noResearch` 9,186).
-- **Phase 2 not started** — cross-branch combinations (digital+commercial, network+
-  acquisition, operations+digital, risk+commercial, network+risk) and product/platform
-  gating. The `SERVICE_APPLICATIONS.requires` pattern already takes an array of branches, so
-  the mechanism exists.
-- **No UI work.** `ui/strategy-workspace.js` renders whatever the branch table contains, so
-  the sixth branch and third models appear, but nothing explains the new deployment rule to
-  a player.
+- **The earlier weak-Digital result was superseded** by Phase 2. The final reported Phase 2 table has no research lane below `noResearch`, but the lending-focused arm again trails `idle`.
+- **Phase 2 is implemented:** five cross-branch combinations and research product gates, including their owner-view projection and UI. The earlier statement that it had not started was stale.
+- **Research UI exists, but rc4 descriptions were inaccurate.** The local source repair makes milestone/model descriptions aware of the campaign rules, including the permanent-choice confirmation. The frozen rc4 package retains the old text.
 
 ## 5. Verification
 
@@ -164,11 +163,8 @@ Left alone deliberately.
   `runtime-stages`, `determinism`, `campaign-lifecycle`, `build`, `research_program`.
   The first two pin *current Expanded* against recorded reference builds and compare
   `chooseBot` output field by field.
-- Full 296-test suite: **no failure caused by these changes**. `advertising_controls` and
-  `architecture` fail on unmodified rc3 as well.
-- `research_program.test.js` (6 tests) covers opt-in, strict marker validation, Core-only
-  rejection, branch/model visibility, owner-view scoping, resolution, save round-trip, and
-  operating-model permanence.
+- The earlier claim that the architecture failure was pre-existing was incorrect. The exact rc3 build passes its architecture test; rc4 introduces a forbidden `chooseBot` override. The local repair integrates the fallback into the existing function and passes the architecture test without raising its ceiling.
+- The original six research tests passed but missed purchased-model reload and rematch rule loss, and were absent from the maintained gates. The local repair adds those lifecycle regressions, AI compatibility/product checks and economic-description checks, and registers them in both gate modes. Current completion evidence belongs in the repair status; no full-pass claim is inherited from this original release.
 
 ### Two harness defects that nearly produced false reports
 

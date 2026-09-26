@@ -7,8 +7,14 @@ const fs=require('node:fs'),crypto=require('node:crypto');
 const {createEvidence,fingerprintFiles}=require('./gate_evidence');
 const root = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
-const fromArgs=args.filter(arg=>arg.startsWith('--from='));
-if(args.some(arg=>arg!=='--full'&&!arg.startsWith('--from='))||fromArgs.length>1||fromArgs.length&&args.includes('--full'))throw Error('Usage: node tools/check.js [--full | --from=tests/name.test.js]');
+const fromArgs=args.filter(arg=>arg.startsWith('--from=')),shardArgs=args.filter(arg=>arg.startsWith('--shard=')),listOnly=args.includes('--list');
+// --shard=k/n runs every nth fast-gate command so CI can spread the fast gate over
+// parallel runners; a pull request passes only when all n shards pass. Shards are
+// a CI transport for the same command list, not a smaller gate.
+const shard=shardArgs.length===1?shardArgs[0].slice('--shard='.length).match(/^([1-9][0-9]*)\/([1-9][0-9]*)$/):null;
+if(args.some(arg=>!['--full','--list'].includes(arg)&&!arg.startsWith('--from=')&&!arg.startsWith('--shard='))||fromArgs.length>1||fromArgs.length&&args.includes('--full')||
+ shardArgs.length>1||shardArgs.length&&(!shard||Number(shard[1])>Number(shard[2])||fromArgs.length||args.includes('--full')))
+ throw Error('Usage: node tools/check.js [--full | --from=tests/name.test.js | --shard=k/n] [--list]');
 const commands = args.includes('--full')
   ? [['tools/build_game.js', '--check'], ['tools/build_reference.js', '--check'], ['tests/capture_baseline.js'], ['tests/release_balance.test.js', '--report']]
   : [['tools/build_game.js', '--check'], ['tests/build.test.js'], ['tools/build_reference.js', '--check'], ['tests/reference-eol.test.js'], ['tests/docs.test.js'], ['tests/architecture_scope.test.js'], ['tests/architecture.test.js'],
@@ -158,11 +164,18 @@ commands.push(['tests/gate_evidence.test.js']);
 commands.push(['tests/v4_workflow_stabilization.test.js','--portable']);
 commands.push(['tests/workspace_ownership.test.js','--portable'],['tests/stabilization_banking_trial.test.js']);
 commands.push(['tests/bank_rivalry.test.js'],['tests/income_history_network.test.js','--bank-rivalry']);
+commands.push(['tests/research_program.test.js'],['tests/research_bot.test.js'],['tests/research_program_ui.test.js']);
 const from=fromArgs[0]?.slice('--from='.length),start=from===undefined?0:commands.findIndex(command=>command[0]===from);
 if(start<0)throw Error('Unknown resume point: '+from);
+// Every shard first proves the portable build matches source; the rest are dealt
+// round-robin so each shard gets a similar mix of short and long checks.
+const [shardIndex,shardCount]=shard?[Number(shard[1]),Number(shard[2])]:[1,1];
+const selected=shard?[commands[0],...commands.slice(1).filter((_,i)=>i%shardCount===shardIndex-1)]:commands.slice(start);
+// One write and a plain return: process.exit() truncates piped stdout.
+if(listOnly){process.stdout.write(selected.map(command=>command.join(' ')+'\n').join('')+selected.length+' of '+commands.length+' commands'+(shard?' in shard '+shardIndex+'/'+shardCount:'')+'\n');return;}
 const fingerprint=()=>crypto.createHash('sha256').update(require('./build_game').assemble().html).digest('hex');
 const inputEntries=['src','tests','tools','experiments','reports/reference-builds','BRANCH_WARS.html','BRANCH_WARS_LAN_SERVER.ps1','RUN_TESTS.bat','docs/game-reference.md'];
-const expected=commands.slice(start),before=fingerprint(),inputsBefore=fingerprintFiles(root,inputEntries),evidence=createEvidence(path.join(root,'reports','baselines'),'gate',{mode:from!==undefined?'partial':args.includes('--full')?'full':'fast',from,portableSha256:before,inputEntries,inputsSha256:inputsBefore,commands:expected});
+const expected=selected,before=fingerprint(),inputsBefore=fingerprintFiles(root,inputEntries),evidence=createEvidence(path.join(root,'reports','baselines'),'gate',{mode:from!==undefined?'partial':args.includes('--full')?'full':shard?'fast-shard':'fast',from,shard:shard?shardIndex+'/'+shardCount:undefined,portableSha256:before,inputEntries,inputsSha256:inputsBefore,commands:expected});
 let completed=0,gateFinished=false;
 console.log('Durable gate output: '+evidence.log);
 process.on('exit',exitCode=>{if(!gateFinished)evidence.finish({passed:false,incomplete:completed<expected.length,exitCode,completed,expected:expected.length});});
@@ -171,12 +184,20 @@ for (const command of expected) {
   console.log('Checking ' + command.join(' '));
   evidence.append('command-started',{command});
   fs.writeSync(evidence.logFd,'\nChecking '+command.join(' ')+'\n');
+  const outputStart=fs.fstatSync(evidence.logFd).size;
   const result = spawnSync(process.execPath, command, {cwd: root, stdio: ['ignore',evidence.logFd,evidence.logFd], windowsHide: true});
   completed++;evidence.append('command-finished',{command,exitCode:result.status,signal:result.signal,error:result.error?.message||null});
   if (result.error) throw result.error;
-  if (result.status !== 0) process.exit(result.status || 1);
+  if (result.status !== 0) {
+    // Command output goes only to the durable log; CI shows only this console,
+    // so repeat the failing command's own tail here or the failure is unreadable.
+    const size=fs.fstatSync(evidence.logFd).size,length=Math.min(size-outputStart,64*1024),tail=Buffer.alloc(Math.max(0,length));
+    if(length>0)fs.readSync(fs.openSync(evidence.log,'r'),tail,0,length,size-length);
+    console.error('\nFAILED '+command.join(' ')+' (exit '+(result.status??result.signal)+'). Last output:\n'+tail.toString('utf8').split('\n').slice(-80).join('\n'));
+    process.exit(result.status || 1);
+  }
 }
 const after=fingerprint(),inputsAfter=fingerprintFiles(root,inputEntries),sourceUnchanged=before===after&&inputsBefore===inputsAfter;
 evidence.finish({passed:sourceUnchanged,incomplete:false,completed,expected:expected.length,sourceUnchanged,portableAfterSha256:after,inputsAfterSha256:inputsAfter});gateFinished=true;
 if(!sourceUnchanged)throw Error('Playable source changed during the gate; see '+evidence.summary);
-console.log(from!==undefined?'Resumed checks passed (partial diagnostic run, not a complete gate).':args.includes('--full') ? 'Full checks passed.' : 'Fast checks passed (not full release acceptance).');
+console.log(from!==undefined?'Resumed checks passed (partial diagnostic run, not a complete gate).':shard?'Fast gate shard '+shardIndex+'/'+shardCount+' passed; the fast gate passes only when every shard passes.':args.includes('--full') ? 'Full checks passed.' : 'Fast checks passed (not full release acceptance).');

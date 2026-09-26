@@ -792,7 +792,7 @@ Current player candidate: **Group rules 6 / save 9.5**, 134 assembly inputs,
 portable SHA-256 `4d616ad43145baac692d49aa6f864fefe96e0fffa7396cc81554107ee21cd107`.
 The [V3 report](../v3-release-report.md) owns exact final test results and balance
 limits. The [player ZIP](../../../releases/branch-wars-v3.zip) and
-[45-page manual](../../../releases/branch-wars-v3-manual.pdf) describe this snapshot.
+[45-page manual](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/branch-wars-v3-manual.pdf) describe this snapshot.
 All V2 packages remain unchanged. The earlier sections below are checkpoint
 history, not claims that old builds certify V3.
 

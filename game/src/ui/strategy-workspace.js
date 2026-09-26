@@ -66,20 +66,27 @@ function renderStrategyWorkspace(v){
  const branch=strategySelection(v),token=strategyContext(v),s=strategyFundingStatus(v,branch),info=v.strategyBranches[branch],q=E.planBudget(v.me,draft,v),pledged=Object.values(draft.investments||{}).reduce((n,x)=>n+Math.max(0,Math.round(x||0)),0);
  const current=$('#strategyRoadmap');if(current?.dataset?.strategyDetails===branch){const set=new Set(strategyWorkspace.roadmaps);if(current.open)set.add(branch);else set.delete(branch);strategyWorkspace.roadmaps=[...set];}
  $('#strategySummary').innerHTML='<div class="strategy-budget"><span>Research staged <b>'+money(pledged)+'</b></span><span>Remaining plan budget <b>'+money(q.remaining)+'</b></span><span>Per capability / month <b>'+money(v.capabilityCap)+'</b></span></div>';
- $('#strategyTree').innerHTML='<div class="object-workspace research-workspace"><div class="object-columns"><nav class="object-directory" aria-label="Capabilities">'+Object.entries(v.strategyBranches).map(([key,d])=>{const state=strategyFundingStatus(v,key);return '<button type="button" class="object-row" id="strategy-select-'+key+'" aria-pressed="'+(key===branch)+'"><span><b>'+esc(d.name)+'</b><small>'+state.level+' / '+v.capabilityTiers[key].length+' milestones · '+money(state.spent)+' paid</small></span><span class="object-tag">'+(state.pledged?money(state.pledged)+' staged':state.done?'Complete':'Develop')+'</span></button>';}).join('')+'<p class="micro muted">All five capabilities remain open. Inspecting a capability does not fund it or change your focus market. Permanent models retain their own tradeoffs.</p></nav><section class="object-detail" data-strategy-lane="'+branch+'" aria-labelledby="strategyDetailTitle"><h3 id="strategyDetailTitle" tabindex="-1">'+esc(info.name)+'</h3><p class="small">'+esc(info.promise)+'</p><div class="workbench-toolbar" role="group" aria-label="Capability actions">'+[['milestones','Fund research'],['model','Operating model'],['applications','Deployment & use']].map(([key,label])=>'<button type="button" class="btn" id="strategy-desk-'+key+'" aria-pressed="'+(strategyWorkspace.desk===key)+'">'+label+'</button>').join('')+'</div>'+(strategyWorkspace.desk==='model'?strategyModelsContent(v,branch,s,token):strategyWorkspace.desk==='applications'?strategyDeploymentContent(v,branch,token):strategyMilestonesContent(v,branch,s,token))+'</section></div></div>';
+ $('#strategyTree').innerHTML='<div class="object-workspace research-workspace"><div class="object-columns"><nav class="object-directory" aria-label="Capabilities">'+Object.entries(v.strategyBranches).map(([key,d])=>{const state=strategyFundingStatus(v,key);return '<button type="button" class="object-row" id="strategy-select-'+key+'" aria-pressed="'+(key===branch)+'"><span><b>'+esc(d.name)+'</b><small>'+state.level+' / '+v.capabilityTiers[key].length+' milestones · '+money(state.spent)+' paid</small></span><span class="object-tag">'+(state.pledged?money(state.pledged)+' staged':state.done?'Complete':'Develop')+'</span></button>';}).join('')+'<p class="micro muted">All '+(v.researchProgramVersion===1?'six':'five')+' capabilities remain open. Inspecting a capability does not fund it or change your focus market. Permanent models retain their own tradeoffs.</p></nav><section class="object-detail" data-strategy-lane="'+branch+'" aria-labelledby="strategyDetailTitle"><h3 id="strategyDetailTitle" tabindex="-1">'+esc(info.name)+'</h3><p class="small">'+esc(info.promise)+'</p><div class="workbench-toolbar" role="group" aria-label="Capability actions">'+[['milestones','Fund research'],['model','Operating model'],['applications','Deployment & use']].map(([key,label])=>'<button type="button" class="btn" id="strategy-desk-'+key+'" aria-pressed="'+(strategyWorkspace.desk===key)+'">'+label+'</button>').join('')+'</div>'+(strategyWorkspace.desk==='model'?strategyModelsContent(v,branch,s,token):strategyWorkspace.desk==='applications'?strategyDeploymentContent(v,branch,token):strategyMilestonesContent(v,branch,s,token))+'</section></div></div>';
  renderResearchCombinations(v);
  bindStrategyWorkspace(v,token);
 }
 function renderResearchCombinations(v){
  if(!v.researchCombinations)return;
  const held=new Set(v.me.researchCombinations||[]);
+ const descriptions=v.researchProgramVersion===1?{
+  digitalTreasury:'Raises commercial fee income by 22%. Existing servicing capacity still limits the relationships that earn fees.',
+  branchIntegration:'Reduces new branch project costs by another 22%, after Network research. Acquisition project costs are unchanged.',
+  straightThrough:'Raises Retail & Service and Lending banker throughput by 18%. Funding and market capacity still limit actual growth.',
+  structuredCredit:'Raises loan yield by a further 15% and multiplies modeled credit losses by 0.88, alongside any operating-model effects.',
+  depositFranchise:'Reduces deposit funding cost by 10% and rate-sensitive deposit runoff by 28%.'
+ }:{};
  const rows=Object.entries(v.researchCombinations).map(([key,def])=>{
   const need=Object.entries(def.requires).map(([branch,level])=>{
    const at=E.strategyLevel(v.me,branch),ok=at>=level;
    return '<span class="'+(ok?'combo-met':'combo-missing')+'">'+esc(v.strategyBranches[branch].name)+' '+at+'/'+level+'</span>';
   }).join(' + ');
   return '<li class="'+(held.has(key)?'combo-active':'combo-idle')+'"><b>'+(held.has(key)?'✓ ':'')+esc(def.name)+'</b>'+
-   '<div class="micro muted">'+esc(def.desc)+'</div><div class="micro">'+need+'</div></li>';
+   '<div class="micro muted">'+esc(descriptions[key]||def.desc)+'</div><div class="micro">'+need+'</div></li>';
  }).join('');
  $('#strategyTree').insertAdjacentHTML('beforeend',
   '<section class="research-combinations"><h3>COMBINED CAPABILITIES</h3>'+
@@ -100,6 +107,6 @@ function bindStrategyWorkspace(v,token){
  for(const app of strategyApplications(v,branch))bind('strategy-app-'+app.key,()=>{strategyWorkspace.application=app.key;redraw();$('#strategy-app-'+app.key)?.focus?.({preventScroll:true});});
  bind('strategyDeployApplication',()=>{if(application&&toggleInitiative(application.kind==='product'?application.definition.project:application.key,currentView()))redraw('strategyDeployApplication');},true);
  bind('strategyProductLink',()=>{if(application?.kind!=='product'||!v.me.productPrograms)return;const now=currentView();productSelection(now);productWorkspace.product=application.key;openProductDesk('development');focusWorkspaceTarget($('#productDetailTitle'));});
- bind('strategyServiceLink',()=>{const now=currentView();setWorkspaceTab('markets',now);const controls=$('#servicePricing');if(controls)controls.open=true;const input=$('[data-service-active="'+application?.definition.app+'"]'),panel=$('#commercialClientWorkspace');if(input&&!input.disabled)focusWorkspaceTarget(input);else if(panel){panel.setAttribute('tabindex','-1');focusWorkspaceTarget(panel);}});
+ bind('strategyServiceLink',()=>{const now=currentView();if(now.me.householdBook)selectCustomerSubject('commercial');else setWorkspaceTab('markets',now);const controls=$('#servicePricing');if(controls)controls.open=true;const input=$('[data-service-active="'+application?.definition.app+'"]'),panel=$('#commercialClientWorkspace');if(input&&!input.disabled)focusWorkspaceTarget(input);else if(panel){panel.setAttribute('tabindex','-1');focusWorkspaceTarget(panel);}});
  bind('strategyProjectsLink',()=>{setWorkspaceTab('operations');setOperationsDesk('projects');focusWorkspaceTarget($('#projectGrid'));});
 }

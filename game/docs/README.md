@@ -15,7 +15,7 @@ The frozen V3 ZIP/manual, V4 playtest and newer local development HTML are diffe
 | --- | --- |
 | Learn how to play, host or recover | [Player guide](player-guide.md) |
 | Mechanics and numerical values | [Generated game reference](game-reference.md) — generated from the local playable HTML, not automatically from newer source |
-| Frozen V3 handbook | [Matching field manual PDF](../../releases/branch-wars-v3-manual.pdf) |
+| Frozen V3 handbook | [Matching field manual PDF](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/branch-wars-v3-manual.pdf) |
 | Current local handbook | [Development manual status](release-status.md#local-development-handbook--not-a-published-replacement) — guide-derived PDF; not a released replacement |
 | Frozen V3 changes and original QA | [Edition-bound release report](v3-release-report.md) |
 | Earlier V3.1 candidate evidence | [Stability report](v31-stability-report.md) and [manual addendum](v31-manual-addendum.md) — historical, not the current candidate |

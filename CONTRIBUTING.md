@@ -24,7 +24,7 @@ node game/tools/check.js
 node game/tools/check.js --full
 ```
 
-The full Windows gate includes the local LAN server suite. The fast gate is not release acceptance. Both reject a stale portable build; neither silently regenerates it. Source order is explicit in `game/src/manifest.json`; new source files must be listed. Engine/content modules must not depend on DOM, storage, timers or transports. The build uses only Node built-ins and preserves a double-clickable single HTML file.
+`--list` prints the commands a run would execute. CI splits the fast gate with `--shard=k/n` across parallel runners; it passes only when every shard passes. The full Windows gate includes the local LAN server suite. The fast gate is not release acceptance. Both reject a stale portable build; neither silently regenerates it. Source order is explicit in `game/src/manifest.json`; new source files must be listed. Engine/content modules must not depend on DOM, storage, timers or transports. The build uses only Node built-ins and preserves a double-clickable single HTML file.
 
 Golden fixtures are committed expectations, not two current runs agreeing. Never regenerate them just to make a failing refactor pass. For an intentional mechanics change, explain the affected scenarios and rule version in the PR, then run `node game/tests/behavior-golden.test.js --update-goldens` and review the fixture diff. This command does not update preserved save fixtures.
 

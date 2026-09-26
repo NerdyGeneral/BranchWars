@@ -1,5 +1,65 @@
 # Release status and known issues
 
+## September 26 — main carries the rc5 repairs
+
+The published rc5 repair (tag `v4.0.0-rc5`, branch `release/v4-stabilized`) was never merged
+to main. Main was instead built from rc4 on a separate line, so the working copy that the
+README points players to still had rc4's loader defect: reloading a Core 8.20 save deleted
+any Risk & Capital model and any third operating model (reproduced: `{"risk":"provisioning",
+"network":"franchisePartners"}` became `{}`). This merge brings rc5 onto main alongside
+main's later default-Core, multiplayer-resume, monthly-desk and mandate work. Nothing is
+republished; the rc5 ZIP stays the packaged download.
+
+| Working artifact | Identity |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `76652a6fa77bd48bbbaaf13accada70dcde395d9e6779b86bbc2e3e1621b50f4` |
+| Engine | `678af36463e2caa400c1ecdce16abf4648b9c14dc47621b1ebfe04ada52030a9` |
+
+- **Bot product gate:** both lines had moved research gating into the bot. Main's shared
+  `researchAllowedProducts` is kept; rc5's context-based chooser for all 18 Core models is
+  added. `research_bot` proves every other plan field and every AI random draw match the
+  published rc4 bot.
+- **Frozen packages restored:** the merge onto main had pruned `releases/v4` (rc2) and
+  `releases/v4-rc3`, which `income_review`, `research_bot` and `package_release` load as
+  pinned references, and had twice rebuilt the frozen `releases/v4-rc4` from later source.
+  All three are back to their published bytes; `releases/catalog.json` now verifies them.
+- **CI:** every push to main since the V4 merge failed within seconds at
+  `tools/check-release-catalog.js`, which still pinned the V3-era main game and read the
+  pruned V3 manual, so the fast gate never ran on GitHub. The catalog is now schema 2 and
+  pins only what `releases/` stores. `docs.test.js` also failed on six links to pruned
+  packages; they now point at the release tags that hold those files.
+
+**Verification so far:** scoped checks passed on the merged source: build, architecture,
+behavior-golden, runtime-stages, determinism, campaign-lifecycle, bank_economics,
+bank_rivalry, expanded_edition(+_network), engine, research_program(+_ui), research_bot,
+feature_setup, github_resilience, agency_legacy_compat, agency_peer_compat,
+v31_version_boundary, strategy_workspace, package_release, income_review, docs, both
+release-catalog checks and the engine pin. The complete 278-command fast gate was still
+running when this was recorded; its result is not claimed here.
+
+## September 21 — V4 rc5 Core Research & Stabilization
+
+**Verified package with complete exact command coverage across qualified runs.** [V4 rc5](https://github.com/NerdyGeneral/BranchWars/releases/tag/v4.0.0-rc5) provides the [six-file game ZIP](https://github.com/NerdyGeneral/BranchWars/releases/download/v4.0.0-rc5/branch-wars-v4-rc5.zip), byte-identical to the tested local stabilization package. [Repair status](rc4-local-repair.md) · [release notes](../../releases/v4-rc5-notes.md) · [public verification summary](../../releases/v4-rc5-verification.json) · [Claude Code review summary](../../CLAUDE_CODE_REVIEW.md). Earlier frozen releases remain unchanged.
+
+| Current artifact | Identity / evidence |
+| --- | --- |
+| `branch-wars-v4-rc5.zip` | ZIP SHA-256 `38a734cfd98e14d8512108a392a286581a0b4774fb3376f614e98e12dd60c672` |
+| Working and packaged portable | `26d9603689678aaed44ffa2c0981b65877b62cc1d3f78aa2cb43579fec1e0af3` |
+| Engine | `8bf022b18ceb1efdd646f32123b519495c5324e7609195ae1fe64b03b4369d0f` |
+| Qualified command coverage | 278 exact standard commands; original full gate remains failed at 3/44 |
+| Package verification | All six archive/extracted files match source; current-profile runtime smoke passed |
+| Actual Claude Code review | Scoped package review closed; independent fingerprint, coverage-citation and ZIP checks |
+
+The complete 214-entry baseline has 213 passes and one exact stale engine-pin failure; separate full outer tail 41/41 and standard supplement 71/71 passed with unchanged inputs. After all runs terminated and all 11 compatibility/build/research prerequisites passed, the approved engine pin/comment and package-README prose were applied and both affected complete checks passed. The failed pin row is mapped explicitly to the standalone pass; the original failed receipts remain unchanged. The qualifier checks exact schedules/arguments and two-file fingerprint reconstruction. Its `fullGatePassed:false` and `continuousStandardGatePassed:false` are intentional: this is complete command coverage across runs.
+
+The fixes retain paid research through reload and campaign rules through rematch, improve Core operating-model adoption, correct research descriptions and open the visible service controls from Strategy. Household-enabled campaigns route services to Customers/commercial; service-only campaigns without household ownership retain Markets. Explicit Core selection and confirmation starts 8.20; untouched setup stays 8.19. Check Research for six capabilities including RISK & CAPITAL. Confirmed Expanded starts 9.33; imports/rematches preserve saved rules.
+
+No browser/human or physical two-computer acceptance is claimed. Automated Windows LAN checks passed. Model reachability, valid recovery proposals and automated census runs do not establish strategic balance. The standard release-balance runner's legacy configuration must not be relabelled as current Core/Expanded balance. Sustained Expanded recovery and conventional-lending balance remain open. Full blueprint completion is outside this prerelease.
+
+## Historical release and checkpoint evidence
+
+Everything below describes its named older artifact/checkpoint, including past pending/interrupted gates and browser samples. It is preserved history, not rc5 status. The earlier September 20 candidate and joint reviews remain local historical evidence; its 50fff06d portable differs from rc5. Raw local diagnostics and review workspaces are not part of the public package.
+
 **September 14, 2026 · implementation incomplete.** This page owns artifact identity, known issues and release gates. The [implementation ledger](v3-usability.md) owns the full completed/remaining checklist. Detailed prior test narratives are in the [release archive](archive/release-history-2026-09-13.md).
 
 Detailed local diagnostics and raw campaign dumps are preserved but not bundled
@@ -648,9 +708,9 @@ subtotals within the combined competition stage.
 
 | Artifact | Identity | Status |
 | --- | --- | --- |
-| [Frozen V3 player ZIP](../../releases/branch-wars-v3.zip) and [matching manual](../../releases/branch-wars-v3-manual.pdf) | Published-snapshot lineage: save9.5 /134 assembly inputs | Preserved distribution; not the newest development work. Local hashes still match the frozen report. |
+| [Frozen V3 player ZIP](../../releases/branch-wars-v3.zip) and [matching manual](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/branch-wars-v3-manual.pdf) | Published-snapshot lineage: save9.5 /134 assembly inputs | Preserved distribution; not the newest development work. Local hashes still match the frozen report. |
 | [Local playable HTML](../BRANCH_WARS.html) | Checkpoint66; normal Core8.19 / Expanded9.32 | Matches the V4 rc2 package. Reporting and economic corrections are selected by the existing edition buttons. Not a full release gate pass. |
-| [V4 rc2 playtest package](../../releases/branch-wars-v4.zip) | Checkpoint66 / Core8.19 / Expanded9.32 /199 inputs | September14 playtest update; previous V4 is preserved at the rc1 tag. |
+| [V4 rc2 playtest package](https://github.com/NerdyGeneral/BranchWars/blob/v4.0.0-rc2/releases/branch-wars-v4.zip) | Checkpoint66 / Core8.19 / Expanded9.32 /199 inputs | September14 playtest update; previous V4 is preserved at the rc1 tag. |
 | [Current source](../src/manifest.json) | Checkpoint66 /199 inputs; normal Expanded starts9.32 | Integrated reporting, serviced income, credit workload, payroll and Core funding corrections. Balance and release gates remain open. |
 | [Checkpoint65 review artifact](../output/BRANCH_WARS_expanded65_review.html) | Preserved integrated Expanded lending /193 inputs | No longer matches current source. Not a final player release or full gate pass. |
 | [Checkpoint64 review artifact](../output/BRANCH_WARS_creditrival64_review.html) | Preserved company-credit rival workflow /193 inputs; no longer matches current source | Developer review artifact; company lending here still requires explicit9.28 creation. Not a player release or full gate pass. |
@@ -1700,4 +1760,4 @@ No new user content decision blocks the next approved implementation step. Natio
 
 ## Historical evidence
 
-Use the [release history](archive/release-history-2026-09-13.md), [checkpoint index](archive/README.md#september-13-documentation-consolidation), [frozen V3 report](v3-release-report.md) and [rollback packages](../../releases/v2-stabilization-rc1/README.txt). Preserve unique failed tests, saves, reference builds and their matching manuals.
+Use the [release history](archive/release-history-2026-09-13.md), [checkpoint index](archive/README.md#september-13-documentation-consolidation), [frozen V3 report](v3-release-report.md) and [rollback packages](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/v2-stabilization-rc1/README.txt). Preserve unique failed tests, saves, reference builds and their matching manuals.
