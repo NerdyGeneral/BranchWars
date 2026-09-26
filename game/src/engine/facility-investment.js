@@ -5,6 +5,11 @@ function facilityInvestmentDraft(input){const plan=departmentFunctionCopy(input)
 function facilityInvestmentGross(report,owner=null){
  return owner?.creditWorkloadVersion===1?ordinaryCreditOriginations(report):Math.max(0,Math.round((report.loanGrowth||0)+(report.principalRepaid||0)+(report.creditRecovery||0)+(report.chargeoff||0)));
 }
+// Highest monthly coupon the plan's credit products would book.
+function facilityInvestmentCoupon(g,p,plan){
+ const owner={...p,allocation:plan.allocation,policies:{...p.policies,lending:plan.lendingPolicy},products:plan.products};
+ return Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000));
+}
 function facilityInvestmentCreditOwner(source,plan,g){
  return prepareCreditScenarioOwner(source,plan,g);
 }
@@ -95,11 +100,13 @@ function facilityInvestmentReview(g,index,input,request){
   baseStream=facilityInvestmentCreditStream(p,g.economy,plan,baseFlows,Array(months).fill(recurring(before)),undefined,g),
   futureStream=facilityInvestmentCreditStream(p,g.economy,plan,futureFlows,Array.from({length:months},(_,i)=>recurring(i<constructionMonths?during:after)),quote.cost,g);
  if(futureStream.rows.some(row=>row.cash<0||row.capitalRatio<10))return {...reject('The funded long-run scenario breaches cash or capital protection.'),quote,before,during,after,baseStream,futureStream};
- const value=futureStream.value-baseStream.value-quote.cost;
+ // Expanded 9.34 also prices the deposit growth the office adds or gives up.
+ const depositValue=balanceSheetLendingRules(p)?balanceSheetDepositGrowthValue(p,before,month=>month<=constructionMonths?during:after,facilityInvestmentCoupon(g,p,plan),months):0,
+  value=futureStream.value-baseStream.value-quote.cost+depositValue;
  return {eligible:true,ready,reason:ready?'':'Accumulate protected capital before committing this conversion.',quote,
   plan:{...plan,facilityPolicy:ready?{convert:{...request},cancel:null}:defaultFacilityPolicy()},before,during,after,horizon:months,constructionMonths,value,
   beforeOriginations:baseFlows.at(-1),afterOriginations:futureFlows.at(-1),beforePrincipal:baseStream.rows.at(-1).principal,afterPrincipal:futureStream.rows.at(-1).principal,
-  baseStream,futureStream,
+  baseStream,futureStream,...(balanceSheetLendingRules(p)?{depositValue}:{}),
   assumption:'Frozen economy, staff, collections and non-credit operating earnings; projected loans capped by cash and 10% capital plus buffers. No borrowing, future hiring or deposit/customer growth. Unstarted research/projects deferred. Principal repayment is not profit; this is not a future earnings guarantee.'};
 }
 function planFacilityInvestment(g,index,input){
@@ -114,13 +121,13 @@ function planFacilityInvestment(g,index,input){
  const context=facilityContext(g,p,draft),budget=planBudget(p,draft,g),
   metrics=facilityAiConversionMetrics(g,p,draft,budget),byModel=new Map(),
   current=operatingPreview({...p,focus:draft.focus,marketSnapshot:g.marketEconomy},draft,g.economy,g),
-  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity,
-  owner={...p,allocation:draft.allocation,policies:{...p.policies,lending:draft.lendingPolicy},products:draft.products},
-  coupon=Math.max(...creditProductionParts(owner,g,1000000).map(c=>c.rate/1000000)),horizon=FACILITY_INVESTMENT_HORIZON;
+  gross=facilityInvestmentGross(current,p),capacity=regionalBranchMetrics(p).loanCapacity+(balanceSheetLendingRules(p)?loanProductionCentralCapacity(g,p):0),
+  coupon=facilityInvestmentCoupon(g,p,draft),horizon=FACILITY_INVESTMENT_HORIZON;
  context.officeMetrics=metrics;
  // Screen cheaply, then forecast at most two DISTINCT models. Do not let two
  // expensive financial centers crowd every commercial/retail alternative out.
  for(const office of p.facilityNetwork.offices.filter(o=>o.closedCycle===null))for(const model of FacilityNetwork.models(p)){
+  if(!balanceSheetKeepsFullService(p,office.id,model))continue;
   const request={officeId:office.id,model},q=FacilityNetwork.quote(p,request,context);if(!q.eligible)continue;
   const gain=Math.max(0,q.after.loanCapacity-q.before.loanCapacity),lost=Math.max(0,gross-Math.max(0,capacity+q.after.loanCapacity-q.before.loanCapacity)),
    score=(q.before.expense-q.after.expense)*horizon+(gain-lost)*coupon*horizon*(horizon+1)/2-q.cost;

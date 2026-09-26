@@ -39,12 +39,11 @@ Only the host exports the authoritative multiplayer campaign. Never distribute
 private saves or access tokens with the game. Keep a backup before importing.
 
 CAMPAIGN EDITIONS
-To start Core version 8.20, click Core edition and confirm, even if it already
-looks selected, then start your campaign. This enables six research branches
-and permanent operating models. After starting, open Research and check that
-it lists six capabilities, including RISK & CAPITAL.
-Starting without that confirmation retains Core version 8.19. Choose Expanded
-edition and confirm for version 9.33 with persistent bank rivalry. Historical
+New campaigns start as Core version 8.20, with six research branches and
+permanent operating models. After starting, open Research and check that it
+lists six capabilities, including RISK & CAPITAL. Choose Expanded edition and
+confirm for version 9.34: persistent bank rivalry, and credit staff can lend
+part of the funded deposit base beyond local office capacity. Historical
 campaigns retain their saved rules; import and rematch do not silently upgrade
 them. In multiplayer, the host applies the
 shared settings and both players confirm readiness. Campaign rules stay fixed

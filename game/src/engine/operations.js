@@ -15,7 +15,7 @@ function operatingWorkloadMorale(p,a=workforceAllocation(p)){
 }
 // Shared gross origination capacity. A named-company underwriting reservation
 // consumes this same capacity; it is not extra production on top of bank loans.
-function loanProductionCapacity(g,p){
+function loanProductionCapacity(g,p,parts=null){
  const lending=creditSalesStaff(p,workforceAllocation(p).lending),lp=p.policies.lending,cp=p.policies.capital,
   macro=g.economy||MACRO_REGIMES.steady,commercial=strategyProgress(p,'commercial'),creditProduct=productOption(p,'credit'),
   training=(1+p.upgrades.training*.08)*(p.doctrine==='people'?1.1:1),capitalGrowth={liquid:.86,balanced:1,reinvest:1.13}[cp],
@@ -26,13 +26,21 @@ function loanProductionCapacity(g,p){
  // while the book grew 10.7M -> 33.6M. It stayed profitable, but it could no longer
  // fund projects, hires or research, and cash is the largest single score term.
  // Cap production at the liquidity the bank actually has spare, using the same
- // reserve rate settleFunding applies. Core only; every earlier campaign keeps
- // its exact arithmetic.
- const fundingRoom=researchProgramRules(p)
+ // reserve rate settleFunding applies. Core 8.20 and Expanded 9.34 only; every
+ // earlier campaign keeps its exact arithmetic.
+ const fundingRoom=researchProgramRules(p)||balanceSheetLendingRules(p)
   ? Math.max(0,p.stats.cash-Math.round(p.stats.deposits*({liquid:.1,balanced:.05,reinvest:.02}[cp]||.05)*researchReserveMultiplier(p)))
   : Infinity;
- return Math.min((lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'),fundingRoom,regionalOperations(p)?regionalBranchMetrics(p).loanCapacity:Infinity);
+ // Expanded 9.34 central deployment is lent without a local office, so it adds
+ // to both the staff capacity and the office capacity. Zero for every other rule set.
+ const central=balanceSheetLendingRules(p)?balanceSheetDeploymentCapacity(p,lending)*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration'):0,
+  staff=(lending*185000+researchDeploymentCapacity(p,lending))*multiplier*training*researchLoanMultiplier(p)*researchThroughputMultiplier(p)*departmentFunctionCoverage(p,'creditAdministration')+central,
+  office=regionalOperations(p)?regionalBranchMetrics(p).loanCapacity+central:Infinity;
+ // Read-only detail for diagnostics and the AI's office valuation.
+ if(parts)Object.assign(parts,{staff,funding:fundingRoom,office,central});
+ return Math.min(staff,fundingRoom,office);
 }
+function loanProductionCentralCapacity(g,p){const parts={};loanProductionCapacity(g,p,parts);return parts.central;}
 function availableLoanProduction(g,p){
  const capacity=loanProductionCapacity(g,p);
  return p._companyCreditOrigination===undefined?capacity:Math.max(0,capacity-p._companyCreditOrigination);
