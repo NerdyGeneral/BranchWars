@@ -63,7 +63,7 @@ correction above; no expected legacy result was regenerated.
 
 ## Artifact and preservation
 
-Review HTML: [credittrading57](../../output/BRANCH_WARS_credittrading57_review.html).
+Review HTML: [credittrading57](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_credittrading57_review.html).
 SHA-256: `2bc2ca41f6675d2cd0874219fffd7a24847927f27c99cd74e3c5100a4fc43cc2`.
 Engine SHA-256: `89574ccfa4801a53f4928cef071169c4fd20329eb6581b6e58dd476b64a5f922`.
 188 assembly inputs; source and review bytes match. The normal playable remains

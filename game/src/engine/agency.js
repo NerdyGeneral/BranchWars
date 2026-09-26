@@ -62,7 +62,6 @@ function agencyQuote(p, input = defaultAgencyPlan(p), companies = p.companySnaps
     reserveRequired: 3 * monthlyExpense, estimatedCommission, cash: a.book.accounts.cash,
     equity: a.book.accounts.equity, payables: a.book.accounts.payables,...(professional?{professional}: {}) };
 }
-function agencyReview(p) { return agencyQuote(p); }
 function normalizeAgencyPlan(p, plan) {
   if (!p.agency) {
     if (plan.agencyPolicy !== undefined) throw Error('Agency instructions require Financial Group rules 3.');

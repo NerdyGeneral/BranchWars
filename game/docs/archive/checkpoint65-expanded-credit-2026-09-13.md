@@ -14,7 +14,7 @@ Historical tests must not inherit whichever rules the latest Expanded button sel
 
 ## Exact-build evidence
 
-- Review artifact: [Expanded65 HTML](../../output/BRANCH_WARS_expanded65_review.html),193 assembly inputs; SHA-256 `1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00`.
+- Review artifact: [Expanded65 HTML](../../reports/reference-builds/BRANCH_WARS_expanded65_review.html),193 assembly inputs; SHA-256 `1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00`.
 - [Initial integration report](../../output/master-checkpoint65-verification.json):126 tests across32 affected files;119 passed and seven historical-fixture setup failures were retained. Five transport command groups, source architecture and documentation checks passed.
 - [Fixture recheck](../../output/master-checkpoint65-fixture-recheck.json): all nine tests in the two corrected files pass, covering all seven earlier failures and repeating two earlier passes. Production source did not change.
 - [Shared setup regressions](../../output/master-checkpoint65-setup-regression.json): registry, setup, lobby and network commands pass, including legacy compatibility, strict received-state validation, recovery handshakes and stale-message fences. The registry report's optional baseline replay was not requested; exact historical replay is covered by the affected subsystem tests.

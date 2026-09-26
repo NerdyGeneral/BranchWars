@@ -50,7 +50,7 @@ funding stress fixture is not evidence of a viable human strategy.
 
 ## Artifact
 
-[Checkpoint58 review HTML](../../output/BRANCH_WARS_creditbank58_review.html):
+[Checkpoint58 review HTML](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditbank58_review.html):
 `c364cf4266df44e46ba6266aa6455e0e550e1d811873c752215c7aa4e6dc838d`.
 Engine: `7b90e5e192d59097d8d88d433a97200af77bacc99f40f03a77fa808837bdf6fa`.
 189 source inputs. The normal playable remains

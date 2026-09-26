@@ -13,7 +13,7 @@ September 13, 2026. The explicit 9.28 engine campaign now executes real submitte
 
 ## Evidence and failures preserved
 
-[Review artifact](../../output/BRANCH_WARS_creditcampaign62_review.html), 191 inputs, SHA-256 `316558349a6548a7ce35f67aaa8a2c621a4be6dc0094c1f0e80e043ed3d3cfc2`; engine SHA-256 `57120bbc790ff9cf3bf7a2f4a31ad19a8e12a6a350863bde3d59e9cd38eb2e1e`.
+[Review artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_creditcampaign62_review.html), 191 inputs, SHA-256 `316558349a6548a7ce35f67aaa8a2c621a4be6dc0094c1f0e80e043ed3d3cfc2`; engine SHA-256 `57120bbc790ff9cf3bf7a2f4a31ad19a8e12a6a350863bde3d59e9cd38eb2e1e`.
 
 The [initial exact-build report](../../output/master-checkpoint62-verification.json) retains 26 passing campaign/order/forecast/cash-location/historical tests and a passing source architecture/syntax gate. Its first network run failed: an unseeded campaign entered conditions in which the scripted offer correctly failed underwriting. That report remains failed, not rewritten as a pass.
 

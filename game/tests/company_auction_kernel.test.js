@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),{test}=require('node:test'),vm=require('node:vm');
 const ctx={};vm.runInNewContext(require('../tools/build_game').assemble().html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],ctx);
-const G=ctx.BWEngine.GroupAccounting,prototype=process.argv.includes('--prototype'),A=prototype?require('../experiments/company-equity/call-auction')(G):ctx.BWEngine.CompanyAuction,asset=prototype?'investments':'businessAssets',base=prototype?'baseInvestments':'baseAssets',copy=x=>JSON.parse(JSON.stringify(x));
+const G=ctx.BWEngine.GroupAccounting,A=ctx.BWEngine.CompanyAuction,asset='businessAssets',base='baseAssets',copy=x=>JSON.parse(JSON.stringify(x));
 function fresh(cash=500000){
  const issuers=Array.from({length:6},(_,i)=>({id:'company:'+i,issued:100000,referenceCents:1000,suspended:false}));
  const holders=['bank-a','bank-b','outside'].map(id=>{const external=id==='outside',positions=Object.fromEntries(issuers.map(i=>[i.id,{shares:external?100000:0,basis:external?1000000:0}]));

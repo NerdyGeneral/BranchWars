@@ -12,7 +12,7 @@ Funded full-turn tests open a second real office, pay for two rooms, reserve two
 
 ## Evidence and provisional choices
 
-The [exact-build report](../../output/master-checkpoint51-verification.json) records terminal suites, simulated transports, artifact hashes, limitations and failed fixtures. The [local developer artifact](../../output/BRANCH_WARS_premises51_expanded.html) is not a replacement for the normal playable HTML or frozen V3 distribution.
+The [exact-build report](../../output/master-checkpoint51-verification.json) records terminal suites, simulated transports, artifact hashes, limitations and failed fixtures. The [local developer artifact](https://github.com/NerdyGeneral/BranchWars/blob/d795660/game/output/BRANCH_WARS_premises51_expanded.html) is not a replacement for the normal playable HTML or frozen V3 distribution.
 
 Provisional rival choices: assess new fit-out every six months; keep at least half each profession centrally; require65% condition for local service and80% for construction; reserve a year of full-maintenance upkeep, three months of subsidiary recurring costs and applicable capital floors; require related recorded income at least twice base upkeep. These are AI guardrails, not statutory requirements or changes to player rules. Positive-income decision fixtures do not prove ordinary-start profitability.
 

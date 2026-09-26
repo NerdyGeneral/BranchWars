@@ -28,7 +28,7 @@ const current = runtime(source), old = runtime(reference), E = current.E;
 // baseline or making the comparison insensitive to arbitrary error changes.
 // The published V4 folder advances with releases. Use the already-preserved,
 // tracked checkpoint65 bytes instead; keep the original checksum and outcomes.
-const v4Bytes=fs.readFileSync(path.join(root,'output/BRANCH_WARS_expanded65_review.html'));
+const v4Bytes=fs.readFileSync(path.join(root,'reports/reference-builds/BRANCH_WARS_expanded65_review.html'));
 assert.equal(require('node:crypto').createHash('sha256').update(v4Bytes).digest('hex'),'1c488be30061e6729b56bc0a6bf81f838aec7dc039916284429509a06659df00');
 const publishedV4=runtime(v4Bytes.toString());
 function outcome(fn) {
