@@ -1,6 +1,29 @@
 # Unified blueprint and expansion roadmap
 
-This document defines **scope, order and retained decisions**. Use the [implementation ledger](v3-usability.md#master-requirement-inventory-and-finish-gates) for current completion status and [release status](release-status.md) for candidate evidence. Do not maintain a second completed/remaining table here.
+This document defines **scope, order and retained decisions**. Use the [implementation ledger](v3-usability.md#master-requirement-inventory-and-finish-gates) for retained completion history, the [Expanded interface inventory](expanded-interface.md) for the current UI source/control map, and [release status](release-status.md) for candidate evidence. Do not maintain a second completed/remaining table here.
+
+## Current bounded milestone
+
+The [partner-card balance pass](partner-cards.md#939-balance-pass) is implemented
+as local 9.39, with all standard regression, browser and package checks passed. It scales costs and shared
+oversight to the finite outsourced book and exposes lifetime contribution.
+The measured payback excludes shared research and payroll. Bank-issued cards
+remain the next separate feature.
+
+
+[Partner-issued cards](partner-cards.md) is the implemented local 9.38 candidate
+with all standard regression command entries and focused browser checks passed. It adds
+Cedar-funded revolving accounts, payments, losses,
+owner-private planning and Banking → Cards. Bank-issued cards are the next
+separate card milestone; they are not included in this implementation.
+
+[The focused 9.37 playtest and polish pass](expanded-playtest.md) checks longer
+treasury campaigns and actual two-browser LAN recovery. It fixes result ordering
+on screen, same-month navigation preservation and late invoice collection reporting.
+All 312 standard fast-gate command entries and 60 focused browser checks passed
+for that preserved 9.37 milestone.
+
+[Digital + Commercial and outside funding](digital-commercial-milestone.md) adds five real research nodes, existing-platform deployment and one-month funding in 9.37. The remaining research catalogue, Trust, bank-issued cards, outside share trading, correspondent services and acquisition victory remain future work. See the [original card program specification](card-program-foundation.md) and the current partner-card rules above.
 
 ## Approved direction
 
@@ -8,12 +31,88 @@ Complete the [Integrated Expanded Edition master objective](expanded-edition-goa
 
 New campaigns offer Core or integrated Expanded. Supported historical modular campaigns retain their saved rules. Campaign rules stay fixed after starting; operating choices can change through explicit decisions and paid implementation. Preserve offline/portable, solo, hotseat, LAN, direct-link and GitHub-room play.
 
+## Current player-requested interface rebuild
+
+The [consolidated business update](expanded-consolidation.md) implements the next
+authorized batch in new Expanded 9.36: adjustable advertising and sponsorships,
+a service catalogue with searchable clients, bank-wide digital delivery, retired
+legacy launch routes, and funded holding-company shares. Historical campaigns
+preserve their economic rules and paid work. The UI-only 9.35 rebuild described
+below is the preceding milestone; [release status](release-status.md) records
+verification of the current candidate.
+
+The local Expanded interface now has six primary homes: This month, Markets,
+Banking, People, Strategy and Financial Group. Reports, Review month and Save &
+help are supporting destinations. This replaces the earlier grouped tab design;
+it is not another navigation layer around it. The visual direction uses the
+accepted light surface and blue accents, with visible task choices and a focused
+subject inspector rather than routine nested disclosures.
+
+Markets remains the everyday office-management home. Selecting a market keeps
+its location and owned offices visible while building, staffing, maintaining,
+renovating, converting or adding services. The bank-wide list is a comparison
+view. Banking owns actual deposit terms, lending, business-service agreements and
+treasury; People owns recruitment, training, leadership and shared coverage, with
+explicit bank/agency/investment employers. Strategy exposes existing research,
+models, campaigns and mandates; historical campaigns retain initiatives. Group owns separate businesses,
+capital and company ownership. Context links return to the originating subject.
+
+Every editor uses the same monthly draft and existing economic quotes. Working
+edits stay local until explicitly added; Review month shows plan changes,
+commitments, blockers and unstaged work. Employee headcount remains whole people;
+quarter-month assignments are staff time, not fractional employees. Core keeps
+its retained interface. The rebuild does not change Expanded 9.35 economics,
+Core 8.20, save rules, financial authority or the research catalogue.
+
+Bank identities and optional embedded JPG logos remain available in both
+editions. Expanded announcements now live in This month → Announcement; Core
+retains its Overview composer. Announcements remain optional, cosmetic and
+published once at the start of the next month's events.
+
+The follow-up restores the original city geography/art within Markets, adds
+recorded score comparison and a cosmetic score-based ticker to Summary, and
+presents unopened Insurance and Investment / Brokerage businesses as paid
+expansions. Working launch funding, permissions and employer choices stage as
+one complete instruction. Active saves retain their companies. Trust remains
+a visibly locked future expansion; no trust economy or artificial trading
+system was introduced.
+
+Research funding also retains custom amounts alongside +$50k and Stage max
+shortcuts. These stage the same shared instruction within existing engine limits;
+operating models link directly to funding for the selected capability. This is a
+presentation follow-up, with no new research effects or investment mechanics.
+
+The current implementation is a local candidate. The preceding full interface
+rebuild passed its 300-command fast gate. This map/expansion/ticker follow-up has
+its own focused source/portable and isolated Chromium evidence; prior gate
+receipts certify their earlier artifact, not this later file. Browser checks use `setContent` and
+in-memory storage, so native portable launch, persistence across browser restarts,
+physical two-computer recovery and human usability remain separate acceptance.
+See [the evidence map](expanded-interface.md#evidence-and-remaining-acceptance)
+and release status before making a release claim. No publication is authorized.
+
 ## Remaining delivery sequence
 
-The approved V4 stabilization pass continues through checkpoint68: essential starting work,
+The retained economic baseline is [Federal Funds and rate exposure](federal-funds-design.md)
+for new Expanded 9.35 campaigns: a shared Fed calendar, preserved fixed contracts,
+liquid and fixed bank investments with funded maturities and early-sale values,
+benchmark-linked emergency funding, and an owner-only rate desk now reached through Banking → Treasury.
+The player explicitly included investment duration in this first version. Keep
+economic calibration, automated integration checks and human acceptance distinct;
+see release status for evidence. Existing saves and Core retain their rules.
+Publication remains separately authorized.
+
+The next design proposal is the [Expanded research outline](expanded-research-outline.md):
+eight research families, compatible permanent capabilities, explicit operating-model
+tradeoffs, paid implementation and visible effects in the existing bank systems.
+It is a proposed sequence and catalogue, not implemented content or calibrated
+numerical tuning. Begin with the effect audit and one complete Digital/Commercial
+delivery path before expanding the full catalogue.
+
+The earlier V4 stabilization requirements remain relevant: essential starting work,
 actionable monthly review, visible workforce commitments, honest loan-flow
 explanations, guarded controls, AI accounting/performance diagnosis and exact-build
-verification. Keep subject workspaces and contextual actions; do not add a
+verification. Keep the canonical subject homes and contextual returns; do not add a
 mandatory Facilities tab or make persistent policies require monthly approval.
 See the ledger for implementation and release status for evidence.
 

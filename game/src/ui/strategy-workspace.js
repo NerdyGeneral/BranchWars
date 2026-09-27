@@ -11,6 +11,7 @@ function strategySelection(v){
 }
 function inspectStrategyCapability(v,branch,desk='milestones'){
  if(!v.strategyBranches[branch])return false;
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){openInterfaceWorkspace('strategy',desk==='model'?'models':'research',{branch});return true;}
  strategySelection(v);strategyWorkspace.branch=branch;strategyWorkspace.desk=desk;strategyWorkspace.application=null;strategyModelProposal=null;
  setWorkspaceTab('strategy',v);renderProjects(v);focusWorkspaceTarget($('#strategyDetailTitle'));return true;
 }
@@ -80,9 +81,7 @@ function strategyDirectoryProgress(v,key,state){
  const tiers=v.capabilityTiers[key],last=tiers[tiers.length-1]||1;
  return '<span class="strategy-progress" aria-hidden="true"><span style="width:'+Math.min(100,Math.round(100*state.spent/last))+'%"></span></span>';
 }
-function renderResearchCombinations(v){
- if(!v.researchCombinations)return;
- const held=new Set(v.me.researchCombinations||[]);
+function researchCombinationDescription(v,key,def){
  const descriptions=v.researchProgramVersion===1?{
   digitalTreasury:'Raises commercial fee income by 22%. Existing servicing capacity still limits the relationships that earn fees.',
   branchIntegration:'Reduces new branch project costs by another 22%, after Network research. Acquisition project costs are unchanged.',
@@ -90,6 +89,11 @@ function renderResearchCombinations(v){
   structuredCredit:'Raises loan yield by a further 15% and multiplies modeled credit losses by 0.88, alongside any operating-model effects.',
   depositFranchise:'Reduces deposit funding cost by 10% and rate-sensitive deposit runoff by 28%.'
  }:{};
+ return descriptions[key]||def.desc;
+}
+function renderResearchCombinations(v){
+ if(!v.researchCombinations)return;
+ const held=new Set(v.me.researchCombinations||[]);
  const rows=Object.entries(v.researchCombinations).map(([key,def])=>{
   const need=Object.entries(def.requires).map(([branch,level])=>{
    const at=E.strategyLevel(v.me,branch),ok=at>=level;
@@ -98,7 +102,7 @@ function renderResearchCombinations(v){
   const steps=Object.entries(def.requires),met=steps.reduce((n,[branch,level])=>n+Math.min(level,E.strategyLevel(v.me,branch)),0),total=steps.reduce((n,[,level])=>n+level,0);
   return '<li class="combo-card '+(held.has(key)?'combo-active':'combo-idle')+'"><b>'+(held.has(key)?'✓ ':'')+esc(def.name)+'</b>'+
    '<span class="micro">'+(held.has(key)?'Active':met+' of '+total+' milestones')+'</span><span class="combo-bar"><span style="width:'+Math.round(100*met/Math.max(1,total))+'%"></span></span>'+
-   '<div class="micro muted">'+esc(descriptions[key]||def.desc)+'</div><div class="micro">'+need+'</div></li>';
+   '<div class="micro muted">'+esc(researchCombinationDescription(v,key,def))+'</div><div class="micro">'+need+'</div></li>';
  }).join('');
  $('#strategyTree').insertAdjacentHTML('beforeend',
   '<section class="research-combinations"><h3>COMBINED CAPABILITIES</h3>'+

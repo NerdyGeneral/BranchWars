@@ -55,7 +55,7 @@ function resetFeaturePeer(){
  turnGuestChallenge='';peerTurnGuestChallenge='';
  hostStaffingEvidence=null;
 }
-function currentFeatureSource(){return game||lobby&&lobby.settings||p2pConfig||{}}
+function currentFeatureSource(){return game||lobby?.resume?.rules||lobby&&lobby.settings||p2pConfig||{}}
 function departmentPeerStatus(settings=currentFeatureSource()){
  if(![6,7,8,9,10].includes(settings?.financialGroupVersion)&&!(p2pRole==='guest'&&hostStaffingEvidence?.required))return {compatible:true,pending:false,reason:''};
  if(p2pRole==='host')return peerFeatureStatus(settings);
@@ -92,7 +92,7 @@ function challengePeerFeatures(){
  send({type:'hello_request',featureChallenge,turnEnvelopeSupported:1,turnGuestChallenge:peerTurnGuestChallenge,financialGroupSupported:E.campaignCapabilities().financialGroupSupported,departmentStaffingSupported:E.campaignCapabilities().departmentStaffingSupported});
 }
 function makeFeatureHello(request){
- const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),turnEnvelopeSupported:1,turnGuestChallenge:guestTurnChallenge(),color:config.color,name:config.guestName,doctrine:config.doctrine};
+ const config=p2pConfig||{},hello={type:'hello',...E.campaignCapabilities(),turnEnvelopeSupported:1,turnGuestChallenge:guestTurnChallenge(),color:config.color,...(config.identity?{identity:E.bankIdentity(config.identity,config.guestName,1)}:{}),name:config.guestName,doctrine:config.doctrine};
  // Released V2 hosts reject capabilities above their known maximum, even when
  // playing retained Group 1/2 rules. Advertise the legacy-compatible range until
  // the host explicitly requests the modern range. This never changes game rules.
@@ -143,7 +143,7 @@ function validateIncomingFeatureRules(snapshot,context='view'){
  const rules=E.validateCampaignRules(snapshot,context);
  const issue=E.peerRulesIssue(rules,E.campaignCapabilities());
  if(issue)throw Error(issue.message);
- if(context==='view'){E.validateIncomeHistoryView(snapshot);E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
+ if(context==='view'){E.validateBankIdentities(snapshot);E.BankAnnouncements.validateView(snapshot);E.validateIncomeHistoryView(snapshot);E.validateProductPricingView(snapshot);E.validateFinancialGroupView(snapshot);}
  return rules;
 }
 // Chat and mail add wrapping, quote markers, smart punctuation and zero-width characters.

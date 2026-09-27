@@ -16,7 +16,7 @@ function bankFinancialOverview(v,review){
 }
 function bankAttentionItems(v,review,financial){
  const p=v.me,rows=[],add=(id,kind,title,text,tab,target,extra={})=>rows.push({id,kind,title,text,tab,target,...extra});
- for(const row of review.warnings)add(row.id,'watch',row.title,row.text,row.tab,row.target,{desk:row.desk,peopleDesk:row.peopleDesk});
+ for(const row of review.warnings)add(row.id,'watch',row.title,row.text,row.tab,row.target,{desk:row.desk,peopleDesk:row.peopleDesk,workspace:row.workspace,view:row.view,context:row.context,functionId:row.functionId,officeId:row.officeId});
  if(p.capitalTier?.key!=='strong'&&p.capitalTier)add('capital','watch',p.capitalTier.name,
   'Current bank capital ratio '+Number(p.capitalRatio).toFixed(1)+'%. '+(p.capitalTier.text||'Review funding, capital and exposure before expanding.'),'operations','#operatingPreview',{desk:'forecast'});
  if(p.distress>0)add('distress','watch','Institutional failure risk',p.distress+' of '+v.receivershipCycles+' critical months recorded. A positive cash balance does not establish solvency.','overview','#bankRecoveryMount');
@@ -53,18 +53,20 @@ function bankAttentionItems(v,review,financial){
 }
 let bankOverviewState={owner:null,campaign:null,filter:'all',page:0};
 function navigateBankOverview(item){
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(currentView()))return interfaceNavigate(item);
  const v=currentView();if(!v)return;
  if(item.id==='coverage'||item.functionId){openMonthlyEditor(item);return;}
  if(item.householdDesk&&v.me.householdBook)householdWorkspace=item.householdDesk;
  if(item.officeId&&v.me.facilityLifecycle?.records[item.officeId]){
   // The existing desk owns its form. Inspecting a location stages no order.
-  setWorkspaceTab('markets');lifecycleUi.office=item.officeId;lifecycleUi.open=true;renderFacilityLifecycle(v);
+  setWorkspaceTab('markets',v);openMarketOffice(v,item.officeId,'staff');return;
  }
  if(item.peopleDesk&&v.me.workforce){setPeopleDesk(item.peopleDesk);const target=$(item.target);if(typeof focusWorkspaceTarget==='function')focusWorkspaceTarget(target);else {target?.scrollIntoView?.({block:'center',behavior:'auto'});target?.setAttribute?.('tabindex','-1');target?.focus?.({preventScroll:true});}return;}
  navigatePlanReview(item);
 }
 function renderBankOverview(v,review){
  const mount=$('#attentionInbox'),finance=$('#bankFinancialOverview');if(!mount||!finance)return;
+ renderBankAnnouncements(v);
 
  if(bankOverviewState.owner!==v.me.id||bankOverviewState.campaign!==game)bankOverviewState={owner:v.me.id,campaign:game,filter:'all',page:0};
  const financial=bankFinancialOverview(v,review),items=bankAttentionItems(v,review,financial).filter(row=>!review.warnings.some(w=>w.id===row.id)),selected=bankOverviewState.filter;

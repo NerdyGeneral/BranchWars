@@ -34,8 +34,9 @@ test('servicing navigation preserves an unreviewed department form and respects 
  h.run('serviceNavigation=[];seat=1;');h.elements.get('#incomeServicingAction').onclick();assert.equal(h.run('serviceNavigation.length'),0);
  h.run('seat=0;game.cycle++;');h.elements.get('#incomeServicingAction').onclick();assert.equal(h.run('serviceNavigation.length'),0);
 });
-test('live commercial forecast opens the relationship editor with version-correct consequences',()=>{
- const h=harness();h.run(`game=E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true}).options,mode:'hotseat',seed:'service-live',created:1});seat=0;newDraft(currentView());
+// This case retains the legacy renderer route contract, not new Expanded acceptance.
+test('legacy renderer: commercial forecast opens the relationship editor with version-correct consequences',()=>{
+ const h=harness();h.run(`expandedInterfaceEnabled=()=>false;game=E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true}).options,mode:'hotseat',seed:'service-live',created:1});seat=0;newDraft(currentView());
   const originalQuery=document.querySelector;document.querySelector=selector=>{const el=originalQuery(selector);el.remove=function(){this.innerHTML='';};el.insertAdjacentHTML=function(position,html){this.innerHTML+=html;};return el;};
   renderBankRecovery=()=>{};saved=JSON.stringify({game,draft});renderOperatingPreview(currentView());`);
  h.elements.get('#incomeServicingAction').onclick();

@@ -3,6 +3,10 @@ if(!process.argv.includes('--source'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{test}=require('node:test'),{harness}=require('./github_resilience.test');
 function officeHarness(){
  const h=harness(),panel=h.elements.get('#facilityLifecyclePanel')||h.c.document.querySelector('#facilityLifecyclePanel');let html='';
+ // Retained component compatibility: these assertions own the original
+ // lifecycle/premises DOM. Canonical Markets and real browser tests separately
+ // cover Expanded's new inspectors, shared finite supply and return routing.
+ h.run('expandedInterfaceEnabled=()=>false;');
  Object.defineProperty(panel,'innerHTML',{configurable:true,get:()=>html,set:markup=>{
   html=markup;
   for(const m of markup.matchAll(/<[a-z]+\b[^>]*\bid="([^"]+)"[^>]*>/g)){
@@ -18,9 +22,11 @@ function officeHarness(){
 test('office extension review is pure, displays complete costs and stages only its own draft',()=>{
  const h=officeHarness(),before=h.run('JSON.stringify(game)'),draftBefore=h.run('JSON.stringify(draft)');
  assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/Shared service rooms/);
+ assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/<section[^>]+id="sharedPremisesDesk"/);
+ assert.doesNotMatch(h.elements.get('#facilityLifecyclePanel').innerHTML,/<summary>(?:Add service space|Shared service rooms)/);
  h.click('premisesChoice','kind:visiting');
  let html=h.elements.get('#facilityLifecyclePanel').innerHTML;
- assert.match(html,/45,000/);assert.match(html,/900/);assert.match(html,/0.25 employee-months/);assert.match(html,/Internal rent is not new group profit/);
+ assert.match(html,/45,000/);assert.match(html,/900/);assert.match(html,/25% of a month/);assert.match(html,/Internal rent is not new group profit/);
  assert.equal(h.run('JSON.stringify(draft)'),draftBefore);assert.equal(h.run('JSON.stringify(game)'),before);
  h.click('premisesAction','discard');assert.equal(h.run('draft.sharedPremisesPolicy.build'),null);
  h.click('premisesChoice','kind:visiting');
@@ -53,12 +59,27 @@ test('actual room opens after settlement; staff remain qualified and finite, wit
  const roomState=h.run('JSON.stringify(game)');assert.throws(()=>h.run('E.submit(game,0,clashing)'),/excess service space/);assert.equal(h.run('JSON.stringify(game)'),roomState);
  h.click('premisesChoice','room:1');
  assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/Investment adviser/);
- h.run(`document.querySelector('#premisesRole-adviser').value=''`);h.click('premisesAction','discard');assert.equal(h.run('premisesUi.selection'),null);
+ const standing=h.run('JSON.stringify(draft.sharedPremisesPolicy)');
+ h.run(`document.querySelector('#premisesRole-adviser').value='0.25'`);
+ h.elements.get('#sharedPremisesDesk').listeners.input({target:{id:'premisesRole-adviser'}});
+ assert.equal(h.run('premisesUi.form.allocations[0].quarters'),1);
+ h.click('premisesAction','stage');assert.equal(h.run('JSON.stringify(draft.sharedPremisesPolicy)'),standing,'Input capture cannot bypass reviewing a changed staffing estimate');
+ assert.match(h.run('notices.at(-1)'),/Estimate refreshed/);
+ h.run(`draft.decision='a';renderFacilityLifecycle(currentView())`);
+ assert.equal(h.elements.get('#premisesRole-adviser').value,'0.25','Unrelated draft changes retain working room time');
+ h.click('premisesAction','investments');assert.equal(h.run('workspaceTab'),'group');
+ h.run('returnBankingContext();renderFacilityLifecycle(currentView())');
+ assert.equal(h.run('premisesUi.selection'),'room:1');assert.equal(h.elements.get('#premisesRole-adviser').value,'0.25','Subsidiary staffing and Return keep unfinished allocations');
+ h.run(`document.querySelector('#premisesRole-adviser').value=''`);
+ h.elements.get('#sharedPremisesDesk').listeners.input({target:{id:'premisesRole-adviser'}});h.run('renderFacilityLifecycle(currentView())');
+ assert.equal(h.elements.get('#premisesRole-adviser').value,'','Unfinished input is retained without inventing a zero allocation');
+ assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/Enter non-negative employee-months/);
+ h.click('premisesAction','discard');assert.equal(h.run('premisesUi.selection'),null);
  h.click('premisesChoice','room:1');
  h.run(`document.querySelector('#premisesRole-adviser').value='0.5'`);h.click('premisesAction','review');
  assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/space limit|physical room seats/);
  h.run(`document.querySelector('#premisesRole-adviser').value='0.25'`);h.click('premisesAction','review');
- assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/1 employee-months qualified/);
+ assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/1 full month qualified/);
  const before=h.run('JSON.stringify(game)');h.click('premisesAction','stage');assert.equal(h.run('draft.sharedPremisesPolicy.allocations[0].quarters'),1);
  assert.equal(h.run('JSON.stringify(game)'),before);
  h.run(`draft.facilityLifecyclePolicy.offices[lifecycleUi.office].maintenance='off';q=E.sharedPremisesPlanReview(currentView(),currentView().me,draft)`);assert.equal(h.run('q.budget.outsideCost'),900);
@@ -69,6 +90,39 @@ test('actual room opens after settlement; staff remain qualified and finite, wit
  h.run(`E.submit(game,0,draft);renderFacilityLifecycle(currentView())`);h.click('premisesChoice','room:1');
  assert.match(h.elements.get('#facilityLifecyclePanel').innerHTML,/id="premisesRole-adviser"[^>]*disabled/);
  const locked=h.run('JSON.stringify(draft)');h.click('premisesAction','stage');assert.equal(h.run('JSON.stringify(draft)'),locked);
+});
+
+test('pending service choices follow each office and reset only for changed premises authority or session',()=>{
+ const h=officeHarness(),world=h.run('JSON.stringify(game)');h.click('premisesChoice','kind:visiting');
+ const working=h.run('JSON.stringify(premisesUi.form)');
+ // A second presentation target is enough to exercise selection ownership;
+ // no synthetic office is added to the engine or ever staged.
+ h.run(`const homeOffice=currentView().me.facilityNetwork.offices[0];sharedPremisesMarkup(currentView(),{...homeOffice,id:'comparison-only'},'')`);
+ assert.equal(h.run('premisesUi.selection'),null);h.run(`sharedPremisesMarkup(currentView(),homeOffice,'')`);
+ assert.equal(h.run('premisesUi.selection'),'kind:visiting');assert.equal(h.run('JSON.stringify(premisesUi.form)'),working);
+ h.run(`draft.decision='a';renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('JSON.stringify(premisesUi.form)'),working);assert.equal(h.run('premisesUi.selection'),'kind:visiting');
+ assert.equal(h.run('JSON.stringify(game)'),world);assert.equal(h.run('draft.sharedPremisesPolicy.build'),null);
+ h.run(`draft.sharedPremisesPolicy.build={office:homeOffice.id,kind:'agency'};renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('premisesUi.form.build.kind'),'agency');assert.equal(h.run('premisesUi.selection'),'kind:agency','An externally revised premises plan owns the replacement editor');
+ h.run(`connectionAttempt++;draft.sharedPremisesPolicy.build=null;renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('premisesUi.selection'),null);assert.equal(h.run('premisesUi.form.build'),null);
+ h.click('premisesChoice','kind:visiting');h.run(`game.cycle++;renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('premisesUi.selection'),null);assert.equal(h.run('premisesUi.form.build'),null,'A new month cannot inherit an unreviewed fit-out');
+ h.run('newDraft(currentView());renderFacilityLifecycle(currentView())');
+ h.click('premisesChoice','kind:visiting');h.run(`seat=1;newDraft(currentView());renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('premisesUi.selection'),null);assert.equal(h.run('premisesUi.form.build'),null,'Unstaged work does not cross hotseat owners');
+});
+
+test('routine guest state refresh preserves the service editor while invalidating old action callbacks',()=>{
+ const h=officeHarness();
+ h.run(`view=E.publicState(game,0);game=null;p2pRole='guest';newDraft(currentView());renderFacilityLifecycle(currentView())`);
+ h.click('premisesChoice','kind:visiting');
+ const working=h.run('JSON.stringify(premisesUi.form)'),stale=h.elements.get('#sharedPremisesDesk').listeners.click,before=h.run('JSON.stringify(draft)');
+ h.run(`view=JSON.parse(JSON.stringify(view));view.rival.submitted=true;renderFacilityLifecycle(currentView())`);
+ assert.equal(h.run('premisesUi.selection'),'kind:visiting');assert.equal(h.run('JSON.stringify(premisesUi.form)'),working);
+ stale({target:{dataset:{premisesAction:'stage'}}});assert.equal(h.run('JSON.stringify(draft)'),before,'An action quoted against the old view cannot stage after refresh');
+ h.click('premisesAction','stage');assert.equal(h.run('draft.sharedPremisesPolicy.build.kind'),'visiting','The refreshed engine quote remains actionable');
 });
 test('closed and old-rule campaigns do not gain editable premises; connection and month changes refuse stale callbacks',()=>{
  const h=officeHarness();h.click('premisesChoice','kind:agency');const stale=h.elements.get('#sharedPremisesDesk').listeners.click,old=h.run('JSON.stringify(draft)');

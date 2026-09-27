@@ -15,6 +15,7 @@ function workforceEditCurrent(token){
 }
 function setPeopleDesk(key,{focus=false}={}){
  const v=currentView();if(!v?.me.workforce)return;
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v))return openInterfaceWorkspace('people',({overview:'staff',development:'training',functions:'coverage'})[key]||key,{});
  const keys=peopleDesks(v);peopleWorkspaceState={owner:v.me.id,campaign:game||view,desk:keys.includes(key)?key:'overview'};
  if(v.me.departmentFunctions){
   // Initialize owner/session identity before choosing the new desk.

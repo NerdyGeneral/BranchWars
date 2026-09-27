@@ -80,13 +80,19 @@ test('completed actuals and bank/group positions reconcile after real resolution
 });
 test('rendered text is escaped, and overview models cannot inspect the rival',()=>{
  const h=fresh();h.run(`const {v:privateView,r:privateReview,f:privateFinance}=overviewFixture();
+ const ownerPresentation=presentationCampaignIdentity(privateView);
  Object.defineProperty(privateView,'rival',{get(){throw Error('Rival access forbidden here');}});
  privateView.me.capitalTier={key:'watch',name:'<img src=x onerror=bad>',text:'<private>'};
  bankAttentionItems(privateView,privateReview,privateFinance);renderBankOverview(privateView,privateReview);`);
+ assert(h.run('presentationCampaignIdentity(privateView)===ownerPresentation'),'Overview announcements preserve owner presentation identity without reading rival data');
  const html=h.elements.get('#attentionInbox').innerHTML;assert(!html.includes('<img'));assert.match(html,/&lt;img/);
 });
 test('real filter/review callbacks navigate without staging and reject stale owners',()=>{
  const h=fresh(),sets=new Map();h.run('Object.values(game.players[0].facilityLifecycle.records)[0].conditionBp=1000;');
+ // This fixture owns the retained attention component's DOM. Exercise the real
+ // typed Expanded router; the complete shell is covered by interface_shell and
+ // browser acceptance, rather than fabricated nodes in this component fixture.
+ h.run('renderExpandedInterface=()=>{};');
  h.c.document.querySelectorAll=selector=>{
   const attr={'[data-attention-filter]':['data-attention-filter','attentionFilter'],'[data-attention-open]':['data-attention-open','attentionOpen'],'[data-attention-page]':['data-attention-page','attentionPage']}[selector];
   if(!attr)return [];

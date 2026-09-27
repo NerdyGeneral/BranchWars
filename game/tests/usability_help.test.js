@@ -12,7 +12,7 @@ function harness(features={}){
  run('reconcileGameHelp()');return {c,run,$,routes,groups,event,views:()=>views};
 }
 const all={investmentTradingVersion:1,investmentBusiness:{},workforce:{},departmentFunctions:{},departmentOffice:{},productPrograms:{version:2},advertising:{},relationshipOffers:{},onboarding:{},householdBook:{},creditBook:{},creditPerformance:{},facilityNetwork:{},facilityLifecycle:{},facilityExtensions:{},serviceDesk:{},financialGroup:{},agency:{},commercialAccounts:{}};
-all.investmentNotesVersion=1;all.researchProgramVersion=1;all.balanceSheetLendingVersion=1;
+all.investmentNotesVersion=1;all.researchProgramVersion=1;all.balanceSheetLendingVersion=1;all.monetaryPolicyVersion=1;all.expandedBusinessVersion=1;
 all.companyControl={};all.companyConsolidation={};all.sharedPremises={};
 let checks=0;const test=(name,fn)=>{try{fn();checks++;}catch(error){throw Error(name+': '+error.stack)}};
 test('catalog, markup and canonical feature filtering',()=>{
@@ -87,7 +87,8 @@ test('actual supported campaign profiles and navigation preserve drafts and book
   const before=h.run('JSON.stringify({game,draft})');
   h.run('const helpProfile=gameHelpProfile(currentView());');
   assert(h.run("gameHelpAvailable(GAME_HELP_TOPICS.find(x=>x.id==='planning'),helpProfile)"));
-  // Use actual production navigation and painters, not fake economic actions.
+  // Exercise actual typed navigation; DOM rendering has separate browser coverage.
+  h.run("renderExpandedInterface=()=>{};");
   h.run("productDeskView='onboarding';for(const topic of GAME_HELP_TOPICS.filter(x=>['coverage','training','recruitment','advertising','onboarding','products'].includes(x.id)&&gameHelpAvailable(x,helpProfile))){if(topic.productDesk)productDeskView=topic.productDesk;navigateBankOverview(topic);}");
   assert.equal(h.run('JSON.stringify({game,draft})'),before,'help destinations may not write engine state or orders');
  }

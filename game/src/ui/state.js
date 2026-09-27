@@ -10,6 +10,23 @@ let workspaceTab='overview';
 let lobby=null,lobbyPending=null,lobbyDirty=false,lobbySettingsDirty=false;
 // Capability acknowledgements are connection-local, never saved campaign rules.
 let featureConnectionGeneration=0,featurePeerCapabilities=null,featurePeerGeneration=-1,featurePeerFresh=false,featureChallenge='';
+// Public guest snapshots are replaced even when only the rival's Ready state
+// changes. Keep presentation continuity separate from those short-lived views;
+// action/quote callbacks still use their existing current-render guards.
+let presentationCampaignState=null;
+function presentationCampaignIdentity(v=currentView()){
+ if(!v){presentationCampaignState=null;return null;}
+ const context={source:game,owner:v.me.id,mode:v.mode,scope:v.scope,scenario:v.scenario,
+  attempt:connectionAttempt,connection:featureConnectionGeneration,link:linkSession,repository:gh,lan};
+ const previous=presentationCampaignState;
+ if(!previous||Object.entries(context).some(([key,value])=>previous[key]!==value)||
+    v.cycle<previous.cycle||v.resolutionId<previous.resolution||previous.ended&&!v.gameOver){
+  presentationCampaignState={...context,token:{},cycle:v.cycle,resolution:v.resolutionId,ended:!!v.gameOver};
+ }else{
+  previous.cycle=v.cycle;previous.resolution=v.resolutionId;previous.ended=!!v.gameOver;
+ }
+ return presentationCampaignState.token;
+}
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>{const v=Number(n)||0,a=Math.abs(v),sign=v<0?'−':'';return sign+'$'+(a>=1e6?(a/1e6).toFixed(2)+'M':a>=1000?Math.round(a/1000)+'K':String(Math.round(a)))};
 const integer=n=>Math.round(Number(n)||0).toLocaleString();
@@ -25,4 +42,4 @@ function marketEntries(v){
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
 function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
-function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('')}
+function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('');renderSetupBankIdentities()}

@@ -3,6 +3,7 @@ function resolveMonthlySteps(g) {
     before = [baseScore(g, 0), baseScore(g, 1)],
     L = [];
   if(g.companyCreditVersion===1)L.push(...recordLedgerStage(g,'settleCompanyCreditOrders','companies.credit',()=>settleCompanyCreditOrders(g,plans)));
+  if(g.expandedBusinessVersion===1)L.push(...recordLedgerStage(g,'settleHoldingCapital','group.ownership',()=>HoldingCapital.settle(g,plans)));
   if(g.companySharesVersion===1)L.push(...recordLedgerStage(g,'settleCompanyShareAuction','companies.shares',()=>settleCompanyShareAuction(g,plans)));
   if(g.companyControlVersion===1)L.push(...recordLedgerStage(g,'settleCompanyControl','companies.control',()=>settleCompanyControl(g,plans)));
   // Both local-work instructions were authorized against one opening envelope.
@@ -24,11 +25,13 @@ function resolveMonthlySteps(g) {
       capital: plans[i].capitalPolicy
     };
     p.products = { ...p.products, ...plans[i].products };
+    if(MonetaryPolicy.enabled(p)&&plans[i].treasuryPolicy!==undefined)p.treasury.policy=plans[i].treasuryPolicy;
     if(p.financialGroup)recordLedgerStage(g,'applyGroupPortfolio','group.portfolio',()=>applyGroupPortfolio(p,plans[i]));
     if (p.termFunding && plans[i].termPolicy) p.termFunding.policy = { ...plans[i].termPolicy };
     if(p.productPrograms)recordLedgerStage(g,'applyProductProgramPolicy','products.policy',()=>applyProductProgramPolicy(p, plans[i].productProgramPolicy, true));
     if(p.productPrograms&&plans[i].productProgramPolicy?.retire.length)L.push(p.name+' retired '+plans[i].productProgramPolicy.retire.map(k=>RETAIL_DEPLOYMENTS[k].name).join(' and ')+' for $'+(plans[i].productProgramPolicy.retire.length*PRODUCT_RETIRE_COST).toLocaleString()+'. Existing accounts remain serviced.');
     if(p.advertising)recordLedgerStage(g,'applyAdvertisingPolicy','advertising.policy',()=>applyAdvertisingPolicy(p,plans[i].advertisingPolicy));
+    if(p.expandedBusinessVersion===1)recordLedgerStage(g,'applyBrandCampaigns','advertising.branding',()=>BrandCampaigns.apply(p,plans[i].brandCampaignPolicy));
     if (p.retailLifecycle) applyRetailMix(p, plans[i].retailMix || p.retailLifecycle.mix);
     applyServicePolicy(p, plans[i].servicePolicy);
     if(p.commercialAccounts)p.commercialAccounts.policy=JSON.parse(JSON.stringify(plans[i].commercialAccountPolicy||p.commercialAccounts.policy));
@@ -90,6 +93,7 @@ function resolveMonthlySteps(g) {
       addDepartmentOperatingReport(p);
     });
     L.push(...applyInvestments(g, p, plans[i].investments, plans[i].specializations));
+    if(DigitalCommercial.enabled(p))L.push(...recordLedgerStage(g,'settleDigitalCommercial','research.capability',()=>DigitalCommercial.settle(g,p,plans[i])));
     const late = plans[i].specializations || {};
     for (const key of researchBranches(p))
       if (
@@ -130,11 +134,17 @@ function resolveMonthlySteps(g) {
   }
   if(g.companySharesVersion===1)L.push(...recordLedgerStage(g,'finishCompanyShares',g.companyConsolidationVersion===1?'companies.valuation':'companies.shareIncome',()=>finishCompanyShares(g)));
   for(const p of g.players)finishProductPricingReview(g,p);
+  if(PartnerCards.enabled(g))L.push(...recordLedgerStage(g,'settlePartnerCards','cards.settlement',()=>PartnerCards.settle(g,plans)));
   if([6,7,8,9,10].includes(g.financialGroupVersion))L.push(...recordLedgerStage(g,'finishDepartmentFunctions','departments.delivery',()=>finishDepartmentFunctions(g)));
   L.push(...settleCorporateCirculation(g));
   if(g.commercialAccountsVersion===1)L.push(...recordLedgerStage(g,'settleCommercialAccounts','companies.operatingDeposits',()=>settleCommercialAccounts(g)));
+  if(OutsideFunding.enabled(g))L.push(...recordLedgerStage(g,'settleOutsideFunding','funding.outside',()=>OutsideFunding.settle(g,plans)));
+  if(MonetaryPolicy.enabled(g))for(const p of g.players){const line=MonetaryPolicy.finish(g,p);if(line)L.push(line);}
+  HoldingCapital.finish(g);
   const ending = evaluateStrategicEnd(g);
   if (ending) L.push(ending);
+  if(g.expandedBusinessVersion===1)L.unshift(...g.players.flatMap(p=>p.brandCampaigns.events.filter(e=>['start','end','cancel'].includes(e.type)).map(e=>e.text)));
+  L.unshift(...BankAnnouncements.publish(g,plans));
   g.resolution = L;
   g.resolutionId++;
   addLog(g, `CYCLE ${g.cycle} // ${L.join(' ')}`, 'RESOLUTION');
@@ -151,6 +161,11 @@ function resolveMonthlySteps(g) {
     if ((g.cycle - 1) % 4 === 0) {
       chooseEconomy(g);
       addLog(g, `ECONOMIC REGIME // ${g.economy.name}: ${g.economy.text}`, 'ECONOMY');
+    }
+    const fed=MonetaryPolicy.advance(g);
+    if(fed){
+      const firstEconomic=g.announcements?.length||0;
+      L.splice(firstEconomic,0,fed);addLog(g,fed,'FEDERAL FUNDS');
     }
     g.event = chooseEvent(g);
     g.opportunities = makeOpportunities(g);

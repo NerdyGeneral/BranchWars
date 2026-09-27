@@ -76,7 +76,7 @@ function householdServiceReview(p, allocation = p.allocation, policy = p.househo
     const models = marketFacilities(p, market), upgrade = p.regionalOperations.markets[market].service;
     const cohorts = p.depositBook.cohorts.filter(c => c.market === market), deposits = cohorts.reduce((n, c) => n + c.principal, 0);
     for (const [segment, count] of Object.entries(book)) {
-      const channel = segment === 'connected' && models.includes('digital') ? .8 : segment === 'everyday' && models.includes('retail') ? .9 : 1;
+      const channel = segment === 'connected' && ExpandedBusiness.digitalChannel(p,market) ? .8 : segment === 'everyday' && models.includes('retail') ? .9 : 1;
       const demand = count / 900 * HOUSEHOLD_SERVICE[segment] * channel * (1 - upgrade * .1);
       const fitBook = p.segmentDeposits ? cohorts.filter(c => c.segment === segment) : cohorts, fitBalance = fitBook.reduce((n,c) => n+c.principal,0);
       const fit = p.segmentDeposits ? (fitBalance ? fitBook.reduce((n,c) => n+c.principal*CUSTOMER_SEGMENTS[segment].fit[c.product],0)/fitBalance : 1) : deposits ? cohorts.reduce((n, c) => n + c.principal * CUSTOMER_SEGMENTS[segment].fit[c.product], 0) / deposits : 1;

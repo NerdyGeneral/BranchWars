@@ -38,7 +38,7 @@ assert.doesNotMatch(legacy.elements.get('#customerSubjectNavigation').innerHTML,
 assert.doesNotMatch(html(legacy), /data-product-view="relationships"|EXISTING CUSTOMER OFFERS/);
 const legacyWorld = legacy.run('JSON.stringify(game)');
 legacy.run("selectProductSubject('catalogue')");
-assert.match(legacy.elements.get('#productSubjectNavigation').innerHTML, /Product catalogue/);
+assert.match(legacy.elements.get('#productSubjectNavigation').innerHTML, /Deposit products/);
 legacy.run("selectProductSubject('advertising')");
 assert.match(legacy.elements.get('#productProgramsPanel').innerHTML, /3\.00 banker equivalents/, 'older campaigns keep their full post-retention advertising time');
 legacy.run("selectCustomerSubject('households')");

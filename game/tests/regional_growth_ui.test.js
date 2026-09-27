@@ -18,8 +18,9 @@ elements.get('#regionalGrowthWorkspace').dataset.workspace = 'markets';
 let projectionCalls = 0;
 // Narrow renderer fixture: the campaign below is deliberately only a mutation
 // sentinel, not a valid engine save. Supply its already-redacted frozen view to
-// the new Markets refresh path. Real projection is covered by institution tests;
-// retain the actual facility renderer here to exercise feature-off hiding.
+// the Markets refresh path. Real projection is covered by institution tests;
+// retain the actual facility renderer here to exercise feature-off hiding. The
+// contextual office inspector is not mounted in this narrow growth fixture.
 const context = { window: { BWEngine: { publicState(world) {
   assert.equal(world.rng.state, 42); projectionCalls++; return context.testView;
 } } }, document: { querySelector: key => elements.get(key) || null,
@@ -27,7 +28,7 @@ const context = { window: { BWEngine: { publicState(world) {
  console, Math: Object.create(Math) };
 context.Math.random = () => { throw Error('A review cannot consume randomness'); };
 vm.createContext(context);
-vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/market-workspace.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/facility-network.js') + '\n' + read('src/ui/regional-growth.js'), context);
+vm.runInContext(read('src/ui/state.js') + '\n' + read('src/ui/operations-workspace.js') + '\n' + read('src/ui/market-workspace.js') + '\n' + read('src/ui/market-office.js') + '\n' + read('src/ui/draft.js') + '\n' + read('src/ui/facility-network.js') + '\n' + read('src/ui/regional-growth.js'), context);
 const run = code => vm.runInContext(code, context);
 const mount = elements.get('#regionalGrowthMount'), section = elements.get('#regionalGrowthWorkspace');
 const grid = (customers, deposits) => ({ customers: { everyday: customers, connected: 0, reserve: 0 }, deposits: { everyday: deposits, connected: 0, reserve: 0 } });
@@ -50,9 +51,11 @@ const untouched = run('JSON.stringify({draft,game})');
 
 assert.equal(render(base), '');
 assert(section.hidden && section.classList.contains('hidden'), 'older campaigns hide the whole section');
+run('renderFacilityNetwork(testView)');
+assert(elements.get('#facilityNetworkPanel').classList.contains('hidden'), 'actual facility renderer keeps older campaigns hidden');
 run("setWorkspaceTab('markets')");
 assert(projectionCalls > 0, 'Markets refresh uses the current redacted view');
-assert(elements.get('#facilityNetworkPanel').classList.contains('hidden'), 'actual facility renderer keeps older campaigns hidden');
+assert(elements.get('#facilityNetworkPanel').classList.contains('hidden'), 'workspace switching must not reveal a hidden feature-off office panel');
 assert(section.classList.contains('active'), 'test exercises the actual Markets activation');
 assert(section.hidden && section.classList.contains('hidden'), 'workspace switching must not reveal feature-off content');
 const initial = { ...clone(base), regionalGrowth: { version: 1, lastCycle: 0, report: null, forecast: { ...closing(1, 'steady'), conditional: true } } };
@@ -104,6 +107,10 @@ assert.equal(render(base), '', 'switching back to old rules clears stale content
 assert(section.hidden && section.classList.contains('hidden'));
 
 // Use the actual dashboard entry point on a terminal view to exercise its hook.
+// This narrow fixture covers the retained legacy dashboard renderer. Expanded
+// shell routing has its own complete-game harness; this sentinel is not a save.
+context.expandedInterfaceEnabled = () => false;
+context.interfaceRestoreCore = () => {};
 vm.runInContext(read('src/ui/dashboard.js'), context);
 context.testView = freeze(terminal);
 run('currentView=()=>testView;renderBankIdentity=()=>{};renderFinal=()=>{};maybeResolution=()=>{};render()');

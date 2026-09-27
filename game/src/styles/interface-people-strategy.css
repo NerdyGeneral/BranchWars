@@ -1,0 +1,23 @@
+.ips-workspace{min-width:0;color:var(--text,#17283e)}
+.ips-views,.ips-employers{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.ips-views .btn,.ips-employers .btn,.ips-choices .btn{min-height:40px;background:#fff;color:#283c57;border:1px solid #ccd5e0;white-space:normal;text-align:left}
+.ips-views [aria-pressed=true],.ips-employers [aria-pressed=true],.ips-choices [aria-pressed=true]{border-color:#3476d4;background:#eaf2ff;color:#174b91;box-shadow:inset 0 -2px #3476d4}
+.ips-split{display:grid;grid-template-columns:minmax(190px,260px) minmax(0,1fr);gap:24px;align-items:start}
+.ips-directory{display:grid;gap:8px;align-content:start;min-width:0}
+.ips-item{display:grid;gap:6px;border:1px solid #d5dde8;border-radius:10px;padding:14px;text-align:left;background:#fff;color:#20324b;cursor:pointer;overflow-wrap:anywhere}
+.ips-item.selected{border-color:#3476d4;background:#eaf2ff}.ips-item small{color:#596a80}
+.ips-inspector{min-width:0;background:#fff;border:1px solid #d5dde8;border-radius:14px;padding:24px;overflow-wrap:anywhere}
+.ips-inspector h2{margin:0 0 12px;color:#172c49;font-size:24px;line-height:1.2}.ips-inspector h3{margin:22px 0 10px;color:#243a59}
+.ips-inspector p{line-height:1.55;max-width:82ch}.ips-inspector .btn{white-space:normal;max-width:100%;margin:4px 4px 4px 0;min-height:40px}
+.ips-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:18px 0}
+.ips-facts>div{padding:13px;border:1px solid #dde4ed;border-radius:8px;background:#f6f8fc;display:flex;flex-direction:column;gap:5px}
+.ips-facts span{font-size:12px;color:#53657f}.ips-facts strong{font-size:17px;color:#1c3556;overflow-wrap:anywhere}
+.ips-field{margin:16px 0;min-width:0}.ips-field label{display:block;font-size:14px;font-weight:650;margin-bottom:7px;color:#2c3d55}.ips-field input{width:100%;max-width:240px;min-height:42px;background:#fff;color:#172c49;border:1px solid #aebed3;border-radius:6px;padding:9px;font:inherit}
+.ips-field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 18px}.ips-choices{display:flex;flex-wrap:wrap;gap:5px}
+.ips-profile-list{display:grid;gap:8px;margin:18px 0}.ips-profile-list p{padding:12px;margin:0;border-left:3px solid #c6d8f1;background:#f6f8fc;font-size:14px}
+.ips-quote{margin-top:24px;padding-top:5px;border-top:1px solid #cbd7e8}.ips-quote h3{margin-top:16px}.ips-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.ips-replace{display:block;margin:12px 0;font-size:14px}
+.ips-progression{list-style:none;padding:0;display:grid;gap:0}.ips-progression li{position:relative;padding:12px 12px 12px 24px;margin-left:6px;border-left:3px solid #d2dbe7}.ips-progression li:before{content:'';position:absolute;left:-7px;top:18px;width:11px;height:11px;background:#d2dbe7;border-radius:50%}.ips-progression li.current{border-left-color:#3476d4;background:#f0f5fd}.ips-progression li.current:before,.ips-progression li.complete:before{background:#3476d4}.ips-progression li.complete{border-left-color:#3476d4}.ips-progression span{display:block;font-size:12px;color:#637086;margin:4px 0}.ips-progression p{margin:0;font-size:13px}
+.ips-table{max-width:100%;overflow-x:auto;margin:14px 0;border:1px solid #dce3ed;border-radius:8px}.ips-table table{border-collapse:collapse;width:100%;font-size:13px;text-align:left}.ips-table th,.ips-table td{padding:11px;vertical-align:top;border-bottom:1px solid #e5eaf1}.ips-table thead{background:#f2f5fa}.ips-table td{font-variant-numeric:tabular-nums}.ips-events{padding-left:22px}.ips-events li{padding:7px 0;line-height:1.5}
+.ips-back{display:none}.ips-workspace :focus-visible{outline:3px solid #377ce2;outline-offset:3px}.ips-workspace button:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:760px){.ips-split{display:block}.ips-inspector{padding:18px;margin-top:12px}.ips-split.has-selection>.ips-directory{display:none}.ips-split.has-selection>.ips-inspector{display:block}.ips-split:not(.has-selection)>.ips-inspector{display:none}.ips-back{display:inline-flex!important}.ips-views .btn{flex:1 1 105px}.ips-employers .btn{flex:1 1 150px}.ips-facts{grid-template-columns:repeat(auto-fit,minmax(125px,1fr))}.ips-field-grid{display:block}.ips-inspector h2{font-size:21px}.ips-actions .btn{flex:1 1 150px}.ips-table th,.ips-table td{padding:8px}}
+@media(prefers-reduced-motion:reduce){.ips-workspace *{scroll-behavior:auto!important}}

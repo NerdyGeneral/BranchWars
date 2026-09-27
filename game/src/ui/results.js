@@ -47,7 +47,7 @@ function initiativeFeedbackLines(v){
   row.status==='unknown'?[`Your submitted ${row.name}: the start outcome cannot be confirmed from available history. Check your bank before selecting it again; no cost conclusion is available.`]:[]);
 }
 function resolutionDisplayLines(v){return [...(v.resolution||[]),...initiativeFeedbackLines(v)]}
-function renderHistory(v){const lines=resolutionDisplayLines(v);$('#lastResolution').innerHTML=lines.length?lines.map(x=>`<div class="history-item">${esc(x)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}
+function renderHistory(v){const lines=resolutionDisplayLines(v);$('#lastResolution').innerHTML=lines.length?lines.map((x,i)=>`<div class="history-item">${announcementResolutionMarkup(v,x,i)}</div>`).join(''):'<span class="small muted">The opening market is paused. Configure your institution and mark Ready.</span>'}
 let gameOverlayReturnFocus = null;
 function openGameOverlay(id,buttonId) {
  if(typeof closeGameHelp==='function')closeGameHelp(false);
@@ -55,7 +55,10 @@ function openGameOverlay(id,buttonId) {
  gameOverlayReturnFocus=typeof document==='undefined'?null:document.activeElement;
  overlay.classList.remove('hidden');
  const background=$('.shell');if(background)background.inert=true;
- $(buttonId)?.focus();
+ // Long results must open at their heading, not scroll to the bottom action.
+ // Keep the dialog's reading position separate from keyboard focus.
+ $(buttonId)?.focus({preventScroll:true});
+ const card=overlay.querySelector?.('.resolution-card');if(card)card.scrollTop=0;
 }
 function closeGameOverlay(id) {
  $(id).classList.add('hidden');
@@ -67,7 +70,7 @@ function gameOverlayKey(event) {
  const button=!$('#privacyScreen').classList.contains('hidden')?$('#privacyContinue'):!$('#resolutionScreen').classList.contains('hidden')?$('#resolutionContinue'):null;
  if(button&&event.key==='Tab'){event.preventDefault();button.focus()}
 }
-function maybeResolution(v){if(v.resolutionId>lastResolutionId&&v.resolution.length){lastResolutionId=v.resolutionId;$('#resolutionTitle').textContent=`CYCLE ${v.gameOver?v.cycle:v.cycle-1} RESULTS`;$('#resolutionList').innerHTML=resolutionDisplayLines(v).map(x=>`<li>${esc(x)}</li>`).join('');openGameOverlay('#resolutionScreen','#resolutionContinue')}}
+function maybeResolution(v){if(v.resolutionId>lastResolutionId&&v.resolution.length){lastResolutionId=v.resolutionId;$('#resolutionTitle').textContent=`CYCLE ${v.gameOver?v.cycle:v.cycle-1} RESULTS`;$('#resolutionList').innerHTML=resolutionDisplayLines(v).map((x,i)=>`<li>${announcementResolutionMarkup(v,x,i)}</li>`).join('');openGameOverlay('#resolutionScreen','#resolutionTitle')}}
 function showPrivacy(nextSeat,title,text){privacyNext=()=>{seat=nextSeat;draft=null;draftOwner='';lastCycle=0;closeGameOverlay('#privacyScreen');render()};$('#privacyTitle').textContent=title;$('#privacyText').textContent=text;openGameOverlay('#privacyScreen','#privacyContinue')}
 function validateFacilitySubmission(v,plan){
  // A disabled button is not a submission boundary. Reuse the same pure engine
@@ -97,8 +100,9 @@ function renderFinal(v){show('#gameOver');const winner=v.winnerId;const failedNa
       `Receivership ends a campaign immediately: ${v.receivershipCycles} consecutive cycles below a 2% capital ratio.`)+
       ' No free assets or franchise are transferred; final values are descriptive, not the victory condition.';
   }
-  const card=(p,id)=>{const f=v.final[id],m=f.mandate;return`<div class="final-card"><h3>${esc(p.name)}</h3><div>MARKETS CONTROLLED: <b>${f.markets}</b></div><div>CAPITAL RATIO: <b class="${tierClass(p.capitalTier.key)}">${p.capitalRatio.toFixed(1)}% // ${esc(p.capitalTier.short)}</b></div><div>CUMULATIVE EARNINGS: <b>${money(f.earnings)}</b></div><div>CAREER MILESTONES: <b>${f.achievements}</b></div><div>BASE VALUE: <b>${f.base}</b></div><div>MANDATE: <b>${esc(m.name)}</b></div><div class="small">${esc(m.desc)}</div><div class="${m.achieved?'good':'bad'}">${m.achieved?`ACHIEVED +${m.bonus}`:'NOT ACHIEVED'}</div><div style="margin-top:8px">FINAL VALUE: <b>${f.total}</b></div></div>`};$('#finalCards').innerHTML=card(v.me,v.me.id)+card(v.rival,v.rival.id);$('#rematchBtn').disabled=v.rematchReady;$('#rematchBtn').textContent=v.rematchReady?'[ REMATCH REQUEST FILED ]':'[ REQUEST REMATCH ]';$('#rematchStatus').textContent=v.rematchReady&&!v.rivalRematchReady?'Waiting for rival authorization.':v.rivalRematchReady&&!v.rematchReady?'Rival requested a rematch.':''}
-const renderBase=render;render=function(){renderBase();const v=currentView();if(!v||v.gameOver)return;setWorkspaceTab(workspaceTab);renderCompetitiveActions(v);renderThreatBoard(v);$('#maxCycles').textContent='∞';$('#scopeName').textContent=scopeHeadline(v);$('#scopeName').title=scopeHeadlineTitle(v);const pressure=v.buyoutPressure||[0,0];if(v.act.key==='consolidation'&&(pressure[0]||pressure[1]))$('#unlockText').textContent+=` // TAKEOVER POSITION: ${pressure[0]?`YOU ${pressure[0]}/2`:`RIVAL ${pressure[1]}/2`}`;if(v.consolidationStalemate)$('#unlockText').textContent+=` // FRANCHISE AUCTION ${Math.min(8,v.consolidationStalemate)}/8`}
+  const card=(p,id)=>{const f=v.final[id],m=f.mandate;return`<div class="final-card"><h3>${bankIdentityMarkup(p,{seat:p.id===v.me.id?0:1,size:'large',showName:true})}</h3><div>MARKETS CONTROLLED: <b>${f.markets}</b></div><div>CAPITAL RATIO: <b class="${tierClass(p.capitalTier.key)}">${p.capitalRatio.toFixed(1)}% // ${esc(p.capitalTier.short)}</b></div><div>CUMULATIVE EARNINGS: <b>${money(f.earnings)}</b></div><div>CAREER MILESTONES: <b>${f.achievements}</b></div><div>BASE VALUE: <b>${f.base}</b></div><div>MANDATE: <b>${esc(m.name)}</b></div><div class="small">${esc(m.desc)}</div><div class="${m.achieved?'good':'bad'}">${m.achieved?`ACHIEVED +${m.bonus}`:'NOT ACHIEVED'}</div><div style="margin-top:8px">FINAL VALUE: <b>${f.total}</b></div></div>`};$('#finalCards').innerHTML=card(v.me,v.me.id)+card(v.rival,v.rival.id);$('#rematchBtn').disabled=v.rematchReady;$('#rematchBtn').textContent=v.rematchReady?'[ REMATCH REQUEST FILED ]':'[ REQUEST REMATCH ]';$('#rematchStatus').textContent=v.rematchReady&&!v.rivalRematchReady?'Waiting for rival authorization.':v.rivalRematchReady&&!v.rematchReady?'Rival requested a rematch.':''}
+// Expanded already rendered its selected inspector; legacy navigation would reset it on peer updates.
+const renderBase=render;render=function(){renderBase();const v=currentView();if(!v||v.gameOver||expandedInterfaceEnabled(v))return;setWorkspaceTab(workspaceTab);renderCompetitiveActions(v);renderThreatBoard(v);$('#maxCycles').textContent='∞';$('#scopeName').textContent=scopeHeadline(v);$('#scopeName').title=scopeHeadlineTitle(v);const pressure=v.buyoutPressure||[0,0];if(v.act.key==='consolidation'&&(pressure[0]||pressure[1]))$('#unlockText').textContent+=` // TAKEOVER POSITION: ${pressure[0]?`YOU ${pressure[0]}/2`:`RIVAL ${pressure[1]}/2`}`;if(v.consolidationStalemate)$('#unlockText').textContent+=` // FRANCHISE AUCTION ${Math.min(8,v.consolidationStalemate)}/8`}
 const renderFinalBase=renderFinal;renderFinal=function(v){
  renderFinalBase(v);const winner=v.winnerId?(v.winnerId===v.me.id?v.me.name:v.rival.name):'';
  if(v.endReason==='buyout'){$('#winnerText').textContent=`${winner} ${v.regionalEconomyVersion===1?'WON THE BANK CONTROL CONTEST.':'COMPLETED A HOSTILE BUYOUT AND ABSORBED THE RIVAL FRANCHISE.'}`;$('#endingNote').textContent='A sustained takeover position ended the contest under this campaign’s control rules.'}

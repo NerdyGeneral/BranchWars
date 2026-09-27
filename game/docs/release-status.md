@@ -1,5 +1,386 @@
 # Release status and known issues
 
+## September 27 — 9.39 repository publication
+
+[PR #27](https://github.com/NerdyGeneral/BranchWars/pull/27) publishes the current
+9.39 game and source from the PR #26 baseline. The playable HTML is byte-identical
+to the tested local candidate. A [sanitized validation receipt](../reports/verification/expanded-9.39-local-validation.json)
+records the prior local checks; GitHub CI is a separate run and the PR remains
+subject to its checks and review. Earlier entries below record local milestone
+status at the time of completion. Raw local evidence, campaign snapshots and
+browser captures are deliberately not distributed; local-only paths are labeled
+as such. This repository update does not create a GitHub Release or establish
+full-release balance or physical multiplayer acceptance.
+
+## September 27 — Partner-card balance pass (local 9.39 candidate)
+
+New Expanded campaigns use a $2,500 license, $100 monthly platform cost, $3
+per live account, a $0–$1,000 acquisition budget in $100 steps, and smaller
+shared oversight workloads for the outsourced program. Cards → Results now
+explains operating and cumulative contribution and a conditional payback scenario.
+Old 9.38 campaigns retain their contract. [Rules and measured limits](partner-cards.md).
+
+All 316 standard regression command entries passed on unchanged inputs,
+with 33 actual browser assertions, five final 36-month legal-plan replays,
+exact historical-contract replay, and package runtime / ZIP extraction checks.
+See the evidence ledger (local-only: `game/reports/local/card-balance-20260927/README.md`).
+Nothing is published; human playtesting and physical two-computer acceptance
+remain separate.
+
+## September 27 — Partner-issued cards (local 9.38 candidate)
+
+New Expanded campaigns add **Banking → Cards** with paid research and licensing,
+finite Cedar Reserve funding, actual customer payments, arrears, provisions,
+charge-offs and recoveries. Player compensation and direct costs are separate
+from issuer-owned receivables. See [the rules and walkthrough](partner-cards.md).
+Existing campaigns retain their rules; Core remains 8.20. The prior source and
+packages are preserved. All 314 standard fast-gate command entries passed
+on unchanged gameplay source, with one reviewed fingerprint-only test retry.
+Also passed: 29 actual browser assertions, the legal eighteen-month
+campaign replay, and package runtime / independent ZIP extraction checks.
+Human balance and physical two-computer acceptance remain unverified. Nothing is published.
+
+The current local evidence (local-only: `game/reports/local/partner-cards-20260927/README.md`)
+separates legal campaign playthroughs, adverse fixtures, actual browser checks
+and physical/human acceptance.
+
+## September 27 — Expanded 9.37 playtest and presentation polish
+
+The [focused playtest](expanded-playtest.md) completed four 18-month treasury
+campaigns, 38 real two-browser loopback LAN checks and 22 native file-origin
+browser checks. Three presentation fixes keep announcements visible when results
+open, preserve the current inspector during rival updates, and distinguish late
+invoice collections from current-invoice payments. Engine bytes and save versions
+are unchanged. All 312 standard fast-gate command entries passed against the final
+frozen build; package source/runtime and independent ZIP extraction checks also
+passed. See the
+current evidence ledger (local-only: `game/reports/local/expanded-playtest-20260927-111150/README.md`).
+The original 9.37 package below remains preserved. Physical peers and human balance
+acceptance remain unverified.
+
+## September 27 — Digital + Commercial and funding (local 9.37 candidate)
+
+New Expanded campaigns now select **9.37**, retaining the completed 9.36 business consolidation. Five paid research nodes connect to the existing treasury platform and shared customer service book. Cedar Reserve Bank offers actual funded one-month advances. Historical campaigns retain their rules and paid work.
+
+See the [implementation and player walkthrough](digital-commercial-milestone.md), [card foundation specification](card-program-foundation.md), and current evidence ledger (local-only: `game/reports/local/digital-commercial-20260927/README.md`). All 312 standard fast-gate command entries and 44 isolated browser checks passed against the final build. Package source/runtime, recovery, rematch and ZIP extraction checks passed. Complete terminal receipts and hashes are recorded in that ledger. This is a local engineering candidate; physical multiplayer and human balance acceptance remain unverified.
+
+
+## September 27 — Expanded business consolidation (preserved 9.36 baseline)
+
+New Expanded games use **9.36**, with an explicit `expandedBusinessVersion: 1`
+boundary. Core remains 8.20; existing saves and rematches retain their saved
+economics, paid projects and earned benefits.
+
+- Campaigns now have an exact monthly advertising budget and one optional
+  community or sports sponsorship. Review distinguishes adjustable spending
+  from signed payments, cancellation costs and the end month.
+- Business services starts with Payroll, Merchant services and Corporate
+  treasury, with selected-service setup, pricing, capacity and searchable clients.
+  Household opportunities go to Deposits; forecasts and earned whole-book results
+  are labelled separately.
+- A shared digital platform can be built or licensed once for the bank. Remote
+  acquisition uses finite central staff and local demand; studios are optional.
+- Holding-company issuance, voluntary rival trades and share retirement use
+  funded counterparties and protected parent cash, with dilution and control
+  quotes. Selling bank portfolio securities remains a separate Treasury action.
+- New rules retire obsolete initiative controls and AI/submission paths. The
+  map retains its artwork, restores visible physical-office comparisons and has
+  one selected-market Build here action. Sponsorship identities and start events
+  appear for both banks.
+
+Portable SHA256: `6ccb3144b4c761ad43a20ccf8f47f8c4b5fdd69aa94a264a16f5177a972ce729`.
+Engine SHA256: `42d291957e83f1a7e78445bd685f6e268a3d5c2d694eb7eb3b042b25dc2626c2`.
+
+The preserved 9.36 portable passed **54 isolated browser checks**, including real
+staging and two-bank hotseat settlement, with no script errors. Desktop and
+480px screenshots were inspected. All **308 fast-gate commands passed** across
+fourteen shards with identical, unchanged inputs (321 executions include thirteen
+repeated build checks). The aggregate receipt verifies every command and terminal
+result against that preserved build. Those receipts do not certify 9.37.
+See [implementation and compatibility](expanded-consolidation.md) and
+local evidence (local-only: `game/reports/local/expanded-consolidation-20260927/README.md`).
+
+Nothing is published. Native file-origin persistence, physical multiplayer peers,
+the full release balance gate and human gameplay acceptance remain separate.
+Prices, limits and response strengths require playtesting before release.
+
+## September 27 — Research funding shortcuts (previous verified checkpoint)
+
+Expanded Research restores **+$50k** and **Stage max** alongside its exact custom
+amount. These explicitly stage the selected branch only, using existing engine
+milestone, monthly and protected-budget limits. +$50k starts from the working
+amount; Stage max replaces it with the allowed total. Operating models link to
+the selected capability's funding editor. Engine and save rules are unchanged.
+
+Portable SHA256: `10adb6665f5a81685c681348234a2fe5924e4d9f075e3434da46d7e9f5049804`.
+Engine remains `e348b9f3c84207ee4cef3b989d74434c29f26ad84854697d65188c9f9dfeb5a1`.
+All **18 targeted check commands passed** with stable inputs, including the
+27-case People/Strategy suite in source and portable modes. **20 isolated browser
+checks** passed; desktop and 480px screenshots were visually inspected. The
+checks cover exact custom amounts, repeat increments, caps, invalid inputs,
+stale controls, context returns, unrelated plans, Review removal and unchanged
+simulation state. See evidence (local-only: `game/reports/local/research-shortcuts-20260927/README.md`).
+The full fast/release gates were not rerun; prior receipts below certify their
+own builds. Native persistence, physical peers and human acceptance remain
+separate. Nothing is published.
+
+## September 27 — Map, locked expansions and Summary follow-up (previous verified checkpoint)
+
+The original isometric city map now sits inside the new Markets workspace,
+retaining authored geography, district artwork and local office inspection.
+Selecting a district still does not stage a monthly focus change.
+
+Unopened Insurance and Investment / Brokerage companies now show locked
+expansion preparation. Existing quotes govern funding, costs, staffing and
+permission waits. Shared People choices remain working edits until the complete
+launch is added; one Review row removes the launch and its dependent setup
+together. Active saves keep their operating companies, and supported closed
+businesses can restart. Trust is explicitly a locked future expansion, with no
+purchase or invented business model. Bank-owned liquid securities offers remain
+available in Banking → Treasury without an owned brokerage.
+
+Summary now has recorded score comparisons, current rankings, and a scrolling
+cosmetic bank ticker. Prices are the final recorded score divided by ten,
+rounded to cents with a $0.01 floor. Changes compare recorded closes; private
+plans and early intermediate score deltas are not used. Pause and reduced-motion
+support are included. No trading, economic, RNG or save-schema changes occur.
+
+| Map/expansion/ticker checkpoint artifact | SHA256 |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `a1dd956928a8603797b8a22af88626ec0a017bd47dde0f391fbf68684849bfd6` |
+| Engine, unchanged from the starting build | `e348b9f3c84207ee4cef3b989d74434c29f26ad84854697d65188c9f9dfeb5a1` |
+
+All **32 targeted verification commands passed**, including source and portable
+runs of the four interface suites, map/context/navigation/ownership, plan review,
+investment/agency/shared-premises UI and monetary-policy UI, plus build,
+architecture and documentation checks. Inputs remained unchanged during the run.
+The four interface suites contain 70 cases per mode.
+
+Current-artifact isolated Chromium evidence passed: **73 new checks and 14
+visually inspected captures**; 31 existing routes, 60 layout checks and 29 captures;
+45 keyboard/focus checks; and five existing planning/hotseat flows with ten
+captures. Actual monthly resolution changes the ticker, inspecting/preparing
+does not mutate saved books or RNG, and the updated agency workflow stages and
+removes its full launch from an earned-dividend fixture.
+
+See follow-up evidence and screenshots (local-only: `game/reports/local/map-expansions-ticker-20260927/README.md`)
+and its `verification-summary.json`. The earlier 300-command gate below applies
+to the preceding rebuild; the full fast/full-release gates were not rerun for
+this presentation follow-up. Native launch, durable storage, native zoom,
+physical two-computer play and human acceptance remain outside the isolated
+browser evidence. Nothing has been published.
+
+## September 27 — Expanded interface rebuild (previous verified checkpoint)
+
+Expanded now uses six primary homes: **This month, Markets, Banking, People,
+Strategy and Financial Group**. Reports and Save & help are secondary. Focused
+object editors replace the overlapping Expanded desks; the header keeps the
+authoritative available-spending quote, commitments, cash, capital and Review
+month visible. Core retains its existing interface.
+
+Markets owns physical office work, Banking owns product terms and portfolios,
+People owns employment and qualifications, and Group owns subsidiary operations
+and ownership. Unfinished values remain private working edits until Add/Update.
+Review shows the shared plan, scoped Edit/Remove, recurring costs, blockers and
+the original Ready/Recall controls. Contextual Return restores location rather
+than replacing the financial draft. See the [control ownership and parity
+map](expanded-interface.md) and [player guide](player-guide.md).
+
+| Rebuild checkpoint artifact | SHA256 |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `4fa6e7c4190033ddf2801017921c6973b45af6c5a11a55a3718ec3f71ffe4f7e` |
+| Engine, identical to the preserved starting build | `e348b9f3c84207ee4cef3b989d74434c29f26ad84854697d65188c9f9dfeb5a1` |
+
+The portable is generated from 222 registered source files. This presentation
+rebuild does not change Core 8.20, Expanded 9.35, saved economic profiles, save
+schemas or engine rules. The prior build and source/tests/tools/docs were
+preserved before editing. Nothing has been published or uploaded.
+
+The final **300-command fast gate passed** across all 16 canonical shards
+(315 invocations because each shard repeats the build check). Every terminal
+receipt confirms identical portable and input hashes, with no input changes.
+The collector also checked complete command coverage and the final current
+source fingerprint. Earlier interrupted or changed-input matrices are diagnostic
+evidence, not completed passes. Exact receipts are collected in
+`reports/local/interface-rebuild-20260927/verification-summary.json`.
+
+Current-build browser evidence includes 30 routed views, 59 layout checks and
+29 main screenshots; three months submitted through the real UI; announcement
+once-only publication; campaign export/import; Core startup; five focused editing
+and hotseat workflows; 45 keyboard/focus checks; and seven enabled primary-button
+contrast checks. Desktop sizes are 1920×1080, 1366×768 and 1024×768, with a
+480×900 narrow window and explicitly labelled CSS 125% layout stress.
+
+A separately labelled, engine-settled month-13 fixture supplies three operating
+offices, a completed visiting-adviser desk, operating subsidiaries and seven
+retained investment clients. Its 24 browser checks passed, including finite room
+time, employer navigation, retained working edits and unchanged settled books.
+Its synthetic initial capital is disclosed; this is mature-interface coverage,
+not ordinary-opening economic or balance acceptance.
+
+The local delivery record (local-only: `game/reports/local/interface-rebuild-20260927/acceptance.md`)
+links inventories, screenshots and detailed receipts. Browser runs use isolated
+Chromium, generated HTML, blocked external requests and in-memory storage. Native
+file launch, autosave/Continue after a restart, native browser zoom, physical
+two-computer connectivity and human gameplay acceptance remain unverified. The
+full release/calibration gate is separate from the fast gate. Automated behavior,
+rendered visual inspection and human acceptance are distinct claims.
+
+## September 26 — Expanded Federal Funds implementation (historical baseline)
+
+New Expanded campaigns now select **9.35 / monetaryPolicyVersion 1**. Core stays
+8.20 and existing Expanded saves/rematches retain their saved rules. This local
+candidate has not been published.
+
+- Shared policy decisions occur before planning in months 3, 5, 7 and onward,
+  with a dedicated deterministic RNG and 12-decision history, including holds.
+- Bank securities have liquid and fixed 6-/24-month holdings. Fixed coupons stay
+  fixed; funded maturities return principal, and early sales realize market gains
+  or losses. Changing investment policy does not erase existing contracts.
+- Emergency borrowing costs the policy anchor plus 825 bp annually on opening
+  debt. Existing deposit guarantees, loan coupons and client notes keep their terms.
+- Overview has a compact Fed card and **Inspect bank impact**. Rate comparisons
+  and maturity tables use engine quotes; investment policy uses Review/Stage/Cancel.
+  Contextual banking links retain the shared draft. No extra workspace or selects.
+- Public monetary state excludes RNG state. Holdings and staged treasury policy
+  remain owner-private, with explicit old-peer refusal and save validation.
+
+Only liquid bank securities can be offered to the investment dealer at par.
+Player quotes, planning validation, AI offers and funded settlement share that
+limit; fixed investments cannot bypass their early-sale gain or loss.
+
+| Current local artifact | SHA256 |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `e4a4f66e7119f38474d92a12fda243d832979fde0a13c3c4c6e0962d63a1555d` |
+| Engine | `e348b9f3c84207ee4cef3b989d74434c29f26ad84854697d65188c9f9dfeb5a1` |
+
+Focused domain/UI checks and all three simulated transports passed on source
+and portable builds. Exact pre-Fed replay covers legacy 8.1, Core 8.20,
+Expanded 9.33 and 9.34: creation, AI/RNG, half-ready restore, settlement and
+both private views. Four scenarios on the final engine each completed eight
+months with fixed versus liquid policies and dealer offers; every month checked
+accounting, owner-view validation and identical half-ready restore/continuation.
+The complete **292-command fast gate passed** across all eight canonical shards
+(299 invocations because each shard repeats the build check). Every terminal
+receipt records the same portable and input hashes, with no source changes
+during verification. `reports/local/federal-funds-20260926/verification-summary.json`
+collects the receipt paths, final hashes, replay results and calibration limits.
+
+Longer calibration is diagnostic, not a balance or final-build acceptance pass:
+
+- Earlier candidate engines completed 14 adaptive AI campaigns of 36 months
+  (504 resolved months) across moving-rate and held-rate comparisons. Eight
+  completed runs came from a larger interrupted sweep; the other six came from
+  the remaining three scenarios. The full 96-case adaptive sweep did not finish.
+- A separate 96-case standing-plan matrix resolved 2,550 months. Six cases
+  completed 36 months; 88 stopped when unchanged plans failed the existing 8%
+  post-spending capital requirement, and two stopped at month 35 when office
+  staffing exceeded the shared department pool. Both moving-rate and held-rate
+  controls encountered these stops. The failed plans/states are retained, not
+  counted as passes or used to retune rates. These runs predate the final
+  dealer-offer fix.
+
+Receipts and the preserved pre-Fed baseline are in
+`reports/local/federal-funds-20260926/` and
+`reports/local/before-federal-funds-20260926/`. Full Windows release verification,
+live layout/keyboard acceptance and physical two-computer play remain unverified.
+
+## September 26 — Federal Funds design pass (historical checkpoint)
+
+The [Federal Funds proposal](federal-funds-design.md) traces the existing rate
+consumers, defines the first Expanded slice, contract timing, private exposure
+forecasts, shared policy decisions, interface placement and implementation gates.
+It is a design deliverable, not an implemented monetary-policy system. No game
+source, playable artifact, campaign or saved economic rule changed in this pass.
+
+A reproducible local diagnostic compares current-engine forecasts at 3.25%, 3.75%
+and 4.25%, with a fixed opening bank/plan and other macro factors held constant.
+Both Core 8.20 and Expanded 9.34 preserve campaign/view/RNG state during the probes.
+The Expanded opening case benefits from a hike through its large securities book;
+this is evidence for exposure-based design, not a full-game balance conclusion.
+The script and receipt are in `reports/local/federal-funds-design-20260926/`.
+At that historical checkpoint, the portable SHA256 was the JPG value below.
+
+## September 26 — Optional JPG bank logos
+
+The local Core and Expanded identity editor now accepts optional `.jpg` / `.jpeg`
+files up to **200 × 200 pixels and 100 KB (102,400 bytes)**, alongside the existing
+crest, monogram and color. Rectangular images retain their proportions; oversized
+files are refused without replacing the selected logo. The browser decodes and
+re-encodes the image to remove file metadata. Logos are embedded in the portable
+game's saves and shared identity messages; no image host or external URL is used.
+
+Setup previews the image immediately. In a multiplayer lobby, **Save identity**
+shares the draft and resets both players' readiness. **Use crest instead** removes
+the image while retaining the crest settings. Pending uploads block confirmation;
+late completions after cancellation, reconnect, setup changes or leaving are
+discarded. Campaign rules and save versions remain unchanged.
+
+| Pre-Federal-Funds JPG artifact | SHA256 |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `48bfd47558fc706203c52b041ef8739245c2671a4e368f0df4206d47b936ba8f` |
+| Engine | `6af79a9381559d0dd77a69a18479ce39ad4c2b2fa7dd2b92df8d2bfc3ae7f82e` |
+
+Validation includes real JPEG fixtures, malformed/oversized input refusal,
+Core/Expanded save/rematch and economic neutrality, draft/async guards, and
+GitHub/LAN/direct simulated peer flows. An independent exact replay against the
+preserved pre-JPG portable covers legacy 8.1, Core 8.20 and Expanded 9.33/9.34,
+including preset identities, AI/RNG, half-ready recovery, settlement and both
+player views. Local receipts live in `reports/local/jpg-logos-20260926/`.
+
+These are scoped automated checks. The earlier 285-command fast-gate result below
+belongs to the pre-JPG candidate; this small follow-up does not claim a new full
+gate run. Browser decoding is stubbed in the upload tests. Live file-picker/layout
+acceptance and physical two-computer play remain unverified. Both players should
+use the updated game file. Nothing was published.
+
+## September 26 — Local market desk and multiplayer personality candidate
+
+This local candidate follows the clean PR26 download. Source changes are in
+`game/src/`; the portable game is rebuilt from that manifest. No release or
+remote branch was published. Core remains 8.20 and Expanded remains 9.34;
+existing saves retain their economic rules.
+
+| Pre-JPG local artifact | SHA256 |
+| --- | --- |
+| Portable `game/BRANCH_WARS.html` | `26b5c91ac77a18a6dc6a063a693e94bf802c7356048cfeb2170287a652eb7f34` |
+| Engine | `48dd7a492eeabbd24c880f10aec306c12f2686cc66da43515a9133101e18c44b` |
+
+- **Markets:** selected-market conditions, Your presence, staffing/maintenance,
+  expansion/services and conversion share the map inspector. Construction is
+  reviewed and staged there. Bank-wide comparison remains available. Ordinary
+  office and service controls use visible choices rather than nested disclosures.
+- **Banking:** actual deposit terms, lending portfolio/standards, and funding/
+  capital policies have explicit destinations. Contextual Return retains the
+  shared draft and working office forms, including routine guest state updates.
+- **Identity:** four preset crests, monograms and bank colors work in Core and
+  Expanded, including lobby transports, saves/resume, headers and results.
+- **Announcements:** Overview provides Public/Shareholders, exact preview and
+  staging, editing/removal, and a 240-character plain-text limit. Messages remain
+  owner-private until resolution, appear once before ordinary round events in
+  seat order, and have no economic or random effect. The audience is cosmetic.
+- **Staffing:** headcount remains whole people. Fractional office allocations
+  are explicitly monthly work time, backed by the unchanged finite staff quote.
+
+Focused source checks cover announcement neutrality/privacy/resume, bank marks,
+context returns, distinct office edits, same-month guest refreshes, construction
+confirmation, and restoring the same live editor after inline review. An
+absent-feature replay compared untouched baseline and current engines for legacy
+8.1, Core 8.20, Expanded 9.33 and 9.34 without changing the saved campaign.
+
+All **285 canonical fast-gate commands passed** across eight shards, with the
+portable and checked inputs unchanged during each successful shard. The local
+receipt is `reports/local/market-personality-20260926/verification-summary.json`.
+Historical comparisons used the original Git objects in a separate verification
+cache because this downloaded folder has no Git metadata. To repeat those checks
+here, use a normal clone with history or set `GIT_DIR` to the absolute path of
+`game/reports/local/verification-history.git` for the test process.
+
+These checks use engine and headless DOM/network harnesses: live browser layout/keyboard acceptance,
+two-computer play, and the hours-long full release gate are separate and have
+not been claimed. Existing frozen releases, saves and golden fixtures remain
+unchanged. Use the same updated build on both multiplayer computers.
+
 ## September 26 — Expanded 9.34: lending from the balance sheet
 
 New Expanded campaigns start at save `9.34` (`balanceSheetLendingVersion:1`). Every 9.33 and
@@ -7,7 +388,7 @@ earlier campaign keeps its rules: `balance_sheet_lending` replays 9.33 against t
 package, and the lab's 9.33 numbers below equal the committed baseline exactly. Nothing is
 republished; the rc5 ZIP starts Expanded at 9.33 and cannot join a 9.34 campaign.
 
-| Working artifact | Identity |
+| Prior PR26 artifact | Identity |
 | --- | --- |
 | Portable `game/BRANCH_WARS.html` | `9a1a39dd1aa6347a9914925d5e7ebb4d65c35e3c1d49838b748fb515b6a2109c` |
 | Engine | `3eb11003a82539c9964bd98e3647ed0cab82a6d7079bcbada2aa9b77206b896e` |

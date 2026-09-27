@@ -33,12 +33,12 @@ const text=peer=>peer.elements.get('#lobbyNote').textContent;
 
  // Staging after both players confirmed a new campaign is a shared change: the
  // guest sees the save and which bank each seat plays, and both confirm again.
- const pair=await room(transport,edition);await ready(pair);
+ const pair=await room(transport,edition==='expanded'?'core':'expanded');await ready(pair);
  const before=pair.host.state().lobby.revision;
  await stage(pair,save);
  for(const peer of [pair.host,pair.guest]){
   const l=peer.state().lobby;assert.ok(l.resume,transport+' '+edition+': the staged save must be announced to both players');
-  assert.deepEqual(copy(l.resume),{cycle:4,version:saved.version,banks},transport+' '+edition+' resume summary reaches both players');
+  assert.deepEqual(copy(l.resume),{cycle:4,version:saved.version,rules:copy(first.host.run("E.campaignRules(game,{context:'game'}).options")),banks},transport+' '+edition+' resume rules reach both players independently of the new-game settings');
   assert.equal(l.revision,before+1);assert(l.players.every(p=>!p.ready),'staging a save withdraws earlier confirmations');
   assert.match(text(peer),new RegExp('Resuming a saved '+saved.version.replace('.','\\.')+' campaign at month 4'));
   assert.match(peer.elements.get('#lobbyBanks').innerHTML,new RegExp('Plays saved bank <strong>'+banks[0]));

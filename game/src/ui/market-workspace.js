@@ -1,8 +1,8 @@
 // Inspection is owner-local UI state, never a saved rule or monthly instruction.
-let marketWorkspace={owner:null,market:null,pending:null,advertisingOpen:false,advertisingPending:null};
-function resetMarketWorkspace(v){marketWorkspace={owner:v.me.id,market:v.me.focus,pending:null,advertisingOpen:false,advertisingPending:null};}
+let marketWorkspace={owner:null,campaign:null,market:null,mode:'overview',office:null,desk:'staff',pending:null,advertisingOpen:false,advertisingPending:null};
+function resetMarketWorkspace(v){marketWorkspace={owner:v.me.id,campaign:presentationCampaignIdentity(v),market:v.me.focus,mode:'overview',office:null,desk:'staff',pending:null,advertisingOpen:false,advertisingPending:null};}
 function inspectedMarket(v){
- if(marketWorkspace.owner!==v.me.id)resetMarketWorkspace(v);
+ if(marketWorkspace.owner!==v.me.id||marketWorkspace.campaign!==presentationCampaignIdentity(v))resetMarketWorkspace(v);
  if(!v.territories[marketWorkspace.market])marketWorkspace.market=draft.focus||Object.keys(v.territories)[0];
  return marketWorkspace.market;
 }
@@ -12,9 +12,10 @@ function marketActionCurrent(token,editable=true){
   draftOwner===token.owner&&lastCycle===token.cycle&&(!editable||(!now.me.submitted&&!now.gameOver)));
 }
 function inspectMarket(v,key){
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){const now=currentView();return now?.me.id===v.me.id&&now.cycle===v.cycle&&!!now.territories[key]?interfaceMarketsGo('overview',{market:key}):false;}
  const now=currentView();if(!now||now.me.id!==v.me.id||now.cycle!==v.cycle||!now.territories[key])return false;
- if(now.me.facilityLifecycle&&lifecycleUi.owner===now.me.id&&lifecycleUi.cycle===now.cycle&&lifecycleUi.signature===JSON.stringify(draft)&&lifecycleUi.form&&$('#lifecycleStaff-service'))lifecycleUi.form=lifecycleReadForm();
- marketWorkspace.owner=now.me.id;marketWorkspace.market=key;marketWorkspace.pending=null;marketWorkspace.advertisingPending=null;
+ marketSaveOfficeForm(now);
+ marketWorkspace.owner=now.me.id;marketWorkspace.campaign=presentationCampaignIdentity(now);marketWorkspace.market=key;marketWorkspace.mode='overview';marketWorkspace.pending=null;marketWorkspace.advertisingPending=null;
  renderMarkets(now);$('button[data-market="'+key+'"]')?.focus?.({preventScroll:true});return true;
 }
 function marketFocusEffects(v,nextFocus,plan=draft){
@@ -82,57 +83,25 @@ function restoreMarketActionFocus(key){
 function cancelMarketAction(){const key=marketWorkspace.pending?.key;marketWorkspace.pending=null;const v=currentView();if(v)renderMarketInspector(v);restoreMarketActionFocus(key);}
 function refreshMarketActions(v){renderMarkets(v);renderProjects(v);renderReady(v);}
 function openMarketOffice(v,id,desk){
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){
+  const now=currentView();if(!now||now.me.id!==v.me.id||now.cycle!==v.cycle)return false;const office=interfaceMarketsOffice(now,id);if(!office)return false;
+  return interfaceMarketsGo(desk==='staff'?'staff':desk==='services'?'services':desk==='convert'?'convert':'office',{market:office.market,office:id});
+ }
  const now=currentView(),office=now?.me?.facilityNetwork?.offices.find(o=>o.id===id&&o.closedCycle===null);
  if(!office||now.me.id!==v.me.id||now.cycle!==v.cycle)return false;
- marketWorkspace.market=office.market;marketWorkspace.owner=now.me.id;
- if(desk==='staff'&&now.me.facilityLifecycle){
+ marketSaveOfficeForm(now);
+ marketWorkspace.market=office.market;marketWorkspace.owner=now.me.id;marketWorkspace.campaign=presentationCampaignIdentity(now);marketWorkspace.mode='office';marketWorkspace.office=id;marketWorkspace.desk=['staff','services'].includes(desk)&&now.me.facilityLifecycle?desk:'convert';
+ if(['staff','services'].includes(desk)&&now.me.facilityLifecycle){
   // Preserve edits at the previous office before moving the same editor.
-  if(lifecycleUi.owner===now.me.id&&lifecycleUi.cycle===now.cycle&&lifecycleUi.form&&$('#lifecycleStaff-service'))lifecycleUi.form=lifecycleReadForm();
-  lifecycleUi.office=id;lifecycleUi.open=true;renderFacilityLifecycle(now);
-  focusWorkspaceTarget($('#officeDetailTitle'));
+  lifecycleUi.office=id;lifecycleUi.open=true;renderMarketInspector(now);
+  focusWorkspaceTarget($(desk==='services'?'#officeServicesTitle':'#officeDetailTitle'));
  }else{
-  facilityNetworkSelection={...facilityNetworkSelection,owner:now.me.id,office:id,model:null,open:true};
-  renderFacilityNetwork(now);focusWorkspaceTarget($('#facilityDestination')||$('#facilityNetworkDesk'));
+  const models=facilityNetworkSelection.owner===now.me.id?{...facilityNetworkSelection.models,[facilityNetworkSelection.office]:facilityNetworkSelection.model}:{};
+  facilityNetworkSelection={...facilityNetworkSelection,owner:now.me.id,office:id,model:models[id]||null,models,open:true};
+  renderMarketInspector(now);focusWorkspaceTarget($('#facilityNetworkDesk'));
  }
  return true;
 }
-function renderMarketInspector(v){
- const mount=$('#marketInspector');if(!mount||!draft)return;
- const market=inspectedMarket(v),t=v.territories[market],p=v.me,token=marketActionToken(v),locked=p.submitted||v.gameOver;
- const local=p.marketBook?.markets[market],offices=(p.facilityNetwork?.offices||[]).filter(o=>o.market===market&&o.closedCycle===null);
- const state=!t.unlocked?'Opens month '+t.unlock:t.exited?.[0]?'Withdrawn · review paid re-entry':draft.focus===market?'Current monthly focus':'Inspection only · your plan is unchanged';
- const catalog=E.projectCatalog({...p,focus:market},v),actions=Object.entries(catalog).filter(([,d])=>d.target&&!d.legacy&&!d.strategy&&!d.serviceOnly&&!d.programOnly&&(!d.regionalOnly||p.regionalOperations));
- const pending=marketWorkspace.pending,constructionOpen=mount.dataset.inspectedMarket===market&&!!$('#marketConstruction')?.open;
- // Do not use data-market here: that belongs exclusively to map buttons.
- mount.dataset.inspectedMarket=market;
- const rows=offices.map(o=>{const record=p.facilityLifecycle?.records[o.id];return '<li><div><b>'+esc(facilityUiModel(o.model))+'</b><span class="micro">'+esc(facilityUiOfficeLabel(o))+(record?' · condition '+(record.conditionBp/100).toFixed(1)+'%':'')+(o.conversion?' · converting':'')+'</span></div><div class="market-office-actions">'+(record?'<button type="button" class="btn" data-market-office="'+esc(o.id)+'" data-office-desk="staff">Staff &amp; maintain</button>':'')+'<button type="button" class="btn" data-market-office="'+esc(o.id)+'" data-office-desk="convert">Convert</button></div></li>';}).join('');
- mount.innerHTML='<header><span class="micro">MARKET INSPECTOR</span><h3 id="inspectedMarketName" tabindex="-1">'+esc(t.name)+'</h3><p class="small" role="status">'+esc(state)+'</p></header>'+
-  '<label class="micro" for="marketInspectorSelect">Inspect another market</label><select id="marketInspectorSelect">'+Object.entries(v.territories).map(([key,entry])=>'<option value="'+key+'"'+(key===market?' selected':'')+'>'+esc(entry.name)+'</option>').join('')+'</select>'+
-  '<dl class="market-local-metrics"><div><dt>Your influence</dt><dd>'+t.shares[0].toFixed(1)+'%</dd></div><div><dt>Rival influence</dt><dd>'+t.shares[1].toFixed(1)+'%</dd></div>'+(local?'<div><dt>Your local deposits</dt><dd>'+money(local.deposits)+'</dd></div><div><dt>Your local loans</dt><dd>'+money(local.loans)+'</dd></div>':'')+'</dl><p class="micro muted">Influence and deposit ownership are different measures.</p>'+
-  '<button type="button" class="btn" id="useMarketFocus"'+(locked||!t.unlocked||draft.focus===market?' disabled':'')+'>Use as monthly focus</button>'+
-  '<p class="micro market-construction-guidance">'+(v.financialGroupVersion===10?'Build across markets: stage an office here, then inspect another market and stage a different office type. Each order keeps its location; monthly focus does not move it. All orders share your cash and execution capacity.':'These saved rules tie new local projects to monthly focus. For independent construction across markets, start a new Expanded campaign; existing campaigns keep their original rules.')+'</p>'+
-  (v.financialGroupVersion===10&&E.planInitiatives(draft).some(key=>E.PROJECTS[key]?.target)?'<section class="staged-market-orders"><h4>Local orders this month</h4><ul>'+E.planInitiatives(draft).filter(key=>E.PROJECTS[key]?.target).map(key=>'<li>'+esc(E.PROJECTS[key].name)+' · <b>'+esc(v.territories[E.projectPlanTarget(draft,key)].name)+'</b></li>').join('')+'</ul><p class="micro muted">Each order keeps its location. One initiative of each type per month; one office job per market. Cash and execution capacity are shared across all locations.</p></section>':'')+
-  (pending?'<section class="market-action-confirm" role="group" aria-label="Confirm market instruction"><h4>Review the whole change</h4><ul>'+pending.proposal.effects.map(effect=>'<li>'+esc(effect)+'</li>').join('')+'</ul>'+(!pending.proposal.status.eligible?'<p class="notice bad">'+esc(pending.proposal.status.reason)+'</p>':'')+'<button type="button" class="btn primary" id="confirmMarketAction"'+(!pending.proposal.status.eligible?' disabled':'')+'>Confirm changes</button> <button type="button" class="btn" id="cancelMarketAction">Cancel</button></section>':'')+
-  '<section><h4>Your offices · '+(p.facilityNetwork?offices.length:t.branches[0])+'</h4>'+(rows?'<ul class="market-office-list">'+rows+'</ul>':'<p class="small muted">'+(t.branches[0]?'This campaign manages facilities by market. Local upgrades are listed below.':'No operating office here. Compare funded construction below.')+'</p>')+'</section>'+
-  '<details id="marketConstruction"'+(constructionOpen?' open':'')+'><summary>Build &amp; improve this market · '+actions.length+' options</summary><p class="micro">One-time project costs below. Staff, recurring upkeep and execution capacity remain separate commitments. Prices and the entire plan are checked before staging.</p><div class="market-local-projects">'+actions.map(([key,d])=>{
-   const proposal=marketActionProposal(v,market,key),picked=E.planInitiatives(draft).includes(key)&&E.projectPlanTarget(draft,key)===market;
-   return '<article><button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+esc((picked?'Remove staged: ':'Stage: ')+d.name)+'</button><div class="micro"><b>'+money(d.cost)+'</b> one-time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="micro">'+esc(proposal.status.eligible?d.desc:proposal.status.reason)+'</p>'+renderProjectEffect(p,key,market)+'</article>';
-  }).join('')+'</div></details>'+
-  (p.advertising?'<section><h4>Local customer acquisition</h4><p class="micro">One standing campaign per bank. Inspect its real target, recurring cost and application capacity here.</p><button type="button" class="btn" id="openMarketAdvertising">Manage local campaign</button></section>':'')+
-  (p.householdBook&&v.serviceAgreements?'<section><h4>Local business relationships</h4><p class="micro">Inspect this market’s clients in Customers. Looking does not change monthly focus or place a bid.</p>'+v.serviceAgreements.filter(c=>c.market===market&&!c.companyClosed).map(c=>'<button type="button" class="btn" data-market-client="'+esc(c.id)+'">'+esc(serviceClientPresentation(v,c).name)+' · '+esc(E.SERVICE_TYPES[c.kind].name)+'</button>').join('')+'</section>':'')+
-  '<p class="micro muted">Staging changes only your monthly plan. Nothing is built, paid or submitted by inspecting this market.</p>';
- const current=()=>marketActionCurrent(token,false)&&marketWorkspace.market===market;
- $('#marketInspectorSelect')?.addEventListener('change',()=>{if(current()){inspectMarket(v,$('#marketInspectorSelect').value);$('#marketInspectorSelect')?.focus();}});
- $('#useMarketFocus')?.addEventListener('click',()=>{if(current())requestMarketAction(v,market);});
- $$('[data-local-project]').forEach(button=>button.addEventListener('click',()=>{if(current())requestMarketAction(v,market,button.dataset.localProject);}));
- $$('[data-market-office]').forEach(button=>button.addEventListener('click',()=>{if(current())openMarketOffice(v,button.dataset.marketOffice,button.dataset.officeDesk);}));
- $('#confirmMarketAction')?.addEventListener('click',()=>{if(current())confirmMarketAction();});
- $('#cancelMarketAction')?.addEventListener('click',()=>{if(current())cancelMarketAction();});
- $('#openMarketAdvertising')?.addEventListener('click',()=>{if(current()){marketWorkspace.advertisingOpen=true;renderMarketAdvertising(currentView());focusWorkspaceTarget($('#marketCampaignHeading'));}});
- $$('[data-market-client]').forEach(button=>button.addEventListener('click',()=>{if(current())inspectServiceAgreement(currentView(),button.dataset.marketClient);}));
- renderMarketAdvertising(v);
-}
-
 function requestMarketAdvertisingTarget(v){
  const market=inspectedMarket(v),token=marketActionToken(v);if(!marketActionCurrent(token))return false;
  try{advertisingChangeProposal(v,draft,'market',market);}

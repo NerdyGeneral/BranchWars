@@ -5,6 +5,11 @@
 // import, rematch and multiplayer recovery. Availability is not compatibility.
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
+  ['cardEconomicsVersion', 'cardEconomicsSupported', 1, 1, 'Partner card economics', 'CARD ECONOMICS'],
+  ['partnerCardsVersion', 'partnerCardsSupported', 1, 1, 'Partner-issued cards', 'PARTNER CARDS'],
+  ['digitalCommercialVersion', 'digitalCommercialSupported', 1, 1, 'Digital Commercial delivery', 'DIGITAL COMMERCIAL'],
+  ['expandedBusinessVersion', 'expandedBusinessSupported', 1, 1, 'Shared digital business and ownership', 'EXPANDED BUSINESS'],
+  ['monetaryPolicyVersion', 'monetaryPolicySupported', 1, 1, 'Federal Funds and bank treasury', 'FEDERAL FUNDS'],
   ['balanceSheetLendingVersion', 'balanceSheetLendingSupported', 1, 1, 'Balance-sheet lending', 'BALANCE-SHEET LENDING'],
   ['researchProgramVersion', 'researchProgramSupported', 1, 1, 'Core research programme', 'RESEARCH PROGRAMME'],
   ['bankRivalryVersion', 'bankRivalrySupported', 1, 1, 'Persistent bank rivalry', 'BANK RIVALRY'],
@@ -102,7 +107,12 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['bankEconomicsVersion', 'Service-based bank economics', 1, 'commercialServiceVersion', false, false, 'Income comes from earning assets and delivered services, not automatic staff or upgrade bonuses; shared base payroll is $12K per banker per month.'],
   ['bankRivalryVersion', 'Persistent bank rivalry', 1, 'bankEconomicsVersion', false, false, 'Market dominance and score advantages do not automatically end the campaign. Institutional failure remains consequential; company acquisitions still require funded transactions.'],
   ['researchProgramVersion', 'Core research programme', 1, 'bankEconomicsVersion', false, false, 'Six capability branches with three permanent operating models each. Research is shared knowledge; the operating model decides how the bank applies it, and gates the products and platforms it can run.'],
-  ['balanceSheetLendingVersion', 'Balance-sheet lending', 1, 'bankRivalryVersion', false, false, 'Credit staff can lend part of the funded deposit gap beyond local office capacity. Lending stays bounded by spare cash, credit staff and credit administration.']
+  ['balanceSheetLendingVersion', 'Balance-sheet lending', 1, 'bankRivalryVersion', false, false, 'Credit staff can lend part of the funded deposit gap beyond local office capacity. Lending stays bounded by spare cash, credit staff and credit administration.'],
+  ['monetaryPolicyVersion', 'Federal Funds and bank treasury', 1, 'balanceSheetLendingVersion', false, false, 'A shared policy calendar, fixed and repricing investments, funded maturities and rate-sensitive emergency borrowing.'],
+  ['expandedBusinessVersion', 'Shared digital business and ownership', 1, 'monetaryPolicyVersion', false, false, 'Bank-wide digital delivery, modern initiatives, budgeted branding and sponsorships, and funded holding-company share transactions.'],
+  ['digitalCommercialVersion', 'Digital Commercial delivery', 1, 'expandedBusinessVersion', false, false, 'Five connected capabilities, shared treasury delivery and funded outside-bank advances.'],
+  ['partnerCardsVersion', 'Partner-issued cards', 1, 'digitalCommercialVersion', false, false, 'Cedar Reserve funded cards, cash payments, losses and earned bank fees.'],
+  ['cardEconomicsVersion', 'Partner card economics', 1, 'partnerCardsVersion', false, false, 'Costs scaled to the finite card book and retained lifetime contribution.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
@@ -121,6 +131,11 @@ const CAMPAIGN_VERSION_STAGES = Object.freeze([
 // Legacy creation checks deliberately keep their historical order and wording.
 const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['companyCreditVersion', 'named-company credit version'],
+  ['expandedBusinessVersion', 'expanded business version'],
+  ['partnerCardsVersion', 'partner cards version'],
+  ['cardEconomicsVersion', 'card economics version'],
+  ['digitalCommercialVersion', 'digital commercial version'],
+  ['monetaryPolicyVersion', 'monetary policy version'],
   ['bankRivalryVersion', 'bank rivalry version'],
   ['researchProgramVersion', 'research programme version'],
   ['balanceSheetLendingVersion', 'balance-sheet lending version'],
@@ -154,6 +169,11 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.cardEconomicsVersion===1)return '9.39';
+  if(source.partnerCardsVersion===1)return '9.38';
+  if(source.digitalCommercialVersion===1)return '9.37';
+  if(source.expandedBusinessVersion===1)return '9.36';
+  if(source.monetaryPolicyVersion===1)return '9.35';
   if(source.researchProgramVersion===1)return '8.20';
   if(source.balanceSheetLendingVersion===1)return '9.34';
   if(source.bankRivalryVersion===1)return '9.33';
@@ -195,7 +215,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  if(version==='9.33'||version==='9.34')return true;
+  if(version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
   if(version==='8.20'||version==='8.19'||version==='8.18'||version==='9.32')return true;
   if(version==='9.31')return true;
   if(version==='8.17'||version==='9.30')return true;
@@ -331,7 +351,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false } = {}) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false, currentMonetaryPolicy = false, currentBusiness = false, currentDigitalCommercial = false, currentPartnerCards = false, currentCardEconomics = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -366,6 +386,13 @@ function previewCampaignEdition(source, edition, { currentReporting = false, cur
   // that do not ask for it keep the office-bound lending rules.
   if(currentLending&&currentRivalry&&edition==='expanded')options.balanceSheetLendingVersion=1;
   if(edition!=='expanded'||!currentLending||!currentRivalry)delete options.balanceSheetLendingVersion;
+  if(currentMonetaryPolicy&&currentLending&&currentRivalry&&edition==='expanded')options.monetaryPolicyVersion=1;
+  else delete options.monetaryPolicyVersion;
+  if(currentBusiness&&options.monetaryPolicyVersion===1&&edition==='expanded')options.expandedBusinessVersion=1;
+  else delete options.expandedBusinessVersion;
+  if(currentDigitalCommercial&&options.expandedBusinessVersion===1)options.digitalCommercialVersion=1;else delete options.digitalCommercialVersion;
+  if(currentPartnerCards&&options.digitalCommercialVersion===1)options.partnerCardsVersion=1;else delete options.partnerCardsVersion;
+  if(currentCardEconomics&&options.partnerCardsVersion===1)options.cardEconomicsVersion=1;else delete options.cardEconomicsVersion;
   if(currentResearch&&currentEconomics&&edition==='core')options.researchProgramVersion=1;
   if(edition!=='core'||!currentResearch)delete options.researchProgramVersion;
   const rules = validateCampaignRules(options, 'lobby');

@@ -7,7 +7,7 @@ function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
  plan=planCompanyStrategy(g,index,plan);
  plan=planSharedPremises(g,index,plan);
  if(g.commercialServiceVersion===1)plan=commercialServicePlanReview(g,index,plan).plan;
- return planCompanyCredit(g,index,plan);
+ return MonetaryPolicy.bot(g,index,planCompanyCredit(g,index,plan));
 });}
 function chooseOpenBotCore(g, index) {
   const initial = () => {
@@ -46,6 +46,8 @@ function chooseOpenBotCore(g, index) {
   plan = planOnboarding(g, index, plan);
   plan = collectionsPlan(g, index, plan);
   plan = planBankRecovery(g, index, plan);
+  plan = DigitalCommercial.bot(g, index, plan);
+  plan = PartnerCards.bot(g, index, plan);
   plan = planFinalCashReserve(g, index, plan);
   plan = reconsiderOnboardingPending(g, index, plan);
   plan=g.productProgramsVersion===2?planFinalCashReserve(g,index,planProductPricing(g,index,plan)):plan;
@@ -91,6 +93,7 @@ function aiCashPlanningReview(g, index, plan) {
   const decisionExpense = Math.max(0, p.stats.capital - decisionOwner.stats.capital);
   const forecastPlan = JSON.parse(JSON.stringify(plan));
   if (forecastPlan.advertisingPolicy) forecastPlan.advertisingPolicy.budget = 0;
+  if (p.expandedBusinessVersion===1&&forecastPlan.brandCampaignPolicy){forecastPlan.brandCampaignPolicy.regular.budget=0;forecastPlan.brandCampaignPolicy.regular.mode='off';}
   if (forecastPlan.relationshipOfferPolicy) forecastPlan.relationshipOfferPolicy.share = 0;
   if (forecastPlan.onboardingPolicy) forecastPlan.onboardingPolicy.share = 0;
   if (forecastPlan.workforcePolicy) for (const role of Object.keys(forecastPlan.workforcePolicy.training)) forecastPlan.workforcePolicy.training[role] = 0;
@@ -149,12 +152,15 @@ function planFinalCashReserve(g, index, input) {
       plan.departmentFunctionsPolicy.vendors[id]=Math.max(0,count-Math.ceil(excess()/DepartmentFunctions.FUNCTIONS[id].vendorRate));
     }
   }
+  if(plan.nodeFunding&&excess())plan.nodeFunding={};
   for (const key of Object.keys(plan.investments || {})) {
     plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
     if (plan.investments[key] < 1000) delete plan.investments[key];
   }
   if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
+  if (p.partnerCardsVersion===1&&excess()&&plan.cardPolicy)plan.cardPolicy={action:'none',intake:false,marketing:0};
+  if (p.expandedBusinessVersion===1&&excess()&&plan.brandCampaignPolicy){plan.brandCampaignPolicy.regular.budget=0;plan.brandCampaignPolicy.regular.mode='off';}
   if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
   if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;
   if([7,8,9,10].includes(g.financialGroupVersion)&&staffingRecoveryPriority(p)&&planHires(plan)>0){
@@ -179,7 +185,7 @@ function planFinalCashReserve(g, index, input) {
     plan.facilityLifecyclePolicy.renovate=null;
     if(excess())for(const row of Object.values(plan.facilityLifecyclePolicy.offices))row.maintenance='off';
   }
-  if (input.advertisingPolicy?.budget && !plan.advertisingPolicy.budget) {
+  if (input.advertisingPolicy?.budget && !plan.advertisingPolicy.budget || p.expandedBusinessVersion===1&&input.brandCampaignPolicy?.regular.budget&&!plan.brandCampaignPolicy.regular.budget) {
     // A cancelled campaign must not leave its temporary sales-time release in
     // place. Reprice the reserve once with the ordinary retention mandate; the
     // zero ad budget makes this retry bounded to one additional pass.
@@ -192,6 +198,7 @@ function planFinalCashReserve(g, index, input) {
   return plan;
 }
 function validatePilot(g) {
+  BankAnnouncements.validateGame(g);
   validateIncomeHistoryCampaign(g);
   for(const p of g.players)if(p.submitted){const issue=projectLocationsIssue(g,p,p.submitted);if(issue)throw Error(issue);}
   if (g.financialGroupVersion !== undefined || g.featureRulesVersion !== undefined || ['8.14', '8.15', '9.0', '9.1', '9.2', '9.3', '9.4', '9.5', '9.6', '9.7', '9.8','9.9'].includes(g.version)) validateCampaignRules(g, 'game');
@@ -245,6 +252,7 @@ function validatePortfolioPlan(p, plan,g=null) {
   const locations=projectLocationsIssue(g,p,plan);if(locations)throw Error(locations);
   normalizeProductProgramPlan(p, plan);
   normalizeAdvertisingPlan(p, plan);
+  BrandCampaigns.normalize(p,plan,g);
   normalizeRelationshipOfferPlan(p, plan);
   normalizeOnboardingPlan(p, plan);
   normalizePortfolioProducts(p, plan);
@@ -262,4 +270,5 @@ function validatePortfolioPlan(p, plan,g=null) {
   normalizeCompanyControlPlan(g,p,plan);
   normalizeSharedPremisesPlan(g,p,plan);
   normalizeCompanyCreditPlan(g,p,plan);
+  HoldingCapital.normalize(g,p,plan);
 }

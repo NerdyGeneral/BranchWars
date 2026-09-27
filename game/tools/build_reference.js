@@ -252,6 +252,8 @@ for (const fn of ['doctrineProfile', 'executionCapacity', 'hireCost', 'projectCo
 
 // -------------------------------------------------------------------- render
 
+sections.PARTNER_CARDS = table(['Rule', 'Value'], Object.entries(E.PartnerCards.ECONOMICS).map(([key,value])=>[key,value]));
+
 let out = fs.readFileSync(TEMPLATE, 'utf8').replace(/\r\n/g, '\n');
 const used = new Set();
 out = out.replace(/<!--\{\{([A-Za-z_]+)\}\}-->/g, (m, token) => {

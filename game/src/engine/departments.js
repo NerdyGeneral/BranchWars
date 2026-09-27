@@ -93,7 +93,7 @@ function normalizeDepartmentPlan(p, plan,g=null) {
   if(quote.appointments && (quote.total>policy.envelopes.leadership ||
       quote.total+otherCommitments>Math.max(0,Math.min(p.stats.cash-policy.reserve,pilotSpendingLimit(p)))))
     throw Error('Leadership appointment exceeds its envelope or protected bank funds.');
-  const research=Object.values(plan.investments||{}).reduce((n,x)=>n+x,0);
+  const research=(Object.values(plan.investments||{}).reduce((n,x)=>n+x,0)+DigitalCommercial.spend(plan));
   if(research>policy.envelopes.research)throw Error('Research instructions exceed the departmental envelope.');
   if((plan.servicePolicy?.outsourcing||0)*6000>policy.envelopes.vendors)
     throw Error('Service outsourcing exceeds the departmental envelope.');
@@ -275,7 +275,7 @@ function departmentBudgetQuote(p,input,g=null) {
   const remaining=Math.max(0,budget.total-(budget.training||0)-leadership.total-(p.facilityNetwork?facilityDraftSpend(p,plan):0));
   const training=workforceTrainingQuote(prospective,plan.workforcePolicy||p.workforce.policy,remaining);
   prospective._workforceCosts={training};
-  const research=Object.values(plan.investments||{}).reduce((n,x)=>n+x,0),vendors=(plan.servicePolicy?.outsourcing||0)*6000;
+  const research=(Object.values(plan.investments||{}).reduce((n,x)=>n+x,0)+DigitalCommercial.spend(plan)),vendors=(plan.servicePolicy?.outsourcing||0)*6000;
   return {policy:departmentCopy(plan.departmentPolicy),leadership,training,research,vendors,
     productiveAllocation:departmentProductiveAllocation(prospective,plan.allocation||p.allocation),
     reserve:plan.departmentPolicy.reserve,projectedCash:prospective.stats.cash,
@@ -320,7 +320,7 @@ function planDepartments(g,index,input) {
   const p=g.players[index],plan=departmentCopy(input);
   Object.assign(plan,defaultDepartmentPlan(p));
   plan.departmentPolicy.envelopes.research=Math.max(plan.departmentPolicy.envelopes.research,
-    Object.values(plan.investments||{}).reduce((a,b)=>a+b,0));
+    (Object.values(plan.investments||{}).reduce((a,b)=>a+b,0)+DigitalCommercial.spend(plan)));
   plan.departmentPolicy.envelopes.vendors=Math.max(plan.departmentPolicy.envelopes.vendors,(plan.servicePolicy?.outsourcing||0)*6000);
   if(g.cycle%6===0&&p.stats.lastProfit>120000) {
     const role=departmentRoles().find(k=>!p.departmentOffice.leaders[k]&&p.workforce.departments[k].count>=3&&plan.allocation[k]>=2&&p.workforce.departments[k].skill<70);
@@ -346,7 +346,7 @@ function validateDepartmentPlayer(p,month) {
       Object.values(d.arrears).some(n=>!departmentWhole(n)) || !Array.isArray(d.history)||d.history.length>24 || p._departmentTeaching!==undefined||p._departmentTraining!==undefined)
     throw Error('Invalid persistent department office.');
   validateDepartmentPolicy(d.policy);
-  if(![3,4].includes(p.accounting.version)||p.accounting.accounts.payables!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
+  if(![3,4].includes(p.accounting.version)||p.accounting.accounts.payables-OutsideFunding.liability(p)!==Object.values(d.arrears).reduce((a,b)=>a+b,0))
     throw Error('Department liabilities disagree with bank accounts.');
   const ids=new Set();
   for(const leader of Object.values(d.leaders))if(leader!==null) {
@@ -393,7 +393,7 @@ function validateDepartmentSave(g) {
     if(p.submitted)normalizeDepartmentPlan(p,departmentCopy(p.submitted),g);
   }
   if(e.supplier.accounts.cash+circulated!==e.paid||e.paid!==g.players.reduce((n,p)=>n+p.departmentOffice.paid,0)||
-      e.supplier.accounts.businessAssets!==g.players.reduce((n,p)=>n+p.accounting.accounts.payables,0))throw Error('Department cash and claims do not reconcile.');
+      e.supplier.accounts.businessAssets!==g.players.reduce((n,p)=>n+p.accounting.accounts.payables-OutsideFunding.liability(p),0))throw Error('Department cash and claims do not reconcile.');
 }
 function projectDepartments(g,out,index) {
   if(![4,5,6,7,8,9,10].includes(g.financialGroupVersion))return;

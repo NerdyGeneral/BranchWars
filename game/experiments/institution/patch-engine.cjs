@@ -14,6 +14,13 @@ module.exports=function patchEngine(source,names,reverse=false){
     const adapt=s=>s.replace('planBudget(p,plan)','planBudget(p,plan,g)').replace('normalizeDepartmentPlan(p,plan);','normalizeDepartmentPlan(p,plan,g);');
     if(source.includes(adapt(reverse?after:before))){before=adapt(before);after=adapt(after);}
    }
+   // Expanded 9.36 adds explicitly gated business obligations to the same
+   // quote. Adapt the comparison context, not the archived leadership repair;
+   // historical fixtures still exercise its exact failing-before behavior.
+   if(name==='department-mandatory-obligations.patch'&&source.includes('digitalPlatform=ExpandedBusiness.monthlyCost(p)')){
+    const adapt=s=>s.replace('quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0);','quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0)+(p.expandedBusinessVersion===1?BrandCampaigns.mandatory(p,plan)+digitalPlatform:0);');
+    if(source.includes(adapt(reverse?after:before))){before=adapt(before);after=adapt(after);}
+   }
    const from=reverse?after:before,to=reverse?before:after;
    assert.equal(source.split(from).length,2,'Patch must have one exact context: '+name);
    source=source.replace(from,()=>to);

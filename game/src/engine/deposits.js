@@ -45,7 +45,7 @@ function adjustDepositReport(p,g,r){
  if(!p.depositBook)return;
  const d=depositSummary(p,g),oldIncome=r.depositIncome,oldFunding=r.fundingCost;
  captureProductPricingBill(p,d);
- r.depositIncome=d.fees;r.fundingCost=d.interest+p.stats.emergencyDebt*.01;r.depositServiceCost=d.service;r.depositInterest=d.interest;r.retailPlatformCost=Object.values(d.rows).reduce((n,row)=>n+(row.platform||0),0);
+ r.depositIncome=d.fees;r.fundingCost=d.interest+(MonetaryPolicy.enabled(p)?MonetaryPolicy.debtInterest(p):p.stats.emergencyDebt*.01);r.depositServiceCost=d.service;r.depositInterest=d.interest;r.retailPlatformCost=Object.values(d.rows).reduce((n,row)=>n+(row.platform||0),0);
  if(p.productPrograms)r.productProgramCost=productProgramCosts(p).total;
  r.expense+=d.service;
  const change=r.depositIncome-oldIncome-(r.fundingCost-oldFunding)-d.service;

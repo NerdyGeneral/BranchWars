@@ -1,7 +1,9 @@
 'use strict';
+// Retained pre-rebuild Group component contract. Canonical Expanded inspectors
+// and their routes are exercised by interface_banking_group.test.js.
 const assert=require('node:assert/strict'),{groupHarness}=require('./group_ui_harness');let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){throw Error(name+': '+error.stack);}}
-function fresh(version=9){const h=groupHarness();h.run(`game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options,mode:'hotseat',seed:'group-workspace',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='group';newDraft(currentView());draft.decision='b';errors=[];toast=s=>errors.push(s);renderFinancialGroup(currentView());`);return h;}
+function fresh(version=9){const h=groupHarness();h.run(`expandedInterfaceEnabled=()=>false;game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options,mode:'hotseat',seed:'group-workspace',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='group';newDraft(currentView());draft.decision='b';errors=[];toast=s=>errors.push(s);renderFinancialGroup(currentView());`);return h;}
 const click=(h,id)=>h.elements.get('#'+id).listeners.click(),html=h=>h.elements.get('#financialGroupPanel').innerHTML,bytes=h=>h.run('JSON.stringify({game,draft})');
 function input(h,id,value){const node=h.elements.get('#'+id);node.value=String(value);node.listeners.input();}
 function funded(h){h.run('game.players[0].financialGroup.parent=E.GroupAccounting.post(game.players[0].financialGroup.parent,"ui.fixture","external",{cash:240000,equity:240000});newDraft(currentView());draft.decision="b";renderFinancialGroup(currentView());');}
@@ -65,4 +67,4 @@ test('closed companies cannot route to a live agreement editor',()=>{
  const h=fresh();click(h,'groupTab-companies');h.run('currentView=(()=>{const original=currentView;return ()=>{const v=original();v.me.companySnapshot.world.companies[0].resolution={month:1};v.serviceAgreements.find(c=>c.clientIndex===0).companyClosed=true;return v;};})()');h.run('renderFinancialGroup(currentView())');
  assert.match(html(h),/id="groupCompanyMandate" disabled/);const before=bytes(h);click(h,'groupCompanyMandate');assert.equal(h.run('workspaceTab'),'group');assert.equal(bytes(h),before);
 });
-console.log(JSON.stringify({suite:'group-workspace',checks,scope:'Contextual agency and company UI, finite shared parent commitments, pure quoted forms, raw-edit preservation and stale-session guards. UI-funded fixtures are not balance evidence.'}));
+console.log(JSON.stringify({suite:'group-workspace',checks,scope:'Retained legacy Group renderer: agency/company UI, finite shared parent commitments, pure quoted forms, raw-edit preservation and stale-session guards. Canonical Expanded inspectors have a separate gate. UI-funded fixtures are not balance evidence.'}));

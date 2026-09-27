@@ -22,12 +22,17 @@ function harness(features={}){
  const shown=()=>tabs.filter(x=>!x.hidden).map(x=>x.dataset.workspaceTab);
  refresh();return {c,run,go,select,refresh,shown,tabs,groups,mounts,panels,plan};
 }
-// No duplicated business controls, and expanded spending is no longer sticky.
+// The retained Core/optional-feature navigation keeps one copy of its fallback
+// mounts. Expanded's six-home router is tested separately below.
 for(const tab of names)assert.equal((page.match(new RegExp('data-workspace-tab="'+tab+'"','g'))||[]).length,1);
 const nav=page.slice(page.indexOf('<nav class="panel workspace-nav"'),page.indexOf('</nav>',page.indexOf('<nav class="panel workspace-nav"')));
 assert(!nav.includes('id="planBudget"'));
 assert.equal((page.match(/id="planBudget"/g)||[]).length,1);
-assert(!navigation.includes('innerHTML'),'navigation retains every existing form mount');
+// The contextual return bar owns its own markup; navigation must still leave
+// every existing business form mounted rather than rebuilding those controls.
+const returnBarRenderer=navigation.slice(navigation.indexOf('function renderBankingContext('),navigation.indexOf('function returnBankingContext('));
+assert(returnBarRenderer.includes("const mount=$('#bankingContextBar')"),'return markup belongs only to its dedicated navigation mount');
+assert(!navigation.replace(returnBarRenderer,'').includes('innerHTML'),'navigation retains every existing form mount');
 for(const stylesheet of ['styles/collections.css','styles/product-programs.css'])assert(!/workspace-nav[^{}]*\{position:static/.test(read(stylesheet)),'optional-feature styles must not disable compact navigation');
 const all={creditPerformance:{},financialGroup:{},householdBook:{},productPrograms:{},workforce:{}};
 const h=harness(all),before=JSON.stringify(h.c.view);
@@ -72,4 +77,15 @@ for(let bits=0;bits<32;bits++){
  }
  x.go('credit');assert.equal(x.c.workspaceTab,features.creditPerformance?'credit':'overview','unsupported deep link falls back safely');
 }
-console.log('Usability navigation passed: four task groups, all 11 unique mounts, 32 feature-visibility combinations, remembered/contextual selection, hotseat reset, keyboard/ARIA, single listener binding, immutable draft/view, and non-sticky spending.');
+// Load the actual new router into an isolated navigation-only fixture. Its
+// renderer is replaced here because this fixture deliberately has no page DOM;
+// new domain tests and the browser checks cover real renderers separately.
+const expanded=harness(all),identity={};Object.assign(expanded.c,{presentationCampaignIdentity:()=>identity,connectionAttempt:0,featureConnectionGeneration:0,linkSession:'',gh:{},lan:{},document:{activeElement:null}});
+vm.runInContext(read('ui/interface-shell.js'),expanded.c);expanded.run('renderExpandedInterface=function(v){interfaceIdentity(v)}');
+assert.deepEqual(JSON.parse(expanded.run('JSON.stringify(INTERFACE_WORKSPACES.map(x=>x[0]))')),['month','markets','banking','people','strategy','group']);
+const originalPlan=expanded.c.draft,originalView=JSON.stringify(expanded.c.view);
+for(const [legacy,workspace]of [['overview','month'],['markets','markets'],['products','banking'],['credit','banking'],['customers','banking'],['workforce','people'],['strategy','strategy'],['group','group'],['intelligence','reports']]){expanded.go(legacy);assert.equal(expanded.run('interfaceCurrentRoute().workspace'),workspace);}
+expanded.run("openInterfaceWorkspace('markets','staff',{office:'owner:office:1',market:'downtown'});interfaceNavigate({workspace:'people',view:'staff'})");assert.equal(expanded.run('interfaceState.trail.length'),1);assert(expanded.run('interfaceReturn()'));assert.equal(expanded.run('interfaceCurrentRoute().context.office'),'owner:office:1');
+assert.equal(expanded.c.draft,originalPlan);assert.equal(JSON.stringify(expanded.c.view),originalView);
+expanded.c.view={...expanded.c.view,me:{...all,id:'other'}};expanded.c.draftOwner='other';expanded.run('interfaceIdentity(currentView())');assert.equal(expanded.run('interfaceCurrentRoute().workspace'),'month');assert.equal(expanded.run('interfaceState.trail.length'),0);
+console.log('Usability navigation passed: Core fallback keyboard/ARIA, 32 feature combinations and one projection; Expanded six canonical homes, legacy routes, private contextual Return and immutable draft/view. Browser layout acceptance remains separate.');

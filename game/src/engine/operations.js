@@ -102,10 +102,12 @@ function calculateLegacyOperations(g,p,preview=false){
 function prepareOperatingForecast(p,plan,g=null){
  const copy=JSON.parse(JSON.stringify(p));copy.doctrine=typeof copy.doctrine==='object'?copy.doctrine.key:copy.doctrine;
  copy.allocation={...plan.allocation};copy.policies={deposit:plan.depositPolicy,lending:plan.lendingPolicy,capital:plan.capitalPolicy};
+ if(MonetaryPolicy.enabled(copy)&&plan.treasuryPolicy!==undefined){MonetaryPolicy.validatePlan(copy,plan);copy.treasury.policy=plan.treasuryPolicy;}
  applyHouseholdPolicy(copy,plan.householdPolicy);
  applyCollectionsPolicy(copy,plan.collectionsPolicy);
  applyProductProgramPolicy(copy,plan.productProgramPolicy);
  applyAdvertisingPolicy(copy,plan.advertisingPolicy);
+ BrandCampaigns.apply(copy,plan.brandCampaignPolicy);
  applyRelationshipOfferPolicy(copy,plan.relationshipOfferPolicy);
  applyOnboardingPolicy(copy,plan.onboardingPolicy);
  applyGroupPortfolio(copy,plan);
@@ -117,6 +119,7 @@ function prepareOperatingForecast(p,plan,g=null){
  return copy;
 }
 function finishOperatingForecast(copy,economy){
+ if(MonetaryPolicy.enabled(copy))copy.treasury.anchorBp=Math.round(economy.rate*100);
  if(copy.commercialAccounts)copy._commercialAccountQuarters=commercialAccountWork(copy);
  operate({economy,cycle:0},copy,true);
  return copy;

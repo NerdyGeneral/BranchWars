@@ -53,8 +53,8 @@ function facilitySelectionContent(v,office){
   let review;
   try{review=facilityUiReview(v,policy);}catch(error){review={status:{eligible:false,reason:error.message},quote:null};}
   const quote=review.quote;
-  return '<label for="facilityDestination">Destination model<select id="facilityDestination"'+disabled+'>'+
-    facilityUiModels(p).filter(model=>model!==office.model).map(model=>'<option value="'+esc(model)+'"'+(model===facilityNetworkSelection.model?' selected':'')+'>'+esc(facilityUiModel(model))+'</option>').join('')+'</select></label>'+
+  return '<h4>Convert to</h4><input type="hidden" id="facilityDestination" value="'+esc(facilityNetworkSelection.model)+'"><div class="object-action-strip" role="group" aria-label="Destination office model">'+
+    facilityUiModels(p).filter(model=>model!==office.model).map(model=>'<button type="button" class="btn" data-facility-model="'+esc(model)+'" aria-pressed="'+(model===facilityNetworkSelection.model)+'"'+disabled+'>'+esc(facilityUiModel(model))+'</button>').join('')+'</div>'+
     (quote?.before&&quote?.during&&quote?.after?'<p class="small">One-time conversion expense: '+facilityUiMoney(quote.cost)+
       ' · execution capacity reserved: '+Number(quote.capacity).toLocaleString()+' · work required: '+Number(quote.work).toLocaleString()+
       ' units. '+esc(quote.activation)+'</p>'+facilityImpactTable(quote.before,quote.during,quote.after):'')+
@@ -80,6 +80,7 @@ function renderFacilityNetwork(v){
   facilityNetworkSelection.office=selected?.id||null;
   if(selected&&(!facilityUiModels(p).includes(facilityNetworkSelection.model)||facilityNetworkSelection.model===selected.model))
     facilityNetworkSelection.model=facilityUiModels(p).find(model=>model!==selected.model);
+  if(selected)facilityNetworkSelection.models={...facilityNetworkSelection.models,[selected.id]:facilityNetworkSelection.model};
   const policy=draft.facilityPolicy||E.defaultFacilityPolicy(p),hasOrder=!!(policy.convert||policy.cancel);
   const staged=policy.cancel?'Cancel conversion at '+policy.cancel+' · no refund':policy.convert?
     'Convert '+policy.convert.officeId+' to '+facilityUiModel(policy.convert.model):'No new facility order staged.';
@@ -90,15 +91,16 @@ function renderFacilityNetwork(v){
       (work?esc(facilityUiModel(work.model))+' · '+Number(work.work).toLocaleString()+'/'+E.FacilityNetwork.RULES.work+
         (work.readyCycle===null?' work':' · activates month '+integer(work.readyCycle)):'Operating · '+integer(o.conversions)+' prior conversions')+'</td></tr>';
   }).join('');
-  mount.innerHTML='<details id="facilityNetworkDesk"'+(facilityNetworkSelection.open?' open':'')+'><summary>OFFICE NETWORK · '+integer(offices.length)+' operating · '+integer(offices.filter(o=>o.conversion).length)+' converting</summary>'+
+  const contextual=typeof marketOfficeContext==='function'&&!!marketOfficeContext(v,'convert');
+  mount.innerHTML='<section id="facilityNetworkDesk"><header class="office-network-only"><h3>Office network · '+integer(offices.length)+' operating · '+integer(offices.filter(o=>o.conversion).length)+' converting</h3></header>'+
     '<section class="credit-policy group-credit-policy"><p class="small">Manage identified existing offices. Conversion changes one site, not every branch in a market. No office is created by opening this desk.</p>'+
-    (offices.length?'<div class="table-scroll" tabindex="0" style="max-height:320px;overflow:auto" aria-label="Owned office network"><table class="regional-table"><thead><tr><th>Market / office</th><th>Current model</th><th>Upkeep</th><th>Deposit capacity</th><th>Loan capacity</th><th>Progress</th></tr></thead><tbody>'+rows+'</tbody></table></div>':
+    (offices.length?(!contextual?'<div class="table-scroll" tabindex="0" aria-label="Owned office network"><table class="regional-table"><thead><tr><th>Market / office</th><th>Current model</th><th>Upkeep</th><th>Deposit capacity</th><th>Loan capacity</th><th>Progress</th></tr></thead><tbody>'+rows+'</tbody></table></div>':''):
       '<p class="notice">No operating offices. Open a site through the normal funded project workflow before considering conversion.</p>')+
     '<p class="notice" id="facilityInstructionStatus" role="status">'+esc(staged)+'</p>'+
     (hasOrder?'<button type="button" class="btn" id="clearFacilityInstruction"'+(p.submitted||v.gameOver?' disabled':'')+'>Clear unsubmitted facility order</button>':'')+
-    (selected?'<label for="facilityOffice">Inspect office<select id="facilityOffice">'+offices.map(o=>'<option value="'+esc(o.id)+'"'+(o.id===selected.id?' selected':'')+'>'+esc((v.territories[o.market]?.name||o.market)+' · '+o.id+' · '+facilityUiModel(o.model))+'</option>').join('')+'</select></label>'+facilitySelectionContent(v,selected):'')+
+    (selected?'<input type="hidden" id="facilityOffice" value="'+esc(selected.id)+'">'+(!contextual?'<nav class="facility-office-choices" aria-label="Choose an office">'+offices.map(o=>'<button type="button" class="btn" data-facility-office="'+esc(o.id)+'" aria-pressed="'+(o.id===selected.id)+'">'+esc((v.territories[o.market]?.name||o.market)+' · '+facilityUiOfficeLabel(o)+' · '+facilityUiModel(o.model))+'</button>').join('')+'</nav>':'')+facilitySelectionContent(v,selected):'')+
     (closed.length?'<details><summary>Closed-office history · '+integer(closed.length)+'</summary><ul>'+closed.map(o=>'<li>'+esc(o.id)+' · '+esc(facilityUiModel(o.model))+' · closed month '+integer(o.closedCycle)+'</li>').join('')+'</ul></details>':'')+
-    '<p class="micro">Choose a facility model to suit each market. Conversions share cash and execution resources with other initiatives, while the office continues to incur upkeep. Manage departmental staffing and leadership in Workforce.</p></section></details>';
+    '<p class="micro">Conversions share cash and execution resources with other initiatives. The office continues to incur upkeep during work.</p></section></section>';
   bindFacilityNetwork(v,selected);
 }
 function bindFacilityNetwork(v,office){
@@ -115,14 +117,24 @@ function bindFacilityNetwork(v,office){
   $('#facilityOffice').addEventListener('change',()=>{
     if(!freshForm()||!stillOwner())return;
     const id=$('#facilityOffice').value;if(!v.me.facilityNetwork.offices.some(o=>o.id===id&&o.closedCycle===null))return;
-    facilityNetworkSelection.office=id;facilityNetworkSelection.model=null;facilityNetworkSelection.open=true;renderFacilityNetwork(currentView());
+    facilityNetworkSelection.office=id;facilityNetworkSelection.model=facilityNetworkSelection.models?.[id]||null;facilityNetworkSelection.open=true;renderFacilityNetwork(currentView());
   });
+  document.querySelectorAll('[data-facility-office]').forEach(button=>button.addEventListener('click',()=>{
+    if(!freshForm()||!stillOwner())return;
+    const id=button.dataset.facilityOffice;if(!v.me.facilityNetwork.offices.some(o=>o.id===id&&o.closedCycle===null))return;
+    if(typeof openMarketOffice==='function')openMarketOffice(currentView(),id,currentView().me.facilityLifecycle?'staff':'convert');
+  }));
   if(!office.conversion){
     $('#facilityDestination').addEventListener('change',()=>{
       if(!freshForm()||!facilityUiCurrent(v,signature,campaign))return;
       const model=$('#facilityDestination').value;if(!facilityUiModels(v.me).includes(model)||model===office.model)return;
       facilityNetworkSelection.model=model;facilityNetworkSelection.open=true;renderFacilityNetwork(currentView());
     });
+    document.querySelectorAll('[data-facility-model]').forEach(button=>button.addEventListener('click',()=>{
+      if(!freshForm()||!facilityUiCurrent(v,signature,campaign))return;
+      const model=button.dataset.facilityModel;if(!facilityUiModels(v.me).includes(model)||model===office.model)return;
+      facilityNetworkSelection.model=model;renderFacilityNetwork(currentView());
+    }));
     const model=facilityNetworkSelection.model;
     $('#stageFacilityConversion').addEventListener('click',()=>{if(freshForm())stageFacilityPolicy(v,{convert:{officeId:office.id,model},cancel:null},signature,campaign);});
   }else $('#stageFacilityCancel').addEventListener('click',()=>{if(freshForm())stageFacilityPolicy(v,{convert:null,cancel:office.id},signature,campaign);});

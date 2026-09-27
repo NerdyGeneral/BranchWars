@@ -1,9 +1,11 @@
 'use strict';
+// Legacy renderer regression only. Current Expanded acceptance is covered by
+// interface_people_strategy.test.js and the actual-browser interface walkthrough.
 if(!process.argv.includes('--source'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');
 let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){throw Error(name+': '+error.stack);}}
-function fresh(version=7){const h=harness();h.run(`const opts=${version==='current'?`E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true}).options`:version?`E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options`:'{}'};
+function fresh(version=7){const h=harness();h.run(`expandedInterfaceEnabled=()=>false;const opts=${version==='current'?`E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true}).options`:version?`E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options`:'{}'};
 game=E.createGame({...opts,mode:'hotseat',seed:'people-overview',created:1});seat=0;gh.active=false;p2pRole='';newDraft(currentView());`);return h;}
 test('overview does not create disabled systems or mutate supported campaigns',()=>{
  for(const version of [0,4,5,6,7]){const h=fresh(version),before=h.run('JSON.stringify({game,draft})');h.run('renderPeopleOverview(currentView());');assert.equal(h.run('JSON.stringify({game,draft})'),before);

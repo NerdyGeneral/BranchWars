@@ -1,0 +1,14 @@
+#monetaryPolicyDesk{margin-top:16px;padding:18px;border:1px solid var(--line,#b9bdb8);background:var(--panel,#f8f8f4);color:var(--ink,#101311)}
+#monetaryPolicyDesk[hidden]{display:none}
+.rate-desk-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;margin-top:20px}
+.rate-scenarios,.rate-links{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.rate-scenarios .active{background:var(--ink,#101311);color:var(--panel,#f8f8f4)}
+.rate-table-scroll{overflow-x:auto}.rate-table{border-collapse:collapse;width:100%;font-size:12px}
+.rate-table caption{text-align:left;padding:8px 0;color:var(--muted,#626760)}
+.rate-table th,.rate-table td{padding:9px 6px;border-bottom:1px solid var(--line,#b9bdb8);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rate-table th:first-child{text-align:left;white-space:normal}.rate-table tbody th{font-weight:normal}.rate-table .rate-total>*{font-weight:bold;border-top:2px solid currentColor}
+.rate-exposure{margin:0}.rate-exposure>div{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line,#b9bdb8);font-size:12px}.rate-exposure dd{margin:0;font-weight:bold;white-space:nowrap}
+.rate-treasury{margin-top:20px;padding-top:16px;border-top:1px solid var(--line,#b9bdb8)}
+.rate-policy-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.rate-policy-options .policy{display:flex;flex-direction:column;gap:8px;text-align:left;padding:14px;min-height:90px}.rate-policy-options span{font-size:12px;line-height:1.5}
+.rate-history{border-top:1px solid var(--line,#b9bdb8);padding-top:14px;line-height:1.8}
+@media(max-width:1000px){.rate-desk-grid{grid-template-columns:1fr}}@media(max-width:600px){.rate-policy-options{grid-template-columns:1fr}#monetaryPolicyDesk{padding:12px}.rate-table{font-size:11px}}

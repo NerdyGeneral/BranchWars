@@ -1,7 +1,19 @@
 // Owner-only lifecycle desk. Versioned engine rules own prices, shared staff,
 // authored proximity and licenses; UI only compares and stages complete plans.
-let lifecycleUi={owner:null,campaign:null,cycle:null,signature:null,office:null,open:false,form:null,revision:0,notice:''};
+let lifecycleUi={owner:null,campaign:null,cycle:null,signature:null,basePolicy:null,office:null,open:false,form:null,revision:0,notice:''};
 function lifecycleMoney(n){return '$'+Math.round(Number(n)||0).toLocaleString();}
+function lifecycleStaffTime(quarters){
+ if(!Number.isFinite(quarters))return 'Unavailable';
+ const whole=Math.floor(quarters/4),part=quarters%4*25;
+ return whole?whole+' full '+(whole===1?'month':'months')+(part?' + '+part+'% of a month':''):part?part+'% of a month':'No time assigned';
+}
+function lifecycleCampaignIdentity(v){return typeof presentationCampaignIdentity==='function'?presentationCampaignIdentity(v):game||view;}
+function lifecycleCaptureForm(v){
+ if(typeof premisesCaptureForm==='function')premisesCaptureForm(v);
+ if(!v?.me?.facilityLifecycle||!lifecycleUi.form||lifecycleUi.owner!==v.me.id||lifecycleUi.campaign!==lifecycleCampaignIdentity(v)||lifecycleUi.cycle!==v.cycle||lifecycleUi.signature!==JSON.stringify(draft))return;
+ if(lifecycleUi.renderedOffice!==lifecycleUi.office)return;
+ if($('#lifecycleStaff-service'))lifecycleUi.form=lifecycleReadForm();
+}
 // An office staffed below its model reference produces reduced capacity, and an
 // office with an unstaffed required role produces none at all. Say so in front
 // of the collapsed detail rather than inside it.
@@ -46,9 +58,9 @@ function stageFacilityLifecycle(v,policy,signature=JSON.stringify(draft),campaig
 function lifecycleReadForm(){
   const policy=JSON.parse(JSON.stringify(lifecycleUi.form)),id=lifecycleUi.office;
   if(!id||!policy.offices[id])return policy;
-  const row=policy.offices[id];row.maintenance=$('#lifecycleMaintenance').value;
-  row.hubId=$('#lifecycleHub').value||null;
-  for(const role of E.FacilityLifecycle.ROLES)row.staffQuarters[role]=Number($('#lifecycleStaff-'+role).value)*4;
+  const row=policy.offices[id];if($('#lifecycleMaintenance'))row.maintenance=$('#lifecycleMaintenance').value;
+  if($('#lifecycleHub'))row.hubId=$('#lifecycleHub').value||null;
+  for(const role of E.FacilityLifecycle.ROLES)if($('#lifecycleStaff-'+role))row.staffQuarters[role]=Number($('#lifecycleStaff-'+role).value)*4;
   return policy;
 }
 function lifecycleImpact(before,during,after){
@@ -91,11 +103,17 @@ function prepareLifecycleStaff(v,signature=JSON.stringify(draft),campaign=game||
   }catch(error){toast(error.message);return false;}
 }
 function renderFacilityLifecycle(v){
-  const mount=$('#facilityLifecyclePanel'),p=v.me,campaign=game||view,signature=JSON.stringify(draft);
+  const mount=$('#facilityLifecyclePanel'),p=v.me,campaign=lifecycleCampaignIdentity(v),signature=JSON.stringify(draft);
   if(!p.facilityLifecycle){mount.innerHTML='';mount.classList.add('hidden');lifecycleUi={owner:null,campaign:null,cycle:null,signature:null,office:null,open:false,form:null,revision:lifecycleUi.revision+1,notice:''};return;}
   mount.classList.remove('hidden');
   if(lifecycleUi.owner!==p.id||lifecycleUi.campaign!==campaign)lifecycleUi={owner:p.id,campaign,cycle:null,signature:null,office:null,open:false,form:null,revision:lifecycleUi.revision,notice:''};
-  if(lifecycleUi.signature!==signature||lifecycleUi.cycle!==v.cycle){lifecycleUi.form=JSON.parse(JSON.stringify(draft.facilityLifecyclePolicy||E.defaultFacilityLifecyclePlan(p)));lifecycleUi.signature=signature;lifecycleUi.cycle=v.cycle;lifecycleUi.notice='Form changes remain unsubmitted until Stage.';}
+  const activePolicy=draft.facilityLifecyclePolicy||E.defaultFacilityLifecyclePlan(p);
+  if(lifecycleUi.signature!==signature||lifecycleUi.cycle!==v.cycle){
+   const keep=lifecycleUi.form&&lifecycleUi.cycle===v.cycle&&JSON.stringify(lifecycleUi.basePolicy)===JSON.stringify(activePolicy);
+   if(!keep)lifecycleUi.form=JSON.parse(JSON.stringify(activePolicy));
+   lifecycleUi.signature=signature;lifecycleUi.cycle=v.cycle;lifecycleUi.notice=keep?'Office edits retained. Review them against the updated monthly plan.':'Form changes remain unsubmitted until Stage.';
+  }
+  lifecycleUi.basePolicy=JSON.parse(JSON.stringify(activePolicy));
   lifecycleUi.revision++;
   const offices=p.facilityNetwork.offices.filter(o=>o.closedCycle===null),office=offices.find(o=>o.id===lifecycleUi.office)||offices[0];lifecycleUi.office=office?.id||null;
   const record=office?p.facilityLifecycle.records[office.id]:null,disabled=p.submitted||v.gameOver?' disabled':'';
@@ -108,28 +126,29 @@ function renderFacilityLifecycle(v){
   const starved=lifecycleStarvationNotes(v,offices,measured);
   const selectedMetric=measured.find(x=>x.officeId===office?.id),design=office?{...E.FacilityLifecycle.CATALOG[office.model],staffQuarters:p.facilityExtensions?E.facilityExtensionStaffReference(p,office):E.FacilityLifecycle.CATALOG[office.model].staffQuarters}:null;
   const officeButtons=offices.map(o=>{const r=p.facilityLifecycle.records[o.id];return '<button type="button" class="object-row" data-office-inspect="'+esc(o.id)+'" aria-pressed="'+(o.id===office?.id)+'"><span><b>'+esc(v.territories[o.market]?.name||o.market)+'</b><small>'+esc(E.FacilityLifecycle.CATALOG[o.model].name)+'</small></span><span class="object-tag">'+(r.conditionBp/100).toFixed(0)+'% condition</span></button>';}).join('');
-  const staffRow=role=>'<div class="office-staff-row"><label for="lifecycleStaff-'+role+'"><b>'+esc(lifecycleRole(role))+'</b><small>Employee-months assigned</small></label><input type="number" id="lifecycleStaff-'+role+'" min="0" step="0.25"'+(pool?' max="'+Number(pool[E.FacilityLifecycle.staffPoolRole(p,role)])/4+'"':'')+' value="'+order.staffQuarters[role]/4+'"'+disabled+'><small>Model reference: <b>'+design.staffQuarters[role]/4+'</b><br>1.0 = one full-time person</small></div>';
+  const staffRow=role=>'<div class="office-staff-row"><label for="lifecycleStaff-'+role+'"><b>'+esc(lifecycleRole(role))+'</b><small>Monthly staff time</small></label><input type="number" id="lifecycleStaff-'+role+'" min="0" step="0.25"'+(pool?' max="'+Number(pool[E.FacilityLifecycle.staffPoolRole(p,role)])/4+'"':'')+' value="'+order.staffQuarters[role]/4+'"'+disabled+'><small class="office-time-readout"><span id="lifecycleTime-'+role+'">'+lifecycleStaffTime(order.staffQuarters[role])+'</span><br>Full-capacity reference: '+lifecycleStaffTime(design.staffQuarters[role])+'</small></div>';
   const mainRoles=office?E.FacilityLifecycle.ROLES.filter(role=>design.staffQuarters[role]>0||order.staffQuarters[role]>0):[];
   const otherRoles=office?E.FacilityLifecycle.ROLES.filter(role=>!mainRoles.includes(role)):[];
-  const staffRows=mainRoles.map(staffRow).join('')+(otherRoles.length?'<details class="office-ledger"><summary>Other role assignments</summary>'+otherRoles.map(staffRow).join('')+'</details>':'');
-  mount.innerHTML='<details id="facilityLifecycleDesk"'+(lifecycleUi.open?' open':'')+'><summary>OFFICE CONDITION &amp; STAFFING · '+integer(offices.length)+' operating site'+(offices.length===1?'':'s')+'</summary><section class="object-workspace"><div class="workbench-toolbar"><button type="button" class="btn" id="openOfficeConstruction">Build another office</button><span class="small muted">Choose a location. Staff, maintain and improve it here.</span></div>'+
+  const staffRows=mainRoles.concat(otherRoles).map(staffRow).join('');
+  mount.innerHTML='<section id="facilityLifecycleDesk"><header class="office-network-only"><h3>Office condition &amp; staffing · '+integer(offices.length)+' sites</h3></header><section class="object-workspace"><div class="workbench-toolbar office-network-only"><button type="button" class="btn" id="openOfficeConstruction">Build another office</button><span class="small muted">Choose a location. Staff, maintain and improve it here.</span></div>'+
     (v.gameOver?'<p class="notice">Campaign ended. Office records remain available for inspection; lifecycle orders are locked.</p>':p.submitted?'<p class="notice">Plan submitted. You can inspect offices, but lifecycle orders are locked until the next planning month.</p>':'')+
     '<div class="object-columns"><nav class="object-directory" aria-label="Your offices">'+officeButtons+'</nav><section class="object-detail" aria-labelledby="officeDetailTitle">'+
-    (office?'<span class="eyebrow">'+esc(v.territories[office.market]?.name||office.market)+'</span><h3 id="officeDetailTitle" tabindex="-1">'+esc(design.name)+'</h3><div class="decision-facts"><div><small>Condition</small><b>'+(record.conditionBp/100).toFixed(1)+'%</b></div><div><small>Operating + maintenance / month</small><b>'+(selectedMetric?lifecycleMoney(selectedMetric.upkeep+selectedMetric.maintenance):'Unavailable')+'</b></div></div><p class="small muted">Age '+integer(record.ageMonths)+' months · deferred wear '+(record.deferredWearBp/100).toFixed(2)+' points · '+integer(record.renovations)+' completed renovations.</p>'+
+    (office?'<div class="office-main-controls"><span class="eyebrow">'+esc(v.territories[office.market]?.name||office.market)+'</span><h3 id="officeDetailTitle" tabindex="-1">'+esc(design.name)+'</h3><div class="decision-facts"><div><small>Condition</small><b>'+(record.conditionBp/100).toFixed(1)+'%</b></div><div><small>Operating + maintenance / month</small><b>'+(selectedMetric?lifecycleMoney(selectedMetric.upkeep+selectedMetric.maintenance):'Unavailable')+'</b></div></div><p class="small muted">Age '+integer(record.ageMonths)+' months · deferred wear '+(record.deferredWearBp/100).toFixed(2)+' points · '+integer(record.renovations)+' completed renovations.</p>'+
       (lifecycleStarvationNotes(v,[office],measured).length?'<div class="notice warn"><b>Current staffing limits this office</b><ul class="small">'+lifecycleStarvationNotes(v,[office],measured).join('')+'</ul><span class="micro">The form below is a proposal. Existing staffing changes only at settlement.</span></div>':'')+
-      facilityExtensionMarkup(v,office,disabled)+(p.sharedPremises?sharedPremisesMarkup(v,office,disabled):'')+'<h4>Assign time, not extra employees</h4><p class="small">Use 0.25 steps for quarter-time work. These are existing people shared with your other offices and bank activities. The model reference includes active suites and is a capacity guide, not an automatic hiring order.</p>'+staffRows+
-      '<div class="office-controls-row"><label for="lifecycleMaintenance">Maintenance<select id="lifecycleMaintenance"'+disabled+'>'+Object.keys(E.FacilityLifecycle.modes).map(mode=>'<option value="'+mode+'"'+(mode===order.maintenance?' selected':'')+'>'+({off:'Off · fastest wear',basic:'Basic · reduced spending',full:'Full · slowest wear'}[mode]||mode)+'</option>').join('')+'</select></label>'+
-      '<label for="lifecycleHub">Support from a nearby hub<select id="lifecycleHub"'+disabled+'><option value="">No hub support</option>'+hubIds.map(id=>'<option value="'+esc(id)+'"'+(id===order.hubId?' selected':'')+'>'+esc(id)+'</option>').join('')+'</select></label></div>'+
+      '<h4>Staff time</h4><p class="small">'+(Number.isInteger(p.stats?.staff)?'Your bank employs '+integer(p.stats.staff)+' people. ':'')+'One full month means one employee working here all month. A 0.25 step assigns 25% of an employee’s month; it does not hire a fraction of a person.</p>'+staffRows+
+      '<div class="office-controls-row"><div><h4>Maintenance</h4><input type="hidden" id="lifecycleMaintenance" value="'+order.maintenance+'"><div class="office-maintenance-options" role="group" aria-label="Maintenance">'+Object.keys(E.FacilityLifecycle.modes).map(mode=>'<button type="button" class="btn" data-maintenance-mode="'+mode+'" aria-pressed="'+(mode===order.maintenance)+'"'+disabled+'>'+({off:'Off',basic:'Basic',full:'Full'}[mode]||mode)+'</button>').join('')+'</div></div>'+
+      (hubIds.length?'<label for="lifecycleHub">Nearby hub support<select id="lifecycleHub"'+disabled+'><option value="">No hub support</option>'+hubIds.map(id=>'<option value="'+esc(id)+'"'+(id===order.hubId?' selected':'')+'>'+esc(typeof facilityUiOfficeLabel==='function'?facilityUiOfficeLabel(p.facilityNetwork.offices.find(o=>o.id===id)||{id}):id)+'</option>').join('')+'</select></label>':'<input type="hidden" id="lifecycleHub" value=""><span class="micro muted">No nearby hub support available.</span>')+'</div>'+
       (selectedMetric?.licensedAdvisory===false&&design.capacity.advisoryCapacity?'<p class="notice">Advisory output unavailable: no applicable operating license. Paying upkeep or assigning staff does not grant one.</p>':'')+
       '<div class="workbench-actions"><button type="button" class="btn" id="prepareLifecycleStaff"'+disabled+'>Propose network staffing</button><button type="button" class="btn" id="previewLifecycleSettings"'+disabled+'>Review changes</button><button type="button" class="btn primary" id="stageLifecycleSettings"'+disabled+'>Stage office plan</button><button type="button" class="btn" id="clearLifecycleSettings" title="Restore all office instructions to their currently active settings. This also removes staged office changes."'+disabled+'>Reset network plan</button></div>'+
       '<p class="small" id="lifecycleStatus" role="status">'+esc(lifecycleUi.notice)+'</p><div id="lifecycleQuote" aria-live="polite">'+lifecycleQuoteMarkup(review,office,record)+'</div>'+
-      '<details class="office-ledger"><summary>Renovation & detailed office records</summary>'+
+      '<section class="office-ledger"><h4>Renovation</h4>'+
       (record.renovation?'<p class="notice">Renovation: '+lifecycleMoney(record.renovation.cost)+' already paid · '+Number(record.renovation.work)+'/'+E.FacilityLifecycle.RULES.renovationWork+' work.</p><button type="button" class="btn danger" id="cancelLifecycleRenovation"'+disabled+'>Stage cancellation · no refund</button>':'<button type="button" class="btn" id="previewLifecycleRenovation"'+disabled+'>Preview renovation at this office</button>')+
-      '<p class="small">'+(lifecycleUi.form.renovate?'Unsubmitted renovation: '+esc(lifecycleUi.form.renovate):lifecycleUi.form.cancel?'Unsubmitted cancellation: '+esc(lifecycleUi.form.cancel):'No new renovation instruction selected.')+'</p><p class="micro">A renovation restores condition only after completion. Hub links move finite capacity; they do not multiply it.</p></details>':'<p class="workbench-empty">No operating offices. Build a location to begin.</p>')+'</section></div>'+
-    '<details class="office-ledger"><summary>Network diagnostics & shared staffing ledger</summary>'+
+      '<p class="small">'+(lifecycleUi.form.renovate?'Unsubmitted renovation: '+esc(lifecycleUi.form.renovate):lifecycleUi.form.cancel?'Unsubmitted cancellation: '+esc(lifecycleUi.form.cancel):'No new renovation instruction selected.')+'</p><p class="micro">A renovation restores condition only after completion. Hub links move finite capacity; they do not multiply it.</p></section></div><div class="office-capability-controls"><h3 id="officeServicesTitle" tabindex="-1">Expand &amp; services</h3>'+facilityExtensionMarkup(v,office,disabled)+(p.sharedPremises?sharedPremisesMarkup(v,office,disabled):'')+'</div>':'<p class="workbench-empty">No operating offices. Build a location to begin.</p>')+'</section></div>'+
+    '<section class="office-ledger office-staff-ledger"><h4>Shared staff time</h4>'+
     (starved.length?'<p class="notice"><b>UNDERSTAFFED OFFICES</b></p><ul class="small">'+starved.join('')+'</ul>':'')+
-    '<p class="micro">Internal accounting units: four quarters = one banker. Available time is after teaching and retained servicing. Previewed assignments never create employees.</p><ul>'+
-    E.FacilityLifecycle.ROLES.map(role=>E.FacilityLifecycle.staffPoolRole(p,role)!==role?'<li>Wealth advisory uses the same Business pool in this campaign version, not additional employees.</li>':'<li>'+esc(lifecycleRole(role))+': '+totals[role]/4+' employee-months assigned / '+(pool?Number(pool[role])/4:'unavailable')+' available</li>').join('')+'</ul><div class="table-scroll"><table class="regional-table"><thead><tr><th>Office ID</th><th>Condition / wear</th><th>Ramp</th><th>Upkeep + maintenance</th><th>Work</th></tr></thead><tbody>'+rows+'</tbody></table></div></details></section></details>';
+    '<p class="micro">Monthly time available after teaching and retained servicing; shared across all offices.</p><ul>'+
+    E.FacilityLifecycle.ROLES.map(role=>E.FacilityLifecycle.staffPoolRole(p,role)!==role?'<li>Wealth advisory shares the Business pool.</li>':'<li>'+esc(lifecycleRole(role))+': '+lifecycleStaffTime(totals[role])+' assigned / '+(pool?lifecycleStaffTime(Number(pool[role])):'unavailable')+' available</li>').join('')+'</ul><div class="table-scroll office-network-only"><table class="regional-table"><thead><tr><th>Office ID</th><th>Condition / wear</th><th>Ramp</th><th>Upkeep + maintenance</th><th>Work</th></tr></thead><tbody>'+rows+'</tbody></table></div></section></section></section>';
+  lifecycleUi.renderedOffice=office?.id||null;
   bindFacilityLifecycle(v,office);
   bindFacilityExtension(v,office);
   if(v.me.sharedPremises)bindSharedPremises(v,office);
@@ -139,8 +158,7 @@ function bindFacilityLifecycle(v,office){
   const construct=$('#openOfficeConstruction');
   if(construct)construct.addEventListener('click',()=>{
     if(revision!==lifecycleUi.revision||(game||view)!==campaign)return;
-    setWorkspaceTab('operations');
-    if(typeof setOperationsDesk==='function')setOperationsDesk('projects',{focus:true});
+    if(typeof openMarketConstruction==='function')openMarketConstruction(currentView(),office?.market||inspectedMarket(currentView()));
   });
   const transport=typeof opportunityToken==='function'?opportunityToken(v):null;
   const sameView=()=>revision===lifecycleUi.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id&&currentView()?.cycle===v.cycle&&JSON.stringify(draft)===signature&&(!transport||opportunityCurrent(transport,false));
@@ -148,10 +166,17 @@ function bindFacilityLifecycle(v,office){
   $('#facilityLifecycleDesk').addEventListener('toggle',()=>{if(revision===lifecycleUi.revision&&(game||view)===campaign&&currentView()?.me?.id===v.me.id)lifecycleUi.open=!!$('#facilityLifecycleDesk').open;});
   if(office){
     document.querySelectorAll('[data-office-inspect]').forEach(el=>el.addEventListener('click',()=>{if(!sameView())return;inspectLifecycleOffice(el.dataset.officeInspect);}));
-    for(const selector of ['#lifecycleMaintenance','#lifecycleHub',...E.FacilityLifecycle.ROLES.map(role=>'#lifecycleStaff-'+role)])$(selector).addEventListener('change',()=>{
+    const edited=()=>{
       if(!fresh())return;$('#lifecycleQuote').innerHTML='<p class="notice">Settings changed. Choose Review changes to refresh the cost and capacity comparison before staging.</p>';
+      lifecycleUi.form=lifecycleReadForm();
+      for(const role of E.FacilityLifecycle.ROLES){const out=$('#lifecycleTime-'+role);if(out)out.textContent=lifecycleStaffTime(lifecycleUi.form.offices[office.id].staffQuarters[role]);}
       $('#lifecycleStatus').textContent='Edited form only; no plan, staff or spending changes applied.';
-    });
+    };
+    for(const selector of ['#lifecycleMaintenance','#lifecycleHub',...E.FacilityLifecycle.ROLES.map(role=>'#lifecycleStaff-'+role)])$(selector).addEventListener('change',edited);
+    document.querySelectorAll('[data-maintenance-mode]').forEach(button=>button.addEventListener('click',()=>{
+      if(!fresh())return;$('#lifecycleMaintenance').value=button.dataset.maintenanceMode;edited();
+      document.querySelectorAll('[data-maintenance-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.maintenanceMode===$('#lifecycleMaintenance').value)));
+    }));
     if(office&&v.me.facilityLifecycle.records[office.id].renovation)$('#cancelLifecycleRenovation').addEventListener('click',()=>{if(!fresh())return;const policy=lifecycleReadForm();policy.renovate=null;policy.cancel=office.id;stageFacilityLifecycle(v,policy,signature,campaign);});
     else $('#previewLifecycleRenovation').addEventListener('click',()=>{if(!fresh())return;const policy=lifecycleReadForm();policy.renovate=office.id;policy.cancel=null;lifecycleUi.form=policy;lifecycleUi.notice='Renovation preview only. Review costs and disruption before Stage.';renderFacilityLifecycle(currentView());});
   }
@@ -161,6 +186,6 @@ function bindFacilityLifecycle(v,office){
   $('#clearLifecycleSettings')?.addEventListener('click',()=>{if(fresh())stageFacilityLifecycle(v,E.defaultFacilityLifecyclePlan(currentView().me),signature,campaign);});
 }
 function inspectLifecycleOffice(id){
- const v=currentView();if(!v?.me.facilityLifecycle||lifecycleUi.campaign!==(game||view)||lifecycleUi.owner!==v.me.id||lifecycleUi.cycle!==v.cycle||lifecycleUi.signature!==JSON.stringify(draft)||!lifecycleUi.form?.offices[id])return false;
+ const v=currentView();if(!v?.me.facilityLifecycle||lifecycleUi.campaign!==lifecycleCampaignIdentity(v)||lifecycleUi.owner!==v.me.id||lifecycleUi.cycle!==v.cycle||lifecycleUi.signature!==JSON.stringify(draft)||!lifecycleUi.form?.offices[id])return false;
  lifecycleUi.form=lifecycleReadForm();lifecycleUi.office=id;lifecycleUi.open=true;renderFacilityLifecycle(v);$('#officeDetailTitle')?.focus?.({preventScroll:true});return true;
 }

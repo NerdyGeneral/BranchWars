@@ -1453,6 +1453,9 @@ const renderedIds=[...managementMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1])
 assert.equal(new Set(renderedIds).size,renderedIds.length,'rendered management IDs must be unique');
 assert(renderedIds.includes('research-enabled')&&renderedIds.includes('manager-mode')&&renderedIds.includes('prepareManagement'));
 const agencyHarness=require('./github_resilience.test.js').harness();
+// These emitted-ID assertions exercise retained dynamic components directly.
+// Canonical Expanded shell/inspector markup has its own interface UI suites.
+agencyHarness.run('expandedInterfaceEnabled=()=>false;');
 agencyHarness.run("game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:3}).options,mode:'hotseat',seed:'selector-contract',created:1});seat=0;workspaceTab='group';newDraft(currentView());renderFinancialGroup(currentView());");
 const agencyMarkup=agencyHarness.elements.get('#financialGroupPanel').innerHTML;
 const agencyIds=[...agencyMarkup.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);

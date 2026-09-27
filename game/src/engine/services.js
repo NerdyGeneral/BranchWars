@@ -25,11 +25,11 @@ function serviceLoad(p){
  const d=p.serviceDesk,staff=departmentFunctionTaskFte(p,'commercialDelivery',p.departmentOffice?departmentDeliveryAllocation(p,d.policy.staff).service:Math.min(p.allocation.business,d.policy.staff)),capacity=((staff+(departmentFunctionExecution(p)?0:specialistBusinessBonus(p,true)))*2+d.policy.outsourcing)*departmentFunctionCoverage(p,'technology');
  let free=capacity,fees=0,direct=0;
  const rows=[...d.contracts].sort((a,b)=>a.due-b.due||a.id.localeCompare(b.id)).map(c=>{
-  const type=SERVICE_TYPES[c.kind],served=free>=type.load;if(served)free-=type.load;
-  const cost=type.cost-(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?1500:0);
+  const type=SERVICE_TYPES[c.kind],required=DigitalCommercial.load(p,c.kind),served=free+(DigitalCommercial.enabled(p)?1e-9:0)>=required;if(served)free-=required;
+  const cost=DigitalCommercial.cost(p,c.kind,type.cost-(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?1500:0));
   const eligible=c.kind!=='treasury'||serviceApplicationActive(p,'treasury'),paid=served&&eligible;
   fees+=paid?c.fee:0;direct+=cost;
-  return {...c,load:type.load,served:paid,cost,earned:paid?c.fee:0};
+  return {...c,load:required,served:paid,cost,earned:paid?c.fee:0};
  });
  const outsourced=d.policy.outsourcing*6000,platform=(serviceApplicationActive(p,'payroll')?4000:0)+(serviceApplicationActive(p,'treasury')?(d.applications.treasury==='build'?6000:18000):0);
  return {count:rows.length,served:rows.filter(c=>c.served).length,fees,cost:direct+outsourced+platform,direct,outsourced,platform,capacity,used:capacity-free,staff,sales:commercialSalesStaff(p),rows};
@@ -40,7 +40,7 @@ function serviceBidStatus(p,c){
  if(c.kind==='treasury'&&!serviceApplicationActive(p,'treasury'))return {eligible:false,reason:'Activate a built or partnered Corporate Treasury platform.'};
  const load=serviceLoad(p),other=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0);
  if(p.allocation.business<1)return {eligible:false,reason:'Assign at least one Business banker.'};
- if(load.capacity<other+SERVICE_TYPES[c.kind].load)return {eligible:false,reason:'Reserve enough service capacity for the entire book plus this mandate.'};
+ if(load.capacity+(DigitalCommercial.enabled(p)?1e-9:0)<other+DigitalCommercial.load(p,c.kind))return {eligible:false,reason:'Reserve enough service capacity for the entire book plus this mandate.'};
  return {eligible:true,reason:'Capacity available; bids remain uncertain.'};
 }
 function syncServiceBook(g){
@@ -59,7 +59,7 @@ const servicePowerV1=contractPower;
 contractPower=function(g,p,c){
  if(!p.serviceDesk)return servicePowerV1(g,p,c);
  const pricing=SERVICE_PRICING[p.serviceDesk.policy.pricing[c.kind]],load=serviceLoad(p);
- return 5+(commercialSalesStaff(p)+specialistBusinessBonus(p))*1.5+load.staff+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+pricing.power+(c.owner===p.id?(load.served===load.count?2:-3):0)+(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?2:0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
+ return 5+DigitalCommercial.bid(p)+(commercialSalesStaff(p)+specialistBusinessBonus(p))*1.5+load.staff+Math.min(3,p.branches[c.market]||0)*1.5+strategyLevel(p,'commercial')+p.stats.reputation/40+pricing.power+(c.owner===p.id?(load.served===load.count?2:-3):0)+(c.kind==='payroll'&&serviceApplicationActive(p,'payroll')?2:0)+(p.contractAds&&p.contractAds.market===c.market&&p.contractAds.expires>=g.cycle?3:0);
 };
 const serviceReport=adjustDepositReport;
 adjustDepositReport=function(p,g,r){serviceReport(p,g,r);if(!p.serviceDesk)return;const s=serviceLoad(p);Object.assign(r,{serviceCapacity:s.capacity,serviceUsed:s.used,serviceStaff:s.staff,serviceOutsourcing:s.outsourced,servicePlatform:s.platform,serviceDirect:s.direct,commercialSalesStaff:s.sales})};
@@ -132,7 +132,7 @@ function planServiceDesk(g,index,plan){
 // No saved balances, quoted contract terms or human intents are changed here.
 function servicePlanReview(p,plan,economy,g=null){
  const planned={...p,focus:plan.focus||p.focus},forecast=operatingPreview(planned,plan,economy,g),budget=planBudget(planned,plan,g),exposure=riskAssets(p);
- const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.training||0)+(budget.relationshipOffers||0)+(budget.onboarding||0)+(budget.departmentFunctions||0)+(p.departmentFunctions?(forecast.facilityMaintenance||0):0)+(p.departmentOffice?(budget.departmentLeadership||0):0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
+ const fundingLoss=forecast.fundingLoss||0,netOperating=forecast.profit-fundingLoss,includedOperatingSpend=(budget.advertising||0)+(budget.digitalPlatform||0)+(budget.training||0)+(budget.relationshipOffers||0)+(budget.onboarding||0)+(budget.departmentFunctions||0)+(p.departmentFunctions?(forecast.facilityMaintenance||0):0)+(p.departmentOffice?(budget.departmentLeadership||0):0),nonOperatingSpend=budget.total-includedOperatingSpend,equityAfterPlan=p.stats.capital+netOperating-nonOperatingSpend;
  const reserve=exposure*.10+200000,lossBuffer=Math.max(0,-netOperating)*2;
  return {profit:forecast.profit,fundingLoss,netOperating,spend:budget.total,includedOperatingSpend,nonOperatingSpend,netAfterSpend:netOperating-nonOperatingSpend,equityAfterPlan,reserve,
   headroom:equityAfterPlan-reserve,spendingLimit:Math.max(0,Math.min(budget.capitalBudget,p.stats.capital-reserve-lossBuffer)),
@@ -142,9 +142,9 @@ function serviceDeliveryOptions(p,plan,economy,mandate=null,g=null){
  if(!p.serviceDesk)return [];
  const policy=plan.servicePolicy||p.serviceDesk.policy,contracts=p.serviceDesk.contracts.map(c=>({...c}));
  if(mandate&&!contracts.some(c=>c.id===mandate.id))contracts.push({...mandate,fee:Math.round(SERVICE_TYPES[mandate.kind].fee*SERVICE_PRICING[policy.pricing[mandate.kind]].mult)});
- const demand=contracts.reduce((n,c)=>n+SERVICE_TYPES[c.kind].load,0),out=[];
+ const demand=contracts.reduce((n,c)=>n+DigitalCommercial.load({...p,serviceDesk:{...p.serviceDesk,policy}},c.kind),0),out=[];
  for(let staff=0;staff<=Math.min(plan.allocation.business,Math.ceil(demand/2));staff++){
-  const outsourcing=Math.max(0,demand-staff*2);if(outsourcing>4)continue;
+  const outsourcing=Math.max(0,DigitalCommercial.enabled(p)?Math.ceil(demand-staff*2-1e-9):demand-staff*2);if(outsourcing>4)continue;
   const delivery={...policy,staff,outsourcing,pricing:{...policy.pricing}},copy={...p,focus:plan.focus||p.focus,allocation:{...plan.allocation},serviceDesk:{...p.serviceDesk,contracts,policy:delivery}};
   if(p.departmentFunctions){
    const quote=departmentFunctionsQuote({cycle:p.facilityLifecycle.lastActivatedCycle},copy,{...plan,servicePolicy:delivery});
@@ -186,6 +186,7 @@ function planServiceReserve(g,index,plan){
  plan=serviceRecoveryPlan(p,plan,g.economy,g);
  const limit=servicePlanReview(p,plan,g.economy,g).spendingLimit;
  for(const key of Object.keys(plan.investments||{})){const excess=Math.max(0,planBudget(p,plan,g).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(excess));if(plan.investments[key]<1000)delete plan.investments[key]}
+ if(plan.nodeFunding&&planBudget(p,plan,g).total>limit)plan.nodeFunding={};
  if(planBudget(p,plan,g).total>limit)plan.hires=0;
  plan.newProjects=[...planInitiatives(plan)];
  while(plan.newProjects.length&&planBudget(p,plan,g).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
@@ -206,7 +207,7 @@ function validateServiceSave(g){
   validateServicePolicy(p,d.policy);
   const expected=g.serviceAgreements.filter(c=>c.owner===p.id).map(({id,kind,fee,due,misses})=>({id,kind,fee,due,misses}));
   if(JSON.stringify(expected)!==JSON.stringify(d.contracts))throw Error('Service desk contract book mismatch');
-  const seen=new Set();for(const x of p.projects){const def=SERVICE_APPLICATIONS[x.key];if(!def)continue;if(seen.has(def.app)||x.target!==null||def.requires.some(k=>strategyLevel(p,k)<1)||d.applications[def.app]===def.route||d.applications[def.app]==='build')throw Error('Invalid service deployment');seen.add(def.app)}
+  const seen=new Set();for(const x of p.projects){const def=SERVICE_APPLICATIONS[x.key];if(!def)continue;if(seen.has(def.app)||x.target!==null||(DigitalCommercial.platformIssue(p,x.key)===null?def.requires.some(k=>strategyLevel(p,k)<1):!!DigitalCommercial.platformIssue(p,x.key))||d.applications[def.app]===def.route||d.applications[def.app]==='build')throw Error('Invalid service deployment');seen.add(def.app)}
   if(p.submitted){validateServicePolicy(p,p.submitted.servicePolicy,p.submitted.allocation);validatePlan(g,p,p.submitted)}
  }
  return g;

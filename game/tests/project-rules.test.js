@@ -31,7 +31,7 @@ function validation(engine, g, p, intent) {
 const profiles = [{fundingRulesVersion: 1}, {fundingRulesVersion: 2},
   {campaignRulesVersion: 1, serviceExpansionVersion: 0},
   {campaignRulesVersion: 1, managementVersion: 2, customerDemandVersion: 2}];
-assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth','licenseHighYield','licenseRewards']);
+assert.deepEqual(Object.keys(E.PROJECTS).filter(k=>!Old.PROJECTS[k]).sort(),['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth','buildDigitalPlatform','correctiveAction','licenseDigitalPlatform','licenseHighYield','licenseRewards']);
 let compared = 0;
 for (const [index, options] of profiles.entries()) {
   const g = E.createGame({...options, seed: 'project-rules-' + index, created: 1, mode: 'hotseat'});

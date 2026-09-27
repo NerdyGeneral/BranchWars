@@ -64,9 +64,13 @@ run('reconcileOperationsWorkspace()');assert.deepEqual(visible(),['monthly','pro
 select('funding');assert.deepEqual(productSubjects,['policies']);
 run('reconcileOperationsWorkspace()');assert.equal(run('operationsDesk'),'plan');assert.deepEqual(visible(),['monthly','projects']);
 delete c.subjectWorkspace;delete c.selectProductSubject;run('reconcileOperationsWorkspace()');assert.deepEqual(visible(),desks.plan);
-// Exercise the actual setWorkspaceTab integration without starting or mutating a campaign.
+// Exercise the retained Core setWorkspaceTab integration. The real function
+// projects a current view even for navigation; this isolated fixture supplies
+// that read-only API contract without pretending to run the Expanded shell.
+const coreView=Object.freeze({cycle:4,me:Object.freeze({id:'bank-b'})});
+c.seat=0;c.E={publicState(g,s){assert.equal(g,frozenGame);assert.equal(s,0);return coreView;}};
 vm.runInContext(draftScript,c);select('forecast');run("setWorkspaceTab('strategy');setWorkspaceTab('operations')");
 assert.equal(run('operationsDesk'),'forecast','main-tab round trip retains the same owner desk');
 assert(elements.get('#operationsWorkspace').classList.contains('active'));
 assert.equal(c.draft,frozenDraft);assert.equal(c.game,frozenGame);
-console.log('Operations workspace passed: unique preserved mounts, two task desks over four sections, old desk names, Products-owned pricing, exact nested grouping, keyboard/ARIA focus, single listener binding, required-decision shortcut, hotseat owner reset, draft purity and actual main-tab round trip.');
+console.log('Core Operations workspace passed: unique preserved mounts, two task desks over four sections, old desk names, Products-owned pricing, exact nested grouping, keyboard/ARIA focus, single listener binding, required-decision shortcut, hotseat owner reset, draft purity and actual Core main-tab round trip. Expanded routing is covered by interface_shell and usability_navigation tests.');

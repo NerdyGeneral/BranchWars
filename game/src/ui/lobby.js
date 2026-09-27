@@ -3,7 +3,7 @@ function lobbyIdentity(player,index){
  const name=String(player&&player.name||'').trim().slice(0,36);
  if(!name)throw Error('Enter an institution name.');
  if(!/^#[0-9a-f]{6}$/i.test(String(player.color)))throw Error('Choose a valid bank color.');
- return {name,color:E.bankColor(player.color,index),ready:false};
+ return {name,color:E.bankColor(player.color,index),...(player.identity!==undefined?{identity:E.bankIdentity(E.validateBankIdentity(player.identity),name,index)}:{}),ready:false};
 }
 function lobbyColorsClash(a,b){
  const rgb=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
@@ -24,8 +24,9 @@ function lobbySettingsSignature(settings){
 function lobbyCompatibility(){
  if(!lobby)return {compatible:false,pending:true,reason:'Waiting for the shared campaign rules.'};
  try{
-  validateIncomingFeatureRules(lobby.settings,'lobby');
-  return p2pRole==='host'?peerFeatureStatus(lobby.settings):departmentPeerStatus(lobby.settings);
+  const rules=lobby.resume?.rules||lobby.settings;
+  validateIncomingFeatureRules(rules,'lobby');
+  return p2pRole==='host'?peerFeatureStatus(rules):departmentPeerStatus(rules);
  }catch(e){return {compatible:false,pending:false,reason:e.message}}
 }
 function discardLobbySettings(){
@@ -59,8 +60,8 @@ function publishLobby(){
 function openLobby(peer){
  if(peer.lobbySupported!==1){$('#connectHint').textContent='Update the game file on both computers to use the campaign lobby.';send({type:'error',code:'lobby_required',message:'The campaign lobby requires this updated game on both computers.'});setConnection('LOBBY REFUSED // Update both game files.','bad');return}
  if(!lobby){
-  const host=lobbyIdentity({name:p2pConfig.name,color:E.bankColor(p2pConfig.color)},0);
-  const guest=lobbyIdentity({name:peer.name,color:E.bankColor(peer.color,1)},1);
+  const host=lobbyIdentity({name:p2pConfig.name,color:E.bankColor(p2pConfig.color),...(p2pConfig.identity?{identity:p2pConfig.identity}:{})},0);
+  const guest=lobbyIdentity({name:peer.name,color:E.bankColor(peer.color,1),...(peer.identity!==undefined?{identity:peer.identity}:{})},1);
   const adjusted=lobbyColorsClash(host.color,guest.color);if(adjusted)guest.color=lobbyAlternative(host.color);
   lobby={version:1,revision:1,players:[host,guest],settings:lobbyOptions(),guestAck:'',
    note:adjusted?'The joining bank received a distinct starting color. Both players can change their own color before confirming.':''};
@@ -79,7 +80,7 @@ function applyLobbyUpdate(index,message){
  }
  let player;try{player=lobbyIdentity(message.player,index)}catch(e){return reject(e.message)}
  if(lobbyColorsClash(player.color,lobby.players[1-index].color))return reject('Those colors are too similar. Choose a more distinct bank color.');
- const before=lobby.players[index],changed=player.name!==before.name||player.color!==before.color;
+ const before=lobby.players[index],changed=player.name!==before.name||player.color!==before.color||JSON.stringify(E.bankIdentity(player.identity,player.name,index))!==JSON.stringify(E.bankIdentity(before.identity,before.name,index));
  if(changed){lobby.players[index]=player;lobby.revision++;lobby.players.forEach(p=>p.ready=false)}
  else lobby.players[index].ready=message.ready===true;
  if(index===1)lobby.guestAck=String(message.id||'');
@@ -89,10 +90,10 @@ function applyLobbyUpdate(index,message){
 }
 function editLobbyIdentity(ready=false){
  try{
-  if(!lobby||game||view||lobbyPending)return;
+  if(!lobby||game||view||lobbyPending||bankLogoDrafts.lobby.busy)return;
   if(ready&&!lobbyCompatibility().compatible)throw Error(lobbyCompatibility().reason);
   const i=p2pRole==='host'?0:1;
-  const player=lobbyIdentity({name:$('#lobbyName').value,color:$('#lobbyColor').value},i);
+  const player=lobbyIdentity({name:$('#lobbyName').value,color:$('#lobbyColor').value,identity:readBankIdentityFields('#lobbyCrest','#lobbyMonogram',$('#lobbyName').value,i)},i);
   if(lobbyColorsClash(player.color,lobby.players[1-i].color))throw Error('Those colors are too similar. Choose a more distinct bank color.');
   const message={type:'lobby_update',id:messageId(),revision:lobby.revision,player,ready};
   $('#lobbyError').textContent='';
@@ -135,9 +136,10 @@ function receiveLobby(message){
 }
 function renderLobbyControls(){
  if(!lobby)return;
- const i=p2pRole==='host'?0:1,blocked=Boolean(lobbyPending),me=lobby.players[i],confirmation=featureSelectionPending(),compatibility=lobbyCompatibility();
+ const i=p2pRole==='host'?0:1,blocked=Boolean(lobbyPending)||bankLogoDrafts.lobby.busy,me=lobby.players[i],confirmation=featureSelectionPending(),compatibility=lobbyCompatibility();
  $('#lobbyReady').disabled=blocked||lobbyDirty||lobbySettingsDirty||confirmation||(!me.ready&&!compatibility.compatible);$('#lobbySave').disabled=blocked||me.ready;
- $('#lobbyName').disabled=blocked||me.ready;$('#lobbyColor').disabled=blocked||me.ready;
+ $('#lobbyName').disabled=blocked||me.ready;$('#lobbyColor').disabled=blocked||me.ready;$('#lobbyCrest').disabled=blocked||me.ready;$('#lobbyMonogram').disabled=blocked||me.ready;
+ renderBankLogoControls('lobby');
  $('#lobbyScope').disabled=i!==0||confirmation||lobbyDraftSettings().campaignRulesVersion===1;$('#lobbyScenario').disabled=i!==0||confirmation;
  $('#lobbySettings').disabled=i!==0||confirmation;
  $('#lobbyDiscardSettings').disabled=i!==0||confirmation||!lobbySettingsDirty;
@@ -153,8 +155,8 @@ function renderLobby(){
   lobbyFeatureDraft=null;lobbySettingsDirty=false;
  }
  show('#lobbyScreen');const host=p2pRole==='host',i=host?0:1,settings=lobby.settings;
- $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3><span class="bank-swatch"></span> '+esc(p.name)+'</h3>'+(lobby.resume?'<span class="small">Plays saved bank <strong>'+esc(lobby.resume.banks[n])+'</strong></span> ':'')+'<span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
- if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color}
+ $('#lobbyBanks').innerHTML=lobby.players.map((p,n)=>'<div class="lobby-bank" style="--identity-color:'+E.bankColor(p.color,n)+'"><span class="small muted">'+(n===0?'HOST · INSTITUTION 1':'GUEST · INSTITUTION 2')+(n===i?' · YOU':' · FRIEND')+'</span><h3>'+bankIdentityMarkup(p,{seat:n,size:'large',showName:true})+'</h3>'+(lobby.resume?'<span class="small">Plays saved bank '+(lobby.resume.identities?bankIdentityMarkup(lobby.resume.identities[n],{seat:n,showName:true}):'<strong>'+esc(lobby.resume.banks[n])+'</strong>')+'</span> ':'')+'<span class="'+(p.ready?'good':'muted')+'">'+(p.ready?'✓ Confirmed ready':'○ Reviewing setup')+'</span><span class="micro muted"> · '+esc(p.color)+'</span></div>').join('');
+ if(!lobbyDirty){$('#lobbyName').value=(lobbyPending?lobbyPending.player:lobby.players[i]).name;$('#lobbyColor').value=(lobbyPending?lobbyPending.player:lobby.players[i]).color;const mark=E.bankIdentity((lobbyPending?lobbyPending.player:lobby.players[i]).identity,$('#lobbyName').value,i);$('#lobbyCrest').value=mark.crest;$('#lobbyMonogram').value=mark.monogram;bankLogoDrafts.lobby.jpeg=mark.jpeg||'';}renderLobbyIdentityPreview();
  if(!lobbySettingsDirty){$('#lobbyScope').value=settings.scope;$('#lobbyScenario').value=settings.scenario}
  $('#lobbyScope').disabled=!host||settings.campaignRulesVersion===1;$('#lobbyScenario').disabled=!host;
  $('#lobbySettings').classList.toggle('hidden',!host);$('#lobbyStart').classList.toggle('hidden',!host);
@@ -184,10 +186,12 @@ function renderLobby(){
 // whoever hosts today; the note warns when that would hand a player the other bank.
 let lobbyResumeCampaign=null;
 function validLobbyResume(r){
+ if(r?.rules!==undefined){try{E.validateCampaignRules(r.rules,'lobby');}catch{return false;}}
  return !!r&&typeof r==='object'&&Number.isSafeInteger(r.cycle)&&r.cycle>=1&&typeof r.version==='string'&&r.version.length<=16&&
-  Array.isArray(r.banks)&&r.banks.length===2&&r.banks.every(name=>typeof name==='string'&&name.length<=80);
+  Array.isArray(r.banks)&&r.banks.length===2&&r.banks.every(name=>typeof name==='string'&&name.length<=80)&&
+  (r.identities===undefined||Array.isArray(r.identities)&&r.identities.length===2&&r.identities.every((bank,i)=>bank&&bank.name===r.banks[i]&&/^#[0-9a-f]{6}$/.test(bank.color)&&E.validBankIdentity(bank.identity))); 
 }
-function lobbyResumeSummary(g){return {cycle:g.cycle,version:String(g.version||''),banks:g.players.map(p=>String(p.name||''))}}
+function lobbyResumeSummary(g){return {cycle:g.cycle,version:String(g.version||''),rules:E.campaignRules(g,{context:'game'}).options,banks:g.players.map(p=>String(p.name||'')),...(g.players.some(p=>p.identity!==undefined)?{identities:g.players.map((p,i)=>({name:String(p.name||''),color:E.bankColor(p.color,i),identity:E.bankIdentity(p.identity,p.name,i)}))}:{})}}
 function lobbyResumeNote(l){
  const r=l.resume,[host,guest]=l.players;
  let note='Resuming a saved '+r.version+' campaign at month '+r.cycle+'. '+host.name+' (host) plays '+r.banks[0]+'; '+guest.name+' plays '+r.banks[1]+'. The save keeps its own rules; the settings below apply only to a new campaign.';
@@ -198,6 +202,7 @@ function publishLobbyResume(summary){
  if(summary)lobby.resume=summary;else delete lobby.resume;
  lobby.revision++;lobby.players.forEach(p=>p.ready=false);lobby.error='';
  publishLobby();
+ if(peerFeatureStatus(lobby.resume?.rules||lobby.settings).pending)challengePeerFeatures();
 }
 function clearLobbyResume(message){
  lobbyResumeCampaign=null;
@@ -227,7 +232,7 @@ function stageLobbyResume(file){
 }
 function startLobbyCampaign(){
  try{
-  if(p2pRole!=='host'||!lobby||game||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty||featureSelectionPending())return;
+  if(p2pRole!=='host'||!lobby||game||bankLogoDrafts.lobby.busy||!lobby.players.every(p=>p.ready)||lobbyDirty||lobbySettingsDirty||featureSelectionPending())return;
   const compatibility=lobbyCompatibility();
   if(!compatibility.compatible)throw Error(compatibility.reason||'Waiting for a compatible peer handshake.');
   if(lobbyColorsClash(lobby.players[0].color,lobby.players[1].color))throw Error('Choose distinct bank colors before starting.');
@@ -244,15 +249,17 @@ function startLobbyCampaign(){
    created=migrateGame(JSON.parse(JSON.stringify(lobbyResumeCampaign)));
    created.mode=transport;
   }else{
-  created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,difficulty:'vp',doctrine1:p2pConfig.doctrine});
+  created=E.createGame({...s,startingWorkforce:'covered',campaignRulesVersion:s.campaignRulesVersion||undefined,mode:transport,name1:host.name,name2:guest.name,color1:host.color,color2:guest.color,...(host.identity?{identity1:host.identity}:{}),...(guest.identity?{identity2:guest.identity}:{}),difficulty:'vp',doctrine1:p2pConfig.doctrine});
   }
-  p2pConfig={...p2pConfig,...s,name:host.name,color:host.color};
+  p2pConfig={...p2pConfig,...s,name:host.name,color:host.color,...(host.identity?{identity:host.identity}:{})};
   game=created;seat=0;draft=null;lastResolutionId=0;linkReady=true;syncPeers();
  }catch(e){$('#lobbyError').textContent=e.message}
 }
-function markLobbyDirty(){lobbyDirty=true;renderLobbyControls()}
+function markLobbyDirty(){lobbyDirty=true;renderLobbyIdentityPreview();renderLobbyControls()}
 $('#lobbyName').addEventListener('input',markLobbyDirty);
 $('#lobbyColor').addEventListener('input',markLobbyDirty);
+$('#lobbyCrest').addEventListener('change',markLobbyDirty);
+$('#lobbyMonogram').addEventListener('input',markLobbyDirty);
 $('#lobbyScope').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbyScenario').addEventListener('change',()=>{lobbySettingsDirty=true;renderLobbyControls()});
 $('#lobbySave').addEventListener('click',()=>editLobbyIdentity(false));

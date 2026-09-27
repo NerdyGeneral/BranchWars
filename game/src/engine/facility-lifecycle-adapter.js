@@ -67,7 +67,7 @@ function facilityLifecycleRegionalMetrics(p,original) {
   // Retain the existing central online capacity; local offices replace, rather
   // than add to, the old unstaffed local throughput.
   return {...original,rows,expense:rows.reduce((n,r)=>n+r.expense,0),
-    depositCapacity:100000+rows.reduce((n,r)=>n+r.depositCapacity,0),
+    depositCapacity:100000+rows.reduce((n,r)=>n+r.depositCapacity,0)+ExpandedBusiness.centralCapacity(p),
     loanCapacity:100000+rows.reduce((n,r)=>n+r.loanCapacity,0)};
 }
 function facilityLifecycleInfluenceRows(p) {

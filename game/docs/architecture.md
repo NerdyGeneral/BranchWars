@@ -5,8 +5,9 @@ This is the maintainer guide, not another implementation timeline. Use the [impl
 ## Source of truth
 
 Current player-facing creation calls `previewCampaignEdition` with
-`currentReporting`, `currentEconomics`, `currentRivalry`, `currentResearch` and
-`currentLending` all true, selecting Core 8.20 or Expanded 9.34. It composes the
+`currentReporting`, `currentEconomics`, `currentRivalry`, `currentResearch`,
+`currentLending` and `currentMonetaryPolicy` all true, selecting Core 8.20 or
+Expanded 9.35. It composes the
 existing authoritative scalars; the proposal option itself is never saved.
 The default API and `currentReporting:true` remain historical/reporting-only
 construction paths. Save import, Continue and rematch do not opt into new rules.
@@ -31,12 +32,51 @@ keeps its last full-service office, prices deposit growth into office conversion
 lending through a thin month when capital and funding are healthy. `balance_sheet_lending`
 replays 9.33 against the frozen rc4 package.
 
-`ui/workspace-ownership.js` owns presentation-only subject routing and live DOM
-mounts. People owns allocation, Customers owns household/commercial relationships
-and applications, Products owns banking policies/programmes, and Markets keeps
-local inspectors/actions. Existing nodes and handlers move; no second draft is
-created. Core restores original homes. Owner/campaign changes reset transient
-selection; the monthly editor may temporarily borrow and return the same node.
+### Expanded presentation architecture
+
+The September 27 interface rebuild changes presentation on the existing Expanded
+rules. It does not introduce a save version, economic marker, research catalogue
+or settlement path. New games still select Expanded 9.35 or Core 8.20; imported
+campaigns and rematches retain their saved rules. The current monetary-policy
+boundary and compatibility contract remain in [Federal Funds design](federal-funds-design.md).
+
+`ui/interface-shell.js` selects six canonical Expanded homes: This month, Markets,
+Banking, People, Strategy and Financial Group. Reports, Review month and Save &
+help are supporting destinations. `dashboard.render` delegates to this shell
+instead of rendering the old full dashboard underneath it. Core keeps the
+retained interface, and unsupported features remain unavailable in old saves.
+`workspace-ownership.js` and `workspace-navigation.js` adapt legacy shortcuts;
+they do not define another Expanded navigation tree.
+
+`renderExpandedInterface` dispatches the active workspace to
+`interface-markets.js`, `interface-banking-group.js` or
+`interface-people-strategy.js`. Each builds the selected subject's meaningful
+controls. Routine actions use visible choices and focused inspectors, without
+nesting the old panels inside new disclosures. The shell clears inactive mounts;
+only existing shared controls such as Ready, Recall, export and announcements
+are deliberately reparented. The ordered manifest owns all source/CSS loading.
+
+`openInterfaceWorkspace` selects a route; `interfaceNavigate` records contextual
+return navigation. A return restores location and selection, never an old draft.
+There is one `draft`, plus owner-local working form state. Editors preserve dirty
+fields across navigation and same-month guest refreshes, rebase untouched fields
+from the latest draft, quote with existing engine APIs and patch their owned
+paths only after explicit Add/Update. Agency and investment staffing use their
+employer's shared working form, preventing People and Group from overwriting one
+another. Unstaged edits are reported in Review month; leaving a workspace is not
+an implicit Add or Discard.
+
+`presentationCampaignIdentity` distinguishes a continuing guest campaign from a
+new frame object. Action guards also retain owner, month, connection, submitted
+and terminal fences; route-sensitive callbacks cannot act from a hidden editor.
+A campaign/owner/month change resets the relevant transient state. Working forms
+are not a new save or network model and are not promised to survive a browser
+restart. `interface-plan.js` and the existing review/budget helpers describe and
+remove changes against the opening monthly draft. Engine quotes, normalization,
+execution and privacy projections remain authoritative.
+
+See [Expanded interface inventory and evidence](expanded-interface.md) for
+control ownership, module/test coverage and the limits of browser verification.
 
 New explicit9.31 operating reports add optional finite `incomeSource_*` diagnostic
 fields at the source calculation, including actual opening-securities interest.

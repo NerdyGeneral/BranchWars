@@ -15,11 +15,11 @@ function initializeCompanyShares(g,options){
  for(const p of g.players)p.companyShares={version:1,positions:Object.fromEntries(issuers.map(i=>[i.id,{shares:0,basis:0}]))};
 }
 function companyShareState(g){
- const m=g.companyShareMarket,holders=g.players.map(p=>({id:p.id,book:p.financialGroup.parent,baseAssets:0,positions:p.companyShares.positions}));
- holders.push({id:'outside',book:m.outside.book,baseAssets:0,positions:m.outside.positions});
+ const m=g.companyShareMarket,holders=g.players.map(p=>({id:p.id,book:p.financialGroup.parent,baseAssets:HoldingCapital.basis(p),positions:p.companyShares.positions}));
+ holders.push({id:'outside',book:m.outside.book,baseAssets:HoldingCapital.outsideBasis(g),positions:m.outside.positions});
  return {version:1,month:m.month,issuers:m.issuers,holders,exchange:m.exchange,openingCash:holders.reduce((n,h)=>n+h.book.accounts.cash,0)+m.exchange.accounts.cash,feesPaid:m.feesPaid,receipts:m.receipts};
 }
-function companyShareParentReserve(plan){return (plan.groupPolicy?.bankSupport||0)+(plan.agencyPolicy?.capital||0)+(plan.agencyPolicy?.supportCap||0)+(plan.investmentPolicy?.institution?.capital||0)+(plan.investmentPolicy?.institution?.supportCap||0);}
+function companyShareParentReserve(plan,rules=null){const holdingPaid=rules?.expandedBusinessVersion===1&&rules.holdingCapitalMarket?.month===rules.cycle;return (holdingPaid?0:HoldingCapital.reserve({expandedBusinessVersion:plan.holdingCapitalOrders?1:0},plan))+(plan.groupPolicy?.bankSupport||0)+(plan.agencyPolicy?.capital||0)+(plan.agencyPolicy?.supportCap||0)+(plan.investmentPolicy?.institution?.capital||0)+(plan.investmentPolicy?.institution?.supportCap||0);}
 function companyShareOrderReview(p,plan,rules){
  const orders=plan.companyShareOrders===undefined?[]:plan.companyShareOrders;
  if(!p.companyShares){if(plan.companyShareOrders!==undefined)throw Error('Company orders require the selected company-share rules.');return {cash:0,protectedCash:0,remaining:0};}
@@ -30,7 +30,7 @@ function companyShareOrderReview(p,plan,rules){
  // One parent cannot obtain control through ordinary portfolio orders; an
  // explicit reviewed control transaction is a separate approved action.
  for(const o of orders){if(!investmentExact(o,['issuer','side','shares','limitCents']))throw Error('Invalid company order fields.');if(o.side==='buy'&&(p.companyShares.positions[o.issuer]?.shares||0)+o.shares>50000)throw Error('Ordinary orders cannot exceed 50% ownership; control requires a reviewed offer.');}
- return CompanyAuction.orderQuote(issuers,{id:p.id,book:p.financialGroup.parent,positions:p.companyShares.positions},full,companyShareParentReserve(plan)+companyControlReserve(p,plan,rules));
+ return CompanyAuction.orderQuote(issuers,{id:p.id,book:p.financialGroup.parent,positions:p.companyShares.positions},full,companyShareParentReserve(plan,rules)+companyControlReserve(p,plan,rules));
 }
 function normalizeCompanySharePlan(g,p,plan){
  companyShareOrderReview(p,plan,g);if(p.companyShares)plan.companyShareOrders=investmentCopy(plan.companyShareOrders||[]);
@@ -40,7 +40,7 @@ function settleCompanyShareAuction(g,plans){
  const m=g.companyShareMarket;if(m.month!==g.cycle-1||m.paidMonth!==g.cycle-1)throw Error('Company auction is duplicate or unsettled.');
  for(const [i,p]of g.players.entries())normalizeCompanySharePlan(g,p,plans[i]);
  const orders=g.players.flatMap((p,i)=>(plans[i].companyShareOrders||[]).map(o=>({...o,holder:p.id}))),before=g.players.map(p=>p.financialGroup.parent.accounts.cash);
- const settled=CompanyAuction.settle(companyShareState(g),orders,g.cycle,Object.fromEntries(g.players.map((p,i)=>[p.id,companyShareParentReserve(plans[i])+companyControlReserve(p,plans[i],g)])));
+ const settled=CompanyAuction.settle(companyShareState(g),orders,g.cycle,Object.fromEntries(g.players.map((p,i)=>[p.id,companyShareParentReserve(plans[i],g)+companyControlReserve(p,plans[i],g)])));
  for(const [i,p]of g.players.entries()){const h=settled.holders.find(h=>h.id===p.id);p.financialGroup.parent=h.book;p.companyShares.positions=h.positions;m.parentCashNet+=h.book.accounts.cash-before[i];}
  const outside=settled.holders.find(h=>h.id==='outside');m.outside={book:outside.book,positions:outside.positions};m.exchange=settled.exchange;m.feesPaid=settled.feesPaid;m.receipts=settled.receipts;m.month=g.cycle;m.distributions=[];
  return settled.receipts.filter(r=>r.holder!=='outside').map(r=>g.players.find(p=>p.id===r.holder).name+' '+(r.side==='buy'?'bought ':'sold ')+r.shares.toLocaleString()+' shares in '+r.issuer+' for $'+r.consideration.toLocaleString()+' plus $'+r.fee.toLocaleString()+' exchange fees. Banking contracts are unchanged.');
@@ -89,7 +89,7 @@ function validateCompanyShareOwner(p,issuers){
  let basis=0;for(const position of Object.values(p.companyShares.positions)){
   if(!investmentExact(position,['shares','basis'])||!investmentWhole(position.shares)||position.shares>(p.companyControl?100000:50000)||!investmentWhole(position.basis)||!position.shares&&position.basis)throw Error('Invalid company position.');basis+=position.basis;
  }
- if(basis!==p.financialGroup.parent.accounts.businessAssets)throw Error('Parent company assets and share basis do not reconcile.');
+ if(basis+HoldingCapital.basis(p)!==p.financialGroup.parent.accounts.businessAssets)throw Error('Parent company assets and share basis do not reconcile.');
 }
 function validateCompanyShares(g){
  if(g.companySharesVersion===undefined){if(g.companyShareMarket!==undefined||g.players.some(p=>p.companyShares!==undefined||p.submitted?.companyShareOrders!==undefined)||Object.values(g.lastPlans||{}).some(p=>p.companyShareOrders!==undefined))throw Error('Unversioned company share state.');return;}
@@ -98,7 +98,7 @@ function validateCompanyShares(g){
  CompanyAuction.validate(companyShareState(g));
  if(!investmentExact(m.outside,['book','positions'])||!investmentExact(m.history,m.issuers.map(i=>i.id))||!Array.isArray(m.distributions)||m.distributions.length>18)throw Error('Invalid company market records.');
  const controlCash=g.companyControlVersion===1?g.companyControlMarket.lender.accounts.cash+g.companyControlMarket.provider.accounts.cash:0;
- if(m.capital!==g.companyEconomy.shareMarket.capital||m.outside.book.accounts.cash+m.exchange.accounts.cash+m.parentCashNet+controlCash!==m.capital+g.companyEconomy.shareMarket.distributed)throw Error('Company trading and parent cash flows do not reconcile.');
+ if(m.capital!==g.companyEconomy.shareMarket.capital||m.outside.book.accounts.cash+m.exchange.accounts.cash+m.parentCashNet+controlCash+(g.outsideFunding?.netCashToBanks||0)+(g.cardMarket?.netFromLender||0)!==m.capital+g.companyEconomy.shareMarket.distributed)throw Error('Company trading and parent cash flows do not reconcile.');
  for(const c of g.companyEconomy.companies){const issuer=m.issuers.find(i=>i.id===c.id),history=m.history[c.id];
   if(!Array.isArray(history)||history.length!==Math.min(6,month)||history.some(n=>!Number.isSafeInteger(n))||!issuer||issuer.suspended!==!!c.resolution||issuer.referenceCents!==CompanyAuction.reference(c.book.accounts.equity,history).referenceCents)throw Error('Stale or inconsistent issuer reference.');
  }

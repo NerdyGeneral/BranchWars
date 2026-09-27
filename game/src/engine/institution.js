@@ -66,6 +66,7 @@ function syncPrimaryStrategy(p){p.primaryStrategy=leadCapability(p);return p.pri
 function strategyBarred(){return''}
 function projectBarred(p,key){
  const def=PROJECTS[key];
+ const expandedIssue=ExpandedBusiness.barred(p,key);if(expandedIssue)return expandedIssue;
  const facilityIssue=facilityProjectIssue(p,key);if(facilityIssue)return facilityIssue;
  // Preserve legacy precedence: contract availability, local-office rules,
  // regulatory restrictions, retail deployment, then service applications.
@@ -92,7 +93,8 @@ function projectBarred(p,key){
  if(!p.serviceDesk)return 'Requires a new expanded-service pilot.';
  const current=p.serviceDesk.applications[app.app];
  if(current===app.route||current==='build')return 'Already deployed. Activation is managed in Markets > Service Desk.';
- if(app.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+app.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
+ const capabilityIssue=DigitalCommercial.platformIssue(p,key);if(capabilityIssue)return capabilityIssue;
+ if(capabilityIssue===null&&app.requires.some(k=>strategyLevel(p,k)<1))return 'Complete tier 1 in '+app.requires.map(k=>STRATEGY_BRANCHES[k].name).join(' + ')+'.';
  if(p.projects.some(x=>SERVICE_APPLICATIONS[x.key]&&SERVICE_APPLICATIONS[x.key].app===app.app))return 'This application already has a deployment in progress.';
  return '';
 }
@@ -127,10 +129,10 @@ function planBudgetBase(p,plan,g=null){
  if(regionalOperations(p))p={...p,focus:plan.focus||p.focus};
  const initiatives=planInitiatives(plan),action=(COMPETITIVE_ACTIONS[plan.competitiveAction]||COMPETITIVE_ACTIONS.none).cost;
  const projects=initiatives.reduce((sum,key)=>sum+(projectDefinition(key)?([9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,key,projectPlanTarget(plan,key)||p.focus).cost:projectCost(p,projectDefinition(key))):0),0);
- const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0);
+ const research=Object.values(plan.investments||{}).reduce((sum,n)=>sum+Math.max(0,Math.round(Number(n)||0)),0)+DigitalCommercial.spend(plan);
  const hires=planHires(plan),recruiting=(hires?hireCost(p,hires):0)+(p.workforce?specialistHirePremium(plan):0);
  const productRetirement=p.productPrograms?(plan.productProgramPolicy?.retire?.length||0)*PRODUCT_RETIRE_COST:0;
- const advertising=p.advertising?(plan.advertisingPolicy||p.advertising.policy).budget:0;
+ const advertising=p.expandedBusinessVersion===1?BrandCampaigns.commitment(p,plan):p.advertising?(plan.advertisingPolicy||p.advertising.policy).budget:0, digitalPlatform=ExpandedBusiness.monthlyCost(p);
  const relationshipOffers=p.relationshipOffers?relationshipOfferBudget(p,plan):0;
  const onboarding=p.onboarding?onboardingBudget(p,plan):0;
  const facilityConversion=facilityDraftSpend(p,plan),departmentLeadership=p.departmentOffice?departmentLeadershipQuote(p,plan).total:0;
@@ -139,10 +141,11 @@ function planBudgetBase(p,plan,g=null){
  const shared=p.sharedPremises?sharedPremisesCommitment(p,plan):{cost:0,capacity:0};
  const departmentFunctions=p.departmentFunctions?departmentFunctionDraftCost(p,plan):0;
  const unpaidDepartmentFunctions=p.departmentFunctions&&p._departmentFunctionPaidCycle===p.departmentFunctions.lastCycle?0:departmentFunctions;
- const base=action+projects+research+recruiting+productRetirement+advertising+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+extensions.cost+shared.cost+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
+ const base=PartnerCards.commitment(p,plan)+action+projects+research+recruiting+productRetirement+advertising+digitalPlatform+relationshipOffers+onboarding+facilityConversion+departmentLeadership+lifecycle.total+extensions.cost+shared.cost+unpaidDepartmentFunctions,departmental=p.departmentOffice?departmentPlanOperatingQuote(p,plan,base):null,training=departmental?departmental.training.total:p.workforce?workforceTrainingQuote(p,plan.workforcePolicy||p.workforce.policy,base).total:0,total=base+training;
  const capacityOwner=departmental?.owner||p,baseCapacity=executionCapacity(capacityOwner,plan.allocation);
  const capacity=p.departmentFunctions&&!departmentFunctionExecution(p)?departmentFunctionDraftExecutionCapacity(capacityOwner,plan):baseCapacity,load=usedCapacity(p,initiatives.map(projectDefinition).filter(Boolean))+facilityDraftCapacity(p,plan)+lifecycle.capacity+extensions.capacity+shared.capacity+companyControlExecution(p,plan);
  const quote={action,projects,research,recruiting,total,cash:p.stats.cash,remaining:p.stats.cash-total,capacity,load,freeCapacity:Math.round((capacity-load)*10)/10,basePayrollAdded:hires*bankBasePayroll(p)};
+ if(PartnerCards.enabled(p))quote.cards=PartnerCards.commitment(p,plan);
  if(p.facilityLifecycle){quote.facilityLifecycle=lifecycle.total;quote.facilityLifecycleCapacity=lifecycle.capacity;}
  if(p.facilityExtensions){quote.facilityExtensions=extensions.cost;quote.facilityExtensionsCapacity=extensions.capacity;}
  if(p.sharedPremises){quote.sharedPremises=shared.cost;quote.sharedPremisesCapacity=shared.capacity;}
@@ -151,13 +154,14 @@ function planBudgetBase(p,plan,g=null){
  if(p.departmentOffice)quote.departmentLeadership=departmentLeadership;
  if(p.productPrograms)quote.productRetirement=productRetirement;
  if(p.advertising)quote.advertising=advertising;
+ if(p.expandedBusinessVersion===1)quote.digitalPlatform=digitalPlatform;
  if(p.relationshipOffers)quote.relationshipOffers=relationshipOffers;
  if(p.onboarding)quote.onboarding=onboarding;
  if(p.workforce){quote.training=training;quote.specialistPayrollAdded=Object.entries(SPECIALIST_ROLES).reduce((n,[k,d])=>n+(Number(plan.specialistHires?.[k])||0)*d.payroll,0)}
  if(p.accounting){quote.capitalBudget=pilotSpendingLimit(p);quote.remaining=Math.min(quote.remaining,quote.capitalBudget-quote.total)}
  if(p.departmentOffice){
   const leadership=departmentLeadershipQuote(p,plan);
-  quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0);
+  quote.mandatoryObligations=leadership.rows.reduce((sum,row)=>sum+row.severance+(row.appointment?0:row.salary),0)+(p.expandedBusinessVersion===1?BrandCampaigns.mandatory(p,plan)+digitalPlatform:0);
   quote.discretionaryCommitments=quote.total-quote.mandatoryObligations;
   quote.discretionaryCashAvailable=Math.max(0,p.stats.cash-(p.accounting.accounts.payables||0)-quote.mandatoryObligations);
   quote.discretionaryCapitalAvailable=Math.max(0,quote.capitalBudget-quote.mandatoryObligations);
@@ -210,7 +214,7 @@ function projectTerms(p,key,focus=p.focus,premium=1){
  const owner=focus===p.focus?p:{...p,focus};
  return {key,cost:projectCost(owner,def,focus,premium),cycles:projectCycles(owner,def),capacity:projectCapacity(def),
   barred:projectBarred(owner,key),running:p.projects.some(x=>x.key===key),
-  retired:!!def.legacy,atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
+  retired:!!def.legacy||ExpandedBusiness.retired(p,key),atMaximum:!!(def.max&&upgradeLevel(p,key)>=def.max),
   branchFull:!!(def.kind==='branch'&&p.branches[focus]>=3)};
 }
 function projectPlanStatus(p,plan,g=null){
@@ -284,7 +288,7 @@ function projectStartStatus(g,p,key,focus=p.focus){
  // executive/rival effects would change already accepted campaign rules.
  return {eligible:true,code:null,terms};
 }
-function projectCatalog(p,g=null){return Object.fromEntries(Object.entries(PROJECTS).filter(([,d])=>!d.institutionOnlyVersion||p.facilityNetwork?.version===2).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
+function projectCatalog(p,g=null){return Object.fromEntries(Object.entries(PROJECTS).filter(([k,d])=>(!d.institutionOnlyVersion||p.facilityNetwork?.version===2)&&ExpandedBusiness.catalogVisible(p,k)).map(([k,d])=>{if(d.strategy){const branch=STRATEGY_BRANCHES[d.strategy],level=strategyLevel(p,d.strategy),node=branch.nodes[level];return[k,{...d,name:node?node.name:`${branch.name} Complete`,desc:node?node.desc:branch.promise,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),level,max:4,branchName:branch.name,barred:projectBarred(p,k)}]}return[k,{...d,cost:[9,10].includes(g?.financialGroupVersion)?projectStartTerms(g,p,k).cost:projectCost(p,d),cycles:projectCycles(p,d),barred:projectBarred(p,k)}]}))}
 function capitalRequestStatus(p){const liquidity=p.stats.deposits?p.stats.cash/p.stats.deposits*100:100,requests=p.capitalRequests||0,rank=tierRank(p),eligible=requests<2&&(rank>=2||(rank>=1&&liquidity<.5))&&p.stats.influence>=10&&(p.capitalRestriction||0)===0;let reason='Emergency board assistance unlocks only at critical capital, or under supervision with severe liquidity stress.';if(requests>=2)reason='The board will not authorize a third rescue in this campaign.';else if(p.stats.influence<10)reason='Board assistance requires 10 executive influence.';else if((p.capitalRestriction||0)>0)reason=`Board oversight remains in force for ${p.capitalRestriction} cycle${p.capitalRestriction===1?'':'s'}.`;else if(eligible)reason='Immediate capital, but with oversight, expansion restrictions, and a permanent value concession.';return{eligible,reason,liquidity:Math.round(liquidity*10)/10,restriction:p.capitalRestriction||0,concessions:p.boardConcessions||0,requests}}
 // The Physical Empire mandate asked for 3-6 branch levels, but a finished bank holds a
 // median of 19, so it was a free bonus. Programme campaigns scale it with the measured

@@ -1,9 +1,11 @@
 'use strict';
+// Legacy renderer regression only. Current Expanded acceptance is covered by
+// interface_people_strategy.test.js and the actual-browser interface walkthrough.
 if(!process.argv.includes('--source'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');
 let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){throw Error(name+': '+error.stack.slice(0,2200));}}
-function fresh(version=7){const h=harness();h.run(`const query=document.querySelector;document.querySelector=selector=>{const element=query(selector);element.insertAdjacentHTML=(position,html)=>element.innerHTML+=html;element.remove=()=>{element.innerHTML='';};return element;};const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;game=E.createGame({...options,mode:'hotseat',seed:'people-workflows',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='workforce';newDraft(currentView());renderWorkforce(currentView());`);return h;}
+function fresh(version=7){const h=harness();h.run(`expandedInterfaceEnabled=()=>false;const query=document.querySelector;document.querySelector=selector=>{const element=query(selector);element.insertAdjacentHTML=(position,html)=>element.innerHTML+=html;element.remove=()=>{element.innerHTML='';};return element;};const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;game=E.createGame({...options,mode:'hotseat',seed:'people-workflows',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='workforce';newDraft(currentView());renderWorkforce(currentView());`);return h;}
 const bytes=h=>h.run('JSON.stringify({game,draft})');
 test('five desks hide unrelated content and preserve the shared draft; earlier rules omit unavailable desks',()=>{
  const h=fresh(),before=bytes(h);for(const desk of ['overview','recruitment','development','coverage','leadership']){h.run(`setPeopleDesk('${desk}');`);assert.equal(h.run('peopleWorkspaceState.desk'),desk);assert.equal(h.elements.get('#peopleOverview').hidden,desk!=='overview');assert.equal(h.elements.get('#peopleRecruitment').hidden,desk!=='recruitment');assert.equal(h.elements.get('#workforcePanel').hidden,desk!=='development');assert.equal(h.elements.get('#departmentPanel').hidden,!['coverage','leadership'].includes(desk));assert.equal(bytes(h),before);}

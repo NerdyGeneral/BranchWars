@@ -10,6 +10,33 @@ inside a cycle — you commit, and then you find out.
 
 ## 1. Playing a campaign
 
+### Current Expanded business rules
+
+New Expanded campaigns use **9.37**, with `digitalCommercialVersion: 1` and the retained `expandedBusinessVersion: 1`. Five funded research nodes connect to existing treasury deployment and central service capacity. Treasury offers an actual funded one-month advance from Cedar Reserve Bank. See [research, delivery, monthly order and funding terms](digital-commercial-milestone.md).
+Core and historical saves keep their selected rules. The legacy project tables
+later in this reference describe supported older campaigns; new Expanded cannot
+launch their obsolete marketing, technology, training, analytics or strategy
+initiatives. Existing paid work and earned benefits remain valid in their saved
+campaigns. See [the current business specification](expanded-consolidation.md).
+
+Strategy → Campaigns has one adjustable targeted/general monthly budget and one
+community or sports sponsorship. Coverage divides a single budget across served
+markets. Sponsorship installments remain due until completion or paid cancellation.
+Costs reduce bank earnings; exposure and awareness do not guarantee acquisition.
+
+Banking → Business services has Payroll, Merchant services and Corporate treasury,
+with service-specific setup/pricing, shared capacity and searchable clients.
+Its digital platform is built or licensed centrally, with finite shared staff.
+Physical digital studios remain optional local service premises. Treasury recovery
+contains the modern corrective risk action.
+
+Financial Group → Holding-company ownership uses funded parent and outside
+investor books. Issuance dilutes ownership; repurchases retire voluntarily sold
+shares. Current fundamental quotes, finite liquidity and order limits govern
+fills; founder control stays at least 51%. Quotes show parent cash, equity and
+ownership consequences. These are holding-company shares, separate from the
+illustrative score ticker, bank portfolio securities and customer custody assets.
+
 ### Modes
 
 | Mode | Engine key | How it works |
@@ -145,6 +172,28 @@ Two ordering facts worth remembering, because both have caused bugs:
 ---
 
 ## 4. Economy
+
+### New Expanded 9.35: Federal Funds and bank treasury
+
+`monetaryPolicyVersion:1` separates the shared policy anchor from macro regimes.
+Decisions occur before planning in months 3, 5, 7 and onward, with a separate
+deterministic random stream. The upper bound of the 25-bp target range supplies
+new product quotes. Holds are recorded; old fixed contracts are not repriced.
+Core and historical campaigns keep their previous rules and formulas below.
+
+Bank securities reconcile to liquid holdings and fixed 6-/24-month positions.
+Fixed coupons are locked; early sales use discounted remaining coupons and
+principal at the current anchor plus a term spread. Unrealized values are memo
+estimates; an actual sale posts its gain or loss. At maturity, principal returns
+to cash without income. Surplus cash above 15% of deposits plus payables is
+invested only when emergency debt is zero, with new purchases earning next month.
+The staged Liquid / Balanced / Longer fixed policy targets 0% / 50% / 80% fixed
+holdings using available liquid assets, without cancelling existing fixed terms.
+
+Emergency funding costs the anchor plus 825 bp annually on opening monthly debt.
+Overview's rate desk is an owner-only current-book comparison; it excludes new
+business and behavioral changes and does not advance policy or the shared draft.
+See [the full specification](federal-funds-design.md) for timing and boundaries.
 
 Each Service, Business and Lending banker earns fee income; Operations bankers
 earn none and instead buy execution capacity and risk control. Facilities carry
@@ -1070,6 +1119,17 @@ goodwill; a same-book offer quote alone is not a measured retention benefit.
 The next retention probe holds the estimated closing book and staffing fixed.
 It excludes intervening rival actions, opportunities, economic changes and
 other future activity. It is conditional, not a promised result or lifetime value.
+
+### Partner-issued cards (Expanded 9.38)
+
+Cedar Reserve owns the receivables and funds merchant settlement from its existing
+finite lender cash. Player banks earn 1.5% of settled purchases and 25% of interest
+actually collected. Customer principal never becomes player-bank revenue.
+The first product has fixed terms, no rewards or annual fee, next-month statements,
+monthly interest on unpaid opening principal and a four-missed-payment charge-off.
+See [partner card rules](partner-cards.md) for cash, capacity and exit conventions.
+
+<!--{{PARTNER_CARDS}}-->
 
 Only a spare existing Business banker can be suggested. Existing specialist
 assignments, reserved commercial delivery, served contracts and bid capacity

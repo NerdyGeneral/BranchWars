@@ -73,7 +73,7 @@ function normalizeInvestmentPlan(p,plan,g=null){
  const s=plan.investmentPolicy===undefined?defaultInvestmentPlan(p):investmentCopy(plan.investmentPolicy);
  if(!investmentExact(s,[...(p.investmentNotesVersion===1?['notes']:[]),...(p.investmentTradingVersion===1?['trades']:[]),'institution','market','pursue','close','funding',...(p.investmentAssetReport!==undefined?['inventorySale']:[]),...(p.investmentSweepVersion===1?['cashOrders']:[])])||typeof s.market!=='string'||!Object.hasOwn(p.householdBook.markets,s.market)||
   typeof s.pursue!=='boolean'||typeof s.close!=='boolean'||!Array.isArray(s.funding)||s.funding.length>16)throw Error('Invalid investment instructions.');
- if(p.investmentAssetReport!==undefined&&(!investmentWhole(s.inventorySale)||s.inventorySale>p.accounting.accounts.securities))throw Error('Inventory offer exceeds current bank securities.');
+ if(p.investmentAssetReport!==undefined&&(!investmentWhole(s.inventorySale)||s.inventorySale>MonetaryPolicy.liquid(p)))throw Error(MonetaryPolicy.enabled(p)?'Inventory offer exceeds liquid bank securities. Fixed holdings are not eligible for a par sale.':'Inventory offer exceeds current bank securities.');
  s.institution=InvestmentSettlement.prepareClosure(p.investmentBusiness,s.institution,s.close);
  const ids=new Set();
  for(const f of s.funding){
@@ -227,11 +227,11 @@ function settleInvestmentServices(g,plans,prepared=null,premises,distress){
   // Equal-price offers share the dealer's existing cash pro rata. Neither seat
   // receives a first-mover advantage, and no current offer funds the other bank.
   const available=Math.floor(g.investmentEconomy.world.dealer.accounts.cash/100);
-  const wanted=policies.map((s,i)=>Math.floor(Math.min(s.inventorySale,g.players[i].accounting.accounts.securities)/100)),total=wanted[0]+wanted[1];
+  const wanted=policies.map((s,i)=>Math.floor(Math.min(s.inventorySale,MonetaryPolicy.liquid(g.players[i]))/100)),total=wanted[0]+wanted[1];
   const quotas=wanted.map(n=>total>available?Number(BigInt(n)*BigInt(available)/BigInt(total)):n);
   for(const [i,p]of g.players.entries()){
    const r=InvestmentClients.stockFromBank(g.investmentEconomy.world,g.players.map(p=>p.investmentBusiness),p.accounting,p.id,quotas[i]*100);
-   p.accounting=r.bank;syncAccounts(p);g.investmentEconomy.world=r.world;
+   MonetaryPolicy.consumeLiquid(p,r.paid);p.accounting=r.bank;syncAccounts(p);g.investmentEconomy.world=r.world;
    p.investmentAssetReport={cycle:g.cycle,requested:policies[i].inventorySale,units:r.units,paid:r.paid};
   }
  }

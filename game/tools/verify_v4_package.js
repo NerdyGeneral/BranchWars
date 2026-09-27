@@ -7,7 +7,7 @@ const {verifyPackage,README,RUNTIME_FILES}=require('./package_release'),{assembl
 const digest=b=>createHash('sha256').update(b).digest('hex');
 const copy=v=>JSON.parse(JSON.stringify(v));
 const PROFILES=Object.freeze({
- current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true},versions:{core:'8.20',expanded:'9.34'}},
+ current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true},versions:{core:'8.20',expanded:'9.39'}},
  rc4:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true},versions:{core:'8.20',expanded:'9.33'}},
  rc2:{flags:{currentEconomics:true},versions:{core:'8.19',expanded:'9.32'}},
  rc3:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true},versions:{core:'8.19',expanded:'9.33'}}
@@ -55,7 +55,9 @@ function rematchRecovery(E,options,edition){
   // This is not an ordinary-start balance trial or a forced gameOver flag.
   const owner=game.players[0],A=E.AccountingPrototype;
   owner.accounting=A.transact(owner.accounting,'borrow',6000000);
-  owner.accounting=A.transact(owner.accounting,'buySecurities',owner.accounting.accounts.cash);
+  const investment=owner.accounting.accounts.cash;
+  owner.accounting=A.transact(owner.accounting,'buySecurities',investment);
+  if(owner.treasury){owner.treasury.liquid+=investment;owner.treasury.openingDebt=6000000;}
   const a=owner.accounting.accounts;
   Object.assign(owner.stats,{cash:a.cash,loans:a.loans,deposits:a.deposits,emergencyDebt:a.emergencyDebt,capital:a.equity,earnings:owner.accounting.retainedEarnings});
   validate(E,game);
@@ -76,6 +78,7 @@ function rematchRecovery(E,options,edition){
   assert.equal(E.researchBranches(owner).includes('risk'),edition==='core');
   assert(Object.values(owner.capability).every(amount=>amount===0),'Rematch must reset paid research');
   assert.deepEqual(copy(owner.specializations),{},'Rematch must reset earned models');
+  if(owner.expandedBusinessVersion===1)assert.equal(owner.expandedBusiness.digital.route,'none','Rematch must reset paid digital platforms');
  }
  validate(E,restored);
  const reloaded=E.migrateCampaign(copy(restored));assert.equal(reloaded.version,version);
@@ -100,6 +103,7 @@ function verify(directory,zip,{profile='current',release=null,expectedHtmlSha256
   const options=E.previewCampaignEdition({},edition,selected.flags).options;
   let game=E.createGame({...options,seed:'v4-package-smoke',created:1,mode:'hotseat'});
   assert.equal(game.version,selected.versions[edition],edition+' package profile version');
+  if(current)assert.equal(game.expandedBusinessVersion,edition==='expanded'?1:undefined,'Current package must select the intended consolidated business rules');
   const plans=[0,1].map(seat=>E.chooseBot(game,seat));
   E.submit(game,0,plans[0]);const half=copy(game),resumed=E.migrateCampaign(copy(half));
   assert.deepEqual(copy(E.migrateCampaign(copy(resumed))),copy(resumed),'Repeated recovery drift');
@@ -112,7 +116,7 @@ function verify(directory,zip,{profile='current',release=null,expectedHtmlSha256
    assert.deepEqual(copy(view),copy(E.publicState(game,seat)));
    // Earned operating models are intentionally public; plans, paid capability
    // totals and income history are private in the existing projection contract.
-   for(const key of ['capability','allocation','projects','policies','submittedPlan','incomeHistory'])assert.equal(view.rival[key],undefined,'Rival leaks private '+key);
+   for(const key of ['capability','allocation','projects','policies','submittedPlan','incomeHistory','expandedBusiness','brandCampaigns','pendingBrandCampaignPolicy','pendingHoldingCapitalOrders'])assert.equal(view.rival[key],undefined,'Rival leaks private '+key);
   }
   const check={edition,version:game.version,creation:true,halfReadyRecovery:true,resolvedMonth:true,idempotentRecovery:true,ownerViewsMatch:true,rivalPrivateFieldsAbsent:true};
   if(current){

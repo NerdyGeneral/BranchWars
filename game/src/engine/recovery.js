@@ -35,7 +35,7 @@ function bankRecoveryReview(p, plan, economy, event,g=null) {
   if (event && ['a','b'].includes(plan.decision)) applyDecision({ event }, owner, plan.decision);
   const decisionExpense = Math.max(0, p.stats.capital - owner.stats.capital);
   const forecast = operatingPreview({ ...p, focus:plan.focus || p.focus }, plan, economy,g);
-  const budget = planBudget(p, plan,g), operatingSpend = (budget.advertising || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
+  const budget = planBudget(p, plan,g), operatingSpend = (budget.advertising || 0) + (budget.digitalPlatform || 0) + (budget.training || 0) + (budget.relationshipOffers || 0) + (budget.onboarding || 0);
   // Campaign/training expense is already inside operating profit. It must not
   // be subtracted for a second time alongside projects, hiring and research.
   // Current Expanded forecasts already post paid department vendors, leader

@@ -1,9 +1,11 @@
 'use strict';
+// Retained legacy service inspector and confirmation flow, plus real shared
+// proposal/settlement behavior. Canonical Business services has its own tests.
 if(!process.argv.includes('--portable'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{test}=require('node:test'),{harness}=require('./github_resilience.test');
 const copy=x=>JSON.parse(JSON.stringify(x));
 function fresh(version=9){
- const h=harness();h.run(`game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options,mode:'hotseat',seed:'service-object-workflow',created:1});seat=0;gh.active=false;p2pRole='';newDraft(currentView());errors=[];toast=s=>errors.push(s);renderReady=()=>{};$('#pipeline').insertAdjacentHTML=function(position,html){this.innerHTML+=html};renderPipeline=v=>{$('#pipeline').innerHTML='';renderServiceAgreementInspector(v)};target=currentView().serviceAgreements.find(c=>c.kind==='payroll'&&c.due===1);`);return h;
+ const h=harness();h.run(`expandedInterfaceEnabled=()=>false;game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options,mode:'hotseat',seed:'service-object-workflow',created:1});seat=0;gh.active=false;p2pRole='';newDraft(currentView());errors=[];toast=s=>errors.push(s);renderReady=()=>{};$('#pipeline').insertAdjacentHTML=function(position,html){this.innerHTML+=html};renderPipeline=v=>{$('#pipeline').innerHTML='';renderServiceAgreementInspector(v)};target=currentView().serviceAgreements.find(c=>c.kind==='payroll'&&c.due===1);`);return h;
 }
 test('Client inspection and whole-book options are pure and agree with the shared engine',()=>{
  const h=fresh(),before=h.run('JSON.stringify({game,draft})');assert(h.run('inspectServiceAgreement(currentView(),target.id)'));

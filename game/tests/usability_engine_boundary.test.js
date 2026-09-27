@@ -305,6 +305,64 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // facility_lifecycle_legacy_compat, facility_extensions_ui, department_runtime,
 // department_ai_lending, usability_help, architecture(+_scope) and docs. No reference
 // build, golden or ceiling changed.
-const expected='3eb11003a82539c9964bd98e3647ed0cab82a6d7079bcbada2aa9b77206b896e';
+// September26 user-authorized multiplayer personality: optional preset identities
+// and exactly-once plain-text announcements. No prices, staff supply, AI choices
+// or campaign rule versions change. Independent replay against the untouched
+// pre-edit PR26 portable (9a1a39dd) verifies exact absent-feature creation,
+// AI plans/RNG, half-ready migration, actual settlement/restored continuation
+// and both views for legacy8.1/Core8.20/Expanded9.33/9.34. announcements.test
+// checks used-message economic/RNG neutrality, privacy and once-only publishing;
+// bank_logos.test checks optional identity validation and save/transport flow.
+// Evidence: reports/local/market-personality-20260926/absent-feature-replay.json.
+// No frozen reference, historical golden or architecture ceiling changed.
+// September26 optional JPG extension: strict embedded JPEG byte/dimension bounds,
+// retaining every preset/absent identity field shape. Exact pre-JPG replay covers
+// legacy8.1/Core8.20/Expanded9.33/9.34 creation, AI/RNG, half-ready migration,
+// settlement and both views. JPEG-active tests cover neutral results, rematch,
+// private lobby edits and three simulated transports. No golden changed.
+// Evidence: reports/local/jpg-logos-20260926/absent-feature-replay.json.
+// September26 authorized Expanded Federal Funds implementation, explicit9.35.
+// Fixed/repricing securities and funded maturities, market-valued early sales,
+// opening-debt interest, calendar/RNG, private quotes and peer/save boundaries.
+// Exact pre-Fed replay against preserved48bfd475 covers legacy8.1/Core8.20/
+// Expanded9.33/9.34 creation, AI/RNG, half-ready restore, settlement and both
+// views. Domain/UI tests and three simulated transports pass; no historical
+// reference, golden or override ceiling changed. This is not human acceptance.
+// Evidence: reports/local/federal-funds-20260926/absent-feature-replay.json.
+// September27 user-authorized Expanded business consolidation, explicit9.36
+// and expandedBusinessVersion:1. Adds paid advertising/sponsorship obligations,
+// shared digital delivery, modern recovery and funded holding-company orders;
+// retires obsolete launches only in new rules. Core and historical boundaries
+// retain their original state, AI/RNG, paid projects, settlement and private views.
+// Independent replay against the preserved pre-consolidation9.35 portable
+// (10adb666, engine e348b9f3) passed expanded_business7/7 and holding_capital11/11,
+// including actual legacy paid work, funded company trades and half-ready restore.
+// Both durable local-replay receipts verify unchanged current/baseline sources.
+// Focused new engine/UI suites and54 isolated portable browser checks also pass.
+// Evidence: reports/local/expanded-consolidation-20260927/README.md, the
+// expanded-business-local-replay and holding-capital-local-replay receipts there.
+// No historical golden, reference build or architecture ceiling was changed.
+// The complete fast gate is recorded separately; this pin is not release balance
+// or physical multiplayer acceptance.
+// Authorized 9.37 paid capability/funding milestone: six-month exact 9.36 replay
+// plus complete paid customer journey and focused funding checks, recorded in
+// reports/local/digital-commercial-20260927/. Historical fixtures unchanged.
+// Authorized 9.38 partner-card boundary: Cedar-funded customer receivables,
+// finite central delivery and paired fees/costs only in explicitly new campaigns.
+// Six-month Core8.20 and Expanded9.37 creation, AI/RNG, half-ready recovery,
+// settlement and owner views match the preserved polished9.37 portable exactly.
+// Evidence: reports/local/partner-cards-20260927/historical-replay.json.
+// Focused source/portable, actual browser and eighteen-month legal replay checks
+// passed. No preserved reference, historical golden or ceiling was changed.
+// This reviewed fingerprint is not balance or human multiplayer acceptance.
+// Authorized 9.39 card calibration: explicit cardEconomicsVersion1 scales
+// outsourced-program costs and oversight, and retains lifetime contribution.
+// Exact Core8.20 and Expanded9.38 AI/recovery/private-view comparisons plus
+// eight months of the earned active9.38 card contract pass against preserved9.38.
+// See reports/local/card-balance-20260927/historical-replay.json. Existing
+// frozen references, historical goldens and architecture ceilings are unchanged.
+// Controlled profitability checks exclude shared research/payroll; no human
+// balance or physical multiplayer acceptance is inferred from this digest.
+const expected="e0fe959739a1387e3757564aa7de41415c0783cf6d73c2699504b7bc1e1bc90c";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

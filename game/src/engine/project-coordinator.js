@@ -1,4 +1,6 @@
 function finishProject(g, p, project) {
+  const expanded = ExpandedBusiness.finish(g,p,project);
+  if(expanded)return expanded;
   const programme = project && finishProductProgram(p, project.key);
   if(programme)return programme;
   const service = project && SERVICE_APPLICATIONS[project.key];

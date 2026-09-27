@@ -39,7 +39,7 @@ function renderProductPrograms(v) {
  preview.policies={...preview.policies,deposit:draft.depositPolicy};
  const vendor=E.productProgramCosts(preview),book=E.segmentDepositSummary(preview,v),catalogue=['development','pricing','targets'].includes(productDeskView);
  const tabs=[['development','Product catalogue'],...(p.advertising?[['advertising','Advertising']]:[]),...(p.productPrograms.version===2?[['reports','Statements']]:[])];
- const head='<div class="section-head"><div><h2>PRODUCTS & CUSTOMER GROWTH</h2><p class="small muted">Select a product to manage delivery, pricing and local sales. Customer offers and applications are in Customers. Changes are staged, never submitted here.</p></div></div>'+
+ const head='<div class="section-head"><div><h2>DEPOSIT PRODUCTS</h2><p class="small muted">Select a deposit product, then edit its pricing, delivery or local sales. Lending owns loan portfolios and standards; Bank policies owns funding and capital. All controls use this month’s shared draft.</p></div></div>'+
   (typeof renderSubjectNavigation==='function'?'':'<div class="product-desk-tabs" role="group" aria-label="Product views">'+tabs.map(([key,label])=>'<button type="button" class="btn" id="product-desk-'+key+'" aria-pressed="'+(productDeskView===key||key==='development'&&catalogue)+'">'+label+'</button>').join('')+'</div>');
  let content=catalogue?productCatalogueContent(v,preview,book,vendor,token):'';
  if(productDeskView==='advertising')content=advertisingDeskContent(v,preview);

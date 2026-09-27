@@ -1,8 +1,10 @@
 'use strict';
+// Legacy renderer regression only. Current Expanded acceptance is covered by
+// interface_people_strategy.test.js and the actual-browser interface walkthrough.
 // Real engine/client; inspection and employee-month presentation are UI only.
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){throw Error(name+': '+error.stack);}}
-function fresh(version=9){const h=harness();h.run(`const original=document.querySelector;document.querySelector=selector=>{const el=original(selector);el.querySelector=s=>document.querySelector(s);el.addEventListener=function(event,fn){this.listeners[event]=fn};el.remove=()=>{el.innerHTML=''};el.insertAdjacentHTML=(position,html)=>{el.innerHTML+=html};return el};
+function fresh(version=9){const h=harness();h.run(`expandedInterfaceEnabled=()=>false;const original=document.querySelector;document.querySelector=selector=>{const el=original(selector);el.querySelector=s=>document.querySelector(s);el.addEventListener=function(event,fn){this.listeners[event]=fn};el.remove=()=>{el.innerHTML=''};el.insertAdjacentHTML=(position,html)=>{el.innerHTML+=html};return el};
  const opts=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;game=E.createGame({...opts,mode:'hotseat',seed:'people-object-workspaces',created:1});seat=0;p2pRole='';gh.active=false;workspaceTab='workforce';newDraft(currentView());draft.decision='b';uiErrors=[];toast=text=>uiErrors.push(text);setPeopleDesk('coverage');`);return h;}
 const bytes=h=>h.run('JSON.stringify({game,draft})'),markup=h=>h.elements.get('#departmentFunctionsMount').innerHTML;
 function input(h,id,value){const el=h.elements.get('#'+id);el.value=String(value);el.listeners.input();}

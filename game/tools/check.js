@@ -23,6 +23,8 @@ const commands = args.includes('--full')
      ['tests/project-rules.test.js'], ['tests/campaign-lifecycle.test.js'], ['tests/runtime-stages.test.js'], ['tests/behavior-golden.test.js'], ['tests/save-baseline.test.js'], ['tests/launcher-path.test.js'], ['tests/portable-launcher.test.js'], ['tests/storage_capacity.test.js','--quick'],
      ['tests/determinism.test.js'], ['tests/save_integrity.test.js'], ['tests/transport.test.js'], ['tests/multiplayer_lobby.test.js'], ['tests/specialist_workforce.test.js'], ['tests/workforce_network.test.js'], ['tests/households.test.js'], ['tests/workforce_network.test.js', '--households'], ['tests/collections.test.js'], ['tests/workforce_network.test.js', '--collections'], ['tests/segment_deposits.test.js'], ['tests/workforce_network.test.js','--segment-deposits'], ['tests/product_programs.test.js'], ['tests/product_draft.test.js'], ['tests/ai_cash_planning.test.js'], ['tests/recovery_planning.test.js'], ['tests/recovery_ui.test.js'], ['tests/github_recovery_acceptance.test.js'], ['tests/onboarding.test.js'], ['tests/onboarding_ui.test.js'], ['tests/onboarding_network.test.js'], ['tests/customer_effects.test.js'], ['tests/customer_effects_ui.test.js'], ['tests/release_balance.test.js','--relationship-offers','--attribution','--scenario','regulatory','--seeds','1','--turns','3'], ['tests/relationship_offers.test.js'], ['tests/relationship_offers_ui.test.js'], ['tests/workforce_network.test.js','--relationship-offers'], ['tests/github_resilience.test.js','--relationship-offers'], ['tests/regional_growth.test.js'], ['tests/regional_growth_ui.test.js'], ['tests/workforce_network.test.js','--regional-growth'], ['tests/github_resilience.test.js','--regional-growth'], ['tests/advertising.test.js'], ['tests/workforce_network.test.js','--advertising'], ['tests/workforce_network.test.js','--product-programs']];
 if (!args.includes('--full')) commands.push(['tests/investment_trading_network.test.js','--notes']);
+if (!args.includes('--full')) commands.push(['tests/partner_cards.test.js'],['tests/partner_cards.test.js','--portable'],['tests/partner_card_economics.test.js'],['tests/partner_card_economics.test.js','--portable']);
+if (!args.includes('--full')) commands.push(...['interface_shell','interface_markets','interface_banking_group','interface_people_strategy'].flatMap(name=>[['tests/'+name+'.test.js','--source'],['tests/'+name+'.test.js','--portable']]));
 if (!args.includes('--full')) commands.push(['tests/company_agency_boundary.test.js'],
   ['tests/agency.test.js'], ['tests/agency_ui.test.js'], ['tests/agency_legacy_compat.test.js'], ['tests/agency_peer_compat.test.js']);
 if (!args.includes('--full')) commands.push(['tests/accounting_payables.test.js'],
@@ -167,6 +169,13 @@ commands.push(['tests/bank_rivalry.test.js'],['tests/income_history_network.test
 commands.push(['tests/research_program.test.js'],['tests/research_bot.test.js'],['tests/research_program_ui.test.js']);
 commands.push(['tests/balance_sheet_lending.test.js']);
 commands.push(['tests/lobby_resume_network.test.js']);
+for(const name of ['monetary_policy','monetary_policy_ui','monetary_policy_network']){
+ commands.push(['tests/'+name+'.test.js']);commands.push(['tests/'+name+'.test.js','--portable']);
+}
+for(const name of ['expanded_business','brand_campaigns','brand_campaigns_ui','holding_capital','digital_commercial','outside_funding']){
+ commands.push(['tests/'+name+'.test.js','--source']);commands.push(['tests/'+name+'.test.js','--portable']);
+}
+if(!args.includes('--full'))commands.push(...['announcements','bank_logos','bank_logo_uploads','banking_navigation','market_office_context'].map(name=>['tests/'+name+'.test.js','--portable']));
 const from=fromArgs[0]?.slice('--from='.length),start=from===undefined?0:commands.findIndex(command=>command[0]===from);
 if(start<0)throw Error('Unknown resume point: '+from);
 // Every shard first proves the portable build matches source; the rest are dealt

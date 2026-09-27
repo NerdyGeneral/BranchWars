@@ -1,7 +1,9 @@
 'use strict';
+// Legacy renderer regression only. Current Expanded acceptance is covered by
+// interface_people_strategy.test.js and the actual-browser interface walkthrough.
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');let checks=0;
 function test(name,fn){try{fn();checks++;}catch(e){throw Error(name+': '+e.stack);}}
-function fresh(group=9){const h=harness();h.run(`const original=document.querySelector;document.querySelector=s=>{const el=original(s);el.addEventListener=function(event,fn){this.listeners[event]=fn};el.remove=()=>{el.innerHTML=''};el.insertAdjacentHTML=(where,html)=>{if(where==='beforebegin'||where==='afterend')el.adjacentHTML=html;else el.innerHTML+=html};return el};
+function fresh(group=9){const h=harness();h.run(`expandedInterfaceEnabled=()=>false;const original=document.querySelector;document.querySelector=s=>{const el=original(s);el.addEventListener=function(event,fn){this.listeners[event]=fn};el.remove=()=>{el.innerHTML=''};el.insertAdjacentHTML=(where,html)=>{if(where==='beforebegin'||where==='afterend')el.adjacentHTML=html;else el.innerHTML+=html};return el};
  game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${group}}).options,mode:'hotseat',seed:'strategy-workspace',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='strategy';newDraft(currentView());draft.decision='b';errors=[];toast=t=>errors.push(t);renderStrategy(currentView());`);return h;}
 const html=h=>h.elements.get('#strategyTree').innerHTML,bytes=h=>h.run('JSON.stringify({game,draft})'),click=(h,id)=>h.elements.get('#'+id).listeners.click();
 function tierOne(h,branch='network'){h.c.branch=branch;h.run('game.players[0].capability[branch]=E.CAPABILITY_TIERS[branch][0];newDraft(currentView());draft.decision="b";renderStrategy(currentView())');}

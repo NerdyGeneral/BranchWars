@@ -6,6 +6,16 @@ function monthlyPlanReview(v,plan=draft){
  const add=(id,title,text,tab,desk,target)=>{if(!blockers.some(x=>x.id===id))blockers.push({id,title,text,tab,desk,target});};
  const check=(id,title,tab,desk,target,read)=>{try{return read();}catch(error){add(id,title,error.message,tab,desk,target);return null;}};
  const p=v.me,assigned=Object.values(plan.allocation||{}).reduce((n,x)=>n+Number(x||0),0),unallocated=p.stats.staff-assigned;
+ check('announcement','Review announcement','overview',null,'#bankAnnouncements',()=>E.BankAnnouncements.validate(plan.announcement));
+ check('treasury-policy','Review treasury policy','overview',null,'#monetaryPolicyDesk',()=>E.MonetaryPolicy.validatePlan(p,plan));
+ if(v.expandedBusinessVersion===1){
+  check('partner-cards','Review card program','banking',null,null,()=>E.PartnerCards.validatePlan(v,p,plan));
+  check('outside-funding','Review outside-bank advance','banking',null,null,()=>E.OutsideFunding.validatePlan(v,p,plan));
+  check('digital-commercial','Review capability funding','strategy',null,null,()=>E.DigitalCommercial.validatePlan(p,plan));
+  check('brand-campaigns','Review advertising and sponsorship','strategy',null,null,()=>E.BrandCampaigns.quote(v,p,plan));
+  check('holding-capital','Review holding-company capital orders','group',null,null,()=>E.HoldingCapital.quote(v,p,plan));
+  for(const item of blockers){if(item.id==='brand-campaigns')Object.assign(item,{workspace:'strategy',view:'campaigns',context:{campaignType:'advertising'}});if(item.id==='holding-capital')Object.assign(item,{workspace:'group',view:'ownership',context:{objectId:'capital'}});}
+ }
  if(!plan.focus||!v.territories[plan.focus])add('focus','Choose a focus market','Select an open market for market-dependent orders.','markets',null,'#marketMap');
  if(!['a','b'].includes(plan.decision))add('decision','Answer the executive call','Choose a response before submitting this month.','operations','monthly','#decisionGrid');
  if(unallocated!==0||Object.values(plan.allocation||{}).some(x=>!Number.isInteger(x)||x<0))add('allocation','Allocate your employees',unallocated>0?unallocated+' employee'+(unallocated===1?'':'s')+' remain'+(unallocated===1?'s':'')+' unallocated.':unallocated<0?Math.abs(unallocated)+' employee'+(Math.abs(unallocated)===1?' is':'s are')+' over-allocated.':'Staff allocations must be non-negative whole numbers.','operations','monthly','#staffGrid');
@@ -63,6 +73,7 @@ function monthlyPlanReview(v,plan=draft){
  if(plan.opportunity&&!v.opportunities?.some(o=>o.id===plan.opportunity))add('opportunity','Review expired opportunity','This opportunity is no longer available. Choose another pursuit or clear it.','markets',null,'#pipeline');
  if(E.planHires(plan)>E.hireLimit(p))add('hires','Reduce combined recruitment','Generalists and specialists share the '+E.hireLimit(p)+'-banker monthly limit.','operations','projects','#hiringPanel');
  if(typeof pendingDepartmentForm==='function'&&pendingDepartmentForm(v))warnings.push({id:'unstaged-leaders',title:'Leadership form has unstaged edits',text:'These entries are not in your monthly plan. Preview and stage them, or explicitly discard them.',tab:'workforce',target:'#departmentPanel'});
+ if(typeof pendingAnnouncementEdits==='function'&&pendingAnnouncementEdits(v))warnings.push({id:'unstaged-announcement',title:'Announcement has unstaged edits',text:'Preview and stage the message in Overview, or discard its edits. Only the staged message is included with your plan.',tab:'overview',target:'#bankAnnouncements'});
  if(p.workforce&&typeof workforceForm==='function'&&workforceForm(v).dirty)warnings.push({id:'unstaged-training',title:'Training form has unstaged edits',text:'Training and reserve entries are not yet in your monthly plan. Preview and stage them, or discard them.',tab:'workforce',target:'#workforcePanel'});
  if(p.commercialAccounts){
   const q=check('business-accounts','Review business account instructions','markets',null,'#commercialClientWorkspace',()=>E.commercialAccountReview(v,p,plan));
@@ -80,11 +91,16 @@ function monthlyPlanReview(v,plan=draft){
  return {blockers,warnings,quote,project,lifecycle,functions,unallocated};
 }
 function navigatePlanReview(item){
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(currentView()))return interfaceNavigate(item);
  if(typeof subjectRoute==='function')item=subjectRoute(item,currentView());
  if(item.customerDesk&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.customers=item.customerDesk;if(['relationships','onboarding'].includes(productDeskView))productDeskView='development';}
  if(item.productSubject&&typeof subjectIdentity==='function'){subjectIdentity(currentView());subjectWorkspace.products=item.productSubject;}
  setWorkspaceTab(item.tab);
- if(item.premisesOffice)inspectLifecycleOffice(item.premisesOffice);
+ if(['#facilityNetworkPanel','#facilityLifecyclePanel','#sharedPremisesDesk'].includes(item.target)||item.premisesOffice){
+  const v=currentView(),office=(v.me.facilityNetwork?.offices||[]).filter(o=>o.closedCycle===null);
+  if(item.target==='#facilityNetworkPanel'||!office.length){marketWorkspace.mode='compare';marketWorkspace.pending=null;renderMarketInspector(v);}
+  else {const selected=office.find(o=>o.id===(item.premisesOffice||lifecycleUi.office))||office[0];openMarketOffice(v,selected.id,item.target==='#sharedPremisesDesk'||item.premisesOffice?'services':'staff');}
+ }
  if(item.serviceId)inspectServiceAgreement(currentView(),item.serviceId);
  if(item.desk)setOperationsDesk(item.desk);
  if(item.groupDesk)setFinancialGroupDesk(item.groupDesk);
@@ -129,7 +145,7 @@ function monthlyChangeRows(v){
   if(JSON.stringify(before)===JSON.stringify(after)&&!(path.length===1&&path[0]==='newProjects'&&JSON.stringify(state.baseline.projectTargets)!==JSON.stringify(draft.projectTargets)))return;
   // Qualified role counts and total headcount are one validated instruction.
   // Undoing a single count would leave an impossible partly-restored team.
-  if(path.length===1&&(path[0]==='sharedPremisesPolicy'||path[0]==='investmentPolicy'||path[0]==='agencyPolicy'&&v.me.agency?.version===2)){rows.push({path,before,after});return;}
+  if(path.length===1&&(path[0]==='announcement'||path[0]==='sharedPremisesPolicy'||path[0]==='investmentPolicy'||path[0]==='agencyPolicy'&&v.me.agency?.version===2)){rows.push({path,before,after});return;}
   if(path.length===1&&path[0]==='newProjects'&&Array.isArray(before)&&Array.isArray(after)){
    for(const key of new Set([...before,...after]))if(before.includes(key)!==after.includes(key)||state.baseline.projectTargets?.[key]!==draft.projectTargets?.[key])rows.push({path:['newProjects',key],before:before.includes(key),after:after.includes(key),initiative:true});
    return;
@@ -143,6 +159,8 @@ function monthlyChangeRows(v){
  return rows.filter(row=>!['newProject','projectTargets'].includes(row.path[0]));
 }
 function monthlyChangeName(path){
+ if(path[0]==='treasuryPolicy')return 'Bank treasury';
+ if(path[0]==='announcement')return 'Bank announcement';
  if(path[0]==='sharedPremisesPolicy')return 'Shared office space and subsidiary time';
  if(path[0]==='companyShareOrders')return 'Company share orders';
  if(path[0]==='companyCreditOrders')return 'Company loan offers';
@@ -157,6 +175,7 @@ function monthlyChangeName(path){
 }
 function monthlyChangeValue(v,value,path){
  if(value===undefined||value===null||value==='none'||value==='')return 'None';
+ if(path[0]==='announcement')return E.BankAnnouncements.format(v.me,value);
  if(path[0]==='sharedPremisesPolicy'&&path.length===1){
   const build=value.build,office=build&&v.me.facilityNetwork.offices.find(o=>o.id===build.office),parts=[];
   if(build)parts.push(E.SharedPremises.CATALOG[build.kind].name+' at '+(v.territories[office?.market]?.name||build.office));
@@ -180,6 +199,8 @@ function monthlyChangeValue(v,value,path){
 }
 function monthlyChangeTiming(path){
   switch(path[0]){
+   case 'treasuryPolicy':return 'New investments and reinvestment follow this policy after month-end spending. Existing fixed holdings keep their coupons and maturities; early funding sales use market value.';
+   case 'announcement':return 'Published once at the start of next round’s results after both plans resolve. Public and Shareholders are audience labels; both players see the published message. No cost or gameplay effects.';
    case 'sharedPremisesPolicy':return 'One reviewed premises instruction. Fit-out uses bank cash and shared execution; qualified subsidiary time is moved from central work. Occupancy costs and rent settle once per month, with no new group profit.';
    case 'companyShareOrders':return 'One-month simultaneous auction. Existing parent cash reserves include fees and other group commitments. No immediate trade or guaranteed fill; company ownership does not award banking contracts.';
    case 'companyCreditOrders':return 'One-month loan offers reserve bank cash and shared underwriting capacity. Principal becomes a loan asset, not an expense. Competing offers can lose; funded loans persist with repayments, arrears and possible losses.';
