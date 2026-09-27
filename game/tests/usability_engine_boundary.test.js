@@ -363,6 +363,25 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // frozen references, historical goldens and architecture ceilings are unchanged.
 // Controlled profitability checks exclude shared research/payroll; no human
 // balance or physical multiplayer acceptance is inferred from this digest.
-const expected="e0fe959739a1387e3757564aa7de41415c0783cf6d73c2699504b7bc1e1bc90c";
+// September28 playtest follow-up. Stored bank logos may be 400 x 400 pixels and
+// 150 KB; the monthly deposit gain is written as three named terms with identical
+// arithmetic; and forecast-drivers.js adds a read-only Growth & limits forecast that
+// records those terms only while a forecast asks. Seeded Core8.20 and Expanded9.34
+// and9.39 campaigns replay identically against the 9.39 engine (e0fe9597) for five
+// months in Balanced and Rate. Scoped checks rerun: behavior-golden, runtime-stages,
+// determinism, campaign-lifecycle, bank_economics(+_ui), bank_rivalry,
+// expanded_edition(+_network), research_program(+_ui), research_bot,
+// research_delivery_expanded, build, engine, v31_version_boundary,
+// balance_sheet_lending, package_release, income_review(+_ui), core_loan_income_ui,
+// core_balance_sheet(+_ui), monetary_policy(+_ui,_network), expanded_business,
+// holding_capital, partner_cards, partner_card_economics, digital_commercial,
+// outside_funding, announcements, bank_logos, bank_logo_uploads, forecast_drivers,
+// interface_shell, interface_markets, interface_banking_group,
+// interface_people_strategy, operations_workspace, workspace_ownership,
+// usability_help, architecture(+_scope), docs, agency_legacy_compat,
+// agency_peer_compat, facility_lifecycle_quotes, facility_conversion_lifecycle,
+// department_runtime and department_ai_lending. No reference build, golden or
+// ceiling changed.
+const expected="8395b0c3a616bc122c41e3f78d64b1458d6c8cf41930f2725bf34ae6c48a623a";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
