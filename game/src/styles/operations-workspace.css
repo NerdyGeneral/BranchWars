@@ -5,3 +5,22 @@
 /* Section heads inside the combined monthly desk span the whole grid; as ordinary
    grid items they took a column and pushed the section beside them. */
 .operations-two-column>.operations-section-head,.operations-pane>.operations-section-head{grid-column:1/-1;margin:4px 0 0}
+/* One rhythm for every Operations desk: a titled section, then cards that meet
+   edge to edge and share a row's height. Two desks share the tab row equally. */
+.operations-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.operations-pane{display:grid;gap:14px;align-content:start}
+.operations-pane>.panel{margin:0}
+.operations-two-column{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.operations-section-head{grid-column:1/-1;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;margin:18px 0 0;padding:0 2px 7px;border-bottom:2px solid #d3e0ee}
+.operations-section-head h3{margin:0;font-size:.95rem;letter-spacing:.06em;color:#1b3a5c}
+.operations-section-head p{margin:0}
+#operationsPanel-funding>#bankProductsPanel,#operationsPanel-funding>#bankPricingPanel{grid-column:1/-1}
+.policy-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:10px}
+.policy-column{min-width:0;display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid #d3e0ee;border-radius:10px;background:#f8fbfe}
+.policy-column>h3{margin:0;font-size:.82rem;letter-spacing:.05em;color:#1b3a5c}
+.policy-column>p{margin:0}
+.policy-column .button-group{grid-template-columns:1fr;gap:8px}
+.policy-column .policy{text-align:left;padding:9px 11px;min-height:0}
+.operations-pane>.operations-section-head:first-child{margin-top:4px}
+#projectDeliveryStatus>h3,.project-workspace-heading h2{margin:0;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:#1b3a5c}
+@media(max-width:950px){.operations-two-column{grid-template-columns:1fr}}
