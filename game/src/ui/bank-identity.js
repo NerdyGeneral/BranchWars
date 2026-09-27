@@ -78,26 +78,38 @@ function removeBankLogo(key){
  if(key==='lobby'&&changed)lobbyDirty=true;
  refreshBankLogo(key);
 }
+// Any common image a player picks is decoded by the browser, scaled to fit the
+// stored logo bounds and re-encoded as a plain JPEG, discarding EXIF/location
+// metadata. SVG is refused: it is a document, not pixels.
+const BANK_LOGO_SOURCE=Object.freeze({bytes:10*1024*1024,side:12000,
+ types:Object.freeze({jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif'}),
+ qualities:Object.freeze([.9,.82,.74,.66,.58,.5])});
 async function readBankLogoFile(file){
- if(!/\.jpe?g$/i.test(file.name)||file.type&&file.type!=='image/jpeg')throw Error('Choose a .jpg or .jpeg image.');
- if(!file.size||file.size>E.BANK_LOGO_LIMITS.bytes)throw Error('Choose a JPG of 100 KB or less.');
+ const extension=String(file.name||'').toLowerCase().match(/\.([a-z]+)$/)?.[1],type=BANK_LOGO_SOURCE.types[extension];
+ if(!type||file.type&&!Object.values(BANK_LOGO_SOURCE.types).includes(file.type))throw Error('Choose a JPG, PNG, WebP or GIF image.');
+ if(!file.size||file.size>BANK_LOGO_SOURCE.bytes)throw Error('Choose an image of 10 MB or less.');
  const bytes=new Uint8Array(await file.arrayBuffer());
- if(bytes.length>E.BANK_LOGO_LIMITS.bytes)throw Error('Choose a JPG of 100 KB or less.');
- let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
- const source='data:image/jpeg;base64,'+btoa(binary),info=E.bankLogoInfo(source);
- if(!info)throw Error('Choose a valid JPG no larger than 200 × 200 pixels.');
+ if(!bytes.length||bytes.length>BANK_LOGO_SOURCE.bytes)throw Error('Choose an image of 10 MB or less.');
+ let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+32768));
+ const source='data:'+(file.type||type)+';base64,'+btoa(binary);
  const decoded=await new Promise((resolve,reject)=>{
-  const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('That JPG could not be opened. Try another image.'));img.src=source;
+  const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('That image could not be opened. Try another file.'));img.src=source;
  });
- const width=decoded.naturalWidth,height=decoded.naturalHeight;
- if(!width||!height||width>200||height>200)throw Error('Choose a JPG no larger than 200 × 200 pixels.');
- // Re-encode just the decoded pixels, discarding EXIF/location metadata.
+ const sourceWidth=decoded.naturalWidth,sourceHeight=decoded.naturalHeight;
+ if(!sourceWidth||!sourceHeight)throw Error('That image could not be opened. Try another file.');
+ if(sourceWidth>BANK_LOGO_SOURCE.side||sourceHeight>BANK_LOGO_SOURCE.side)throw Error('Choose an image under 12,000 pixels on each side.');
+ const scale=Math.min(1,E.BANK_LOGO_LIMITS.pixels/Math.max(sourceWidth,sourceHeight)),
+  width=Math.max(1,Math.round(sourceWidth*scale)),height=Math.max(1,Math.round(sourceHeight*scale));
  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
  const context=canvas.getContext('2d');if(!context)throw Error('Your browser could not prepare the logo. Try another browser.');
- context.drawImage(decoded,0,0);
- const jpeg=canvas.toDataURL('image/jpeg',.9);
- if(!E.bankLogoInfo(jpeg))throw Error('That logo could not be prepared within the 100 KB limit. Try a smaller JPG.');
- return {jpeg,width,height};
+ // JPEG has no transparency: a transparent PNG logo sits on white, not black.
+ context.fillStyle='#ffffff';context.fillRect(0,0,width,height);
+ context.drawImage(decoded,0,0,width,height);
+ for(const quality of BANK_LOGO_SOURCE.qualities){
+  const jpeg=canvas.toDataURL('image/jpeg',quality);
+  if(E.bankLogoInfo(jpeg))return {jpeg,width,height};
+ }
+ throw Error('That logo could not be compressed below '+E.BANK_LOGO_LIMITS.bytes/1024+' KB. Try a simpler image.');
 }
 async function uploadBankLogo(key,file){
  if(!bankLogoEditable(key))return;
@@ -110,13 +122,13 @@ async function uploadBankLogo(key,file){
   const result=await readBankLogoFile(file);
   if(!current())return;
   state.jpeg=result.jpeg;
-  $('#'+key+'LogoStatus').textContent='JPG ready · '+result.width+' × '+result.height+' pixels. '+(key==='lobby'?'Save identity to share it.':'Included when you start or join.');
+  $('#'+key+'LogoStatus').textContent='Logo ready · '+result.width+' × '+result.height+' pixels. '+(key==='lobby'?'Save identity to share it.':'Included when you start or join.');
   if(key==='lobby')lobbyDirty=true;
  }catch(error){if(current())$('#'+key+'LogoStatus').textContent=error.message;}
  finally{
   if(state.request===request){
    const stale=!current();state.busy=false;
-   if(stale)$('#'+key+'LogoStatus').textContent='Setup changed while the image was loading. Choose your JPG again.';
+   if(stale)$('#'+key+'LogoStatus').textContent='Setup changed while the image was loading. Choose your image again.';
    refreshBankLogo(key);
   }
  }

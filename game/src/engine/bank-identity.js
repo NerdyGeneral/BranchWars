@@ -1,7 +1,9 @@
 // Cosmetic identity only. Never consumes simulation randomness, changes rules,
 // or adds fields to campaigns that did not explicitly choose a logo.
 const BANK_CRESTS=Object.freeze({shield:'Shield',columns:'Pillars',diamond:'Diamond',roundel:'Roundel'});
-const BANK_LOGO_LIMITS=Object.freeze({pixels:200,bytes:100*1024});
+// Stored logo bounds. Uploads of any common image are scaled and re-encoded to
+// fit, so these limit what travels in saves and messages, not what players pick.
+const BANK_LOGO_LIMITS=Object.freeze({pixels:400,bytes:150*1024});
 // Validate the embedded format and dimensions without DOM/image decoders or RNG.
 // Uploads additionally pass through the browser decoder and a clean JPEG canvas.
 function bankLogoInfo(jpeg){
@@ -57,7 +59,7 @@ function validBankIdentity(identity){
   Object.hasOwn(BANK_CRESTS,identity.crest)&&typeof identity.monogram==='string'&&/^[A-Z0-9]{1,3}$/.test(identity.monogram);
 }
 function validateBankIdentity(identity){
- if(!validBankIdentity(identity))throw Error('Choose a bank crest and a monogram of one to three letters or numbers. Optional JPG logos must be valid JPEGs, at most 200 × 200 pixels and 100 KB.');
+ if(!validBankIdentity(identity))throw Error('Choose a bank crest and a monogram of one to three letters or numbers. Optional JPG logos must be valid JPEGs, at most '+BANK_LOGO_LIMITS.pixels+' × '+BANK_LOGO_LIMITS.pixels+' pixels and '+BANK_LOGO_LIMITS.bytes/1024+' KB.');
  return identity;
 }
 function bankIdentity(identity,name,seat=0){
