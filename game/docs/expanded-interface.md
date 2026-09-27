@@ -15,14 +15,14 @@ The later map/expansion/ticker follow-up restores original map art inside the
 canonical Markets inspector, adds the Summary score graph and cosmetic ticker,
 and keeps unopened subsidiaries behind their actual launch preparation.
 Trust is a locked future placeholder. Bank securities offers belong in Treasury;
-they do not require an owned brokerage. The [follow-up evidence](../reports/local/map-expansions-ticker-20260927/README.md)
+they do not require an owned brokerage. The follow-up evidence (local-only: `game/reports/local/map-expansions-ticker-20260927/README.md`)
 and current release-status entry identify that newer artifact. The full-rebuild
 receipts in the historical evidence section below retain their original hash.
 
 The subsequent research shortcut follow-up restores +$50k and Stage max beside
 the custom contribution and links Operating models to its capability's research.
 Both shortcuts explicitly stage engine-bounded funding in the shared draft.
-See [shortcut evidence](../reports/local/research-shortcuts-20260927/README.md)
+See shortcut evidence (local-only: `game/reports/local/research-shortcuts-20260927/README.md`)
 and release status for that artifact's verification.
 
 This document maps the implemented interface to its source and verification.
@@ -138,7 +138,7 @@ The final playable portable used for the receipts below has SHA-256
 `4fa6e7c4190033ddf2801017921c6973b45af6c5a11a55a3718ec3f71ffe4f7e`.
 The complete 300-command fast gate passed across all 16 canonical shards
 (315 invocations with repeated build checks). Every terminal receipt confirms
-identical source-input and portable hashes. The [verification summary](../reports/local/interface-rebuild-20260927/verification-summary.json)
+identical source-input and portable hashes. The verification summary (local-only: `game/reports/local/interface-rebuild-20260927/verification-summary.json`)
 records complete command coverage and checks the final current fingerprint.
 [Release status](release-status.md) retains the build identity and limits.
 This does not claim the separate full release/calibration gate passed.
@@ -156,10 +156,10 @@ the same portable hash and reports success with no browser page errors:
 
 | Receipt | Verified scope |
 | --- | --- |
-| [Main browser](../reports/local/interface-rebuild-20260927/browser/receipt.json) | 30 routed views, 59 layout checks and 29 screenshots. Actual setup, announcement working-text retention and explicit staging, once-only publication, three UI-submitted resolved months, campaign export/import and retained Core startup. |
-| [Focused workflows](../reports/local/interface-rebuild-20260927/browser-workflows-portable/receipt.json) | Five flows, six check groups and ten screenshots. Actual deposit pricing, People recruitment, research, office staffing/construction, scoped Review Edit/Remove, employer funding/staffing continuity and the hotseat privacy transition. Agency funding uses an engine-generated earned-dividend fixture. |
-| [Keyboard and focus](../reports/local/interface-rebuild-20260927/browser/keyboard-focus-receipt.json) | 45 keyboard/geometry checks at 1366, 1024 and 480 pixels. Enter opens selected inspectors; forward/reverse Tab stays unobscured; narrow Back returns to the record list; long-name headers and sticky-header clearance are measured. Includes CSS 125% focus stress. |
-| [Mature campaign](../reports/local/interface-rebuild-20260927/mature/browser-receipt.json) | 24 checks and six screenshots after actual UI import of a validated month-13 fixture. Three operating offices, a completed service room, funded operating subsidiaries, seven retained investment clients, paid research progress and non-default pricing. Valid room time requires explicit Update, excessive time is refused, Review/navigation retain edits, employer Return retains the room, and before/after UI exports preserve the settled campaign. |
+| Main browser (local-only: `game/reports/local/interface-rebuild-20260927/browser/receipt.json`) | 30 routed views, 59 layout checks and 29 screenshots. Actual setup, announcement working-text retention and explicit staging, once-only publication, three UI-submitted resolved months, campaign export/import and retained Core startup. |
+| Focused workflows (local-only: `game/reports/local/interface-rebuild-20260927/browser-workflows-portable/receipt.json`) | Five flows, six check groups and ten screenshots. Actual deposit pricing, People recruitment, research, office staffing/construction, scoped Review Edit/Remove, employer funding/staffing continuity and the hotseat privacy transition. Agency funding uses an engine-generated earned-dividend fixture. |
+| Keyboard and focus (local-only: `game/reports/local/interface-rebuild-20260927/browser/keyboard-focus-receipt.json`) | 45 keyboard/geometry checks at 1366, 1024 and 480 pixels. Enter opens selected inspectors; forward/reverse Tab stays unobscured; narrow Back returns to the record list; long-name headers and sticky-header clearance are measured. Includes CSS 125% focus stress. |
+| Mature campaign (local-only: `game/reports/local/interface-rebuild-20260927/mature/browser-receipt.json`) | 24 checks and six screenshots after actual UI import of a validated month-13 fixture. Three operating offices, a completed service room, funded operating subsidiaries, seven retained investment clients, paid research progress and non-default pricing. Valid room time requires explicit Update, excessive time is refused, Review/navigation retain edits, employer Return retains the room, and before/after UI exports preserve the settled campaign. |
 
 The main layout run samples 1920×1080, 1366×768, 1024×768 and 480×900. Its
 reported page widths match the viewports, and sampled routine routes have no
@@ -171,7 +171,7 @@ parent capital, followed by $1.5M of bank capitalization through the existing
 accounting API. Offices, the room, permissions and client relationships then
 arise through 12 controlled engine settlements, with ledger, pilot, migration
 and both-owner projection validation. It demonstrates mature UI paths, not
-ordinary-opening balance or AI strategy. The [mature evidence notes](../reports/local/interface-rebuild-20260927/mature/README.md)
+ordinary-opening balance or AI strategy. The mature evidence notes (local-only: `game/reports/local/interface-rebuild-20260927/mature/README.md`)
 record those limits and the earlier correctly refused underfunded-tenant case.
 
 These runs load the portable with Chromium `page.setContent`, use in-memory

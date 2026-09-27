@@ -157,7 +157,7 @@ acquisition victory. See [card integration specification](card-program-foundatio
   source/runtime recovery and rematch checks, plus independent ZIP extraction.
 - Final standard fast gate: **312 command entries passed** in fourteen shards,
   with unchanged source/build inputs and complete terminal receipts.
-- See the [local evidence ledger](../reports/local/digital-commercial-20260927/README.md).
+- See the local evidence ledger (local-only: `game/reports/local/digital-commercial-20260927/README.md`).
   Physical multiplayer and human balance/enjoyment remain unverified.
 
 Balance assumption: initial diagnostics priced research at $700K, placing the

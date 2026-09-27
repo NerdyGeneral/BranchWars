@@ -1,5 +1,17 @@
 # Release status and known issues
 
+## September 27 — 9.39 repository publication
+
+[PR #27](https://github.com/NerdyGeneral/BranchWars/pull/27) publishes the current
+9.39 game and source from the PR #26 baseline. The playable HTML is byte-identical
+to the tested local candidate. A [sanitized validation receipt](../reports/verification/expanded-9.39-local-validation.json)
+records the prior local checks; GitHub CI is a separate run and the PR remains
+subject to its checks and review. Earlier entries below record local milestone
+status at the time of completion. Raw local evidence, campaign snapshots and
+browser captures are deliberately not distributed; local-only paths are labeled
+as such. This repository update does not create a GitHub Release or establish
+full-release balance or physical multiplayer acceptance.
+
 ## September 27 — Partner-card balance pass (local 9.39 candidate)
 
 New Expanded campaigns use a $2,500 license, $100 monthly platform cost, $3
@@ -11,7 +23,7 @@ Old 9.38 campaigns retain their contract. [Rules and measured limits](partner-ca
 All 316 standard regression command entries passed on unchanged inputs,
 with 33 actual browser assertions, five final 36-month legal-plan replays,
 exact historical-contract replay, and package runtime / ZIP extraction checks.
-See [the evidence ledger](../reports/local/card-balance-20260927/README.md).
+See the evidence ledger (local-only: `game/reports/local/card-balance-20260927/README.md`).
 Nothing is published; human playtesting and physical two-computer acceptance
 remain separate.
 
@@ -28,7 +40,7 @@ Also passed: 29 actual browser assertions, the legal eighteen-month
 campaign replay, and package runtime / independent ZIP extraction checks.
 Human balance and physical two-computer acceptance remain unverified. Nothing is published.
 
-The [current local evidence](../reports/local/partner-cards-20260927/README.md)
+The current local evidence (local-only: `game/reports/local/partner-cards-20260927/README.md`)
 separates legal campaign playthroughs, adverse fixtures, actual browser checks
 and physical/human acceptance.
 
@@ -42,7 +54,7 @@ invoice collections from current-invoice payments. Engine bytes and save version
 are unchanged. All 312 standard fast-gate command entries passed against the final
 frozen build; package source/runtime and independent ZIP extraction checks also
 passed. See the
-[current evidence ledger](../reports/local/expanded-playtest-20260927-111150/README.md).
+current evidence ledger (local-only: `game/reports/local/expanded-playtest-20260927-111150/README.md`).
 The original 9.37 package below remains preserved. Physical peers and human balance
 acceptance remain unverified.
 
@@ -50,7 +62,7 @@ acceptance remain unverified.
 
 New Expanded campaigns now select **9.37**, retaining the completed 9.36 business consolidation. Five paid research nodes connect to the existing treasury platform and shared customer service book. Cedar Reserve Bank offers actual funded one-month advances. Historical campaigns retain their rules and paid work.
 
-See the [implementation and player walkthrough](digital-commercial-milestone.md), [card foundation specification](card-program-foundation.md), and [current evidence ledger](../reports/local/digital-commercial-20260927/README.md). All 312 standard fast-gate command entries and 44 isolated browser checks passed against the final build. Package source/runtime, recovery, rematch and ZIP extraction checks passed. Complete terminal receipts and hashes are recorded in that ledger. This is a local engineering candidate; physical multiplayer and human balance acceptance remain unverified.
+See the [implementation and player walkthrough](digital-commercial-milestone.md), [card foundation specification](card-program-foundation.md), and current evidence ledger (local-only: `game/reports/local/digital-commercial-20260927/README.md`). All 312 standard fast-gate command entries and 44 isolated browser checks passed against the final build. Package source/runtime, recovery, rematch and ZIP extraction checks passed. Complete terminal receipts and hashes are recorded in that ledger. This is a local engineering candidate; physical multiplayer and human balance acceptance remain unverified.
 
 
 ## September 27 — Expanded business consolidation (preserved 9.36 baseline)
@@ -86,7 +98,7 @@ fourteen shards with identical, unchanged inputs (321 executions include thirtee
 repeated build checks). The aggregate receipt verifies every command and terminal
 result against that preserved build. Those receipts do not certify 9.37.
 See [implementation and compatibility](expanded-consolidation.md) and
-[local evidence](../reports/local/expanded-consolidation-20260927/README.md).
+local evidence (local-only: `game/reports/local/expanded-consolidation-20260927/README.md`).
 
 Nothing is published. Native file-origin persistence, physical multiplayer peers,
 the full release balance gate and human gameplay acceptance remain separate.
@@ -107,7 +119,7 @@ All **18 targeted check commands passed** with stable inputs, including the
 checks** passed; desktop and 480px screenshots were visually inspected. The
 checks cover exact custom amounts, repeat increments, caps, invalid inputs,
 stale controls, context returns, unrelated plans, Review removal and unchanged
-simulation state. See [evidence](../reports/local/research-shortcuts-20260927/README.md).
+simulation state. See evidence (local-only: `game/reports/local/research-shortcuts-20260927/README.md`).
 The full fast/release gates were not rerun; prior receipts below certify their
 own builds. Native persistence, physical peers and human acceptance remain
 separate. Nothing is published.
@@ -151,7 +163,7 @@ captures. Actual monthly resolution changes the ticker, inspecting/preparing
 does not mutate saved books or RNG, and the updated agency workflow stages and
 removes its full launch from an earned-dividend fixture.
 
-See [follow-up evidence and screenshots](../reports/local/map-expansions-ticker-20260927/README.md)
+See follow-up evidence and screenshots (local-only: `game/reports/local/map-expansions-ticker-20260927/README.md`)
 and its `verification-summary.json`. The earlier 300-command gate below applies
 to the preceding rebuild; the full fast/full-release gates were not rerun for
 this presentation follow-up. Native launch, durable storage, native zoom,
@@ -206,7 +218,7 @@ time, employer navigation, retained working edits and unchanged settled books.
 Its synthetic initial capital is disclosed; this is mature-interface coverage,
 not ordinary-opening economic or balance acceptance.
 
-The [local delivery record](../reports/local/interface-rebuild-20260927/acceptance.md)
+The local delivery record (local-only: `game/reports/local/interface-rebuild-20260927/acceptance.md`)
 links inventories, screenshots and detailed receipts. Browser runs use isolated
 Chromium, generated HTML, blocked external requests and in-memory storage. Native
 file launch, autosave/Continue after a restart, native browser zoom, physical

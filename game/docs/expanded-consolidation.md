@@ -59,7 +59,7 @@ legacy replay, setup/rematch and AI boundaries. The rebuilt portable passed
 54 isolated browser checks, including real planning and hotseat settlement.
 Focused cases also cover a 20-client service list, funded ownership, voluntary
 sales, sponsorship commitments and exact saved-rule replay. See the
-[verification record](../reports/local/expanded-consolidation-20260927/README.md).
+verification record (local-only: `game/reports/local/expanded-consolidation-20260927/README.md`).
 These checks do not establish native autosave, physical peer reliability, human
 balance acceptance or publication readiness.
 

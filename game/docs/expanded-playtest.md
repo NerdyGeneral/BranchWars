@@ -91,6 +91,6 @@ unchanged in this presentation-only pass.
 
 ## Evidence
 
-See [the local evidence ledger](../reports/local/expanded-playtest-20260927-111150/README.md)
+See the local evidence ledger (local-only: `game/reports/local/expanded-playtest-20260927-111150/README.md`)
 for final hashes, the standard regression gate, focused receipts and screenshots.
 Diagnostic saves and reports stay outside the distribution package.
