@@ -32,7 +32,11 @@ E.createGame = options => createWithFundingRules({ ...options, fundingRulesVersi
 assert.equal(Object.keys(E.TERRITORIES).length, 12);
 assert.equal(E.SCOPES.national.cycles, undefined, 'campaign scopes must not carry a cycle limit');
 assert.equal(E.CAMPAIGN_ACTS.length, 3);
-assert.equal(Object.values(E.PROJECTS).filter(p=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly&&!p.institutionOnlyVersion).length, 18);
+// Expanded 9.36 adds the two shared digital-platform routes and corrective action;
+// the eighteen earlier standard projects are unchanged.
+const standardProjects=Object.entries(E.PROJECTS).filter(([,p])=>!p.regionalOnly&&!p.deploymentProduct&&!p.contractOnly&&!p.serviceOnly&&!p.programOnly&&!p.institutionOnlyVersion).map(([k])=>k);
+assert.equal(standardProjects.length, 21);
+assert.deepEqual(['buildDigitalPlatform','correctiveAction','licenseDigitalPlatform'].filter(k=>standardProjects.includes(k)), ['buildDigitalPlatform','correctiveAction','licenseDigitalPlatform']);
 assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.institutionOnlyVersion).map(([k])=>k)).sort(), ['branchAtm','branchFinancialCenter','branchRegionalHub','branchWealth']);
 assert.deepEqual(Array.from(Object.entries(E.PROJECTS).filter(([,p])=>p.programOnly).map(([k])=>k)).sort(), ['licenseHighYield','licenseRewards']);
 assert.equal(Object.values(E.PROJECTS).filter(p=>p.serviceOnly).length, 3);
