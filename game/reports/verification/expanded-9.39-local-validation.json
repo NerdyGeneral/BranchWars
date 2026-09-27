@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "version": "9.39",
+  "completed": "2026-09-27T20:21:15.170Z",
+  "portableSha256": "3cefe98536edce84b125c12bd2ace1f59348d2512c60e5a9003d99a267be4406",
+  "engineSha256": "e0fe959739a1387e3757564aa7de41415c0783cf6d73c2699504b7bc1e1bc90c",
+  "localFastGate": {
+    "passed": true,
+    "commandEntries": 316,
+    "executions": 329,
+    "shards": 14,
+    "sourceUnchanged": true,
+    "inputsSha256": "982f20b8eff3893fa8b11baef4408e7ff41c1f0622d7927c1f764c8f36343a7e"
+  },
+  "browserChecks": 33,
+  "legalCampaignReplays": 5,
+  "monthsEach": 36,
+  "cases": [
+    {
+      "strategy": "conservative",
+      "seed": "alpha",
+      "seat": 0,
+      "live": 29,
+      "total": 4854,
+      "lastContribution": 568,
+      "breakEven": 26,
+      "fees": 12145,
+      "costs": 7291,
+      "chargeoffs": 20033,
+      "lowCoverageMonths": 0
+    },
+    {
+      "strategy": "aggressive",
+      "seed": "alpha",
+      "seat": 0,
+      "live": 40,
+      "total": 13392,
+      "lastContribution": 803,
+      "breakEven": 19,
+      "fees": 27552,
+      "costs": 14160,
+      "chargeoffs": 45789,
+      "lowCoverageMonths": 0
+    },
+    {
+      "strategy": "conservative",
+      "seed": "beta",
+      "seat": 1,
+      "live": 29,
+      "total": 4854,
+      "lastContribution": 568,
+      "breakEven": 26,
+      "fees": 12145,
+      "costs": 7291,
+      "chargeoffs": 20033,
+      "lowCoverageMonths": 0
+    },
+    {
+      "strategy": "aggressive",
+      "seed": "beta",
+      "seat": 1,
+      "live": 40,
+      "total": 13392,
+      "lastContribution": 803,
+      "breakEven": 19,
+      "fees": 27552,
+      "costs": 14160,
+      "chargeoffs": 45789,
+      "lowCoverageMonths": 0
+    },
+    {
+      "strategy": "wasteful",
+      "seed": "gamma",
+      "seat": 0,
+      "live": 40,
+      "total": -13395,
+      "lastContribution": -205,
+      "breakEven": null,
+      "fees": 28903,
+      "costs": 42298,
+      "chargeoffs": 45789,
+      "lowCoverageMonths": 0
+    }
+  ],
+  "limits": [
+    "Contribution excludes common research, shared payroll and overhead.",
+    "Card schedules are deterministic: repeated world seeds are not independent customer samples.",
+    "Loopback browser checks are not physical two-computer or human gameplay acceptance."
+  ],
+  "publicationCheck": {
+    "source": "Current local 9.39 working files",
+    "comparison": "Identical playable HTML bytes; source and test contents match after CRLF-to-LF normalization",
+    "baseCommit": "a61f07488d817084df1c25f16ddeff8c21e1965e",
+    "excluded": "Local saves, diagnostic dumps, browser captures and design-only conversation artifacts"
+  },
+  "scope": "Historical local fast-gate and focused browser/campaign evidence for these game bytes. GitHub CI is a separate run; full release balance and physical multiplayer acceptance remain unverified."
+}

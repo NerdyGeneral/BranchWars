@@ -54,7 +54,7 @@ function groupDevelopmentReview(v,input){
  // Stop initiating discretionary capital consumption while saving for a chosen
  // business. Existing projects, hires, service work and risk remediation stay.
  plan.investments={};
- plan.newProjects=planInitiatives(plan).filter(key=>key==='remediation');
+ plan.newProjects=planInitiatives(plan).filter(key=>key==='remediation'||DigitalCommercial.enabled(p)&&key==='buildTreasuryDesk'&&DigitalCommercial.combined(p));
  plan.newProject=plan.newProjects[0]||null;
  if(plan.projectTargets)plan.projectTargets=Object.fromEntries(Object.entries(plan.projectTargets).filter(([key])=>plan.newProjects.includes(key)));
  if(plan.facilityExtensionPolicy)plan.facilityExtensionPolicy={...plan.facilityExtensionPolicy,start:null};
@@ -64,3 +64,4 @@ function planGroupDevelopment(g,index,plan){
  if(g.companySharesVersion!==1)return plan;
  return groupDevelopmentReview(root.BWEngine.publicState(g,index),plan).plan;
 }
+

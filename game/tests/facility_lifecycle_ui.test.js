@@ -53,8 +53,8 @@ run(read('src/ui/facility-lifecycle.js')+'\n'+read('src/ui/facility-extensions.j
 // phase counters or history. Off maintenance loses180bp/month:25months ->55%.
 run("for(let month=0;month<25;month++){const plans=game.players.map(p=>{const plan=FacilityLifecycle.defaultPlan(p);for(const row of Object.values(plan.offices))row.maintenance='off';return plan;});closeFixtureMonth(plans);}draft.facilityLifecyclePolicy=E.defaultFacilityLifecyclePlan(game.players[0]);renderFacilityLifecycle(currentView());");
 const panel=element('#facilityLifecyclePanel'),state=()=>run('JSON.stringify(game)'),plan=()=>run('JSON.stringify(draft)'),initial=state(),original=plan();
-assert.match(panel.innerHTML,/OFFICE CONDITION &amp; STAFFING/);assert.match(panel.innerHTML,/55.0%/);assert.match(panel.innerHTML,/1.80 points wear last month/);
-assert.match(panel.innerHTML,/four quarters = one banker/);assert.match(panel.innerHTML,/Deferred|deferred wear/);assert.match(panel.innerHTML,/bank:0:office:1/);
+assert.match(panel.innerHTML,/Office condition &amp; staffing/);assert.match(panel.innerHTML,/55.0%/);assert.match(panel.innerHTML,/1.80 points wear last month/);
+assert.match(panel.innerHTML,/A 0.25 step assigns 25% of an employee’s month/);assert.match(panel.innerHTML,/Deferred|deferred wear/);assert.match(panel.innerHTML,/bank:0:office:1/);
 assert(!panel.innerHTML.includes('NEVER-RENDER-RIVAL'));assert.equal(state(),initial);assert.equal(plan(),original);
 // UI speaks in employee-months; authoritative saves still use integer quarters.
 element('#lifecycleStaff-service').value='0.75';
@@ -104,16 +104,17 @@ run('game.gameOver=false;');
 run("seat=1;draftOwner=game.players[1].id;draft={facilityLifecyclePolicy:E.defaultFacilityLifecyclePlan(game.players[1])};renderFacilityLifecycle(currentView());");
 assert.equal(run('lifecycleUi.owner'),'bank:1');assert(!panel.innerHTML.includes('bank:0:office:1'));
 run('delete game.players[1].facilityLifecycle;renderFacilityLifecycle(currentView());');assert.equal(panel.innerHTML,'');
-// Actual Group5 creation, API projection, canonical draft and Markets hooks.
-// The previous detailed wear/renovation cases remain labeled domain fixtures.
-if(!process.argv.includes('--source'))process.argv.push('--source');
+// Actual Group5 creation, API projection, canonical draft and the retained
+// standalone legacy lifecycle component. Expanded Markets has a new canonical
+// renderer, exercised separately below rather than requiring hidden old panels.
+if(!process.argv.includes('--portable')&&!process.argv.includes('--source'))process.argv.push('--source');
 const integrated=require('./github_resilience.test.js').harness();
-integrated.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;game=E.createGame({...options,mode:'hotseat',seed:'lifecycle-source-ui',created:1});seat=0;newDraft(currentView());renderReady=()=>{};workspaceTab='markets';renderMarkets(currentView());");
+integrated.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:5}).options;game=E.createGame({...options,mode:'hotseat',seed:'lifecycle-source-ui',created:1});seat=0;newDraft(currentView());renderReady=()=>{};renderFacilityLifecycle(currentView());renderFacilityNetwork(currentView());");
 assert.equal(integrated.run('game.version'),'9.4');assert.equal(integrated.run('game.financialGroupVersion'),5);
 assert.equal(integrated.run('currentView().me.facilityNetwork.version'),2);
 assert.equal(integrated.run('!!currentView().me.facilityLifecycle'),true);
 assert.equal(integrated.run('JSON.stringify(draft.facilityLifecyclePolicy)'),integrated.run('JSON.stringify(E.defaultFacilityLifecyclePlan(currentView().me))'));
-assert.match(integrated.elements.get('#facilityLifecyclePanel').innerHTML,/OFFICE CONDITION &amp; STAFFING/);
+assert.match(integrated.elements.get('#facilityLifecyclePanel').innerHTML,/Office condition &amp; staffing/);
 assert.match(integrated.elements.get('#facilityNetworkPanel').innerHTML,/ATM \/ micro service point/);
 const actualState=integrated.run('JSON.stringify(game)');
 assert(integrated.run('stageFacilityLifecycle(currentView(),draft.facilityLifecyclePolicy)'));
@@ -134,7 +135,7 @@ integrated.run(`hydrateHealthyOfficeControls();$('#lifecycleMaintenance').value=
 assert.equal(integrated.run('draft.facilityLifecyclePolicy.offices[lifecycleUi.office].maintenance'),'off');
 assert.equal(integrated.run('draft.facilityLifecyclePolicy.renovate'),null);
 assert.equal(integrated.run('JSON.stringify(game)'),actualState,'Clear, replacement preview and staging remain non-authoritative.');
-integrated.run('seat=1;newDraft(currentView());renderMarkets(currentView());');assert.equal(integrated.run('lifecycleUi.owner'),integrated.run('game.players[1].id'));
+integrated.run('seat=1;newDraft(currentView());renderFacilityLifecycle(currentView());');assert.equal(integrated.run('lifecycleUi.owner'),integrated.run('game.players[1].id'));
 assert.equal(integrated.run('currentView().rival.facilityLifecycle'),undefined);
 // Actual engine reserve/teaching rules and real readiness renderer. Specialist
 // qualification below is an explicit within-headcount fixture, not earned AI.
@@ -144,6 +145,9 @@ budgetUi.run(`const options=E.previewFeatureSelection({}, {field:'financialGroup
  game.event=JSON.parse(JSON.stringify(E.EVENTS.find(e=>e.key==='quiet')));
  game.players[0].workforce.departments.business.count=2;game.players[0].workforce.departments.business.skill=20;
  game.players[0].allocation={service:3,business:3,lending:1,operations:1};E.validatePilot(game);newDraft(currentView());draft.decision='b';
+ // Test actual Expanded readiness/validation with only the full-shell drawing
+ // stubbed; the minimal component DOM cannot represent its nine workspaces.
+ renderExpandedInterface=()=>{};
  renderOperatingPreview=()=>{};renderWorkforce=()=>{};renderProductPrograms=()=>{};renderPipeline=()=>{};
  function hydrateLifecycleControls(){const row=lifecycleUi.form.offices[lifecycleUi.office];$('#lifecycleMaintenance').value=row.maintenance;$('#lifecycleHub').value=row.hubId||'';for(const role of E.FacilityLifecycle.ROLES)$('#lifecycleStaff-'+role).value=String(row.staffQuarters[role]/4);}
  renderFacilityLifecycle(currentView());const businessBefore=E.lifecycleInstructionQuote(currentView(),currentView().me,draft).availableStaffQuarters.business;
@@ -180,8 +184,16 @@ budgetUi.run('draft.facilityLifecyclePolicy=validLifecycle;renderReady(currentVi
 budgetUi.run('draft.decision=null;renderReady(currentView());');assert.equal(budgetUi.elements.get('#readyBtn').disabled,true,'Lifecycle affordability does not bypass a required executive decision.');
 // Feature-off legacy harnesses do not need the new renderer or new exports.
 const legacy=require('./github_resilience.test.js').harness();
-legacy.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options;game=E.createGame({...options,mode:'hotseat',seed:'lifecycle-disabled-ui',created:1});seat=0;newDraft(currentView());renderFacilityLifecycle=undefined;renderMarkets(currentView());setWorkspaceTab('markets');");
+legacy.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options;game=E.createGame({...options,mode:'hotseat',seed:'lifecycle-disabled-ui',created:1});seat=0;newDraft(currentView());expandedInterfaceEnabled=()=>false;renderFacilityLifecycle=undefined;renderMarkets(currentView());setWorkspaceTab('markets');");
 assert.equal(legacy.run('draft.facilityLifecyclePolicy'),undefined);
 assert.equal(legacy.elements.get('#facilityLifecyclePanel').innerHTML,'');
 assert(!legacy.elements.get('#facilityNetworkPanel').innerHTML.includes('ATM / micro service point'));
-console.log('Facility lifecycle source UI PASS: real Group5 creation/public view/default draft/Markets hooks, versioned models, paid teaching pool, protected-reserve versus no-spend readiness, blocked-reason display, pure staffing repair previews, month reset and feature-off legacy; domain fixtures verify sequential wear, paired paid renovation, staff/hub/license boundaries and stale/sealed/cancel guards. Complete campaign, transport and browser acceptance remain separate.');
+// Canonical Expanded Markets integration: real Group5 engine, the one draft,
+// self-sufficient focused forms, no dependence on the hidden legacy panel.
+const modern=require('./interface_markets_harness').fresh({version:5}),modernState=modern.run('JSON.stringify(game)');
+modern.go('maintenance');assert.match(modern.c.imMount.innerHTML,/Maintenance/);assert.doesNotMatch(modern.c.imMount.innerHTML,/This selection is unavailable/);
+modern.go('staff');assert.match(modern.c.imMount.innerHTML,/whole people/);assert(modern.c.imMount.querySelectorAll('[data-im-field]').length>0);
+modern.go('renovate');assert.match(modern.c.imMount.innerHTML,/Choose a worn operating office|condition/i);
+assert.equal(modern.run('JSON.stringify(game)'),modernState,'Canonical office inspections do not mutate engine state.');
+assert.equal(modern.run('currentView().rival.facilityLifecycle'),undefined);
+console.log('Facility lifecycle UI PASS: real Group5 canonical Markets forms and private projection; retained standalone legacy component; paid teaching pool, protected-reserve versus no-spend Expanded readiness, blocked-reason display, pure previews and feature-off compatibility. Domain fixtures verify wear, paid renovation, staff/hub/license and stale/sealed/cancel guards. Browser acceptance remains separate.');

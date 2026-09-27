@@ -76,8 +76,8 @@ const DepartmentFunctionContext = (() => {
       onboarding:sources.householdDemandFte*4+pending/ONBOARDING_CAPACITY*4+intakeProspecting+sources.contractLoad/2*4,
       credit:creditWork?creditWork.workload:loans/10000000*4+sources.loanVintages/48,
       collections:sources.latePrincipal/1000000*4,
-      technology:sources.depositVintages/24+activeProducts*2+activeApplications*2+offices/4,
-      risk:loans/20000000+deposits/40000000+sources.riskPoints/100,
+      technology:DigitalCommercial.technology(p,sources.depositVintages/24)+activeProducts*2+activeApplications*2+offices/4+ExpandedBusiness.technologyWork(p)+PartnerCards.workload(p),
+      risk:loans/20000000+deposits/40000000+sources.riskPoints/100+PartnerCards.workload(p),
       treasury:deposits/40000000*2+sources.emergencyDebt/1000000*4+termVintages/48,
       people:p.stats.staff/8+sources.paidTrainingRoles};
     const workloads=Object.fromEntries(DepartmentFunctions.IDS.map(id=>[id,Math.ceil(raw[id])]));

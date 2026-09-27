@@ -8,23 +8,23 @@ function settleCompanyControl(g,plans){
   for(const [j,d]of p.companyControl.deals.entries()){
    if(d.offer.id===policy[i].cancel)p.companyControl.deals[j]=CompanyControlSettlement.cancel(d);
    if(d.status==='closed'){
-    const paid=CompanyControlSettlement.serviceDebt(p.financialGroup.parent,m.lender,d.loan,g.cycle,companyShareParentReserve(plans[i]));
+    const paid=CompanyControlSettlement.serviceDebt(p.financialGroup.parent,m.lender,d.loan,g.cycle,companyShareParentReserve(plans[i],g));
     p.financialGroup.parent=paid.parent;m.lender=paid.lender;d.loan=paid.loan;
     if(paid.arrears)lines.push(p.name+' has unpaid acquisition debt service. Parent obligations remain due; customer assets are not used.');
    }
   }
-  if(policy[i].diligence){const paid=CompanyControl.startDiligence(p.financialGroup.parent,m.provider,companyControlCompany(g,policy[i].diligence),g.cycle,companyShareParentReserve(plans[i]));p.financialGroup.parent=paid.parent;m.provider=paid.provider;m.expenses+=paid.record.fee;p.companyControl.diligence[paid.record.issuer]=paid.record;lines.push(p.name+' commissioned company diligence; the paid review becomes usable next month.');}
+  if(policy[i].diligence){const paid=CompanyControl.startDiligence(p.financialGroup.parent,m.provider,companyControlCompany(g,policy[i].diligence),g.cycle,companyShareParentReserve(plans[i],g));p.financialGroup.parent=paid.parent;m.provider=paid.provider;m.expenses+=paid.record.fee;p.companyControl.diligence[paid.record.issuer]=paid.record;lines.push(p.name+' commissioned company diligence; the paid review becomes usable next month.');}
  }
  for(const [i,p]of g.players.entries())if(policy[i].defend){
   const owner=g.players.find(b=>b.companyControl.deals.some(d=>d.offer.id===policy[i].defend)),index=owner.companyControl.deals.findIndex(d=>d.offer.id===policy[i].defend),d=owner.companyControl.deals[index];
-  const paid=CompanyControlSettlement.defend(d,p.financialGroup.parent,m.provider,companyControlCompany(g,d.offer.issuer),p.companyShares.positions[d.offer.issuer].shares,g.cycle,companyShareParentReserve(plans[i]));
+  const paid=CompanyControlSettlement.defend(d,p.financialGroup.parent,m.provider,companyControlCompany(g,d.offer.issuer),p.companyShares.positions[d.offer.issuer].shares,g.cycle,companyShareParentReserve(plans[i],g));
   owner.companyControl.deals[index]=paid.record;p.financialGroup.parent=paid.parent;m.provider=paid.provider;m.expenses+=paid.fee;lines.push(p.name+' funded a one-month independent review delay. No shares were diluted.');
  }
  const ids=market.issuers.map(i=>i.id).sort(),rotation=g.cycle%ids.length;
  for(const issuer of ids.slice(rotation).concat(ids.slice(0,rotation))){
   const eligible=[];
   for(const [index,p]of g.players.entries())for(const d of p.companyControl.deals.filter(d=>d.status==='review'&&d.offer.issuer===issuer&&d.reviewMonth<=g.cycle)){
-   const postPaymentPlan={...plans[index],companyShareOrders:[],companyControlPolicy:{...policy[index],diligence:null,defend:null,offer:null}},reserved=companyShareParentReserve(postPaymentPlan)+companyControlReserve(p,postPaymentPlan,g,{exclude:d.offer.id});
+   const postPaymentPlan={...plans[index],companyShareOrders:[],companyControlPolicy:{...policy[index],diligence:null,defend:null,offer:null}},reserved=companyShareParentReserve(postPaymentPlan,g)+companyControlReserve(p,postPaymentPlan,g,{exclude:d.offer.id});
    const consents=policy.flatMap(p=>p.consents).filter(c=>c.offerId===d.offer.id),context=companyControlContext(g,p,issuer,reserved,consents);
    try{eligible.push({offer:d.offer,quote:CompanyControl.review(context,d.offer,d.diligence),record:d,context,player:p});}
    catch(error){d.status='cancelled';lines.push(p.name+' control offer cancelled at review: '+error.message);}
@@ -43,7 +43,7 @@ function settleCompanyControl(g,plans){
  }
  for(const [i,p]of g.players.entries())if(policy[i].offer){
   const order=companyControlOrder(g,p,policy[i].offer),withoutNew={...plans[i],companyShareOrders:[],companyControlPolicy:{...policy[i],diligence:null,defend:null,offer:null}};
-  const context=companyControlContext(g,p,order.issuer,companyShareParentReserve(withoutNew)+companyControlReserve(p,withoutNew,g));
+  const context=companyControlContext(g,p,order.issuer,companyShareParentReserve(withoutNew,g)+companyControlReserve(p,withoutNew,g));
   try{p.companyControl.deals.push(CompanyControlSettlement.pending(context,order,p.companyControl.diligence[order.issuer]));lines.push(p.name+' submitted a reviewed company control offer. It cannot close before next month.');}
   catch(error){lines.push(p.name+' could not submit its control offer after current settlements: '+error.message);}
  }

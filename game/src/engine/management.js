@@ -13,7 +13,7 @@ function clientBidAdjustment(p,c){
  const f=clientProfile(c);if(!p.management||!f)return 0;
  if(f.priority==='price')return SERVICE_PRICING[p.serviceDesk.policy.pricing[c.kind]].power;
  if(f.priority==='controls')return Math.min(2,strategyLevel(p,'operations'));
- const load=serviceLoad(p),demand=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0)+SERVICE_TYPES[c.kind].load;
+ const load=serviceLoad(p),demand=load.rows.filter(x=>x.id!==c.id).reduce((n,x)=>n+x.load,0)+DigitalCommercial.load(p,c.kind);
  return (load.staff+specialistBusinessBonus(p,true))*2>=demand?2:0;
 }
 function initializeManagement(g,o){

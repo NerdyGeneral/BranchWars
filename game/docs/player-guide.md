@@ -1,43 +1,154 @@
 # Branch Wars — Player Guide
 
-Executive Command · Living Bank working build
+For new Expanded 9.37, see the [research-to-customer walkthrough and one-month outside funding terms](digital-commercial-milestone.md#player-walkthrough). Custom research funding, Add $50k and Stage max all use the shared Review draft. Existing saves keep their original rules.
 
-## V4 workflow playtest · September 14
+Executive Command · Expanded interface working candidate · September 27, 2026
+
+New games use **Core 8.20** or **Expanded 9.36**. The latest Expanded business
+update adds campaigns, sponsorships, shared digital delivery and holding-company
+share transactions. Existing saves and rematches keep
+their saved rules. The current Expanded navigation below supersedes older UI
+paths in the version-specific reference sections later in this guide; Core keeps
+its retained controls. See [Expanded interface](expanded-interface.md) for the
+implementation and scoped validation evidence.
+
+## Expanded business update
+
+**Strategy → Campaigns** contains one regular targeted or general campaign and
+one sponsorship. Choose a monthly budget, pause it, or review the community and
+Nan Santonio Burs offers. All served markets divides one budget. Advertising
+builds awareness; product fit, customer choice and service capacity still matter.
+Review month shows regular advertising, the sponsorship payment, future payments
+and its end month. Sports contracts cost $30,000 monthly for six months, with
+cancellation capped at two remaining installments; the community package is
+$15,000 for one month. Neither guarantees profit.
+
+**Banking → Business services** starts with Payroll, Merchant services and
+Corporate treasury. Choose a service to manage setup, price, shared delivery or
+clients. View clients has Prospects, Active and Renewals filters plus search.
+Quotes and the latest earned whole-book results are labelled separately; the
+game does not invent a service-specific cash-income or shared-cost allocation.
+Household opportunities live in Deposits.
+
+The **Shared digital platform** is built once ($220,000; three months of full
+project delivery) or licensed ($90,000; one month, then $12,000 per operating
+month). It uses central customer and technology staff; market demand and sales
+determine adoption. Studios remain optional physical premises. Completing an
+internal replacement ends a license's recurring vendor fee.
+
+**Financial Group → Holding-company ownership** lets you issue shares, buy or
+sell rival holdings, and repurchase shares for retirement. Use the displayed
+current quote and price limit. Trades use parent cash and funded outside
+investors; human holders only sell through explicit orders. Issuance dilutes
+ownership, founder control stays at least 51%, and partial or zero fills are
+possible. Parent cash, equity and ownership comparisons appear before staging.
+The bank's score ticker remains illustrative; it does not set trading prices.
+**Sell securities from bank portfolio** remains a separate Treasury asset sale.
+
+New Expanded retires Legacy initiatives, including their AI and submission
+routes. Advertising belongs in Campaigns, technology and analytics in Research
+and deployed capabilities, training in People, physical improvements in Markets,
+and corrective risk work in Treasury recovery. Existing saves retain paid work
+and earned benefits; new economic rules require a new 9.36 campaign.
+
+## Federal Funds in new Expanded campaigns
+
+In **Banking → Treasury**, use the Federal Funds rate desk to compare hypothetical rate moves against
+your own bank. The shared Fed rate changes before planning on scheduled decision
+months. A rise can improve liquid-investment income while increasing deposit and
+borrowing costs; old fixed loans and investments keep their coupons.
+
+Choose **Liquid**, **Balanced** or **Longer fixed**, then review and stage the
+investment policy. Existing fixed holdings keep their terms. Their value can fall
+when market yields rise, producing a loss if the bank must sell early. Maturity
+returns principal at par; it is not profit. The desk separates interest income,
+estimated sale value and upcoming maturities. Changing a scenario stages nothing.
+
+These rules require **Expanded 9.35 or later** and an updated file on both
+computers. Core and saved campaigns retain their original economics.
+
+## Expanded interface · planning your month
 
 ### Where to manage your bank
 
-- **People:** bank-wide employee allocation and persistent staffing policy.
-  Department coverage and individual offices still use the same finite staff.
-- **Customers:** Households, Businesses & opportunities, and Applications &
-  relationship offers. Inspect a client and pursue its actual service agreement.
-- **Products:** Product catalogue, Pricing & bank policies, Advertising and Deposit statements.
-  Loan/deposit pricing and capital policy live here; application delivery is in
-  Customers. Pricing shortcuts open the relevant editor, not a hidden subtab.
-- **Markets:** select the location to build, convert, upgrade or staff an office.
-  Local business links open that client's relationship inspector. Selecting a
-  client does not itself submit a bid or retarget your plan.
-- **Operations:** review this month and manage project execution. Its staffing
-  shortcut leads to People; Expanded bank pricing is in Products. Core keeps its
-  simpler original controls.
+| Home | What belongs here |
+| --- | --- |
+| **This month** | Last recorded results, required decisions, current warnings, your executive decision, announcement and next-month events. |
+| **Markets** | Select a market on the map, inspect its conditions and owned offices, then build or manage that exact office in the same panel. Office staff time, maintenance, renovations, conversion, commercial suites and shared rooms stay here. Compare offices is a secondary bank-wide view. |
+| **Banking** | Deposits, Lending, Business services and Treasury. Choose a product to edit its actual terms or delivery; choose a portfolio to view its real book. Customer offers, applications, agreements and company loans have their own selected subjects. |
+| **People** | Staff, Recruitment, Training, Work coverage and Leadership. Select the employer when managing bank, agency or investment employees. The same finite people and qualifications support office, service and central work. |
+| **Strategy** | Research, Operating models, Campaigns and Mandates. Historical campaigns retain their initiative controls. Selecting a market campaign does not silently change focus or stage advertising. |
+| **Financial Group** | Parent & bank capital, Holding-company ownership, Insurance agency, Investment business and Companies. Subsidiary money, client assets and bank cash remain distinct. |
 
-These screens share one draft. Moving between them does not commit spending.
-Only the selected subject's controls are shown; there is no need to open every
-policy each month. The monthly review can still open the relevant editor inline.
+**Reports** holds read-only statements, forecasts, balances, portfolios, deposit
+and lending records, operating capacity and public rival information. **Review
+month** shows the shared plan, costs, blockers, warnings and working edits that
+have not been added. **Save & help** contains campaign export, connection recovery,
+exit and the reference guide. These are supporting destinations, not extra
+banking policies to maintain.
 
-New Expanded campaigns (save 9.34) use persistent rivalry. Market dominance and a score
-lead no longer award automatic bank control or stop play. Receivership and
-unresolved funding-covenant failure remain possible; company acquisitions still
-require the existing funded decisions.
-Older saves and their rematches retain their original ending rules; importing
-one does not convert it. Both computers need a build supporting the new rule
-to start or resume 9.34 together. No additional setup checkbox is required.
+Choose a subject, edit visible controls, inspect the engine's quote, then use
+**Add** or **Update** to put that instruction into the monthly plan. Navigating
+or returning keeps working edits without adding them. **Discard working edits**
+restores that editor's staged values. Removing a planned change in Review month
+restores its opening monthly value; it does not close an existing office or
+cancel all of its ongoing obligations. Read the action's quoted consequence.
 
-Expanded 9.34 also lets your Lending bankers lend part of the gap between your loan
-book and 80% of deposits, beyond what your offices can originate. Spare cash, credit
-staff and credit administration still limit it. Credit shows what it adds each month;
-in Help, search *balance-sheet lending*. A 9.33 save keeps its old lending rules.
+Contextual shortcuts include a return path to the original subject. Selecting a
+market or office only inspects it; changing monthly focus is an explicit action.
+Bank-wide reports cannot edit a second copy of your policies. A quiet month is
+valid: answer the required decision, review relevant exceptions and become Ready
+without reopening every standing policy.
+
+In **Strategy → Research**, keep an exact custom contribution or use **+$50k**
+and **Stage max**. The shortcuts explicitly stage funding: +$50k starts from the
+amount currently in the field, while Stage max replaces it with the largest
+allowed contribution. The next milestone, monthly limit and shared protected
+budget can reduce either amount. The field then shows the staged total; no cash
+is paid until the month resolves. Operating models link to **Fund research** for
+the selected capability, retaining unfinished edits.
+
+Choose a crest, monogram, bank color or supported JPG logo in setup or the lobby.
+Both editions retain those identities in the campaign and results. In **This
+month → Announcement**, choose Public or Shareholders, enter up to 240 characters,
+preview, then explicitly add it to the plan. Core retains its Overview composer.
+It appears once at the start of the next month's events for both players. The
+audience is wording, not privacy; the announcement has no economic effect.
+
+Expanded 9.35 and later include the persistent rivalry introduced in 9.33 and the
+balance-sheet lending introduced in 9.34. Dominance and a score lead do not
+award automatic bank control. Receivership and unresolved funding-covenant
+failure remain possible. Lending can use part of the funded gap between loans
+and 80% of deposits, beyond office production, while cash, capital and shared
+credit work still constrain it. Older saves retain their original boundaries.
+The proposed eight-family research outline is not implemented by this UI rebuild.
 
 ### Before expanding
+
+The original city map is available in **Markets**, with the new office inspector
+beside it. District selection inspects the market; it does not change monthly
+focus. Buildings and influence colors retain their existing meanings.
+
+**This month → Summary** compares both banks' recorded enterprise scores and
+current rankings. Its scrolling ticker is cosmetic: each illustrative price is
+the bank's latest recorded score divided by ten, rounded to cents with a $0.01
+minimum. Changes compare recorded monthly closes, not private plans or early
+intermediate results. There is no share purchase or economic effect. Use
+**Pause ticker** to stop the motion; reduced-motion preferences display static
+quotes. Missing history is not filled with invented months.
+
+In **Financial Group**, Insurance and Investment / Brokerage begin as locked
+expansions. Choose **Prepare expansion**, review the real parent funding, setup,
+operating costs and permission requirements, and use **Plan expansion people**
+for the correct employer. People preserves those working staff choices and
+returns to the expansion review. **Add expansion to monthly plan** stages the
+complete launch together. Removing it from Review also removes its dependent
+launch staffing and permissions. The company unlocks only when funded settlement
+actually opens it; regulatory waiting periods and qualifications still apply.
+Existing operating companies stay open, and supported closed companies can
+prepare a funded restart. Trust is a locked future expansion with no purchase
+or playable company yet. Bank-owned liquid securities offers remain available
+separately in **Banking → Treasury**.
 
 Check three different limits, not just whether the Build button is available:
 
@@ -56,12 +167,11 @@ measures. A positive equity balance does not prove that an expansion is paying
 its recurring costs. Current forecasts exclude some rival actions, events and
 future completions; use them as estimates, not guaranteed results.
 
-Start with **This month**. Required decisions appear beside Mark Ready. Review an
-executive call or work-coverage warning to open its existing editor there; you
-do not have to travel through several tabs. Preview the change, then adopt it
-into the shared draft. Closing the editor is not Discard and does not submit.
-Changing workspaces returns the editor to its usual home. Recorded risks and
-upcoming work are in a separate disclosure so they do not repeat every warning.
+Start with **This month**. Open a required decision or warning to reach its
+canonical editor with a contextual return. Review the change and explicitly add
+it to the shared draft. Open **Review month** to check costs, plan changes and
+submission blockers, then choose **Ready for month**. Both institutions must be
+ready for resolution. Closing or leaving an editor is not Discard or submission.
 
 New Expanded games assign one existing employee-month to credit administration
 and 0.25 to commercial servicing. These are allocations from the eight starting
@@ -81,21 +191,21 @@ You may choose zero new lending. Existing loans can still repay, so a shrinking
 loan book does not prove that bankers made no loans. Funding, premises, product
 choices and shared work can constrain production even with enough headcount.
 
-**Forecast & books** separates originations, named-company advances, scheduled
+**Reports → Lending income & principal** separates originations, named-company advances, scheduled
 principal, collections, principal losses and net operating loan movement.
-Overview offers the same breakdown for the last recorded month. Repayments
+Reports distinguishes the last recorded result from standing-policy and plan forecasts. Repayments
 return principal to cash, not profit. These operating components do not include
 every later trade, forced sale or market award. Missing reports are unavailable,
 not invented zeroes.
 
 Persistent policies continue. A quiet month is valid: answer its executive call,
 review important exceptions and mark ready without reopening every policy.
-Core uses one row of its six workspaces; Expanded retains subject groups.
+Core retains its existing workspace row; Expanded uses the six homes above.
 
 ### Focused playtest checklist
 
 1. Start a new Expanded campaign. Open a coverage warning from **This month**;
-   confirm the explanation and relevant allocation are together. In Credit,
+   confirm the explanation and relevant allocation are together. In Banking → Lending,
    preview zero additional work, inspect the loan-production consequence, then
    restore coverage. Nothing should be spent until the month resolves.
 2. In People, reconcile total employees with committed work. Check that moving
@@ -116,7 +226,7 @@ Automated network checks cannot certify your two-computer connection or whether
 the game feels fun. The current economic findings and remaining acceptance gates
 are in [release status](release-status.md).
 
-Current local new games use **Core8.19** or **Expanded9.32**. Choose the depth
+Current local new games use **Core 8.20** or **Expanded 9.35**. Choose the depth
 you want with those two buttons; the integrated accounting and income repairs
 do not add checkboxes. Existing campaigns keep their saved rules. The published
 V3/V4 packages and their PDF manuals are older snapshots, not this working build.
@@ -216,7 +326,7 @@ source breakdown above is not retroactively populated in those older records.
 
 ### Understanding a shrinking loan book
 
-In the current development candidate, **Credit → Loan book movement** separates
+In Expanded, **Reports → Lending income & principal** separates
 new loans, scheduled principal returned to cash, collections recoveries and
 credit losses. Repayment is not income; losing principal is not the same as
 receiving it back. The draft and last completed month are shown separately.
@@ -283,7 +393,7 @@ withdraw an unaffordable bid. Neither side can inspect the other's sealed plan.
 
 ### Lending portfolios in new Expanded campaigns
 
-Open **Bank & finance → Credit**. Allocate100% in25-point steps, then stage the
+Open **Banking → Lending → Lending portfolio**. Allocate100% in25-point steps, then stage the
 mix. This changes new production, not existing loans. Small-business term loans
 run36 months; commercial-property loans run120 months. Both use the bank's real
 loan funding and share existing lending/collections capacity. Zero allocation
@@ -326,7 +436,7 @@ a staged subscription also requires review and staging; Discard restores it.
 
 ### Finding business growth and building across locations
 
-Operations → Forecast & books now shows business loans, business operating
+Reports → Standing & plan forecast shows business loans, business operating
 deposits and treasury service revenue directly below the bank forecast. The
 commercial detail button compares your current policies with your draft.
 Loan changes are estimates; business deposit changes are labeled with their
@@ -490,8 +600,8 @@ release or a legal-compliance simulator.
 ### Current controls: edition, construction and commercial results
 
 New Expanded campaigns also allow a **commercial banking suite inside an existing
-office**. In Markets, select the office, open **Staff & maintain**, then expand
-**Add a commercial banking suite**. Eligible retail, digital, financial-center
+office**. In Markets, select the office, open **Services & expansion**, then choose
+**Commercial banking suite**. Eligible retail, digital, financial-center
 and regional-hub offices have one suite space. This adds a service, not another
 branch or a replacement for the original office.
 
@@ -516,8 +626,8 @@ connected six-market simulation. Expanded confirms its five main additions, not
 a checklist of internal dependencies. Opening a subsidiary remains optional.
 Existing saves retain their rules; changing setup does not upgrade Continue.
 
-In current Expanded campaigns, inspect a market and use **Build & improve this
-market** to stage an office there. Inspect another market to stage a different
+In current Expanded campaigns, inspect a market and use **Build here**
+to stage an office there. Inspect another market to stage a different
 office type. Each order retains its own destination; monthly focus does not move
 it. The inspector lists all staged local orders. One initiative of each type per
 month and one office job per market remain; construction at multiple locations
@@ -525,7 +635,7 @@ still needs sufficient combined cash, capital and execution capacity. Older
 campaigns keep their focus-based construction rules. Both multiplayer computers
 need the current build; a client lacking independent-location support is blocked.
 
-Use **Run the bank → Operations → Forecast & books → Commercial banking** to
+Use **Reports → Standing & plan forecast** and **Banking → Business services** to
 compare business/merchant relationship growth, fee income, commercial loan
 balances and changes, and delivered treasury service revenue. Bank forecast and
 Balances & books are separate views, so these figures are not buried among every
@@ -615,60 +725,32 @@ expansion remains future work; the existing twelve-market legacy map is retained
 
 ### Your first staffing and planning decisions
 
-**People: start with the work, not the spreadsheet.** Overview shortages open the
-responsible function directly. Work coverage has a function directory and one
-inspector showing the actual affected tasks, coverage and reviewed vendor cost.
-Additional staff use employee-months: `0.25` is one quarter of a banker’s time,
-`1.00` is one full-time banker. Four task-work units equal one employee-month of
-effort; vendor work is not headcount. Existing service reservations are separate
-from additional assignments, and time cannot be spent twice.
+**People:** choose **Staff** for the bank's whole-person allocation, then use
+**Work coverage** for shared central tasks and outside vendor work. Payroll
+headcount is a count of people. Office and function allocations are work time:
+one full month plus 75% of another employee's month is not 1.75 employees hired.
+Time reserved for teaching, retained customers, services and offices cannot be
+spent twice. A positive amount before office/sales use is not necessarily idle.
 
-The Overview's shared-time table also uses employee-months, not internal
-quarter-units. Negative remaining time means overcommitment; positive remaining
-time is still before facilities/sales use, not necessarily idle staff. In current
-serviced-income campaigns, a Commercial relationships shortage can reduce
-recurring business/merchant fees as well as new acquisition.
+Choose **Recruitment** to review hiring and next-month arrivals. **Training** and
+**Leadership** show the actual qualifications, envelopes and existing delegation
+rules. For subsidiary staff, select the agency or investment employer; staffing
+and that business's operating editor share one working form. Inspection never
+hires, appoints, buys vendor work or submits the month. Review the inline quote
+and use the explicit Add/Update control. Unfinished fields survive navigation;
+Review month warns when they have not been added.
 
-Choose **Preview changes**, review the consequences, then **Adopt reviewed
-changes** to stage them. **Discard preview** leaves the existing plan unchanged.
-Preview or discard unfinished function values before selecting another function.
-Detailed bank-wide staff accounting, proposal limits and settled results remain
-available below the inspector. Coverage does not guarantee customers or profit.
+New campaigns offer **Core** or **Expanded**, with the host controlling shared
+lobby rules. Current Expanded is Group 10/save 9.35 on the six-market regional
+map. Historical modular combinations remain loadable under their saved rules,
+but are not a new-game checklist. Importing a save never upgrades it.
 
-Recovery comparisons and their undo controls belong to the exact reviewed
-draft and connection. A paused repository connection cannot stage recovery;
-after reconnecting or replacing the campaign, compare again. An old recovery
-card cannot apply a newer proposal just because its option has the same name.
-
-Development and Leadership also use department directories. Their unfinished
-entries survive department changes without becoming orders. Training preview
-and department staging cover all edited departments, not only the visible one.
-Bank-wide envelopes and delegation remain explicit shared limits. Inspection
-never hires, appoints a leader, pays a vendor or submits a month for you.
-
-**Core or Expanded:** expand the complexity section before creating a campaign.
-Core retains the original campaign. Expanded enables the interconnected systems
-together and currently overrides map size to the six-market regional pilot.
-Confirm the proposed change; Cancel leaves the previous choice intact. This is
-not National Empire. In a linked lobby the host applies shared settings and both
-players reconfirm readiness. Guests cannot edit the shared rules.
-
-Historical modular combinations remain loadable under their supported versions;
-they are not offered as new-campaign selections. Existing saves are never
-automatically upgraded to Expanded. The local integration candidate creates
-Expanded Group10/save9.32 campaigns. These retain the shared commercial/wealth
-office staff pool and add separately qualified agency employees and ongoing
-operating permissions. This candidate is still undergoing gameplay and release
-verification; older campaigns retain their exact rules.
-
-**Markets:** clicking a district now inspects it without changing your monthly
-plan. In the inspector, expand **Build & improve this market** to stage a local
-initiative. Changing the focus requires confirmation listing affected staged
-projects and competitive actions. Cancel changes nothing. An existing office’s
-**Staff & maintain** or **Convert** button opens its exact editor in Markets.
-These are shared planning controls, not instant construction or turn submission.
-Detailed regional books remain available below the map. The wider UI overhaul
-and final manual/PDF synchronization are still in progress.
+**Markets:** select a district to inspect it without changing monthly focus.
+Its office list and **Build here** remain beside the selected market. An office
+opens visible task choices for staff time, maintenance, renovation, conversion
+and services. The market heading remains visible. **Compare offices** is the
+bank-wide comparison; return to the same subject to continue unfinished work.
+Inspection and construction quotes do not spend cash or submit a turn.
 
 **Paid re-entry in new Expanded:** returning to a withdrawn market adds an entry
 premium to new office construction based on the rival's influence. The inspector
@@ -680,12 +762,11 @@ On wider windows the inspector scrolls beside the map; opening all construction
 choices no longer pushes the entire page down. Confirm stages instructions;
 it does not spend cash or submit your turn. Cancel changes nothing.
 
-**Local advertising:** select a market, then **Manage local campaign**. The
-inspected market and campaign target are shown separately. Moving a campaign
-through the market shortcut requires confirmation and keeps its recurring
-budget; it does not move monthly focus or the application desk. Products and
-Markets edit the same instruction. Pausing in either sets the next resolution's
-budget to $0; current awareness decays over time.
+**Local advertising:** open the market's campaign shortcut to **Strategy →
+Campaigns**. The inspected target is a working choice until explicitly added;
+monthly focus and application targets stay unchanged. The recurring budget and
+pause controls edit the same advertising policy. Pausing sets the next month's
+budget to $0, while existing awareness decays under the saved rules.
 
 The desk compares all budgets against the current audience and warns when
 extra spending buys no extra reach. It also identifies a paused, understaffed
@@ -1100,47 +1181,21 @@ display notices do not rewrite saved results or change spending rules.
 
 ## COMMAND CENTER WORKSPACES
 
-The current navigation groups related subjects; select a group, then its desk:
+Expanded uses the [six canonical homes](#where-to-manage-your-bank) near the
+start of this guide. Review month and Reports separate editing from read-only
+inspection. Workspaces supported by an older save expose only its existing
+capabilities. Navigating does not submit or discard the shared plan.
 
-| Group | Workspaces |
-| --- | --- |
-| Bank & finance | Overview, Credit, Financial Group |
-| Customers & markets | Markets, Customers, Products |
-| Run the bank | Operations, People |
-| Growth & competition | Strategy, Competition, Intelligence |
-
-Only workspaces supported by your saved campaign appear. Core does not gain
-Expanded systems when a report or help shortcut is opened. Older guides may
-call People "Workforce"; these are not separate pools of employees.
-
-The Ready bar and shared plan budget stay above the workspaces. Build the plan in
-any order; navigating does not submit a turn or discard its selections.
-
-Operations is divided into four task desks:
-
-| Desk | What to do there |
-| --- | --- |
-| Monthly plan | Answer the executive call and assign your existing staff. |
-| Products & funding | Review retail/business/credit offers, deposit pricing, lending standards and capital strategy; manage term funding when enabled. |
-| Projects & construction | Inspect and stage initiatives against execution capacity and shared funding; open current work/recruitment or eligible emergency board capital. |
-| Forecast & books | Read the current draft's operating estimates and existing balance books. Projected earnings are not available spending cash. |
-
-The **Review executive decision** shortcut always returns to Monthly plan.
-Arrow keys, Home and End move between Operations desk buttons; ordinary Tab
-navigation reaches their controls. The selected desk survives redraws and main
-workspace changes, but another Pass & Play bank starts at Monthly plan.
-
-Operations **Products & funding** is not the optional top-level **Products**
-workspace: the latter contains product development/deployment, targeting,
-retirement and enabled customer offers/onboarding. Specialist recruitment and
-training are in **People**, alongside Work coverage, Development and Leadership
-& budgets. Commercial service staffing, activation and
-renewal prices remain in **Markets**; their research applications are in
-**Strategy**. These are different views of the same bank and monthly draft.
+Core retains its original workspace row and Operations desks: Monthly plan,
+Products & funding, Projects & construction, and Forecast & books. Historical
+references to Overview, Credit, Customers, Products, Competition or grouped
+navigation describe those retained/earlier screens. In current Expanded, use
+This month for decisions, Banking for bank products and credit, Strategy for
+campaigns, Reports for statements and People for shared employees.
 
 ### Product catalogue: inspect one offer, then act
 
-In **Products**, choose Essential Banking, Rewards Checking or High-Yield Savings
+In **Banking → Deposits**, choose Essential Banking, Rewards Checking or High-Yield Savings
 from the directory. The selected product owns three focused views:
 
 - **Delivery:** compare the actual development/licensing quote, execution work,
@@ -1159,9 +1214,9 @@ instructions and existing obligations. Confirm stages it; Keep current plan
 does not change anything. Canceling an already-staged retirement leaves its
 sales targets closed, so reopen appropriate targets deliberately.
 
-**Statements** holds actual billed costs and the full deposit movement bridge.
-Advertising, existing-customer offers and applications remain available beside
-the catalogue when supported by the campaign. Lending and commercial-service
+**Reports → Deposit statements** holds actual billed costs and the full deposit
+movement bridge. Existing-customer offers and applications remain in Banking →
+Deposits; advertising is in Strategy → Campaigns when supported by the campaign. Lending and commercial-service
 shortcuts open those actual specialist desks. These are not extra saved rules.
 
 ## COMPETITIVE ACTIONS AND COUNTERS
@@ -1720,7 +1775,7 @@ the historical v8.12 cumulative preview and remains unavailable in saved Modular
 combinations campaigns. Existing saves retain their selections; importing does
 not enable offers or add a new setup checkbox.
 
-In Products > Existing customers, choose a local segment and an open, deployed
+In Banking → Deposits → Existing customers, choose a local segment and an open, deployed
 product. Reserve 25% or 50% of Retail sales time after the Customers retention
 reserve, or select Paused. The offer target does not change your focus market.
 This switches eligible existing balances to a better-fitting product; it does
@@ -1763,7 +1818,7 @@ the historical v8.13 cumulative preview; saved Modular combinations campaigns
 do not support it. Both computers must support the campaign's actual rules.
 Existing saves do not gain application queues automatically.
 
-In **Products > Applications & onboarding**, choose a market, segment and open
+In **Banking → Deposits → Applications**, choose a market, segment and open
 product for new requests. Reserve 25% or 50% of Retail time remaining after
 retention and existing-customer offers, or pause the channel. This is existing
 staff time, not a free department or new hiring. Ordinary banker-led acquisition
@@ -1815,7 +1870,7 @@ The developer checkout additionally contains RUN_TESTS.bat, the source modules,
 tests, and this full guide at docs/player-guide.md. They are not required for
 playing and are deliberately excluded from the player package.
 
-## Current V3 candidate: managing one thing at a time
+## Earlier object-editor reference · retained mechanics
 
 In Projects & construction, choose a category and an initiative to inspect its
 price, execution needs and effects. Selecting a row spends nothing. Stage this
@@ -1832,13 +1887,13 @@ Other role assignments and detailed records remain available when needed.
 
 ### Shared service rooms (introduced in Expanded 9.27)
 
-These controls are included in new Expanded9.32 campaigns in the current local
+These controls are included in new Expanded 9.35 campaigns in the current local
 playable HTML. That development file is separate from frozen published packages.
 There is no separate checkbox. Existing saves never gain rooms automatically;
 they keep their original rules. Final release and long-campaign acceptance remain pending.
 
-In the office inspector, open **Shared service rooms**. Choose one existing room
-or expand **Add service space** to review a visiting-adviser desk, wealth suite,
+In Markets, select the office and open **Services & expansion**. Choose an existing room
+or a visible service-space option to review a visiting-adviser desk, wealth suite,
 insurance office, shared advisory wing or extra premises. The bank pays fit-out;
 construction uses shared execution and opens only after completion. Additional
 premises add space, not employees or customer capacity. Commercial suites use

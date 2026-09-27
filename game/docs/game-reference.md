@@ -10,6 +10,33 @@ inside a cycle — you commit, and then you find out.
 
 ## 1. Playing a campaign
 
+### Current Expanded business rules
+
+New Expanded campaigns use **9.37**, with `digitalCommercialVersion: 1` and the retained `expandedBusinessVersion: 1`. Five funded research nodes connect to existing treasury deployment and central service capacity. Treasury offers an actual funded one-month advance from Cedar Reserve Bank. See [research, delivery, monthly order and funding terms](digital-commercial-milestone.md).
+Core and historical saves keep their selected rules. The legacy project tables
+later in this reference describe supported older campaigns; new Expanded cannot
+launch their obsolete marketing, technology, training, analytics or strategy
+initiatives. Existing paid work and earned benefits remain valid in their saved
+campaigns. See [the current business specification](expanded-consolidation.md).
+
+Strategy → Campaigns has one adjustable targeted/general monthly budget and one
+community or sports sponsorship. Coverage divides a single budget across served
+markets. Sponsorship installments remain due until completion or paid cancellation.
+Costs reduce bank earnings; exposure and awareness do not guarantee acquisition.
+
+Banking → Business services has Payroll, Merchant services and Corporate treasury,
+with service-specific setup/pricing, shared capacity and searchable clients.
+Its digital platform is built or licensed centrally, with finite shared staff.
+Physical digital studios remain optional local service premises. Treasury recovery
+contains the modern corrective risk action.
+
+Financial Group → Holding-company ownership uses funded parent and outside
+investor books. Issuance dilutes ownership; repurchases retire voluntarily sold
+shares. Current fundamental quotes, finite liquidity and order limits govern
+fills; founder control stays at least 51%. Quotes show parent cash, equity and
+ownership consequences. These are holding-company shares, separate from the
+illustrative score ticker, bank portfolio securities and customer custody assets.
+
 ### Modes
 
 | Mode | Engine key | How it works |
@@ -176,6 +203,28 @@ Two ordering facts worth remembering, because both have caused bugs:
 ---
 
 ## 4. Economy
+
+### New Expanded 9.35: Federal Funds and bank treasury
+
+`monetaryPolicyVersion:1` separates the shared policy anchor from macro regimes.
+Decisions occur before planning in months 3, 5, 7 and onward, with a separate
+deterministic random stream. The upper bound of the 25-bp target range supplies
+new product quotes. Holds are recorded; old fixed contracts are not repriced.
+Core and historical campaigns keep their previous rules and formulas below.
+
+Bank securities reconcile to liquid holdings and fixed 6-/24-month positions.
+Fixed coupons are locked; early sales use discounted remaining coupons and
+principal at the current anchor plus a term spread. Unrealized values are memo
+estimates; an actual sale posts its gain or loss. At maturity, principal returns
+to cash without income. Surplus cash above 15% of deposits plus payables is
+invested only when emergency debt is zero, with new purchases earning next month.
+The staged Liquid / Balanced / Longer fixed policy targets 0% / 50% / 80% fixed
+holdings using available liquid assets, without cancelling existing fixed terms.
+
+Emergency funding costs the anchor plus 825 bp annually on opening monthly debt.
+Overview's rate desk is an owner-only current-book comparison; it excludes new
+business and behavioral changes and does not advance policy or the shared draft.
+See [the full specification](federal-funds-design.md) for timing and boundaries.
 
 Each Service, Business and Lending banker earns fee income; Operations bankers
 earn none and instead buy execution capacity and risk control. Facilities carry
@@ -360,6 +409,9 @@ capability tiers.
 | branchWealth | Wealth Advisory Office | $800K | 3 | 1.5 | branch | wealth | yes | Specialized advisory location. Requires a licensed operating wealth subsidiary and dedicated qualified staff; unavailable until that business exists. |
 | branchFinancialCenter | Integrated Financial Center | $1.40M | 4 | 2 | branch | financialCenter | yes | Large retail, commercial and lending facility with substantial staffing and upkeep. Advisory throughput remains unavailable without a licensed subsidiary. |
 | branchRegionalHub | Regional Operations Hub | $1.85M | 5 | 2.5 | branch | regionalHub | yes | High-overhead service hub. Staff can transfer finite service throughput to explicitly linked nearby offices in the same region; it does not create customers. |
+| buildDigitalPlatform | Build bank-wide digital platform | $220K | 3 | 2 | digitalPlatform | -- | no | Digital research tier 1. Build once for the bank; shared Technology and customer staff serve eligible markets. No local digital office, free customers or deposits. Replaces a licensed platform after completion. |
+| licenseDigitalPlatform | License bank-wide digital platform | $90K | 1 | 1 | digitalPlatform | -- | no | License once for the bank without an internal research prerequisite. $12,000 each operating month after completion; finite shared Technology and customer staff still required. |
+| correctiveAction | Corrective risk action | $170K | 2 | 1 | correctiveAction | -- | no | A bounded paid recovery project: at completion reduce compliance risk by up to 24 and Corporate Attention by up to 14. Uses shared execution; does not repair capital, repay debt or create customers. |
 | licenseRewards | License Rewards Checking | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 | licenseHighYield | License High-Yield Savings | $90K | 1 | 1 | productProgram | -- | no | One-cycle vendor launch; no internal research gate. Shares execution capacity with other projects. Adds $12,000/month while available plus 0.01% of non-term product balances/month, including retired accounts. Sales open only when targeted next month. |
 
@@ -1474,6 +1526,34 @@ goodwill; a same-book offer quote alone is not a measured retention benefit.
 The next retention probe holds the estimated closing book and staffing fixed.
 It excludes intervening rival actions, opportunities, economic changes and
 other future activity. It is conditional, not a promised result or lifetime value.
+
+### Partner-issued cards (Expanded 9.38)
+
+Cedar Reserve owns the receivables and funds merchant settlement from its existing
+finite lender cash. Player banks earn 1.5% of settled purchases and 25% of interest
+actually collected. Customer principal never becomes player-bank revenue.
+The first product has fixed terms, no rewards or annual fee, next-month statements,
+monthly interest on unpaid opening principal and a four-missed-payment charge-off.
+See [partner card rules](partner-cards.md) for cash, capacity and exit conventions.
+
+| Rule | Value |
+|---|---|
+| setup | 2500 |
+| monthly | 100 |
+| perAccount | 3 |
+| maxMarketing | 1000 |
+| maxAccounts | 40 |
+| maxIntake | 6 |
+| aprBp | 2400 |
+| limit | 5000 |
+| merchantBp | 300 |
+| bankShareBp | 150 |
+| interestShareBp | 2500 |
+| chargeoffMonths | 4 |
+| marketingStep | 100 |
+| acquisitionUnit | 200 |
+| baseWorkQuarters | 0.1 |
+| accountsPerWorkQuarter | 200 |
 
 Only a spare existing Business banker can be suggested. Existing specialist
 assignments, reserved commercial delivery, served contracts and bid capacity

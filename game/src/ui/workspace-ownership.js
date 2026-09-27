@@ -23,6 +23,7 @@ function subjectRoute(item,v){
  if(v.me.workforce&&['#staffGrid','#staffPool','#staffAllocationPanel'].includes(item.target))return {...item,tab:'workforce',desk:undefined,peopleDesk:'overview'};
  if(v.me.householdBook&&(item.serviceId||['#pipeline','#commercialClientWorkspace','#servicePricing'].includes(item.target)))return {...item,tab:'customers',desk:undefined,customerDesk:'commercial'};
  if(v.me.householdBook&&(item.productDesk==='relationships'||item.productDesk==='onboarding'))return {...item,tab:'customers',customerDesk:item.productDesk,target:'#customerGrowthPanel'};
+ if(v.me.creditPerformance&&['#lendingPolicies','#lendingPolicyPanel','#productPortfolio-credit','#creditPanel'].includes(item.target))return {...item,tab:'credit',desk:undefined,productSubject:undefined};
  if(v.me.productPrograms&&(item.desk==='funding'||['#productPortfolio','#depositPolicies','#lendingPolicies','#capitalPolicies'].includes(item.target)))return {...item,tab:'products',desk:undefined,productSubject:'policies'};
  if(v.me.productPrograms&&item.target==='#productProgramsPanel')return {...item,productSubject:['advertising','reports'].includes(item.productDesk)?item.productDesk:'catalogue'};
  if(v.me.householdBook&&item.target==='#householdPanel')return {...item,customerDesk:'households'};
@@ -55,33 +56,38 @@ function renderCustomerGrowth(v){
 }
 function selectProductSubject(key){
  const v=currentView();if(!v?.me.productPrograms)return;
+ if(key==='lending'){openBankingContext('portfolio');return;}
  subjectIdentity(v);subjectWorkspace.products=['policies','advertising','reports'].includes(key)?key:'catalogue';
  if(key!=='policies')productDeskView=['advertising','reports'].includes(key)?key:'development';
  setWorkspaceTab('products',v);
 }
-function openProductDesk(desk){
+function openProductDesk(desk,options={}){
  const v=currentView();if(!v?.me.productPrograms)return;
+ if(['pricing','development'].includes(desk))return openBankingContext(desk==='pricing'?'pricing':'product',options);
+ if(options.remember!==false)rememberBankingContext(v);
  if(['relationships','onboarding'].includes(desk)){selectCustomerSubject(desk);return;}
  subjectIdentity(v);subjectWorkspace.products=['advertising','reports'].includes(desk)?desk:'catalogue';
  productDeskView=desk;setWorkspaceTab('products',v);
 }
 function renderSubjectNavigation(v){
- const labels={households:'Households & retention',commercial:'Businesses & opportunities',relationships:'Relationship offers',onboarding:'Applications',catalogue:'Product catalogue',policies:'Pricing & bank policies',advertising:'Advertising',reports:'Deposit statements'};
- const products=['catalogue','policies',...(v.me.advertising?['advertising']:[]),...(v.me.productPrograms?.version===2?['reports']:[])];
+ const labels={households:'Households & retention',commercial:'Businesses & opportunities',relationships:'Relationship offers',onboarding:'Applications',catalogue:'Deposit products',lending:'Lending portfolio',policies:'Bank policies',advertising:'Advertising',reports:'Deposit statements'};
+ const products=['catalogue',...(v.me.creditPerformance?['lending']:[]),'policies',...(v.me.advertising?['advertising']:[]),...(v.me.productPrograms?.version===2?['reports']:[])];
  for(const [kind,mount,keys]of [['customers','customerSubjectNavigation',customerSubjectDesks(v)],['products','productSubjectNavigation',products]]){
   const el=$('#'+mount);if(!el)continue;
   el.innerHTML='<div class="subject-tabs" role="group" aria-label="'+kind+' desks">'+keys.map(key=>'<button type="button" class="btn" data-subject="'+kind+'" data-subject-desk="'+key+'" aria-pressed="'+(subjectWorkspace[kind]===key)+'">'+labels[key]+'</button>').join('')+'</div>';
-  const campaign=game||view,owner=v.me.id;
-  el.onclick=event=>{const button=event.target.closest?.('[data-subject-desk]');if(!button||!el.contains(button))return;const now=currentView();if((game||view)!==campaign||now?.me.id!==owner)return;
+  const token=opportunityToken(v);
+  el.onclick=event=>{const button=event.target.closest?.('[data-subject-desk]');if(!button||!el.contains(button)||!opportunityCurrent(token,false))return;
    if(kind==='customers')selectCustomerSubject(button.dataset.subjectDesk);else selectProductSubject(button.dataset.subjectDesk);
    $('#'+mount)?.querySelector?.('[aria-pressed="true"]')?.focus?.({preventScroll:true});};
  }
 }
 function reconcileWorkspaceOwnership(v){
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v))return;
  if(!v?.me)return;subjectIdentity(v);
  placeSubjectPanel('staffAllocationPanel',v.me.workforce?'peopleAllocationMount':null);
  placeSubjectPanel('bankProductsPanel',v.me.productPrograms?'productPolicyMount':null);
  placeSubjectPanel('bankPricingPanel',v.me.productPrograms?'productPolicyMount':null);
+ placeSubjectPanel('lendingPolicyPanel',v.me.creditPerformance?'creditPolicyMount':null);
  const clients=$('#customerPipelinePanel');
  placeSubjectPanel('customerPipelinePanel',v.me.householdBook?'customerCommercialMount':null);
  if(clients){clients.classList.toggle('workspace-view',!v.me.householdBook);if(v.me.householdBook)clients.removeAttribute('data-workspace');else clients.setAttribute('data-workspace','markets');}

@@ -64,8 +64,10 @@ test('A premium shortfall blocks staging and authoritative submission, while rem
  assert.equal(h.run("marketActionProposal(currentView(),target,'branchDigital').status.eligible"),false);
 });
 
-test('Map inspector, project cards and shared review show the same executable entry cost',()=>{
- const h=fresh();h.run(`v=currentView();marketWorkspace.market=target;renderMarketInspector(v);serviceProjectsUI(v);projectWorkspace.selected='branchDigital';serviceProjectsUI(v);review=monthlyPlanReview(v);`);
+test('Retained map inspector, project cards and shared review show the same executable entry cost',()=>{
+ // These markup assertions exercise the retained components directly. The
+ // canonical Expanded inspector is covered separately below.
+ const h=fresh();h.run(`expandedInterfaceEnabled=()=>false;v=currentView();openMarketConstruction(v,target);serviceProjectsUI(v);projectWorkspace.selected='branchDigital';serviceProjectsUI(v);review=monthlyPlanReview(v);`);
  assert.match(h.elements.get('#marketInspector').innerHTML,/\$813K/);
  assert.match(h.elements.get('#marketInspector').innerHTML,/\$470,000 base \+ \$343,100 rival-held entry premium = \$813,100/);
  assert.match(h.elements.get('#projectGrid').innerHTML,/\$813K/);
@@ -76,6 +78,19 @@ test('Map inspector, project cards and shared review show the same executable en
  assert.equal(h.run('E.planBudget(v.me,draft,v).projects'),813100);
  const cheapest=h.run('marketReentryCost(v,target)');
  assert.equal(cheapest,h.run("Math.min(...Object.entries(E.projectCatalog(v.me,v)).filter(([,d])=>d.kind==='branch'&&!d.legacy).map(([k])=>E.projectStartTerms(v,v.me,k,target).cost))"));
+});
+
+test('Canonical Expanded build inspector quotes the same premium without changing the plan',()=>{
+ const h=require('./interface_markets_harness').fresh({version:9});
+ h.run(`game.territories.northside.exited[0]=true;game.territories.northside.shares=[27,73];
+  draft.focus='northside';draft.newProjects=['branchDigital'];draft.newProject='branchDigital';
+  quotedPlan=JSON.stringify(draft);quotedWorld=JSON.stringify(game);
+  openInterfaceWorkspace('markets','build',{market:'northside',project:'branchDigital'});`);
+ assert.match(h.c.imMount.innerHTML,/\$470,000 base \+ \$343,100 rival-held entry premium = \$813,100/);
+ assert.equal(h.run("E.projectStartTerms(currentView(),currentView().me,'branchDigital','northside').cost"),813100);
+ assert.equal(h.run('E.planBudget(currentView().me,draft,currentView()).projects'),813100);
+ assert.equal(h.run('JSON.stringify(draft)'),h.run('quotedPlan'));
+ assert.equal(h.run('JSON.stringify(game)'),h.run('quotedWorld'));
 });
 
 test('Actual project start charges exactly once and final AI reserve includes the premium',()=>{

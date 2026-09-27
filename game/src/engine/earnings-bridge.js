@@ -53,7 +53,7 @@ const BankEarningsBridge = (() => {
       return unavailable('The completed operating report does not match owner history.');
     let change=0;
     for(const e of current.slice(1)){
-      if((sources[e.category]||(includeExtended?extendedSources[e.category]:undefined)||(v.sharedPremisesVersion===1?premisesSources[e.category]:undefined)||(v.companyCreditVersion===1&&e.category==='companies.credit'?'settleCompanyCreditOrders':undefined))!==e.source||e.parentCause!==root.id||!e.deltas||Array.isArray(e.deltas)||typeof e.deltas!=='object'||!Object.values(e.deltas).every(Number.isFinite)||!e.changes||Array.isArray(e.changes))
+      if((sources[e.category]||(v.partnerCardsVersion===1&&e.category==='cards.settlement'?'settlePartnerCards':undefined)||(v.partnerCardsVersion===1?{'research.capability':'settleDigitalCommercial','funding.outside':'settleOutsideFunding'}[e.category]:undefined)||(v.partnerCardsVersion===1?{'group.ownership':'settleHoldingCapital','advertising.branding':'applyBrandCampaigns'}[e.category]:undefined)||(includeExtended?extendedSources[e.category]:undefined)||(v.sharedPremisesVersion===1?premisesSources[e.category]:undefined)||(v.companyCreditVersion===1&&e.category==='companies.credit'?'settleCompanyCreditOrders':undefined))!==e.source||e.parentCause!==root.id||!e.deltas||Array.isArray(e.deltas)||typeof e.deltas!=='object'||!Object.values(e.deltas).every(Number.isFinite)||!e.changes||Array.isArray(e.changes))
         return unavailable('A monthly earnings event is inconsistent; the bridge is unavailable.');
       const amount=e.deltas.earnings??0;
       if(!int(amount)||!int(change+amount))return unavailable('A monthly earnings amount is invalid.');
@@ -71,7 +71,7 @@ const BankEarningsBridge = (() => {
     const p=g.players?.[seat];
     if(!p?.accounting)return null;
     const ownerEvents=Array.isArray(g.eventLedger)?g.eventLedger.filter(e=>e?.target===p.id):[];
-    const v={cycle:g.cycle,gameOver:g.gameOver,resolutionId:g.resolutionId,ledgerPrunedThrough:g.ledgerPrunedThrough,sharedPremisesVersion:g.sharedPremisesVersion,companyCreditVersion:g.companyCreditVersion,
+    const v={cycle:g.cycle,gameOver:g.gameOver,resolutionId:g.resolutionId,ledgerPrunedThrough:g.ledgerPrunedThrough,sharedPremisesVersion:g.sharedPremisesVersion,companyCreditVersion:g.companyCreditVersion,partnerCardsVersion:g.partnerCardsVersion,digitalCommercialVersion:g.digitalCommercialVersion,expandedBusinessVersion:g.expandedBusinessVersion,
       me:{id:p.id,accounting:{retainedEarnings:p.accounting.retainedEarnings},stats:{earnings:p.stats?.earnings},operatingReport:p.operatingReport},
       causalEvents:ownerEvents.filter(e=>e.deltas||e.category==='resolution.start'),
       operatingEvents:ownerEvents.filter(e=>e.category==='operations.result')};

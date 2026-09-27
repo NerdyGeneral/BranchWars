@@ -99,7 +99,7 @@ function investmentStrategyReview(v,input){
   }
   // Inventory changes are an actual bank-security sale, not new securities or
   // subsidiary capital. It can supply next month's orders, never this month's.
-  s.inventorySale=Math.floor(Math.min(p.accounting.accounts.securities,wantedInventory,100000)/100)*100;
+  s.inventorySale=Math.floor(Math.min(MonetaryPolicy.liquid(p),wantedInventory,100000)/100)*100;
   const recurringNet=(snap.performance?.fees||0)-(snap.performance?.providerCost||0)-q.recurring;
   if(!s.institution.capital&&recurringNet>0&&q.dividendLimit>q.recurring*6)s.institution.dividend=Math.floor((q.dividendLimit-q.recurring*6)/2);
  }

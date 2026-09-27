@@ -1,9 +1,11 @@
 'use strict';
-if(!process.argv.includes('--source'))process.argv.push('--source');
+if(!process.argv.includes('--portable')&&!process.argv.includes('--source'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');
 let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){throw Error(name+': '+error.stack.slice(0,1600));}}
-function fresh(version=7){const h=harness();h.run(`const query=document.querySelector;document.querySelector=selector=>{const element=query(selector);element.insertAdjacentHTML=(position,html)=>element.innerHTML+=html;element.remove=()=>{element.innerHTML='';};return element;};
+// Existing markup assertions target the retained legacy review component.
+// The engine quotes are real; a separate case restores the Expanded dispatcher.
+function fresh(version=7){const h=harness();h.run(`const canonicalReviewEnabled=expandedInterfaceEnabled;expandedInterfaceEnabled=()=>false;const query=document.querySelector;document.querySelector=selector=>{const element=query(selector);element.insertAdjacentHTML=(position,html)=>element.innerHTML+=html;element.remove=()=>{element.innerHTML='';};return element;};
  const settings=${version?`E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options`:'{}'};
  game=E.createGame({...settings,mode:'hotseat',seed:'plan-review',created:1});seat=0;p2pRole='';gh.active=false;newDraft(currentView());`);return h;}
 const bytes=h=>h.run('JSON.stringify({game,draft})');
@@ -46,6 +48,15 @@ test('sealed and terminal campaigns do not offer submission',()=>{
   const h=fresh();h.run("draft.decision='b';"+alter+'renderReady(currentView());');assert.equal(h.elements.get('#readyBtn').disabled,true);
  }
 });
+
+test('canonical Expanded readiness retains simultaneous blockers and quiet-plan validity',()=>{
+ for(const version of [4,5,6,7]){
+  const h=fresh(version);h.run(`expandedInterfaceEnabled=canonicalReviewEnabled;renderExpandedInterface=(_v,review)=>{expandedReview=review;};draft.focus=null;draft.allocation.service--;`);
+  const before=bytes(h);h.run('renderReady(currentView());');assert.equal(bytes(h),before);assert(h.elements.get('#readyBtn').disabled);
+  const ids=h.run('expandedReview.blockers.map(x=>x.id)');for(const id of ['focus','decision','allocation'])assert(ids.includes(id),version+': '+id);
+  h.run(`newDraft(currentView());draft.decision='b';renderReady(currentView());`);assert.equal(h.elements.get('#readyBtn').disabled,false,'Expanded quiet rules '+version);assert.equal(h.run('expandedReview.blockers.length'),0);
+ }
+});
 test('required decisions use contextual targets that exist in the assembled page',()=>{
  const h=fresh(),html=require('../tools/build_game.js').assemble().html;
  h.run('draft.focus=null;draft.allocation.service--;');
@@ -59,4 +70,4 @@ test('fresh campaign entry opens Overview and resets scrolling without changing 
  const before=bytes(h);h.run('enterGame(true);');assert.equal(h.run('workspaceTab'),'overview');assert.equal(h.run('entryScroll.top'),0);assert.equal(bytes(h),before);
  h.run("workspaceTab='operations';entryScroll=null;enterGame(false);");assert.equal(h.run('workspaceTab'),'operations');assert.equal(h.run('entryScroll'),null);
 });
-console.log(JSON.stringify({suite:'usability-plan-review',checks,scope:'Production quotes, simultaneous blockers, optional quiet plans, preserved bids, original/Group4-7, read-only world and draft. Browser navigation and all-validator completeness remain separate.'}));
+console.log(JSON.stringify({suite:'usability-plan-review',checks,scope:'Production quotes, retained legacy review markup and canonical Expanded readiness; simultaneous blockers, optional quiet plans, preserved bids, original/Group4-7, read-only world and draft. Full-shell rendering/browser acceptance remain separate.'}));

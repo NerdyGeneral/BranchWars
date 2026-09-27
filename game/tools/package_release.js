@@ -42,8 +42,17 @@ CAMPAIGN EDITIONS
 New campaigns start as Core version 8.20, with six research branches and
 permanent operating models. After starting, open Research and check that it
 lists six capabilities, including RISK & CAPITAL. Choose Expanded edition and
-confirm for version 9.34: persistent bank rivalry, and credit staff can lend
-part of the funded deposit base beyond local office capacity. Historical
+confirm for version 9.39: persistent bank rivalry, lending beyond local office
+capacity, bank-wide digital platforms, brand campaigns and holding capital.
+Strategy > Research adds five paid capability nodes. Corporate treasury reuses
+the existing internal/partner platform, central delivery and actual fee book.
+Treasury > Outside-bank advance offers funded one-month borrowing with explicit
+interest and repayment. Banking > Cards offers a paid Cedar Reserve partner
+program after Digital Architecture and Relationship Planning. Cedar funds and
+owns the loans; your bank receives collected fees and pays direct program costs.
+Bank-issued cards, overnight funding and outside-bank share trading remain future features.
+Open Banking > Treasury for the shared Fed calendar and fixed or liquid treasury
+investments, including interest and early-sale values. Historical
 campaigns retain their saved rules; import and rematch do not silently upgrade
 them. In multiplayer, the host applies the
 shared settings and both players confirm readiness. Campaign rules stay fixed

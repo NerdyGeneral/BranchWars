@@ -1,0 +1,31 @@
+/* Contextual desks use the game's type, controls and bank accent. */
+.market-workbench{grid-template-columns:minmax(0,1.12fr) minmax(430px,1fr);align-items:start}
+.market-inspector{background:#f3f6fa;color:#203648;border-color:#bdcbd9;max-height:none;overflow:visible;scrollbar-gutter:auto}
+.market-context-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #d5dfe8;padding-bottom:10px}
+.market-context-heading .micro{letter-spacing:.09em}.market-context-status{color:#54697a}
+.market-inspector .market-office-list{list-style:none;padding:0;display:grid;grid-template-columns:1fr;gap:8px}
+.market-inspector .market-office-list>li{display:block;padding:0;border:0}
+.market-presence-office{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px;text-align:left;background:#fff;color:#203648;border:1px solid #cdd8e2;border-radius:7px}
+.market-presence-office:hover{background:#eaf1f9}.market-presence-office .micro{display:block;margin-top:4px;color:#536a7c}
+.market-office-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+#marketOfficeEditorMount .object-columns{display:block}#marketOfficeEditorMount .object-directory{display:none}
+#marketOfficeEditorMount .object-detail{border:0;padding:8px 0;background:transparent}
+#marketOfficeEditorMount .object-workspace{padding:0;background:transparent;border:0}
+#marketOfficeEditorMount .office-network-only{display:none}
+#marketOfficeEditorMount #facilityLifecycleDesk,#marketOfficeEditorMount #facilityNetworkDesk{border:0;padding:0;background:transparent}
+#marketOfficeEditorMount .credit-policy{padding:0;background:transparent}
+.office-staff-row{grid-template-columns:minmax(110px,1fr) 92px minmax(110px,1fr);gap:9px;padding:9px 0}
+.office-staff-row .office-time-readout{font-size:.74rem;color:#496173}
+.office-maintenance-options{display:flex;gap:4px;flex-wrap:wrap}.office-maintenance-options .btn[aria-pressed="true"]{background:#203e64;color:#fff}
+.office-maintenance-options .btn{min-height:38px;padding:7px 10px}
+.office-section-heading{font-size:.9rem;margin:14px 0 5px}.office-ledger{border-top:1px solid #cdd8e2;padding-top:12px;margin-top:12px}
+#marketOfficeEditorMount .credit-summary{grid-template-columns:1fr}.market-local-projects{display:grid;grid-template-columns:1fr;gap:10px}
+.market-local-projects article{background:#fff;border:1px solid #ccd9e4;border-radius:7px;padding:12px}.market-local-projects h4{margin-top:0}
+.market-local-projects .project-effect{font-size:.76rem}.market-inspector .staged-market-orders{border-top:1px solid #cdd8e2;margin-top:16px}
+@media(max-width:1199px){.market-workbench{grid-template-columns:minmax(0,1fr) minmax(390px,1fr)}.market-inspector{grid-row:auto}.market-workbench .map-board{min-height:510px}}
+@media(max-width:900px){.market-workbench{grid-template-columns:1fr}.market-inspector{grid-row:auto}.market-workbench .map-board{min-height:480px}.market-local-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.office-staff-row{grid-template-columns:minmax(0,1fr) 85px}.office-staff-row>small,.office-staff-row .office-time-readout{grid-column:1/-1}.market-office-toolbar .object-action-strip{display:flex;flex-wrap:wrap}}
+
+#marketOfficeEditorMount #facilityLifecyclePanel:not(.market-office-services) .office-capability-controls{display:none}
+#marketOfficeEditorMount .market-office-services .office-main-controls,#marketOfficeEditorMount .market-office-services .office-staff-ledger{display:none}
+.market-office-toolbar .btn[aria-pressed="true"]{background:#203e64;color:#fff}

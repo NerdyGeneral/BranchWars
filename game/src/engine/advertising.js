@@ -22,6 +22,7 @@ function initializeAdvertising(g, o) {
 }
 function normalizeAdvertisingPlan(p, plan) {
   if (!p.advertising) { if (plan.advertisingPolicy !== undefined) throw Error('Advertising requires a new advertising campaign.'); return; }
+  if(p.expandedBusinessVersion===1){plan.advertisingPolicy={...p.advertising.policy,budget:0};return;}
   const policy = JSON.parse(JSON.stringify(plan.advertisingPolicy || p.advertising.policy));
   validateAdvertisingPolicy(p, { ...policy, budget: 0 });
   if (!ADVERTISING_BUDGETS.includes(policy.budget)) throw Error('Choose a valid advertising budget.');
@@ -38,7 +39,7 @@ function applyAdvertisingPolicy(p, policy) {
   p.advertising.policy = { ...input.advertisingPolicy };
 }
 function advertisingFit(p, market, segment, product) {
-  const models = marketFacilities(p, market), channel = segment === 'everyday' && models.includes('retail') ? .08 : segment === 'connected' && models.includes('digital') ? .1 : 0;
+  const models = marketFacilities(p, market), digital=p.expandedBusinessVersion===1?ExpandedBusiness.digitalChannel(p,market):models.includes('digital'),channel = segment === 'everyday' && models.includes('retail') ? .08 : segment === 'connected' && digital ? .1 : 0;
   return CUSTOMER_SEGMENTS[segment].fit[product] + channel;
 }
 function advertisingSalesStaff(p) { return householdSalesStaff(p, workforceAllocation(p).service); }
@@ -63,6 +64,7 @@ function advertisingPreview(p, g, policy = p.advertising?.policy) {
 }
 function beginAdvertisingCycle(g, p, preview = false) {
   if (!p.advertising) return;
+  if(p.expandedBusinessVersion===1)return BrandCampaigns.begin(g,p);
   const cycle = g.cycle || p.advertising.lastCycle + 1;
   if (p.advertising.lastCycle >= cycle || p._advertisingCycle) throw Error('Advertising cycle already settled or in progress.');
   const quote = advertisingPreview(p, g);
@@ -156,11 +158,13 @@ function finishAdvertisingCycle(g, p) {
   for (const [total, key] of Object.entries({ depositIntake: 'deposits', householdIntake: 'households', assistedDeposits: 'assistedDeposits', assistedHouseholds: 'assistedHouseholds' }))
     report[total] = report.rows.reduce((n, row) => n + row[key], 0);
   p.advertising.report = report; p.advertising.lastCycle = report.cycle;
+  if(p.expandedBusinessVersion===1)BrandCampaigns.finish(p);
   return report;
 }
-function cleanupAdvertisingCycle(p) { if (p.advertising) delete p._advertisingCycle; }
+function cleanupAdvertisingCycle(p) { if (p.advertising) delete p._advertisingCycle;if(p.expandedBusinessVersion===1)BrandCampaigns.cleanup(p); }
 function planAdvertising(g, index, input) {
   const p = g.players[index]; if (!p.advertising) return input;
+  if(p.expandedBusinessVersion===1)return BrandCampaigns.plan(g,index,input);
   const plan = JSON.parse(JSON.stringify(input));
   plan.advertisingPolicy = { ...p.advertising.policy, budget: 0 };
   // Advertising is a modest periodic growth budget, never an investment return
@@ -194,6 +198,7 @@ function validateAdvertisingSave(g) {
   if (g.advertisingVersion !== 1 || ![1, 2].includes(g.productProgramsVersion) || g.version !== campaignVersion(g)) throw Error('Unsupported advertising save');
   const uint = n => Number.isSafeInteger(n) && n >= 0, bps = n => uint(n) && n <= 10000;
   for (const p of g.players) {
+    if(p.expandedBusinessVersion===1){BrandCampaigns.validateOwner(g,p);continue;}
     const state = p.advertising;
     if (!state || Object.keys(state).sort().join() !== 'awareness,lastCycle,policy,report,version' || state.version !== 1 ||
         state.lastCycle !== g.cycle - (g.gameOver ? 0 : 1) || p._advertisingCycle !== undefined ||

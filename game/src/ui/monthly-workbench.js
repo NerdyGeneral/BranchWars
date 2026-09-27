@@ -3,7 +3,13 @@
 let monthlyEditorState=null,monthlyReviewIdentity=null;
 function closeMonthlyEditor(){
  const state=monthlyEditorState;monthlyEditorState=null;
- if(state){state.home?.insertBefore(state.panel,state.next?.parentNode===state.home?state.next:null);state.panel.hidden=state.hidden;if(state.wasHidden)state.panel.classList.add('hidden');}
+ if(state){
+  // The contextual inspector can redraw while this live panel is borrowed.
+  // Its former mount is then detached; return to the replacement or stable home.
+  const home=state.home?.isConnected===false?($('#'+state.home.id)?.isConnected?$('#'+state.home.id):state.fallback?.parent):state.home;
+  const next=home===state.fallback?.parent?state.fallback.next:state.next;
+  home?.insertBefore(state.panel,next?.parentNode===home?next:null);state.panel.hidden=state.hidden;if(state.wasHidden)state.panel.classList.add('hidden');
+ }
  const editor=$('#monthlyEditor');if(editor)editor.hidden=true;
 }
 function reconcileMonthlyEditor(v,review){
@@ -20,7 +26,7 @@ function reconcileMonthlyEditor(v,review){
 function openMonthlyEditor(item){
  const v=currentView();if(!v||!draft)return false;
  closeMonthlyEditor();
- let panel;
+ let panel,restoreHidden;
  if(item.id==='decision'||item.target==='#decisionGrid')panel=$('#decisionGrid')?.parentElement;
  else if(item.id==='allocation'||item.target==='#staffGrid')panel=$('#staffGrid')?.parentElement;
  else if(['coverage','functions','functions-quote'].includes(item.id)||item.functionId){
@@ -29,9 +35,13 @@ function openMonthlyEditor(item){
   const c=departmentFunctionsLive.controller;
   if(item.functionId&&c?.select(item.functionId,c.token()))renderDepartments(v);
   panel=$('#departmentPanel');
- }else if(item.target==='#facilityLifecyclePanel')panel=$('#facilityLifecyclePanel');
+ }else if(item.target==='#facilityLifecyclePanel'){
+  if(!v.me.facilityLifecycle)return false;
+  restoreHidden=$('#facilityLifecyclePanel').classList.contains('hidden');
+  renderFacilityLifecycle(v);panel=$('#facilityLifecyclePanel');
+ }
  if(!panel||!$('#monthlyEditorBody')?.appendChild){navigatePlanReview(item);return false;}
- monthlyEditorState={panel,home:panel.parentElement,next:panel.nextSibling,hidden:panel.hidden,wasHidden:panel.classList.contains('hidden'),identity:game||view,owner:v.me.id,cycle:v.cycle};
+ monthlyEditorState={panel,home:panel.parentElement,next:panel.nextSibling,fallback:typeof subjectPanelHomes!=='undefined'?subjectPanelHomes.get(panel.id):null,hidden:panel.hidden,wasHidden:restoreHidden??panel.classList.contains('hidden'),identity:game||view,owner:v.me.id,cycle:v.cycle};
  $('#monthlyEditorBody').appendChild(panel);panel.hidden=false;panel.classList.remove('hidden');
  $('#monthlyEditorTitle').textContent=item.title||'Review work coverage';$('#monthlyEditor').hidden=false;$('#monthlyReviewDetails').open=true;
  $('#monthlyEditorClose').onclick=()=>{closeMonthlyEditor();$('#monthlyReviewSummary')?.focus();};

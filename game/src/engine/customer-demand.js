@@ -6,7 +6,7 @@ function customerDemand(p,g,market,mix=null){
  const models=marketFacilities(p,market),weights={essential:0,rewards:0,highYield:0},segments=[];
  let fit=0,cost=0;
  for(const [key,d]of Object.entries(CUSTOMER_SEGMENTS)){
-  const share=raw[key]/total,channel=key==='everyday'&&models.includes('retail')?.08:key==='connected'&&models.includes('digital')?.1:0;
+  const share=raw[key]/total,channel=key==='everyday'&&models.includes('retail')?.08:key==='connected'&&ExpandedBusiness.digitalChannel(p,market)?.1:0;
   const local=mix||productTargetMix(p,market,key),emphasis=Object.values(local).reduce((a,b)=>a+b,0);
   let match=0;
   for(const product of Object.keys(weights)){const strength=d.fit[product]+channel;weights[product]+=share*local[product]*strength;match+=local[product]*strength/emphasis}

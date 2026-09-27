@@ -7,7 +7,7 @@ function marketSplit(amount,weights){
  let left=amount;for(const k of keys){out[k]=Math.floor(amount*Math.max(0,weights[k])/total);left-=out[k]}
  for(const k of keys.filter(k=>weights[k]>0)){if(!left)break;out[k]++;left--}return out;
 }
-function marketReach(p,key){const service=p.regionalOperations.markets[key].service;return p.branches[key]>0?Math.min(1,.4+p.branches[key]*.2+service*.1+strategyLevel(p,'digital')*.03):.02+strategyLevel(p,'digital')*.015}
+function marketReach(p,key){const service=p.regionalOperations.markets[key].service,legacy=p.branches[key]>0?Math.min(1,.4+p.branches[key]*.2+service*.1+strategyLevel(p,'digital')*.03):.02+strategyLevel(p,'digital')*.015;return ExpandedBusiness.marketReach(p,key,legacy)}
 function marketSupply(g,p){
  const out={};for(const r of MARKET_RESOURCES){out[r]={};for(const [key,m]of Object.entries(g.marketEconomy.markets)){
   const available=m.community[r]+m.union[r],quota=p.marketQuota&&p.marketQuota[r]&&p.marketQuota[r][key];

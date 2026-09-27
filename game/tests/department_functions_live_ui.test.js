@@ -1,10 +1,14 @@
 'use strict';
 // Actual assembled Group6/9.5 creation and client. No injected feature books or
 // experimental source replacements; live runtime quotes own all capacity/costs.
-if(!process.argv.includes('--source'))process.argv.push('--source');
+if(!process.argv.includes('--source')&&!process.argv.includes('--portable'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test.js');let checks=0;
 function test(name,fn){try{fn();checks++;}catch(error){error.message=name+': '+error.message;throw error;}}
-function fresh(version=6){const h=harness();h.run(`const originalQuery=document.querySelector;document.querySelector=selector=>{const el=originalQuery(selector);el.remove=function(){this.innerHTML='';};el.insertAdjacentHTML=function(position,html){if(position==='beforeend'||position==='afterend')this.innerHTML+=html;else if(position==='afterbegin'||position==='beforebegin')this.innerHTML=html+this.innerHTML;else throw Error('Unexpected insertion');};return el;};
+function fresh(version=6){const h=harness();
+ // This fixture asserts the retained desk's DOM and contextual legacy routes.
+ // The canonical Expanded shell is exercised by interface and browser suites;
+ // keep the real retained renderer, Ready validation and owner guards here.
+ h.run('expandedInterfaceEnabled=()=>false;');h.run(`const originalQuery=document.querySelector;document.querySelector=selector=>{const el=originalQuery(selector);el.remove=function(){this.innerHTML='';};el.insertAdjacentHTML=function(position,html){if(position==='beforeend'||position==='afterend')this.innerHTML+=html;else if(position==='afterbegin'||position==='beforebegin')this.innerHTML=html+this.innerHTML;else throw Error('Unexpected insertion');};return el;};
  const settings=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;
  game=E.createGame({...settings,mode:'hotseat',seed:'functions-live-ui',created:1});seat=0;p2pRole='';gh.active=false;workspaceTab='workforce';uiErrors=[];toast=message=>uiErrors.push(message);newDraft(currentView());draft.decision='b';
  renderDepartments(currentView());`);return h;}

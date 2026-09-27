@@ -20,7 +20,7 @@ function validateCompanyControl(g){
  if(['investments','custodyAssets','custodyLiabilities','debt','payables'].some(k=>m.lender.accounts[k]||m.provider.accounts[k])||m.provider.accounts.businessAssets||m.provider.accounts.cash!==m.expenses||m.provider.retainedEarnings!==m.expenses||m.provider.accounts.equity!==m.expenses||m.lender.accounts.equity!==m.capital+m.lender.retainedEarnings)throw Error('Outside control funds do not reconcile.');
  let claims=0;
  for(const p of g.players){const due=validateCompanyControlOwner(p,ids,month);claims+=due.debt+due.payables;if(p.submitted)normalizeCompanyControlPlan(g,p,investmentCopy(p.submitted));}
- if(claims!==m.lender.accounts.businessAssets)throw Error('Acquisition lender assets and parent obligations differ.');
+ if(claims+OutsideFunding.claims(g)+PartnerCards.claims(g)!==m.lender.accounts.businessAssets)throw Error('Acquisition lender assets and parent obligations differ.');
 }
 function projectCompanyControl(g,out,index){
  if(g.companyControlVersion!==1)return;

@@ -43,6 +43,13 @@ function recordIncomeHistory(g){
 function validateIncomeHistoryCampaign(g){
  validateBankRivalry(g,'game');
  validateBalanceSheetLending(g,'game');
+ MonetaryPolicy.validate(g,'game');
+ ExpandedBusiness.validate(g,'game');
+ DigitalCommercial.validate(g,'game');
+ OutsideFunding.validate(g,'game');
+ PartnerCards.validate(g,'game');
+ BrandCampaigns.validate(g,'game');
+ HoldingCapital.validate(g,'game');
  validateResearchProgram(g,'game');
  validateBankEconomicsCampaign(g);
  validateCreditWorkloadCampaign(g);
@@ -55,6 +62,13 @@ function validateIncomeHistoryCampaign(g){
 function projectIncomeHistory(g,out,index){
  projectBankRivalry(g,out);
  projectBalanceSheetLending(g,out);
+ MonetaryPolicy.project(g,out,index);
+ ExpandedBusiness.project(g,out,index);
+ DigitalCommercial.project(g,out,index);
+ OutsideFunding.project(g,out,index);
+ PartnerCards.project(g,out,index);
+ BrandCampaigns.project(g,out,index);
+ HoldingCapital.project(g,out,index);
  projectResearchProgram(g,out);
  projectBankEconomics(g,out);
  projectCreditWorkload(g,out);
@@ -65,6 +79,13 @@ function projectIncomeHistory(g,out,index){
 function validateIncomeHistoryView(v){
  validateBankRivalry(v,'view');
  validateBalanceSheetLending(v,'view');
+ MonetaryPolicy.validate(v,'view');
+ ExpandedBusiness.validate(v,'view');
+ DigitalCommercial.validate(v,'view');
+ OutsideFunding.validate(v,'view');
+ PartnerCards.validate(v,'view');
+ BrandCampaigns.validate(v,'view');
+ HoldingCapital.validate(v,'view');
  validateResearchProgram(v,'view');
  validateBankEconomicsView(v);
  validateCreditWorkloadView(v);

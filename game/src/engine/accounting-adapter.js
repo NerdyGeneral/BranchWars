@@ -9,6 +9,7 @@ function provideCash(p,amount,reservedLoans=0){
  let gap=Math.max(0,amount-p.stats.cash);
  for(const [asset,baseBps] of [['securities',200],['loans',600]]){
   if(!gap)break;
+  if(asset==='securities'&&MonetaryPolicy.sellForCash(p,gap)){gap=Math.max(0,amount-p.stats.cash);continue;}
   const bps=asset==='loans'?creditSaleHaircut(p,baseBps):baseBps;
   const face=Math.min(Math.max(0,p.accounting.accounts[asset]-(asset==='loans'?reservedLoans+companyCreditPrincipal(p):0)),Math.ceil(gap/(1-bps/10000)));
   if(face){p.accounting=AccountingPrototype.sell(p.accounting,asset,face,bps);syncAccounts(p);gap=Math.max(0,amount-p.stats.cash)}
@@ -54,7 +55,7 @@ function postMonthlyOperations(g,p,preview=false){
  const calculation=JSON.parse(JSON.stringify(p));delete calculation.accounting;
  const text=runLegacyOperations(g,calculation,preview),r={...calculation.operatingReport};
  if(p.bankEconomicsVersion===2)r.depositInterest=r.fundingCost-before.accounts.emergencyDebt*.01;
- const securitiesIncome=Math.round(before.accounts.securities*(g.economy.rate/1200));
+ const securitiesIncome=MonetaryPolicy.enabled(p)?MonetaryPolicy.income(p):Math.round(before.accounts.securities*(g.economy.rate/1200));
  r.otherIncome+=securitiesIncome;r.profit+=securitiesIncome;
  if(r.incomeSource_version===1)r.incomeSource_securitiesInterest=securitiesIncome;
  // Apply funding in actual chronological order, not by borrowing an unexplained residual.
@@ -83,6 +84,7 @@ function postMonthlyOperations(g,p,preview=false){
   adjustAdvertisingReport(p,r);
   adjustRelationshipOfferReport(p,r);
   adjustOnboardingReport(p,r);
+  ExpandedBusiness.adjustReport(p,r);
   if(p.creditPerformance){const credit=p.creditPerformance.report;r.collectionsCost=credit.cost;r.creditRecovery=credit.recovered;r.creditEntered=credit.entered;r.creditCured=credit.cured;r.interestForgone=p.creditBook.cohorts.reduce((n,c)=>n+(c.principal-performingCredit(c))*c.rate/1000000,0);r.expense+=credit.cost;r.profit-=credit.cost}
   settleWorkforceOperatingExpense(p,r);calculation.stats.fundingCost=Math.round(r.fundingCost);
   const corporate=adjustCorporateIncomeReport(g,p,r,preview);

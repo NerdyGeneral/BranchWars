@@ -5,7 +5,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const {createHash}=require('node:crypto'),root=path.resolve(__dirname,'..');
 const read=name=>fs.readFileSync(path.join(root,name),'utf8');
-const html=require('../tools/build_game.js').assemble().html;
+const html=process.argv.includes('--portable')?read('BRANCH_WARS.html'):require('../tools/build_game.js').assemble().html;
 assert.match(html,/id="facilityNetworkPanel" class="hidden"/,'Markets includes its initially hidden owner-only mount.');
 let engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 engine=engine.replace('root.BWEngine={','root.BWEngine={FacilityNetwork,facilityContext,defaultFacilityPolicy,facilityOfficeMetrics,facilityInstructionQuote,');
@@ -26,7 +26,7 @@ run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',
   "renderReady=()=>{};let lastToast='';toast=text=>lastToast=text;newDraft(currentView());draft.facilityPolicy=E.defaultFacilityPolicy();renderFacilityNetwork(currentView());");
 const fingerprint=code=>createHash('sha256').update(run('JSON.stringify('+code+')')).digest('hex');
 const state=fingerprint('game'),originalDraft=fingerprint('draft'),panel=elements.get('#facilityNetworkPanel');
-assert.match(panel.innerHTML,/OFFICE NETWORK/);assert.match(panel.innerHTML,/Recurring office upkeep/);
+assert.match(panel.innerHTML,/Office network/);assert.match(panel.innerHTML,/Recurring office upkeep/);
 assert.match(panel.innerHTML,/Before/);assert.match(panel.innerHTML,/During work/);assert.match(panel.innerHTML,/After activation/);
 assert.match(panel.innerHTML,/does not disappear|do not disappear/);assert.match(panel.innerHTML,/not guaranteed customer growth/);
 assert.match(panel.innerHTML,/execution capacity reserved/);assert.match(panel.innerHTML,/Next month after completed work/);
@@ -89,13 +89,15 @@ assert.match(panel.innerHTML,/No operating offices/);assert.doesNotMatch(panel.i
 assert.equal(run('facilityNetworkSelection.office'),null);
 run("const legacyView=currentView();delete legacyView.me.facilityNetwork;renderFacilityNetwork(legacyView);");
 assert.equal(panel.innerHTML,'');assert.equal(run('facilityNetworkSelection.owner'),null);
-// Actual Group 4 creation/public-view/default draft/render hook without injections.
-if(!process.argv.includes('--source'))process.argv.push('--source');
+// Actual Group 4 creation/public view/default draft plus the retained standalone
+// legacy conversion renderer. New Expanded Markets owns its focused editor and
+// is exercised separately below; it does not populate the hidden old panel.
+if(!process.argv.includes('--portable')&&!process.argv.includes('--source'))process.argv.push('--source');
 const integrated=require('./github_resilience.test.js').harness();
-integrated.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options;game=E.createGame({...options,mode:'hotseat',seed:'facility-integrated-ui',created:1});seat=0;newDraft(currentView());workspaceTab='markets';renderReady=()=>{};renderMarkets(currentView());");
+integrated.run("const options=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:4}).options;game=E.createGame({...options,mode:'hotseat',seed:'facility-integrated-ui',created:1});seat=0;newDraft(currentView());renderReady=()=>{};renderFacilityNetwork(currentView());");
 assert.equal(integrated.run('game.version'),'9.3');
 assert.equal(integrated.run('JSON.stringify(draft.facilityPolicy)'),'{"convert":null,"cancel":null}');
-assert.match(integrated.elements.get('#facilityNetworkPanel').innerHTML,/OFFICE NETWORK/);
+assert.match(integrated.elements.get('#facilityNetworkPanel').innerHTML,/Office network/);
 const integratedGame=integrated.run('JSON.stringify(game)');
 assert(integrated.run("stageFacilityPolicy(currentView(),{convert:{officeId:currentView().me.facilityNetwork.offices[0].id,model:'digital'},cancel:null})"));
 assert.equal(integrated.run('JSON.stringify(game)'),integratedGame);
@@ -109,4 +111,8 @@ integrated.run("const priorSixOptions=E.previewFeatureSelection({}, {field:'fina
 assert.equal(integrated.run('restoredSix.financialGroupVersion'),6,'Historical Group 6 must not gain Group 7 rules.');
 assert.equal(integrated.run('restoredSix.version'),'9.5');
 assert.equal(integrated.run('restoredSix.departmentFunctionEconomy.version'),1,'Historical vendor accounting remains unchanged.');
-console.log('Facility UI source PASS: real Group 4 creation/public-view/default draft/Markets hook, pure metrics/staging, no-refund cancellation, stale/sealed/replaced/owner guards and legacy hiding. Settlement, transport and browser acceptance remain separate.');
+const modern=require('./interface_markets_harness').fresh({version:4}),beforeModern=modern.run('JSON.stringify(game)');
+modern.go('convert',{model:'digital'});assert.match(modern.c.imMount.innerHTML,/Convert this office/);assert.doesNotMatch(modern.c.imMount.innerHTML,/This selection is unavailable/);
+modern.click('save');assert.equal(modern.run('draft.facilityPolicy.convert.officeId'),modern.run('office.id'));assert.equal(modern.run('draft.facilityPolicy.convert.model'),'digital');assert.equal(modern.run('JSON.stringify(game)'),beforeModern);
+assert.equal(modern.run('currentView().rival.facilityNetwork'),undefined);
+console.log('Facility UI PASS: real Group 4 canonical Markets conversion stages into the shared draft; retained standalone renderer, historical rules, pure metrics/staging, no-refund cancellation, stale/sealed/replaced/owner guards and legacy hiding. Settlement, transport and browser acceptance remain separate.');

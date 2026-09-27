@@ -101,7 +101,7 @@ function workforceOperatingCosts(p) {
   return { payroll: specialistPayroll(p), training };
 }
 function workforceLateReserve(p, plan) {
-  const research = Object.values(plan.investments || {}).reduce((n, v) => n + Math.max(0, Number(v) || 0), 0);
+  const research = (Object.values(plan.investments || {}).reduce((n, v) => n + Math.max(0, Number(v) || 0), 0)+DigitalCommercial.spend(plan));
   return research + hireCost(p, planHires(plan)) + specialistHirePremium(plan) + facilityLifecycleDraftCommitment(p,plan).maintenance;
 }
 function addWorkforceReport(p, report) {

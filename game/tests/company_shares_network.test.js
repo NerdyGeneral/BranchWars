@@ -1,5 +1,5 @@
 'use strict';
-process.argv.push('--source');
+if(!process.argv.includes('--portable'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{peers,lobby,start}=require('./agency_peer_compat.test'),copy=x=>JSON.parse(JSON.stringify(x));
 async function expanded(pair){await lobby(pair);pair.host.run(`{const input=document.querySelector('#lobbyFeature-facilityExtensionsVersion');input._editionRequest='expanded';input.checked=true;document.querySelector('#lobbyFeatureOptions').listeners.change({target:input});confirmFeatureSelection();applyLobbySettings();}`);await pair.drain();}
 (async()=>{for(const transport of ['gh','lan','p2p']){
@@ -8,7 +8,7 @@ async function expanded(pair){await lobby(pair);pair.host.run(`{const input=docu
  assert.equal(old.host.state().game,null);assert(old.frames.some(([,f])=>f.type==='error'&&/Company share ownership/i.test(f.message)),'Older peer must be refused for selected ownership rules');
  const pair=peers(transport,10);await expanded(pair);await start(pair);
  // Declared mature-parent capital fixture, not new-game or AI balance evidence.
- pair.host.run(`for(const p of game.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:200000,equity:200000});syncPeers();`);await pair.drain();
+ pair.host.run(`for(const p of game.players)p.financialGroup.parent=E.GroupAccounting.post(p.financialGroup.parent,'fixture.shareholder','external-shareholder',{cash:200000,equity:200000});if(game.expandedBusinessVersion===1)E.HoldingCapital.finish(game);syncPeers();`);await pair.drain();
  const plans=copy(pair.host.run('game.players.map((p,i)=>E.chooseBot(game,i))'));
  for(const p of plans)p.companyShareOrders=[{issuer:'company:0',side:'buy',shares:1500,limitCents:1500}];
  pair.host.c.plan=plans[0];pair.guest.c.plan=plans[1];pair.host.run('E.submit(game,0,plan);syncPeers()');await pair.drain();

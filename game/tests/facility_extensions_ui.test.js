@@ -4,7 +4,8 @@ const assert=require('node:assert/strict'),{test}=require('node:test'),{harness}
 test('The office inspector stages and removes a quoted suite without changing the bank or other plans',()=>{
  const h=harness();h.run(`game=E.createGame({...E.previewFeatureSelection({}, {field:'facilityExtensionsVersion',value:1}).options,mode:'hotseat',seed:'suite-ui',created:1});seat=0;gh.active=false;p2pRole='';newDraft(currentView());draft.decision='b';notices=[];toast=m=>notices.push(m);renderReady=()=>{};renderFacilityLifecycle(currentView());`);
  const panel=h.elements.get('#facilityLifecyclePanel').innerHTML;
- assert.match(panel,/Add a commercial banking suite/);assert.match(panel,/180,000/);assert.match(panel,/0.5 Lending/);assert.match(panel,/approval and funding/);
+ assert.match(panel,/Add a commercial banking suite/);assert.match(panel,/180,000/);assert.match(panel,/Lending — 50% of a month/);assert.match(panel,/approval and funding/);
+ assert.match(panel,/<section[^>]+id="officeSuiteOffer"/);assert.doesNotMatch(panel,/<details[^>]+id="officeSuiteOffer"/);
  assert.doesNotMatch(panel,/id="stageOfficeSuite" disabled/);
  const before=h.run('JSON.stringify(game)'),form=h.run('JSON.stringify(draft.facilityLifecyclePolicy)');
  h.run(`for(const role of E.FacilityLifecycle.ROLES)document.querySelector('#lifecycleStaff-'+role).value=String(lifecycleUi.form.offices[lifecycleUi.office].staffQuarters[role]/4);document.querySelector('#lifecycleMaintenance').value='full';document.querySelector('#lifecycleStaff-service').value='1.25'`);
@@ -31,9 +32,10 @@ test('Core and historical offices keep their existing controls; latest Expanded 
  assert(h.confirmFeatures());assert.equal(h.run('readSetupFeatureOptions().facilityExtensionsVersion'),1);
  // This tests the current integrated selection, not the historical suite-only
  // campaign. Current Expanded includes reporting, persistent rivalry and
- // balance-sheet lending (9.34);
+ // balance-sheet lending, Federal Funds and bank-wide business delivery (9.39);
  // historical suite creation below remains9.11.
- assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),'9.34');
+ assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),'9.39');
+ assert.equal(h.run('readSetupFeatureOptions().expandedBusinessVersion'),1);
  assert.equal(h.run('readSetupFeatureOptions().bankEconomicsVersion'),1);
  assert.equal(h.run('readSetupFeatureOptions().creditWorkloadVersion'),1);
  assert.equal(h.run('E.campaignRules(E.previewFeatureSelection({}, {field:"facilityExtensionsVersion",value:1}).options,{context:"lobby"}).version'),'9.11','Historical suite creation retains its original boundary');

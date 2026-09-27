@@ -7,6 +7,7 @@ function createBaseCampaign(o){
   territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],
   gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};
  g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));
+ initializeBankIdentities(g,o);
  for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};
  g.players[0].focus='downtown';
  g.players[1].focus='northside';
@@ -34,11 +35,13 @@ function createBaseCampaign(o){
 }
 function validateCreationOptions(o){
  validateCampaignCreationValues(o);
+ for(const identity of [o.identity1,o.identity2])if(identity!==undefined)validateBankIdentity(identity);
  if(o.startingWorkforce!==undefined&&o.startingWorkforce!=='covered')throw Error('Unsupported starting workforce instruction.');
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.cardEconomicsVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined||o.monetaryPolicyVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
  // A pilot has always forced regional scope and funding v2. Do not mutate options.
@@ -94,6 +97,13 @@ function createGame(o){
  initializeBankEconomics(g,o);
  initializeBankRivalry(g,o);
  initializeBalanceSheetLending(g,o);
+ MonetaryPolicy.initialize(g,o);
+ ExpandedBusiness.initialize(g,o);
+ DigitalCommercial.initialize(g,o);
+ OutsideFunding.initialize(g,o);
+ PartnerCards.initialize(g,o);
+ BrandCampaigns.initialize(g,o);
+ HoldingCapital.initialize(g,o);
  initializeResearchProgram(g,o);
  // The complete rules marker is stamped only after every required book exists.
  // Initializers use creation prerequisites, not completed-save validation.

@@ -7,12 +7,18 @@ const start=html.indexOf('function renderFinal('),end=html.indexOf('const render
 assert(start>=0&&end>start);
 const elements=new Map(),node=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',className:'',disabled:false});return elements.get(id);};
 const c={$:node,show(){},esc:s=>String(s).replaceAll('<','&lt;'),money:String,tierClass:String};
-vm.createContext(c);vm.runInContext(html.slice(start,end),c);
+vm.createContext(c);
+vm.runInContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],c);c.E=c.BWEngine;
+const identityStart=html.indexOf('function bankIdentityInk('),identityEnd=html.indexOf('function readBankIdentityFields(',identityStart);
+assert(identityStart>=0&&identityEnd>identityStart,'Final cards require the actual bank identity renderer');
+vm.runInContext(html.slice(identityStart,identityEnd),c);
+vm.runInContext(html.slice(start,end),c);
 const me={id:'a',name:'Cedar Bank',capitalRatio:-.5,capitalTier:{key:'failing',short:'FAILING'}},rival={id:'b',name:'Harbor Bank',capitalRatio:13.6,capitalTier:{key:'well',short:'WELL CAP'}};
 const final={markets:1,earnings:0,achievements:0,base:20,total:20,mandate:{name:'Test mandate',desc:'Test',achieved:false,bonus:0}};
 function render(extra={}){
  const view={me,rival,final:{a:final,b:final},winnerId:'b',failedId:'a',endReason:'receivership',receivershipCycles:3,rematchReady:false,rivalRematchReady:false,...extra};
  const before=JSON.stringify(view);c.view=view;vm.runInContext('renderFinal(view)',c);assert.equal(JSON.stringify(view),before,'Rendering changes no books or instructions');
+ assert.match(node('#finalCards').innerHTML,/bank-crest-large/,'Final cards include the production identity mark');
  return {headline:node('#winnerText').textContent,note:node('#endingNote').textContent,style:node('#winnerText').className};
 }
 for(const perspective of [{me,rival},{me:rival,rival:me}]){

@@ -1,5 +1,11 @@
 function validatePlan(g,p,plan){
  if(!plan||!g.territories[plan.focus]||!unlocked(g,g.territories[plan.focus]))throw Error('Choose an open focus market.');
+ BankAnnouncements.validate(plan.announcement);
+ MonetaryPolicy.validatePlan(p,plan);
+ ExpandedBusiness.validatePlan(p,plan);
+ DigitalCommercial.validatePlan(p,plan);
+ OutsideFunding.validatePlan(g,p,plan);
+ PartnerCards.validatePlan(g,p,plan);
  if(regionalOperations(p))p={...p,focus:plan.focus};
  if(!DEPOSIT_POLICIES[plan.depositPolicy]||!LENDING_POLICIES[plan.lendingPolicy]||!CAPITAL_POLICIES[plan.capitalPolicy])throw Error('Choose valid operating policies.');
  if(!['a','b'].includes(plan.decision))throw Error('Answer the executive call.');

@@ -1,63 +1,42 @@
 'use strict';
 if(!process.argv.includes('--portable'))process.argv.push('--source');
-const {test}=require('node:test'),assert=require('node:assert/strict'),{harness}=require('./github_resilience.test');
-function fresh(edition='expanded'){
- const h=harness();h.run(`game=E.createGame({...E.previewCampaignEdition({},'${edition}',{currentReporting:true,currentEconomics:true}).options,startingWorkforce:'covered',mode:'hotseat',seed:'ownership68',created:1});seat=0;gh.active=false;newDraft(currentView());$('#pipeline').insertAdjacentHTML=function(position,html){this.innerHTML+=html};`);return h;
-}
-const state=h=>h.run('JSON.stringify({game,draft})');
-function structure(h){
- h.run(`testHomes={};for(const id of ['staffAllocationPanel','bankProductsPanel','bankPricingPanel','customerPipelinePanel']){
-  const panel=$('#'+id),home={id:'home-'+id,insertBefore(child){child.parentElement=this;child.parentNode=this;}};home.insertBefore(panel);testHomes[id]=home;
- }
- for(const id of ['peopleAllocationMount','productPolicyMount','customerCommercialMount','monthlyEditorBody']){
-  const mount=$('#'+id);mount.insertBefore=function(child){child.parentElement=this;child.parentNode=this;};mount.appendChild=function(child){this.insertBefore(child)};
- }`);
-}
-test('Expanded moves one live editor per subject and Core restores its original containers',()=>{
- const h=fresh();structure(h);const before=state(h);h.run('reconcileWorkspaceOwnership(currentView())');
- for(const [id,mount]of [['staffAllocationPanel','peopleAllocationMount'],['bankProductsPanel','productPolicyMount'],['bankPricingPanel','productPolicyMount'],['customerPipelinePanel','customerCommercialMount']])assert.equal(h.elements.get('#'+id).parentElement,h.elements.get('#'+mount));
- assert.equal(state(h),before);
- h.run("game=E.createGame({...E.previewCampaignEdition({},'core',{currentReporting:true,currentEconomics:true}).options,mode:'hotseat',created:1});newDraft(currentView());reconcileWorkspaceOwnership(currentView())");
- for(const id of ['staffAllocationPanel','bankProductsPanel','bankPricingPanel','customerPipelinePanel'])assert.equal(h.elements.get('#'+id).parentElement.id,'home-'+id);
- assert.equal(h.elements.get('#customerPipelinePanel').getAttribute('data-workspace'),'markets');
+const {test}=require('node:test'),assert=require('node:assert/strict'),{fresh:marketHarness}=require('./interface_markets_harness');
+const fresh=()=>marketHarness({realRouter:true}),state=h=>h.run('JSON.stringify({game,draft})');
+test('Expanded leaves old business forms at their single legacy homes and Core restores temporary shared mounts',()=>{
+ const h=fresh();h.run(`document.body={classList:{add(){},remove(){}}};for(const id of ['staffAllocationPanel','bankProductsPanel','bankPricingPanel','lendingPolicyPanel','customerPipelinePanel']){
+ const panel=$('#'+id),home={id:'home-'+id,insertBefore(child){child.parentElement=this;child.parentNode=this;}};home.insertBefore(panel);}
+ const shared=$('#bankAnnouncements');shared.parentElement={id:'announcement-home',insertBefore(child){child.parentElement=this;}};shared.hidden=true;$('#testSharedMount').appendChild=function(child){child.parentElement=this};`);
+ const before=state(h);h.run('reconcileWorkspaceOwnership(currentView())');for(const id of ['staffAllocationPanel','bankProductsPanel','bankPricingPanel','lendingPolicyPanel','customerPipelinePanel'])assert.equal(h.elements.get('#'+id).parentElement.id,'home-'+id);
+ h.run(`interfaceMountPanel('bankAnnouncements','testSharedMount')`);assert.equal(h.elements.get('#bankAnnouncements').parentElement.id,'testSharedMount');h.run(`interfaceRestoreCore()`);assert.equal(h.elements.get('#bankAnnouncements').parentElement.id,'announcement-home');assert.equal(h.elements.get('#bankAnnouncements').hidden,true);assert.equal(state(h),before);
+ h.run(`game=E.createGame({...E.previewCampaignEdition({},'core',{currentReporting:true,currentEconomics:true}).options,mode:'hotseat',created:1});newDraft(currentView());reconcileWorkspaceOwnership(currentView())`);assert.equal(h.run('expandedInterfaceEnabled(currentView())'),false);for(const id of ['staffAllocationPanel','bankProductsPanel','bankPricingPanel','lendingPolicyPanel','customerPipelinePanel'])assert.equal(h.elements.get('#'+id).parentElement.id,'home-'+id);assert.equal(h.elements.get('#customerPipelinePanel').getAttribute('data-workspace'),'markets');
 });
-test('Help and historical shortcuts resolve to the actual owning controls without rewriting plans',()=>{
+test('Historical shortcuts resolve to the canonical editable home without changing plans',()=>{
  const h=fresh(),before=state(h);
- for(const [item,tab,field,key]of [
-  [{tab:'operations',target:'#staffGrid'},'workforce','peopleDesk','overview'],
-  [{tab:'markets',target:'#pipeline'},'customers','customerDesk','commercial'],
-  [{tab:'products',target:'#productProgramsPanel',productDesk:'onboarding'},'customers','customerDesk','onboarding'],
-  [{tab:'operations',desk:'funding'},'products','productSubject','policies']]){
-  const route=JSON.parse(h.run(`JSON.stringify(subjectRoute(${JSON.stringify(item)},currentView()))`));assert.equal(route.tab,tab);assert.equal(route[field],key);
- }
- assert.equal(state(h),before);
+ for(const [item,workspace,view]of [
+  [{tab:'operations',target:'#staffGrid'},'people','staff'],[{tab:'markets',target:'#pipeline'},'banking','services'],
+  [{tab:'products',target:'#productProgramsPanel',productDesk:'onboarding'},'banking','deposits'],
+  [{tab:'operations',desk:'funding'},'banking','treasury'],[{tab:'operations',desk:'funding',target:'#lendingPolicies'},'banking','lending'],
+  [{tab:'products',productDesk:'advertising'},'strategy','campaigns']]){
+  h.c.shortcut=item;h.run('navigatePlanReview(shortcut)');assert.equal(h.run('interfaceCurrentRoute().workspace'),workspace);assert.equal(h.run('interfaceCurrentRoute().view'),view);
+ }assert.equal(state(h),before);
 });
-test('People overview owns allocation; its other desks do not repeat the form',()=>{
- const h=fresh();structure(h);h.run("setPeopleDesk('overview')");assert.equal(h.elements.get('#peopleAllocationMount').hidden,false);
- h.run("setPeopleDesk('coverage')");assert.equal(h.elements.get('#peopleAllocationMount').hidden,true);
- const before=state(h);h.run("navigatePlanReview({tab:'operations',target:'#staffGrid'})");assert.equal(h.run('workspaceTab'),'workforce');assert.equal(h.run('peopleWorkspaceState.desk'),'overview');assert.equal(state(h),before);
+test('Six primary workspaces have unique owners; Reports is secondary read-only navigation',()=>{
+ const h=fresh();assert.deepEqual(JSON.parse(h.run('JSON.stringify(INTERFACE_WORKSPACES.map(x=>x[0]))')),['month','markets','banking','people','strategy','group']);const before=state(h);
+ for(const [workspace,view]of [['people','staff'],['banking','deposits'],['banking','lending'],['banking','services'],['banking','treasury'],['strategy','campaigns'],['group','agency'],['reports','statements']]){h.c.next={workspace,view};h.run('openInterfaceWorkspace(next.workspace,next.view)');assert.equal(h.run('interfaceCurrentRoute().workspace'),workspace);assert.equal(h.run('interfaceCurrentRoute().view'),view);}assert.equal(state(h),before);
 });
-test('Customers owns offers and applications; Products has one subject navigation row',()=>{
- const h=fresh(),before=state(h);h.run("selectCustomerSubject('onboarding')");
- assert.match(h.elements.get('#customerGrowthPanel').innerHTML,/APPLICATIONS &amp; ONBOARDING/);assert.equal(h.elements.get('#customerHouseholdMount').hidden,true);
- h.run("selectProductSubject('catalogue')");
- assert.doesNotMatch(h.elements.get('#productProgramsPanel').innerHTML,/id="product-desk-(relationships|onboarding|development)"/);
- assert.match(h.elements.get('#productSubjectNavigation').innerHTML,/Pricing & bank policies/);
- h.run("selectProductSubject('policies')");assert.equal(h.elements.get('#productPolicyMount').hidden,false);assert.equal(h.elements.get('#productProgramsPanel').hidden,true);
- assert.equal(state(h),before);
+test('Product pricing, borrowing and credit shortcuts point to their respective banking editor',()=>{
+ const h=fresh(),before=state(h);h.run(`openBankingContext('pricing',{product:'essential',market:'downtown'})`);assert.equal(h.run('interfaceCurrentRoute().workspace'),'banking');assert.equal(h.run('interfaceCurrentRoute().view'),'deposits');assert.equal(h.run('interfaceCurrentRoute().context.mode'),'pricing');assert.equal(h.run('interfaceCurrentRoute().context.productId'),'essential');
+ h.run(`openBankingContext('portfolio')`);assert.equal(h.run('interfaceCurrentRoute().view'),'lending');h.run(`navigatePlanReview({tab:'operations',target:'#monetaryPolicyPanel'})`);assert.equal(h.run('interfaceCurrentRoute().view'),'treasury');assert.equal(state(h),before);
 });
-test('Subject inspection resets between seats and never leaks into campaigns or plans',()=>{
- const h=fresh();h.run("selectCustomerSubject('onboarding');selectProductSubject('policies');seat=1;newDraft(currentView())");const before=state(h);h.run('reconcileWorkspaceOwnership(currentView())');
- assert.equal(h.run('subjectWorkspace.customers'),'households');assert.equal(h.run('subjectWorkspace.products'),'catalogue');assert.equal(state(h),before);
- const route=h.run("JSON.stringify(E.publicState(game,1))");assert(!route.includes('subjectWorkspace'));assert(!h.run('JSON.stringify(draft)').includes('subjectWorkspace'));
+test('Presentation route and pending edits reset between owners and never leak into saves, views or draft',()=>{
+ const h=fresh();h.run(`openMarketOffice(currentView(),office.id,'staff')`);const field=h.c.imMount.querySelectorAll('[data-im-field]')[0];field.value='0.25';field.listeners.input();assert.equal(h.run('pendingInterfaceMarketsEdits(currentView()).length'),1);
+ h.run(`seat=1;newDraft(currentView());interfaceIdentity(currentView())`);const before=state(h);assert.equal(h.run('interfaceCurrentRoute().workspace'),'month');assert.equal(h.run('pendingInterfaceMarketsEdits(currentView()).length'),0);assert.equal(state(h),before);assert.doesNotMatch(h.run('JSON.stringify(E.publicState(game,1))'),/interfaceMarketsState|interfaceState|subjectWorkspace/);assert.doesNotMatch(h.run('JSON.stringify(draft)'),/interfaceMarketsState|interfaceState|subjectWorkspace/);
 });
-test('A stale navigation callback cannot change another bank view',()=>{
- const h=fresh();h.run('reconcileWorkspaceOwnership(currentView());oldSubjectClick=$("#customerSubjectNavigation").onclick;$("#customerSubjectNavigation").contains=()=>true;seat=1;newDraft(currentView());reconcileWorkspaceOwnership(currentView())');
- const before=state(h);h.run("oldSubjectClick({target:{closest:()=>({dataset:{subjectDesk:'commercial'}})}})");assert.equal(h.run('subjectWorkspace.customers'),'households');assert.equal(state(h),before);
+test('Stale navigation cannot change a newly selected bank or replay another session return',()=>{
+ const h=fresh();h.run(`openMarketOffice(currentView(),office.id,'staff')`);const old=h.c.imMount.querySelectorAll('[data-im-cross]')[0].listeners.click;h.run(`seat=1;newDraft(currentView());interfaceIdentity(currentView())`);const before=state(h),route=h.run('JSON.stringify(interfaceCurrentRoute())');old();assert.equal(h.run('JSON.stringify(interfaceCurrentRoute())'),route);assert.equal(state(h),before);
+ h.run(`interfaceNavigate({workspace:'people',view:'staff'});connectionAttempt++`);assert.equal(h.run('interfaceReturn()'),false);
 });
-test('Pricing and advertising shortcuts reveal their owning panel after another product desk was selected',()=>{
- const h=fresh(),before=state(h);h.run("selectProductSubject('policies');openProductDesk('pricing')");
- assert.equal(h.run('subjectWorkspace.products'),'catalogue');assert.equal(h.elements.get('#productProgramsPanel').hidden,false);
- assert.match(h.elements.get('#productProgramsPanel').innerHTML,/Compare this price plan/);
- h.run("openProductDesk('onboarding')");assert.equal(h.run('workspaceTab'),'customers');assert.equal(h.run('subjectWorkspace.customers'),'onboarding');assert.equal(state(h),before);
+test('Cross-domain Return stores presentation context and keeps newer shared-draft changes',()=>{
+ const h=fresh();h.run(`openInterfaceWorkspace('banking','deposits',{productId:'essential',marketId:'downtown',mode:'pricing'});interfaceNavigate({workspace:'people',view:'coverage',context:{function:'relationships'}});draft.depositPolicy='growth';interfaceReturn()`);
+ assert.equal(h.run('interfaceCurrentRoute().workspace'),'banking');assert.equal(h.run('interfaceCurrentRoute().context.productId'),'essential');assert.equal(h.run('interfaceCurrentRoute().context.mode'),'pricing');assert.equal(h.run('draft.depositPolicy'),'growth');assert.equal(h.run('interfaceState.trail.length'),0);
 });

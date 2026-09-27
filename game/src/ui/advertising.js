@@ -1,20 +1,23 @@
-// Advertising belongs beside offer development and local sales, not another
-// Operations column. All controls stage the same sealed monthly plan.
+// One pure draft-aware quote for the canonical Strategy campaign editor and
+// earlier edition controls. No preview writes to the owner or the shared plan.
+function advertisingPlanningQuote(v,plan,productPreview=v.me){
+ const p=JSON.parse(JSON.stringify(productPreview));
+ p.doctrine=typeof p.doctrine==='object'?p.doctrine.key:p.doctrine;p.allocation={...plan.allocation};
+ if(p.householdBook)p.householdBook.policy=JSON.parse(JSON.stringify(plan.householdPolicy));
+ if(p.workforce)p.workforce.policy=JSON.parse(JSON.stringify(plan.workforcePolicy));
+ if(p.relationshipOffers)E.applyRelationshipOfferPolicy(p,plan.relationshipOfferPolicy);
+ if(p.onboarding)E.applyOnboardingPolicy(p,plan.onboardingPolicy);
+ const budget=E.planBudget(v.me,plan,v);p._workforceReserved=budget.total-(budget.training||0)-(budget.advertising||0)-(budget.relationshipOffers||0)-(budget.onboarding||0);
+ if(p.onboarding){p._relationshipOfferBudget=budget.relationshipOffers||0;p._onboardingBudget=budget.onboarding||0;}
+ const owner=p.departmentFunctions?E.departmentCustomerPreview(v.me,v,plan).owner:p;
+ return {owner,quote:E.advertisingPreview(owner,v,plan.advertisingPolicy)};
+}
 function advertisingDeskContent(v, productPreview, scope='') {
- const p=JSON.parse(JSON.stringify(productPreview)),q=draft.advertisingPolicy,cash=n=>'$'+Math.round(n).toLocaleString();
+ const q=draft.advertisingPolicy,cash=n=>'$'+Math.round(n).toLocaleString();
  const controlId=name=>scope?scope+'-'+name:name;
  let quote,owner,forecastError;
  try{
- p.doctrine=typeof p.doctrine==='object'?p.doctrine.key:p.doctrine;p.allocation={...draft.allocation};
- p.householdBook.policy=JSON.parse(JSON.stringify(draft.householdPolicy));p.workforce.policy=JSON.parse(JSON.stringify(draft.workforcePolicy));
- if(p.relationshipOffers)E.applyRelationshipOfferPolicy(p,draft.relationshipOfferPolicy);
- if(p.onboarding)E.applyOnboardingPolicy(p,draft.onboardingPolicy);
- const budget=E.planBudget(v.me,draft,v);p._workforceReserved=budget.total-(budget.training||0)-(budget.advertising||0)-(budget.relationshipOffers||0)-(budget.onboarding||0);
- if(p.onboarding){p._relationshipOfferBudget=budget.relationshipOffers||0;p._onboardingBudget=budget.onboarding||0;}
- // Use the same authorized department dispatch as the customer/operations
- // forecast. Raw allocation alone can promise sales after all time is spent.
- owner=p.departmentFunctions?E.departmentCustomerPreview(v.me,v,draft).owner:p;
- quote=E.advertisingPreview(owner,v,q);
+ ({quote,owner}=advertisingPlanningQuote(v,draft,productPreview));
  }catch(error){forecastError=error.message;}
  const last=v.me.advertising.report,disabled=v.me.submitted||v.gameOver?'disabled':'';
  const select=(key,label,options)=>'<label>'+label+'<select id="'+controlId('advertising-'+key)+'" data-advertising-scope="'+scope+'" data-advertising-field="'+key+'" '+disabled+'>'+options.map(([value,text,unavailable])=>'<option value="'+value+'" '+(String(q[key])===String(value)?'selected':'')+' '+(unavailable?'disabled':'')+'>'+esc(text)+'</option>').join('')+'</select></label>';

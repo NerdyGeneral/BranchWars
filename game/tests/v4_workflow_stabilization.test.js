@@ -86,6 +86,9 @@ test('inline editor moves a single live mount, restores its home, retains draft 
 });
 test('rendering and staffing forecasts preserve state and explicit disclosure choice',()=>{
  const h=fresh();const before=h.run('JSON.stringify({game,draft})');
+ // Compatibility contract for the retained disclosure and forecast component.
+ // Expanded's replacement Review is exercised by interface_shell and Chromium.
+ h.run('expandedInterfaceEnabled=()=>false;');
  h.run('renderReady(currentView());$("#monthlyReviewDetails").open=false;renderReady(currentView());');
  assert.equal(h.elements.get('#monthlyReviewDetails').open,false);
  assert.equal(h.run('JSON.stringify({game,draft})'),before);

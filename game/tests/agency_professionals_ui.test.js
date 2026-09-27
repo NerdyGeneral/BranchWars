@@ -1,7 +1,9 @@
 'use strict';
+// Retained legacy agency controls. Current Expanded employer and business forms
+// are covered separately by the canonical interface_banking_group tests.
 const assert=require('node:assert/strict'),{groupHarness}=require('./group_ui_harness');let checks=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
-function fresh(){const h=groupHarness();h.run("game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:10}).options,mode:'hotseat',seed:'agency-role-ui',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='group';newDraft(currentView());draft.decision='b';errors=[];toast=s=>errors.push(s);renderFinancialGroup(currentView());setFinancialGroupDesk('agency');");return h;}
+function fresh(){const h=groupHarness();h.run("expandedInterfaceEnabled=()=>false;game=E.createGame({...E.previewFeatureSelection({}, {field:'financialGroupVersion',value:10}).options,mode:'hotseat',seed:'agency-role-ui',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='group';newDraft(currentView());draft.decision='b';errors=[];toast=s=>errors.push(s);renderFinancialGroup(currentView());setFinancialGroupDesk('agency');");return h;}
 const click=(h,id)=>h.elements.get('#'+id).listeners.click(),html=h=>h.elements.get('#financialGroupPanel').innerHTML,bytes=h=>h.run('JSON.stringify({game,draft})');
 test('three priced roles replace generic staffing without dropdowns or automatic changes',()=>{
  const h=fresh(),before=bytes(h);assert.match(html(h),/two-month registration/);click(h,'agency-section-operations');assert(!html(h).includes('<select'));assert(!html(h).includes('agency-choice-staff-'));
@@ -34,4 +36,4 @@ test('monthly undo restores one coherent agency instruction without undoing unre
  h.run('proposeMonthlyUndo(currentView(),monthlyChangeRows(currentView()).findIndex(r=>r.path[0]==="agencyPolicy"));applyMonthlyUndo(currentView());');assert.equal(h.run('draft.agencyPolicy.staff'),1);assert.equal(h.run('draft.agencyPolicy.roles.servicing'),0);assert.equal(h.run('draft.hires'),1);h.run('E.normalizeAgencyPlan(currentView().me,draft)');
  h.run('draft.agencyPolicy.staff=4');assert(h.run('monthlyPlanReview(currentView()).blockers.some(x=>x.id==="agency-plan"&&x.groupDesk==="agency")'));
 });
-console.log(JSON.stringify({suite:'agency-professionals-ui',checks,scope:'No real browser or balance claim; role costs, pure forms, cancellation, finite counts and stale guards.'}));
+console.log(JSON.stringify({suite:'agency-professionals-ui',checks,scope:'Retained legacy role controls and real engine quotes: costs, pure forms, cancellation, finite counts and stale guards. Canonical Expanded employers have a separate gate; no browser or balance claim.'}));

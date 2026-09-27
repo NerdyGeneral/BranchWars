@@ -1,11 +1,15 @@
 'use strict';
 // Actual assembled client and Group6 engine facade. Draft-only staffing/vendor
 // variations are explicit test instructions, never injected funds or books.
-if(!process.argv.includes('--source'))process.argv.push('--source');
+if(!process.argv.includes('--source')&&!process.argv.includes('--portable'))process.argv.push('--source');
 const assert=require('node:assert/strict'),{harness}=require('./github_resilience.test');let checks=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function fresh(version=6){
- const h=harness();h.run(`const base=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;const options=E.previewFeatureSelection(base,{field:'onboardingVersion',value:1}).options;
+ const h=harness();
+ // This fixture asserts the retained desk's DOM and contextual legacy routes.
+ // The canonical Expanded shell is exercised by interface and browser suites;
+ // keep the real retained renderer, Ready validation and owner guards here.
+ h.run('expandedInterfaceEnabled=()=>false;');h.run(`const base=E.previewFeatureSelection({}, {field:'financialGroupVersion',value:${version}}).options;const options=E.previewFeatureSelection(base,{field:'onboardingVersion',value:1}).options;
  game=E.createGame({...options,mode:'hotseat',seed:'customer-capacity-ui',created:1});seat=0;gh.active=false;p2pRole='';workspaceTab='overview';newDraft(currentView());draft.decision='b';
  draft.allocation={service:4,business:1,lending:1,operations:2};draft.householdPolicy.retention=25;draft.relationshipOfferPolicy.share=25;draft.onboardingPolicy.share=25;
  draft.management.research.enabled=false;draft.investments={};

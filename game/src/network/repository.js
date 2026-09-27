@@ -250,7 +250,7 @@ async function ghCreateRoom(){
  let attempt=connectionAttempt;
  try{if(featureSelectionPending())throw Error('Confirm or cancel the pending feature changes before opening a room.');setStartMessage('');const cfg=ghConfig('#ghToken');const name=validName('#ghHostName');
   resetLink();attempt=connectionAttempt;game=null;view=null;mode='gh';p2pRole='host';
-  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
+  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,identity:setupBankIdentity(1,name),name,scope:$('#ghScope').value,scenario:$('#ghScenario').value,doctrine:'community'};
   gh={...emptyGh(),active:true,...cfg,side:'host'};await ghCheckRepo();if(attempt!==connectionAttempt)return;ghRemember();
   for(let reservationTry=0;reservationTry<5&&!gh.sha;reservationTry++){gh.room=ghRoomCode();const existing=await ghRead('host','');if(attempt!==connectionAttempt)return;if(existing.missing){try{gh.sha=await ghWrite('host',{seq:0,messages:[]},'')||''}catch(e){if(attempt!==connectionAttempt)return;const accepted=await ghRead('host','');if(attempt!==connectionAttempt)return;if(!accepted.missing&&Number(accepted.data&&accepted.data.seq)===0)gh.sha=accepted.sha||'';else throw e}}}
   if(attempt!==connectionAttempt)return;if(!gh.sha)throw Error('Could not reserve a unique repository room. Try again.');
@@ -267,7 +267,7 @@ async function ghJoinRoom(){
   if(!token)throw Error('Enter your own access token. Never use your rival\u2019s.');
   const repo=ghNormalizeRepo(invite.repo),room=String(invite.room||'').trim().toUpperCase(),api=ghNormalizeApi($('#ghGuestApi').value);if(!/^[A-Z2-9]{8}$/.test(room))throw Error('That repository-room code is invalid or incomplete. Ask the host for a fresh code.');
   resetLink();attempt=connectionAttempt;game=null;view=null;mode='gh';p2pRole='guest';
-  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,guestName:name,doctrine:'commercial'};
+  p2pConfig={lobbyRequired:true,...readSetupFeatureOptions(),color:$('#bankColor1').value,identity:setupBankIdentity(1,name),guestName:name,doctrine:'commercial'};
   gh={...emptyGh(),active:true,api,repo,room,token,side:'guest'};await ghCheckRepo();if(attempt!==connectionAttempt)return;const occupied=await ghRead('guest','');if(attempt!==connectionAttempt)return;if(!occupied.missing)throw Error('This room already has a guest file. Use Resume in the original tab; do not overwrite an occupied seat.');$('#ghRepo').value=gh.repo;ghRemember();
   show('#connectScreen');$('#rejoinBtn').classList.add('hidden');$('#answerArea').classList.add('hidden');
   $('#connectInstructions').innerHTML=`<b>ROOM JOINED.</b> Waiting for the host to open the campaign.${gh.private?'':'<br><b class="bad">WARNING:</b> This repository is public, so the fictional campaign files will also be public.'}`;

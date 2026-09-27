@@ -60,7 +60,10 @@ test('Research capability counts and help availability follow the current campai
   h.run('snapshot=JSON.stringify({game,draft});profile=gameHelpProfile(currentView());renderStrategy(currentView());');
   const expected=edition==='research'?'six':'five';
   assert.match(h.elements.get('#strategyTree').innerHTML,new RegExp('All '+expected+' capabilities remain open'));
-  assert.match(h.run('searchGameHelp("research",profile,"strategy").find(row=>row.topic.id==="research").topic.text'),new RegExp('All '+expected+' capabilities'));
+  const help=h.run('searchGameHelp("research",profile,"strategy").find(row=>row.topic.id==="research").topic.text');
+  // Expanded help describes the new canonical inspector, while the retained
+  // Core renderer above continues to prove saved-rule capability counts.
+  assert.match(help,edition==='expanded'?/Strategy → Research.*Add to monthly plan/:new RegExp('All '+expected+' capabilities'));
   for(const id of ['deployment','relationships','combinations']){
    h.c.topicId=id;
    assert.equal(h.run('gameHelpAvailable(GAME_HELP_TOPICS.find(topic=>topic.id===topicId),profile)'),edition==='research',edition+' '+id);

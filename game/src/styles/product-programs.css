@@ -50,3 +50,9 @@
 @media(max-width:600px){.onboarding-controls,.onboarding-summary{grid-template-columns:1fr}}
 .product-pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}.product-pricing-grid select{display:block;width:100%;margin-top:6px;padding:10px;border:1px solid #b4c9dd;border-radius:6px;background:white;color:#18324b}.product-pricing-grid p{overflow-wrap:anywhere}.product-pricing-detail{max-height:420px;overflow:auto}.table-scroll:focus-visible{outline:2px solid #1d5fa7;outline-offset:3px}#productPricingComparison:not(:empty){padding:14px;border:1px solid #b4c9dd;border-radius:8px;margin:12px 0}
 @media(max-width:950px){.product-pricing-grid{grid-template-columns:1fr}}
+#bankingContextBar{position:sticky;top:var(--banking-context-top,12px);z-index:17;min-width:0}
+#bankingContextBar[hidden]{display:none!important}
+#bankingContextBar>.panel{margin-bottom:.6rem;padding:.55rem .8rem;gap:.6rem}
+#bankingContextBar .btn{white-space:normal}
+#creditPolicyMount:not(:empty){margin-bottom:1rem}
+@media(max-width:600px){#bankingContextBar .workbench-toolbar{align-items:flex-start}#bankingContextBar .btn{flex:1 1 auto}}

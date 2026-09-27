@@ -23,10 +23,11 @@ const root=path.resolve(__dirname,'..');
 
 // Rule variants. Add a new variant here when a new rule boundary needs measuring
 // against the unchanged one; every variant starts from ordinary edition setup.
-const CURRENT={currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true};
+const CURRENT={currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true};
 const VARIANTS={
  core:E=>E.previewCampaignEdition({},'core',CURRENT).options,
  expanded:E=>E.previewCampaignEdition({},'expanded',CURRENT).options,
+ 'expanded-934':E=>E.previewCampaignEdition({},'expanded',{...CURRENT,currentMonetaryPolicy:false}).options,
  'expanded-933':E=>E.previewCampaignEdition({},'expanded',{...CURRENT,currentLending:false}).options
 };
 const CHECKPOINTS=[1,3,6,12,24,36,48,60,84,120];
