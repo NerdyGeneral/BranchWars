@@ -4,18 +4,24 @@ This document defines **scope, order and retained decisions**. Use the [implemen
 
 ## Current bounded milestone
 
+[Bank-issued cards](bank-cards.md) are implemented as Expanded 9.40: a second
+card route in which the bank funds, owns and services its card book, earns
+interest and interchange, and bears the losses, beside the unchanged partner
+program. Next in order: a deeper research tree, outside-bank stakes and
+correspondent banking, Financial Group forecasts, Trust, more Expanded markets,
+whole-game balance and AI deposit defense.
+
 The [partner-card balance pass](partner-cards.md#939-balance-pass) is implemented
 as local 9.39, with all standard regression, browser and package checks passed. It scales costs and shared
 oversight to the finite outsourced book and exposes lifetime contribution.
-The measured payback excludes shared research and payroll. Bank-issued cards
-remain the next separate feature.
+The measured payback excludes shared research and payroll.
 
 
 [Partner-issued cards](partner-cards.md) is the implemented local 9.38 candidate
 with all standard regression command entries and focused browser checks passed. It adds
 Cedar-funded revolving accounts, payments, losses,
-owner-private planning and Banking → Cards. Bank-issued cards are the next
-separate card milestone; they are not included in this implementation.
+owner-private planning and Banking → Cards. Bank-issued cards followed
+separately in 9.40.
 
 [The focused 9.37 playtest and polish pass](expanded-playtest.md) checks longer
 treasury campaigns and actual two-browser LAN recovery. It fixes result ordering
@@ -23,7 +29,7 @@ on screen, same-month navigation preservation and late invoice collection report
 All 312 standard fast-gate command entries and 60 focused browser checks passed
 for that preserved 9.37 milestone.
 
-[Digital + Commercial and outside funding](digital-commercial-milestone.md) adds five real research nodes, existing-platform deployment and one-month funding in 9.37. The remaining research catalogue, Trust, bank-issued cards, outside share trading, correspondent services and acquisition victory remain future work. See the [original card program specification](card-program-foundation.md) and the current partner-card rules above.
+[Digital + Commercial and outside funding](digital-commercial-milestone.md) adds five real research nodes, existing-platform deployment and one-month funding in 9.37. The remaining research catalogue, Trust, outside share trading, correspondent services and acquisition victory remain future work. See the [original card program specification](card-program-foundation.md) and the current partner-card rules above.
 
 ## Approved direction
 

@@ -1,8 +1,9 @@
 # Partner-issued cards — Expanded 9.39
 
 This local implementation adds **Banking → Cards** to new Expanded campaigns.
-Core and imported/rematched campaigns retain their original rules. Bank-issued
-cards remain a separate future feature.
+Core and imported/rematched campaigns retain their original rules. From 9.40,
+new Expanded campaigns can instead issue their own cards; see
+[bank-issued cards](bank-cards.md). The partner contract below is unchanged in 9.40.
 
 ## Contract and player decisions
 

@@ -3,9 +3,11 @@
 **September 27 update:** The bounded partner-issued model is implemented in
 [Expanded 9.39](partner-cards.md), with calibrated costs, fixed customer terms
 and no rewards. Existing 9.38 contracts retain their original economics.
-The text below preserves the original design contract. Bank-issued cards and
-additional product types remain future work; this document alone is not evidence
-of verification. Consult [release status](release-status.md) for current checks.
+**September 28 update:** [Bank-issued cards](bank-cards.md) are implemented in
+Expanded 9.40 as a second route. Additional product types (rewards, cash
+advances, balance transfers) remain future work.
+The text below preserves the original design contract; this document alone is
+not evidence of verification. Consult [release status](release-status.md) for current checks.
 
 The original 9.37 scope was a specification, not a playable card launch. Its
 one-month outside-bank advance was a funding foundation, not a

@@ -1,5 +1,52 @@
 # Release status and known issues
 
+## September 28 — Interface follow-up: header figures, one Research page, Core products
+
+Three playtest requests. Interface only; no campaign rules change.
+
+- **Expanded header.** Deposits and loans now sit beside Available to spend, in compact
+  millions with the exact amount on hover.
+- **Strategy → Research is one page.** From 9.37, the Research tab showed only the five
+  digital and commercial projects. The capability tracks were reachable only through
+  Operating models, and the project families switched with buttons inside the detail
+  panel. One grouped list now holds capability research, then the digital and commercial
+  projects, and combined capabilities where they exist. Each entry shows milestones, paid
+  progress, or the prerequisite it still needs. A capability track links to its operating
+  model, and Operating models links back to the same track. Links that name a track or a
+  project, from Banking, Review or older desks, open it directly.
+- **Core Operations.** Product & balance-sheet design and Bank funding & capital policies
+  sit side by side again, in balanced proportion. Each policy shows its three options in one
+  row, so less scrolling separates Decision & staff from Products, pricing & risk. They
+  stack below 1,100 px.
+
+## September 28 — Expanded 9.40: bank-issued cards
+
+New Expanded campaigns choose who issues their credit cards at launch: Cedar Reserve as
+partner (the unchanged 9.39 contract) or the bank itself. A bank-issued program costs a
+$15,000 platform, $300 a month and $4 per account. The bank pays merchants from protected
+cash, carries the balances as receivables net of their loss allowance, keeps 2.2% of
+purchases and all interest, and bears provisions, disputes and charge-offs. Launch and new
+accounts need a 10% capital ratio. See [bank-issued cards](bank-cards.md).
+
+- **Compatibility.** `bankCardsVersion: 1` stamps 9.40 and needs a peer that supports it.
+  Core, 9.39 and older campaigns and their rematches keep their rules. Seeded 9.38 and 9.39
+  partner-card campaigns replay byte-identically on the 9.40 engine for 16 months,
+  including wind-down.
+- **Balance.** On the 36-month card-only comparison, a full bank-issued book earns about
+  2.8 times the partner share (+$27,750 against +$9,786 over the last year) and repays its
+  platform in month 30 with faster growth; a cautious bank-issued book does not repay it.
+- **Checks.** New `bank_cards` test (9 checks, source and portable). 37 scoped suites pass,
+  including partner cards, card economics, corporate income, behavior goldens, determinism
+  and the interface suites. Cards were checked in headless Chromium before launch and after
+  seven months on the bank route.
+- **Fixed: card programs below the capital reserve.** Since 9.38, once a bank's spending
+  limit could not cover its card program's running cost, every plan except a permanent
+  wind-down failed the capital reserve check, for a human as well as the AI; in AI mode the
+  human's month could not resolve. The running cost is no longer a commitment then (the
+  program pauses at settlement, as it always did) and the AI does not stage a launch it
+  cannot pay for. Campaigns that could continue before replay identically. See
+  [bank-issued cards](bank-cards.md#card-programs-below-the-capital-reserve-fixed).
+
 ## September 28 — Playtest follow-up: Core Operations layout, forecast drivers, logos
 
 Three requests from the 9.39 playtest. No campaign rule changes: saves of every version keep
