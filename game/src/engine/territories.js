@@ -12,7 +12,10 @@ function marketValue(g,index){return Math.round(activeTerritories(g).filter(([,t
 // hoarding line stops being the highest-scoring one. Core only; every earlier
 // campaign keeps the original weight so recorded results stay comparable.
 function coreCashWeight(p){return researchProgramRules(p)?250000:135000;}
-function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,strategyValue=strategyTotal(p)*18+(strategyCapstone(p)?30:0);return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.business*.82+s.merchant*.72+s.wealth*1.15+s.reputation*1.65+s.digital*.55+s.morale*.62+s.staff*2.4+s.cash/coreCashWeight(p)+s.capital/120000+s.earnings/65000+s.influence*.68+s.momentum*.3+(u.technology+u.training+u.analytics+u.wealth+u.operations)*13+strategyValue-(p.boardConcessions||0)*35+branchLevels(p)*14+(p.achievements||[]).length*25-s.compliance-s.attention*.82-s.chargeoffs/100000+marketValue(g,index)*2.5)*10)/10}
+// Core values durable research as franchise know-how. Its former 18 points per
+// tier were lost in ordinary monthly deposit swings, despite the cash and
+// capital consumed to build it. Historical campaigns retain their old weights.
+function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,strategyValue=strategyTotal(p)*(researchProgramRules(p)?135:18)+(strategyCapstone(p)?researchProgramRules(p)?100:30:0);return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.business*.82+s.merchant*.72+s.wealth*1.15+s.reputation*1.65+s.digital*.55+s.morale*.62+s.staff*2.4+s.cash/coreCashWeight(p)+s.capital/120000+s.earnings/65000+s.influence*.68+s.momentum*.3+(u.technology+u.training+u.analytics+u.wealth+u.operations)*13+strategyValue-(p.boardConcessions||0)*35+branchLevels(p)*14+(p.achievements||[]).length*25-s.compliance-s.attention*.82-s.chargeoffs/100000+marketValue(g,index)*2.5)*10)/10}
 // The people/digital mandates required upgrade levels from the five legacy-only
 // projects, which no current campaign can start, so both were unreachable. Current
 // Core reads the capability lanes instead; earlier saves keep the original test.

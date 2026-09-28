@@ -68,6 +68,20 @@ identically before and after.
   re-encoded as JPEG. Stored logos may be up to 400 × 400 pixels and 150 KB (were 200 × 200
   and 100 KB); most store at a few tens of KB. SVG is still refused.
 
+### Recruitment forecast follow-up
+
+Core and Expanded Forecast & books now includes **Hiring impact**. The ordinary
+bank forecast covers this month's operating stage, before new hires arrive, so
+staging recruits cannot change its deposit or loan growth. The new table holds
+today's book and economy fixed, then assigns all arriving recruits to Retail &
+service, Business, Lending, or Operations one role at a time. It displays the
+estimated monthly deposit and loan growth, operating profit, recurring expense,
+the change from the current draft, and the binding deposit/loan limits. With no
+staged recruits it compares one illustrative generalist. Recruits enter Retail
+& service by default and can be reassigned in the following month's plan.
+The what-if does not forecast next month's economy or settled balances, and it
+does not include the one-time signing cost in operating profit.
+
 ## September 27 — 9.39 repository publication
 
 [PR #27](https://github.com/NerdyGeneral/BranchWars/pull/27) publishes the current

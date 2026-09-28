@@ -27,7 +27,7 @@ function renderForecastLimits(part){
   forecastLimitTable('New deposits',L.deposits,'Forecast deposit gain: '+money(L.deposits.gain)+'. More Retail &amp; Service bankers or another branch raise what you can gather.')+
   forecastLimitTable('New loans',L.loans,L.loans.deployment?'Includes '+money(L.loans.deployment)+' of central deployment from your balance sheet.':'More Lending bankers, spare cash or office capacity raise this, whichever is limiting.')+
   '</div>'+
-  (r?'<p class="notice'+(r.saturated?' bad':'')+'"><b>Business &amp; merchant relationships:</b> '+integer(r.held)+' of '+integer(r.capacity)+' your branches can serve. '+(r.saturated?'New relationships now slow sharply; open branches to serve more.':'Past '+integer(r.capacity)+', new relationships slow sharply; each branch level adds room for 120.')+'</p>':'');
+  (r?'<p class="notice'+(r.saturated?' bad':'')+'"><b>Business &amp; merchant relationships:</b> '+integer(r.held)+' of '+integer(r.capacity)+' your branches can serve. '+(r.saturated?'New relationships now slow sharply; open branches to serve more.':'Past '+integer(r.capacity)+', new relationships slow sharply; open branches to add room.')+'</p>':'');
 }
 function renderForecastProjects(part){
  if(part.error)return '<p class="notice">Project effects are unavailable for this draft: '+esc(part.error)+'</p>';
@@ -52,4 +52,16 @@ function renderForecastDrivers(v){
  if(result.error)return '<p class="notice">Growth drivers are unavailable: '+esc(result.error)+'</p>';
  return renderForecastLimits(result.limits)+renderForecastProjects(result.projects)+renderForecastResearch(result.research)+
   '<p class="micro muted">Same economy and staffing as your draft. Estimates exclude executive events, rival actions and market results.</p>';
+}
+function renderHiringImpact(v){
+ let r;try{r=E.forecastHiringImpact(v,v.me,draft);}catch(error){return '<p class="notice" role="status">Hiring impact unavailable for this draft: '+esc(error.message)+'</p>';}
+ const roleName={service:'Retail & service',business:'Business',lending:'Lending',operations:'Operations'},
+  limitName={demand:'banker demand',market:'market supply',office:'office capacity',staff:'lending staff',funding:'spare cash'};
+ const amount=(n,delta)=>money(n)+' <span class="micro muted">('+forecastDriverSigned(delta)+')</span>';
+ const rows=r.rows.map(row=>row.error?'<tr><th scope="row">'+roleName[row.role]+'</th><td colspan="5" class="micro muted">Unavailable: '+esc(row.error)+'</td></tr>':
+  '<tr><th scope="row">'+roleName[row.role]+'</th><td>'+amount(row.forecast.depositGrowth,row.change.depositGrowth)+'</td><td>'+amount(row.forecast.loanGrowth,row.change.loanGrowth)+'</td><td>'+amount(row.forecast.profit,row.change.profit)+'</td><td>'+money(row.forecast.expense)+'</td><td class="micro">Deposits: '+esc(limitName[row.depositLimit]||'no limit')+'; loans: '+esc(limitName[row.loanLimit]||'no limit')+'</td></tr>').join('');
+ return '<h3>EXPECTED HIRING IMPACT</h3><p class="small"><b>'+integer(r.count)+' '+(r.staged?'staged recruit'+(r.count===1?'':'s'):'illustrative additional banker')+'</b> · '+(r.staged?'Joining after this month’s operations; the table assigns all staged recruits to one role at a time. They initially join Retail &amp; service; reassign them in next month’s plan to realize another row.':'No recruit staged; the table illustrates one additional generalist in each role.')+'</p>'+
+  '<p class="micro muted">Current-month draft: net deposits '+money(r.current.depositGrowth)+', net loans '+money(r.current.loanGrowth)+', operating profit '+money(r.current.profit)+'. Parentheses in the table show change from this draft. Hires do not affect this month’s production.</p>'+
+  '<div class="table-scroll"><table class="forecast-table"><caption>Estimated monthly run rate if recruits work in each role</caption><thead><tr><th>Assign arrivals to</th><th>Net deposit growth</th><th>Net loan production</th><th>Operating profit</th><th>Operating expense</th><th>Growth limits</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+  '<p class="micro muted">Uses today’s balances, economy, offices, draft policies and existing staff assignments as a fixed starting point. Includes recurring payroll and recruited specialist skills. Excludes one-time signing cost, named company-loan offers, the current month’s changing book, future market moves, events, rivals and projects. A zero growth change can mean another limit is holding; see Growth &amp; limits.</p>';
 }

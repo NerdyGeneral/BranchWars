@@ -1214,6 +1214,14 @@ navigation describe those retained/earlier screens. In current Expanded, use
 This month for decisions, Banking for bank products and credit, Strategy for
 campaigns, Reports for statements and People for shared employees.
 
+In **Forecast & books → Hiring impact**, compare the monthly growth and profit
+expected if incoming bankers work in Retail & service, Business, Lending, or
+Operations. The main bank forecast covers this month, before staged recruits
+arrive. The hiring table uses today's balances and economy as a fixed starting
+point for the next month's possible staffing; it shows which capacity limits
+hold back deposits and loans. Recruits join Retail & service first, so change
+their assignment in next month's staffing plan if you want another role.
+
 ### Product catalogue: inspect one offer, then act
 
 In **Banking → Deposits**, choose Essential Banking, Rewards Checking or High-Yield Savings

@@ -672,7 +672,7 @@ Buyout ends roughly 97% of bot-vs-bot campaigns.
 **Enterprise value** is the running score:
 
 ```js
-function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,strategyValue=strategyTotal(p)*18+(strategyCapstone(p)?30:0);
+function baseScore(g,index){const p=g.players[index],s=p.stats,u=p.upgrades,strategyValue=strategyTotal(p)*(researchProgramRules(p)?135:18)+(strategyCapstone(p)?researchProgramRules(p)?100:30:0);
 return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.business*.82+s.merchant*.72+s.wealth*1.15+s.reputation*1.65+s.digital*.55+s.morale*.62+s.staff*2.4+s.cash/coreCashWeight(p)+s.capital/120000+s.earnings/65000+s.influence*.68+s.momentum*.3+(u.technology+u.training+u.analytics+u.wealth+u.operations)*13+strategyValue-(p.boardConcessions||0)*35+branchLevels(p)*14+(p.achievements||[]).length*25-s.compliance-s.attention*.82-s.chargeoffs/100000+marketValue(g,index)*2.5)*10)/10}
 ```
 
@@ -723,7 +723,7 @@ return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.busi
 
 | Key | Name | Effect |
 |---|---|---|
-| margin | Protect Margin | Stable funding, slower acquisition, strongest spread |
+| margin | Protect Margin | Lower funding cost and slower acquisition; price-sensitive balances may leave |
 | balanced | Balanced | Steady growth, moderate funding cost and runoff |
 | aggressive | Win Deposits | Fast growth with high funding cost and rate-sensitive runoff |
 

@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm');
 const html=require('../tools/build_game').assemble().html,ctx={};
-vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.coreProbe={delta,settleFunding,postMonthlyOperations,applyProjectEffects,absorbFranchise};root.BWEngine={'),ctx);
+vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.coreProbe={delta,settleFunding,postMonthlyOperations,applyProjectEffects,absorbFranchise,calculateLegacyOperations,researchRelationshipCapacity};root.BWEngine={'),ctx);
 const E=ctx.BWEngine,P=ctx.coreProbe,copy=x=>JSON.parse(JSON.stringify(x));
 const options={incomeHistoryVersion:1,commercialServiceVersion:1,bankEconomicsVersion:2,created:1,seed:'core-funding',mode:'hotseat'};
 test('Core opening accounts represent existing resources, separately from Expanded geography',()=>{
@@ -18,6 +18,31 @@ test('Core deposits and funded loans conserve their corresponding balance-sheet 
  P.delta(p,'loans',250000);assert.equal(p.stats.cash,s.cash+150000);assert.equal(p.stats.loans,s.loans+250000);
  P.delta(p,'deposits',-400000);assert.equal(p.stats.cash,s.cash-250000);
  assert.equal(p.stats.earnings,0);E.AccountingPrototype.check(p.accounting);
+});
+test('Core prices securities and loans once, and funded credit brings bounded deposit relationships',()=>{
+ const g=E.createGame({...options,researchProgramVersion:1}),p=g.players[0],before=p.stats.deposits;
+ const plans=g.players.map((_,i)=>E.chooseBot(g,i));for(const i of [0,1])E.submit(g,i,plans[i]);
+ E.validatePilot(g);
+ assert.equal(p.operatingReport.depositIncome,0);
+ assert(p.operatingReport.incomeSource_securitiesInterest>0);
+ assert(p.operatingReport.loanIncome>0);
+ assert(p.stats.deposits>before);
+ const near=copy(p);delete near.accounting;
+ near.stats.business=P.researchRelationshipCapacity(near)-near.stats.merchant-1;
+ P.calculateLegacyOperations(g,near,true);
+ assert(near.stats.business+near.stats.merchant<=P.researchRelationshipCapacity(near));
+ const margin=copy(p),balanced=copy(p);delete margin.accounting;delete balanced.accounting;
+ margin.policies.deposit='margin';balanced.policies.deposit='balanced';
+ margin.stats.rateSensitiveDeposits=balanced.stats.rateSensitiveDeposits=1000000;
+ P.calculateLegacyOperations(g,margin,true);P.calculateLegacyOperations(g,balanced,true);
+ assert(margin.operatingReport.depositRunoff>balanced.operatingReport.depositRunoff);
+});
+test('Core alone assigns durable research franchise value',()=>{
+ const g=E.createGame({...options,researchProgramVersion:1}),p=g.players[0],old=E.createGame(options),legacy=old.players[0],tier=E.CAPABILITY_TIERS.network[0];
+ const before=E.baseScore(g,0),oldBefore=E.baseScore(old,0);
+ p.capability.network=tier;legacy.capability.network=tier;
+ assert.equal(Math.round(E.baseScore(g,0)-before),135);
+ assert.equal(Math.round(E.baseScore(old,0)-oldBefore),18);
 });
 test('Core preview is pure and actual campaigns settle and restore with private books',()=>{
  const g=E.createGame(options);
