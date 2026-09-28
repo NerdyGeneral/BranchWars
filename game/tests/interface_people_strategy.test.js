@@ -58,7 +58,7 @@ test('same-month guest view refresh preserves working fields but invalidates old
  const h=fresh();h.run('view=E.publicState(game,0);game=null;p2pRole="guest"');show(h,'people','training');input(h,'reserve','123000');const old=h.elements.get('#ipsAdd').listeners.click;h.run('view=JSON.parse(JSON.stringify(view));view.rival.submitted=true');const before=bytes(h);old();assert.equal(bytes(h),before);show(h,'people','training');assert.equal(h.run('interfacePeopleStrategyState.forms["bank-training"].value.reserve'),'123000');
 });
 test('finite staff time is exact quarters and never fractional employee headcount',()=>{
- const h=fresh();assert.equal(h.run('ipsTime(7)'),'1 full month + 75% of another');assert.equal(h.run('ipsTime(1)'),'25% of one employee’s month');show(h,'people','coverage',{functionId:'people'});input(h,'quotas.people.operations',0.5);assert.equal(h.elements.get('#ipsAdd').disabled,true);assert.match(h.elements.get('#ipsQuote').innerHTML,/steps of 1/);input(h,'quotas.people.operations',1);assert.match(h.elements.get('#ipsQuote').innerHTML,/25% of one employee/);const before=h.run('JSON.stringify(game)');add(h);assert.equal(h.run('draft.departmentFunctionsPolicy.quotas.people.operations'),1);assert.equal(h.run('JSON.stringify(game)'),before);
+ const h=fresh();assert.equal(h.run('ipsTime(7)'),'1 full month + 75% of another');assert.equal(h.run('ipsTime(1)'),'25% of one employee’s month');show(h,'people','coverage',{functionId:'people'});input(h,'quotas.people.operations',0.1);assert.equal(h.elements.get('#ipsAdd').disabled,true);assert.match(h.elements.get('#ipsQuote').innerHTML,/steps of 0.25/);input(h,'quotas.people.operations',0.25);assert.match(h.elements.get('#ipsQuote').innerHTML,/25% of one employee/);const before=h.run('JSON.stringify(game)');add(h);assert.equal(h.run('draft.departmentFunctionsPolicy.quotas.people.operations'),1);assert.equal(h.run('JSON.stringify(game)'),before);
 });
 test('research contribution is inspected and quoted before its one explicit Add',()=>{
  const h=fresh();show(h,'strategy','research',{branch:'digital'});const before=bytes(h);input(h,'amount',1000);assert.equal(bytes(h),before);add(h);assert.equal(h.run('draft.investments.digital'),1000);assert.equal(h.run('draft.hires'),0);show(h,'strategy','research',{branch:'risk'});assert(!html(h).includes('<h2>Unavailable</h2>'));
@@ -73,7 +73,7 @@ test('advertising can be paused without silently repairing an unrelated invalid 
  const h=fresh();h.run('draft.advertisingPolicy.budget=E.ADVERTISING_BUDGETS.find(n=>n>0);draft.departmentFunctionsPolicy.quotas.risk.operations=400');show(h,'strategy','campaigns',{campaignType:'advertising'});const old=h.run('JSON.stringify(draft.departmentFunctionsPolicy)');choose(h,'budget',0);assert.equal(h.elements.get('#ipsAdd').disabled,false,h.elements.get('#ipsQuote').innerHTML);add(h);assert.equal(h.run('draft.advertisingPolicy.budget'),0);assert.equal(h.run('JSON.stringify(draft.departmentFunctionsPolicy)'),old);
 });
 test('reports remain read-only and distinguish missing history',()=>{
- const h=fresh(),before=bytes(h);for(const view of ['statements','forecasts','commitments','position','history','portfolios','depositStatements','lendingIncome','markets','operations','group','intelligence']){show(h,'reports',view);assert(!html(h).includes('<h2>Unavailable</h2>'),view+': '+html(h));assert.equal(bytes(h),before);assert(!html(h).includes('id="ipsAdd"'));}show(h,'reports','statements');assert.match(html(h),/unavailable|Unavailable/);
+ const h=fresh(),before=bytes(h);for(const view of ['statements','forecasts','hiring','commitments','position','history','portfolios','depositStatements','lendingIncome','markets','operations','group','intelligence']){show(h,'reports',view);assert(!html(h).includes('<h2>Unavailable</h2>'),view+': '+html(h));assert.equal(bytes(h),before);assert(!html(h).includes('id="ipsAdd"'));}show(h,'reports','statements');assert.match(html(h),/unavailable|Unavailable/);
 });
 test('Review month receives one meaningful pending form with its exact route',()=>{
  const h=fresh();show(h,'people','recruitment',{role:'generalist'});input(h,'generalist',1);let rows=JSON.parse(h.run('JSON.stringify(pendingInterfacePeopleStrategyEdits(currentView()))'));assert.equal(rows.length,1);assert.equal(rows[0].workspace,'people');assert.equal(rows[0].view,'recruitment');input(h,'generalist',0);assert.equal(h.run('pendingInterfacePeopleStrategyEdits(currentView()).length'),0);
@@ -196,4 +196,21 @@ test('9.41 research tree: six families, the node tree beside its funding, and st
  show(h,'strategy','models',{branch:'digital'});choose(h,'model','dataLedCredit');assert.match(h.elements.get('#ipsQuote').innerHTML,/Learn the foundation, or stage its full remaining cost/);
 });
 
+test('People starts with the company and hides locked or irrelevant employer controls',()=>{
+ const h=fresh(),before=bytes(h);show(h,'people','staff');let menu=h.elements.get('#ps').innerHTML;
+ assert(menu.indexOf('ips-employers')<menu.indexOf('ips-views'));
+ for(const employer of ['agency','investment']){
+  show(h,'people','training',{employer});menu=h.elements.get('#ps').innerHTML;
+  assert.doesNotMatch(menu,/data-ips-view=/);assert.match(h.elements.get('.ips-body').innerHTML,/<p>Locked<\/p>/);
+  assert.doesNotMatch(h.elements.get('.ips-body').innerHTML,/<input|financeField|ipsAdd/);
+ }
+ assert.equal(bytes(h),before);
+ // UI-only active-state specimen: this checks tab visibility, not a funded launch.
+ h.run('game.players[0].agency.status="active"');show(h,'people','recruitment',{employer:'agency'});menu=h.elements.get('#ps').innerHTML;
+ assert.match(menu,/Staff &amp; credentials/);assert.doesNotMatch(menu,/data-ips-view="(?:recruitment|training|coverage|leadership)"/);
+});
+test('coverage and leadership start with readable department summaries',()=>{
+ const h=fresh(),before=bytes(h);show(h,'people','coverage');assert.match(html(h),/employee-month/);assert.match(html(h),/<progress/);assert.match(html(h),/Adjust coverage/);
+ show(h,'people','leadership');assert.match(html(h),/Department leadership/);assert.match(html(h),/specialists within/);assert.match(html(h),/Manage department/);assert.equal(bytes(h),before);
+});
 console.log(JSON.stringify({suite:'interface-people-strategy',checks,scope:'Focused controller and engine checks, shared draft and dirty-form continuity, finite staffing, actual research rules and read-only reports; not browser visual acceptance.'}));

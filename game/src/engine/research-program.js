@@ -193,17 +193,11 @@ function researchDeploymentCapacity(p,lendingStaff){
 // against business staff x 4). Acquisition now respects it: a bank cannot keep
 // winning relationships it has no capacity to serve. Fee COVERAGE already
 // scaled down past capacity; what was missing is that ACQUISITION did not.
-// Relationships need somewhere to be served from. Measured at 120 months, a
-// business-tilted bank held 11,413 business + 7,424 merchant relationships across
-// 36 branch levels -- 523 per branch, against a balanced bank's 25 -- paying
-// $23.8M/month in fees and beating base by +18,806 (12/12 campaigns). An earlier
-// version of this cap keyed off BUSINESS STAFF, which scale with the very tilt
-// being capped, so it never bound. Branch levels are Core's only measure of
-// physical presence, so they are the anchor.
-//
-// Below capacity this returns exactly 1: a balanced bank (593 relationships
-// against a 2,980 ceiling) is untouched. Past it, acquisition decays sharply.
-function researchRelationshipCapacity(p){return 100+branchLevels(p)*120}
+// Branch levels are Core's measure of physical presence. A staff-based limit
+// grows with the tilt it is meant to constrain; the office network does not.
+// Normal acquisition is capped at the remaining slots in operations.js, while
+// paid acquisitions/transfers may temporarily put a bank over this threshold.
+function researchRelationshipCapacity(p){return 100+branchLevels(p)*(researchProgramRules(p)?50:120)}
 function researchRelationshipSaturation(p){
  if(!researchProgramRules(p))return 1;
  const held=(p.stats.business||0)+(p.stats.merchant||0),cap=researchRelationshipCapacity(p);

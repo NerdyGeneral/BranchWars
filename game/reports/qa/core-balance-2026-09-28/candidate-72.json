@@ -1,0 +1,2691 @@
+{
+  "sourceSha256": "97cc29e3570bac0960da1d62ea80c927524b46ce373ad8445d500a8ddd39bd06",
+  "months": 72,
+  "seeds": 2,
+  "strategies": {
+    "ai": {},
+    "noResearch": {
+      "research": "none"
+    },
+    "network": {
+      "research": "network"
+    },
+    "digital": {
+      "research": "digital"
+    },
+    "commercial": {
+      "research": "commercial"
+    },
+    "operations": {
+      "research": "operations"
+    },
+    "acquisition": {
+      "research": "acquisition"
+    },
+    "risk": {
+      "research": "risk"
+    },
+    "lending": {
+      "allocation": [
+        2,
+        1,
+        4,
+        1
+      ],
+      "lendingPolicy": "growth"
+    },
+    "lendingBalanced": {
+      "allocation": [
+        2,
+        1,
+        4,
+        1
+      ],
+      "lendingPolicy": "balanced"
+    },
+    "lendingPrudent": {
+      "allocation": [
+        3,
+        2,
+        3,
+        1
+      ],
+      "lendingPolicy": "balanced",
+      "research": "commercial"
+    },
+    "lendingNetwork": {
+      "allocation": [
+        3,
+        2,
+        3,
+        1
+      ],
+      "lendingPolicy": "balanced",
+      "research": "network"
+    },
+    "business": {
+      "allocation": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "lendingCoverage": {
+      "allocation": [
+        4,
+        3,
+        3,
+        2
+      ],
+      "lendingPolicy": "balanced",
+      "research": "network"
+    },
+    "service": {
+      "allocation": [
+        4,
+        1,
+        2,
+        1
+      ]
+    },
+    "margin": {
+      "depositPolicy": "margin"
+    },
+    "aggressive": {
+      "depositPolicy": "aggressive"
+    },
+    "creditGrowth": {
+      "lendingPolicy": "growth"
+    },
+    "conservative": {
+      "lendingPolicy": "conservative"
+    }
+  },
+  "only": [
+    "ai",
+    "noResearch",
+    "lendingNetwork",
+    "business",
+    "margin"
+  ],
+  "results": [
+    {
+      "name": "ai",
+      "seed": 1,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3718.1,
+          "cash": 34199586,
+          "loans": 114256202,
+          "deposits": 150180182,
+          "business": 144,
+          "merchant": 127,
+          "staff": 9,
+          "earnings": 9975606,
+          "research": 6,
+          "profit": 471264
+        },
+        {
+          "score": 8953.4,
+          "cash": 227871853,
+          "loans": 274276536,
+          "deposits": 487705994,
+          "business": 246,
+          "merchant": 208,
+          "staff": 39,
+          "earnings": 26042395,
+          "research": 7,
+          "profit": 879841
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1239.8,
+            1089.5
+          ],
+          "loans": [
+            23937064,
+            22559223
+          ],
+          "deposits": [
+            40470129,
+            38927358
+          ],
+          "cash": [
+            5568740,
+            4932580
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1632.4,
+            2008
+          ],
+          "loans": [
+            38876341,
+            36892828
+          ],
+          "deposits": [
+            52517466,
+            58825466
+          ],
+          "cash": [
+            4668366,
+            12470795
+          ],
+          "research": [
+            2,
+            2
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2540,
+            3460.5
+          ],
+          "loans": [
+            70993260,
+            76907530
+          ],
+          "deposits": [
+            107761955,
+            127932765
+          ],
+          "cash": [
+            30697512,
+            45748356
+          ],
+          "research": [
+            3,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3718.1,
+            8953.4
+          ],
+          "loans": [
+            114256202,
+            274276536
+          ],
+          "deposits": [
+            150180182,
+            487705994
+          ],
+          "cash": [
+            34199586,
+            227871853
+          ],
+          "research": [
+            6,
+            7
+          ]
+        }
+      ],
+      "margin": -5235.299999999999
+    },
+    {
+      "name": "ai",
+      "seed": 1,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3718.1,
+          "cash": 34199586,
+          "loans": 114256202,
+          "deposits": 150180182,
+          "business": 144,
+          "merchant": 127,
+          "staff": 9,
+          "earnings": 9975606,
+          "research": 6,
+          "profit": 471264
+        },
+        {
+          "score": 8953.4,
+          "cash": 227871853,
+          "loans": 274276536,
+          "deposits": 487705994,
+          "business": 246,
+          "merchant": 208,
+          "staff": 39,
+          "earnings": 26042395,
+          "research": 7,
+          "profit": 879841
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1239.8,
+            1089.5
+          ],
+          "loans": [
+            23937064,
+            22559223
+          ],
+          "deposits": [
+            40470129,
+            38927358
+          ],
+          "cash": [
+            5568740,
+            4932580
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1632.4,
+            2008
+          ],
+          "loans": [
+            38876341,
+            36892828
+          ],
+          "deposits": [
+            52517466,
+            58825466
+          ],
+          "cash": [
+            4668366,
+            12470795
+          ],
+          "research": [
+            2,
+            2
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2540,
+            3460.5
+          ],
+          "loans": [
+            70993260,
+            76907530
+          ],
+          "deposits": [
+            107761955,
+            127932765
+          ],
+          "cash": [
+            30697512,
+            45748356
+          ],
+          "research": [
+            3,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3718.1,
+            8953.4
+          ],
+          "loans": [
+            114256202,
+            274276536
+          ],
+          "deposits": [
+            150180182,
+            487705994
+          ],
+          "cash": [
+            34199586,
+            227871853
+          ],
+          "research": [
+            6,
+            7
+          ]
+        }
+      ],
+      "margin": 5235.299999999999
+    },
+    {
+      "name": "ai",
+      "seed": 2,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 8689.3,
+          "cash": 265182896,
+          "loans": 209867117,
+          "deposits": 467892377,
+          "business": 312,
+          "merchant": 297,
+          "staff": 29,
+          "earnings": 20107636,
+          "research": 8,
+          "profit": 755972
+        },
+        {
+          "score": 3887.9,
+          "cash": 64521677,
+          "loans": 142317876,
+          "deposits": 206820571,
+          "business": 128,
+          "merchant": 105,
+          "staff": 17,
+          "earnings": 13068982,
+          "research": 3,
+          "profit": 596614
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1203.9,
+            1328.3
+          ],
+          "loans": [
+            24672653,
+            22707062
+          ],
+          "deposits": [
+            44473857,
+            55873877
+          ],
+          "cash": [
+            7550622,
+            19559223
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1832.5,
+            1894.1
+          ],
+          "loans": [
+            37425915,
+            40641752
+          ],
+          "deposits": [
+            62155976,
+            84798247
+          ],
+          "cash": [
+            13749202,
+            32514663
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3151.4,
+            2860.1
+          ],
+          "loans": [
+            66781652,
+            89310347
+          ],
+          "deposits": [
+            108768097,
+            144283448
+          ],
+          "cash": [
+            34690856,
+            49468402
+          ],
+          "research": [
+            3,
+            1
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            8689.3,
+            3887.9
+          ],
+          "loans": [
+            209867117,
+            142317876
+          ],
+          "deposits": [
+            467892377,
+            206820571
+          ],
+          "cash": [
+            265182896,
+            64521677
+          ],
+          "research": [
+            8,
+            3
+          ]
+        }
+      ],
+      "margin": 4801.4
+    },
+    {
+      "name": "ai",
+      "seed": 2,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 8689.3,
+          "cash": 265182896,
+          "loans": 209867117,
+          "deposits": 467892377,
+          "business": 312,
+          "merchant": 297,
+          "staff": 29,
+          "earnings": 20107636,
+          "research": 8,
+          "profit": 755972
+        },
+        {
+          "score": 3887.9,
+          "cash": 64521677,
+          "loans": 142317876,
+          "deposits": 206820571,
+          "business": 128,
+          "merchant": 105,
+          "staff": 17,
+          "earnings": 13068982,
+          "research": 3,
+          "profit": 596614
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1203.9,
+            1328.3
+          ],
+          "loans": [
+            24672653,
+            22707062
+          ],
+          "deposits": [
+            44473857,
+            55873877
+          ],
+          "cash": [
+            7550622,
+            19559223
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1832.5,
+            1894.1
+          ],
+          "loans": [
+            37425915,
+            40641752
+          ],
+          "deposits": [
+            62155976,
+            84798247
+          ],
+          "cash": [
+            13749202,
+            32514663
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3151.4,
+            2860.1
+          ],
+          "loans": [
+            66781652,
+            89310347
+          ],
+          "deposits": [
+            108768097,
+            144283448
+          ],
+          "cash": [
+            34690856,
+            49468402
+          ],
+          "research": [
+            3,
+            1
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            8689.3,
+            3887.9
+          ],
+          "loans": [
+            209867117,
+            142317876
+          ],
+          "deposits": [
+            467892377,
+            206820571
+          ],
+          "cash": [
+            265182896,
+            64521677
+          ],
+          "research": [
+            8,
+            3
+          ]
+        }
+      ],
+      "margin": -4801.4
+    },
+    {
+      "name": "noResearch",
+      "seed": 1,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 5264.5,
+          "cash": 107438207,
+          "loans": 150241049,
+          "deposits": 254516193,
+          "business": 456,
+          "merchant": 317,
+          "staff": 50,
+          "earnings": 14763063,
+          "research": 0,
+          "profit": 404202
+        },
+        {
+          "score": 3256.1,
+          "cash": 29854134,
+          "loans": 98583116,
+          "deposits": 131604045,
+          "business": 143,
+          "merchant": 113,
+          "staff": 6,
+          "earnings": 8533205,
+          "research": 5,
+          "profit": 522900
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1151,
+            1076.9
+          ],
+          "loans": [
+            24914579,
+            22961593
+          ],
+          "deposits": [
+            40521432,
+            38947276
+          ],
+          "cash": [
+            4650818,
+            4311868
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1553.6,
+            1627.2
+          ],
+          "loans": [
+            39093168,
+            35468012
+          ],
+          "deposits": [
+            54765816,
+            52054817
+          ],
+          "cash": [
+            7048978,
+            7401294
+          ],
+          "research": [
+            0,
+            1
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2880.7,
+            2455
+          ],
+          "loans": [
+            72115383,
+            72073278
+          ],
+          "deposits": [
+            111243928,
+            93821479
+          ],
+          "cash": [
+            33831428,
+            15871690
+          ],
+          "research": [
+            0,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            5264.5,
+            3256.1
+          ],
+          "loans": [
+            150241049,
+            98583116
+          ],
+          "deposits": [
+            254516193,
+            131604045
+          ],
+          "cash": [
+            107438207,
+            29854134
+          ],
+          "research": [
+            0,
+            5
+          ]
+        }
+      ],
+      "margin": 2008.4
+    },
+    {
+      "name": "noResearch",
+      "seed": 1,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 4502.9,
+          "cash": 74790008,
+          "loans": 122391777,
+          "deposits": 198037425,
+          "business": 168,
+          "merchant": 153,
+          "staff": 6,
+          "earnings": 10744360,
+          "research": 7,
+          "profit": 418537
+        },
+        {
+          "score": 5224.4,
+          "cash": 113440135,
+          "loans": 145794231,
+          "deposits": 257541851,
+          "business": 460,
+          "merchant": 310,
+          "staff": 51,
+          "earnings": 13292515,
+          "research": 0,
+          "profit": 58127
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1292.8,
+            1063.3
+          ],
+          "loans": [
+            23933152,
+            22790004
+          ],
+          "deposits": [
+            41366543,
+            37924972
+          ],
+          "cash": [
+            6553957,
+            3514296
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1715.2,
+            1598.9
+          ],
+          "loans": [
+            37129182,
+            36563289
+          ],
+          "deposits": [
+            52509732,
+            56027512
+          ],
+          "cash": [
+            5879044,
+            9981227
+          ],
+          "research": [
+            2,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2538.2,
+            2752.2
+          ],
+          "loans": [
+            72567824,
+            66660264
+          ],
+          "deposits": [
+            97754705,
+            100738743
+          ],
+          "cash": [
+            19369637,
+            29222684
+          ],
+          "research": [
+            3,
+            0
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            4502.9,
+            5224.4
+          ],
+          "loans": [
+            122391777,
+            145794231
+          ],
+          "deposits": [
+            198037425,
+            257541851
+          ],
+          "cash": [
+            74790008,
+            113440135
+          ],
+          "research": [
+            7,
+            0
+          ]
+        }
+      ],
+      "margin": 721.5
+    },
+    {
+      "name": "noResearch",
+      "seed": 2,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 4747.6,
+          "cash": 89710178,
+          "loans": 128231534,
+          "deposits": 218969890,
+          "business": 473,
+          "merchant": 349,
+          "staff": 38,
+          "earnings": 11921822,
+          "research": 0,
+          "profit": 401467
+        },
+        {
+          "score": 3342.9,
+          "cash": 26423598,
+          "loans": 121673487,
+          "deposits": 150167044,
+          "business": 178,
+          "merchant": 122,
+          "staff": 18,
+          "earnings": 10980041,
+          "research": 3,
+          "profit": 469994
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1177.5,
+            1355.7
+          ],
+          "loans": [
+            25120143,
+            22711485
+          ],
+          "deposits": [
+            43885977,
+            55948572
+          ],
+          "cash": [
+            6519621,
+            19664314
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1648.5,
+            1929.9
+          ],
+          "loans": [
+            37737632,
+            39746701
+          ],
+          "deposits": [
+            59356868,
+            84404878
+          ],
+          "cash": [
+            10665871,
+            32821446
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2506.6,
+            2781.7
+          ],
+          "loans": [
+            66172470,
+            90958946
+          ],
+          "deposits": [
+            93488125,
+            134800356
+          ],
+          "cash": [
+            20026191,
+            38477387
+          ],
+          "research": [
+            0,
+            1
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            4747.6,
+            3342.9
+          ],
+          "loans": [
+            128231534,
+            121673487
+          ],
+          "deposits": [
+            218969890,
+            150167044
+          ],
+          "cash": [
+            89710178,
+            26423598
+          ],
+          "research": [
+            0,
+            3
+          ]
+        }
+      ],
+      "margin": 1404.7000000000003
+    },
+    {
+      "name": "noResearch",
+      "seed": 2,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 9173.1,
+          "cash": 134283397,
+          "loans": 225078241,
+          "deposits": 340888258,
+          "business": 480,
+          "merchant": 420,
+          "staff": 35,
+          "earnings": 31423380,
+          "research": 17,
+          "profit": 2181541
+        },
+        {
+          "score": 3809,
+          "cash": 54489163,
+          "loans": 170783207,
+          "deposits": 222397582,
+          "business": 142,
+          "merchant": 114,
+          "staff": 23,
+          "earnings": 15924788,
+          "research": 0,
+          "profit": 678315
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1271.7,
+            1331.6
+          ],
+          "loans": [
+            24678766,
+            23245276
+          ],
+          "deposits": [
+            44500569,
+            56249905
+          ],
+          "cash": [
+            7710009,
+            19522824
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1901.9,
+            1900.7
+          ],
+          "loans": [
+            37044147,
+            43398377
+          ],
+          "deposits": [
+            60838288,
+            86121716
+          ],
+          "cash": [
+            12905900,
+            31346227
+          ],
+          "research": [
+            2,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3616.1,
+            2653.4
+          ],
+          "loans": [
+            74434896,
+            107424729
+          ],
+          "deposits": [
+            113416731,
+            141768607
+          ],
+          "cash": [
+            32198669,
+            30552502
+          ],
+          "research": [
+            5,
+            0
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            9173.1,
+            3809
+          ],
+          "loans": [
+            225078241,
+            170783207
+          ],
+          "deposits": [
+            340888258,
+            222397582
+          ],
+          "cash": [
+            134283397,
+            54489163
+          ],
+          "research": [
+            17,
+            0
+          ]
+        }
+      ],
+      "margin": -5364.1
+    },
+    {
+      "name": "lendingNetwork",
+      "seed": 1,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 4818.7,
+          "cash": 46199172,
+          "loans": 172525695,
+          "deposits": 214478317,
+          "business": 217,
+          "merchant": 133,
+          "staff": 26,
+          "earnings": 15946550,
+          "research": 4,
+          "profit": 623581
+        },
+        {
+          "score": 6678.9,
+          "cash": 133417979,
+          "loans": 249639724,
+          "deposits": 372417339,
+          "business": 143,
+          "merchant": 129,
+          "staff": 18,
+          "earnings": 22340364,
+          "research": 6,
+          "profit": 817138
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1125.6,
+            1237.3
+          ],
+          "loans": [
+            28249184,
+            24568944
+          ],
+          "deposits": [
+            43873679,
+            42929745
+          ],
+          "cash": [
+            4659659,
+            7447915
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1688.8,
+            2019.4
+          ],
+          "loans": [
+            53460888,
+            38877748
+          ],
+          "deposits": [
+            69832849,
+            60535705
+          ],
+          "cash": [
+            8156993,
+            12339836
+          ],
+          "research": [
+            0,
+            2
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2746,
+            3365
+          ],
+          "loans": [
+            84601461,
+            83632809
+          ],
+          "deposits": [
+            99270659,
+            150878934
+          ],
+          "cash": [
+            10054633,
+            62575961
+          ],
+          "research": [
+            3,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            4818.7,
+            6678.9
+          ],
+          "loans": [
+            172525695,
+            249639724
+          ],
+          "deposits": [
+            214478317,
+            372417339
+          ],
+          "cash": [
+            46199172,
+            133417979
+          ],
+          "research": [
+            4,
+            6
+          ]
+        }
+      ],
+      "margin": -1860.1999999999998
+    },
+    {
+      "name": "lendingNetwork",
+      "seed": 1,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 5885.6,
+          "cash": 82355058,
+          "loans": 151766823,
+          "deposits": 230790081,
+          "business": 443,
+          "merchant": 347,
+          "staff": 26,
+          "earnings": 14931800,
+          "research": 8,
+          "profit": 1102761
+        },
+        {
+          "score": 6754.1,
+          "cash": 79963200,
+          "loans": 292653705,
+          "deposits": 356452544,
+          "business": 228,
+          "merchant": 144,
+          "staff": 26,
+          "earnings": 27864361,
+          "research": 5,
+          "profit": 1462423
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1251.2,
+            1196.3
+          ],
+          "loans": [
+            23555951,
+            28931110
+          ],
+          "deposits": [
+            39801604,
+            45859594
+          ],
+          "cash": [
+            5307280,
+            5563211
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1661.1,
+            1840.7
+          ],
+          "loans": [
+            38907374,
+            54799623
+          ],
+          "deposits": [
+            55520146,
+            73927053
+          ],
+          "cash": [
+            7126317,
+            11038960
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2971.1,
+            3534.5
+          ],
+          "loans": [
+            68225496,
+            132036369
+          ],
+          "deposits": [
+            104895925,
+            165725353
+          ],
+          "cash": [
+            30494833,
+            33734697
+          ],
+          "research": [
+            3,
+            2
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            5885.6,
+            6754.1
+          ],
+          "loans": [
+            151766823,
+            292653705
+          ],
+          "deposits": [
+            230790081,
+            356452544
+          ],
+          "cash": [
+            82355058,
+            79963200
+          ],
+          "research": [
+            8,
+            5
+          ]
+        }
+      ],
+      "margin": 868.5
+    },
+    {
+      "name": "lendingNetwork",
+      "seed": 2,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 4360.5,
+          "cash": 29993839,
+          "loans": 187080257,
+          "deposits": 212417964,
+          "business": 112,
+          "merchant": 82,
+          "staff": 22,
+          "earnings": 17706132,
+          "research": 3,
+          "profit": 799594
+        },
+        {
+          "score": 4649.5,
+          "cash": 88717985,
+          "loans": 165233307,
+          "deposits": 251684028,
+          "business": 109,
+          "merchant": 81,
+          "staff": 14,
+          "earnings": 15317264,
+          "research": 3,
+          "profit": 669261
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1123.3,
+            1313.9
+          ],
+          "loans": [
+            24397505,
+            23736549
+          ],
+          "deposits": [
+            44130381,
+            56813266
+          ],
+          "cash": [
+            6606840,
+            19736979
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1499.6,
+            1861.6
+          ],
+          "loans": [
+            40114319,
+            42053149
+          ],
+          "deposits": [
+            57882992,
+            84717477
+          ],
+          "cash": [
+            6220487,
+            31169087
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2722.3,
+            3023
+          ],
+          "loans": [
+            94023070,
+            92664428
+          ],
+          "deposits": [
+            112516710,
+            147726177
+          ],
+          "cash": [
+            13208594,
+            49619977
+          ],
+          "research": [
+            2,
+            1
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            4360.5,
+            4649.5
+          ],
+          "loans": [
+            187080257,
+            165233307
+          ],
+          "deposits": [
+            212417964,
+            251684028
+          ],
+          "cash": [
+            29993839,
+            88717985
+          ],
+          "research": [
+            3,
+            3
+          ]
+        }
+      ],
+      "margin": -289
+    },
+    {
+      "name": "lendingNetwork",
+      "seed": 2,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 7866.4,
+          "cash": 224809817,
+          "loans": 211039422,
+          "deposits": 428864231,
+          "business": 226,
+          "merchant": 216,
+          "staff": 31,
+          "earnings": 19935008,
+          "research": 6,
+          "profit": 605616
+        },
+        {
+          "score": 3819.3,
+          "cash": 16819988,
+          "loans": 157573158,
+          "deposits": 172756477,
+          "business": 148,
+          "merchant": 113,
+          "staff": 15,
+          "earnings": 14686669,
+          "research": 4,
+          "profit": 759863
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1208.8,
+            1197.6
+          ],
+          "loans": [
+            24136673,
+            26965488
+          ],
+          "deposits": [
+            44776317,
+            47112087
+          ],
+          "cash": [
+            8317838,
+            6817781
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1863.5,
+            1756.7
+          ],
+          "loans": [
+            37547311,
+            52311229
+          ],
+          "deposits": [
+            63817919,
+            75530661
+          ],
+          "cash": [
+            15526908,
+            12840300
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3408.3,
+            2906.1
+          ],
+          "loans": [
+            70962742,
+            109501394
+          ],
+          "deposits": [
+            137014081,
+            131052774
+          ],
+          "cash": [
+            58835317,
+            18168424
+          ],
+          "research": [
+            3,
+            2
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            7866.4,
+            3819.3
+          ],
+          "loans": [
+            211039422,
+            157573158
+          ],
+          "deposits": [
+            428864231,
+            172756477
+          ],
+          "cash": [
+            224809817,
+            16819988
+          ],
+          "research": [
+            6,
+            4
+          ]
+        }
+      ],
+      "margin": -4047.0999999999995
+    },
+    {
+      "name": "business",
+      "seed": 1,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3404.9,
+          "cash": 25245097,
+          "loans": 100989761,
+          "deposits": 129179687,
+          "business": 182,
+          "merchant": 169,
+          "staff": 11,
+          "earnings": 8755171,
+          "research": 6,
+          "profit": 689238
+        },
+        {
+          "score": 10729.7,
+          "cash": 194804119,
+          "loans": 289264690,
+          "deposits": 464297258,
+          "business": 751,
+          "merchant": 390,
+          "staff": 55,
+          "earnings": 31371551,
+          "research": 15,
+          "profit": 2445307
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1321.8,
+            1118.6
+          ],
+          "loans": [
+            17152179,
+            22870153
+          ],
+          "deposits": [
+            40063649,
+            39937022
+          ],
+          "cash": [
+            10986443,
+            5992095
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1721.2,
+            1778.1
+          ],
+          "loans": [
+            33631181,
+            37019654
+          ],
+          "deposits": [
+            55907416,
+            58489077
+          ],
+          "cash": [
+            12350506,
+            12556833
+          ],
+          "research": [
+            1,
+            1
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2300.7,
+            3350.8
+          ],
+          "loans": [
+            65208488,
+            74874089
+          ],
+          "deposits": [
+            94039579,
+            119305627
+          ],
+          "cash": [
+            22290361,
+            39376488
+          ],
+          "research": [
+            2,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3404.9,
+            10729.7
+          ],
+          "loans": [
+            100989761,
+            289264690
+          ],
+          "deposits": [
+            129179687,
+            464297258
+          ],
+          "cash": [
+            25245097,
+            194804119
+          ],
+          "research": [
+            6,
+            15
+          ]
+        }
+      ],
+      "margin": -7324.800000000001
+    },
+    {
+      "name": "business",
+      "seed": 1,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3628.6,
+          "cash": 44431276,
+          "loans": 92576167,
+          "deposits": 140844975,
+          "business": 213,
+          "merchant": 199,
+          "staff": 9,
+          "earnings": 7862468,
+          "research": 6,
+          "profit": 499432
+        },
+        {
+          "score": 10786.3,
+          "cash": 171700170,
+          "loans": 475494715,
+          "deposits": 613300620,
+          "business": 486,
+          "merchant": 335,
+          "staff": 36,
+          "earnings": 45494265,
+          "research": 5,
+          "profit": 2215758
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1073.3,
+            1008.4
+          ],
+          "loans": [
+            23542299,
+            20084079
+          ],
+          "deposits": [
+            38755114,
+            36691075
+          ],
+          "cash": [
+            4227178,
+            5136648
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1564.6,
+            2064.8
+          ],
+          "loans": [
+            36590858,
+            29800718
+          ],
+          "deposits": [
+            50096333,
+            60080965
+          ],
+          "cash": [
+            4437868,
+            19995722
+          ],
+          "research": [
+            2,
+            2
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2226.6,
+            3794.1
+          ],
+          "loans": [
+            55508411,
+            100943635
+          ],
+          "deposits": [
+            75639014,
+            149277021
+          ],
+          "cash": [
+            12734400,
+            45751786
+          ],
+          "research": [
+            3,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3628.6,
+            10786.3
+          ],
+          "loans": [
+            92576167,
+            475494715
+          ],
+          "deposits": [
+            140844975,
+            613300620
+          ],
+          "cash": [
+            44431276,
+            171700170
+          ],
+          "research": [
+            6,
+            5
+          ]
+        }
+      ],
+      "margin": 7157.699999999999
+    },
+    {
+      "name": "business",
+      "seed": 2,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 9420.3,
+          "cash": 149071112,
+          "loans": 372001621,
+          "deposits": 498581249,
+          "business": 323,
+          "merchant": 277,
+          "staff": 34,
+          "earnings": 35441484,
+          "research": 7,
+          "profit": 1440960
+        },
+        {
+          "score": 3432.3,
+          "cash": 50766868,
+          "loans": 123699847,
+          "deposits": 176557056,
+          "business": 121,
+          "merchant": 91,
+          "staff": 12,
+          "earnings": 10959659,
+          "research": 3,
+          "profit": 465500
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1221.7,
+            1300.3
+          ],
+          "loans": [
+            22443144,
+            23666558
+          ],
+          "deposits": [
+            45253329,
+            55673533
+          ],
+          "cash": [
+            10228253,
+            18822879
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1882.3,
+            1797
+          ],
+          "loans": [
+            36878169,
+            44514068
+          ],
+          "deposits": [
+            64534177,
+            84472584
+          ],
+          "cash": [
+            16818081,
+            28802838
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3796.9,
+            2577.6
+          ],
+          "loans": [
+            86284947,
+            83248776
+          ],
+          "deposits": [
+            144531337,
+            120869548
+          ],
+          "cash": [
+            52775130,
+            31464450
+          ],
+          "research": [
+            3,
+            2
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            9420.3,
+            3432.3
+          ],
+          "loans": [
+            372001621,
+            123699847
+          ],
+          "deposits": [
+            498581249,
+            176557056
+          ],
+          "cash": [
+            149071112,
+            50766868
+          ],
+          "research": [
+            7,
+            3
+          ]
+        }
+      ],
+      "margin": 5987.999999999999
+    },
+    {
+      "name": "business",
+      "seed": 2,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3427.1,
+          "cash": 22067796,
+          "loans": 95819283,
+          "deposits": 122652979,
+          "business": 233,
+          "merchant": 234,
+          "staff": 18,
+          "earnings": 8284100,
+          "research": 5,
+          "profit": 521384
+        },
+        {
+          "score": 6048.6,
+          "cash": 77512974,
+          "loans": 203815491,
+          "deposits": 275566098,
+          "business": 232,
+          "merchant": 231,
+          "staff": 26,
+          "earnings": 18812367,
+          "research": 6,
+          "profit": 899682
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1119,
+            1138
+          ],
+          "loans": [
+            23164587,
+            22691169
+          ],
+          "deposits": [
+            42973379,
+            42324905
+          ],
+          "cash": [
+            7079108,
+            7144047
+          ],
+          "research": [
+            0,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1723.1,
+            1725.8
+          ],
+          "loans": [
+            36047064,
+            34444428
+          ],
+          "deposits": [
+            59206486,
+            57504411
+          ],
+          "cash": [
+            12080739,
+            11827664
+          ],
+          "research": [
+            1,
+            1
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2437.4,
+            3132.7
+          ],
+          "loans": [
+            58268218,
+            75114513
+          ],
+          "deposits": [
+            79817441,
+            121946948
+          ],
+          "cash": [
+            12974679,
+            39794599
+          ],
+          "research": [
+            3,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3427.1,
+            6048.6
+          ],
+          "loans": [
+            95819283,
+            203815491
+          ],
+          "deposits": [
+            122652979,
+            275566098
+          ],
+          "cash": [
+            22067796,
+            77512974
+          ],
+          "research": [
+            5,
+            6
+          ]
+        }
+      ],
+      "margin": 2621.5000000000005
+    },
+    {
+      "name": "margin",
+      "seed": 1,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 3687.2,
+          "cash": 35913932,
+          "loans": 100174732,
+          "deposits": 139028173,
+          "business": 195,
+          "merchant": 171,
+          "staff": 8,
+          "earnings": 8760491,
+          "research": 7,
+          "profit": 593053
+        },
+        {
+          "score": 9885.3,
+          "cash": 206424128,
+          "loans": 243864058,
+          "deposits": 433348899,
+          "business": 669,
+          "merchant": 392,
+          "staff": 53,
+          "earnings": 28539287,
+          "research": 13,
+          "profit": 2061891
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1275.5,
+            1104.7
+          ],
+          "loans": [
+            23418676,
+            23081579
+          ],
+          "deposits": [
+            38583790,
+            39794772
+          ],
+          "cash": [
+            4165077,
+            5378600
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1646.5,
+            1874.7
+          ],
+          "loans": [
+            35318964,
+            36710514
+          ],
+          "deposits": [
+            48104828,
+            57478246
+          ],
+          "cash": [
+            3608023,
+            11297011
+          ],
+          "research": [
+            2,
+            1
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2502,
+            3551.1
+          ],
+          "loans": [
+            58080272,
+            75906051
+          ],
+          "deposits": [
+            79851418,
+            122857301
+          ],
+          "cash": [
+            14485699,
+            41864102
+          ],
+          "research": [
+            4,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            3687.2,
+            9885.3
+          ],
+          "loans": [
+            100174732,
+            243864058
+          ],
+          "deposits": [
+            139028173,
+            433348899
+          ],
+          "cash": [
+            35913932,
+            206424128
+          ],
+          "research": [
+            7,
+            13
+          ]
+        }
+      ],
+      "margin": -6198.099999999999
+    },
+    {
+      "name": "margin",
+      "seed": 1,
+      "seat": 1,
+      "completed": 71,
+      "gameOver": true,
+      "endReason": "buyout",
+      "error": null,
+      "banks": [
+        {
+          "score": 2039.9,
+          "cash": 0,
+          "loans": 38570778,
+          "deposits": 28997207,
+          "business": 81,
+          "merchant": 150,
+          "staff": 7,
+          "earnings": 7373571,
+          "research": 6,
+          "profit": 660109
+        },
+        {
+          "score": 10319.9,
+          "cash": 190228016,
+          "loans": 260483335,
+          "deposits": 435312752,
+          "business": 920,
+          "merchant": 372,
+          "staff": 60,
+          "earnings": 26998599,
+          "research": 13,
+          "profit": 2331813
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1240.6,
+            1069.1
+          ],
+          "loans": [
+            23957698,
+            21020752
+          ],
+          "deposits": [
+            40528287,
+            36641199
+          ],
+          "cash": [
+            5608174,
+            4294216
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1641.2,
+            1843.8
+          ],
+          "loans": [
+            38933080,
+            34598563
+          ],
+          "deposits": [
+            52435621,
+            55166211
+          ],
+          "cash": [
+            4097250,
+            10853351
+          ],
+          "research": [
+            2,
+            1
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            2256.5,
+            3335.6
+          ],
+          "loans": [
+            61734475,
+            65883937
+          ],
+          "deposits": [
+            83430474,
+            105471306
+          ],
+          "cash": [
+            14893290,
+            33404467
+          ],
+          "research": [
+            3,
+            3
+          ]
+        }
+      ],
+      "margin": 8280
+    },
+    {
+      "name": "margin",
+      "seed": 2,
+      "seat": 0,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 5791.6,
+          "cash": 114155303,
+          "loans": 171606753,
+          "deposits": 282648709,
+          "business": 121,
+          "merchant": 102,
+          "staff": 24,
+          "earnings": 16163347,
+          "research": 6,
+          "profit": 883109
+        },
+        {
+          "score": 3574.1,
+          "cash": 39289262,
+          "loans": 115742516,
+          "deposits": 157699387,
+          "business": 133,
+          "merchant": 107,
+          "staff": 13,
+          "earnings": 10382391,
+          "research": 3,
+          "profit": 699981
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1348.1,
+            1333.6
+          ],
+          "loans": [
+            23567246,
+            22744297
+          ],
+          "deposits": [
+            41743219,
+            56151852
+          ],
+          "cash": [
+            5938381,
+            19993839
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1859.7,
+            1722.6
+          ],
+          "loans": [
+            37814595,
+            39614514
+          ],
+          "deposits": [
+            67187109,
+            75166666
+          ],
+          "cash": [
+            18485560,
+            23987554
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3346.3,
+            2677.7
+          ],
+          "loans": [
+            86073795,
+            72758927
+          ],
+          "deposits": [
+            149038763,
+            107610729
+          ],
+          "cash": [
+            57049430,
+            27606617
+          ],
+          "research": [
+            3,
+            2
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            5791.6,
+            3574.1
+          ],
+          "loans": [
+            171606753,
+            115742516
+          ],
+          "deposits": [
+            282648709,
+            157699387
+          ],
+          "cash": [
+            114155303,
+            39289262
+          ],
+          "research": [
+            6,
+            3
+          ]
+        }
+      ],
+      "margin": 2217.5000000000005
+    },
+    {
+      "name": "margin",
+      "seed": 2,
+      "seat": 1,
+      "completed": 72,
+      "gameOver": false,
+      "endReason": null,
+      "error": null,
+      "banks": [
+        {
+          "score": 9866.2,
+          "cash": 208795485,
+          "loans": 214579721,
+          "deposits": 412145240,
+          "business": 530,
+          "merchant": 420,
+          "staff": 46,
+          "earnings": 24179966,
+          "research": 17,
+          "profit": 2017284
+        },
+        {
+          "score": 4845.7,
+          "cash": 87990540,
+          "loans": 151265964,
+          "deposits": 238319774,
+          "business": 127,
+          "merchant": 97,
+          "staff": 17,
+          "earnings": 13986730,
+          "research": 5,
+          "profit": 617701
+        }
+      ],
+      "checkpoints": [
+        {
+          "month": 12,
+          "scores": [
+            1295.8,
+            1272.6
+          ],
+          "loans": [
+            24749422,
+            23771708
+          ],
+          "deposits": [
+            44858244,
+            50068794
+          ],
+          "cash": [
+            7947629,
+            13271916
+          ],
+          "research": [
+            1,
+            0
+          ]
+        },
+        {
+          "month": 24,
+          "scores": [
+            1980.6,
+            1797
+          ],
+          "loans": [
+            37727907,
+            41435253
+          ],
+          "deposits": [
+            63054369,
+            76033830
+          ],
+          "cash": [
+            14366294,
+            23630082
+          ],
+          "research": [
+            2,
+            0
+          ]
+        },
+        {
+          "month": 48,
+          "scores": [
+            3602.3,
+            3360.3
+          ],
+          "loans": [
+            70004268,
+            94042841
+          ],
+          "deposits": [
+            110857245,
+            159207026
+          ],
+          "cash": [
+            34006219,
+            59922843
+          ],
+          "research": [
+            5,
+            3
+          ]
+        },
+        {
+          "month": 72,
+          "scores": [
+            9866.2,
+            4845.7
+          ],
+          "loans": [
+            214579721,
+            151265964
+          ],
+          "deposits": [
+            412145240,
+            238319774
+          ],
+          "cash": [
+            208795485,
+            87990540
+          ],
+          "research": [
+            17,
+            5
+          ]
+        }
+      ],
+      "margin": -5020.500000000001
+    }
+  ]
+}

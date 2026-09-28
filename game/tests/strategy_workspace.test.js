@@ -133,4 +133,10 @@ test('stale service shortcuts cannot navigate another bank, month, plan or conne
   assert.equal(h.run('JSON.stringify({workspaceTab,desk:subjectWorkspace.customers,hidden:$("#customerCommercialMount").hidden})'),navigation,change);
  }
 });
+test('Core funding controls refresh after unrelated spending and old callbacks stay invalid',()=>{
+ const h=fresh();h.run('game=E.createGame({...E.previewCampaignEdition({},"core",{currentReporting:true,currentEconomics:true,currentResearch:true}).options,mode:"hotseat",seed:"strategy-spend-refresh",created:1});seat=0;newDraft(currentView());draft.decision="b";renderStrategy(currentView())');
+ const stale=h.elements.get('#fund-network-more').listeners.click,world=h.run('JSON.stringify(game)');
+ h.run('draft.hires=1;renderReady(currentView())');const before=bytes(h);stale();assert.equal(bytes(h),before);
+ const expected=h.run('E.fundingStep(currentView().me,draft,"network",50000,currentView())');click(h,'fund-network-more');assert(expected>0);assert.equal(h.run('draft.investments.network'),expected);assert.equal(h.run('draft.hires'),1);assert.equal(h.run('JSON.stringify(game)'),world);
+});
 console.log(JSON.stringify({suite:'strategy-workspace',checks,scope:'Selected-capability workflow, pure inspection, model review and exact funding/deployment commands, stale contexts, lifecycle state and cross-object navigation. No new simulation rules.'}));

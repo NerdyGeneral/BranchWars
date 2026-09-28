@@ -18,18 +18,18 @@ const route=h=>copy(h.run('interfaceCurrentRoute()'));
 test('pricing opens exact terms and return restores only the office route, retaining new plan edits',()=>{
  const h=fresh(),initial=route(h),before=state(h),world=h.run('JSON.stringify(game)');
  assert(h.run("openBankingContext('pricing',{product:'essential',market:'uptown'})"));
- assert.deepEqual(route(h),{workspace:'banking',view:'deposits',context:{productId:'essential',marketId:'uptown',mode:'pricing'}});assert.equal(state(h),before);
+ assert.deepEqual(route(h),{workspace:'banking',view:'deposits',context:{objectId:'essential',productId:'essential',marketId:'uptown',mode:'terms'}});assert.equal(state(h),before);
  h.run("draft.productProgramPolicy.pricingBp.essential=25;draft.depositPolicy='growth'");const changed=state(h);
  assert(h.run('interfaceReturn()'));assert.deepEqual(route(h),initial);assert.equal(state(h),changed);assert.equal(h.run('JSON.stringify(game)'),world);assert.equal(h.run('restoredScroll.top'),380);
 });
 test('each pricing route names its exact product; invalid requests neither navigate nor stage',()=>{
  const h=fresh(),before=state(h);
- for(const product of ['essential','rewards','highYield']){h.c.product=product;assert(h.run("openBankingContext('pricing',{product})"));assert.equal(route(h).context.productId,product);assert.equal(route(h).context.mode,'pricing');assert(h.run('interfaceReturn()'));}
+ for(const product of ['essential','rewards','highYield']){h.c.product=product;assert(h.run("openBankingContext('pricing',{product})"));assert.equal(route(h).context.productId,product);assert.equal(route(h).context.objectId,product);assert.equal(route(h).context.mode,'terms');assert(h.run('interfaceReturn()'));}
  const r=route(h);assert.equal(h.run("openBankingContext('pricing',{product:'not-a-product'})"),false);assert.equal(h.run("openBankingContext('unknown')"),false);assert.deepEqual(route(h),r);assert.equal(state(h),before);
 });
 test('portfolio has a distinct canonical home and nested return restores product and office selections',()=>{
  const h=fresh(),before=state(h),office=route(h);h.run("openBankingContext('pricing',{product:'rewards'});openBankingContext('portfolio',{market:'downtown'})");
- assert.equal(route(h).view,'lending');assert.equal(route(h).context.mode,'portfolio');
+ assert.equal(route(h).view,'lending');assert.deepEqual(route(h).context,{objectId:'portfolio',marketId:'downtown'});
  assert(h.run('interfaceReturn()'));assert.equal(route(h).view,'deposits');assert.equal(route(h).context.productId,'rewards');assert(h.run('interfaceReturn()'));assert.deepEqual(route(h),office);assert.equal(state(h),before);
 });
 test('Core and historical non-Expanded programmes keep their supported original routes',()=>{

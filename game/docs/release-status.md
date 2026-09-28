@@ -1,5 +1,14 @@
 # Release status and known issues
 
+## September 28 — Planning repairs on PR #33
+
+Core and Expanded planning repairs are implemented and scoped-tested; see the
+[repair evidence](archive/planning-repairs-2026-09-28.md) and
+[exact-build browser receipt](../reports/qa/planning-repair-2026-09-28.json).
+Portable SHA256: `4ea09486aa3eb1e8318fa32b3a182b5830fffb3725dad863969cc13509a150be`.
+This UI batch preserves the engine from the preceding Core balance/hiring change.
+Full GitHub checks on the updated PR head remain required before merge.
+
 ## September 28 — Interface follow-up: header figures, one Research page, Core products
 
 Three playtest requests. Interface only; no campaign rules change.
@@ -67,6 +76,20 @@ identically before and after.
 - **Bank logos.** Uploads accept JPG, PNG, WebP or GIF up to 10 MB, scaled to fit and
   re-encoded as JPEG. Stored logos may be up to 400 × 400 pixels and 150 KB (were 200 × 200
   and 100 KB); most store at a few tens of KB. SVG is still refused.
+
+### Recruitment forecast follow-up
+
+Core and Expanded Forecast & books now includes **Hiring impact**. The ordinary
+bank forecast covers this month's operating stage, before new hires arrive, so
+staging recruits cannot change its deposit or loan growth. The new table holds
+today's book and economy fixed, then assigns all arriving recruits to Retail &
+service, Business, Lending, or Operations one role at a time. It displays the
+estimated monthly deposit and loan growth, operating profit, recurring expense,
+the change from the current draft, and the binding deposit/loan limits. With no
+staged recruits it compares one illustrative generalist. Recruits enter Retail
+& service by default and can be reassigned in the following month's plan.
+The what-if does not forecast next month's economy or settled balances, and it
+does not include the one-time signing cost in operating profit.
 
 ## September 27 — 9.39 repository publication
 

@@ -7,3 +7,7 @@
 .im-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #d6e0ec}
 .im-tabs .btn{min-height:36px;padding:6px 12px;font-size:13px}
 .im-tabs .btn[aria-pressed="true"]{background:#e8f0fc;border-color:#3476d4;color:#174a8c}
+.im-selection.im-single-selection{grid-template-columns:1fr;gap:0}
+.im-single-selection>.im-options{display:none}
+
+.im-build-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0 22px}.im-build-groups .btn{white-space:normal;text-align:left;min-height:48px;padding:12px}.im-build-groups [aria-pressed=true]{background:#eaf2ff;border-color:#3476d4;color:#174b91}@media(max-width:520px){.im-build-groups{grid-template-columns:1fr}}

@@ -16,6 +16,7 @@ Read the [current implementation ledger](../v3-usability.md) first. These full s
 
 ## Subsequent implementation evidence
 
+- [Planning repairs — Core forecasts and decisions; Expanded People, Reports and offices](planning-repairs-2026-09-28.md).
 - [Checkpoint65 — ordinary Expanded company lending, strict lobby compatibility and historical fixture separation](checkpoint65-expanded-credit-2026-09-13.md).
 - [Checkpoint64 — same-rule rival company loans and actual ending-stage ownership](checkpoint64-company-credit-rival-2026-09-13.md).
 - [Checkpoint63 — customer loan tickets, shared conditional forecasts and guarded staging](checkpoint63-company-credit-desk-2026-09-13.md).

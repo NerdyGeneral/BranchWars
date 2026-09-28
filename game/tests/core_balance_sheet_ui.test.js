@@ -10,4 +10,14 @@ test('Core balance sheet, earnings sources and payroll are visible without chang
  assert.match(html,/Exposure = loans \+ 20% of securities/);assert.doesNotMatch(html,/NaN|undefined/);
  assert.equal(h.run('E.bankBasePayroll(currentView().me)'),12000);
  assert.equal(h.run('E.IncomeReview.statement(currentView().me.operatingReport).abstract'),0);
+ assert(h.run('currentView().me.operatingReport.depositIncome')>0);
+ assert.match(h.elements.get('#operatingReport').innerHTML,/Deposit margin \(modeled\)/);
+ assert.match(h.elements.get('#operatingReport').innerHTML,/Deposit margin is the modeled return/);
+});
+test('current Core books omit the removed deposit proxy',()=>{
+ const h=harness();
+ h.run("game=E.createGame({incomeHistoryVersion:1,commercialServiceVersion:1,bankEconomicsVersion:2,researchProgramVersion:1,mode:'hotseat',seed:'core-books-ui',created:1});seat=0;E.submit(game,0,E.chooseBot(game,0));E.submit(game,1,E.chooseBot(game,1));newDraft(currentView());renderBankRecovery=()=>{};renderOperatingPreview(currentView());");
+ assert.equal(h.run('currentView().me.operatingReport.depositIncome'),0);
+ assert.doesNotMatch(h.elements.get('#operatingReport').innerHTML,/Deposit margin/);
+ assert.match(h.elements.get('#operatingReport').innerHTML,/Loan interest/);
 });

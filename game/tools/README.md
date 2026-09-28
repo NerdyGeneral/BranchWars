@@ -19,6 +19,17 @@ full release gate or physical two-computer testing. `RUN_TESTS.bat` still runs t
 complete suite. Golden updates are deliberate: see [contributing](../../CONTRIBUTING.md).
 The original save fixtures must not be overwritten.
 
+CI keeps the original eight shard memberships, with shard 5 split into three
+parallel jobs, `fast (5.1)` through `fast (5.3)`. The `fast (5)` status waits for
+all three and fails on failure, cancellation or skipped work. Inspect or run a
+part with `node game/tools/check.js --shard=5/8 --partition=1/3 --list` (omit
+`--list` to execute). All parts repeat the portable freshness check.
+`gate_shard_timings.json` records the timing source and estimates; unknown/new
+commands use a default scheduling estimate and are never omitted.
+`gate_shards.test.js` verifies the complete CI matrix against the central gate,
+including distinct argument variants and aggregate failure behavior. The split
+shortens queues behind expensive commands; it does not shorten individual tests.
+
 `RUN_TESTS.bat` delegates to `tools/check.js --full`, including newer checks added
 after the original baseline runner. Each central run preserves an append-only
 JSONL journal, captured output log and terminal JSON receipt in

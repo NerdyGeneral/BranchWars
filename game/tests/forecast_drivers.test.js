@@ -79,4 +79,53 @@ test('Forecast & books shows Growth & limits with every section and no broken fi
  assert(text.includes('data-forecast-view="drivers"'));
 });
 
+test('staged hires leave current operations alone, but staffing comparison shows their next run rate',()=>{
+ const g=core('hiring-impact',0),v=E.publicState(g,0),plan=E.chooseBot(g,0),frozen=JSON.stringify({g,v,plan});
+ const current=E.operatingPreview(v.me,plan,v.economy,v),hired={...plan,hires:2};
+ assert.equal(E.operatingPreview(v.me,hired,v.economy,v).depositGrowth,current.depositGrowth);
+ const result=E.forecastHiringImpact(v,v.me,hired);
+ assert.equal(result.staged,2);assert.equal(result.count,2);
+ const service=result.rows.find(x=>x.role==='service'),business=result.rows.find(x=>x.role==='business');
+ assert(service.change.depositGrowth>business.change.depositGrowth,'Core service hires increase deposits at this opening');
+ assert(service.forecast.expense>current.expense,'Recurring payroll belongs in the illustrated run rate');
+ assert.equal(JSON.stringify({g,v,plan}),frozen,'No what-if may alter a stored game, public view or draft');
+});
+
+test('Expanded lending hires show a funded growth change and no recruits remain illustrative',()=>{
+ const g=E.createGame({...E.previewCampaignEdition({},'expanded',CORE).options,mode:'hotseat',seed:'hiring-impact',created:1}),
+  v=E.publicState(g,0),plan=E.chooseBot(g,0),r=E.forecastHiringImpact(v,v.me,plan);
+ assert.equal(r.staged,0);assert.equal(r.count,1);
+ assert(r.rows.find(x=>x.role==='lending').change.loanGrowth>0);
+ assert(r.rows.every(x=>!x.error),JSON.stringify(r.rows));
+ const specialist={...plan,specialistHires:{...E.emptySpecialistOrders(),lending:1}},snapshot=JSON.stringify({g,v,specialist});
+ const trained=E.forecastHiringImpact(v,v.me,specialist);
+ assert.equal(trained.staged,1);
+ assert(trained.rows.find(x=>x.role==='lending').change.loanGrowth>r.rows.find(x=>x.role==='lending').change.loanGrowth,
+  'Qualified lending recruit improves the next run rate more than an untrained generalist');
+ assert.equal(JSON.stringify({g,v,specialist}),snapshot);
+});
+
+test('Forecast & books renders the same hiring view in Core and Expanded',()=>{
+ const {harness}=require('./github_resilience.test');
+ for(const edition of ['core','expanded']){
+  const h=harness();h.c.opts={...E.previewCampaignEdition({},edition,CORE).options,mode:'hotseat',seed:'hiring-ui',created:1};
+  h.run("game=E.createGame(opts);seat=0;gh.active=false;p2pRole='';renderBankRecovery=()=>{};newDraft(currentView());draft.hires=2;operatingForecastView={owner:currentView().me.id,desk:'hiring'};renderOperatingPreview(currentView());");
+  const markup=h.elements.get('#operatingPreview').innerHTML;
+  assert.match(markup,/EXPECTED HIRING IMPACT/);assert.match(markup,/2 staged recruits/);
+  assert.match(markup,/Joining after this month/);assert.match(markup,/data-forecast-view="hiring"/);
+  assert.doesNotMatch(markup,/NaN|undefined|Infinity|Unavailable:/,edition);
+ }
+});
+
+test('Core forecast uses flat topic reports instead of stacked disclosure boxes',()=>{
+ const h=require('./github_resilience.test').harness();h.run('game=E.createGame({...E.previewCampaignEdition({},"core",{currentReporting:true,currentEconomics:true,currentResearch:true}).options,mode:"hotseat",seed:"flat-forecast",created:1});seat=0;newDraft(currentView());renderBankRecovery=()=>{};renderOperatingPreview(currentView())');
+ const html=h.elements.get('#operatingPreview').innerHTML;assert.doesNotMatch(html,/<details|<summary/);assert.match(html,/data-forecast-view="income"/);assert.match(html,/data-forecast-panel="income" hidden/);assert.match(html,/Income statement/);
+});
+test('Core executive responses distinguish temporary effects from unrelated orders',()=>{
+ const h=require('./github_resilience.test').harness();
+ assert.match(h.run('coreDecisionOutcome({key:"staffing"},"a")'),/does not add employees/);
+ assert.match(h.run('coreDecisionOutcome({key:"merger"},"a")'),/conditional staffing/);
+ assert.match(h.run('coreDecisionOutcome({key:"fintech"},"a")'),/does not buy research/);
+ assert.match(h.run('coreDecisionOutcome({key:"closure"},"a")'),/No rival branch or customer book is purchased/);
+});
 console.log('Forecast drivers passed: '+checks+' checks on growth limits, project effects and research contributions.');

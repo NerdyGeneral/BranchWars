@@ -1,0 +1,2108 @@
+{
+  "sourceSha256": "ddc6a7df70d6d4ff08f1941e9766e058f2e36b1bd33e7db315bf61cb1e7159bb",
+  "months": 48,
+  "seeds": 2,
+  "strategies": {
+    "ai": {},
+    "noResearch": {
+      "research": "none"
+    },
+    "network": {
+      "research": "network"
+    },
+    "digital": {
+      "research": "digital"
+    },
+    "commercial": {
+      "research": "commercial"
+    },
+    "operations": {
+      "research": "operations"
+    },
+    "acquisition": {
+      "research": "acquisition"
+    },
+    "risk": {
+      "research": "risk"
+    },
+    "lending": {
+      "allocation": [
+        2,
+        1,
+        4,
+        1
+      ],
+      "lendingPolicy": "growth"
+    },
+    "business": {
+      "allocation": [
+        2,
+        4,
+        1,
+        1
+      ]
+    },
+    "service": {
+      "allocation": [
+        4,
+        1,
+        2,
+        1
+      ]
+    },
+    "margin": {
+      "depositPolicy": "margin"
+    },
+    "aggressive": {
+      "depositPolicy": "aggressive"
+    },
+    "creditGrowth": {
+      "lendingPolicy": "growth"
+    },
+    "conservative": {
+      "lendingPolicy": "conservative"
+    }
+  },
+  "results": [
+    {
+      "name": "ai",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3135.9,
+          "cash": 63851441,
+          "loans": 103018537,
+          "deposits": 170000318,
+          "business": 142,
+          "merchant": 100,
+          "staff": 18,
+          "earnings": 8569660,
+          "research": 3,
+          "profit": 286473
+        },
+        {
+          "score": 5100.4,
+          "cash": 119971603,
+          "loans": 78931070,
+          "deposits": 200266203,
+          "business": 853,
+          "merchant": 552,
+          "staff": 36,
+          "earnings": 10236470,
+          "research": 9,
+          "profit": 1808860
+        }
+      ],
+      "margin": -1964.4999999999995
+    },
+    {
+      "name": "ai",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3135.9,
+          "cash": 63851441,
+          "loans": 103018537,
+          "deposits": 170000318,
+          "business": 142,
+          "merchant": 100,
+          "staff": 18,
+          "earnings": 8569660,
+          "research": 3,
+          "profit": 286473
+        },
+        {
+          "score": 5100.4,
+          "cash": 119971603,
+          "loans": 78931070,
+          "deposits": 200266203,
+          "business": 853,
+          "merchant": 552,
+          "staff": 36,
+          "earnings": 10236470,
+          "research": 9,
+          "profit": 1808860
+        }
+      ],
+      "margin": 1964.4999999999995
+    },
+    {
+      "name": "ai",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3798.5,
+          "cash": 81222818,
+          "loans": 112235467,
+          "deposits": 197004201,
+          "business": 230,
+          "merchant": 188,
+          "staff": 21,
+          "earnings": 9504084,
+          "research": 4,
+          "profit": 412295
+        },
+        {
+          "score": 2831.7,
+          "cash": 43932527,
+          "loans": 88223287,
+          "deposits": 137982482,
+          "business": 128,
+          "merchant": 95,
+          "staff": 13,
+          "earnings": 7223332,
+          "research": 3,
+          "profit": 302989
+        }
+      ],
+      "margin": 966.8000000000002
+    },
+    {
+      "name": "ai",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3798.5,
+          "cash": 81222818,
+          "loans": 112235467,
+          "deposits": 197004201,
+          "business": 230,
+          "merchant": 188,
+          "staff": 21,
+          "earnings": 9504084,
+          "research": 4,
+          "profit": 412295
+        },
+        {
+          "score": 2831.7,
+          "cash": 43932527,
+          "loans": 88223287,
+          "deposits": 137982482,
+          "business": 128,
+          "merchant": 95,
+          "staff": 13,
+          "earnings": 7223332,
+          "research": 3,
+          "profit": 302989
+        }
+      ],
+      "margin": -966.8000000000002
+    },
+    {
+      "name": "noResearch",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3288.1,
+          "cash": 27612473,
+          "loans": 61897394,
+          "deposits": 94964406,
+          "business": 749,
+          "merchant": 460,
+          "staff": 38,
+          "earnings": 6245461,
+          "research": 0,
+          "profit": 670325
+        },
+        {
+          "score": 2969.1,
+          "cash": 50720487,
+          "loans": 80092177,
+          "deposits": 135778770,
+          "business": 315,
+          "merchant": 230,
+          "staff": 17,
+          "earnings": 6733894,
+          "research": 3,
+          "profit": 641354
+        }
+      ],
+      "margin": 319
+    },
+    {
+      "name": "noResearch",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2960.4,
+          "cash": 57764212,
+          "loans": 97384665,
+          "deposits": 158862613,
+          "business": 146,
+          "merchant": 100,
+          "staff": 17,
+          "earnings": 7986264,
+          "research": 2,
+          "profit": 316140
+        },
+        {
+          "score": 4055.2,
+          "cash": 66716243,
+          "loans": 68738682,
+          "deposits": 135862147,
+          "business": 750,
+          "merchant": 468,
+          "staff": 36,
+          "earnings": 11192778,
+          "research": 0,
+          "profit": 485730
+        }
+      ],
+      "margin": 1094.7999999999997
+    },
+    {
+      "name": "noResearch",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4058.1,
+          "cash": 86420386,
+          "loans": 115555702,
+          "deposits": 204941157,
+          "business": 221,
+          "merchant": 172,
+          "staff": 28,
+          "earnings": 10084931,
+          "research": 0,
+          "profit": 306732
+        },
+        {
+          "score": 2153.5,
+          "cash": 17205708,
+          "loans": 66223143,
+          "deposits": 91278595,
+          "business": 174,
+          "merchant": 139,
+          "staff": 11,
+          "earnings": 5200256,
+          "research": 3,
+          "profit": 335838
+        }
+      ],
+      "margin": 1904.6
+    },
+    {
+      "name": "noResearch",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3734.2,
+          "cash": 76685419,
+          "loans": 108399680,
+          "deposits": 189012448,
+          "business": 222,
+          "merchant": 180,
+          "staff": 20,
+          "earnings": 9122651,
+          "research": 4,
+          "profit": 388251
+        },
+        {
+          "score": 2769.5,
+          "cash": 43054572,
+          "loans": 89914011,
+          "deposits": 138556168,
+          "business": 138,
+          "merchant": 103,
+          "staff": 17,
+          "earnings": 7462415,
+          "research": 0,
+          "profit": 277676
+        }
+      ],
+      "margin": -964.6999999999998
+    },
+    {
+      "name": "network",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3131.1,
+          "cash": 63538554,
+          "loans": 102856629,
+          "deposits": 169539860,
+          "business": 143,
+          "merchant": 100,
+          "staff": 18,
+          "earnings": 8555323,
+          "research": 3,
+          "profit": 286835
+        },
+        {
+          "score": 5101.1,
+          "cash": 119976367,
+          "loans": 78926228,
+          "deposits": 200266972,
+          "business": 853,
+          "merchant": 552,
+          "staff": 36,
+          "earnings": 10235623,
+          "research": 9,
+          "profit": 1808833
+        }
+      ],
+      "margin": -1970.0000000000005
+    },
+    {
+      "name": "network",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3155.1,
+          "cash": 65336414,
+          "loans": 102963203,
+          "deposits": 171520888,
+          "business": 150,
+          "merchant": 108,
+          "staff": 19,
+          "earnings": 8478729,
+          "research": 3,
+          "profit": 283834
+        },
+        {
+          "score": 4605.9,
+          "cash": 101002825,
+          "loans": 75160051,
+          "deposits": 176505458,
+          "business": 735,
+          "merchant": 476,
+          "staff": 37,
+          "earnings": 11257418,
+          "research": 4,
+          "profit": 505686
+        }
+      ],
+      "margin": 1450.7999999999997
+    },
+    {
+      "name": "network",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3729.3,
+          "cash": 80763836,
+          "loans": 111656784,
+          "deposits": 196023566,
+          "business": 230,
+          "merchant": 188,
+          "staff": 21,
+          "earnings": 9447054,
+          "research": 3,
+          "profit": 410564
+        },
+        {
+          "score": 2855.3,
+          "cash": 44063588,
+          "loans": 88379665,
+          "deposits": 138254594,
+          "business": 128,
+          "merchant": 95,
+          "staff": 13,
+          "earnings": 7238659,
+          "research": 3,
+          "profit": 303421
+        }
+      ],
+      "margin": 874
+    },
+    {
+      "name": "network",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3819.9,
+          "cash": 83765104,
+          "loans": 110884450,
+          "deposits": 198220857,
+          "business": 230,
+          "merchant": 188,
+          "staff": 20,
+          "earnings": 9478697,
+          "research": 4,
+          "profit": 433918
+        },
+        {
+          "score": 2800.4,
+          "cash": 44956484,
+          "loans": 85302017,
+          "deposits": 136339770,
+          "business": 128,
+          "merchant": 95,
+          "staff": 15,
+          "earnings": 6968731,
+          "research": 3,
+          "profit": 308408
+        }
+      ],
+      "margin": -1019.5
+    },
+    {
+      "name": "digital",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3172,
+          "cash": 52059850,
+          "loans": 106968923,
+          "deposits": 161667705,
+          "business": 156,
+          "merchant": 112,
+          "staff": 20,
+          "earnings": 9061068,
+          "research": 3,
+          "profit": 462526
+        },
+        {
+          "score": 4982.7,
+          "cash": 107260901,
+          "loans": 75479135,
+          "deposits": 183238742,
+          "business": 873,
+          "merchant": 562,
+          "staff": 34,
+          "earnings": 11101294,
+          "research": 9,
+          "profit": 1849464
+        }
+      ],
+      "margin": -1810.6999999999998
+    },
+    {
+      "name": "digital",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2934.2,
+          "cash": 52168996,
+          "loans": 94821113,
+          "deposits": 150898660,
+          "business": 154,
+          "merchant": 108,
+          "staff": 17,
+          "earnings": 7791449,
+          "research": 3,
+          "profit": 322609
+        },
+        {
+          "score": 4169.2,
+          "cash": 69386831,
+          "loans": 72058749,
+          "deposits": 142357191,
+          "business": 649,
+          "merchant": 480,
+          "staff": 34,
+          "earnings": 10688389,
+          "research": 4,
+          "profit": 642519
+        }
+      ],
+      "margin": 1235
+    },
+    {
+      "name": "digital",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3520.5,
+          "cash": 31903630,
+          "loans": 66778783,
+          "deposits": 103808672,
+          "business": 624,
+          "merchant": 523,
+          "staff": 31,
+          "earnings": 7823741,
+          "research": 4,
+          "profit": 639813
+        },
+        {
+          "score": 3276.2,
+          "cash": 66375104,
+          "loans": 100123690,
+          "deposits": 171113763,
+          "business": 124,
+          "merchant": 92,
+          "staff": 15,
+          "earnings": 8435031,
+          "research": 3,
+          "profit": 339497
+        }
+      ],
+      "margin": 244.30000000000018
+    },
+    {
+      "name": "digital",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4483.9,
+          "cash": 115100822,
+          "loans": 114120775,
+          "deposits": 232338236,
+          "business": 217,
+          "merchant": 177,
+          "staff": 24,
+          "earnings": 9933361,
+          "research": 3,
+          "profit": 261443
+        },
+        {
+          "score": 1977,
+          "cash": 6959228,
+          "loans": 58921966,
+          "deposits": 74325066,
+          "business": 195,
+          "merchant": 162,
+          "staff": 11,
+          "earnings": 4606128,
+          "research": 3,
+          "profit": 411735
+        }
+      ],
+      "margin": -2506.8999999999996
+    },
+    {
+      "name": "commercial",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3059.5,
+          "cash": 42257939,
+          "loans": 99166051,
+          "deposits": 144578778,
+          "business": 212,
+          "merchant": 161,
+          "staff": 18,
+          "earnings": 8545212,
+          "research": 3,
+          "profit": 583522
+        },
+        {
+          "score": 4397.9,
+          "cash": 92246411,
+          "loans": 72422918,
+          "deposits": 166965653,
+          "business": 664,
+          "merchant": 485,
+          "staff": 31,
+          "earnings": 9303676,
+          "research": 9,
+          "profit": 1478529
+        }
+      ],
+      "margin": -1338.3999999999996
+    },
+    {
+      "name": "commercial",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3142.1,
+          "cash": 62369089,
+          "loans": 100239486,
+          "deposits": 166127369,
+          "business": 142,
+          "merchant": 96,
+          "staff": 17,
+          "earnings": 8181206,
+          "research": 3,
+          "profit": 281589
+        },
+        {
+          "score": 4463.5,
+          "cash": 67741012,
+          "loans": 74648215,
+          "deposits": 140061860,
+          "business": 836,
+          "merchant": 608,
+          "staff": 37,
+          "earnings": 13927367,
+          "research": 4,
+          "profit": 982136
+        }
+      ],
+      "margin": 1321.4
+    },
+    {
+      "name": "commercial",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3902.4,
+          "cash": 72500165,
+          "loans": 108899334,
+          "deposits": 184981838,
+          "business": 264,
+          "merchant": 215,
+          "staff": 31,
+          "earnings": 9467661,
+          "research": 3,
+          "profit": 393224
+        },
+        {
+          "score": 2154.6,
+          "cash": 8942832,
+          "loans": 61388431,
+          "deposits": 78595397,
+          "business": 191,
+          "merchant": 156,
+          "staff": 9,
+          "earnings": 4785866,
+          "research": 3,
+          "profit": 375277
+        }
+      ],
+      "margin": 1747.8000000000002
+    },
+    {
+      "name": "commercial",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4276.5,
+          "cash": 106712535,
+          "loans": 110533478,
+          "deposits": 221333216,
+          "business": 210,
+          "merchant": 172,
+          "staff": 26,
+          "earnings": 8962797,
+          "research": 3,
+          "profit": 341455
+        },
+        {
+          "score": 2112.3,
+          "cash": 10129901,
+          "loans": 64986646,
+          "deposits": 83101630,
+          "business": 182,
+          "merchant": 137,
+          "staff": 15,
+          "earnings": 5064917,
+          "research": 3,
+          "profit": 411291
+        }
+      ],
+      "margin": -2164.2
+    },
+    {
+      "name": "operations",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3035.3,
+          "cash": 51094174,
+          "loans": 109196431,
+          "deposits": 162800197,
+          "business": 148,
+          "merchant": 104,
+          "staff": 21,
+          "earnings": 9190408,
+          "research": 2,
+          "profit": 340831
+        },
+        {
+          "score": 5334.9,
+          "cash": 108747845,
+          "loans": 88297136,
+          "deposits": 189591850,
+          "business": 813,
+          "merchant": 586,
+          "staff": 33,
+          "earnings": 19053131,
+          "research": 11,
+          "profit": 1981865
+        }
+      ],
+      "margin": -2299.5999999999995
+    },
+    {
+      "name": "operations",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3584.9,
+          "cash": 85458050,
+          "loans": 109689124,
+          "deposits": 196920738,
+          "business": 145,
+          "merchant": 101,
+          "staff": 22,
+          "earnings": 9926436,
+          "research": 2,
+          "profit": 677270
+        },
+        {
+          "score": 3670,
+          "cash": 17531053,
+          "loans": 68962848,
+          "deposits": 89477375,
+          "business": 851,
+          "merchant": 574,
+          "staff": 29,
+          "earnings": 8616526,
+          "research": 4,
+          "profit": 1027783
+        }
+      ],
+      "margin": 85.09999999999991
+    },
+    {
+      "name": "operations",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3981.4,
+          "cash": 79666875,
+          "loans": 115049691,
+          "deposits": 197791853,
+          "business": 214,
+          "merchant": 174,
+          "staff": 28,
+          "earnings": 9974713,
+          "research": 3,
+          "profit": 339882
+        },
+        {
+          "score": 2253.7,
+          "cash": 18912114,
+          "loans": 67291489,
+          "deposits": 93955431,
+          "business": 148,
+          "merchant": 118,
+          "staff": 12,
+          "earnings": 5298172,
+          "research": 3,
+          "profit": 306816
+        }
+      ],
+      "margin": 1727.7000000000003
+    },
+    {
+      "name": "operations",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4296.6,
+          "cash": 85803806,
+          "loans": 70387609,
+          "deposits": 160988936,
+          "business": 579,
+          "merchant": 479,
+          "staff": 25,
+          "earnings": 8152479,
+          "research": 9,
+          "profit": 1276659
+        },
+        {
+          "score": 2762.1,
+          "cash": 40169629,
+          "loans": 94374121,
+          "deposits": 139590475,
+          "business": 144,
+          "merchant": 106,
+          "staff": 15,
+          "earnings": 8003275,
+          "research": 2,
+          "profit": 353020
+        }
+      ],
+      "margin": -1534.5000000000005
+    },
+    {
+      "name": "acquisition",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3155,
+          "cash": 51224999,
+          "loans": 103906704,
+          "deposits": 157751694,
+          "business": 159,
+          "merchant": 114,
+          "staff": 20,
+          "earnings": 9080009,
+          "research": 3,
+          "profit": 584695
+        },
+        {
+          "score": 4282.4,
+          "cash": 45919726,
+          "loans": 72094170,
+          "deposits": 115887467,
+          "business": 920,
+          "merchant": 607,
+          "staff": 32,
+          "earnings": 13726429,
+          "research": 9,
+          "profit": 2500719
+        }
+      ],
+      "margin": -1127.3999999999996
+    },
+    {
+      "name": "acquisition",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2574.5,
+          "cash": 32230557,
+          "loans": 89895992,
+          "deposits": 126363455,
+          "business": 152,
+          "merchant": 108,
+          "staff": 8,
+          "earnings": 7463094,
+          "research": 3,
+          "profit": 394625
+        },
+        {
+          "score": 4466,
+          "cash": 81413987,
+          "loans": 72984594,
+          "deposits": 156910588,
+          "business": 789,
+          "merchant": 491,
+          "staff": 46,
+          "earnings": 9087993,
+          "research": 4,
+          "profit": 392420
+        }
+      ],
+      "margin": 1891.5
+    },
+    {
+      "name": "acquisition",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3562.5,
+          "cash": 70702062,
+          "loans": 87743000,
+          "deposits": 164071800,
+          "business": 227,
+          "merchant": 177,
+          "staff": 23,
+          "earnings": 7423262,
+          "research": 4,
+          "profit": 246051
+        },
+        {
+          "score": 2241.5,
+          "cash": 16849647,
+          "loans": 68017035,
+          "deposits": 92470890,
+          "business": 154,
+          "merchant": 125,
+          "staff": 8,
+          "earnings": 5445792,
+          "research": 3,
+          "profit": 313935
+        }
+      ],
+      "margin": 1321
+    },
+    {
+      "name": "acquisition",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3647.7,
+          "cash": 82681202,
+          "loans": 94253277,
+          "deposits": 182266084,
+          "business": 230,
+          "merchant": 188,
+          "staff": 20,
+          "earnings": 7718395,
+          "research": 4,
+          "profit": 341459
+        },
+        {
+          "score": 2320.2,
+          "cash": 16122505,
+          "loans": 71165828,
+          "deposits": 94553960,
+          "business": 162,
+          "merchant": 117,
+          "staff": 10,
+          "earnings": 5784373,
+          "research": 4,
+          "profit": 326319
+        }
+      ],
+      "margin": -1327.5
+    },
+    {
+      "name": "risk",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2612.1,
+          "cash": 32093596,
+          "loans": 95579170,
+          "deposits": 131397681,
+          "business": 148,
+          "merchant": 104,
+          "staff": 16,
+          "earnings": 7975085,
+          "research": 3,
+          "profit": 382647
+        },
+        {
+          "score": 5872.1,
+          "cash": 141770997,
+          "loans": 88862394,
+          "deposits": 229050459,
+          "business": 1037,
+          "merchant": 667,
+          "staff": 38,
+          "earnings": 13182932,
+          "research": 10,
+          "profit": 1952188
+        }
+      ],
+      "margin": -3260.0000000000005
+    },
+    {
+      "name": "risk",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3491.3,
+          "cash": 68666925,
+          "loans": 108831524,
+          "deposits": 179593295,
+          "business": 155,
+          "merchant": 108,
+          "staff": 17,
+          "earnings": 9605154,
+          "research": 3,
+          "profit": 691239
+        },
+        {
+          "score": 3502.3,
+          "cash": 24718749,
+          "loans": 63396997,
+          "deposits": 92754660,
+          "business": 784,
+          "merchant": 543,
+          "staff": 30,
+          "earnings": 6961086,
+          "research": 4,
+          "profit": 830260
+        }
+      ],
+      "margin": 11
+    },
+    {
+      "name": "risk",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3903,
+          "cash": 74732303,
+          "loans": 103715846,
+          "deposits": 182675277,
+          "business": 220,
+          "merchant": 178,
+          "staff": 26,
+          "earnings": 8822872,
+          "research": 3,
+          "profit": 338121
+        },
+        {
+          "score": 2133.9,
+          "cash": 20970783,
+          "loans": 67287476,
+          "deposits": 96124019,
+          "business": 132,
+          "merchant": 102,
+          "staff": 7,
+          "earnings": 5184240,
+          "research": 3,
+          "profit": 337192
+        }
+      ],
+      "margin": 1769.1
+    },
+    {
+      "name": "risk",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3715.5,
+          "cash": 81594678,
+          "loans": 112450085,
+          "deposits": 197589772,
+          "business": 213,
+          "merchant": 170,
+          "staff": 19,
+          "earnings": 9504991,
+          "research": 3,
+          "profit": 398300
+        },
+        {
+          "score": 2585.5,
+          "cash": 23604274,
+          "loans": 82788650,
+          "deposits": 112663339,
+          "business": 141,
+          "merchant": 107,
+          "staff": 15,
+          "earnings": 6779585,
+          "research": 3,
+          "profit": 316325
+        }
+      ],
+      "margin": -1130
+    },
+    {
+      "name": "lending",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 1954.4,
+          "cash": 3807736,
+          "loans": 69010300,
+          "deposits": 79037739,
+          "business": 160,
+          "merchant": 104,
+          "staff": 17,
+          "earnings": 5175685,
+          "research": 3,
+          "profit": 211585
+        },
+        {
+          "score": 5732.2,
+          "cash": 140088665,
+          "loans": 94322914,
+          "deposits": 233157543,
+          "business": 914,
+          "merchant": 610,
+          "staff": 33,
+          "earnings": 12854036,
+          "research": 9,
+          "profit": 1849798
+        }
+      ],
+      "margin": -3777.7999999999997
+    },
+    {
+      "name": "lending",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3877.5,
+          "cash": 56710218,
+          "loans": 117900723,
+          "deposits": 175405299,
+          "business": 235,
+          "merchant": 170,
+          "staff": 22,
+          "earnings": 10905642,
+          "research": 4,
+          "profit": 726398
+        },
+        {
+          "score": 1716.8,
+          "cash": 4153931,
+          "loans": 47753226,
+          "deposits": 55634699,
+          "business": 178,
+          "merchant": 113,
+          "staff": 14,
+          "earnings": 3376290,
+          "research": 2,
+          "profit": 221643
+        }
+      ],
+      "margin": -2160.7
+    },
+    {
+      "name": "lending",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 1488.7,
+          "cash": 3520621,
+          "loans": 35570499,
+          "deposits": 49527791,
+          "business": 133,
+          "merchant": 111,
+          "staff": 9,
+          "earnings": 2183204,
+          "research": 2,
+          "profit": 281627
+        },
+        {
+          "score": 3805.2,
+          "cash": 80075133,
+          "loans": 110812277,
+          "deposits": 193886240,
+          "business": 131,
+          "merchant": 102,
+          "staff": 17,
+          "earnings": 10051170,
+          "research": 2,
+          "profit": 758905
+        }
+      ],
+      "margin": -2316.5
+    },
+    {
+      "name": "lending",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 5949,
+          "cash": 169843084,
+          "loans": 102836218,
+          "deposits": 274081806,
+          "business": 696,
+          "merchant": 549,
+          "staff": 32,
+          "earnings": 11547496,
+          "research": 10,
+          "profit": 1062151
+        },
+        {
+          "score": 1331.2,
+          "cash": 0,
+          "loans": 54831333,
+          "deposits": 56571210,
+          "business": 124,
+          "merchant": 97,
+          "staff": 7,
+          "earnings": 4597548,
+          "research": 2,
+          "profit": 231967
+        }
+      ],
+      "margin": -4617.8
+    },
+    {
+      "name": "business",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2910.1,
+          "cash": 31178774,
+          "loans": 74549450,
+          "deposits": 110949390,
+          "business": 452,
+          "merchant": 326,
+          "staff": 15,
+          "earnings": 6478834,
+          "research": 5,
+          "profit": 744119
+        },
+        {
+          "score": 3801.3,
+          "cash": 63472633,
+          "loans": 74576066,
+          "deposits": 143076154,
+          "business": 535,
+          "merchant": 361,
+          "staff": 37,
+          "earnings": 6672545,
+          "research": 4,
+          "profit": 700377
+        }
+      ],
+      "margin": -891.2000000000003
+    },
+    {
+      "name": "business",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4228.9,
+          "cash": 32958183,
+          "loans": 101398978,
+          "deposits": 135851604,
+          "business": 706,
+          "merchant": 477,
+          "staff": 40,
+          "earnings": 10205557,
+          "research": 8,
+          "profit": 1516167
+        },
+        {
+          "score": 2501.6,
+          "cash": 26071496,
+          "loans": 62860226,
+          "deposits": 95501326,
+          "business": 343,
+          "merchant": 245,
+          "staff": 12,
+          "earnings": 5130396,
+          "research": 6,
+          "profit": 701311
+        }
+      ],
+      "margin": -1727.2999999999997
+    },
+    {
+      "name": "business",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 5288.2,
+          "cash": 66950084,
+          "loans": 135432236,
+          "deposits": 202316024,
+          "business": 735,
+          "merchant": 507,
+          "staff": 34,
+          "earnings": 13016296,
+          "research": 7,
+          "profit": 1256766
+        },
+        {
+          "score": 2180.3,
+          "cash": 23656132,
+          "loans": 76461521,
+          "deposits": 106953124,
+          "business": 128,
+          "merchant": 97,
+          "staff": 7,
+          "earnings": 6214529,
+          "research": 3,
+          "profit": 326842
+        }
+      ],
+      "margin": 3107.8999999999996
+    },
+    {
+      "name": "business",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2407.2,
+          "cash": 28851131,
+          "loans": 59809287,
+          "deposits": 97095546,
+          "business": 269,
+          "merchant": 222,
+          "staff": 6,
+          "earnings": 4614872,
+          "research": 4,
+          "profit": 406712
+        },
+        {
+          "score": 3596.1,
+          "cash": 30072701,
+          "loans": 100944558,
+          "deposits": 135236499,
+          "business": 458,
+          "merchant": 353,
+          "staff": 30,
+          "earnings": 8830760,
+          "research": 3,
+          "profit": 546609
+        }
+      ],
+      "margin": 1188.9
+    },
+    {
+      "name": "service",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2762.8,
+          "cash": 15422106,
+          "loans": 112649867,
+          "deposits": 130092764,
+          "business": 172,
+          "merchant": 110,
+          "staff": 18,
+          "earnings": 9679209,
+          "research": 3,
+          "profit": 399684
+        },
+        {
+          "score": 5604.9,
+          "cash": 172920233,
+          "loans": 93084770,
+          "deposits": 269418700,
+          "business": 628,
+          "merchant": 445,
+          "staff": 30,
+          "earnings": 8186303,
+          "research": 11,
+          "profit": 839788
+        }
+      ],
+      "margin": -2842.0999999999995
+    },
+    {
+      "name": "service",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3651.9,
+          "cash": 82419424,
+          "loans": 105717529,
+          "deposits": 190756771,
+          "business": 146,
+          "merchant": 97,
+          "staff": 20,
+          "earnings": 9080182,
+          "research": 3,
+          "profit": 253632
+        },
+        {
+          "score": 2235.4,
+          "cash": 14792436,
+          "loans": 65188835,
+          "deposits": 86557054,
+          "business": 146,
+          "merchant": 115,
+          "staff": 9,
+          "earnings": 5124217,
+          "research": 3,
+          "profit": 227789
+        }
+      ],
+      "margin": -1416.5
+    },
+    {
+      "name": "service",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2341,
+          "cash": 9566060,
+          "loans": 81035039,
+          "deposits": 97185780,
+          "business": 143,
+          "merchant": 108,
+          "staff": 16,
+          "earnings": 6465319,
+          "research": 3,
+          "profit": 312550
+        },
+        {
+          "score": 3231.2,
+          "cash": 55453330,
+          "loans": 93208218,
+          "deposits": 153976171,
+          "business": 126,
+          "merchant": 96,
+          "staff": 13,
+          "earnings": 7735377,
+          "research": 3,
+          "profit": 332080
+        }
+      ],
+      "margin": -890.1999999999998
+    },
+    {
+      "name": "service",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3636.7,
+          "cash": 78092804,
+          "loans": 97713583,
+          "deposits": 180676309,
+          "business": 221,
+          "merchant": 181,
+          "staff": 20,
+          "earnings": 8180078,
+          "research": 4,
+          "profit": 369019
+        },
+        {
+          "score": 2262.7,
+          "cash": 8596920,
+          "loans": 72529944,
+          "deposits": 88359470,
+          "business": 148,
+          "merchant": 105,
+          "staff": 14,
+          "earnings": 5817394,
+          "research": 3,
+          "profit": 307661
+        }
+      ],
+      "margin": -1374
+    },
+    {
+      "name": "margin",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 5257.7,
+          "cash": 85251114,
+          "loans": 93499497,
+          "deposits": 175806804,
+          "business": 889,
+          "merchant": 583,
+          "staff": 41,
+          "earnings": 14543807,
+          "research": 9,
+          "profit": 2387047
+        },
+        {
+          "score": 2238.2,
+          "cash": 18116905,
+          "loans": 56932916,
+          "deposits": 82505591,
+          "business": 363,
+          "merchant": 246,
+          "staff": 15,
+          "earnings": 4244230,
+          "research": 5,
+          "profit": 415222
+        }
+      ],
+      "margin": 3019.5
+    },
+    {
+      "name": "margin",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2669.8,
+          "cash": 39268943,
+          "loans": 91918172,
+          "deposits": 135097491,
+          "business": 148,
+          "merchant": 104,
+          "staff": 15,
+          "earnings": 7789624,
+          "research": 3,
+          "profit": 552660
+        },
+        {
+          "score": 5547.1,
+          "cash": 76236619,
+          "loans": 93342796,
+          "deposits": 155860794,
+          "business": 1015,
+          "merchant": 708,
+          "staff": 37,
+          "earnings": 25318621,
+          "research": 12,
+          "profit": 3374630
+        }
+      ],
+      "margin": 2877.3
+    },
+    {
+      "name": "margin",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4335.6,
+          "cash": 107107454,
+          "loans": 98969233,
+          "deposits": 210026217,
+          "business": 187,
+          "merchant": 152,
+          "staff": 31,
+          "earnings": 9000470,
+          "research": 6,
+          "profit": 1142187
+        },
+        {
+          "score": 2225.4,
+          "cash": 24467906,
+          "loans": 68083523,
+          "deposits": 100193719,
+          "business": 133,
+          "merchant": 98,
+          "staff": 8,
+          "earnings": 5407710,
+          "research": 3,
+          "profit": 298751
+        }
+      ],
+      "margin": 2110.2000000000003
+    },
+    {
+      "name": "margin",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3240.8,
+          "cash": 31890139,
+          "loans": 64015008,
+          "deposits": 103019474,
+          "business": 606,
+          "merchant": 523,
+          "staff": 26,
+          "earnings": 5835673,
+          "research": 7,
+          "profit": 859046
+        },
+        {
+          "score": 4478.1,
+          "cash": 109881099,
+          "loans": 114621816,
+          "deposits": 226805425,
+          "business": 172,
+          "merchant": 132,
+          "staff": 27,
+          "earnings": 10747490,
+          "research": 7,
+          "profit": 1064110
+        }
+      ],
+      "margin": 1237.3000000000002
+    },
+    {
+      "name": "aggressive",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2691,
+          "cash": 43946377,
+          "loans": 91320240,
+          "deposits": 139432811,
+          "business": 140,
+          "merchant": 96,
+          "staff": 12,
+          "earnings": 7533806,
+          "research": 2,
+          "profit": 386445
+        },
+        {
+          "score": 4887.3,
+          "cash": 93410842,
+          "loans": 80924855,
+          "deposits": 171685803,
+          "business": 800,
+          "merchant": 562,
+          "staff": 30,
+          "earnings": 14249894,
+          "research": 10,
+          "profit": 2114916
+        }
+      ],
+      "margin": -2196.3
+    },
+    {
+      "name": "aggressive",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3179.3,
+          "cash": 65668368,
+          "loans": 98407886,
+          "deposits": 167043997,
+          "business": 160,
+          "merchant": 116,
+          "staff": 19,
+          "earnings": 8732257,
+          "research": 3,
+          "profit": 630485
+        },
+        {
+          "score": 4200.8,
+          "cash": 62098573,
+          "loans": 71775485,
+          "deposits": 137796164,
+          "business": 738,
+          "merchant": 536,
+          "staff": 27,
+          "earnings": 7677894,
+          "research": 8,
+          "profit": 1366158
+        }
+      ],
+      "margin": 1021.5
+    },
+    {
+      "name": "aggressive",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3269.4,
+          "cash": 64993484,
+          "loans": 105183203,
+          "deposits": 174318345,
+          "business": 213,
+          "merchant": 172,
+          "staff": 16,
+          "earnings": 8908342,
+          "research": 3,
+          "profit": 424767
+        },
+        {
+          "score": 3097,
+          "cash": 47573870,
+          "loans": 89078646,
+          "deposits": 142410963,
+          "business": 143,
+          "merchant": 115,
+          "staff": 15,
+          "earnings": 7291553,
+          "research": 2,
+          "profit": 301987
+        }
+      ],
+      "margin": 172.4000000000001
+    },
+    {
+      "name": "aggressive",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3512.9,
+          "cash": 44446440,
+          "loans": 66922783,
+          "deposits": 118524476,
+          "business": 557,
+          "merchant": 456,
+          "staff": 24,
+          "earnings": 5794747,
+          "research": 6,
+          "profit": 720077
+        },
+        {
+          "score": 3016.7,
+          "cash": 56633372,
+          "loans": 98475885,
+          "deposits": 159945826,
+          "business": 121,
+          "merchant": 88,
+          "staff": 12,
+          "earnings": 8213431,
+          "research": 2,
+          "profit": 338723
+        }
+      ],
+      "margin": -496.2000000000003
+    },
+    {
+      "name": "creditGrowth",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 2056.3,
+          "cash": 8253895,
+          "loans": 48624300,
+          "deposits": 64726371,
+          "business": 311,
+          "merchant": 223,
+          "staff": 6,
+          "earnings": 3729912,
+          "research": 5,
+          "profit": 448955
+        },
+        {
+          "score": 4632.8,
+          "cash": 122962995,
+          "loans": 97990900,
+          "deposits": 223698001,
+          "business": 397,
+          "merchant": 267,
+          "staff": 37,
+          "earnings": 8855894,
+          "research": 4,
+          "profit": 697654
+        }
+      ],
+      "margin": -2576.5
+    },
+    {
+      "name": "creditGrowth",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3680.6,
+          "cash": 83536829,
+          "loans": 109264954,
+          "deposits": 194580203,
+          "business": 154,
+          "merchant": 114,
+          "staff": 20,
+          "earnings": 9921580,
+          "research": 3,
+          "profit": 709906
+        },
+        {
+          "score": 2976.7,
+          "cash": 18224208,
+          "loans": 57557573,
+          "deposits": 82111840,
+          "business": 616,
+          "merchant": 437,
+          "staff": 23,
+          "earnings": 5269941,
+          "research": 5,
+          "profit": 569677
+        }
+      ],
+      "margin": -703.9000000000001
+    },
+    {
+      "name": "creditGrowth",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3311.8,
+          "cash": 54319117,
+          "loans": 114104369,
+          "deposits": 171538557,
+          "business": 217,
+          "merchant": 176,
+          "staff": 17,
+          "earnings": 9934929,
+          "research": 3,
+          "profit": 463822
+        },
+        {
+          "score": 3004,
+          "cash": 39015009,
+          "loans": 87983024,
+          "deposits": 132665154,
+          "business": 145,
+          "merchant": 116,
+          "staff": 13,
+          "earnings": 7382879,
+          "research": 3,
+          "profit": 375339
+        }
+      ],
+      "margin": 307.8000000000002
+    },
+    {
+      "name": "creditGrowth",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3991.1,
+          "cash": 68421636,
+          "loans": 66929638,
+          "deposits": 142173424,
+          "business": 512,
+          "merchant": 421,
+          "staff": 25,
+          "earnings": 6127850,
+          "research": 6,
+          "profit": 723025
+        },
+        {
+          "score": 2302.8,
+          "cash": 4851614,
+          "loans": 105417249,
+          "deposits": 114161924,
+          "business": 189,
+          "merchant": 137,
+          "staff": 11,
+          "earnings": 9156939,
+          "research": 1,
+          "profit": 476134
+        }
+      ],
+      "margin": -1688.2999999999997
+    },
+    {
+      "name": "conservative",
+      "seed": 1,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3427,
+          "cash": 91150449,
+          "loans": 96957928,
+          "deposits": 191697380,
+          "business": 155,
+          "merchant": 116,
+          "staff": 19,
+          "earnings": 8110997,
+          "research": 3,
+          "profit": 294682
+        },
+        {
+          "score": 5329.8,
+          "cash": 122050450,
+          "loans": 113707338,
+          "deposits": 237085190,
+          "business": 725,
+          "merchant": 518,
+          "staff": 31,
+          "earnings": 10272598,
+          "research": 9,
+          "profit": 1272841
+        }
+      ],
+      "margin": -1902.8000000000002
+    },
+    {
+      "name": "conservative",
+      "seed": 1,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3240.1,
+          "cash": 69279727,
+          "loans": 101769144,
+          "deposits": 174297404,
+          "business": 141,
+          "merchant": 100,
+          "staff": 15,
+          "earnings": 8451467,
+          "research": 3,
+          "profit": 273933
+        },
+        {
+          "score": 4199.7,
+          "cash": 82795486,
+          "loans": 64905324,
+          "deposits": 151184965,
+          "business": 658,
+          "merchant": 480,
+          "staff": 30,
+          "earnings": 8115845,
+          "research": 9,
+          "profit": 1511208
+        }
+      ],
+      "margin": 959.5999999999999
+    },
+    {
+      "name": "conservative",
+      "seed": 2,
+      "seat": 0,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 4521.3,
+          "cash": 137066334,
+          "loans": 104371943,
+          "deposits": 245643124,
+          "business": 213,
+          "merchant": 173,
+          "staff": 26,
+          "earnings": 8845153,
+          "research": 4,
+          "profit": 223238
+        },
+        {
+          "score": 2262.3,
+          "cash": 16646273,
+          "loans": 65170572,
+          "deposits": 89735591,
+          "business": 174,
+          "merchant": 144,
+          "staff": 7,
+          "earnings": 5131254,
+          "research": 3,
+          "profit": 320081
+        }
+      ],
+      "margin": 2259
+    },
+    {
+      "name": "conservative",
+      "seed": 2,
+      "seat": 1,
+      "completed": 48,
+      "error": null,
+      "banks": [
+        {
+          "score": 3448.6,
+          "cash": 68450211,
+          "loans": 100676839,
+          "deposits": 173477052,
+          "business": 220,
+          "merchant": 178,
+          "staff": 18,
+          "earnings": 8699998,
+          "research": 4,
+          "profit": 759571
+        },
+        {
+          "score": 3018.1,
+          "cash": 56571038,
+          "loans": 82740448,
+          "deposits": 145283887,
+          "business": 141,
+          "merchant": 109,
+          "staff": 13,
+          "earnings": 7077599,
+          "research": 3,
+          "profit": 702479
+        }
+      ],
+      "margin": -430.5
+    }
+  ]
+}

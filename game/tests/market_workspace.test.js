@@ -39,7 +39,7 @@ test('Locked maps stay inspectable and display actual withdrawn-market influence
  assert.match(html,/Your influence<\/dt><dd>27\.0%/);assert.match(html,/Rival influence<\/dt><dd>73\.0%/);assert.doesNotMatch(html,/RIVAL 100%/);assert(h.c.imMount.querySelectorAll('[data-im-market]').every(el=>!el.disabled));assert.match(html,/Planning is locked/);
 });
 test('Office entry points and market changes retain identified local working edits without staging',()=>{
- const h=fresh(),before=bytes(h);assert(h.run(`openMarketOffice(currentView(),office.id,'staff')`));assert.equal(h.run('interfaceCurrentRoute().context.office'),h.run('office.id'));assert.match(h.c.imMount.innerHTML,/Assign bank staff time/);
+ const h=fresh(),before=bytes(h);assert(h.run(`openMarketOffice(currentView(),office.id,'staff')`));assert.equal(h.run('interfaceCurrentRoute().context.office'),h.run('office.id'));assert.match(h.c.imMount.innerHTML,/Assign employees to this office/);
  const field=h.c.imMount.querySelectorAll('[data-im-field]')[0];field.value='0.25';field.listeners.input();h.run(`inspectMarket(currentView(),testTarget);openMarketOffice(currentView(),office.id,'staff')`);assert.equal(h.c.imMount.querySelectorAll('[data-im-field]')[0].value,'0.25');assert.equal(bytes(h),before);
 });
 test('Market campaign uses canonical Strategy context; Return restores market without retargeting',()=>{

@@ -417,6 +417,14 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // edition and version tests, usability_help and docs.
 // 9.41 recurring research mandate: tree campaigns cover all six families. Only
 // campaigns with the research tree change; 9.40, 9.39 and Core replay identically.
-const expected="0e4c79829308995e6c16d10e32cd29ac8f5cef3b92b910a3fdd7a494d0864aa8";
+// Core 8.20 balance pass: funded loan yield, deposit-linked proxy and bounded
+// relationships are gated by researchProgramVersion 1. Current Expanded and
+// older campaigns retain their old income terms. Historical Group 1-4 and
+// Expanded edition replays, the 20-campaign/790-turn behavior golden, Core
+// balance and forecast checks were repeated without altering reference builds.
+// This digest records reviewed scope, not a long-run strategy balance guarantee.
+// Follow-up: preserve the legacy/Expanded relationship threshold and actual
+// income rows; focused Core, Expanded, forecast and research AI checks pass.
+const expected="9ae8036769f38a5ddd679cdeeff4cb30a7ca23b31fe0559134ee777f7f137a92";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

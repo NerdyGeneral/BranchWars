@@ -39,6 +39,29 @@ function forecastGrowthLimits(v,p,plan){
   relationships:limits.relationships&&{...limits.relationships,saturated:limits.relationships.held>limits.relationships.capacity}
  };
 }
+// Hold the current book, economy and draft policies fixed to compare where
+// arriving recruits could work. Recruitment settles after this month's
+// operations; the frozen-book run rate is illustrative, not a next-month book.
+function forecastHiringImpact(v,p,plan){
+ const staged=planHires(plan),count=staged||1,roles=['service','business','lending','operations'],
+  current=forecastDriverRun(v,p,plan).result,owner=JSON.parse(JSON.stringify(p)),nextPlan=JSON.parse(JSON.stringify(plan));
+ owner.stats.staff+=count;
+ if(staged&&owner.workforce)addSpecialistRecruits(owner,plan.specialistHires||{});
+ nextPlan.hires=0;if(owner.workforce)nextPlan.specialistHires=emptySpecialistOrders();
+ // Compare all the arrivals in one destination against the same current draft.
+ // Existing staff keep their staged assignments; no staffing order is changed.
+ const rows=roles.map(role=>{
+  const allocation={...plan.allocation,[role]:(plan.allocation[role]||0)+count};
+  try{
+   const candidate=JSON.parse(JSON.stringify(owner));candidate.allocation=allocation;
+   const forecast=forecastDriverRun(v,candidate,{...nextPlan,allocation}).result;
+   const limits=forecastGrowthLimits(v,candidate,{...nextPlan,allocation});
+   return {role,forecast:Object.fromEntries(['profit','depositGrowth','loanGrowth','expense'].map(key=>[key,Math.round(forecast[key]||0)])),
+    change:forecastDriverChange(forecast,current),depositLimit:limits.deposits.binding,loanLimit:limits.loans.binding};
+  }catch(error){return {role,error:error.message};}
+ });
+ return {staged,count,current:Object.fromEntries(['profit','depositGrowth','loanGrowth','expense'].map(key=>[key,Math.round(current[key]||0)])),rows};
+}
 // A game-shaped copy of the owner's view for completing one project privately.
 // The rival is the owner's public projection, so completions that need the
 // rival's private books fail and are reported as not estimated.
