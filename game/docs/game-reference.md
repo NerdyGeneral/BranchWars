@@ -272,7 +272,7 @@ Operational Excellence lane.
 
 ```js
 function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);
-return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5+ResearchTree.additive(p,'execution'))*10)/10}
 ```
 
 Capacity is judged against **the allocation being submitted**, not last month's,
@@ -427,7 +427,12 @@ function projectCost(p,def,focus=p.focus,premium=1){
   // Branch Integration (network 2 + acquisition 2): sites convert cheaply.
   if(def.kind==='branch'&&researchCombination(p,'branchIntegration'))cost*=.78;
   if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
-  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  if(ResearchTree.enabled(p)){
+   // Research tree: level 3 and the Lean model each discount, and they stack.
+   cost*=(operationsLevel(p)>=3?.85:1)*(hasSpecialization(p,'operations','lean')?.85:1)*ResearchTree.multiplier(p,'projectCost');
+   if(def.kind==='branch')cost*=ResearchTree.multiplier(p,'officeProjectCost');
+   if(def.kind==='acquisition')cost*=ResearchTree.multiplier(p,'acquisitionCost');
+  }else if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
  }
  // Local entry pricing applies after the existing whole-dollar rounding.
@@ -439,8 +444,10 @@ function projectCost(p,def,focus=p.focus,premium=1){
 ```js
 function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];
 return node?node.cycles:1}let cycles=def.cycles;
-if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;
+if(ResearchTree.enabled(p)&&def.kind==='branch')cycles-=(strategyLevel(p,'network')>=2?1:0)+(hasSpecialization(p,'network','regionalHub')?1:0);
+else if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;
 if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;
+if(def.kind==='acquisition')cycles+=ResearchTree.additive(p,'acquisitionWork');
 if(operationsLevel(p)>=1&&cycles>=3)cycles--;
 return Math.max(1,cycles)}
 ```
