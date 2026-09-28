@@ -108,7 +108,16 @@ and the card schedule forced, gave two results:
   $15,000.
 - At $15,000 the same seed diverged. At month 31 the bank, at a 7.83% capital
   ratio after its own executive decisions, produced a plan that failed the
-  capital reserve check.
+  capital reserve check (the card issue below).
+
+With that fixed, both failing runs complete all 36 months with every plan valid
+and every ledger reconciled:
+
+- **Bank route, $15,000:** the program paused while the bank sat below the
+  reserve. It repaid its platform in month 30 and ended +$8,670 with 38
+  accounts.
+- **Partner route that failed at month 22:** capital fell to 5.98% and the
+  program paused. It repaid in month 25 as capital recovered to 20.7%.
 
 ### Card programs below the capital reserve (fixed)
 
