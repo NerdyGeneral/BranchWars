@@ -183,6 +183,9 @@ function renderReady(v){
  if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){const review=monthlyPlanReview(v);$('#readyBtn').disabled=!!v.me.submitted||!!v.gameOver||review.blockers.length>0;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'Plan locked. Waiting for the other institution.':review.blockers.length?review.blockers[0].text:'Required decisions complete. Review your warnings, then mark Ready.';renderExpandedInterface(v,review);return;}
  const review=monthlyPlanReview(v),pool=review.unallocated;
  if(typeof renderCoreSpendable==='function')renderCoreSpendable(v);
+ // Every spending edit changes the strategy action token and its available budget.
+ // Refresh the visible controls while old detached callbacks remain invalid.
+ renderStrategy(v);
  $('#planChecklist').innerHTML=`${draft.focus?'✓':'○'} Focus market &nbsp; ${draft.decision?'✓':'○'} Executive decision &nbsp; ${pool===0?'✓':'○'} Headcount allocated <span class="micro">(not a work-coverage guarantee)</span>`;
  // A missing target can reach this view during draft repair. Do not run
  // market-dependent forecasts with no market, or leave old estimates visible.

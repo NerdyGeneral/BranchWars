@@ -117,4 +117,15 @@ test('Forecast & books renders the same hiring view in Core and Expanded',()=>{
  }
 });
 
+test('Core forecast uses flat topic reports instead of stacked disclosure boxes',()=>{
+ const h=require('./github_resilience.test').harness();h.run('game=E.createGame({...E.previewCampaignEdition({},"core",{currentReporting:true,currentEconomics:true,currentResearch:true}).options,mode:"hotseat",seed:"flat-forecast",created:1});seat=0;newDraft(currentView());renderBankRecovery=()=>{};renderOperatingPreview(currentView())');
+ const html=h.elements.get('#operatingPreview').innerHTML;assert.doesNotMatch(html,/<details|<summary/);assert.match(html,/data-forecast-view="income"/);assert.match(html,/data-forecast-panel="income" hidden/);assert.match(html,/Income statement/);
+});
+test('Core executive responses distinguish temporary effects from unrelated orders',()=>{
+ const h=require('./github_resilience.test').harness();
+ assert.match(h.run('coreDecisionOutcome({key:"staffing"},"a")'),/does not add employees/);
+ assert.match(h.run('coreDecisionOutcome({key:"merger"},"a")'),/conditional staffing/);
+ assert.match(h.run('coreDecisionOutcome({key:"fintech"},"a")'),/does not buy research/);
+ assert.match(h.run('coreDecisionOutcome({key:"closure"},"a")'),/No rival branch or customer book is purchased/);
+});
 console.log('Forecast drivers passed: '+checks+' checks on growth limits, project effects and research contributions.');

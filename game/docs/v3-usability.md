@@ -20,6 +20,15 @@ visual, multiplayer-human acceptance or remaining content gates.
 
 ## Current handoff
 
+### September 28 · planning repair follow-up
+
+Implemented and scoped-tested: Core forecast topics and executive explanations,
+Strategy funding after unrelated spending, retained Reports navigation,
+company-first People with locked subsidiaries, employee-month work coverage,
+department leadership cards, and grouped branch construction/upgrades. Expanded
+Reports now exposes Hiring impact. See the [dated evidence](archive/planning-repairs-2026-09-28.md).
+Full PR checks remain the merge gate; this batch adds no engine or save changes.
+
 ### Checkpoint68 · subject ownership, economic diagnosis and persistent rivalry
 
 - Implemented: People owns bank allocation; Customers owns households, commercial

@@ -52,3 +52,13 @@
 @media(max-width:1100px){.rt-layout{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:520px){.rt-paths{grid-template-columns:minmax(0,1fr)}.rt-tree>.rt-node{width:100%}}
 .rt-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;margin:10px 0}.rt-facts div{min-width:0}.rt-facts dt{font-size:11.5px;color:#607289}.rt-facts dd{margin:1px 0 0;font-weight:700;color:#172c49}
+
+/* Planning repair: people, then time, with one visible coverage overview. */
+.ips-employer-title{font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px;color:#526780}
+.ips-employers{padding-bottom:16px;border-bottom:1px solid #d5dde8}.ips-locked{padding:32px;border:1px solid #d5dde8;border-radius:12px;background:#f4f6fa}.ips-locked p{font-weight:700;color:#62738a}
+.ips-staff-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:16px 0}
+.ips-staff-guide li{padding:12px;border-radius:8px;background:#f0f5fb;border:1px solid #d9e4f1}.ips-staff-guide b,.ips-staff-guide span{display:block}.ips-staff-guide span{font-size:12px;line-height:1.5;margin-top:6px;color:#53657f}
+.ips-coverage-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:16px 0}.ips-coverage-card{min-width:0;border:1px solid #d5dde8;border-radius:10px;padding:16px;background:#f9fbfe}.ips-inspector .ips-coverage-card h3{margin:0 0 10px;font-size:16px}.ips-coverage-card p{font-size:13px}.ips-coverage-card progress{display:block;width:100%;height:14px;margin:12px 0;accent-color:#3476d4}
+@media(max-width:760px){.ips-staff-guide{grid-template-columns:1fr}.ips-coverage-grid{grid-template-columns:1fr}}
+
+.ips-choices .btn:has(small){display:flex;flex-direction:column;gap:8px;flex:1 1 180px;padding:14px}.ips-choices .btn small{font-size:12px;line-height:1.5;font-weight:400}

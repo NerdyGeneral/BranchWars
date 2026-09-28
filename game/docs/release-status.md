@@ -1,5 +1,14 @@
 # Release status and known issues
 
+## September 28 — Planning repairs on PR #33
+
+Core and Expanded planning repairs are implemented and scoped-tested; see the
+[repair evidence](archive/planning-repairs-2026-09-28.md) and
+[exact-build browser receipt](../reports/qa/planning-repair-2026-09-28.json).
+Portable SHA256: `4ea09486aa3eb1e8318fa32b3a182b5830fffb3725dad863969cc13509a150be`.
+This UI batch preserves the engine from the preceding Core balance/hiring change.
+Full GitHub checks on the updated PR head remain required before merge.
+
 ## September 28 — Interface follow-up: header figures, one Research page, Core products
 
 Three playtest requests. Interface only; no campaign rules change.

@@ -189,3 +189,13 @@ test('household pursuits, digital setup and recovery return to their proper home
  for(const [id,expected]of [['household','deposits'],['wealth','deposits'],['loan','lending'],['business','services']]){h.c.testId=id;assert.equal(h.run(`interfaceChangeRoute(testView,{path:['opportunity'],after:testId}).view`),expected);}
  assert.deepEqual(value(h,`interfaceChangeRoute(testView,{path:['newProjects','licenseDigitalPlatform']}).context`),{objectId:'digital-platform',projectId:'licenseDigitalPlatform'});assert.equal(h.run(`interfaceChangeRoute(testView,{path:['newProjects','correctiveAction']}).context.objectId`),'recovery');
 });
+
+test('Spending and commitments retains the Reports directory',()=>{
+ const h=fresh(),before=h.run('JSON.stringify([game,draft])');
+ h.run('document.createElement=()=>$("#test-back");openInterfaceWorkspace("reports","commitments",{})');
+ assert.match(h.elements.get('#interfaceReports').innerHTML,/ips-workspace/);
+ assert.match(h.elements.get('.ips-body').innerHTML,/data-ips-item="statements"/);
+ assert.match(h.elements.get('.ips-body').innerHTML,/data-ips-item="forecasts"/);
+ assert.match(h.elements.get('.ips-inspector').innerHTML,/Total quoted commitments/);
+ assert.equal(h.run('JSON.stringify([game,draft])'),before);
+});

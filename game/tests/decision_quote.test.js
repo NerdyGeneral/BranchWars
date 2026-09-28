@@ -61,9 +61,9 @@ assert.throws(()=>E.decisionQuote(fresh({}).players[0],E.EVENTS[0],'bad'),/known
 const {harness}=require('./github_resilience.test.js'),h=harness();
 h.run("game=E.createGame({mode:'hotseat',seed:19,created:1});game.event=E.EVENTS.find(x=>x.key==='viral');view=E.publicState(game,0);newDraft(view);renderAnalytics=()=>{};renderDecision(view)");
 let markup=h.elements.get('#decisionGrid').innerHTML;
-assert(markup.includes('Immediate cash paid $75,000'));assert(markup.includes('Cash balance change −$75,000'));
-assert(markup.includes('outside the plan-budget total'));assert(markup.includes('delayed consequences'));
+assert(markup.includes('Paid when the call resolves</small><b>$75,000'));assert(markup.includes('Cash balance −$75,000'));assert(markup.includes('Immediate effect'));assert(markup.includes('Later this month'));
+assert(markup.includes('outside the plan-budget total'));assert(markup.includes('Conditional event outcomes'));
 const state=h.run('JSON.stringify({game,draft})');h.run('renderDecision(view)');assert.equal(h.run('JSON.stringify({game,draft})'),state);
 h.run('draft.investments={network:game.players[0].stats.cash};renderDecision(view)');
-assert(h.elements.get('#decisionGrid').innerHTML.includes('Draft commitments exceed cash'));
+assert(h.elements.get('#decisionGrid').innerHTML.includes('Existing commitments exceed spending room'));
 console.log('Decision quote: '+direct+' direct owner comparisons; '+resolved+' full event/choice resolutions; forced securities/credit/debt funding; invalid inputs and UI advisory checks passed.');

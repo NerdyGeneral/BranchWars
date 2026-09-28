@@ -132,7 +132,7 @@ function renderExpandedInterface(v,review){
   else if(route.workspace==='markets')renderInterfaceMarkets(v,route,mount);
   else if(route.workspace==='banking')renderInterfaceBanking(v,route,mount);
   else if(route.workspace==='group')renderInterfaceGroup(v,route,mount);
-  else if(route.workspace==='review'||route.workspace==='reports'&&route.view==='commitments')renderInterfaceReview(v,route,mount,review,f);
+  else if(route.workspace==='review')renderInterfaceReview(v,route,mount,review,f);
   else if(['people','strategy','reports'].includes(route.workspace))renderInterfacePeopleStrategy(v,route,mount);
   else renderInterfaceUtilities(v,mount);
   $('#interfaceHeader').onclick=event=>{if(!interfaceCurrent(token,false))return;if(event.target.closest('[data-interface-review]'))openInterfaceWorkspace('review');if(event.target.closest('[data-interface-budget]'))interfaceNavigate({workspace:'reports',view:'commitments'});};

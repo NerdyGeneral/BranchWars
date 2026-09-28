@@ -46,8 +46,12 @@ test('Original-art map preserves inspected locked markets and seat-relative publ
 test('market inspection and seven-model build catalogue are pure and exclude customer-book acquisition',()=>{
  const h=fresh(),world=h.run('JSON.stringify(game)'),plan=h.run('JSON.stringify(draft)');h.go('build');
  assert.equal(h.run('JSON.stringify(game)'),world);assert.equal(h.run('JSON.stringify(draft)'),plan);
- const choices=h.c.imMount.querySelectorAll('[data-im-context]').filter(el=>el.dataset.imView==='build'&&JSON.parse(el.dataset.imContext).project);
- assert.equal(choices.length,7);assert(!choices.some(el=>['acquisition','branchService','branchAutomation','branchClose'].includes(JSON.parse(el.dataset.imContext).project)));
+ const collect=()=>h.c.imMount.querySelectorAll('[data-im-context]').filter(el=>el.dataset.imView==='build'&&JSON.parse(el.dataset.imContext).project).map(el=>JSON.parse(el.dataset.imContext).project);
+ assert.deepEqual(collect(),['branch'],'Standard branch is the simple starting choice');
+ const choices=new Set(collect());
+ for(const buildGroup of ['specialist','centers']){h.go('build',{buildGroup});for(const key of collect())choices.add(key);}
+ assert.equal(choices.size,7);assert(![...choices].some(key=>['acquisition','branchService','branchAutomation','branchClose'].includes(key)));
+ assert.equal(h.run('JSON.stringify(game)'),world);assert.equal(h.run('JSON.stringify(draft)'),plan);
  assert.match(h.c.imMount.innerHTML,/creates no employees/);assert.match(h.c.imMount.innerHTML,/not a guaranteed opening date/);
 });
 test('local staff time quote stages only dirty selected paths against the latest draft',()=>{
@@ -97,4 +101,10 @@ test('all focused office actions render through real engine quotations without t
  for(const view of ['office','staff','maintenance','renovate','convert','suite','services','compare','improve','premises']){
   h.go(view);assert.doesNotMatch(h.c.imMount.innerHTML,/This selection is unavailable/,view);assert.equal(h.run('JSON.stringify(game)'),before,view+' mutated simulation');
  }
+});
+
+test('reference office staffing stays in working inputs until an explicit save',()=>{
+ const h=fresh();h.go('staff');const before=h.run('JSON.stringify([game,draft])');h.click('staff-reference');assert.equal(h.run('JSON.stringify([game,draft])'),before);
+ assert(h.c.imMount.querySelectorAll('[data-im-field]').some(el=>Number(el.value)>0));h.click('staff-clear');assert.equal(h.run('JSON.stringify([game,draft])'),before);
+ assert(h.c.imMount.querySelectorAll('[data-im-field]').every(el=>Number(el.value)===0));
 });

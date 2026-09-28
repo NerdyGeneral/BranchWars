@@ -4,6 +4,11 @@ This document defines **scope, order and retained decisions**. Use the [implemen
 
 ## Current bounded milestone
 
+The [planning repair follow-up](archive/planning-repairs-2026-09-28.md) simplifies
+Core and Expanded controls while preserving existing campaign rules. Construction
+starts with one branch choice and groups upgrades and specialist offices; a new
+universal building model is a separate mechanics decision.
+
 [Bank-issued cards](bank-cards.md) are implemented as Expanded 9.40: a second
 card route in which the bank funds, owns and services its card book, earns
 interest and interchange, and bears the losses, beside the unchanged partner
