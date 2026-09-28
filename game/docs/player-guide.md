@@ -4,9 +4,9 @@ For new Expanded 9.37, see the [research-to-customer walkthrough and one-month o
 
 Executive Command · Expanded interface working candidate · September 27, 2026
 
-New games use **Core 8.20** or **Expanded 9.36**. The latest Expanded business
-update adds campaigns, sponsorships, shared digital delivery and holding-company
-share transactions. Existing saves and rematches keep
+New games use **Core 8.20** or **Expanded 9.40**. Recent Expanded updates add
+campaigns, sponsorships, shared digital delivery, holding-company share
+transactions, Federal Funds and credit cards. Existing saves and rematches keep
 their saved rules. The current Expanded navigation below supersedes older UI
 paths in the version-specific reference sections later in this guide; Core keeps
 its retained controls. See [Expanded interface](expanded-interface.md) for the
@@ -66,6 +66,27 @@ estimated sale value and upcoming maturities. Changing a scenario stages nothing
 
 These rules require **Expanded 9.35 or later** and an updated file on both
 computers. Core and saved campaigns retain their original economics.
+
+## Credit cards in new Expanded campaigns
+
+After Digital Architecture and Relationship Planning, **Banking → Cards** can
+launch a card program. From 9.40 you choose who issues the cards, once, at launch:
+
+- **Partner-issued (Cedar Reserve):** a $2,500 license, $100 a month and $3 per
+  account. Cedar funds purchases, owns the balances and bears the losses. Your
+  bank earns 1.5% of purchases and 25% of the interest Cedar collects.
+- **Bank-issued (your bank):** a $15,000 platform, $300 a month and $4 per
+  account. Your bank pays merchants from protected cash and owns the balances,
+  which count toward the capital ratio. It keeps 2.2% of purchases and all the
+  interest, and bears provisions, disputes and charge-offs. Launch and new
+  accounts need a capital ratio of at least 10%, and the program uses more
+  Technology and Risk time.
+
+Open intake and set a marketing budget after launch. **Cards → Results** shows
+monthly and lifetime contribution; on the bank-issued route it also shows card
+income after losses and the card book's activity. See
+[bank-issued cards](bank-cards.md) for the full rules. Campaigns created before
+9.40 keep the partner program only.
 
 ## Expanded interface · planning your month
 

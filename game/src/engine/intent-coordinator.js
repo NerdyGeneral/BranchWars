@@ -159,7 +159,7 @@ function planFinalCashReserve(g, index, input) {
   }
   if (excess() && plan.workforcePolicy) for (const role of Object.keys(plan.workforcePolicy.training)) plan.workforcePolicy.training[role] = 0;
   if (excess() && plan.advertisingPolicy) plan.advertisingPolicy.budget = 0;
-  if (p.partnerCardsVersion===1&&excess()&&plan.cardPolicy)plan.cardPolicy={action:'none',intake:false,marketing:0};
+  if (p.partnerCardsVersion===1&&excess()&&plan.cardPolicy)plan.cardPolicy={...PartnerCards.defaults(p),action:'none',intake:false,marketing:0};
   if (p.expandedBusinessVersion===1&&excess()&&plan.brandCampaignPolicy){plan.brandCampaignPolicy.regular.budget=0;plan.brandCampaignPolicy.regular.mode='off';}
   if (excess() && plan.relationshipOfferPolicy) plan.relationshipOfferPolicy.share = 0;
   if (excess() && plan.onboardingPolicy) plan.onboardingPolicy.share = 0;

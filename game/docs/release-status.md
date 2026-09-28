@@ -1,5 +1,31 @@
 # Release status and known issues
 
+## September 28 — Expanded 9.40: bank-issued cards
+
+New Expanded campaigns choose who issues their credit cards at launch: Cedar Reserve as
+partner (the unchanged 9.39 contract) or the bank itself. A bank-issued program costs a
+$15,000 platform, $300 a month and $4 per account. The bank pays merchants from protected
+cash, carries the balances as receivables net of their loss allowance, keeps 2.2% of
+purchases and all interest, and bears provisions, disputes and charge-offs. Launch and new
+accounts need a 10% capital ratio. See [bank-issued cards](bank-cards.md).
+
+- **Compatibility.** `bankCardsVersion: 1` stamps 9.40 and needs a peer that supports it.
+  Core, 9.39 and older campaigns and their rematches keep their rules. Seeded 9.38 and 9.39
+  partner-card campaigns replay byte-identically on the 9.40 engine for 16 months,
+  including wind-down.
+- **Balance.** On the 36-month card-only comparison, a full bank-issued book earns about
+  2.8 times the partner share (+$27,750 against +$9,786 over the last year) and repays its
+  platform in month 30 with faster growth; a cautious bank-issued book does not repay it.
+- **Checks.** New `bank_cards` test (9 checks, source and portable). 37 scoped suites pass,
+  including partner cards, card economics, corporate income, behavior goldens, determinism
+  and the interface suites. Cards were checked in headless Chromium before launch and after
+  seven months on the bank route.
+- **Known issue, predates 9.40.** In whole-game runs on one seed, a bank played by the AI
+  planner fell below an 8% capital ratio through its own executive decisions; its next plan
+  then failed the capital reserve check with or without cards. This happened on the partner
+  route at month 22 (identically on the 9.39 engine) and on the bank route at month 31.
+  Tracked separately.
+
 ## September 28 — Playtest follow-up: Core Operations layout, forecast drivers, logos
 
 Three requests from the 9.39 playtest. No campaign rule changes: saves of every version keep

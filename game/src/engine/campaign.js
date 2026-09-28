@@ -40,7 +40,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.cardEconomicsVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined||o.monetaryPolicyVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');

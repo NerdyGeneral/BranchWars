@@ -32,9 +32,9 @@ test('Core and historical offices keep their existing controls; latest Expanded 
  assert(h.confirmFeatures());assert.equal(h.run('readSetupFeatureOptions().facilityExtensionsVersion'),1);
  // This tests the current integrated selection, not the historical suite-only
  // campaign. Current Expanded includes reporting, persistent rivalry and
- // balance-sheet lending, Federal Funds and bank-wide business delivery (9.39);
+ // balance-sheet lending, Federal Funds and bank-wide business delivery (9.39) and bank-issued cards (9.40);
  // historical suite creation below remains9.11.
- assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),'9.39');
+ assert.equal(h.run('E.campaignRules(readSetupFeatureOptions(),{context:"lobby"}).version'),'9.40');
  assert.equal(h.run('readSetupFeatureOptions().expandedBusinessVersion'),1);
  assert.equal(h.run('readSetupFeatureOptions().bankEconomicsVersion'),1);
  assert.equal(h.run('readSetupFeatureOptions().creditWorkloadVersion'),1);

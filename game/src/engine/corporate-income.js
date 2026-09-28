@@ -147,7 +147,7 @@ function finishCorporateEconomy(g){
 function validateCorporatePlayer(p,world,month,groupVersion){
   const c=p.corporate;
   if(!c||Object.keys(c).sort().join()!=='index,report,version'||c.version!==1||![0,1].includes(c.index))throw Error('Invalid corporate banking book.');
-  if(p.accounting.version!==([8,9,10].includes(groupVersion)?4:[4,5,6,7].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0)+(p.companyCredit?.claims.reduce((n,x)=>n+x.interestDue,0)||0))
+  if(p.accounting.version!==([8,9,10].includes(groupVersion)?4:[4,5,6,7].includes(groupVersion)?3:2)||p.accounting.accounts.receivables!==world.companies.reduce((n,x)=>n+x.bankArrears[c.index],0)+(p.companyCredit?.claims.reduce((n,x)=>n+x.interestDue,0)||0)+PartnerCards.bankReceivables(p))
     throw Error('Bank receivables disagree with company liabilities.');
   if(month===0){if(c.report!==null)throw Error('Unexpected opening company receipts.');}
   else{

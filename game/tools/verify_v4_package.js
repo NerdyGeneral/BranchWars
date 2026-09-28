@@ -7,7 +7,7 @@ const {verifyPackage,README,RUNTIME_FILES}=require('./package_release'),{assembl
 const digest=b=>createHash('sha256').update(b).digest('hex');
 const copy=v=>JSON.parse(JSON.stringify(v));
 const PROFILES=Object.freeze({
- current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true},versions:{core:'8.20',expanded:'9.39'}},
+ current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true,currentBankCards:true},versions:{core:'8.20',expanded:'9.40'}},
  rc4:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true},versions:{core:'8.20',expanded:'9.33'}},
  rc2:{flags:{currentEconomics:true},versions:{core:'8.19',expanded:'9.32'}},
  rc3:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true},versions:{core:'8.19',expanded:'9.33'}}

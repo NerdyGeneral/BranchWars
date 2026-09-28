@@ -139,7 +139,7 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
       const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }
@@ -160,7 +160,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.

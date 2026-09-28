@@ -382,6 +382,21 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // agency_peer_compat, facility_lifecycle_quotes, facility_conversion_lifecycle,
 // department_runtime and department_ai_lending. No reference build, golden or
 // ceiling changed.
-const expected="8395b0c3a616bc122c41e3f78d64b1458d6c8cf41930f2725bf34ae6c48a623a";
+// Expanded 9.40 bank-issued cards. bankCardsVersion1 adds a second card route in which
+// the bank funds, owns and services its card book; the partner route is the 9.39
+// contract. Seeded 9.38 and 9.39 partner-card campaigns replay byte-identically against
+// the 9.39 engine for 16 months, including wind-down. Scoped checks rerun: bank_cards,
+// partner_cards, partner_card_economics, expanded_edition(+_network),
+// monetary_policy(+_network), facility_extensions_ui, package_release,
+// interface_banking_group, interface_shell, interface_markets, interface_people_strategy,
+// digital_commercial, outside_funding, corporate_income, feature_network, feature_setup,
+// features, forecast_drivers, behavior-golden, runtime-stages, determinism,
+// campaign-lifecycle, save_integrity, v31_version_boundary, engine, bank_economics,
+// bank_rivalry, research_program, announcements, bank_logos, holding_capital,
+// expanded_business, operations_workspace, workspace_ownership, balance_sheet_lending,
+// company_bank_funding, income_review, usability_help, build, architecture(+_scope) and
+// docs. Version expectations moved to 9.40 in five tests, deliberately. No reference
+// build, golden or ceiling changed.
+const expected="e5402739f1813e792a417d1741b28a81e2007d17b6f17a38e2cde6ec0699d60a";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));
