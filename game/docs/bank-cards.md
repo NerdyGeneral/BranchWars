@@ -108,11 +108,29 @@ and the card schedule forced, gave two results:
   $15,000.
 - At $15,000 the same seed diverged. At month 31 the bank, at a 7.83% capital
   ratio after its own executive decisions, produced a plan that failed the
-  capital reserve check, with or without cards; its card book was about 1% of
-  its risk assets.
+  capital reserve check.
 
-That second failure is a pre-existing planner issue: a bank played by the AI
-planner can fall below an 8% capital ratio through its own executive
-decisions, after which the planner proposes spending that validation rejects.
-A partner-route run fails the same way at month 22 on both the 9.40 and the
-unchanged 9.39 engine. It is tracked separately.
+### Card programs below the capital reserve (fixed)
+
+Both whole-game failures had one cause, present since 9.38. Once a bank's
+spending limit (capital above 8% of risk assets, within cash) could not cover
+its card program's running cost, that cost still counted as a plan commitment.
+Every plan except a permanent wind-down then failed the reserve check, for a
+human as well as the AI, although settlement would simply have paused the
+program without charge. The AI never winds down, so in AI mode the human's month
+could not resolve.
+
+Now, for every card campaign version:
+
+- A running program the bank cannot pay for is not a commitment. It pauses at
+  settlement exactly as before: no running charge, purchases or new accounts;
+  collections continue, and it resumes once capital and cash allow. Cards →
+  Program says so before the month resolves.
+- The AI does not stage a launch the reserve would reject.
+
+Only states in which the reserve already rejected every plan that kept the
+program behave differently, so campaigns that could continue before are
+unchanged. Seeded 9.38, 9.39 and 9.40 card campaigns and Core 8.20 and Expanded
+AI campaigns replay byte-identically against the unfixed engine.
+`card_capital_reserve` covers a human below the reserve, an AI-mode month and
+AI launch affordability, and fails on the unfixed engine with the original error.

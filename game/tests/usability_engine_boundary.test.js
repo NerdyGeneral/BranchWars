@@ -397,6 +397,17 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // company_bank_funding, income_review, usability_help, build, architecture(+_scope) and
 // docs. Version expectations moved to 9.40 in five tests, deliberately. No reference
 // build, golden or ceiling changed.
-const expected="e5402739f1813e792a417d1741b28a81e2007d17b6f17a38e2cde6ec0699d60a";
+// Card programs below the capital reserve. A running program the bank cannot pay for is
+// no longer a plan commitment (it pauses at settlement, as before), and the AI does not
+// stage a launch the reserve would reject. Only states in which the reserve rejected
+// every plan that kept the program change: seeded 9.38, 9.39 and 9.40 card campaigns
+// (16 months) and Core 8.20 and Expanded 9.39 Balanced and Rate campaigns (5 months)
+// replay byte-identically against the previous engine. Scoped checks rerun:
+// card_capital_reserve (fails on the previous engine with the original error),
+// bank_cards, partner_cards, partner_card_economics, interface_people_strategy,
+// interface_shell, interface_banking_group, interface_markets, research_program_ui,
+// strategy_workspace, strategy_release_ui, digital_commercial, operations_workspace,
+// workspace_ownership, core_balance_sheet_ui, usability_help and docs.
+const expected="30b72858daf9b59ef5e80daf19fdc73d37a310e2deb2a6c7df7adda694ed819b";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

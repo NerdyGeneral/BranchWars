@@ -45,7 +45,12 @@ const PartnerCards=(()=>{
   if(!q.intake&&q.marketing)throw Error('Marketing needs open card intake.');
   return copy(q);
  }
- function commitment(p,plan={}){if(!enabled(p))return 0;const q=plan.cardPolicy||defaults(p),R=rules(p);return (q.action==='launch'?(bankCards(p)?routeRules(q.route).setup:R.setup):0)+(active(p)&&q.action!=='windDown'?R.monthly+live(p).length*R.perAccount+(q.marketing||0):0);}
+ // A running program the bank cannot pay for pauses at settlement instead of
+ // charging, so its running costs are not a commitment then. Only states in
+ // which the reserve already rejected every plan that kept the program change.
+ const running=(p,q)=>active(p)&&q.action!=='windDown'?rules(p).monthly+live(p).length*rules(p).perAccount:0;
+ const pauses=(p,q)=>{const cost=running(p,q);return cost>0&&!!p.accounting&&pilotSpendingLimit(p)<cost;};
+ function commitment(p,plan={}){if(!enabled(p))return 0;const q=plan.cardPolicy||defaults(p),R=rules(p),cost=running(p,q);return (q.action==='launch'?(bankCards(p)?routeRules(q.route).setup:R.setup):0)+(cost&&!pauses(p,q)?cost+(q.marketing||0):0);}
  // Shared Technology and Risk tasks already serve all consumers proportionally.
  // Adding demand here consumes their existing finite dispatch, never idle time twice.
  function workload(p){return active(p)?bankRoute(p)?BANK.baseWorkQuarters+live(p).length/BANK.accountsPerWorkQuarter:p.cardEconomicsVersion===1?ECONOMICS.baseWorkQuarters+live(p).length/ECONOMICS.accountsPerWorkQuarter:1+live(p).length/20:0;}
@@ -55,7 +60,7 @@ const PartnerCards=(()=>{
  function quote(g,p,plan={}){
   const q=policy(p,plan);if(!q)throw Error('Cards are unavailable in these rules.');
   const dq=departmentFunctionsQuote(g,p,plan),covered=coverage(p,dq.delivery),last=p.cardProgram.history.at(-1)||null;
-  return {policy:q,route:bankCards(p)?q.route:'partner',status:p.cardProgram.status,ready:p.cardProgram.ready,cost:commitment(p,plan),coverage:covered,accounts:live(p).length,principal:sum(p.cardProgram.accounts.map(a=>a.principal)),interest:sum(p.cardProgram.accounts.map(a=>a.interest)),allowance:sum(p.cardProgram.accounts.map(a=>a.allowance)),chargedOff:sum(p.cardProgram.accounts.map(a=>a.chargedOff)),last};
+  return {policy:q,route:bankCards(p)?q.route:'partner',pauses:pauses(p,q),status:p.cardProgram.status,ready:p.cardProgram.ready,cost:commitment(p,plan),coverage:covered,accounts:live(p).length,principal:sum(p.cardProgram.accounts.map(a=>a.principal)),interest:sum(p.cardProgram.accounts.map(a=>a.interest)),allowance:sum(p.cardProgram.accounts.map(a=>a.allowance)),chargedOff:sum(p.cardProgram.accounts.map(a=>a.chargedOff)),last};
  }
  function validatePlan(g,p,plan){policy(p,plan);}
  function payer(g,p,amount,source){
@@ -225,7 +230,10 @@ const PartnerCards=(()=>{
   const p=g.players[i];if(!enabled(p))return plan;plan.cardPolicy=defaults(p);
   if(p.cardProgram.status==='unlaunched'&&DigitalCommercial.has(p,'digitalArchitecture')&&DigitalCommercial.has(p,'relationshipPlanning')&&p.stats.cash>800000){plan.cardPolicy.action='launch';
    // 9.40: a well-capitalised bank with spare cash issues its own cards.
-   if(bankCards(p))plan.cardPolicy.route=capitalRatio(p)>=14&&p.stats.cash>1200000?'bank':'partner';}
+   if(bankCards(p))plan.cardPolicy.route=capitalRatio(p)>=14&&p.stats.cash>1200000?'bank':'partner';
+   // Never stage a launch the capital reserve would reject; such a plan could not be submitted.
+   const setup=bankCards(p)?routeRules(plan.cardPolicy.route).setup:rules(p).setup;
+   if(p.accounting&&pilotSpendingLimit(p)<setup)plan.cardPolicy=defaults(p);}
   if(active(p)){plan.cardPolicy.intake=p.stats.cash>400000;plan.cardPolicy.marketing=plan.cardPolicy.intake?(p.cardEconomicsVersion===1?(live(p).length<25&&coverage(p,departmentFunctionsQuote(g,p,plan).delivery)>=.8?200:0):1000):0;}
   return plan;
  }

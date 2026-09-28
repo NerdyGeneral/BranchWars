@@ -20,11 +20,13 @@ accounts need a 10% capital ratio. See [bank-issued cards](bank-cards.md).
   including partner cards, card economics, corporate income, behavior goldens, determinism
   and the interface suites. Cards were checked in headless Chromium before launch and after
   seven months on the bank route.
-- **Known issue, predates 9.40.** In whole-game runs on one seed, a bank played by the AI
-  planner fell below an 8% capital ratio through its own executive decisions; its next plan
-  then failed the capital reserve check with or without cards. This happened on the partner
-  route at month 22 (identically on the 9.39 engine) and on the bank route at month 31.
-  Tracked separately.
+- **Fixed: card programs below the capital reserve.** Since 9.38, once a bank's spending
+  limit could not cover its card program's running cost, every plan except a permanent
+  wind-down failed the capital reserve check, for a human as well as the AI; in AI mode the
+  human's month could not resolve. The running cost is no longer a commitment then (the
+  program pauses at settlement, as it always did) and the AI does not stage a launch it
+  cannot pay for. Campaigns that could continue before replay identically. See
+  [bank-issued cards](bank-cards.md#card-programs-below-the-capital-reserve-fixed).
 
 ## September 28 — Playtest follow-up: Core Operations layout, forecast drivers, logos
 
