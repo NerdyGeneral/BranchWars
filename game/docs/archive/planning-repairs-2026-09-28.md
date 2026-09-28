@@ -46,3 +46,15 @@ after installing Playwright and its Chromium browser. Optional environment
 variables: `PLAYWRIGHT_MODULE`, `CHROMIUM_EXECUTABLE`, and
 `BRANCH_WARS_REPAIR_OUTPUT`. The runner uses isolated in-memory storage and
 blocks external requests. Its snapshot hook only reads the current draft/world.
+
+## CI fixture follow-up
+
+Run 36482452782 exposed old staffing-heading expectations in the market context
+tests and a missing Strategy renderer stub in the isolated budget harness.
+The market workspace suite had the same obsolete heading. Updated those three
+test fixtures while retaining route, working-input, budget and stale-control
+assertions. No production code or portable bytes changed in this follow-up.
+Market context and workspace suites passed on source and portable builds;
+department obligations passed 12 checks and Strategy passed 17. The related
+credit, shares, consolidation, opportunity, People and research UI checks passed.
+The updated PR still requires a fresh complete GitHub gate.

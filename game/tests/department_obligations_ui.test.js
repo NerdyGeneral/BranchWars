@@ -44,7 +44,9 @@ function harness(world,plan,code=ui){
   Object.defineProperty(el,'innerHTML',{get:()=>markup,set:html=>{markup=String(html);if(id==='#competitiveActions')buttons=[...markup.matchAll(/<button\b[^>]*data-competitive-action="([^"]+)"[^>]*>/g)].map(m=>{const b=node('action:'+m[1]);b.dataset.competitiveAction=m[1];b.disabled=/\sdisabled(?:\s|>)/.test(m[0]);return b;});}});nodes.set(id,el);return el;};
  const ctx={console,E,game:copy(world),view:null,seat:0,draft:copy(plan),$:node,$$:s=>s==='[data-competitive-action]'?buttons:[],money:n=>'$'+Math.round(n).toLocaleString('en-US'),esc:x=>String(x)};
  vm.createContext(ctx);vm.runInContext(code,ctx);
- vm.runInContext("currentView=()=>E.publicState(game,seat);renderProjects=()=>{};renderPipeline=()=>{};renderOperatingPreview=()=>{};renderWorkforce=()=>{};renderProductPrograms=()=>{};",ctx);
+ // This harness loads budget/readiness renderers only. The Strategy workspace
+ // refresh belongs to the full-client strategy_workspace regression suite.
+ vm.runInContext("currentView=()=>E.publicState(game,seat);renderProjects=()=>{};renderPipeline=()=>{};renderOperatingPreview=()=>{};renderWorkforce=()=>{};renderProductPrograms=()=>{};renderStrategyWorkspace=()=>{};",ctx);
  return {ctx,nodes,run:js=>vm.runInContext(js,ctx),draw:()=>vm.runInContext('renderReady(currentView())',ctx),action:key=>node('action:'+key)};
 }
 const broke=copy(g);cashAt(broke.players[0],0);E.validatePilot(broke);const h=harness(broke,ordinary),state=JSON.stringify(h.ctx.game);h.draw();
