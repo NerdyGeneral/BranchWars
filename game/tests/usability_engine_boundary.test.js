@@ -415,6 +415,8 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // interface_people_strategy, research_program, research_program_ui, research_bot,
 // digital_commercial, bank_cards, card_capital_reserve, partner_cards, expanded
 // edition and version tests, usability_help and docs.
-const expected="7e03acf1ad5bb54f1f4f58aa578cf0a363c30741fdf8d2a9cb7d1e97935f2eb5";
+// 9.41 recurring research mandate: tree campaigns cover all six families. Only
+// campaigns with the research tree change; 9.40, 9.39 and Core replay identically.
+const expected="0e4c79829308995e6c16d10e32cd29ac8f5cef3b92b910a3fdd7a494d0864aa8";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

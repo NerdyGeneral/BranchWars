@@ -49,8 +49,21 @@ function interfaceMarketsOffice(v,id){return v.me.facilityNetwork?.offices.find(
 function interfaceMarketsOfficeName(v,id){const o=interfaceMarketsOffice(v,id);return o?facilityUiModel(o.model)+' · '+facilityUiOfficeLabel(o)+' · '+(v.territories[o.market]?.name||o.market):'Unavailable office';}
 function interfaceMarketsGo(view='overview',context={}){
  const opened=openInterfaceWorkspace('markets',view,context);
- if(opened)$('#imInspectorTitle')?.focus?.();return opened;
+ if(opened)interfaceMarketsReveal();return opened;
 }
+// Moving within Markets keeps the page where it is. The inspector title takes
+// focus without scrolling; the page scrolls only when the inspector's top is out
+// of view (the stacked layout on narrower windows).
+function interfaceMarketsReveal(){
+ const title=$('#imInspectorTitle'),inspector=title?.closest?.('.im-inspector');if(!title)return;
+ title.focus?.({preventScroll:true});
+ const box=inspector?.getBoundingClientRect?.(),head=(typeof getComputedStyle==='function'?parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--interface-header-height')):0)||100;
+ if(box&&(box.top<head||box.top>window.innerHeight-120))window.scrollTo?.({top:Math.max(0,window.scrollY+box.top-head-12)});
+}
+// One row of tabs replaces the lists of links that used to open each office or
+// market task as a further page.
+function interfaceMarketsTabs(tabs,selected,context){return '<nav class="im-tabs" aria-label="'+esc(context.office?'Office tasks':'Market tasks')+'">'+tabs.map(([label,view])=>'<button type="button" class="btn" data-im-view="'+esc(view)+'" data-im-context="'+esc(JSON.stringify(context))+'" aria-pressed="'+(view===selected)+'">'+esc(label)+'</button>').join('')+'</nav>';}
+function interfaceMarketsOfficeTabs(v,o){const record=v.me.facilityLifecycle?.records[o.id];return [['Overview','office'],...(record?[['Staff time','staff'],['Maintenance & hubs','maintenance'],['Renovate','renovate']]:[]),['Convert','convert'],...(v.me.facilityExtensions||v.me.sharedPremises?[['Services & expansion','services']]:[])];}
 function interfaceMarketsRefresh(){const v=currentView();if(v){renderReady(v);if(typeof renderExpandedInterface==='function')renderExpandedInterface(v);}}
 function interfaceMarketsStage(token,proposal,formKey){
  if(!interfaceMarketsCurrent(token)){toast('This office, month or connection changed. Use the current inspector.');return false;}
@@ -256,8 +269,6 @@ function interfaceMarketsOfficeOverview(v,o){
  let h='<h3>'+esc(facilityUiModel(o.model))+'</h3><p>'+esc(facilityUiOfficeLabel(o))+'</p>'+interfaceMarketsFacts([['Condition',record?(record.conditionBp/100).toFixed(1)+'%':'Not tracked'],['Assigned bank staff time',record?lifecycleStaffTime(staff):'Pooled by market'],['Operating upkeep',m?lifecycleMoney(m.expense)+' / month':'Unavailable'],['Deposit capacity',m?lifecycleMoney(m.depositCapacity):'Unavailable'],['Loan capacity',m?lifecycleMoney(m.loanCapacity):'Unavailable']]);
  if(record)h+='<p class="im-caption">Age '+record.ageMonths+' months · '+(record.deferredWearBp/100).toFixed(2)+' points deferred wear. Capacity is a service limit, not attributed office profit.</p>';
  if(o.conversion||record?.renovation)h+='<p class="im-status warn">'+esc(o.conversion?'Conversion in progress':'Renovation in progress')+' · inspect that action for work and cancellation terms.</p>';
- const links=[...(record?[['Staff time','staff'],['Maintenance & hub support','maintenance'],['Renovate','renovate']]:[]),['Convert office','convert'],...(v.me.facilityExtensions||v.me.sharedPremises?[['Services & expansion','services']]:[])];
- h+='<div class="im-options">'+links.map(([label,view])=>interfaceMarketsLink(label,view,{market:o.market,office:o.id})).join('')+'</div>';
  return {html:h,actions:{}};
 }
 function interfaceMarketsOverview(v,market){
@@ -267,7 +278,7 @@ function interfaceMarketsOverview(v,market){
   h+='<p class="im-status">'+esc(!t.unlocked?'Opens month '+t.unlock:t.exited?.[0]?'Withdrawn. Paid re-entry is quoted when you build here.':draft.focus===market?'This is your monthly focus.':'Inspecting only. Your monthly focus remains '+v.territories[draft.focus]?.name+'.')+'</p>';
  if(draft.focus!==market)h+=interfaceMarketsButton(form.focus?'Keep current monthly focus':'Change monthly focus','prepare-focus',{disabled:v.me.submitted||v.gameOver||!t.unlocked});
  if(form.focus&&draft.focus!==market)h+='<section class="im-focus"><h4>Change monthly focus to '+esc(t.name)+'</h4><ul>'+focus.effects.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul>'+interfaceMarketsStatus(focus.status)+interfaceMarketsButton('Update monthly focus','focus',{primary:true,disabled:!focus.status.eligible})+'</section>';
- h+='<div class="im-actions">'+interfaceMarketsLink('Build here','build',{market})+interfaceMarketsLink('Improve market network','improve',{market})+'</div><h4>Your offices here</h4>'+(offices.length?offices.map(o=>interfaceMarketsLink(facilityUiModel(o.model),'office',{market,office:o.id},facilityUiOfficeLabel(o))).join(''):'<p>No identified operating offices in this market.</p>');
+ h+='<h4>Your offices here</h4>'+(offices.length?offices.map(o=>interfaceMarketsLink(facilityUiModel(o.model),'office',{market,office:o.id},facilityUiOfficeLabel(o))).join(''):'<p>No identified operating offices in this market.</p>');
  const agreements=(v.serviceAgreements||[]).filter(a=>a.market===market&&!a.companyClosed),opportunities=(v.opportunities||[]).filter(a=>a.market===market);
  if(agreements.length||opportunities.length){
   h+='<h4>Local business &amp; relationship opportunities</h4>';
@@ -314,8 +325,8 @@ function renderInterfaceMarkets(v,route,mount){
   else content=interfaceMarketsOverview(v,market);
  }catch(error){content={html:'<p class="im-status bad">This selection is unavailable: '+esc(error.message)+'</p>',actions:{}};}
  const offices=(v.me.facilityNetwork?.offices||[]).filter(o=>o.closedCycle===null&&o.market===market);
- mount.innerHTML='<div class="interface-markets"><aside class="im-directory"><div class="im-directory-heading"><h2>Markets</h2>'+interfaceMarketsButton('Compare offices','compare')+'</div>'+interfaceMarketsMap(v,market)+'<nav aria-label="Markets">'+Object.entries(v.territories).map(([key,t])=>'<button type="button" class="im-market-row" data-im-market="'+esc(key)+'" aria-pressed="'+(key===market)+'"><span><b>'+esc(t.name)+'</b><small>'+(!t.unlocked?'Opens month '+t.unlock:t.exited?.[0]?'Withdrawn':key===draft.focus?'Monthly focus':'Inspect')+'</small></span><span>'+t.branches[0]+' offices</span></button>').join('')+'</nav><h3>Your offices · '+esc(name)+'</h3>'+offices.map(o=>interfaceMarketsLink(facilityUiModel(o.model),'office',{market,office:o.id},facilityUiOfficeLabel(o))).join('')+'</aside><section class="im-inspector" aria-labelledby="imInspectorTitle"><header class="im-inspector-head"><div><span class="eyebrow">'+esc(name)+(office?' · '+esc(facilityUiOfficeLabel(office)):'')+'</span><h2 id="imInspectorTitle" tabindex="-1">'+esc(office?facilityUiModel(office.model):view==='build'?'Build an office':view==='improve'?'Improve this market':view==='compare'?'Network comparison':'Market details')+'</h2></div>'+interfaceMarketsButton(office&&view!=='office'?'Office overview':'Market overview','back')+'</header>'+(v.me.submitted||v.gameOver?'<p class="im-status">Planning is locked. You can inspect existing offices and their records.</p>':'')+content.html+'</section></div>';
- if(typeof interfaceSetLocation==='function')interfaceSetLocation(['Markets',name,...(office?[facilityUiModel(office.model)]:[]),...(view!=='overview'?[view==='staff'?'Staff time':view==='room'?'Service space':view]:[])]);
+ mount.innerHTML='<div class="interface-markets"><aside class="im-directory"><div class="im-directory-heading"><h2>Markets</h2>'+interfaceMarketsButton('Compare offices','compare')+'</div>'+interfaceMarketsMap(v,market)+'<nav aria-label="Markets">'+Object.entries(v.territories).map(([key,t])=>'<button type="button" class="im-market-row" data-im-market="'+esc(key)+'" aria-pressed="'+(key===market)+'"><span><b>'+esc(t.name)+'</b><small>'+(!t.unlocked?'Opens month '+t.unlock:t.exited?.[0]?'Withdrawn':key===draft.focus?'Monthly focus':'Inspect')+'</small></span><span>'+t.branches[0]+' offices</span></button>').join('')+'</nav><h3>Your offices · '+esc(name)+'</h3>'+offices.map(o=>interfaceMarketsLink(facilityUiModel(o.model),'office',{market,office:o.id},facilityUiOfficeLabel(o))).join('')+'</aside><section class="im-inspector" aria-labelledby="imInspectorTitle"><header class="im-inspector-head"><div><span class="eyebrow">'+esc(name)+(office?' · '+esc(facilityUiOfficeLabel(office)):'')+'</span><h2 id="imInspectorTitle" tabindex="-1">'+esc(office?facilityUiModel(office.model):view==='build'?'Build an office':view==='improve'?'Improve this market':view==='compare'?'Network comparison':'Market details')+'</h2></div>'+(office||view!=='overview'?interfaceMarketsButton('Market overview','back'):'')+'</header>'+(office?interfaceMarketsTabs(interfaceMarketsOfficeTabs(v,office),['suite','room','premises'].includes(view)?'services':['staff','maintenance','renovate','convert','services'].includes(view)?view:'office',{market,office:office.id}):['overview','build','improve'].includes(view)?interfaceMarketsTabs([['Overview','overview'],['Build an office','build'],['Improve network','improve']],view,{market}):'')+(v.me.submitted||v.gameOver?'<p class="im-status">Planning is locked. You can inspect existing offices and their records.</p>':'')+content.html+'</section></div>';
+ if(typeof interfaceSetLocation==='function')interfaceSetLocation(['Markets',name,...(office?[facilityUiModel(office.model)]:[]),...(view!=='overview'&&view!=='office'?[{staff:'Staff time',maintenance:'Maintenance & hubs',renovate:'Renovate',convert:'Convert',services:'Services & expansion',suite:'Commercial banking suite',room:'Service space',build:'Build an office',improve:'Improve network',compare:'Office network',network:'Office network',premises:'Premises network'}[view]||view]:[])]);
  const refresh=()=>{
   const source=document.activeElement,keys=['imAction','imModel','imPath','imValue'].filter(key=>source?.dataset?.[key]!==undefined),identity=Object.fromEntries(keys.map(key=>[key,source.dataset[key]]));
   renderInterfaceMarkets(currentView(),route,mount);
@@ -337,7 +348,7 @@ function renderInterfaceMarkets(v,route,mount){
  mount.querySelectorAll('[data-im-action]').forEach(el=>el.addEventListener('click',()=>{
   if(!safe())return;const action=el.dataset.imAction;
   if(action==='compare'){interfaceMarketsGo('compare',{market});return;}
-  if(action==='back'){interfaceMarketsGo(office&&view!=='office'?'office':'overview',office&&view!=='office'?{market,office:office.id}:{market});return;}
+  if(action==='back'){interfaceMarketsGo('overview',{market});return;}
   if(action==='discard'){if(content.formKey)delete interfaceMarketsState.forms[content.formKey];refresh();return;}
   if(!interfaceMarketsCurrent(token))return;
   if(['prepare-focus','prepare-cancel','prepare-remove','prepare-network','prepare-reset','prepare-premises-reset'].includes(action)){

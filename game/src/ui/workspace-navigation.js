@@ -67,7 +67,13 @@ function openBankingContext(kind,{product=null,market=null,remember=true}={}){
  const v=currentView();if(!v||!draft)return false;
  const supported=['pricing','product','portfolio','policies'].includes(kind);if(!supported)return false;
  if(product&&!v.productPortfolios.retail.options[product])return false;
- if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v))return interfaceNavigate({workspace:'banking',view:kind==='portfolio'?'lending':'deposits',context:{productId:product,marketId:market,mode:kind==='pricing'?'pricing':kind==='portfolio'?'portfolio':kind}}, {remember});
+ // Each link opens the editor it names: a product's own terms, bank-wide deposit
+ // pricing, the lending portfolio, or the bank liquidity mandate.
+ if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){
+  const target=kind==='portfolio'?{view:'lending',context:{objectId:'portfolio'}}:kind==='policies'?{view:'treasury',context:{objectId:'liquidity'}}:
+   product?{view:'deposits',context:{objectId:product,productId:product,mode:kind==='pricing'?'terms':'delivery'}}:{view:'deposits',context:{objectId:kind==='pricing'?'base':undefined}};
+  return interfaceNavigate({workspace:'banking',view:target.view,context:{...target.context,marketId:market}},{remember});
+ }
  if(remember)rememberBankingContext(v);
  let target;
  if(['pricing','product'].includes(kind)&&v.me.productPrograms&&(kind!=='pricing'||v.me.productPrograms.version===2)){

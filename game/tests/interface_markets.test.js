@@ -29,9 +29,9 @@ test('Original-art map selects only the contextual inspector and rejects detache
 
 test('map visibly compares operating offices and keeps a single contextual build action',()=>{
  const h=fresh(),markup=h.c.imMount.innerHTML;
- for(const counts of h.run('Object.values(currentView().territories).map(t=>t.branches)'))assert(markup.includes('Offices: You '+counts[0]+' · Rival '+counts[1]));assert.equal((markup.match(/<b>Build here<\/b>/g)||[]).length,1);
+ for(const counts of h.run('Object.values(currentView().territories).map(t=>t.branches)'))assert(markup.includes('Offices: You '+counts[0]+' · Rival '+counts[1]));assert.equal((markup.match(/>Build an office<\/button>/g)||[]).length,1,'One build action: the market tab');
  assert.match(markup,/Your offices under construction/);assert.match(markup,/Operating offices · you \/ rival/);
- const directory=markup.split('</aside>')[0];assert.doesNotMatch(directory,/<b>Build here<\/b>/);
+ const directory=markup.split('</aside>')[0];assert.doesNotMatch(directory,/>Build an office</);
  h.run(`const countsBefore=JSON.stringify(currentView().territories.downtown.branches);game.players[0].projects.push({key:'branchAtm',target:'downtown',progress:0,total:1});openInterfaceWorkspace('markets','overview',{market:'downtown'});`);
  assert.equal(h.run('JSON.stringify(currentView().territories.downtown.branches)'),h.run('countsBefore'),'Unfinished construction is not an operating location');
  assert.match(h.c.imMount.innerHTML,/Your offices under construction<\/dt><dd>1/);
