@@ -143,7 +143,9 @@ const ResearchTree=(()=>{
  function branchTable(){return Object.fromEntries(Object.entries(FAMILIES).map(([f,d])=>[f,{name:d.name,promise:d.promise,nodes:familyNodes(f).map(k=>({key:k,name:NODES[k].name,cost:NODES[k].cost,desc:NODES[k].text}))}]));}
  function initialize(g,o){
   if(o.researchTreeVersion!==1||o.digitalCommercialVersion!==1)return;g.researchTreeVersion=1;
-  for(const p of g.players){p.researchTreeVersion=1;p.researchTree={version:1,nodes:Object.fromEntries(Object.keys(NODES).map(k=>[k,{funded:0,completed:0}]))};}
+  for(const p of g.players){p.researchTreeVersion=1;p.researchTree={version:1,nodes:Object.fromEntries(Object.keys(NODES).map(k=>[k,{funded:0,completed:0}]))};
+   // The recurring research mandate covers Risk & Capital too.
+   const r=p.management?.research;if(r&&!r.priority.includes('risk')){r.priority.push('risk');r.targets.risk=1;}}
  }
  function issue(p,key){
   const d=NODES[key];if(!enabled(p)||!d)return 'This research requires Expanded 9.41.';if(has(p,key))return 'This research is already learned.';

@@ -134,4 +134,17 @@ test('the AI funds foundations first and stages a legal plan',()=>{
  const poor=copy(g);poor.players[1].stats.cash=200000;assert.equal(E.chooseBot(poor,1).nodeFunding,undefined,'No research without spare cash');
 });
 
-console.log('Research tree passed: '+checks+' checks on the 9.41 boundary, funding, levels, effect consumers, stacking, risk and models, persistence and AI.');
+test('the recurring research mandate covers all six families, Risk & Capital included',()=>{
+ const g=create(),p=g.players[0];
+ assert.deepEqual([...p.management.research.priority].sort(),Object.keys(T.FAMILIES).sort());assert.equal(p.management.research.targets.risk,1);
+ assert.equal(create(false).players[0].management.research.priority.includes('risk'),false,'9.40 keeps its five tracks');
+ const plan=E.chooseBot(copy(g),0);plan.investments={};delete plan.nodeFunding;
+ plan.management={...copy(p.management),research:{...copy(p.management.research),enabled:true,budget:100000,reserve:0,priority:['risk',...p.management.research.priority.filter(k=>k!=='risk')]}};
+ const v=E.publicState(g,0),out=E.managementPlan({...v.me,focus:plan.focus},plan,v.economy,v).plan;
+ assert.deepEqual(Object.keys(out.nodeFunding||{}).map(k=>T.NODES[k].family),['risk'],'A Risk-first mandate funds Underwriting Standards');
+ E.validatePlan(copy(g),copy(p),copy(out));
+ const done=copy(g);done.gameOver=true;E.rematch(done,0);E.rematch(done,1);assert(done.players.every(x=>x.management.research.priority.includes('risk')),'Rematch keeps six families');
+ const bad=copy(g);bad.players[0].management.research.priority=bad.players[0].management.research.priority.filter(k=>k!=='risk');delete bad.players[0].management.research.targets.risk;assert.throws(()=>E.migrateCampaign(bad),/research limits/);
+});
+
+console.log('Research tree passed: '+checks+' checks on the 9.41 boundary, funding, levels, effect consumers, stacking, risk and models, persistence, AI and the recurring mandate.');

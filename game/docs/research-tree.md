@@ -62,7 +62,7 @@ The AI funds foundations first, then continues along a path to the capstone. It 
 
 - `researchTreeVersion: 1` stamps 9.41 and requires 9.40 bank cards and 9.37 digital & commercial research. Peers without the capability are refused before a 9.41 campaign links.
 - The owner's view carries only its own research book and pending funding.
-- The recurring research mandate covers the five original families. Fund Risk & Capital from Research.
+- The recurring research mandate (Strategy → Mandates) covers all six families, Risk & Capital included.
 
 ## Tests
 

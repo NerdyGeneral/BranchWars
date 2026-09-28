@@ -1,13 +1,16 @@
 function defaultManagement(){return {version:1,research:{enabled:false,budget:50000,reserve:500000,priority:Object.keys(STRATEGY_BRANCHES),targets:Object.fromEntries(Object.keys(STRATEGY_BRANCHES).map(k=>[k,1]))},delivery:{mode:'manual',staffLimit:2,vendorLimit:4,salesFloor:1}}}
-function validateManagement(m){
- const keys=Object.keys(STRATEGY_BRANCHES).sort().join(),integer=(x,min,max)=>Number.isInteger(x)&&x>=min&&x<=max;
+// Research families a bank's recurring mandate covers: the five capability
+// tracks, or all six research-tree families (with Risk & Capital) from 9.41.
+function managementFamilies(p){return ResearchTree.enabled(p)?Object.keys(ResearchTree.FAMILIES):Object.keys(STRATEGY_BRANCHES)}
+function validateManagement(m,families=Object.keys(STRATEGY_BRANCHES)){
+ const keys=[...families].sort().join(),integer=(x,min,max)=>Number.isInteger(x)&&x>=min&&x<=max;
  if(!m||Object.keys(m).sort().join()!=='delivery,research,version'||m.version!==1)throw Error('Invalid management mandate');
  const r=m.research,d=m.delivery;
- if(!r||Object.keys(r).sort().join()!=='budget,enabled,priority,reserve,targets'||typeof r.enabled!=='boolean'||!integer(r.budget,0,250000)||r.budget%1000||!integer(r.reserve,0,10000000)||!Array.isArray(r.priority)||r.priority.length!==5||[...r.priority].sort().join()!==keys||!r.targets||Object.keys(r.targets).sort().join()!==keys||Object.values(r.targets).some(t=>!integer(t,0,4)))throw Error('Invalid recurring research limits');
+ if(!r||Object.keys(r).sort().join()!=='budget,enabled,priority,reserve,targets'||typeof r.enabled!=='boolean'||!integer(r.budget,0,250000)||r.budget%1000||!integer(r.reserve,0,10000000)||!Array.isArray(r.priority)||r.priority.length!==families.length||[...r.priority].sort().join()!==keys||!r.targets||Object.keys(r.targets).sort().join()!==keys||Object.values(r.targets).some(t=>!integer(t,0,4)))throw Error('Invalid recurring research limits');
  if(!d||Object.keys(d).sort().join()!=='mode,salesFloor,staffLimit,vendorLimit'||!['manual','profit','inhouse'].includes(d.mode)||!integer(d.staffLimit,0,100)||!integer(d.vendorLimit,0,4)||!integer(d.salesFloor,0,100))throw Error('Invalid service manager limits');
  return m;
 }
-function applyManagementPolicy(p,m){if(p.management)p.management=JSON.parse(JSON.stringify(validateManagement(m||p.management)))}
+function applyManagementPolicy(p,m){if(p.management)p.management=JSON.parse(JSON.stringify(validateManagement(m||p.management,managementFamilies(p))))}
 function clientProfile(c){return Number.isInteger(c.clientIndex)?ANCHOR_CLIENTS[c.clientIndex]||null:null}
 function clientBidAdjustment(p,c){
  const f=clientProfile(c);if(!p.management||!f)return 0;
@@ -27,7 +30,7 @@ const institutionPower=contractPower;
 contractPower=function(g,p,c){return institutionPower(g,p,c)+clientBidAdjustment(p,c)};
 
 function normalizeManagementPolicy(p,plan){
- if(p.management){plan.management=JSON.parse(JSON.stringify(validateManagement(plan.management||p.management)))}
+ if(p.management){plan.management=JSON.parse(JSON.stringify(validateManagement(plan.management||p.management,managementFamilies(p))))}
  else if(plan.management)throw Error('Management mandates require a Living institution campaign.');
 }
 // This is a pure DRAFT preparer, never called after a human locks a plan.
@@ -38,7 +41,7 @@ function managementPlan(p,input,economy,g=null){
   if(!current.status.eligible)return {plan:JSON.parse(JSON.stringify(input)),notes:['Management paused: '+current.status.reason+' Standing instructions are unchanged; review department and office staffing.']};
  }
  const plan=JSON.parse(JSON.stringify(input)),notes=[];if(!p.management)return {plan,notes};
- const m=validateManagement(plan.management||p.management);plan.management=JSON.parse(JSON.stringify(m));
+ const m=validateManagement(plan.management||p.management,managementFamilies(p));plan.management=JSON.parse(JSON.stringify(m));
  const d=m.delivery;
  if(d.mode!=='manual'){
   const options=serviceDeliveryOptions(p,plan,economy,undefined,g).filter(o=>o.staff<=d.staffLimit&&o.outsourcing<=d.vendorLimit&&plan.allocation.business-o.staff>=d.salesFloor);
@@ -94,7 +97,7 @@ function validateManagementSave(g){
  if(![1,2].includes(g.managementVersion)||g.serviceExpansionVersion!==1)throw Error('Unsupported institution management save');
  if(g.serviceAgreements.length!==ANCHOR_CLIENTS.length)throw Error('Invalid anchor client roster');
  g.serviceAgreements.forEach((c,i)=>{if(c.clientIndex!==i)throw Error('Invalid anchor client identity')});
- for(const p of g.players){validateManagement(p.management);if(p.submitted)validateManagement(p.submitted.management)}
+ for(const p of g.players){validateManagement(p.management,managementFamilies(p));if(p.submitted)validateManagement(p.submitted.management,managementFamilies(p))}
  return g;
 }
 
