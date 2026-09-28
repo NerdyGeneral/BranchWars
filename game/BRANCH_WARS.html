@@ -271,10 +271,36 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 /* Section heads inside the combined monthly desk span the whole grid; as ordinary
    grid items they took a column and pushed the section beside them. */
 .operations-two-column>.operations-section-head,.operations-pane>.operations-section-head{grid-column:1/-1;margin:4px 0 0}
+/* One rhythm for every Operations desk: a titled section, then cards that meet
+   edge to edge and share a row's height. Two desks share the tab row equally. */
+.operations-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.operations-pane{display:grid;gap:14px;align-content:start}
+.operations-pane>.panel{margin:0}
+.operations-two-column{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+.operations-section-head{grid-column:1/-1;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px;margin:18px 0 0;padding:0 2px 7px;border-bottom:2px solid #d3e0ee}
+.operations-section-head h3{margin:0;font-size:.95rem;letter-spacing:.06em;color:#1b3a5c}
+.operations-section-head p{margin:0}
+#operationsPanel-funding>#bankProductsPanel,#operationsPanel-funding>#bankPricingPanel{grid-column:1/-1}
+.policy-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:10px}
+.policy-column{min-width:0;display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid #d3e0ee;border-radius:10px;background:#f8fbfe}
+.policy-column>h3{margin:0;font-size:.82rem;letter-spacing:.05em;color:#1b3a5c}
+.policy-column>p{margin:0}
+.policy-column .button-group{grid-template-columns:1fr;gap:8px}
+.policy-column .policy{text-align:left;padding:9px 11px;min-height:0}
+.operations-pane>.operations-section-head:first-child{margin-top:4px}
+#projectDeliveryStatus>h3,.project-workspace-heading h2{margin:0;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:#1b3a5c}
+@media(max-width:950px){.operations-two-column{grid-template-columns:1fr}}
+/* Forecast & books → Growth & limits */
+.forecast-limit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.forecast-limit-table tr.forecast-limit-binding td{background:#fff6e5;font-weight:700}
+.forecast-limit-badge{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:#b45309;color:#fff;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase}
+[data-forecast-panel="drivers"] h3{margin:18px 0 4px;font-size:.85rem;letter-spacing:.05em;color:#1b3a5c}
+[data-forecast-panel="drivers"] h3:first-child{margin-top:4px}
+.forecast-limit-table th:last-child,.forecast-limit-table td:last-child{white-space:nowrap;text-align:right}
 </style>
 <style id="usability-ui">.workspace-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.4rem;margin-bottom:.45rem}.workspace-groups button{font:inherit;font-weight:700;line-height:1.3;border:1px solid #bbcadd;border-radius:7px;background:#f5f8fc;color:#354960;padding:.5rem .65rem;min-width:0}.workspace-groups button.active{background:#215f9f;border-color:#215f9f;color:#fff}.workspace-nav #workspaceTabs{display:flex;flex-wrap:wrap;gap:.4rem}.workspace-nav #workspaceTabs .workspace-tab{min-height:0;padding:.4rem .65rem;font-size:.85rem;flex:0 1 auto}.workspace-nav #workspaceTabs .workspace-tab span{font-size:.75rem;color:#536b85}.workspace-nav [hidden]{display:none!important}.workspace-nav button:focus-visible{outline:3px solid #124d91;outline-offset:3px}.plan-budget-panel{padding:.6rem 1rem}.plan-budget-panel .plan-budget{margin:0}
 @media(max-width:700px){.workspace-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.workspace-nav #workspaceTabs .workspace-tab{flex:1 1 130px}}
-@media(min-width:901px){#gameScreen .workspace-nav{position:sticky;top:8px}}
+@media(min-width:901px){#gameScreen .workspace-nav{position:sticky;top:0;box-shadow:0 12px 18px -16px rgba(16,34,56,.6)}}
 /* Compact only campaign chrome; setup/lobby and business forms keep their space. */
 .shell:has(#gameScreen:not(.hidden))>.mast{padding:.5rem .9rem;margin-bottom:.4rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-mark{width:32px;height:32px;font-size:.9rem}.shell:has(#gameScreen:not(.hidden))>.mast .brand-sub,.shell:has(#gameScreen:not(.hidden))>.mast .mast-meta{display:none}#gameScreen>.panel:has(>.statusbar),#gameScreen>.panel:has(>.summary-grid){padding:.55rem .8rem;margin-bottom:.6rem}#gameScreen>.panel>.summary-grid{grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:.45rem}#gameScreen>.panel>.summary-grid .summary{min-height:55px;padding:.4rem .55rem}#gameScreen>.panel>.summary-grid .summary b{font-size:1rem}#gameScreen .workspace-nav{margin-bottom:.6rem}
 .plan-review-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;justify-content:space-between;margin-top:1rem}
@@ -822,7 +848,7 @@ body.game-interface-active .shell>.mast{display:none}
       <input id="relationshipOffersPreview" type="checkbox" hidden aria-label="relationshipOffersPreview">
       <input id="onboardingPreview" type="checkbox" hidden aria-label="onboardingPreview">
     </div>
-    <div class="bank-colors"><div class="bank-logo-editors"><div class="bank-identity-editor"><h3>YOUR BANK / LOCAL PLAYER 1</h3><div id="bankLogoPreview1" class="bank-logo-preview" aria-label="Institution 1 logo preview"></div><div class="bank-identity-fields"><div><label for="bankCrest1">CREST</label><select id="bankCrest1" class="field"><option value="shield" selected>Shield</option><option value="columns">Pillars</option><option value="diamond">Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="bankMonogram1">MONOGRAM</label><input id="bankMonogram1" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off" aria-describedby="bankColorHelp"></div><div><label for="bankColor1">BANK COLOR</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div></div><div class="bank-logo-upload"><label for="bank1LogoFile">Optional JPG logo</label><div class="bank-logo-upload-actions"><input id="bank1LogoFile" type="file" accept=".jpg,.jpeg,image/jpeg" aria-describedby="bank1LogoHelp bank1LogoStatus"><button id="bank1LogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="bank1LogoHelp" class="micro muted">JPG / JPEG · up to 200 × 200 pixels · 100 KB. Smaller or rectangular images keep their proportions.</p><p id="bank1LogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div></div><div class="bank-identity-editor" id="rivalIdentitySetup"><h3>AI RIVAL / LOCAL PLAYER 2</h3><div id="bankLogoPreview2" class="bank-logo-preview" aria-label="Institution 2 logo preview"></div><div class="bank-identity-fields"><div><label for="bankCrest2">CREST</label><select id="bankCrest2" class="field"><option value="shield">Shield</option><option value="columns">Pillars</option><option value="diamond" selected>Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="bankMonogram2">MONOGRAM</label><input id="bankMonogram2" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">BANK COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><div class="bank-logo-upload"><label for="bank2LogoFile">Optional JPG logo</label><div class="bank-logo-upload-actions"><input id="bank2LogoFile" type="file" accept=".jpg,.jpeg,image/jpeg" aria-describedby="bank2LogoHelp bank2LogoStatus"><button id="bank2LogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="bank2LogoHelp" class="micro muted">JPG / JPEG · up to 200 × 200 pixels · 100 KB. Smaller or rectangular images keep their proportions.</p><p id="bank2LogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div></div></div><p id="bankColorHelp" class="micro muted">Choose a crest and monogram, or upload a JPG, plus a bank color. Leave the monogram blank for initials. Your logo follows your bank through saves, results and linked games; each friend chooses their own identity in the shared lobby.</p></div>
+    <div class="bank-colors"><div class="bank-logo-editors"><div class="bank-identity-editor"><h3>YOUR BANK / LOCAL PLAYER 1</h3><div id="bankLogoPreview1" class="bank-logo-preview" aria-label="Institution 1 logo preview"></div><div class="bank-identity-fields"><div><label for="bankCrest1">CREST</label><select id="bankCrest1" class="field"><option value="shield" selected>Shield</option><option value="columns">Pillars</option><option value="diamond">Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="bankMonogram1">MONOGRAM</label><input id="bankMonogram1" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off" aria-describedby="bankColorHelp"></div><div><label for="bankColor1">BANK COLOR</label><input id="bankColor1" type="color" value="#2878e0" aria-describedby="bankColorHelp"></div></div><div class="bank-logo-upload"><label for="bank1LogoFile">Optional logo image</label><div class="bank-logo-upload-actions"><input id="bank1LogoFile" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif" aria-describedby="bank1LogoHelp bank1LogoStatus"><button id="bank1LogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="bank1LogoHelp" class="micro muted">JPG, PNG, WebP or GIF · up to 10 MB. Large images are scaled down to fit 400 × 400 pixels and keep their proportions; transparent areas become white.</p><p id="bank1LogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div></div><div class="bank-identity-editor" id="rivalIdentitySetup"><h3>AI RIVAL / LOCAL PLAYER 2</h3><div id="bankLogoPreview2" class="bank-logo-preview" aria-label="Institution 2 logo preview"></div><div class="bank-identity-fields"><div><label for="bankCrest2">CREST</label><select id="bankCrest2" class="field"><option value="shield">Shield</option><option value="columns">Pillars</option><option value="diamond" selected>Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="bankMonogram2">MONOGRAM</label><input id="bankMonogram2" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off" aria-describedby="bankColorHelp"></div><div><label for="bankColor2">BANK COLOR</label><input id="bankColor2" type="color" value="#e1505c" aria-describedby="bankColorHelp"></div></div><div class="bank-logo-upload"><label for="bank2LogoFile">Optional logo image</label><div class="bank-logo-upload-actions"><input id="bank2LogoFile" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif" aria-describedby="bank2LogoHelp bank2LogoStatus"><button id="bank2LogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="bank2LogoHelp" class="micro muted">JPG, PNG, WebP or GIF · up to 10 MB. Large images are scaled down to fit 400 × 400 pixels and keep their proportions; transparent areas become white.</p><p id="bank2LogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div></div></div><p id="bankColorHelp" class="micro muted">Choose a crest and monogram, or upload a logo image, plus a bank color. Leave the monogram blank for initials. Your logo follows your bank through saves, results and linked games; each friend chooses their own identity in the shared lobby.</p></div>
     <div class="mode-grid"><button class="mode active" data-mode="ai"><strong>Solo vs Corporate AI</strong><span>Deep campaign against one of three executive teams.</span></button><button class="mode" data-mode="hotseat"><strong>Pass &amp; Play</strong><span>Sealed simultaneous plans on one computer.</span></button><button class="mode" data-mode="lan"><strong>Intranet Room</strong><span>Join a reliable room-code game hosted on your local network.</span></button><button class="mode" data-mode="p2p"><strong>Direct P2P</strong><span>Fallback two-browser link with manually exchanged codes.</span></button><button class="mode" data-mode="gh"><strong>Repository Link</strong><span>Play across sites through a private GitHub repository.</span></button></div>
     <div id="ghGuide" class="setup hidden">
       <div class="notice"><b>PLAY BETWEEN BRANCHES — NO NETWORK SETUP.</b><br><span class="small">GitHub carries the game updates over normal web traffic. You do not need an IP address, an open port, or a connection between the two office networks.</span></div>
@@ -854,7 +880,7 @@ body.game-interface-active .shell>.mast{display:none}
     <div class="section-head"><div><h2 id="lobbyTitle">CAMPAIGN LOBBY</h2><p class="small muted">Two institutions. One shared setup. The first cycle stays closed until both players confirm.</p></div><span id="lobbyConnection" class="connection" role="status"></span></div>
     <div id="lobbyBanks" class="lobby-banks" aria-label="Lobby bank identities"></div>
     <div class="lobby-layout">
-      <div class="lobby-editor"><h3>Your institution</h3><label for="lobbyName">BANK NAME</label><input id="lobbyName" class="field" maxlength="36"><div id="lobbyLogoPreview" class="bank-logo-preview" aria-label="Your lobby logo preview"></div><div class="bank-identity-fields"><div><label for="lobbyCrest">CREST</label><select id="lobbyCrest" class="field"><option value="shield" selected>Shield</option><option value="columns">Pillars</option><option value="diamond">Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="lobbyMonogram">MONOGRAM</label><input id="lobbyMonogram" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off"></div><div><label for="lobbyColor">BANK COLOR</label><input id="lobbyColor" type="color" value="#2878e0"></div></div><div class="bank-logo-upload"><label for="lobbyLogoFile">Optional JPG logo</label><div class="bank-logo-upload-actions"><input id="lobbyLogoFile" type="file" accept=".jpg,.jpeg,image/jpeg" aria-describedby="lobbyLogoHelp lobbyLogoStatus"><button id="lobbyLogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="lobbyLogoHelp" class="micro muted">JPG / JPEG · up to 200 × 200 pixels · 100 KB. Smaller or rectangular images keep their proportions.</p><p id="lobbyLogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div><p class="small muted">Your bank keeps its logo and color on both computers. Identity changes reset both ready confirmations.</p><button id="lobbySave" class="btn">Save identity</button></div>
+      <div class="lobby-editor"><h3>Your institution</h3><label for="lobbyName">BANK NAME</label><input id="lobbyName" class="field" maxlength="36"><div id="lobbyLogoPreview" class="bank-logo-preview" aria-label="Your lobby logo preview"></div><div class="bank-identity-fields"><div><label for="lobbyCrest">CREST</label><select id="lobbyCrest" class="field"><option value="shield" selected>Shield</option><option value="columns">Pillars</option><option value="diamond">Diamond</option><option value="roundel">Roundel</option></select></div><div><label for="lobbyMonogram">MONOGRAM</label><input id="lobbyMonogram" class="field" maxlength="3" pattern="[A-Za-z0-9]{0,3}" placeholder="Auto" autocomplete="off"></div><div><label for="lobbyColor">BANK COLOR</label><input id="lobbyColor" type="color" value="#2878e0"></div></div><div class="bank-logo-upload"><label for="lobbyLogoFile">Optional logo image</label><div class="bank-logo-upload-actions"><input id="lobbyLogoFile" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif" aria-describedby="lobbyLogoHelp lobbyLogoStatus"><button id="lobbyLogoRemove" type="button" class="btn" disabled>Use crest instead</button></div><p id="lobbyLogoHelp" class="micro muted">JPG, PNG, WebP or GIF · up to 10 MB. Large images are scaled down to fit 400 × 400 pixels and keep their proportions; transparent areas become white.</p><p id="lobbyLogoStatus" class="micro bank-logo-status" role="status" aria-live="polite"></p></div><p class="small muted">Your bank keeps its logo and color on both computers. Identity changes reset both ready confirmations.</p><button id="lobbySave" class="btn">Save identity</button></div>
       <div class="lobby-editor"><h3>Shared campaign settings</h3><label for="lobbyScope">CAMPAIGN SIZE · HOST SETS</label><select id="lobbyScope" class="field"><option value="town">Town · 4 markets</option><option value="regional">Region · 6 markets</option><option value="state">State · 8 markets</option><option value="national">National · 12 markets</option></select><label for="lobbyScenario">ECONOMY · HOST SETS</label><select id="lobbyScenario" class="field"><option value="balanced">Balanced Economy</option><option value="rate">Rate Shock</option><option value="regulatory">Regulatory Siege</option><option value="growth">Growth Frenzy</option></select><p id="lobbyRules" class="small muted"></p><div id="lobbyFeatureOptions" aria-label="Shared optional campaign systems"></div><p id="lobbyFeatureSummary" class="small muted" role="status"></p><button id="lobbySettings" class="btn">Apply settings</button><button id="lobbyDiscardSettings" class="btn hidden">Discard changes</button></div>
     </div>
     <p id="lobbyNote" class="small muted"></p><p id="lobbyError" class="small bad" role="alert"></p>
@@ -914,20 +940,20 @@ body.game-interface-active .shell>.mast{display:none}
         </div>
         <div class="operations-context"><p id="operationsDeskHint" class="small muted" role="status"></p><button id="operationsDecisionShortcut" type="button" class="btn">Executive decision</button><button type="button" class="btn contextual-help" data-help-topic="planning">Planning help</button></div>
       </div>
-      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="monthly">
+      <div id="operationsPanel-monthly" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="monthly"><header class="operations-section-head"><h3>DECISION &amp; STAFF</h3><p class="small muted">Answer the executive call and assign this month&#39;s bankers.</p></header>
           <section class="panel"><div class="event"><span class="micro muted">EXECUTIVE CALL // DECISION REQUIRED</span><strong id="eventName"></strong><div id="eventText"></div><div id="decisionGrid" class="decision-grid"></div></div></section>
           <section class="panel" id="staffAllocationPanel"><div class="kicker">YOUR MONTHLY STAFF PLAN</div><div class="small muted">Allocate existing bankers, then review work coverage. Recruitment adds employees next month. Offices are built and staffed at their location in Markets.</div><div class="rule"></div><div class="pool"><b>STAFF ALLOCATION</b><br><span id="staffPool" class="small"></span></div><div id="staffGrid" class="staff-grid"></div></section>
           <section id="peopleOwnershipShortcut" class="panel" hidden><h3>People owns staffing</h3><p>Allocate existing employees, review shared work coverage, recruit and develop your team in People. This month can open required staffing controls inline.</p><button type="button" class="btn" data-subject-action="staffing">Review employee allocation</button></section>
       </div>
-      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="funding" hidden><h3 class="operations-section-head">PRODUCTS, PRICING &amp; RISK</h3>
+      <div id="operationsPanel-funding" class="operations-pane operations-two-column" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="funding" hidden><header class="operations-section-head"><h3>PRODUCTS, PRICING &amp; RISK</h3><p class="small muted">Choose what the bank sells, then how it prices deposits, lends and holds capital.</p></header>
           <section class="panel" id="bankProductsPanel"><div class="kicker">PRODUCT &amp; BALANCE-SHEET DESIGN</div><div class="small muted">Choose what the bank actually sells. These products alter customer growth, funding cost, fee income, loan production, and credit losses every cycle.</div><div id="productPortfolio" class="portfolio-lines"></div><div id="portfolioBridge" class="portfolio-bridge micro"></div></section>
-          <section class="panel" id="bankPricingPanel"><div class="kicker">BANK FUNDING &amp; CAPITAL POLICIES</div><label>DEPOSIT PRICING</label><div id="depositPolicies" class="button-group"></div><section id="lendingPolicyPanel"><h3>LENDING STANDARDS</h3><p class="small muted">Standards govern new lending. Existing loan terms remain attached to their loans.</p><div id="lendingPolicies" class="button-group"></div></section><label style="margin-top:8px">CAPITAL STRATEGY</label><div id="capitalPolicies" class="button-group"></div></section>
+          <section class="panel" id="bankPricingPanel"><div class="kicker">BANK FUNDING &amp; CAPITAL POLICIES</div><div class="policy-columns"><section class="policy-column" aria-labelledby="depositPricingTitle"><h3 id="depositPricingTitle">DEPOSIT PRICING</h3><p class="small muted">How hard you compete for deposits, and what they cost you.</p><div id="depositPolicies" class="button-group"></div></section><section id="lendingPolicyPanel" class="policy-column" aria-labelledby="lendingPolicyTitle"><h3 id="lendingPolicyTitle">LENDING STANDARDS</h3><p class="small muted">Standards govern new lending. Existing loan terms remain attached to their loans.</p><div id="lendingPolicies" class="button-group"></div></section><section class="policy-column" aria-labelledby="capitalPolicyTitle"><h3 id="capitalPolicyTitle">CAPITAL STRATEGY</h3><p class="small muted">How much cash you hold back versus put to work.</p><div id="capitalPolicies" class="button-group"></div></section></div></section>
       </div>
-      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="projects" hidden><h3 class="operations-section-head">PROJECTS &amp; CONSTRUCTION</h3>
+      <div id="operationsPanel-projects" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-plan" data-operations-panel="projects" hidden><header class="operations-section-head"><h3>PROJECTS &amp; CONSTRUCTION</h3><p class="small muted">Start offices, programmes and controls, and follow work already under way.</p></header>
           <section class="panel"><div class="project-workspace-heading"><h2>Initiatives</h2><a class="btn" href="#projectDeliveryStatus">Current work &amp; recruitment</a></div><div id="projectGrid" class="projects"></div><section id="projectDeliveryStatus" aria-label="Current work and recruitment"><h3>Current work &amp; recruitment</h3><div class="project-status-band"><div id="activeProject" class="notice"></div><div id="capitalAction" class="capital-action"></div><div id="hiringPanel" class="capital-action hiring-panel"></div></div></section></section>
       </div>
-      <div id="operationsPanel-forecast" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-forecast" data-operations-panel="forecast" hidden>
-        <section class="panel"><h2>OPERATING FORECAST &amp; BOOKS</h2><p class="small muted">Review the same current draft under today's economy. Forecasts are estimates; executive events, rival actions and market results may differ.</p><div id="operatingPreview" class="operating-preview"></div></section>
+      <div id="operationsPanel-forecast" class="operations-pane" role="tabpanel" aria-labelledby="operationsTab-forecast" data-operations-panel="forecast" hidden><header class="operations-section-head"><h3>FORECAST &amp; BOOKS</h3><p class="small muted">Your current draft under today's economy. Forecasts are estimates; executive events, rival actions and market results may differ.</p></header>
+        <section class="panel"><div id="operatingPreview" class="operating-preview"></div></section>
       </div>
     </section>
     <div class="game-layout">
@@ -2192,7 +2218,9 @@ function calculateLegacyOperations(g,p,preview=false){
  const commercialService=commercialOperatingService(p,a);
  const priorSensitive=Math.min(s.rateSensitiveDeposits||0,s.deposits),runoffPressure={expansion:.8,steady:1,tight:1.2,downturn:1.1,recovery:.9}[macro.key]||1,runoffRate={margin:.1,balanced:.03,aggressive:.01}[dp]*runoffPressure*researchRunoffMultiplier(p),depositRunoff=Math.round(priorSensitive*runoffRate);
  if(depositRunoff){delta(p,'rateSensitiveDeposits',-depositRunoff);delta(p,'deposits',-depositRunoff);p.fundingGap=(p.fundingGap||0)+depositRunoff}
- const network=strategyProgress(p,'network'),digital=strategyProgress(p,'digital'),commercial=strategyProgress(p,'commercial'),ops=strategyProgress(p,'operations'),retailProduct=productOption(p,'retail'),businessProduct=productOption(p,'business'),creditProduct=productOption(p,'credit'),facilities=effectiveFacilityTotals(p)||{retail:branch,commercial:0,digital:0},training=(1+u.training*.08)*(p.doctrine==='people'?1.1:1),tech=1+u.technology*.08+u.analytics*.035+digital*.045,prod=p.turnEffects.production||1,capitalGrowth={liquid:.86,balanced:1,reinvest:1.13}[cp],service=(householdSalesStaff(p,a.service)*training*researchThroughputMultiplier(p)+branch*(.55+network*.05)+(facilities.retail||0)*.3+(facilities.digital||0)*.22+digital*.05)*prod*(p.turnEffects.service||1)*researchServiceMultiplier(p),regRank=tierRank(p),depMult={margin:.76,balanced:1,aggressive:1.25}[dp]*(p.turnEffects.deposit||1)*macro.deposits*capitalGrowth*(regRank>=2?.75:1)*(1+digital*.01+network*.025)*retailProduct.deposits*(businessProduct.deposits||1)*(hasSpecialization(p,'digital','customerExperience')?1.07:1)*researchDepositMultiplier(p),depGain=Math.min((service*125000+branch*85000)*depMult,marketAvailable(p,'deposits'),regionalOperations(p)?Math.max(0,regionalBranchMetrics(p).depositCapacity-(p.onboarding?.report?.totals.activated.principal||0)):Infinity),bizGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.45)*(1.25+s.morale/120)*training*(p.doctrine==='commercial'?1.12:1)*(1+commercial*.08)*businessProduct.business*researchRelationshipMultiplier(p)*researchRelationshipSaturation(p))),merchantGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.4)*(1.05+tech*.25)*(p.doctrine==='commercial'?1.1:1)*(1+commercial*.08)*businessProduct.merchant*researchRelationshipMultiplier(p)*researchRelationshipSaturation(p))),loanGain=availableLoanProduction(g,p);
+ const network=strategyProgress(p,'network'),digital=strategyProgress(p,'digital'),commercial=strategyProgress(p,'commercial'),ops=strategyProgress(p,'operations'),retailProduct=productOption(p,'retail'),businessProduct=productOption(p,'business'),creditProduct=productOption(p,'credit'),facilities=effectiveFacilityTotals(p)||{retail:branch,commercial:0,digital:0},training=(1+u.training*.08)*(p.doctrine==='people'?1.1:1),tech=1+u.technology*.08+u.analytics*.035+digital*.045,prod=p.turnEffects.production||1,capitalGrowth={liquid:.86,balanced:1,reinvest:1.13}[cp],service=(householdSalesStaff(p,a.service)*training*researchThroughputMultiplier(p)+branch*(.55+network*.05)+(facilities.retail||0)*.3+(facilities.digital||0)*.22+digital*.05)*prod*(p.turnEffects.service||1)*researchServiceMultiplier(p),regRank=tierRank(p),depMult={margin:.76,balanced:1,aggressive:1.25}[dp]*(p.turnEffects.deposit||1)*macro.deposits*capitalGrowth*(regRank>=2?.75:1)*(1+digital*.01+network*.025)*retailProduct.deposits*(businessProduct.deposits||1)*(hasSpecialization(p,'digital','customerExperience')?1.07:1)*researchDepositMultiplier(p),depositDemand=(service*125000+branch*85000)*depMult,depositMarket=marketAvailable(p,'deposits'),depositOffice=regionalOperations(p)?Math.max(0,regionalBranchMetrics(p).depositCapacity-(p.onboarding?.report?.totals.activated.principal||0)):Infinity,depGain=Math.min(depositDemand,depositMarket,depositOffice),bizGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.45)*(1.25+s.morale/120)*training*(p.doctrine==='commercial'?1.12:1)*(1+commercial*.08)*businessProduct.business*researchRelationshipMultiplier(p)*researchRelationshipSaturation(p))),merchantGain=Math.max(1,Math.round((a.business+(facilities.commercial||0)*.4)*(1.05+tech*.25)*(p.doctrine==='commercial'?1.1:1)*(1+commercial*.08)*businessProduct.merchant*researchRelationshipMultiplier(p)*researchRelationshipSaturation(p))),loanGain=availableLoanProduction(g,p);
+ // Forecast & books reads which deposit limit binds; recorded only while it asks.
+ if(preview&&forecastLimitCapture)captureForecastLimits(g,p,{demand:depositDemand,market:depositMarket,office:depositOffice,gain:depGain});
  delta(p,'deposits',depGain);delta(p,'rateSensitiveDeposits',depGain*({margin:.01,balanced:.06,aggressive:.3}[dp]+(retailProduct.sensitive||0)));s.rateSensitiveDeposits=Math.min(s.rateSensitiveDeposits,s.deposits);s.depositRunoff=depositRunoff;delta(p,'customers',service*(preview?9.5:rint(7,12))*retailProduct.customers);delta(p,'business',bizGain);delta(p,'merchant',merchantGain);delta(p,'loans',loanGain);delta(p,'wealth',u.wealth*(1+a.service*.12)+commercial*.35);delta(p,'digital',(u.technology+u.analytics*.5+digital*.35+(facilities.digital||0)*.45)*(1+a.service*.15)*(p.turnEffects.digital||1)*(p.doctrine==='digital'?1.02:1)*(retailProduct.digital||1)*(businessProduct.digital||1));delta(p,'reputation',retailProduct.reputation||0);delta(p,'attention',(creditProduct.attention||0)+researchAttentionDelta(p));delta(p,'compliance',(lp==='growth'?5:lp==='conservative'?-2:2)+(cp==='reinvest'?2:cp==='liquid'?-1:0)-departmentFunctionTaskFte(p,'risk',a.operations)*1.55-u.training*1.2-u.operations*.9-riskCapability(p,ops)*.45+researchComplianceDelta(p));
  const rateFactor=.75+macro.rate/10,depositIncome=s.deposits*.0028*rateFactor*({margin:1.35,balanced:1,aggressive:.45}[dp]),
   fundingCost=s.deposits*(macro.rate/2400)*({margin:.5,balanced:.8,aggressive:1.2}[dp])*retailProduct.funding*researchFundingCostMultiplier(p)+(p.fundingRulesVersion===2?(s.emergencyDebt||0)*.01:0),
@@ -2274,6 +2302,87 @@ function operatingPreview(p,plan,economy,g=null,includeCommercial=false){
  return projectOperatingForecast(finishOperatingForecast(prepareOperatingForecast(p,plan,g),economy),includeCommercial?p:null);
 }
 function deleverage(g,p){if(tierRank(p)<2||p.stats.loans<250000)return'';const sold=Math.round(p.stats.loans*.03),haircut=Math.round(sold*.07);delta(p,'loans',-sold);delta(p,'cash',sold-haircut);delta(p,'capital',-haircut);return`${p.name} sold $${sold.toLocaleString()} of loans under its consent order at a $${haircut.toLocaleString()} loss.`}
+// Forecast drivers for Forecast & books: what limits growth this month, what a
+// project changes once it is complete, and what each research branch and
+// operating model contributes. Read-only. Every figure is the ordinary monthly
+// forecast (operatingPreview) run on private copies, so it uses the same
+// formulas as the forecast table and never touches the game or the draft.
+// Each row answers "what changes without this one item"; rows can overlap where
+// items work together, for example a combination that needs two branches.
+const FORECAST_DRIVER_FIELDS=Object.freeze(['profit','depositGrowth','loanGrowth','commercialIncome','fundingCost','expense']);
+// Set only while forecastDriverRun asks for limits; the monthly operations step
+// records its own deposit and loan terms here, and never during a real month.
+let forecastLimitCapture=null;
+function captureForecastLimits(g,p,deposits){
+ const loans={};loanProductionCapacity(g,p,loans);
+ Object.assign(forecastLimitCapture,{deposits,loans,
+  relationships:researchProgramRules(p)?{held:(p.stats.business||0)+(p.stats.merchant||0),capacity:researchRelationshipCapacity(p)}:null});
+}
+function forecastDriverRun(v,p,plan,captureLimits=false){
+ const previous=forecastLimitCapture;forecastLimitCapture=captureLimits?{}:null;
+ try{
+  // Named-company offers run their own funded forecast; drivers describe the bank.
+  const result=operatingPreview(p,{...plan,companyCreditOrders:[]},v.economy,v,false);
+  return captureLimits?{result,limits:forecastLimitCapture}:{result};
+ }finally{forecastLimitCapture=previous;}
+}
+function forecastDriverChange(after,before){
+ return Object.fromEntries(FORECAST_DRIVER_FIELDS.map(key=>[key,Math.round((after[key]||0)-(before[key]||0))]));
+}
+function forecastDriverTerms(rows){
+ const terms=rows.filter(([, ,amount])=>Number.isFinite(amount)).map(([key,label,amount])=>({key,label,amount:Math.max(0,Math.round(amount))}));
+ return {terms,binding:terms.length?terms.reduce((a,b)=>b.amount<a.amount?b:a).key:null};
+}
+function forecastGrowthLimits(v,p,plan){
+ const {limits}=forecastDriverRun(v,p,plan,true);
+ if(!limits?.deposits)throw Error('The forecast did not report its growth limits.');
+ const d=limits.deposits,l=limits.loans;
+ return {
+  deposits:{...forecastDriverTerms([['demand','What your bankers and branches can gather',d.demand],['market','Deposits still available in your markets',d.market],['office','Deposit capacity of your offices',d.office]]),gain:Math.round(d.gain)},
+  loans:{...forecastDriverTerms([['staff','What your lending bankers can originate',l.staff],['funding','Spare cash above your liquidity reserve',l.funding],['office','Loan capacity of your offices',l.office]]),deployment:Math.round(l.central||0)},
+  relationships:limits.relationships&&{...limits.relationships,saturated:limits.relationships.held>limits.relationships.capacity}
+ };
+}
+// A game-shaped copy of the owner's view for completing one project privately.
+// The rival is the owner's public projection, so completions that need the
+// rival's private books fail and are reported as not estimated.
+function forecastSandbox(v,p,seat){
+ if(seat!==0&&seat!==1)throw Error('Unknown seat.');
+ const g=JSON.parse(JSON.stringify(v)),owner=JSON.parse(JSON.stringify(p)),rival=JSON.parse(JSON.stringify(v.rival));
+ g.players=seat===0?[owner,rival]:[rival,owner];g.log=g.log||[];
+ return {g,owner};
+}
+function forecastProjectEffects(v,p,plan,seat){
+ const base=forecastDriverRun(v,p,plan).result;
+ const running=(p.projects||[]).map(project=>({project,staged:false}));
+ const staged=planInitiatives(plan).map(key=>({project:{key,target:projectPlanTarget(plan,key),progress:0},staged:true}));
+ return [...running,...staged].filter(({project})=>PROJECTS[project.key]).map(({project,staged})=>{
+  const def=PROJECTS[project.key],row={key:project.key,name:def.name,target:project.target??null,
+   targetName:v.territories?.[project.target]?.name||null,staged,progress:project.progress||0,total:project.total||null};
+  try{
+   const {g,owner}=forecastSandbox(v,p,seat),message=applyProjectEffects(g,owner,{...project});
+   if(message===false||typeof message==='string'&&/could not complete/.test(message))return {...row,change:null,reason:message||'This project would not complete as things stand.'};
+   return {...row,change:forecastDriverChange(forecastDriverRun(g,owner,plan).result,base)};
+  }catch(error){return {...row,change:null,reason:'Not estimated here: '+error.message};}
+ });
+}
+function forecastResearchEffects(v,p,plan){
+ const base=forecastDriverRun(v,p,plan).result,branches=researchBranchTable(p),models=researchModelTable(p),rows=[];
+ const without=mutate=>{const q=JSON.parse(JSON.stringify(p));mutate(q);return forecastDriverChange(base,forecastDriverRun(v,q,plan).result);};
+ for(const branch of researchBranches(p)){
+  const model=p.specializations?.[branch],name=branches[branch]?.name||branch;
+  if(capabilitySpend(p,branch)>0)rows.push({kind:'research',branch,name,level:strategyLevel(p,branch),
+   change:without(q=>{q.capability={...q.capability,[branch]:0};})});
+  if(model)rows.push({kind:'model',branch,name:models?.[branch]?.[model]?.name||model,branchName:name,
+   change:without(q=>{q.specializations={...q.specializations};delete q.specializations[branch];})});
+ }
+ return rows;
+}
+// One call for the desk: each part fails on its own, never the whole view.
+function forecastDrivers(v,p,plan,seat){
+ const part=fn=>{try{return {value:fn()};}catch(error){return {error:error.message};}};
+ return {limits:part(()=>forecastGrowthLimits(v,p,plan)),projects:part(()=>forecastProjectEffects(v,p,plan,seat)),research:part(()=>forecastResearchEffects(v,p,plan))};
+}
 function opportunityPower(p,o){const a=p.allocation,branch=p.branches[o.market]||0,focus=p.focus===o.market?4:0,dept=p.departmentFunctions?(departmentOpportunityQuote(p,o).available||0)/4:a[o.dept]||0,policy=o.type==='deposit'||o.type==='wealth'?p.policies.deposit==='aggressive'?2:0:o.type==='loan'&&p.policies.lending==='growth'?2:0,strategy=(['business','loan','payroll','public'].includes(o.type)?strategyLevel(p,'commercial')*.8:strategyLevel(p,'digital')*.45);const advisory=o.type==='wealth'&&p.accounting?.version===4?(p.facilityNetwork?.offices||[])
   .filter(x=>x.closedCycle===null&&x.market===o.market&&['wealth','financialCenter'].includes(x.model)).length*3:0;
  return dept*2.4+branch*3+focus+policy+p.stats.reputation/22+p.stats.morale/35+p.upgrades.training+p.upgrades.analytics*1.5+strategy+advisory}
@@ -2389,7 +2498,9 @@ function evaluateStrategicEnd(g){
 // Cosmetic identity only. Never consumes simulation randomness, changes rules,
 // or adds fields to campaigns that did not explicitly choose a logo.
 const BANK_CRESTS=Object.freeze({shield:'Shield',columns:'Pillars',diamond:'Diamond',roundel:'Roundel'});
-const BANK_LOGO_LIMITS=Object.freeze({pixels:200,bytes:100*1024});
+// Stored logo bounds. Uploads of any common image are scaled and re-encoded to
+// fit, so these limit what travels in saves and messages, not what players pick.
+const BANK_LOGO_LIMITS=Object.freeze({pixels:400,bytes:150*1024});
 // Validate the embedded format and dimensions without DOM/image decoders or RNG.
 // Uploads additionally pass through the browser decoder and a clean JPEG canvas.
 function bankLogoInfo(jpeg){
@@ -2445,7 +2556,7 @@ function validBankIdentity(identity){
   Object.hasOwn(BANK_CRESTS,identity.crest)&&typeof identity.monogram==='string'&&/^[A-Z0-9]{1,3}$/.test(identity.monogram);
 }
 function validateBankIdentity(identity){
- if(!validBankIdentity(identity))throw Error('Choose a bank crest and a monogram of one to three letters or numbers. Optional JPG logos must be valid JPEGs, at most 200 × 200 pixels and 100 KB.');
+ if(!validBankIdentity(identity))throw Error('Choose a bank crest and a monogram of one to three letters or numbers. Optional JPG logos must be valid JPEGs, at most '+BANK_LOGO_LIMITS.pixels+' × '+BANK_LOGO_LIMITS.pixels+' pixels and '+BANK_LOGO_LIMITS.bytes/1024+' KB.');
  return identity;
 }
 function bankIdentity(identity,name,seat=0){
@@ -18811,7 +18922,7 @@ const MonetaryPolicy=(()=>{
  }
  return Object.freeze({choices,weights,enabled,initialize,validate,project,validatePlan,advance,holdingValue,income,debtInterest,liquid,consumeLiquid,sellForCash,finish,quote,bot});
 })();
-root.BWEngine={PartnerCards,DigitalCommercial,OutsideFunding,ExpandedBusiness,BrandCampaigns,HoldingCapital,MonetaryPolicy,BankAnnouncements,BANK_CRESTS,BANK_LOGO_LIMITS,bankLogoInfo,bankMonogram,bankIdentity,validBankIdentity,validateBankIdentity,validateBankIdentities,BALANCE_SHEET_LENDING_RULES,balanceSheetLendingRules,loanProductionCentralCapacity,researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
+root.BWEngine={forecastDrivers,PartnerCards,DigitalCommercial,OutsideFunding,ExpandedBusiness,BrandCampaigns,HoldingCapital,MonetaryPolicy,BankAnnouncements,BANK_CRESTS,BANK_LOGO_LIMITS,bankLogoInfo,bankMonogram,bankIdentity,validBankIdentity,validateBankIdentity,validateBankIdentities,BALANCE_SHEET_LENDING_RULES,balanceSheetLendingRules,loanProductionCentralCapacity,researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
 Object.assign(root.BWEngine,{bankBasePayroll,IncomeReview,IncomeHistory,validateIncomeHistoryView,CreditWorkload,CommercialFeeEconomics,commercialServicePlanReview:(g,index,plan)=>withCorporateForecast(g,()=>commercialServicePlanReview(g,index,plan))});
@@ -19133,26 +19244,38 @@ function removeBankLogo(key){
  if(key==='lobby'&&changed)lobbyDirty=true;
  refreshBankLogo(key);
 }
+// Any common image a player picks is decoded by the browser, scaled to fit the
+// stored logo bounds and re-encoded as a plain JPEG, discarding EXIF/location
+// metadata. SVG is refused: it is a document, not pixels.
+const BANK_LOGO_SOURCE=Object.freeze({bytes:10*1024*1024,side:12000,
+ types:Object.freeze({jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif'}),
+ qualities:Object.freeze([.9,.82,.74,.66,.58,.5])});
 async function readBankLogoFile(file){
- if(!/\.jpe?g$/i.test(file.name)||file.type&&file.type!=='image/jpeg')throw Error('Choose a .jpg or .jpeg image.');
- if(!file.size||file.size>E.BANK_LOGO_LIMITS.bytes)throw Error('Choose a JPG of 100 KB or less.');
+ const extension=String(file.name||'').toLowerCase().match(/\.([a-z]+)$/)?.[1],type=BANK_LOGO_SOURCE.types[extension];
+ if(!type||file.type&&!Object.values(BANK_LOGO_SOURCE.types).includes(file.type))throw Error('Choose a JPG, PNG, WebP or GIF image.');
+ if(!file.size||file.size>BANK_LOGO_SOURCE.bytes)throw Error('Choose an image of 10 MB or less.');
  const bytes=new Uint8Array(await file.arrayBuffer());
- if(bytes.length>E.BANK_LOGO_LIMITS.bytes)throw Error('Choose a JPG of 100 KB or less.');
- let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
- const source='data:image/jpeg;base64,'+btoa(binary),info=E.bankLogoInfo(source);
- if(!info)throw Error('Choose a valid JPG no larger than 200 × 200 pixels.');
+ if(!bytes.length||bytes.length>BANK_LOGO_SOURCE.bytes)throw Error('Choose an image of 10 MB or less.');
+ let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+32768));
+ const source='data:'+(file.type||type)+';base64,'+btoa(binary);
  const decoded=await new Promise((resolve,reject)=>{
-  const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('That JPG could not be opened. Try another image.'));img.src=source;
+  const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(Error('That image could not be opened. Try another file.'));img.src=source;
  });
- const width=decoded.naturalWidth,height=decoded.naturalHeight;
- if(!width||!height||width>200||height>200)throw Error('Choose a JPG no larger than 200 × 200 pixels.');
- // Re-encode just the decoded pixels, discarding EXIF/location metadata.
+ const sourceWidth=decoded.naturalWidth,sourceHeight=decoded.naturalHeight;
+ if(!sourceWidth||!sourceHeight)throw Error('That image could not be opened. Try another file.');
+ if(sourceWidth>BANK_LOGO_SOURCE.side||sourceHeight>BANK_LOGO_SOURCE.side)throw Error('Choose an image under 12,000 pixels on each side.');
+ const scale=Math.min(1,E.BANK_LOGO_LIMITS.pixels/Math.max(sourceWidth,sourceHeight)),
+  width=Math.max(1,Math.round(sourceWidth*scale)),height=Math.max(1,Math.round(sourceHeight*scale));
  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
  const context=canvas.getContext('2d');if(!context)throw Error('Your browser could not prepare the logo. Try another browser.');
- context.drawImage(decoded,0,0);
- const jpeg=canvas.toDataURL('image/jpeg',.9);
- if(!E.bankLogoInfo(jpeg))throw Error('That logo could not be prepared within the 100 KB limit. Try a smaller JPG.');
- return {jpeg,width,height};
+ // JPEG has no transparency: a transparent PNG logo sits on white, not black.
+ context.fillStyle='#ffffff';context.fillRect(0,0,width,height);
+ context.drawImage(decoded,0,0,width,height);
+ for(const quality of BANK_LOGO_SOURCE.qualities){
+  const jpeg=canvas.toDataURL('image/jpeg',quality);
+  if(E.bankLogoInfo(jpeg))return {jpeg,width,height};
+ }
+ throw Error('That logo could not be compressed below '+E.BANK_LOGO_LIMITS.bytes/1024+' KB. Try a simpler image.');
 }
 async function uploadBankLogo(key,file){
  if(!bankLogoEditable(key))return;
@@ -19165,13 +19288,13 @@ async function uploadBankLogo(key,file){
   const result=await readBankLogoFile(file);
   if(!current())return;
   state.jpeg=result.jpeg;
-  $('#'+key+'LogoStatus').textContent='JPG ready · '+result.width+' × '+result.height+' pixels. '+(key==='lobby'?'Save identity to share it.':'Included when you start or join.');
+  $('#'+key+'LogoStatus').textContent='Logo ready · '+result.width+' × '+result.height+' pixels. '+(key==='lobby'?'Save identity to share it.':'Included when you start or join.');
   if(key==='lobby')lobbyDirty=true;
  }catch(error){if(current())$('#'+key+'LogoStatus').textContent=error.message;}
  finally{
   if(state.request===request){
    const stale=!current();state.busy=false;
-   if(stale)$('#'+key+'LogoStatus').textContent='Setup changed while the image was loading. Choose your JPG again.';
+   if(stale)$('#'+key+'LogoStatus').textContent='Setup changed while the image was loading. Choose your image again.';
    refreshBankLogo(key);
   }
  }
@@ -20739,6 +20862,61 @@ function renderIncomeReview(v,before,after,kind='loan'){
   (relationships?'<p class="small">Net relationship change in month '+relationships.cycle+': <b>'+count(relationships.business)+' business</b> · <b>'+count(relationships.merchant)+' merchant</b>. Includes all settled additions and losses, not just recruitment. These categories can overlap; do not add them as unique customers.</p>':'')+
   '<div class="table-scroll"><table class="forecast-table"><caption>Retained actual records · forecasts are not included</caption><thead><tr><th>Month</th><th>'+ (loan?'Loan interest':'Business/merchant fees')+'</th>'+(loan?'<th>Credit losses</th><th>Net operating principal change</th>':'<th>Service contract fees (all types)</th>')+'</tr></thead><tbody>'+points.map(p=>'<tr><th scope="row">'+p.cycle+'</th><td>'+incomeAmount(p[key])+'</td>'+(loan?'<td>'+incomeAmount(p.chargeoff)+'</td><td>'+incomeAmount(p.loanGrowth,true)+'</td>':'<td>'+incomeAmount(p.contractFees)+'</td>')+'</tr>').join('')+'</tbody></table></div><p class="micro muted">'+provenance+' '+(loan?'Principal change is a balance movement, not earnings; this table does not claim a historical closing balance.':'Contract fees may be billed but not yet collected.')+'</p></details></section>';
 }
+// Forecast & books → Growth & limits. What holds growth back this month, what
+// each project adds once complete, and what research and operating models
+// contribute. Computed only while this view is open, and cached until the
+// draft, the month or the owner changes.
+let forecastDriverCache={key:null,result:null};
+function forecastDriverSeat(){return game?seat:(p2pRole==='guest'?1:0)}
+function forecastDriverResult(v){
+ const key=JSON.stringify([v.me.id,v.cycle,forecastDriverSeat(),draft]);
+ if(forecastDriverCache.key!==key){
+  let result;try{result=E.forecastDrivers(v,v.me,draft,forecastDriverSeat());}catch(error){result={error:error.message};}
+  forecastDriverCache={key,result};
+ }
+ return forecastDriverCache.result;
+}
+function forecastDriverSigned(n){return n?(n<0?'−':'+')+money(Math.abs(n)):'—'}
+function forecastLimitTable(title,part,note){
+ if(!part.terms.length)return '';
+ return '<div class="forecast-limit"><table class="forecast-table forecast-limit-table"><thead><tr><th>'+esc(title)+'</th><th>This month</th></tr></thead><tbody>'+
+  part.terms.map(t=>'<tr'+(t.key===part.binding?' class="forecast-limit-binding"':'')+'><td>'+esc(t.label)+(t.key===part.binding?' <b class="forecast-limit-badge">Limiting</b>':'')+'</td><td>'+money(t.amount)+'</td></tr>').join('')+
+  '</tbody></table>'+(note?'<p class="micro muted">'+note+'</p>':'')+'</div>';
+}
+function renderForecastLimits(part){
+ if(part.error)return '<p class="notice">Growth limits are unavailable for this draft: '+esc(part.error)+'</p>';
+ const L=part.value,r=L.relationships;
+ return '<h3>WHAT LIMITS GROWTH THIS MONTH</h3><p class="micro muted">Each month the bank grows by the smallest of these. Raising the limiting one is what speeds growth; raising the others does not.</p>'+
+  '<div class="forecast-limit-grid">'+
+  forecastLimitTable('New deposits',L.deposits,'Forecast deposit gain: '+money(L.deposits.gain)+'. More Retail &amp; Service bankers or another branch raise what you can gather.')+
+  forecastLimitTable('New loans',L.loans,L.loans.deployment?'Includes '+money(L.loans.deployment)+' of central deployment from your balance sheet.':'More Lending bankers, spare cash or office capacity raise this, whichever is limiting.')+
+  '</div>'+
+  (r?'<p class="notice'+(r.saturated?' bad':'')+'"><b>Business &amp; merchant relationships:</b> '+integer(r.held)+' of '+integer(r.capacity)+' your branches can serve. '+(r.saturated?'New relationships now slow sharply; open branches to serve more.':'Past '+integer(r.capacity)+', new relationships slow sharply; each branch level adds room for 120.')+'</p>':'');
+}
+function renderForecastProjects(part){
+ if(part.error)return '<p class="notice">Project effects are unavailable for this draft: '+esc(part.error)+'</p>';
+ const rows=part.value;
+ const body=rows.length?rows.map(r=>'<tr><td>'+esc(r.name)+(r.targetName?'<br><span class="micro muted">'+esc(r.targetName)+'</span>':'')+'</td><td>'+(r.staged?'Staged this month':'Under way · '+integer(r.progress)+' of '+integer(r.total||0)+' work')+'</td>'+
+  (r.change?['profit','depositGrowth','loanGrowth','commercialIncome'].map(k=>'<td>'+forecastDriverSigned(r.change[k])+'</td>').join(''):'<td colspan="4" class="micro muted">'+esc(r.reason||'Not estimated.')+'</td>')+'</tr>').join(''):
+  '<tr><td colspan="6" class="micro muted">No projects are under way or staged this month.</td></tr>';
+ return '<h3>PROJECTS · MONTHLY EFFECT ONCE COMPLETE</h3><p class="micro muted">This month&#39;s forecast with each project finished, one at a time, compared with your draft as it stands. Construction cost is not included; upkeep is.</p>'+
+  '<div class="table-scroll"><table class="forecast-table"><thead><tr><th>Project</th><th>Status</th><th>Profit</th><th>Deposit growth</th><th>Loan production</th><th>Fee income</th></tr></thead><tbody>'+body+'</tbody></table></div>';
+}
+function renderForecastResearch(part){
+ if(part.error)return '<p class="notice">Research effects are unavailable for this draft: '+esc(part.error)+'</p>';
+ const rows=part.value;
+ const label=r=>r.kind==='model'?esc(r.name)+'<br><span class="micro muted">'+esc(r.branchName)+' operating model</span>':esc(r.name)+'<br><span class="micro muted">Research level '+integer(r.level)+'</span>';
+ const body=rows.length?rows.map(r=>'<tr><td>'+label(r)+'</td>'+(Object.values(r.change).some(Boolean)?['profit','commercialIncome','depositGrowth','loanGrowth'].map(k=>'<td>'+forecastDriverSigned(r.change[k])+'</td>').join(''):'<td colspan="4" class="micro muted">'+(r.kind==='research'&&!r.level?'No effect until level 1.':'No effect on this month&#39;s forecast.')+'</td>')+'</tr>').join(''):
+  '<tr><td colspan="5" class="micro muted">No research or operating model yet. Fund a capability in Strategy.</td></tr>';
+ return '<h3>RESEARCH &amp; OPERATING MODELS · THIS MONTH&#39;S CONTRIBUTION</h3><p class="micro muted">This month&#39;s forecast with and without each item. Items that work together, such as a combination that needs two branches, share credit, so the rows do not add up to a total.</p>'+
+  '<div class="table-scroll"><table class="forecast-table"><thead><tr><th>Research or model</th><th>Profit</th><th>Fee income</th><th>Deposit growth</th><th>Loan production</th></tr></thead><tbody>'+body+'</tbody></table></div>';
+}
+function renderForecastDrivers(v){
+ const result=forecastDriverResult(v);
+ if(result.error)return '<p class="notice">Growth drivers are unavailable: '+esc(result.error)+'</p>';
+ return renderForecastLimits(result.limits)+renderForecastProjects(result.projects)+renderForecastResearch(result.research)+
+  '<p class="micro muted">Same economy and staffing as your draft. Estimates exclude executive events, rival actions and market results.</p>';
+}
 function tierClass(key){return key==='strong'?'good':key==='watch'?'warn':'bad'}
 function ownerLabel(share){return share>=55?['YOU CONTROL','me']:share<=45?['RIVAL CONTROLS','rival']:['CONTESTED','contested']}
 const MAP_POSITIONS={downtown:[24,29],northside:[43,14],industrial:[13,53],suburbs:[42,48],county_seat:[61,31],university:[64,13],metro_core:[64,59],state_capital:[83,29],agricultural:[29,75],innovation:[84,53],logistics:[58,82],resort:[84,80]};
@@ -20852,12 +21030,13 @@ function renderOperatingPreview(v){
  if(v.me.onboarding)rows.push(['Onboarding activation expense','onboardingCost'],['Deposits from activated applications (included above)','onboardingDeposits']);
  if(v.me.fundingCovenant)rows.push(['Debt after operations (before treasury repayment)','emergencyDebt'],['Covenant excess after operations','fundingExcess']);
  const signed=n=>(n<0?'−':n>0?'+':'')+money(Math.abs(n));
- const desks={bank:'Bank forecast',commercial:'Commercial banking',books:'Balances & books'},desk=operatingForecastView.desk;
+ const desks={bank:'Bank forecast',drivers:'Growth & limits',commercial:'Commercial banking',books:'Balances & books'},desk=operatingForecastView.desk;
  const fundingRules=(v.campaignRulesVersion===1||v.bankEconomicsVersion===2)?'Exposure = loans + 20% of securities. Funding uses cash, securities (2% haircut), loans (6% base haircut'+(v.me.creditPerformance?' plus aging-based distress discount':'')+'), then emergency debt (1% monthly). Securities earn the policy rate / 12.':v.fundingRulesVersion===2?'Capital ratio uses loan exposure; deposits are funding liabilities. Emergency debt: '+money(v.me.stats.emergencyDebt||0)+' at 1% per cycle, included in the forecast. Surplus cash repays debt after funding needs (reserve: 10% liquid / 5% balanced / 2% reinvest).':'This saved campaign retains its original capital and funding mechanics.';
  const comparison=list=>'<table class="forecast-table"><thead><tr><th>Per cycle</th><th>Current plan</th><th>Your draft</th><th>Change</th></tr></thead><tbody>'+list.map(([label,key])=>'<tr><td>'+label+'</td><td>'+money(before[key])+'</td><td>'+money(after[key])+'</td><td>'+signed(after[key]-before[key])+'</td></tr>').join('')+'</tbody></table>';
  $('#operatingPreview').innerHTML=creditNotice+'<div class="workbench-toolbar" role="group" aria-label="Forecast views">'+Object.entries(desks).map(([key,label])=>'<button class="btn" type="button" data-forecast-view="'+key+'" aria-pressed="'+(desk===key)+'">'+label+'</button>').join('')+'</div>'+
+  '<div data-forecast-panel="drivers"'+(desk!=='drivers'?' hidden':'')+'>'+(desk==='drivers'?renderForecastDrivers(v):'')+'</div>'+
   '<div data-forecast-panel="books"'+(desk!=='books'?' hidden':'')+'><h3>FUNDING RULES &amp; BOOKS</h3><p class="small">'+fundingRules+'</p>'+renderBalanceSheet(v)+loanBookNotice(v)+renderFundingCovenant(v)+renderDepositProducts(v)+renderCreditBook(v)+'</div>'+
-  '<div data-forecast-panel="bank"'+(desk!=='bank'?' hidden':'')+'><h3>OPERATING PREVIEW</h3><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Pilot forecasts include funding sales needed for their own projected flows.</p>'+comparison(rows.slice(0,summaryCount))+renderLoanProductionBreakdown(before,after)+renderCoreLoanIncome(v,before,after)+
+  '<div data-forecast-panel="bank"'+(desk!=='bank'?' hidden':'')+'><h3>OPERATING PREVIEW</h3><p class="micro muted">Same economy, current facilities. Compares existing policies with your draft; excludes executive events, rival actions, opportunities, regulatory asset sales, and new project completions. Growth &amp; limits shows what each project adds once complete, which limit holds growth back, and what your research contributes. Pilot forecasts include funding sales needed for their own projected flows.</p>'+comparison(rows.slice(0,summaryCount))+renderLoanProductionBreakdown(before,after)+renderCoreLoanIncome(v,before,after)+
   renderBankIncomeStatement(v,before,after)+renderIncomeReview(v,before,after)+renderCommercialSnapshot(v,after.commercial)+(rows.length>summaryCount?'<details><summary>Funding, product and servicing breakdown</summary>'+comparison(rows.slice(summaryCount))+'</details>':'')+'<p class="micro muted">Research and new hires affect future cycles. Profit is not the same as the change in cash. Detailed funding terms and current balances are under Balances &amp; books.</p></div>'+
   '<div data-forecast-panel="commercial"'+(desk!=='commercial'?' hidden':'')+'>'+renderIncomeReview(v,before,after,'commercial')+renderCommercialForecast(v,before.commercial,after.commercial)+'</div>';
  renderBankRecovery(v);
@@ -20866,6 +21045,7 @@ function renderOperatingPreview(v){
  $$('[data-forecast-view]').forEach(button=>button.addEventListener('click',()=>{
   const now=currentView(),key=button.dataset.forecastView;if(!now||(game||view)!==identity||now.me.id!==owner||now.cycle!==cycle||!Object.hasOwn(desks,key))return;
   operatingForecastView.desk=key;
+  if(key==='drivers'){const panel=$('[data-forecast-panel="drivers"]');if(panel&&!panel.innerHTML)panel.innerHTML=renderForecastDrivers(now);}
   $$('[data-forecast-panel]').forEach(panel=>panel.hidden=panel.dataset.forecastPanel!==key);
   $$('[data-forecast-view]').forEach(control=>control.setAttribute('aria-pressed',String(control.dataset.forecastView===key)));
   if(button.closest?.('.commercial-snapshot'))$('#commercialForecastTitle')?.focus?.();
@@ -24788,7 +24968,8 @@ const GAME_HELP_TOPICS=[
  {id:'changes',title:'Current policy, form edits and staged orders',words:'draft save apply preview undo cancel active commitment',tab:'overview',target:'#monthlyChangesDrawer',text:'Current policy is already in effect. Unfinished form edits are not orders: use their Preview and Stage controls where provided. Staged instructions belong to this month’s shared draft. Monthly changes compares that draft with its opening plan and offers individual undo where dependencies allow. Undo cannot cancel work completed in a previous month.'},
  {id:'funds',title:'Cash versus available spending room',words:'money budget discretionary reserve protected capital afford',tab:'overview',target:'#financialFundingDetails',text:'Bank cash is a balance, not a spending allowance. Planned commitments, protected reserves and capital constraints can make spendable funds much smaller. The shared monthly budget and financial explanation use the current draft; a subsidiary or parent balance is not automatically available to the bank.'},
  {id:'earnings',title:'Operating profit versus retained earnings',words:'income loss revenue equity capital accounting balance sheet results',tab:'overview',target:'#financialEarningsDetails',text:'Operating profit reports a month’s operating result. Retained earnings accumulate results and other equity-affecting movements; they are not cash. Where the campaign records a complete earnings bridge, it explains opening earnings, operating profit, other net changes and closing earnings. Missing historical detail is not reconstructed.'},
- {id:'forecasts',title:'Read bank and commercial forecasts',words:'prediction estimate profit cost preview uncertainty outcome business deposits loans treasury merchant growth',tab:'operations',desk:'forecast',target:'#operatingPreview',text:'Choose Bank forecast, Commercial banking or Balances & books. Commercial banking compares business/merchant relationship growth, fee income, commercial loan vintages and delivered treasury run rate. New Expanded campaigns also show funded business operating deposits; older saves do not gain that book automatically. Account wins, withdrawals and company cash changes occur at month-end, outside the operating estimate. Core has no product-level loan attribution or treasury contracts. Rival actions, executive events and new bids can change the outcome. Product and treasury fees are already included in bank income; do not add them twice.'},
+ {id:'growth-limits',title:'What limits growth, and what projects and research add',words:'limit limiting binding capacity deposits loans relationships branch office project complete research model contribution merchant fees treasury effect',tab:'operations',desk:'forecast',target:'#operatingPreview',text:'Forecast & books → Growth & limits shows three things for your current draft. What limits growth: each month the bank adds the smallest of what its bankers and branches can gather, what the market has left and, where offices apply, their capacity; loans likewise stop at lending staff, spare cash above the reserve or office capacity. The limiting one is marked; raising the others does not speed growth. Projects: the monthly effect of each project under way or staged, once complete, including upkeep but not construction cost. Research and operating models: what each funded branch and chosen model adds to this month, for example fee income from a treasury model. Rows that work together share credit, so they do not add up to a total.'},
+ {id:'forecasts',title:'Read bank and commercial forecasts',words:'prediction estimate profit cost preview uncertainty outcome business deposits loans treasury merchant growth',tab:'operations',desk:'forecast',target:'#operatingPreview',text:'Choose Bank forecast, Growth & limits, Commercial banking or Balances & books. Commercial banking compares business/merchant relationship growth, fee income, commercial loan vintages and delivered treasury run rate. New Expanded campaigns also show funded business operating deposits; older saves do not gain that book automatically. Account wins, withdrawals and company cash changes occur at month-end, outside the operating estimate. Core has no product-level loan attribution or treasury contracts. Rival actions, executive events and new bids can change the outcome. Product and treasury fees are already included in bank income; do not add them twice.'},
  {id:'business-accounts',title:'Win and service a business operating account',words:'company business deposits cash qualification pursuit bankers treasury withdrawal staff',requires:['commercialAccounts'],tab:'markets',target:'#commercialClientWorkspace',text:'Select a named Business client, then Pursue operating account and reserve shared Business time in 0.25 employee-month steps. Existing accounts use 0.25 each first. One remaining step advances the selected company; two pursued months qualify an offer. A local office is required. Reputation, Commercial capability, serviced treasury and an incumbent relationship affect selection. A won account holds half the company’s actual closing cash, not new income. Three missed service months cause withdrawal. Shared time reduces ordinary commercial sales; no employee is hired here. Loans and treasury agreements remain separate choices.'},
  {id:'allocation',title:'Allocate employees to departments',words:'staff headcount pool banker retail business lending operations unassigned',tab:'operations',desk:'monthly',target:'#staffGrid',text:'Allocation divides the existing shared staff pool among departments. Assigning every employee does not prove all work is covered. Where workforce and department work are enabled, training, reserves and other commitments reduce productive time; expertise affects particular work rather than creating extra people.'},
  {id:'coverage',title:'People: employees versus work coverage',words:'workforce staff capacity reservations quarter units shortage uncovered bottleneck service',requires:['workforce'],tab:'workforce',peopleDesk:'overview',target:'#peopleOverview',text:'People Overview separates headcount from available employee time and delivered work. Four quarter-time units equal one employee-month. Reservations and teaching time are not spare employees. Where department work is enabled, review uncovered tasks and their business consequences before deciding whether to reassign, recruit or reduce commitments.'},

@@ -168,6 +168,7 @@ commands.push(['tests/workspace_ownership.test.js','--portable'],['tests/stabili
 commands.push(['tests/bank_rivalry.test.js'],['tests/income_history_network.test.js','--bank-rivalry']);
 commands.push(['tests/research_program.test.js'],['tests/research_bot.test.js'],['tests/research_program_ui.test.js']);
 commands.push(['tests/balance_sheet_lending.test.js']);
+commands.push(['tests/forecast_drivers.test.js']);
 commands.push(['tests/lobby_resume_network.test.js']);
 for(const name of ['monetary_policy','monetary_policy_ui','monetary_policy_network']){
  commands.push(['tests/'+name+'.test.js']);commands.push(['tests/'+name+'.test.js','--portable']);

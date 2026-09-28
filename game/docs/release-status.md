@@ -1,5 +1,26 @@
 # Release status and known issues
 
+## September 28 — Playtest follow-up: Core Operations layout, forecast drivers, logos
+
+Three requests from the 9.39 playtest. No campaign rule changes: saves of every version keep
+their economics, and the same seeded 8.20 Core, 9.34 and 9.39 Expanded campaigns replay
+identically before and after.
+
+- **Core Operations layout.** The two desk tabs split the row equally, every desk opens with
+  the same titled section, paired cards share a row's width and height, and deposit pricing,
+  lending standards and capital strategy sit in three even columns. The sticky destination
+  bar sits flush at the top, so scrolled content no longer shows through above it.
+- **Forecast & books → Growth & limits.** Which limit holds deposits and loans back this
+  month (bankers and branches, market room, office capacity, lending staff or spare cash);
+  the monthly effect of each project under way or staged once complete; and what each
+  research branch and operating model adds, such as a treasury model's fee income. Every
+  figure is the ordinary forecast on private copies; see `engine/forecast-drivers.js`.
+  A project that cannot be completed privately, currently staged offices in 9.35+ Expanded,
+  is reported as not estimated rather than guessed.
+- **Bank logos.** Uploads accept JPG, PNG, WebP or GIF up to 10 MB, scaled to fit and
+  re-encoded as JPEG. Stored logos may be up to 400 × 400 pixels and 150 KB (were 200 × 200
+  and 100 KB); most store at a few tens of KB. SVG is still refused.
+
 ## September 27 — 9.39 repository publication
 
 [PR #27](https://github.com/NerdyGeneral/BranchWars/pull/27) publishes the current
