@@ -121,7 +121,7 @@ test('research shortcut callbacks retain owner, ready, month, session, route and
  const h=fresh();h.run('view=E.publicState(game,0);game=null;p2pRole="guest"');show(h,'strategy','research',{branch:'digital'});input(h,'amount',12345);const click=h.elements.get('#ipsResearch50k').listeners.click;h.run('view=JSON.parse(JSON.stringify(view));view.rival.submitted=true');const before=bytes(h);click();assert.equal(bytes(h),before);show(h,'strategy','research',{branch:'digital'});assert.equal(h.run('interfacePeopleStrategyState.forms["research-digital"].value.amount'),'12345');h.elements.get('#ipsResearch50k').listeners.click();assert.equal(h.run('draft.investments.digital'),62345);
 });
 test('operating models link to funding the same research branch without staging a model',()=>{
- const h=fresh(),before=bytes(h);show(h,'strategy','models',{branch:'digital'});assert.match(html(h),/>Fund operating-model research<\/button>/);assert.match(html(h),/&quot;legacyResearch&quot;:true/);assert.match(html(h),/workspace&quot;:&quot;strategy&quot;,&quot;view&quot;:&quot;research&quot;,&quot;context&quot;:\{&quot;branch&quot;:&quot;digital&quot;/);assert.equal(bytes(h),before);
+ const h=fresh(),before=bytes(h);show(h,'strategy','models',{branch:'digital'});assert.match(html(h),/>Fund this track’s research<\/button>/);assert.doesNotMatch(html(h),/legacyResearch/,'Research is one page; the track link needs no mode flag');assert.match(html(h),/workspace&quot;:&quot;strategy&quot;,&quot;view&quot;:&quot;research&quot;,&quot;context&quot;:\{&quot;branch&quot;:&quot;digital&quot;/);assert.equal(bytes(h),before);
 });
 test('blank specialist recruit count is retained and cannot silently become zero',()=>{
  const h=fresh();show(h,'people','recruitment',{role:'service'});input(h,'service','');const before=bytes(h);assert.equal(h.elements.get('#ipsAdd').disabled,true);show(h,'people','recruitment',{role:'operations'});assert.equal(h.run('interfacePeopleStrategyState.forms["bank-recruitment"].value.service'),'');add(h);assert.equal(bytes(h),before);assert.match(h.elements.get('#ipsQuote').innerHTML,/blank field is not zero/);
@@ -149,4 +149,20 @@ test('explicit directory navigation focuses its inspector and Back returns to th
  assert.equal(h.run('document.activeElement===psSelected'),true,'Back returns to the current selection, not the first record');
  assert.equal(bytes(h),before);
 });
+test('research is one grouped page: capability tracks and digital and commercial projects',()=>{
+ const h=fresh();h.run("game=E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true,currentBankCards:true}).options,mode:'hotseat',seed:'research-page',created:1});newDraft(currentView());draft.decision='b';");
+ const list=()=>h.elements.get('.ips-body').innerHTML,before=bytes(h),tracks=h.run('Object.keys(currentView().strategyBranches)');
+ show(h,'strategy','research');
+ for(const heading of ['Capability research','Digital Systems','Commercial Banking'])assert(list().includes('<h3 class="ips-directory-heading">'+heading+'</h3>'),heading);
+ for(const key of tracks)assert(list().includes('data-ips-item="branch:'+key+'"'),key);
+ for(const key of h.run('Object.keys(E.DigitalCommercial.NODES)'))assert(list().includes('data-ips-item="node:'+key+'"'),key);
+ assert(list().includes('aria-pressed="true" data-ips-item="branch:'+tracks[0]+'"'),'The first capability track opens by default');
+ assert.match(list(),/Needs Cash-Management Design/);
+ show(h,'strategy','research',{branch:'digital'});assert.match(html(h),/Capability research<\/span><h2>/);assert.match(html(h),/>Choose an operating model<\/button>/);
+ show(h,'strategy','research',{node:'workflowAutomation'});assert.match(html(h),/Digital Systems<\/span><h2>Workflow Automation/);
+ assert.doesNotMatch(html(h),/>Digital Systems<\/button>|>Commercial Banking<\/button>/,'No family switch inside the inspector');
+ show(h,'strategy','research',{branch:'digital',research:'node:paymentsIntegration'});assert.match(html(h),/<h2>Payments Integration/,'A choice in the list wins over the link that opened the page');
+ assert.equal(bytes(h),before);
+});
+
 console.log(JSON.stringify({suite:'interface-people-strategy',checks,scope:'Focused controller and engine checks, shared draft and dirty-form continuity, finite staffing, actual research rules and read-only reports; not browser visual acceptance.'}));

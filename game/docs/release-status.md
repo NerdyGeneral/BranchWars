@@ -1,5 +1,24 @@
 # Release status and known issues
 
+## September 28 — Interface follow-up: header figures, one Research page, Core products
+
+Three playtest requests. Interface only; no campaign rules change.
+
+- **Expanded header.** Deposits and loans now sit beside Available to spend, in compact
+  millions with the exact amount on hover.
+- **Strategy → Research is one page.** From 9.37, the Research tab showed only the five
+  digital and commercial projects. The capability tracks were reachable only through
+  Operating models, and the project families switched with buttons inside the detail
+  panel. One grouped list now holds capability research, then the digital and commercial
+  projects, and combined capabilities where they exist. Each entry shows milestones, paid
+  progress, or the prerequisite it still needs. A capability track links to its operating
+  model, and Operating models links back to the same track. Links that name a track or a
+  project, from Banking, Review or older desks, open it directly.
+- **Core Operations.** Product & balance-sheet design and Bank funding & capital policies
+  sit side by side again, in balanced proportion. Each policy shows its three options in one
+  row, so less scrolling separates Decision & staff from Products, pricing & risk. They
+  stack below 1,100 px.
+
 ## September 28 — Expanded 9.40: bank-issued cards
 
 New Expanded campaigns choose who issues their credit cards at launch: Cedar Reserve as
