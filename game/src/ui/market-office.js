@@ -37,8 +37,8 @@ function reviewMarketConstruction(v,market,key){
  const token=marketActionToken(v);if(!marketActionCurrent(token))return false;
  const proposal=marketActionProposal(currentView(),market,key);
  if(!proposal.status.eligible){toast(proposal.status.reason);return false;}
- marketWorkspace.mode='build';marketWorkspace.pending={token,market,key,proposal};renderMarketInspector(currentView());
- focusWorkspaceTarget($('#confirmMarketAction'));return true;
+ keepMarketScroll(()=>{marketWorkspace.mode='build';marketWorkspace.pending={token,market,key,proposal};renderMarketInspector(currentView());});
+ const confirm=$('#confirmMarketAction');confirm?.focus?.({preventScroll:true});confirm?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'instant'});return true;
 }
 function marketPresenceMarkup(v,market){
  const p=v.me,t=v.territories[market],offices=(p.facilityNetwork?.offices||[]).filter(o=>o.market===market&&o.closedCycle===null);
@@ -51,14 +51,16 @@ function marketPresenceMarkup(v,market){
   '<button type="button" class="btn" id="buildInMarket">＋ Build here</button>'+
   (offices.length?'<p class="micro muted">Capacity supports customer activity; it is not office profit.</p>':'')+'</section>';
 }
+// The review appears inside the project's own card, so reviewing a project lower
+// in the list no longer inserts a panel above it and pushes the page down.
+function marketConstructionConfirm(pending){return '<section class="market-action-confirm" role="group" aria-label="Confirm market instruction"><h4>Review the whole change</h4><ul>'+pending.proposal.effects.map(effect=>'<li>'+esc(effect)+'</li>').join('')+'</ul>'+(!pending.proposal.status.eligible?'<p class="notice bad">'+esc(pending.proposal.status.reason)+'</p>':'')+'<button type="button" class="btn primary" id="confirmMarketAction"'+(!pending.proposal.status.eligible?' disabled':'')+'>Stage construction</button> <button type="button" class="btn" id="cancelMarketAction">Keep editing</button></section>';}
 function marketConstructionMarkup(v,market){
  const p=v.me,catalog=E.projectCatalog({...p,focus:market},v),actions=Object.entries(catalog).filter(([,d])=>d.target&&!d.legacy&&!d.strategy&&!d.serviceOnly&&!d.programOnly&&(!d.regionalOnly||p.regionalOperations));
  const pending=marketWorkspace.pending;
  return '<section id="marketConstruction"><h4 id="marketConstructionHeading" tabindex="-1">Build &amp; improve '+esc(v.territories[market].name)+'</h4><p class="small">Review a local project, then stage it in your monthly plan.</p>'+
-  (pending?'<section class="market-action-confirm" role="group" aria-label="Confirm market instruction"><h4>Review the whole change</h4><ul>'+pending.proposal.effects.map(effect=>'<li>'+esc(effect)+'</li>').join('')+'</ul>'+(!pending.proposal.status.eligible?'<p class="notice bad">'+esc(pending.proposal.status.reason)+'</p>':'')+'<button type="button" class="btn primary" id="confirmMarketAction"'+(!pending.proposal.status.eligible?' disabled':'')+'>Stage construction</button> <button type="button" class="btn" id="cancelMarketAction">Keep editing</button></section>':'')+
   '<div class="market-local-projects">'+actions.map(([key,d])=>{
    const proposal=marketActionProposal(v,market,key),picked=E.planInitiatives(draft).includes(key)&&E.projectPlanTarget(draft,key)===market,terms=E.projectStartTerms(v,p,key,market);
-   return '<article><h4>'+esc(d.name)+'</h4><div class="micro"><b>'+money(terms.cost)+'</b> one time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="small">'+esc(d.desc)+'</p>'+renderProjectEffect(p,key,market)+'<button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+(picked?'Review removal':'Review project')+'</button>'+(!proposal.status.eligible?'<p class="micro" role="status">'+esc(proposal.status.reason)+'</p>':'')+'</article>';
+   return '<article><h4>'+esc(d.name)+'</h4><div class="micro"><b>'+money(terms.cost)+'</b> one time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="small">'+esc(d.desc)+'</p>'+renderProjectEffect(p,key,market)+(pending?.key===key?marketConstructionConfirm(pending):'<button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+(picked?'Review removal':'Review project')+'</button>')+(!proposal.status.eligible?'<p class="micro" role="status">'+esc(proposal.status.reason)+'</p>':'')+'</article>';
   }).join('')+'</div><p class="micro muted">Work units are not a guaranteed opening date. Staff, ongoing upkeep and shared execution remain separate commitments.</p></section>';
 }
 function renderMarketInspector(v){

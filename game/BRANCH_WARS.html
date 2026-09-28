@@ -346,7 +346,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
 .command-bar-status .bank-identity .bank-label{overflow:hidden;text-overflow:ellipsis}
 .command-bar-status>.small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
 .command-bar-actions{margin-left:auto;flex:0 0 auto;align-items:center;gap:.4rem;flex-wrap:nowrap;min-width:0}
-.command-bar .headline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;flex:1 1 290px;min-width:0;overflow:hidden}
+.command-bar .headline-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.55rem;flex:1 1 290px;min-width:0;overflow:hidden}
 .command-bar .headline-grid .summary{padding:0;border:0;background:none;min-height:0;overflow:hidden;box-shadow:none;min-width:0}
 .command-bar .headline-grid .summary span{font-size:.62rem;letter-spacing:.04em}
 .command-bar .headline-grid .summary b{display:block;font-size:1rem;margin:0;line-height:1.2}
@@ -451,7 +451,7 @@ html{background:#e9eef5}body{color:var(--ink);background:radial-gradient(circle 
  .command-bar-actions{gap:.5rem}
 }
 @media(min-width:901px){
- .command-bar .headline-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .command-bar .headline-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
  .command-bar-row>.summary-grid{margin-right:.75rem}
  .command-bar .headline-grid .summary b,.command-bar .headline-grid .summary span{
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
@@ -936,7 +936,7 @@ body.game-interface-active .shell>.mast{display:none}
     <section class="panel command-bar" aria-label="Campaign status and headline figures">
       <div class="command-bar-row">
         <div class="command-bar-status"><span class="kicker">EXECUTIVE COMMAND CENTER</span><span class="small"><span id="modeBadge" class="modebadge"></span> // CYCLE <b id="cycleNo"></b>/<span id="maxCycles"></span> // <span id="scopeName" class="blue"></span></span><div id="bankIdentity" class="bank-identity" aria-label="Bank identities"></div></div>
-        <div class="summary-grid headline-grid"><div class="summary"><span>VALUE</span><b id="myScore"></b></div><div class="summary"><span>CAPITAL</span><b id="myCapital"></b><span id="myTier" class="micro"></span></div><div class="summary"><span>CASH</span><b id="myCash"></b></div></div>
+        <div class="summary-grid headline-grid"><div class="summary"><span title="Available to spend">TO SPEND</span><b id="mySpendable"></b></div><div class="summary"><span>VALUE</span><b id="myScore"></b></div><div class="summary"><span>CAPITAL</span><b id="myCapital"></b><span id="myTier" class="micro"></span></div><div class="summary"><span>CASH</span><b id="myCash"></b></div></div>
         <div class="row command-bar-actions"><span id="readyState" class="small"></span><span id="linkState" class="connection good"></span><button id="relinkBtn" class="btn hidden">[ NEW LINK CODE ]</button><button id="exportBtn" class="btn">[ EXPORT ]</button><button id="exitBtn" class="btn danger">[ EXIT ]</button></div>
         <details class="summary-more"><summary>More figures</summary><div class="summary-grid"><div class="summary"><span>MARKETS</span><b id="myMarkets"></b></div><div class="summary"><span>DEPOSITS</span><b id="myDeposits"></b></div><div class="summary"><span>LOANS</span><b id="myLoans"></b></div><div class="summary"><span>LAST PROFIT</span><b id="myProfit"></b></div><div class="summary"><span>RISK / HEAT</span><b id="myRisk"></b></div></div></details>
       </div>
@@ -21527,7 +21527,14 @@ function renderPlanBudget(v){
  $('#planBudget').innerHTML=`<span>Committed <b>${money(q.total)}</b></span><span>${v.campaignRulesVersion===1?'Available within cash / capital limits':'Uncommitted cash'} <b class="${q.remaining<0?'bad':''}">${money(q.remaining)}</b></span><span>Execution <b class="${q.freeCapacity<0?'warn':''}">${q.load.toFixed(1)} / ${q.capacity.toFixed(1)}</b></span><span>New base payroll <b>${money(q.basePayrollAdded)}/cycle</b>${v.me.workforce?' + specialist premiums <b>'+money(q.specialistPayrollAdded)+'/cycle</b>':''}</span><details><summary>Spending & timing</summary><div>Initiatives ${money(q.projects)} · Research ${money(q.research)}${v.me.workforce?' · Reserved training '+money(q.training):''} · Recruiting ${money(q.recruiting)} · Competition ${money(q.action)}${v.me.productPrograms?' · Product retirement '+money(q.productRetirement):''}${v.me.advertising?' · Advertising '+money(q.advertising):''}${v.me.relationshipOffers?' · Existing-customer conversions (ceiling) '+money(q.relationshipOffers):''}${v.me.onboarding?' · Onboarding activation (ceiling) '+money(q.onboarding):''}.</div>${v.campaignRulesVersion===1?`<div>Capital-safe spending limit ${money(q.capitalBudget)}: preserves an 8% current exposure reserve. Discretionary spending is expensed, not capitalized.</div>`:''}<div>Uncommitted cash excludes operating income, expenses, event effects, and rival actions. New bankers and capability benefits apply from the next cycle; payroll shown before efficiency adjustments.</div>${q.freeCapacity<0?'<div class="warn">Existing work may stall with this staffing allocation.</div>':''}</details>`;
 }
 function renderThreatBoard(v){$('#threatBoard').innerHTML=(v.competitiveForecast||[]).map(x=>`<div class="threat-line ${x.severity==='stable'?'':esc(x.severity)}"><b>${esc(x.title)}</b><div>${esc(x.text)}</div></div>`).join('')}
-function render(){const v=currentView();if(!v)return;if(expandedInterfaceEnabled(v)){renderExpandedGame(v);return;}interfaceRestoreCore();renderBankIdentity(v);renderRegionalGrowth(v);if(v.gameOver){renderFinal(v);maybeResolution(v);return}show('#gameScreen');ensureDraft(v);$('#cycleNo').textContent=v.cycle;$('#maxCycles').textContent=v.maxCycles;$('#scopeName').textContent=E.SCOPES[v.scope].name;$('#modeBadge').textContent=gh.active?`REPOSITORY ${p2pRole.toUpperCase()}`:v.mode==='ai'?'SOLO AI':v.mode==='hotseat'?'PASS & PLAY':v.mode==='lan'?`LAN ${p2pRole.toUpperCase()}`:p2pRole==='guest'?'DIRECT GUEST':'DIRECT HOST';$('#myScore').textContent=v.me.score.toFixed(1);$('#myMarkets').textContent=`${v.me.controlled}/${Object.keys(v.territories).length}`;$('#myDeposits').textContent=money(v.me.stats.deposits);$('#myLoans').textContent=money(v.me.stats.loans);$('#myCash').textContent=money(v.me.stats.cash);$('#myProfit').textContent=money(v.me.stats.lastProfit);$('#myRisk').textContent=`${v.me.stats.compliance}/${v.me.stats.attention}`;$('#myCapital').textContent=`${v.me.capitalRatio.toFixed(1)}%`;$('#myCapital').className=tierClass(v.me.capitalTier.key);$('#myTier').textContent=v.me.capitalTier.short;$('#myTier').className='micro '+tierClass(v.me.capitalTier.key);$('#macroName').textContent=v.economy.name;$('#macroText').textContent=v.economy.text;$('#macroRate').textContent=`${v.economy.rate.toFixed(2)}%`;$('#macroDemand').textContent=`${Math.round(v.economy.demand*100)}%`;$('#macroDeposits').textContent=`${Math.round(v.economy.deposits*100)}%`;$('#macroCredit').textContent=`${Math.round(v.economy.credit*100)}%`;$('#readyState').innerHTML=`<span class="readydot ${v.me.submitted?'on':''}"></span>YOU ${v.me.submitted?'READY':'PLANNING'} &nbsp; <span class="readydot ${v.rival.submitted?'on':''}"></span>RIVAL ${v.rival.submitted?'READY':'PLANNING'}`;if(!['p2p','lan'].includes(v.mode))$('#linkState').textContent=v.mode==='ai'?'LOCAL AI // PAUSED':'LOCAL PASS & PLAY';else paintLink();paintRelink();renderDecision(v);renderMarkets(v);renderPipeline(v);renderStaff(v);renderPolicies(v);renderProducts(v);renderProjects(v);renderReady(v);renderDetails(v);renderHistory(v);$('#exportBtn').disabled=p2pRole==='guest';maybeResolution(v)}
+// Core header: the Expanded header's "Available to spend" (cash left after this
+// month's planned commitments and protected reserves).
+function renderCoreSpendable(v){
+ const el=$('#mySpendable');if(!el)return;
+ try{const f=bankFinancialOverview(v,monthlyPlanReview(v));el.textContent=Number.isFinite(f.room)?money(f.room):'Unavailable';el.className=f.room<0?'bad':'';el.title='Cash left after this month’s planned commitments and protected reserves';}
+ catch(error){el.textContent='Unavailable';el.className='';el.title=error.message;}
+}
+function render(){const v=currentView();if(!v)return;if(expandedInterfaceEnabled(v)){renderExpandedGame(v);return;}interfaceRestoreCore();renderBankIdentity(v);renderRegionalGrowth(v);if(v.gameOver){renderFinal(v);maybeResolution(v);return}show('#gameScreen');ensureDraft(v);$('#cycleNo').textContent=v.cycle;$('#maxCycles').textContent=v.maxCycles;$('#scopeName').textContent=E.SCOPES[v.scope].name;$('#modeBadge').textContent=gh.active?`REPOSITORY ${p2pRole.toUpperCase()}`:v.mode==='ai'?'SOLO AI':v.mode==='hotseat'?'PASS & PLAY':v.mode==='lan'?`LAN ${p2pRole.toUpperCase()}`:p2pRole==='guest'?'DIRECT GUEST':'DIRECT HOST';$('#myScore').textContent=v.me.score.toFixed(1);$('#myMarkets').textContent=`${v.me.controlled}/${Object.keys(v.territories).length}`;$('#myDeposits').textContent=money(v.me.stats.deposits);$('#myLoans').textContent=money(v.me.stats.loans);$('#myCash').textContent=money(v.me.stats.cash);renderCoreSpendable(v);$('#myProfit').textContent=money(v.me.stats.lastProfit);$('#myRisk').textContent=`${v.me.stats.compliance}/${v.me.stats.attention}`;$('#myCapital').textContent=`${v.me.capitalRatio.toFixed(1)}%`;$('#myCapital').className=tierClass(v.me.capitalTier.key);$('#myTier').textContent=v.me.capitalTier.short;$('#myTier').className='micro '+tierClass(v.me.capitalTier.key);$('#macroName').textContent=v.economy.name;$('#macroText').textContent=v.economy.text;$('#macroRate').textContent=`${v.economy.rate.toFixed(2)}%`;$('#macroDemand').textContent=`${Math.round(v.economy.demand*100)}%`;$('#macroDeposits').textContent=`${Math.round(v.economy.deposits*100)}%`;$('#macroCredit').textContent=`${Math.round(v.economy.credit*100)}%`;$('#readyState').innerHTML=`<span class="readydot ${v.me.submitted?'on':''}"></span>YOU ${v.me.submitted?'READY':'PLANNING'} &nbsp; <span class="readydot ${v.rival.submitted?'on':''}"></span>RIVAL ${v.rival.submitted?'READY':'PLANNING'}`;if(!['p2p','lan'].includes(v.mode))$('#linkState').textContent=v.mode==='ai'?'LOCAL AI // PAUSED':'LOCAL PASS & PLAY';else paintLink();paintRelink();renderDecision(v);renderMarkets(v);renderPipeline(v);renderStaff(v);renderPolicies(v);renderProducts(v);renderProjects(v);renderReady(v);renderDetails(v);renderHistory(v);$('#exportBtn').disabled=p2pRole==='guest';maybeResolution(v)}
 function renderBankIdentity(v){
  const me=E.bankColor(v.me.color),rival=E.bankColor(v.rival.color,1);
  document.documentElement.style.setProperty('--bank-me',me);document.documentElement.style.setProperty('--bank-rival',rival);
@@ -25700,6 +25707,7 @@ function renderProjects(v){
 function renderReady(v){
  if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){const review=monthlyPlanReview(v);$('#readyBtn').disabled=!!v.me.submitted||!!v.gameOver||review.blockers.length>0;$('#recallBtn').classList.toggle('hidden',!v.me.submitted||v.rival.submitted||v.gameOver);$('#submitMsg').textContent=v.me.submitted?'Plan locked. Waiting for the other institution.':review.blockers.length?review.blockers[0].text:'Required decisions complete. Review your warnings, then mark Ready.';renderExpandedInterface(v,review);return;}
  const review=monthlyPlanReview(v),pool=review.unallocated;
+ if(typeof renderCoreSpendable==='function')renderCoreSpendable(v);
  $('#planChecklist').innerHTML=`${draft.focus?'✓':'○'} Focus market &nbsp; ${draft.decision?'✓':'○'} Executive decision &nbsp; ${pool===0?'✓':'○'} Headcount allocated <span class="micro">(not a work-coverage guarantee)</span>`;
  // A missing target can reach this view during draft repair. Do not run
  // market-dependent forecasts with no market, or leave old estimates visible.
@@ -25947,7 +25955,14 @@ function confirmMarketAction(){
   toast('Your plan changed. Review the refreshed effects and confirm again.');return false;
  }
  if(!proposal.status.eligible){marketWorkspace.pending=null;renderMarketInspector(now);toast(proposal.status.reason);return false;}
- draft=proposal.candidate;marketWorkspace.pending=null;refreshMarketActions(now);restoreMarketActionFocus(pending.key);return true;
+ draft=proposal.candidate;marketWorkspace.pending=null;keepMarketScroll(()=>refreshMarketActions(now));restoreMarketActionFocus(pending.key);return true;
+}
+// Re-rendering the Markets tab keeps the page and the inspector where they were.
+function keepMarketScroll(render){
+ const panel=$('#marketInspector'),y=typeof window!=='undefined'?window.scrollY:0,top=panel?.scrollTop||0;
+ render();
+ if(typeof window!=='undefined'&&window.scrollY!==y)window.scrollTo?.(window.scrollX||0,y);
+ const next=$('#marketInspector');if(next&&next.scrollTop!==top)next.scrollTop=top;
 }
 function restoreMarketActionFocus(key){
  const target=key?$('button[data-local-project="'+key+'"]'):$('#inspectedMarketName');
@@ -25956,7 +25971,7 @@ function restoreMarketActionFocus(key){
  // new node leaves keyboard users below the clipped panel after a re-render.
  target?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'instant'});
 }
-function cancelMarketAction(){const key=marketWorkspace.pending?.key;marketWorkspace.pending=null;const v=currentView();if(v)renderMarketInspector(v);restoreMarketActionFocus(key);}
+function cancelMarketAction(){const key=marketWorkspace.pending?.key;marketWorkspace.pending=null;const v=currentView();if(v)keepMarketScroll(()=>renderMarketInspector(v));restoreMarketActionFocus(key);}
 function refreshMarketActions(v){renderMarkets(v);renderProjects(v);renderReady(v);}
 function openMarketOffice(v,id,desk){
  if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){
@@ -26052,8 +26067,8 @@ function reviewMarketConstruction(v,market,key){
  const token=marketActionToken(v);if(!marketActionCurrent(token))return false;
  const proposal=marketActionProposal(currentView(),market,key);
  if(!proposal.status.eligible){toast(proposal.status.reason);return false;}
- marketWorkspace.mode='build';marketWorkspace.pending={token,market,key,proposal};renderMarketInspector(currentView());
- focusWorkspaceTarget($('#confirmMarketAction'));return true;
+ keepMarketScroll(()=>{marketWorkspace.mode='build';marketWorkspace.pending={token,market,key,proposal};renderMarketInspector(currentView());});
+ const confirm=$('#confirmMarketAction');confirm?.focus?.({preventScroll:true});confirm?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'instant'});return true;
 }
 function marketPresenceMarkup(v,market){
  const p=v.me,t=v.territories[market],offices=(p.facilityNetwork?.offices||[]).filter(o=>o.market===market&&o.closedCycle===null);
@@ -26066,14 +26081,16 @@ function marketPresenceMarkup(v,market){
   '<button type="button" class="btn" id="buildInMarket">＋ Build here</button>'+
   (offices.length?'<p class="micro muted">Capacity supports customer activity; it is not office profit.</p>':'')+'</section>';
 }
+// The review appears inside the project's own card, so reviewing a project lower
+// in the list no longer inserts a panel above it and pushes the page down.
+function marketConstructionConfirm(pending){return '<section class="market-action-confirm" role="group" aria-label="Confirm market instruction"><h4>Review the whole change</h4><ul>'+pending.proposal.effects.map(effect=>'<li>'+esc(effect)+'</li>').join('')+'</ul>'+(!pending.proposal.status.eligible?'<p class="notice bad">'+esc(pending.proposal.status.reason)+'</p>':'')+'<button type="button" class="btn primary" id="confirmMarketAction"'+(!pending.proposal.status.eligible?' disabled':'')+'>Stage construction</button> <button type="button" class="btn" id="cancelMarketAction">Keep editing</button></section>';}
 function marketConstructionMarkup(v,market){
  const p=v.me,catalog=E.projectCatalog({...p,focus:market},v),actions=Object.entries(catalog).filter(([,d])=>d.target&&!d.legacy&&!d.strategy&&!d.serviceOnly&&!d.programOnly&&(!d.regionalOnly||p.regionalOperations));
  const pending=marketWorkspace.pending;
  return '<section id="marketConstruction"><h4 id="marketConstructionHeading" tabindex="-1">Build &amp; improve '+esc(v.territories[market].name)+'</h4><p class="small">Review a local project, then stage it in your monthly plan.</p>'+
-  (pending?'<section class="market-action-confirm" role="group" aria-label="Confirm market instruction"><h4>Review the whole change</h4><ul>'+pending.proposal.effects.map(effect=>'<li>'+esc(effect)+'</li>').join('')+'</ul>'+(!pending.proposal.status.eligible?'<p class="notice bad">'+esc(pending.proposal.status.reason)+'</p>':'')+'<button type="button" class="btn primary" id="confirmMarketAction"'+(!pending.proposal.status.eligible?' disabled':'')+'>Stage construction</button> <button type="button" class="btn" id="cancelMarketAction">Keep editing</button></section>':'')+
   '<div class="market-local-projects">'+actions.map(([key,d])=>{
    const proposal=marketActionProposal(v,market,key),picked=E.planInitiatives(draft).includes(key)&&E.projectPlanTarget(draft,key)===market,terms=E.projectStartTerms(v,p,key,market);
-   return '<article><h4>'+esc(d.name)+'</h4><div class="micro"><b>'+money(terms.cost)+'</b> one time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="small">'+esc(d.desc)+'</p>'+renderProjectEffect(p,key,market)+'<button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+(picked?'Review removal':'Review project')+'</button>'+(!proposal.status.eligible?'<p class="micro" role="status">'+esc(proposal.status.reason)+'</p>':'')+'</article>';
+   return '<article><h4>'+esc(d.name)+'</h4><div class="micro"><b>'+money(terms.cost)+'</b> one time · '+d.cycles+' base work units · '+(d.capacity||1.5)+' execution</div>'+projectEntryPriceNote(v,key,market)+'<p class="small">'+esc(d.desc)+'</p>'+renderProjectEffect(p,key,market)+(pending?.key===key?marketConstructionConfirm(pending):'<button type="button" class="btn" data-local-project="'+key+'"'+(!proposal.status.eligible?' disabled':'')+'>'+(picked?'Review removal':'Review project')+'</button>')+(!proposal.status.eligible?'<p class="micro" role="status">'+esc(proposal.status.reason)+'</p>':'')+'</article>';
   }).join('')+'</div><p class="micro muted">Work units are not a guaranteed opening date. Staff, ongoing upkeep and shared execution remain separate commitments.</p></section>';
 }
 function renderMarketInspector(v){

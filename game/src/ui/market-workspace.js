@@ -71,7 +71,14 @@ function confirmMarketAction(){
   toast('Your plan changed. Review the refreshed effects and confirm again.');return false;
  }
  if(!proposal.status.eligible){marketWorkspace.pending=null;renderMarketInspector(now);toast(proposal.status.reason);return false;}
- draft=proposal.candidate;marketWorkspace.pending=null;refreshMarketActions(now);restoreMarketActionFocus(pending.key);return true;
+ draft=proposal.candidate;marketWorkspace.pending=null;keepMarketScroll(()=>refreshMarketActions(now));restoreMarketActionFocus(pending.key);return true;
+}
+// Re-rendering the Markets tab keeps the page and the inspector where they were.
+function keepMarketScroll(render){
+ const panel=$('#marketInspector'),y=typeof window!=='undefined'?window.scrollY:0,top=panel?.scrollTop||0;
+ render();
+ if(typeof window!=='undefined'&&window.scrollY!==y)window.scrollTo?.(window.scrollX||0,y);
+ const next=$('#marketInspector');if(next&&next.scrollTop!==top)next.scrollTop=top;
 }
 function restoreMarketActionFocus(key){
  const target=key?$('button[data-local-project="'+key+'"]'):$('#inspectedMarketName');
@@ -80,7 +87,7 @@ function restoreMarketActionFocus(key){
  // new node leaves keyboard users below the clipped panel after a re-render.
  target?.scrollIntoView?.({block:'nearest',inline:'nearest',behavior:'instant'});
 }
-function cancelMarketAction(){const key=marketWorkspace.pending?.key;marketWorkspace.pending=null;const v=currentView();if(v)renderMarketInspector(v);restoreMarketActionFocus(key);}
+function cancelMarketAction(){const key=marketWorkspace.pending?.key;marketWorkspace.pending=null;const v=currentView();if(v)keepMarketScroll(()=>renderMarketInspector(v));restoreMarketActionFocus(key);}
 function refreshMarketActions(v){renderMarkets(v);renderProjects(v);renderReady(v);}
 function openMarketOffice(v,id,desk){
  if(typeof expandedInterfaceEnabled==='function'&&expandedInterfaceEnabled(v)){
