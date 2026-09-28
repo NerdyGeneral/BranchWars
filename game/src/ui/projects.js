@@ -112,6 +112,9 @@ function strategyModelDescription(v,branch,key){
   };
   if(researchDescriptions[branch+':'+key])return researchDescriptions[branch+':'+key];
  }
+ // 9.41 research tree: these discounts stack with the family levels.
+ if(v.researchTreeVersion===1&&branch==='network'&&key==='regionalHub')return 'Office projects need one fewer work unit, on top of the one Network level 2 removes. This model does not increase regional deposit or loan capacity.';
+ if(v.researchTreeVersion===1&&branch==='operations'&&key==='lean')return 'Reduces base staff and facility operating expense by 10% and project costs by 15%, on top of the Operations level 3 discount. This model does not add execution capacity.';
  const corrections={
   'network:regionalHub':'Branch projects require one fewer work unit, the same non-stacking reduction as Network tier 2. This model does not increase regional deposit or loan capacity.',
   'digital:customerExperience':'Raises the organic deposit-acquisition multiplier by 7%, subject to supply and capacity limits. It does not directly add a household-acquisition bonus.',

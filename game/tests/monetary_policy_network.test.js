@@ -6,7 +6,7 @@ function select(h){h.run(`{const control=document.querySelector('#lobbyFeature-f
  const limited=peers(transport,10);limited.guest.run('const priorCaps=E.campaignCapabilities;E.campaignCapabilities=()=>{const caps=priorCaps();delete caps.monetaryPolicySupported;return caps;}');
  await lobby(limited);const before=copy(limited.guest.state().lobby);select(limited.host);await assert.rejects(limited.drain(),/Federal Funds.*updated game/);assert.deepEqual(copy(limited.guest.state().lobby),before);assert(!limited.host.run('lobbyCompatibility().compatible'));
  const pair=peers(transport,10);await lobby(pair);select(pair.host);await pair.drain();await start(pair);
- assert.equal(pair.host.state().game.version,'9.40');assert.equal(pair.host.state().game.expandedBusinessVersion,1);assert.equal(pair.guest.state().view.expandedBusinessVersion,1);assert.equal(pair.guest.state().view.monetaryPolicyVersion,1);
+ assert.equal(pair.host.state().game.version,'9.41');assert.equal(pair.host.state().game.expandedBusinessVersion,1);assert.equal(pair.guest.state().view.expandedBusinessVersion,1);assert.equal(pair.guest.state().view.monetaryPolicyVersion,1);
  for(let month=1;month<=2;month++){
   const plans=copy(pair.host.run('game.players.map((p,i)=>E.chooseBot(game,i))'));plans[0].treasuryPolicy='fixed';plans[1].treasuryPolicy='liquid';plans[0].announcement={audience:'public',text:'Rate this bank.'};
   pair.host.c.plan=plans[0];pair.guest.c.plan=plans[1];pair.host.run('E.submit(game,0,plan);syncPeers()');await pair.drain();

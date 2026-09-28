@@ -23,7 +23,7 @@ function validatePlan(g,p,plan){
 // the player had chosen nothing and the permanent decision was quietly lost.
 // Research-programme campaigns refuse it instead; every earlier campaign keeps
 // the original forgiving behaviour.
- if(researchProgramRules(p)&&plan.specializations&&typeof plan.specializations==='object'){
+ if((researchProgramRules(p)||ResearchTree.enabled(p))&&plan.specializations&&typeof plan.specializations==='object'){
   const models=researchModelTable(p);
   for(const [branch,pick] of Object.entries(plan.specializations)){
    if(pick===undefined||pick===null)continue;
@@ -34,6 +34,8 @@ function validatePlan(g,p,plan){
   }
  }
  const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};
+ // The research tree funds nodes (nodeFunding); its families have no capability tracks.
+ if(ResearchTree.enabled(p)&&Object.values(investments).some(n=>Number(n)!==0))throw Error('Research tree campaigns fund research nodes, not capability tracks.');
  for(const key of Object.keys(investments)){
   if(!researchBranchTable(p)[key])throw Error('That capability does not exist.');
   const amount=Number(investments[key]);

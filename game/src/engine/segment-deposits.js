@@ -135,7 +135,7 @@ function segmentDepositSummary(p,g) {
       const counts = marketSplit(p.householdBook.markets[key][segment],Object.fromEntries(products.map(k => [k,Math.max(0,local[k].principal-local[k].exiting)])));
       for (const product of products) {
         const r=local[product],def=DEPOSIT_SERVICE[product]||DEPOSIT_SERVICE.highYield;
-        r.interest=Math.round(r.interest);r.fees=counts[product]*def.fee;r.service=Math.round(counts[product]*def.cost+r.principal*.00006);
+        r.interest=Math.round(r.interest);r.fees=counts[product]*def.fee;r.service=Math.round((counts[product]*def.cost+r.principal*.00006)*ResearchTree.multiplier(p,'depositService'));
         cells.push({key,segment,product,row:r});
         for(const f of Object.keys(row))row[f]+=r[f];
       }

@@ -48,7 +48,9 @@ function initializeCreditPerformance(g, o) {
   return g;
 }
 function originationCreditGuard(p) {
-  return Math.max(.28, 1 - (departmentFunctionTaskFte(p,'risk',workforceAllocation(p).operations) + p.upgrades.training + p.upgrades.operations + strategyLevel(p,'operations')*.65)*.075) *
+  // In the 9.41 research tree loss control is Risk & Capital research, not Operations.
+  const capability=ResearchTree.enabled(p)?riskCapability(p,0):strategyLevel(p,'operations');
+  return ResearchTree.multiplier(p,'newLoanRisk') * Math.max(.28, 1 - (departmentFunctionTaskFte(p,'risk',workforceAllocation(p).operations) + p.upgrades.training + p.upgrades.operations + capability*.65)*.075) *
     (hasSpecialization(p,'operations','resilience') ? .82 : 1) * (productOption(p,'business').risk || 1) *
     (hasSpecialization(p,'commercial','specializedCredit') ? 1.08 : 1);
 }
@@ -79,10 +81,10 @@ function creditPerformanceForecast(p, economy, allocation = p.allocation, policy
   const exposures=p.creditProductsVersion===1?creditProductExposures(p):null;
   const moves = p.creditBook.cohorts.map(c => {
     const [early,late,nonperforming] = c.late;
-    const cured = [Math.floor(early*def.early*review.coverage), Math.floor(late*def.late*review.coverage)];
+    const cure = ResearchTree.multiplier(p,'cure'), cured = [Math.min(early,Math.floor(early*def.early*review.coverage*cure)), Math.min(late,Math.floor(late*def.late*review.coverage*cure))];
     const resolved = Math.min(nonperforming,Math.ceil(nonperforming*def.resolve*(.25+.75*review.coverage)));
     const productRisk=p.creditProductsVersion===1?creditProductRisk(p,c,economy,exposures):{incidence:1,severity:1};
-    const loss = Math.round(resolved*def.severity*productRisk.severity), recovered = resolved-loss;
+    const loss = Math.round(resolved*def.severity*productRisk.severity*ResearchTree.multiplier(p,'severity')), recovered = resolved-loss;
     const incidence = Math.min(.04, .006*c.risk/10000*(economy?.credit || 1)*(p.turnEffects.credit || 1)*productRisk.incidence);
     const entered = c.seasoning ? 0 : Math.floor(performingCredit(c)*incidence);
     const move = { entered,cured:cured[0]+cured[1],resolved,recovered,loss,

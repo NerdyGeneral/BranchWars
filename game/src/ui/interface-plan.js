@@ -35,7 +35,7 @@ function interfacePlanRows(v){
   }else if(key==='outsideAdvanceAmount'){
    addGroup([[key]],'Cedar Reserve Bank · one-month advance',{workspace:'banking',view:'treasury',context:{objectId:'outside-funding'}});
   }else if(key==='nodeFunding'){
-   for(const node of new Set([...Object.keys(baseline[key]||{}),...Object.keys(draft[key]||{})]))addGroup([[key,node]],E.DigitalCommercial.NODES[node]?.name||node,{workspace:'strategy',view:'research',context:{node}});
+   for(const node of new Set([...Object.keys(baseline[key]||{}),...Object.keys(draft[key]||{})]))addGroup([[key,node]],(E.ResearchTree.NODES[node]||E.DigitalCommercial.NODES[node])?.name||node,{workspace:'strategy',view:'research',context:{node}});
   }else if(key==='brandCampaignPolicy'){
    for(const kind of ['regular','sponsorship']){
     const count=rows.length;addGroup([[key,kind]],kind==='regular'?'Monthly advertising':'Sponsorship agreement',{workspace:'strategy',view:'campaigns',context:{campaignType:kind==='regular'?'advertising':'sponsorship'}});

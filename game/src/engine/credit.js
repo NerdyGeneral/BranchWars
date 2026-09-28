@@ -2,7 +2,7 @@ const CREDIT_TERMS={mortgage:120,middleMarket:48,consumer:24};
 let creditWorld=null,creditBypass=false;
 function creditTerms(p,g,product=p.products.credit){
  const option=creditProductOptions(p)[product];
- return {product,remaining:CREDIT_TERMS[product]||option.months,...(Object.hasOwn(EXPANDED_CREDIT,product)?{collateralBp:option.collateralBp}:{}),rate:Math.round(.0047*(.8+(g&&g.economy?g.economy.rate:3.75)/12)*option.spread*1000000),risk:Math.max(1,Math.round(option.credit*{conservative:.55,balanced:1,growth:1.45}[p.policies.lending]*10000*(p.creditPerformance?originationCreditGuard(p):1))),...(p.creditPerformance?{late:[0,0,0],seasoning:2}:{})};
+ return {product,remaining:CREDIT_TERMS[product]||option.months,...(Object.hasOwn(EXPANDED_CREDIT,product)?{collateralBp:option.collateralBp}:{}),rate:Math.round(.0047*(.8+(g&&g.economy?g.economy.rate:3.75)/12)*option.spread*ResearchTree.multiplier(p,'newLoanRate')*1000000),risk:Math.max(1,Math.round(option.credit*{conservative:.55,balanced:1,growth:1.45}[p.policies.lending]*10000*(p.creditPerformance?originationCreditGuard(p):1))),...(p.creditPerformance?{late:[0,0,0],seasoning:2}:{})};
 }
 // The unpublished Group9 boundary gives a selected commercial mandate its own
 // loan purpose. Older campaigns retain their original portfolio routing.

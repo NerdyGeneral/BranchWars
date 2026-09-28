@@ -100,7 +100,7 @@ try {
   assert.equal(current.sourceCompared, true);assert.equal(current.sourceMatches, true);assert.equal(current.expectedReadmeVerified, true);
   assert.equal(current.runtimeFilesCompared, true);
   assert.equal(current.pinnedHtmlSha256, null);
-  assert.deepEqual(current.checks.map(check => [check.edition, check.version]), [['core', '8.20'], ['expanded', '9.40']]);
+  assert.deepEqual(current.checks.map(check => [check.edition, check.version]), [['core', '8.20'], ['expanded', '9.41']]);
   assert.equal(current.checks[0].research.legalPaidAcquisition, true);
   assert.equal(current.checks[0].research.model, 'standing');assert.equal(current.checks[0].research.permanentChoiceEnforced, true);
   for (const check of current.checks) {
@@ -151,7 +151,7 @@ try {
   const invalidCli = spawnSync(process.execPath, [path.join(gameRoot, 'tools', 'verify_v4_package.js'), frozen, archive, path.join(temporary, 'invalid.json'), '--profile', 'rc3', '--profile', 'rc2'], { encoding: 'utf8' });
   assert.notEqual(invalidCli.status, 0);assert.match(invalidCli.stderr, /unique/);assert(!fs.existsSync(path.join(temporary, 'invalid.json')));
   console.log('Release packaging PASS: six-file allowlist, spaced output, immutable copies, deterministic manifest, no private workspace files, stale/overwrite/in-repo rejection, extra/tamper verification, packaged creation/resume and CLI verification.');
-  console.log('Package runtime PASS: explicit current 8.20/9.40 and pinned rc3 profiles, legal research reload/permanence, two-vote rematch, half-ready/privacy, strict current README/source matching and evidence-scope receipts.');
+  console.log('Package runtime PASS: explicit current 8.20/9.41 and pinned rc3 profiles, legal research reload/permanence, two-vote rematch, half-ready/privacy, strict current README/source matching and evidence-scope receipts.');
 } finally {
   const resolved = fs.realpathSync(temporary), tempRoot = fs.realpathSync(os.tmpdir());
   assert.equal(path.dirname(resolved), tempRoot);assert(path.basename(resolved).startsWith('branchwars-package-test-'));

@@ -40,7 +40,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined||o.researchTreeVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined||o.monetaryPolicyVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
@@ -100,6 +100,7 @@ function createGame(o){
  MonetaryPolicy.initialize(g,o);
  ExpandedBusiness.initialize(g,o);
  DigitalCommercial.initialize(g,o);
+ ResearchTree.initialize(g,o);
  OutsideFunding.initialize(g,o);
  PartnerCards.initialize(g,o);
  BrandCampaigns.initialize(g,o);

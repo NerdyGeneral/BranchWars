@@ -152,7 +152,7 @@ function planFinalCashReserve(g, index, input) {
       plan.departmentFunctionsPolicy.vendors[id]=Math.max(0,count-Math.ceil(excess()/DepartmentFunctions.FUNCTIONS[id].vendorRate));
     }
   }
-  if(plan.nodeFunding&&excess())plan.nodeFunding={};
+  if(plan.nodeFunding&&excess()){if(ResearchTree.enabled(p))ResearchTree.trim(p,plan,excess);else plan.nodeFunding={};}
   for (const key of Object.keys(plan.investments || {})) {
     plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
     if (plan.investments[key] < 1000) delete plan.investments[key];

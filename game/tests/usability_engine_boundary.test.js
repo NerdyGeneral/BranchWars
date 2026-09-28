@@ -408,6 +408,13 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // interface_shell, interface_banking_group, interface_markets, research_program_ui,
 // strategy_workspace, strategy_release_ui, digital_commercial, operations_workspace,
 // workspace_ownership, core_balance_sheet_ui, usability_help and docs.
-const expected="30b72858daf9b59ef5e80daf19fdc73d37a310e2deb2a6c7df7adda694ed819b";
+// Expanded 9.41 research tree. New Expanded campaigns fund a 36-node tree; every
+// research consumer multiplies by ResearchTree terms that are exactly 1 outside a
+// tree campaign. Seeded Expanded 9.40, 9.39 and Core 8.20 campaigns replay
+// byte-identically against the previous engine. Scoped checks rerun: research_tree,
+// interface_people_strategy, research_program, research_program_ui, research_bot,
+// digital_commercial, bank_cards, card_capital_reserve, partner_cards, expanded
+// edition and version tests, usability_help and docs.
+const expected="7e03acf1ad5bb54f1f4f58aa578cf0a363c30741fdf8d2a9cb7d1e97935f2eb5";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

@@ -8,8 +8,9 @@
 function researchProgramRules(source){return source?.researchProgramVersion===1}
 // Branch and model tables are merged only for campaigns carrying the marker.
 // Every earlier campaign sees the original five branches and two models each.
-function researchBranchTable(source){return researchProgramRules(source)?RESEARCH_PROGRAM_BRANCHES:STRATEGY_BRANCHES}
-function researchModelTable(source){return researchProgramRules(source)?RESEARCH_PROGRAM_SPECIALIZATIONS:STRATEGY_SPECIALIZATIONS}
+// Expanded 9.41 research tree campaigns have six families and three models each.
+function researchBranchTable(source){return ResearchTree.enabled(source)?ResearchTree.branchTable():researchProgramRules(source)?RESEARCH_PROGRAM_BRANCHES:STRATEGY_BRANCHES}
+function researchModelTable(source){return ResearchTree.enabled(source)?ResearchTree.modelTable():researchProgramRules(source)?RESEARCH_PROGRAM_SPECIALIZATIONS:STRATEGY_SPECIALIZATIONS}
 function researchBranches(source){return Object.keys(researchBranchTable(source))}
 
 // --- one term per branch -------------------------------------------------
@@ -18,7 +19,7 @@ function researchBranches(source){return Object.keys(researchBranchTable(source)
 // the loss and compliance terms moves to risk; the Operations *staff* term is
 // untouched, so operations bankers still reduce losses exactly as before.
 function riskCapability(p,operationsProgress){
- return researchProgramRules(p)?strategyProgress(p,'risk'):operationsProgress;
+ return researchProgramRules(p)||ResearchTree.enabled(p)?strategyProgress(p,'risk'):operationsProgress;
 }
 // --- tier grants ---------------------------------------------------------
 // delta() clamps reputation/digital/morale/influence/momentum to 0-100. That
@@ -54,21 +55,21 @@ function researchDigitalLevel(p){return researchProgramRules(p)?strategyProgress
 function modelIs(p,branch,key){return researchProgramRules(p)&&p.specializations&&p.specializations[branch]===key}
 // Deposit and customer capacity per unit of service.
 function researchServiceMultiplier(p){
- return (modelIs(p,'network','retailDensity')?1.32:1)
+ return ResearchTree.multiplier(p,'service')*(modelIs(p,'network','retailDensity')?1.32:1)
   *(modelIs(p,'network','franchisePartners')?1.15:1)
   *(modelIs(p,'digital','customerExperience')?1.18:1)
   *(modelIs(p,'commercial','relationshipBanking')?.98:1);
 }
 // Deposit conversion rate.
 function researchDepositMultiplier(p){
- return (modelIs(p,'network','regionalHub')?1.26:1)
+ return ResearchTree.multiplier(p,'deposits')*(modelIs(p,'network','regionalHub')?1.26:1)
   *(modelIs(p,'digital','customerExperience')?1.12:1)
   *(modelIs(p,'commercial','relationshipBanking')?1.38:1)
   *(modelIs(p,'risk','provisioning')?.94:1);
 }
 // Recurring operating expense.
 function researchExpenseMultiplier(p){
- return (1-researchDigitalLevel(p)*.045)
+ return ResearchTree.multiplier(p,'expense')*(1-researchDigitalLevel(p)*.045)
   *(modelIs(p,'network','retailDensity')?1.04:1)
   *(modelIs(p,'network','franchisePartners')?.70:1)
   *(modelIs(p,'digital','automation')?.82:1)
@@ -78,7 +79,7 @@ function researchExpenseMultiplier(p){
 }
 // Work each service/lending banker gets through.
 function researchThroughputMultiplier(p){
- return (researchCombination(p,'straightThrough')?1.18:1)
+ return ResearchTree.multiplier(p,'throughput')*(researchCombination(p,'straightThrough')?1.18:1)
   *(1+researchDigitalLevel(p)*.055)
   *(modelIs(p,'digital','automation')?1.24:1)
   *(modelIs(p,'operations','processRedesign')?1.34:1)
@@ -86,7 +87,7 @@ function researchThroughputMultiplier(p){
 }
 // Gross loan origination capacity.
 function researchLoanMultiplier(p){
- return (modelIs(p,'commercial','specializedCredit')?1.02:1)
+ return ResearchTree.multiplier(p,'loans')*(modelIs(p,'commercial','specializedCredit')?1.02:1)
   *(modelIs(p,'risk','provisioning')?.93:1)
   *(modelIs(p,'risk','capitalEfficiency')?1.26:1)
   *(modelIs(p,'digital','dataLedCredit')?1.14:1);
@@ -121,20 +122,20 @@ function researchFundingCostMultiplier(p){
 }
 // Commercial fee income.
 function researchFeeMultiplier(p){
- return (researchCombination(p,'digitalTreasury')?1.22:1)
+ return ResearchTree.multiplier(p,'fees')*(researchCombination(p,'digitalTreasury')?1.22:1)
   *(modelIs(p,'commercial','treasury')?1.28:1)
   *(modelIs(p,'commercial','relationshipBanking')?1.10:1)
   *(modelIs(p,'network','franchisePartners')?.86:1);
 }
 // Business and merchant relationship acquisition.
 function researchRelationshipMultiplier(p){
- return (modelIs(p,'commercial','relationshipBanking')?1.0:1)
+ return ResearchTree.multiplier(p,'relationships')*(modelIs(p,'commercial','relationshipBanking')?1.0:1)
   *(modelIs(p,'commercial','treasury')?1.12:1)
   *(modelIs(p,'acquisition','consolidator')?1.14:1);
 }
 // Rate-sensitive deposit runoff.
 function researchRunoffMultiplier(p){
- return (researchCombination(p,'depositFranchise')?.72:1)
+ return ResearchTree.multiplier(p,'runoff')*(researchCombination(p,'depositFranchise')?.72:1)
   *(modelIs(p,'network','franchisePartners')?1.60:1)
   *(modelIs(p,'digital','customerExperience')?1.08:1)
   *(modelIs(p,'commercial','relationshipBanking')?.70:1)
@@ -142,16 +143,16 @@ function researchRunoffMultiplier(p){
 }
 // Liquidity reserve held back from origination; capitalEfficiency runs thinner.
 function researchReserveMultiplier(p){
- return (modelIs(p,'risk','capitalEfficiency')?.78:1)*(modelIs(p,'risk','provisioning')?1.35:1);
+ return ResearchTree.multiplier(p,'reserve')*(modelIs(p,'risk','capitalEfficiency')?.78:1)*(modelIs(p,'risk','provisioning')?1.35:1);
 }
 // Per-cycle additions to the two penalty stats. Down is good; their floor at 0
 // is deliberate, unlike the ceiling that made the digital tier grant worthless.
 function researchComplianceDelta(p){
- return (modelIs(p,'risk','standing')?-2.2:0)+(modelIs(p,'commercial','specializedCredit')?1.1:0)
+ return ResearchTree.additive(p,'compliance')+(modelIs(p,'risk','standing')?-2.2:0)+(modelIs(p,'commercial','specializedCredit')?1.1:0)
   +(modelIs(p,'risk','capitalEfficiency')?1.3:0);
 }
 function researchAttentionDelta(p){
- return (modelIs(p,'risk','standing')?-1.4:0)+(modelIs(p,'digital','dataLedCredit')?.7:0)
+ return ResearchTree.additive(p,'attention')+(modelIs(p,'risk','standing')?-1.4:0)+(modelIs(p,'digital','dataLedCredit')?.7:0)
   +(modelIs(p,'acquisition','consolidator')?.8:0);
 }
 
