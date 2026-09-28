@@ -28,6 +28,12 @@ node game/tools/check.js --full
 
 Golden fixtures are committed expectations, not two current runs agreeing. Never regenerate them just to make a failing refactor pass. For an intentional mechanics change, explain the affected scenarios and rule version in the PR, then run `node game/tests/behavior-golden.test.js --update-goldens` and review the fixture diff. This command does not update preserved save fixtures.
 
+Heavy shard 5 runs as three parallel parts using `--shard=5/8 --partition=k/3`.
+The original `fast (5)` status is an aggregate that requires all three parts to
+pass. Recorded durations affect scheduling only; every command remains required,
+and each part checks portable freshness. Run `node game/tests/gate_shards.test.js`
+after changing the matrix or partitioning logic to verify complete coverage.
+
 Rebuild the reference with `node game/tools/build_reference.js` after changing mechanics or tables, and inspect its diff. Update [release status](game/docs/release-status.md) and [roadmap](game/docs/roadmap.md), not another competing status document.
 
 GitHub checks run with read-only repository permissions and without game-relay credentials. Passing checks do not establish human balance, two-computer reliability, or blueprint completion.

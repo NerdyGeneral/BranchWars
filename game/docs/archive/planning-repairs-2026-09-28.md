@@ -58,3 +58,22 @@ Market context and workspace suites passed on source and portable builds;
 department obligations passed 12 checks and Strategy passed 17. The related
 credit, shares, consolidation, opportunity, People and research UI checks passed.
 The updated PR still requires a fresh complete GitHub gate.
+
+## Split the slow CI group
+
+The cancelled run's group 5 log later became available. Integrated staffing
+completed in 1,534.1 seconds (25.6 minutes); another 1,676 seconds of completed
+commands surrounded it. These observations replace the older approximate
+13-minute staffing figure for this particular runner/build.
+
+Group 5 now has three parallel parts, with the largest measured command on its
+own. The other two parts each have roughly 1,018 estimated seconds of work;
+unobserved commands use a 60-second fallback, so these are scheduling estimates,
+not promised completion times. Every test remains required, and the original
+`fast (5)` check aggregates all three outcomes for existing merge requirements.
+
+Verification: all 323 pre-existing central commands and their order retained,
+plus one partition coverage test; the CI matrix covers every test/argument
+combination exactly once apart from repeated build freshness. Eight partition
+and evidence checks, YAML parsing, architecture, portable freshness, and a real
+two-command partition smoke run passed. Gameplay and portable bytes are unchanged.

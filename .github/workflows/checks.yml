@@ -28,18 +28,13 @@ jobs:
 
   fast:
     runs-on: ubuntu-latest
-    # V4 grew the fast gate to 278 commands, roughly three sequential hours, so
-    # one runner cannot finish inside a job limit. Each shard runs every eighth
-    # command on its own runner (no shared output files) and every shard also
-    # proves the portable build matches source. The gate passes only when all
-    # eight shards pass; fail-fast is off so every shard reports. The slowest
-    # shard took 56 minutes on its first green run (integrated_staffing alone
-    # is ~13), so allow 90 rather than fail a passing shard on runner speed.
+    # Keep existing check names and shard membership. Heavy shard 5 runs in
+    # three timing-balanced jobs below; no test commands are removed.
     timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+        shard: [1, 2, 3, 4, 6, 7, 8]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -51,3 +46,34 @@ jobs:
         with:
           node-version: '24'
       - run: node game/tools/check.js --shard=${{ matrix.shard }}/8
+
+  fast_five_parts:
+    name: fast (5.${{ matrix.part }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: node game/tools/check.js --shard=5/8 --partition=${{ matrix.part }}/3
+
+  fast_five_gate:
+    # Preserve the original status name for existing branch protection rules.
+    name: fast (5)
+    needs: fast_five_parts
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require all three parts to pass
+        env:
+          PARTS_RESULT: ${{ needs.fast_five_parts.result }}
+        run: node -e "if (process.env.PARTS_RESULT !== 'success') process.exit(1)"
