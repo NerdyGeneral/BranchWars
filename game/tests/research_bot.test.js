@@ -2,7 +2,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),{createHash}=require('node:crypto');
 const copy=value=>JSON.parse(JSON.stringify(value));
 function load(html){const context={};vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1],context);return context.BWEngine;}
-const E=load(require('../tools/build_game').assemble().html);
+const currentHtml=require('../tools/build_game').assemble().html,E=load(currentHtml);
 const prior=fs.readFileSync(path.join(__dirname,'../../releases/v4-rc3/BRANCH_WARS.html'));
 assert.equal(createHash('sha256').update(prior).digest('hex'),'a3c293cfe58ac21f97df256fe28bc06e35f14f14518015d2fd2cd26479052ccf');
 const old=load(prior.toString('utf8')),editionOptions={currentReporting:true,currentEconomics:true,currentRivalry:true};
@@ -164,10 +164,14 @@ for(const [branch,model,context]of modelCases)test('Core AI adopts paid model '+
 
 test('all six first-tier crossings include a model in the funded plan, never before payment',()=>{
  for(const branch of E.researchBranches(E.createGame(options('core',true)).players[0])){
-  const {g,p,hold}=modelFixture(branch,{remaining:1000}),before=p.capability[branch],plan=E.chooseBot(g,0),unfunded=copy(g);
+  // Hold lending production while saving for the crossing so the revised
+  // Core capital reserve can fund the complete bot plan without injected cash.
+  const {g,p,hold}=modelFixture(branch,{remaining:1000,allocation:{service:1,business:3,lending:0,operations:4}}),
+   before=p.capability[branch],plan=E.chooseBot(g,0),unfunded=copy(g);
   assert.equal(E.strategyLevel(p,branch),0,branch+' is still below its first tier');
   assert(plan.investments[branch]>=1000,branch+' must be funded by the complete bot plan');
   const model=plan.specializations[branch];assert(E.researchModelTable(p)[branch][model],branch+' includes a valid model choice');
+  assert(E.planBudget(p,plan,g).remaining>=0,branch+' complete bot plan is affordable');
   assert.equal(p.specializations[branch],undefined,'Planning changes no permanent model');
   // If the instruction's payment is removed, its proposed model cannot bypass
   // the paid tier prerequisite. No credits or cash are added to either bank.
@@ -207,14 +211,17 @@ test('unearned branches without a tier-crossing investment do not receive model 
 });
 
 test('Core model decisions add no random draws or changes to the other bot instructions',()=>{
- const release=fs.readFileSync(path.join(__dirname,'../../releases/v4-rc4/BRANCH_WARS.html'));
- assert.equal(createHash('sha256').update(release).digest('hex'),'51ba02d13ad7bd8df9332b924e0be0beb20b3d972851ce7d32a0f0577b2e76d5');
- const originalCore=load(release.toString('utf8'));
+ // Isolate the model chooser under the same economics. Comparing whole plans
+ // against rc4 would also compare the deliberately changed income and budgets.
+ const selection='specializations[branch]=planResearchModel(g,p,branch,allocation);';
+ assert.equal(currentHtml.split(selection).length,2,'Exactly one model-selection call is isolated');
+ const control=load(currentHtml.replace(selection,'specializations[branch]=undefined;'));
  for(const [branch,,context]of modelCases){
-  const {g}=modelFixture(branch,context),a=copy(g),b=copy(g),expected=originalCore.chooseBot(a,0),actual=E.chooseBot(b,0);
+  const {g}=modelFixture(branch,context),a=copy(g),b=copy(g),expected=control.chooseBot(a,0),actual=E.chooseBot(b,0);
+  assert(E.researchModelTable(b.players[0])[branch][actual.specializations[branch]],branch+' chooses a valid earned model');
   delete expected.specializations;delete actual.specializations;
   assert.deepEqual(copy(actual),copy(expected),branch+' keeps the same funding, products, projects and staffing');
-  assert.deepEqual(copy(b.rng),copy(a.rng),branch+' consumes exactly the prior AI random draws');
+  assert.deepEqual(copy(b.rng),copy(a.rng),branch+' consumes exactly the same AI random draws');
  }
 });
 

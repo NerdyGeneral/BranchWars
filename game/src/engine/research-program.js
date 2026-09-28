@@ -197,7 +197,7 @@ function researchDeploymentCapacity(p,lendingStaff){
 // grows with the tilt it is meant to constrain; the office network does not.
 // Normal acquisition is capped at the remaining slots in operations.js, while
 // paid acquisitions/transfers may temporarily put a bank over this threshold.
-function researchRelationshipCapacity(p){return 100+branchLevels(p)*50}
+function researchRelationshipCapacity(p){return 100+branchLevels(p)*(researchProgramRules(p)?50:120)}
 function researchRelationshipSaturation(p){
  if(!researchProgramRules(p))return 1;
  const held=(p.stats.business||0)+(p.stats.merchant||0),cap=researchRelationshipCapacity(p);

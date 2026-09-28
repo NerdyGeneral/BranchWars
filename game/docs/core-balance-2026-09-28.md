@@ -78,3 +78,26 @@ income, deposit and loan movements, the relationship ceiling, the margin-runoff
 tradeoff, research value and old-rule isolation. Markets and interface suites
 also exercise the staged map review and header changes. The portable
 `BRANCH_WARS.html` is rebuilt from the edited source.
+
+### PR review and CI corrections
+
+- Keep repriced lending, removal of the deposit-income proxy, and the reduced
+  relationship ceiling inside current Core rules. Earlier Core and Expanded
+  retain their income terms and acquisition-model threshold.
+- Keep the shared policy catalog unchanged for historical owner-view replays;
+  show current Core wording in its UI. Books still show any recorded legacy
+  deposit income, including a report retained across an update.
+- Keep the research AI assertions: all six tier crossings use affordable bot
+  plans, no model is adopted before payment, and model selection changes no
+  other instructions or RNG. The crossing fixture holds lending production to
+  preserve capital for research. Its isolation control uses current economics.
+- Align three stale banking-navigation expectations with the existing `main`
+  route contract (`terms` and `objectId`). Return, draft, privacy and stale-control
+  assertions remain in place; production navigation is unchanged.
+
+Focused reruns passed: Core balance (10), Core books UI (2), Expanded edition
+(6), research AI (29), forecast drivers/hiring (10), banking navigation (8),
+plus portable monetary-policy UI, campaign UI and bank-logo checks. Build
+freshness, the reviewed engine fingerprint and whitespace checks also passed.
+The complete GitHub matrix must pass independently; these focused results are
+not a substitute for that gate.

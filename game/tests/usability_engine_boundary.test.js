@@ -423,6 +423,8 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // Expanded edition replays, the 20-campaign/790-turn behavior golden, Core
 // balance and forecast checks were repeated without altering reference builds.
 // This digest records reviewed scope, not a long-run strategy balance guarantee.
-const expected="cef11c22b033a31fbd8a4e1027a7681894b15c715f3f7829bf3f87be46bccfa5";
+// Follow-up: preserve the legacy/Expanded relationship threshold and actual
+// income rows; focused Core, Expanded, forecast and research AI checks pass.
+const expected="9ae8036769f38a5ddd679cdeeff4cb30a7ca23b31fe0559134ee777f7f137a92";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

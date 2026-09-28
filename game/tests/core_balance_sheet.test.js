@@ -1,7 +1,7 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm');
 const html=require('../tools/build_game').assemble().html,ctx={};
-vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.coreProbe={delta,settleFunding,postMonthlyOperations,applyProjectEffects,absorbFranchise,calculateLegacyOperations,researchRelationshipCapacity};root.BWEngine={'),ctx);
+vm.runInNewContext(html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1].replace('root.BWEngine={','root.coreProbe={delta,settleFunding,postMonthlyOperations,applyProjectEffects,absorbFranchise,calculateLegacyOperations,researchRelationshipCapacity,planResearchModel,branchLevels};root.BWEngine={'),ctx);
 const E=ctx.BWEngine,P=ctx.coreProbe,copy=x=>JSON.parse(JSON.stringify(x));
 const options={incomeHistoryVersion:1,commercialServiceVersion:1,bankEconomicsVersion:2,created:1,seed:'core-funding',mode:'hotseat'};
 test('Core opening accounts represent existing resources, separately from Expanded geography',()=>{
@@ -87,4 +87,15 @@ test('Core liquid-policy cash is explained by funded growth and profit, with no 
  assert.equal(r.fundingLoss,0);
  assert.equal(r.closingCash-v.me.stats.cash,Math.round(r.depositGrowth)-Math.round(r.loanGrowth)+r.profit);
  assert.equal(r.closingEquity-v.me.stats.capital,r.profit);
+});
+
+test('Core relationship capacity leaves legacy and Expanded acquisition choices unchanged',()=>{
+ const expanded=E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true}).options;
+ for(const [rules,currentCore]of [[options,false],[{...options,researchProgramVersion:1},true],[{...options,...expanded},false]]){
+  const g=E.createGame(rules),p=g.players[0],branches=P.branchLevels(p);
+  assert(branches>0);
+  assert.equal(P.researchRelationshipCapacity(p),100+branches*(currentCore?50:120));
+  p.stats.attention=0;p.stats.business=100+branches*75;p.stats.merchant=0;p.doctrine='commercial';
+  assert.equal(P.planResearchModel(g,p,'acquisition',p.allocation),currentCore?'integrator':'dealmaker');
+ }
 });
