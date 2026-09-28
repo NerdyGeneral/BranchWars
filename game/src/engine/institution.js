@@ -17,20 +17,21 @@ const tierRun=table=>Object.fromEntries(Object.entries(table).map(([k,b])=>{let 
 const BASE_CAPABILITY_TIERS=tierRun(STRATEGY_BRANCHES);
 const CAPABILITY_TIERS=tierRun(RESEARCH_PROGRAM_BRANCHES);
 const CAPABILITY_CAP_PER_CYCLE=250000;
-function capabilitySpend(p,key){return Math.max(0,Number(p.capability&&p.capability[key])||0)}
+function capabilitySpend(p,key){if(ResearchTree.enabled(p))return ResearchTree.spent(p,key);return Math.max(0,Number(p.capability&&p.capability[key])||0)}
 function leadCapability(p){let best=null,bestShare=0,tied=false;for(const k of researchBranches(p)){const tiers=CAPABILITY_TIERS[k],share=capabilitySpend(p,k)/tiers[tiers.length-1];if(share>bestShare+1e-9){best=k;bestShare=share;tied=false}else if(Math.abs(share-bestShare)<=1e-9&&share>0)tied=true}return bestShare>0&&!tied?best:null}
-function strategyLevel(p,key){const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
+function strategyLevel(p,key){if(ResearchTree.enabled(p))return ResearchTree.level(p,key);const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
 // Fractional capability for continuous effects only. Book version4 is the
 // Group8 marker; every earlier group keeps whole levels and is untouched.
 // Gates, unlocks, node lookups and specialization triggers all stay on
 // strategyLevel, so nothing becomes reachable earlier than it was.
 function strategyProgress(p,key){
  const level=strategyLevel(p,key),tiers=CAPABILITY_TIERS[key];
- if(p.accounting?.version!==4||!tiers||level>=tiers.length)return level;
+ // Research tree levels are whole: a node is either learned or it is not.
+ if(ResearchTree.enabled(p)||p.accounting?.version!==4||!tiers||level>=tiers.length)return level;
  const floor=level?tiers[level-1]:0,next=tiers[level],spent=capabilitySpend(p,key);
  return next>floor?level+Math.max(0,Math.min(1,(spent-floor)/(next-floor))):level;
 }
-function capabilityNextCost(p,key){const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
+function capabilityNextCost(p,key){if(ResearchTree.enabled(p))return 0;const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
 function capabilityBenefit(p,branch){if(researchProgramRules(p)){researchTierGrant(p,branch);return}const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
 function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of researchBranches(p)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=researchBranchTable(p)[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${researchBranchTable(p)[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key],models=researchModelTable(p);if(pick&&models[key]&&models[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${models[key][pick].name} operating model in ${researchBranchTable(p)[key].name}.`)}}}return L}
 function hasSpecialization(p,branch,key){return p.specializations&&p.specializations[branch]===key}
@@ -101,7 +102,7 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5+ResearchTree.additive(p,'execution'))*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
 function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0)+(p.facilityNetwork?FacilityNetwork.committedCapacity(p):0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
@@ -178,7 +179,8 @@ function fundingStep(p,plan,key,step,g=null){
  return amount>0&&amount<1000?0:amount;
 }
 function strategyCostMultiplier(){return 1}
-function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
+function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(ResearchTree.enabled(p)&&def.kind==='branch')cycles-=(strategyLevel(p,'network')>=2?1:0)+(hasSpecialization(p,'network','regionalHub')?1:0);
+else if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(def.kind==='acquisition')cycles+=ResearchTree.additive(p,'acquisitionWork');if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
 function projectCost(p,def,focus=p.focus,premium=1){
  let cost;
  if(def.strategy){
@@ -190,7 +192,12 @@ function projectCost(p,def,focus=p.focus,premium=1){
   // Branch Integration (network 2 + acquisition 2): sites convert cheaply.
   if(def.kind==='branch'&&researchCombination(p,'branchIntegration'))cost*=.78;
   if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
-  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  if(ResearchTree.enabled(p)){
+   // Research tree: level 3 and the Lean model each discount, and they stack.
+   cost*=(operationsLevel(p)>=3?.85:1)*(hasSpecialization(p,'operations','lean')?.85:1)*ResearchTree.multiplier(p,'projectCost');
+   if(def.kind==='branch')cost*=ResearchTree.multiplier(p,'officeProjectCost');
+   if(def.kind==='acquisition')cost*=ResearchTree.multiplier(p,'acquisitionCost');
+  }else if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
  }
  // Local entry pricing applies after the existing whole-dollar rounding.

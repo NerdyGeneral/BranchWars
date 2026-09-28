@@ -67,8 +67,9 @@ function forecastResearchEffects(v,p,plan){
  const without=mutate=>{const q=JSON.parse(JSON.stringify(p));mutate(q);return forecastDriverChange(base,forecastDriverRun(v,q,plan).result);};
  for(const branch of researchBranches(p)){
   const model=p.specializations?.[branch],name=branches[branch]?.name||branch;
+  // Research tree campaigns credit a family's learned nodes; earlier ones its track spending.
   if(capabilitySpend(p,branch)>0)rows.push({kind:'research',branch,name,level:strategyLevel(p,branch),
-   change:without(q=>{q.capability={...q.capability,[branch]:0};})});
+   change:without(q=>{if(ResearchTree.enabled(q)){for(const [k,d] of Object.entries(ResearchTree.NODES))if(d.family===branch)q.researchTree.nodes[k]={funded:0,completed:0};}else q.capability={...q.capability,[branch]:0};})});
   if(model)rows.push({kind:'model',branch,name:models?.[branch]?.[model]?.name||model,branchName:name,
    change:without(q=>{q.specializations={...q.specializations};delete q.specializations[branch];})});
  }

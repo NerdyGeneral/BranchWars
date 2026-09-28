@@ -75,7 +75,7 @@ function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);cons
  // The existing settlement can adopt an already-earned model without another
  // payment. Also include a choice when this plan's paid research earns tier one.
  // Planning itself never grants capability or changes a permanent model.
- if(researchProgramRules(p))for(const branch of researchBranches(p)){
+ if(researchProgramRules(p)||ResearchTree.enabled(p))for(const branch of researchBranches(p)){
   const earned=strategyLevel(p,branch)>=1,funded=investments[branch]>=1000&&capabilitySpend(p,branch)+investments[branch]>=CAPABILITY_TIERS[branch][0];
   if(!specializations[branch]&&(earned||funded))
    specializations[branch]=planResearchModel(g,p,branch,allocation);

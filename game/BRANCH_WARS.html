@@ -833,6 +833,34 @@ body.game-interface-active .shell>.mast{display:none}
 .ips-back{display:none}.ips-workspace :focus-visible{outline:3px solid #377ce2;outline-offset:3px}.ips-workspace button:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:760px){.ips-split{display:block}.ips-inspector{padding:18px;margin-top:12px}.ips-split.has-selection>.ips-directory{display:none}.ips-split.has-selection>.ips-inspector{display:block}.ips-split:not(.has-selection)>.ips-inspector{display:none}.ips-back{display:inline-flex!important}.ips-views .btn{flex:1 1 105px}.ips-employers .btn{flex:1 1 150px}.ips-facts{grid-template-columns:repeat(auto-fit,minmax(125px,1fr))}.ips-field-grid{display:block}.ips-inspector h2{font-size:21px}.ips-actions .btn{flex:1 1 150px}.ips-table th,.ips-table td{padding:8px}}
 @media(prefers-reduced-motion:reduce){.ips-workspace *{scroll-behavior:auto!important}}
+/* 9.41 research tree: the family's nodes beside the selected node's funding. */
+.rt-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;align-items:start;margin:16px 0 8px}
+.rt-tree{display:flex;flex-direction:column;align-items:stretch;gap:0;min-width:0}
+.rt-tree>.rt-node{align-self:center;width:min(100%,300px)}
+.rt-paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rt-path{display:flex;flex-direction:column;min-width:0;border:1px dashed #cfd9e6;border-radius:12px;padding:8px}
+#expandedInterface .rt-path h4{margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#607289}
+.rt-link{display:block;width:2px;height:14px;background:#b8c6d8;margin:0 auto}
+#expandedInterface .rt-node{display:grid;gap:3px;text-align:left;border:1px solid #d5dde8;border-left:4px solid #b8c6d8;border-radius:10px;background:#fff;padding:9px 11px;font:inherit;color:#243a59;cursor:pointer;min-width:0;overflow-wrap:anywhere}
+.rt-node small{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:#6a7a8f}
+.rt-node b{font-size:14px;line-height:1.25}
+.rt-node span{font-size:12px;line-height:1.35;color:#4c5d74}
+.rt-node em{font-style:normal;font-size:11.5px;font-weight:600;color:#6a7a8f}
+#expandedInterface .rt-node.rt-learned{border-left-color:#2f8a57;background:#f2faf5}.rt-node.rt-learned em{color:#2f7a4d}
+#expandedInterface .rt-node.rt-open{border-left-color:#3476d4}.rt-node.rt-open em{color:#2c63b3}
+#expandedInterface .rt-node.rt-progress,#expandedInterface .rt-node.rt-staged{border-left-color:#c58a17;background:#fffaf0}.rt-node.rt-staged em,.rt-node.rt-progress em{color:#8a5f0c}
+#expandedInterface .rt-node.rt-locked{opacity:.72;background:#f7f9fc}
+#expandedInterface .rt-node.selected{outline:2px solid #3476d4;outline-offset:1px;box-shadow:0 2px 10px rgba(52,118,212,.18)}
+#expandedInterface .rt-node:focus-visible{outline:3px solid #1d5fbf;outline-offset:2px}
+.rt-tree>.micro{text-align:center;margin:6px 0 0}
+.rt-detail{border:1px solid #d5dde8;border-radius:12px;padding:14px 16px;background:#fbfcfe;min-width:0}
+#expandedInterface .rt-detail h3{margin:2px 0 6px}
+
+.rt-combo.active{border-left:4px solid #2f8a57;padding-left:10px}
+@media(min-width:1101px){.rt-detail{position:sticky;top:150px}}
+@media(max-width:1100px){.rt-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.rt-paths{grid-template-columns:minmax(0,1fr)}.rt-tree>.rt-node{width:100%}}
+.rt-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;margin:10px 0}.rt-facts div{min-width:0}.rt-facts dt{font-size:11.5px;color:#607289}.rt-facts dd{margin:1px 0 0;font-weight:700;color:#172c49}
 </style>
 <style>.brand-campaign-logo{width:54px;height:54px;flex:0 0 54px;fill:#edf4fc;stroke:#246dcc;stroke-width:3}.brand-campaign-logo.burs{fill:#e5ebf3;stroke:#26364c}.brand-campaign-logo text{font:bold 22px sans-serif;fill:#26364c;stroke:#fff;stroke-width:1;paint-order:stroke}.brand-campaign-logo.community{stroke-linejoin:round}.brand-package,.brand-sponsor-event{display:flex;gap:15px;align-items:center;padding:14px 0;border-bottom:1px solid #d6e0ec}.brand-package h3{margin:0 0 7px}.brand-package p,.brand-sponsor-event p{margin:0;font-size:13px;line-height:1.6}.brand-sponsor-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;color:#52677e}.brand-sponsor-badge .brand-campaign-logo{width:28px;height:28px;flex-basis:28px}
 </style>
@@ -1027,6 +1055,7 @@ const pick=a=>a[Math.floor(simulationRandom()*a.length)];
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
   ['bankCardsVersion', 'bankCardsSupported', 1, 1, 'Bank-issued cards', 'BANK CARDS'],
+  ['researchTreeVersion', 'researchTreeSupported', 1, 1, 'Research tree', 'RESEARCH TREE'],
   ['cardEconomicsVersion', 'cardEconomicsSupported', 1, 1, 'Partner card economics', 'CARD ECONOMICS'],
   ['partnerCardsVersion', 'partnerCardsSupported', 1, 1, 'Partner-issued cards', 'PARTNER CARDS'],
   ['digitalCommercialVersion', 'digitalCommercialSupported', 1, 1, 'Digital Commercial delivery', 'DIGITAL COMMERCIAL'],
@@ -1135,7 +1164,8 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['digitalCommercialVersion', 'Digital Commercial delivery', 1, 'expandedBusinessVersion', false, false, 'Five connected capabilities, shared treasury delivery and funded outside-bank advances.'],
   ['partnerCardsVersion', 'Partner-issued cards', 1, 'digitalCommercialVersion', false, false, 'Cedar Reserve funded cards, cash payments, losses and earned bank fees.'],
   ['cardEconomicsVersion', 'Partner card economics', 1, 'partnerCardsVersion', false, false, 'Costs scaled to the finite card book and retained lifetime contribution.'],
-  ['bankCardsVersion', 'Bank-issued cards', 1, 'cardEconomicsVersion', false, false, 'Your bank may issue, fund and own its card book: it earns the interest and interchange and bears the losses and capital.']
+  ['bankCardsVersion', 'Bank-issued cards', 1, 'cardEconomicsVersion', false, false, 'Your bank may issue, fund and own its card book: it earns the interest and interchange and bears the losses and capital.'],
+  ['researchTreeVersion', 'Research tree', 1, 'bankCardsVersion', false, false, 'Six research families of six nodes with branching paths, stacking effects, three operating models each and cross-family combinations.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
@@ -1158,6 +1188,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['partnerCardsVersion', 'partner cards version'],
   ['cardEconomicsVersion', 'card economics version'],
   ['bankCardsVersion', 'bank cards version'],
+  ['researchTreeVersion', 'research tree version'],
   ['digitalCommercialVersion', 'digital commercial version'],
   ['monetaryPolicyVersion', 'monetary policy version'],
   ['bankRivalryVersion', 'bank rivalry version'],
@@ -1193,6 +1224,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.researchTreeVersion===1)return '9.41';
   if(source.bankCardsVersion===1)return '9.40';
   if(source.cardEconomicsVersion===1)return '9.39';
   if(source.partnerCardsVersion===1)return '9.38';
@@ -1240,7 +1272,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  if(version==='9.40'||version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
+  if(version==='9.41'||version==='9.40'||version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
   if(version==='8.20'||version==='8.19'||version==='8.18'||version==='9.32')return true;
   if(version==='9.31')return true;
   if(version==='8.17'||version==='9.30')return true;
@@ -1376,7 +1408,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false, currentMonetaryPolicy = false, currentBusiness = false, currentDigitalCommercial = false, currentPartnerCards = false, currentCardEconomics = false, currentBankCards = false } = {}) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false, currentMonetaryPolicy = false, currentBusiness = false, currentDigitalCommercial = false, currentPartnerCards = false, currentCardEconomics = false, currentBankCards = false, currentResearchTree = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -1419,6 +1451,7 @@ function previewCampaignEdition(source, edition, { currentReporting = false, cur
   if(currentPartnerCards&&options.digitalCommercialVersion===1)options.partnerCardsVersion=1;else delete options.partnerCardsVersion;
   if(currentCardEconomics&&options.partnerCardsVersion===1)options.cardEconomicsVersion=1;else delete options.cardEconomicsVersion;
   if(currentBankCards&&options.cardEconomicsVersion===1)options.bankCardsVersion=1;else delete options.bankCardsVersion;
+  if(currentResearchTree&&options.bankCardsVersion===1)options.researchTreeVersion=1;else delete options.researchTreeVersion;
   if(currentResearch&&currentEconomics&&edition==='core')options.researchProgramVersion=1;
   if(edition!=='core'||!currentResearch)delete options.researchProgramVersion;
   const rules = validateCampaignRules(options, 'lobby');
@@ -1665,20 +1698,21 @@ const tierRun=table=>Object.fromEntries(Object.entries(table).map(([k,b])=>{let 
 const BASE_CAPABILITY_TIERS=tierRun(STRATEGY_BRANCHES);
 const CAPABILITY_TIERS=tierRun(RESEARCH_PROGRAM_BRANCHES);
 const CAPABILITY_CAP_PER_CYCLE=250000;
-function capabilitySpend(p,key){return Math.max(0,Number(p.capability&&p.capability[key])||0)}
+function capabilitySpend(p,key){if(ResearchTree.enabled(p))return ResearchTree.spent(p,key);return Math.max(0,Number(p.capability&&p.capability[key])||0)}
 function leadCapability(p){let best=null,bestShare=0,tied=false;for(const k of researchBranches(p)){const tiers=CAPABILITY_TIERS[k],share=capabilitySpend(p,k)/tiers[tiers.length-1];if(share>bestShare+1e-9){best=k;bestShare=share;tied=false}else if(Math.abs(share-bestShare)<=1e-9&&share>0)tied=true}return bestShare>0&&!tied?best:null}
-function strategyLevel(p,key){const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
+function strategyLevel(p,key){if(ResearchTree.enabled(p))return ResearchTree.level(p,key);const tiers=CAPABILITY_TIERS[key];if(!tiers)return 0;const spent=capabilitySpend(p,key);let level=0;for(let i=0;i<tiers.length;i++)if(spent>=tiers[i])level=i+1;return level}
 // Fractional capability for continuous effects only. Book version4 is the
 // Group8 marker; every earlier group keeps whole levels and is untouched.
 // Gates, unlocks, node lookups and specialization triggers all stay on
 // strategyLevel, so nothing becomes reachable earlier than it was.
 function strategyProgress(p,key){
  const level=strategyLevel(p,key),tiers=CAPABILITY_TIERS[key];
- if(p.accounting?.version!==4||!tiers||level>=tiers.length)return level;
+ // Research tree levels are whole: a node is either learned or it is not.
+ if(ResearchTree.enabled(p)||p.accounting?.version!==4||!tiers||level>=tiers.length)return level;
  const floor=level?tiers[level-1]:0,next=tiers[level],spent=capabilitySpend(p,key);
  return next>floor?level+Math.max(0,Math.min(1,(spent-floor)/(next-floor))):level;
 }
-function capabilityNextCost(p,key){const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
+function capabilityNextCost(p,key){if(ResearchTree.enabled(p))return 0;const tiers=CAPABILITY_TIERS[key],spent=capabilitySpend(p,key);for(const t of tiers)if(spent<t)return t-spent;return 0}
 function capabilityBenefit(p,branch){if(researchProgramRules(p)){researchTierGrant(p,branch);return}const benefits={network:()=>{delta(p,'reputation',3);delta(p,'customers',40)},digital:()=>delta(p,'digital',8),commercial:()=>{delta(p,'business',4);delta(p,'merchant',4)},operations:()=>{delta(p,'compliance',-5);delta(p,'morale',2)},acquisition:()=>delta(p,'influence',3)};if(benefits[branch])benefits[branch]()}
 function applyInvestments(g,p,investments,specializations){const L=[];if(!investments)return L;const picks=specializations&&typeof specializations==='object'?specializations:{};for(const key of researchBranches(p)){const room=CAPABILITY_TIERS[key][CAPABILITY_TIERS[key].length-1]-capabilitySpend(p,key);const amount=Math.min(room,CAPABILITY_CAP_PER_CYCLE,Math.max(0,Math.round(Number(investments[key])||0)));if(amount<1000||p.stats.cash<amount||room<=0)continue;const before=strategyLevel(p,key);delta(p,'cash',-amount);p.capability[key]=capabilitySpend(p,key)+amount;const after=strategyLevel(p,key);for(let lvl=before+1;lvl<=after;lvl++){capabilityBenefit(p,key);const node=researchBranchTable(p)[key].nodes[lvl-1];L.push(`${p.name} reached ${node.name} in ${researchBranchTable(p)[key].name}.`)}if(strategyLevel(p,key)>=1&&!p.specializations[key]){const pick=picks[key],models=researchModelTable(p);if(pick&&models[key]&&models[key][pick]){p.specializations[key]=pick;L.push(`${p.name} adopted the ${models[key][pick].name} operating model in ${researchBranchTable(p)[key].name}.`)}}}return L}
 function hasSpecialization(p,branch,key){return p.specializations&&p.specializations[branch]===key}
@@ -1749,7 +1783,7 @@ function projectBarred(p,key){
 function upgradeLevel(p,key){const def=PROJECTS[key];return def&&def.upgrade?(p.upgrades[def.upgrade]||0):0}
 function operationsLevel(p){return Math.max(strategyLevel(p,'operations'),p.upgrades.operations||0)}
 const CAPACITY_PER_BANKER=2,BASE_CAPACITY=1.5,MAX_HIRES_PER_CYCLE=6,HIRE_BASE_COST=110000;
-function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5)*10)/10}
+function executionCapacity(p,allocation=p.allocation){const productive=p.departmentOffice?departmentProductiveAllocation(p,allocation):allocation,ops=departmentFunctionResidual(p,'operations',productive&&Number.isFinite(productive.operations)?productive.operations:0);return Math.round((BASE_CAPACITY+(ops+departmentFunctionResidualProductivity(p,'operations',specialistBonus(p,'operations',allocation),specialistBonus(p,'operations',allocation)))*CAPACITY_PER_BANKER+operationsLevel(p)*1.5+ResearchTree.additive(p,'execution'))*10)/10}
 function projectCapacity(def){return def&&Number.isFinite(def.capacity)?def.capacity:1.5}
 function usedCapacity(p,extra=[]){return Math.round(([...p.projects.map(x=>PROJECTS[x.key]),...extra].reduce((s,d)=>s+projectCapacity(d),0)+(p.facilityNetwork?FacilityNetwork.committedCapacity(p):0))*10)/10}
 function projectSlots(p,allocation=p.allocation){return Math.max(1,Math.floor(executionCapacity(p,allocation)/1.5))}
@@ -1826,7 +1860,8 @@ function fundingStep(p,plan,key,step,g=null){
  return amount>0&&amount<1000?0:amount;
 }
 function strategyCostMultiplier(){return 1}
-function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
+function projectCycles(p,def){if(def.strategy){const node=STRATEGY_BRANCHES[def.strategy].nodes[strategyLevel(p,def.strategy)];return node?node.cycles:1}let cycles=def.cycles;if(ResearchTree.enabled(p)&&def.kind==='branch')cycles-=(strategyLevel(p,'network')>=2?1:0)+(hasSpecialization(p,'network','regionalHub')?1:0);
+else if(def.kind==='branch'&&(strategyLevel(p,'network')>=2||hasSpecialization(p,'network','regionalHub')))cycles--;if(def.kind==='acquisition'&&strategyLevel(p,'acquisition')>=2)cycles--;if(def.kind==='acquisition')cycles+=ResearchTree.additive(p,'acquisitionWork');if(operationsLevel(p)>=1&&cycles>=3)cycles--;return Math.max(1,cycles)}
 function projectCost(p,def,focus=p.focus,premium=1){
  let cost;
  if(def.strategy){
@@ -1838,7 +1873,12 @@ function projectCost(p,def,focus=p.focus,premium=1){
   // Branch Integration (network 2 + acquisition 2): sites convert cheaply.
   if(def.kind==='branch'&&researchCombination(p,'branchIntegration'))cost*=.78;
   if(def.kind==='acquisition')cost*=1-strategyProgress(p,'acquisition')*.1-(hasSpecialization(p,'acquisition','dealmaker')?.1:0);
-  if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
+  if(ResearchTree.enabled(p)){
+   // Research tree: level 3 and the Lean model each discount, and they stack.
+   cost*=(operationsLevel(p)>=3?.85:1)*(hasSpecialization(p,'operations','lean')?.85:1)*ResearchTree.multiplier(p,'projectCost');
+   if(def.kind==='branch')cost*=ResearchTree.multiplier(p,'officeProjectCost');
+   if(def.kind==='acquisition')cost*=ResearchTree.multiplier(p,'acquisitionCost');
+  }else if(operationsLevel(p)>=3||hasSpecialization(p,'operations','lean'))cost*=.85;
   cost=Math.max(0,Math.round(cost));
  }
  // Local entry pricing applies after the existing whole-dollar rounding.
@@ -2033,7 +2073,7 @@ function validateCreationOptions(o){
 }
 function createGame(o){
  validateCreationOptions(o);
- if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined)validateCampaignRules(o,'creation');
+ if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined||o.researchTreeVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined||o.monetaryPolicyVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.researchProgramVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankEconomicsVersion!==undefined||o.creditWorkloadVersion!==undefined||o.commercialServiceVersion!==undefined||o.incomeHistoryVersion!==undefined||o.financialGroupVersion!==undefined||o.featureRulesVersion===1||o.productProgramsVersion===2)validateCampaignRules(o,'creation');
@@ -2093,6 +2133,7 @@ function createGame(o){
  MonetaryPolicy.initialize(g,o);
  ExpandedBusiness.initialize(g,o);
  DigitalCommercial.initialize(g,o);
+ ResearchTree.initialize(g,o);
  OutsideFunding.initialize(g,o);
  PartnerCards.initialize(g,o);
  BrandCampaigns.initialize(g,o);
@@ -2387,8 +2428,9 @@ function forecastResearchEffects(v,p,plan){
  const without=mutate=>{const q=JSON.parse(JSON.stringify(p));mutate(q);return forecastDriverChange(base,forecastDriverRun(v,q,plan).result);};
  for(const branch of researchBranches(p)){
   const model=p.specializations?.[branch],name=branches[branch]?.name||branch;
+  // Research tree campaigns credit a family's learned nodes; earlier ones its track spending.
   if(capabilitySpend(p,branch)>0)rows.push({kind:'research',branch,name,level:strategyLevel(p,branch),
-   change:without(q=>{q.capability={...q.capability,[branch]:0};})});
+   change:without(q=>{if(ResearchTree.enabled(q)){for(const [k,d] of Object.entries(ResearchTree.NODES))if(d.family===branch)q.researchTree.nodes[k]={funded:0,completed:0};}else q.capability={...q.capability,[branch]:0};})});
   if(model)rows.push({kind:'model',branch,name:models?.[branch]?.[model]?.name||model,branchName:name,
    change:without(q=>{q.specializations={...q.specializations};delete q.specializations[branch];})});
  }
@@ -2428,8 +2470,8 @@ function opportunityTerms(o){
 function acquisitionTerms(g,p,target){
  const buyer=g.players.indexOf(p),seller=1-buyer,rival=g.players[seller],market=g.territories[target];
  if(buyer<0||!market||!rival)throw new Error('Invalid acquisition target');
- const deal=strategyLevel(p,'acquisition'),share=market.shares[seller]/100;
- return {buyer,seller,deal,depositTake:Math.round(Math.min(rival.stats.deposits*(.045+deal*.012)*Math.max(.45,share),4200000)),loanTake:Math.round(Math.min(rival.stats.loans*(.025+deal*.007)*Math.max(.4,share),1900000)),customerTake:Math.round(Math.min(rival.stats.customers*(.035+deal*.008),420))};
+ const deal=strategyLevel(p,'acquisition'),share=market.shares[seller]/100,won=ResearchTree.multiplier(p,'acquisitionTransfer');
+ return {buyer,seller,deal,depositTake:Math.round(Math.min(rival.stats.deposits*(.045+deal*.012)*Math.max(.45,share)*won,4200000)),loanTake:Math.round(Math.min(rival.stats.loans*(.025+deal*.007)*Math.max(.4,share)*won,1900000)),customerTake:Math.round(Math.min(rival.stats.customers*(.035+deal*.008)*won,420))};
 }
 function awardOpportunity(p,o){
  if(!authorizeDepartmentOpportunityAward(p,o))return;
@@ -2720,7 +2762,7 @@ function chooseBot(g,index){const p=g.players[index];normalizeAllocation(p);cons
  // The existing settlement can adopt an already-earned model without another
  // payment. Also include a choice when this plan's paid research earns tier one.
  // Planning itself never grants capability or changes a permanent model.
- if(researchProgramRules(p))for(const branch of researchBranches(p)){
+ if(researchProgramRules(p)||ResearchTree.enabled(p))for(const branch of researchBranches(p)){
   const earned=strategyLevel(p,branch)>=1,funded=investments[branch]>=1000&&capabilitySpend(p,branch)+investments[branch]>=CAPABILITY_TIERS[branch][0];
   if(!specializations[branch]&&(earned||funded))
    specializations[branch]=planResearchModel(g,p,branch,allocation);
@@ -2804,7 +2846,7 @@ function validatePlan(g,p,plan){
 // the player had chosen nothing and the permanent decision was quietly lost.
 // Research-programme campaigns refuse it instead; every earlier campaign keeps
 // the original forgiving behaviour.
- if(researchProgramRules(p)&&plan.specializations&&typeof plan.specializations==='object'){
+ if((researchProgramRules(p)||ResearchTree.enabled(p))&&plan.specializations&&typeof plan.specializations==='object'){
   const models=researchModelTable(p);
   for(const [branch,pick] of Object.entries(plan.specializations)){
    if(pick===undefined||pick===null)continue;
@@ -2815,6 +2857,8 @@ function validatePlan(g,p,plan){
   }
  }
  const investments=plan.investments&&typeof plan.investments==='object'?plan.investments:{};
+ // The research tree funds nodes (nodeFunding); its families have no capability tracks.
+ if(ResearchTree.enabled(p)&&Object.values(investments).some(n=>Number(n)!==0))throw Error('Research tree campaigns fund research nodes, not capability tracks.');
  for(const key of Object.keys(investments)){
   if(!researchBranchTable(p)[key])throw Error('That capability does not exist.');
   const amount=Number(investments[key]);
@@ -3068,8 +3112,8 @@ submit=function(g,...args){return withRandom(g,'state',()=>{const before=g.resol
 
 const rematchCore=rematch;
 rematch=function(g,...args){if(args[1]?.startingWorkforce!==undefined&&args[1].startingWorkforce!=='covered')throw Error('Invalid starting workforce instruction.');return withRandom(g,'state',()=>{
- const bankCardsVersion=g.bankCardsVersion,cardEconomicsVersion=g.cardEconomicsVersion,partnerCardsVersion=g.partnerCardsVersion,digitalCommercialVersion=g.digitalCommercialVersion,expandedBusinessVersion=g.expandedBusinessVersion,monetaryPolicyVersion=g.monetaryPolicyVersion,incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,balanceSheetLendingVersion=g.balanceSheetLendingVersion,researchProgramVersion=g.researchProgramVersion,result=rematchCore(g,...args);
- if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});initializeBalanceSheetLending(g,{balanceSheetLendingVersion});MonetaryPolicy.initialize(g,{monetaryPolicyVersion});ExpandedBusiness.initialize(g,{expandedBusinessVersion});DigitalCommercial.initialize(g,{digitalCommercialVersion});OutsideFunding.initialize(g,{digitalCommercialVersion});PartnerCards.initialize(g,{partnerCardsVersion,cardEconomicsVersion,bankCardsVersion});BrandCampaigns.initialize(g);HoldingCapital.initialize(g);initializeResearchProgram(g,{researchProgramVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
+ const researchTreeVersion=g.researchTreeVersion,bankCardsVersion=g.bankCardsVersion,cardEconomicsVersion=g.cardEconomicsVersion,partnerCardsVersion=g.partnerCardsVersion,digitalCommercialVersion=g.digitalCommercialVersion,expandedBusinessVersion=g.expandedBusinessVersion,monetaryPolicyVersion=g.monetaryPolicyVersion,incomeHistoryVersion=g.incomeHistoryVersion,commercialServiceVersion=g.commercialServiceVersion,creditWorkloadVersion=g.creditWorkloadVersion,bankEconomicsVersion=g.bankEconomicsVersion,bankRivalryVersion=g.bankRivalryVersion,balanceSheetLendingVersion=g.balanceSheetLendingVersion,researchProgramVersion=g.researchProgramVersion,result=rematchCore(g,...args);
+ if(result&&incomeHistoryVersion===1){initializeIncomeHistory(g,{incomeHistoryVersion});initializeCommercialService(g,{commercialServiceVersion});initializeCreditWorkload(g,{creditWorkloadVersion});initializeBankEconomics(g,{bankEconomicsVersion});initializeBankRivalry(g,{bankRivalryVersion});initializeBalanceSheetLending(g,{balanceSheetLendingVersion});MonetaryPolicy.initialize(g,{monetaryPolicyVersion});ExpandedBusiness.initialize(g,{expandedBusinessVersion});DigitalCommercial.initialize(g,{digitalCommercialVersion,researchTreeVersion});ResearchTree.initialize(g,{digitalCommercialVersion,researchTreeVersion});OutsideFunding.initialize(g,{digitalCommercialVersion});PartnerCards.initialize(g,{partnerCardsVersion,cardEconomicsVersion,bankCardsVersion});BrandCampaigns.initialize(g);HoldingCapital.initialize(g);initializeResearchProgram(g,{researchProgramVersion});applyStartingWorkforce(g,args[1]?.startingWorkforce);g.version=campaignVersion(g);validatePilot(g);}
  return result;
 })};
 
@@ -3649,7 +3693,7 @@ const CREDIT_TERMS={mortgage:120,middleMarket:48,consumer:24};
 let creditWorld=null,creditBypass=false;
 function creditTerms(p,g,product=p.products.credit){
  const option=creditProductOptions(p)[product];
- return {product,remaining:CREDIT_TERMS[product]||option.months,...(Object.hasOwn(EXPANDED_CREDIT,product)?{collateralBp:option.collateralBp}:{}),rate:Math.round(.0047*(.8+(g&&g.economy?g.economy.rate:3.75)/12)*option.spread*1000000),risk:Math.max(1,Math.round(option.credit*{conservative:.55,balanced:1,growth:1.45}[p.policies.lending]*10000*(p.creditPerformance?originationCreditGuard(p):1))),...(p.creditPerformance?{late:[0,0,0],seasoning:2}:{})};
+ return {product,remaining:CREDIT_TERMS[product]||option.months,...(Object.hasOwn(EXPANDED_CREDIT,product)?{collateralBp:option.collateralBp}:{}),rate:Math.round(.0047*(.8+(g&&g.economy?g.economy.rate:3.75)/12)*option.spread*ResearchTree.multiplier(p,'newLoanRate')*1000000),risk:Math.max(1,Math.round(option.credit*{conservative:.55,balanced:1,growth:1.45}[p.policies.lending]*10000*(p.creditPerformance?originationCreditGuard(p):1))),...(p.creditPerformance?{late:[0,0,0],seasoning:2}:{})};
 }
 // The unpublished Group9 boundary gives a selected commercial mandate its own
 // loan purpose. Older campaigns retain their original portfolio routing.
@@ -3902,7 +3946,7 @@ function depositSummary(p,g){
  const rows=Object.fromEntries(Object.keys(DEPOSIT_SERVICE).map(k=>[k,{principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0}]));
  if(p.termFunding)rows.term={principal:0,interest:0,fees:0,service:0,guaranteed:0,renewing:0};
  for(const c of p.depositBook.cohorts){const row=rows[c.locked?'term':c.product];row.principal+=c.principal;row.interest+=c.principal*(c.remaining>0?c.rate:depositRate(p,g,c.product))/1000000;if(c.remaining>0)row.guaranteed+=c.principal;if(c.remaining===1)row.renewing+=c.principal}
- for(const [k,r]of Object.entries(rows)){const customers=p.stats.customers*r.principal/Math.max(1,p.stats.deposits);r.fees=Math.round(customers*(DEPOSIT_SERVICE[k]||DEPOSIT_SERVICE.highYield).fee);r.service=Math.round(customers*(DEPOSIT_SERVICE[k]||DEPOSIT_SERVICE.highYield).cost+r.principal*.00006);r.interest=Math.round(r.interest);r.platform=p.retailLifecycle&&k!=='term'&&p.retailLifecycle.mix[k]>0?RETAIL_PLATFORM[k]:0;r.service+=r.platform;r.directCost=r.interest+r.service-r.fees}
+ for(const [k,r]of Object.entries(rows)){const customers=p.stats.customers*r.principal/Math.max(1,p.stats.deposits);r.fees=Math.round(customers*(DEPOSIT_SERVICE[k]||DEPOSIT_SERVICE.highYield).fee);r.service=Math.round((customers*(DEPOSIT_SERVICE[k]||DEPOSIT_SERVICE.highYield).cost+r.principal*.00006)*ResearchTree.multiplier(p,'depositService'));r.interest=Math.round(r.interest);r.platform=p.retailLifecycle&&k!=='term'&&p.retailLifecycle.mix[k]>0?RETAIL_PLATFORM[k]:0;r.service+=r.platform;r.directCost=r.interest+r.service-r.fees}
  return {rows,interest:Object.values(rows).reduce((n,r)=>n+r.interest,0),fees:Object.values(rows).reduce((n,r)=>n+r.fees,0),service:Object.values(rows).reduce((n,r)=>n+r.service,0)};
 }
 function adjustDepositReport(p,g,r){
@@ -4378,7 +4422,7 @@ function planServiceReserve(g,index,plan){
  plan=serviceRecoveryPlan(p,plan,g.economy,g);
  const limit=servicePlanReview(p,plan,g.economy,g).spendingLimit;
  for(const key of Object.keys(plan.investments||{})){const excess=Math.max(0,planBudget(p,plan,g).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(excess));if(plan.investments[key]<1000)delete plan.investments[key]}
- if(plan.nodeFunding&&planBudget(p,plan,g).total>limit)plan.nodeFunding={};
+ if(plan.nodeFunding&&planBudget(p,plan,g).total>limit){if(ResearchTree.enabled(p))ResearchTree.trim(p,plan,()=>Math.max(0,planBudget(p,plan,g).total-limit));else plan.nodeFunding={};}
  if(planBudget(p,plan,g).total>limit)plan.hires=0;
  plan.newProjects=[...planInitiatives(plan)];
  while(plan.newProjects.length&&planBudget(p,plan,g).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}
@@ -4512,8 +4556,272 @@ const ExpandedBusiness=(()=>{
  function legacySummary(p){return {ongoing:(p.projects||[]).filter(x=>LEGACY.includes(x.key)||PROJECTS[x.key]?.strategy||PROJECTS[x.key]?.legacy).map(copy),upgrades:copy(p.upgrades),marketingTurns:p.marketingTurns||0};}
  return Object.freeze({VERSION,LEGACY,RULES,PROJECT_KEYS,enabled,available,initialize,validate,validatePlan,project,retired,barred,catalogVisible,finish,monthlyCost,adjustReport,digitalChannel,centralCapacity,marketReach,technologyWork,digitalQuote,legacySummary});
 })();
+// Expanded 9.41 research tree. Six families of six nodes: a foundation, two
+// two-node paths and a capstone that needs either path. A family's level (1-4)
+// comes from how much of it is learned, so every earlier level-based effect keeps
+// its consumer; each node adds one named effect of its own. Effects on the same
+// term multiply (or add, for per-month drifts), so everything learned stacks.
+// Earlier campaigns keep the five capability tracks and their funding rules.
+const ResearchTree=(()=>{
+ const enabled=p=>p?.researchTreeVersion===1,copy=x=>JSON.parse(JSON.stringify(x));
+ // Research any one node can absorb in a month; each family funds one node at a time.
+ // Costs are sized to Expanded banks (about $1.8M of opening equity): a foundation
+ // is one month and $100K, a capstone three months and $260K, a family about $1M.
+ const NODE_CAP=100000;
+ const SLOTS=Object.freeze(['F','A1','A2','B1','B2','X']);
+ // Family levels reuse the capability-track effects (see LEVEL_TEXT). Path A
+ // and path B each reach level 3; the capstone gives level 4.
+ const FAMILIES=Object.freeze({
+  network:{name:'Network & Markets',promise:'Office reach, local service and a stable deposit franchise.',paths:{A:'Local service',B:'Office network'}},
+  digital:{name:'Digital Systems',promise:'Onboarding, servicing and automation that scale without headcount.',paths:{A:'Customer channels',B:'Automation & analytics'}},
+  commercial:{name:'Commercial Banking',promise:'Business relationships, treasury services and commercial credit.',paths:{A:'Treasury & payments',B:'Commercial credit & pricing'}},
+  operations:{name:'Operations & Delivery',promise:'Delivery capacity, efficiency and operating control.',paths:{A:'Delivery capacity',B:'Controls & programmes'}},
+  acquisition:{name:'Acquisitions & Integration',promise:'Deal diligence, valuation and integration of acquired books.',paths:{A:'Deal terms',B:'Integration'}},
+  risk:{name:'Risk & Capital',promise:'Credit quality, supervision and capital efficiency.',paths:{A:'Credit risk',B:'Supervision & capital'}}
+ });
+ const LEVEL_TEXT=Object.freeze({
+  network:'Each level: office projects cost 8% less, offices serve 5% more, deposit growth +2.5%. Level 2: offices build a month sooner. Level 4: new offices take local market share.',
+  digital:'Each level: more service capacity and deposit growth, faster digital adoption and platform uptake, +$4K a month of digital income.',
+  commercial:'Each level: loan origination +4.5%, commercial fees +7.5%, business relationship growth +8%, +1 service-bid point.',
+  operations:'Each level: operating expense -3.5% and +1.5 execution capacity. Level 1: long projects finish a month sooner. Level 3: initiatives cost 15% less.',
+  acquisition:'Each level: book acquisitions cost 10% less. Level 2: acquisitions close a month sooner.',
+  risk:'Each level: lower losses on new loans and less compliance drift. In this edition loss control is Risk & Capital research, not Operations.'
+ });
+ // Terms each effect acts on, and the consumer that reads it. Multipliers
+ // unless listed in ADDITIVE. Every term has exactly one authoritative reader.
+ const TERMS=Object.freeze({
+  service:'Household service capacity',deposits:'Deposit growth from bankers and offices',officeDeposits:'Office deposit capacity',
+  loans:'Loan origination capacity',throughput:'Banker throughput',newLoanRisk:'Credit risk on new loans',newLoanRate:'Interest rate on new loans',
+  fees:'Commercial fee income',relationships:'Business and merchant relationship growth',expense:'Recurring operating expense',
+  officeExpense:'Office running costs',depositService:'Deposit servicing cost',runoff:'Rate-sensitive deposit runoff',reserve:'Liquidity reserve held back from lending',
+  officeProjectCost:'Office project cost',projectCost:'Initiative cost',acquisitionCost:'Book acquisition cost',acquisitionTransfer:'Customers and balances won by book acquisitions',
+  cure:'Late loans cured by collections',severity:'Loss on resolved defaults',
+  execution:'Execution capacity',compliance:'Compliance drift per month',attention:'Corporate attention per month',acquisitionWork:'Book acquisition delivery'
+ });
+ const ADDITIVE=Object.freeze(['execution','compliance','attention','acquisitionWork']);
+ const n=(family,slot,name,cost,effects,text,extra={})=>({family,slot,name,cost,effects,text,...extra});
+ const NODES=Object.freeze({
+  // Network & Markets
+  marketPlanning:n('network','F','Market Planning',100000,{service:1.05},'Household service capacity +5%.'),
+  localServiceDesign:n('network','A1','Local Service Design',140000,{deposits:1.06},'Deposit growth from bankers and offices +6%.'),
+  relationshipRetention:n('network','A2','Relationship Retention',180000,{runoff:.75},'Rate-sensitive deposit runoff -25%.'),
+  hubNetworkPlanning:n('network','B1','Hub Network Planning',140000,{officeDeposits:1.1},'Office deposit capacity +10%.'),
+  standardOfficeRollout:n('network','B2','Standard Office Rollout',180000,{officeProjectCost:.9},'Office projects cost a further 10% less.'),
+  integratedNetwork:n('network','X','Integrated Network',260000,{officeExpense:.9},'Office running costs -10%.'),
+  // Digital Systems (Digital Architecture and Workflow Automation keep their 9.37 effects)
+  digitalArchitecture:n('digital','F','Digital Architecture',100000,{},'Deposit administration in Technology uses 20% less employee time.',{named:'techWork'}),
+  selfServiceOnboarding:n('digital','A1','Self-Service Onboarding',140000,{service:1.05},'Household service capacity +5%.'),
+  omnichannelServicing:n('digital','A2','Omnichannel Servicing',180000,{depositService:.85},'Deposit servicing cost -15%.'),
+  workflowAutomation:n('digital','B1','Workflow Automation',140000,{},'Active payroll and treasury applications use 15% less contract delivery time.',{named:'applicationWork'}),
+  creditAnalytics:n('digital','B2','Validated Credit Analytics',180000,{newLoanRisk:.92},'Credit risk on new loans -8%.'),
+  integratedDigitalBank:n('digital','X','Integrated Digital Bank',260000,{expense:.96},'Recurring operating expense -4%.'),
+  // Commercial Banking (the first three keep their 9.37 effects)
+  relationshipPlanning:n('commercial','F','Relationship Planning',100000,{},'Eligible service bids gain 1 matching point.',{named:'bid'}),
+  cashManagementDesign:n('commercial','A1','Cash-Management Design',140000,{},'Treasury mandates use 10% less delivery time.',{named:'treasuryWork'}),
+  paymentsIntegration:n('commercial','A2','Payments Integration',180000,{},'Direct payroll and treasury delivery costs -10% while active; merchant settlement cost -10% with an active treasury platform.',{named:'deliveryCost'}),
+  sectorUnderwriting:n('commercial','B1','Sector Underwriting',140000,{newLoanRisk:.94},'Credit risk on new loans -6%.'),
+  relationshipPricing:n('commercial','B2','Relationship Pricing',180000,{fees:1.06},'Commercial fee income +6%.'),
+  corporateServiceDelivery:n('commercial','X','Corporate Service Delivery',260000,{relationships:1.1},'Business and merchant relationship growth +10%.'),
+  // Operations & Delivery
+  processMapping:n('operations','F','Process Mapping',100000,{expense:.98},'Recurring operating expense -2%.'),
+  serviceQueueDesign:n('operations','A1','Service Queue Design',140000,{throughput:1.05},'Banker throughput +5%.'),
+  standardizedDelivery:n('operations','A2','Standardized Delivery',180000,{execution:1},'+1 execution capacity.'),
+  operationalControls:n('operations','B1','Operational Controls',140000,{compliance:-1},'Compliance drift -1 a month.'),
+  programmeManagement:n('operations','B2','Programme Management',180000,{projectCost:.94},'Every initiative costs 6% less.'),
+  scalableOperations:n('operations','X','Scalable Operations',260000,{expense:.95},'Recurring operating expense -5%.'),
+  // Acquisitions & Integration
+  dealDiligence:n('acquisition','F','Deal Diligence',100000,{acquisitionCost:.95},'Book acquisitions cost 5% less.'),
+  acquisitionValuation:n('acquisition','A1','Acquisition Valuation',140000,{acquisitionCost:.93},'Book acquisitions cost a further 7% less.'),
+  negotiationPreparation:n('acquisition','A2','Negotiation Preparation',180000,{acquisitionTransfer:1.1},'Book acquisitions win 10% more customers and balances.'),
+  customerTransition:n('acquisition','B1','Customer Transition',140000,{acquisitionTransfer:1.08},'Book acquisitions keep 8% more of the customers and balances they win.'),
+  operatingIntegration:n('acquisition','B2','Operating Integration',180000,{acquisitionWork:-1},'Book acquisitions close a further month sooner.'),
+  repeatableAcquisition:n('acquisition','X','Repeatable Acquisition Programme',260000,{acquisitionCost:.9,attention:-.5},'Book acquisitions cost a further 10% less; corporate attention -0.5 a month.'),
+  // Risk & Capital
+  underwritingStandards:n('risk','F','Underwriting Standards',100000,{newLoanRisk:.94},'Credit risk on new loans -6%.'),
+  creditMonitoring:n('risk','A1','Credit Monitoring',140000,{cure:1.2},'Collections cure 20% more late loans.'),
+  workoutMethods:n('risk','A2','Workout Methods',180000,{severity:.85},'Loss on resolved defaults -15%.'),
+  complianceProgramme:n('risk','B1','Compliance Programme',140000,{compliance:-1.5,attention:-.5},'Compliance drift -1.5 and corporate attention -0.5 a month.'),
+  capitalPlanning:n('risk','B2','Capital Planning',180000,{reserve:.85},'Liquidity reserve held back from lending -15%. Capital rules are unchanged.'),
+  integratedRiskControls:n('risk','X','Integrated Risk Controls',260000,{newLoanRisk:.92},'Credit risk on new loans -8%.')
+ });
+ const bySlot=(family,slot)=>Object.keys(NODES).find(k=>NODES[k].family===family&&NODES[k].slot===slot);
+ // F opens both paths; each second node needs its first; the capstone needs either finished path.
+ function requires(key){const {family,slot}=NODES[key];
+  return slot==='F'?{all:[],any:[]}:slot==='X'?{all:[],any:[bySlot(family,'A2'),bySlot(family,'B2')]}:{all:[bySlot(family,slot[1]==='1'?'F':slot[0]+'1')],any:[]};}
+ const COMBINATIONS=Object.freeze({
+  digitalTreasury:{name:'Digital Treasury Services',requires:['paymentsIntegration','workflowAutomation'],effects:{fees:1.05},text:'Opens the internal treasury platform build and adds 5% to commercial fees.'},
+  straightThrough:{name:'Straight-Through Processing',requires:['workflowAutomation','standardizedDelivery'],effects:{throughput:1.08},text:'Banker throughput +8%.'},
+  stableFunding:{name:'Stable Funding Relationships',requires:['relationshipRetention','complianceProgramme'],effects:{runoff:.8,deposits:1.03},text:'Rate-sensitive runoff -20% and deposit growth +3%.'},
+  integratedRollout:{name:'Integrated Office Rollout',requires:['standardOfficeRollout','operatingIntegration'],effects:{officeProjectCost:.92,acquisitionCost:.92},text:'Office projects and book acquisitions cost 8% less.'},
+  disciplinedLending:{name:'Disciplined Specialist Lending',requires:['sectorUnderwriting','creditMonitoring'],effects:{newLoanRisk:.9,newLoanRate:1.03},text:'Credit risk on new loans -10% and new-loan rates +3%.'}
+ });
+ // Three permanent models per family. The first two keep their existing
+ // Expanded effects in place; these are the added models' effects.
+ const MODELS=Object.freeze({
+  network:{retailDensity:{name:'Retail Density',desc:'Full-service offices produce more households, deposits and reputation.'},
+   regionalHub:{name:'Regional Hubs',desc:'Office projects build a month sooner and reinforce surrounding market capacity.'},
+   franchisePartners:{name:'Franchise Partners',desc:'Office running costs -25%, at 8% of commercial fees and 30% faster rate-sensitive runoff.',effects:{officeExpense:.75,fees:.92,runoff:1.3}}},
+  digital:{customerExperience:{name:'Customer Experience',desc:'Digital adoption converts more directly into households and deposits.'},
+   automation:{name:'Back-Office Automation',desc:'Technology lowers recurring operating expense.'},
+   dataLedCredit:{name:'Data-Led Credit',desc:'Credit risk on new loans -15% and new-loan rates +4%, at +0.7 corporate attention a month.',effects:{newLoanRisk:.85,newLoanRate:1.04,attention:.7}}},
+  commercial:{treasury:{name:'Treasury & Payments',desc:'Merchant services and operating-account fee income compound faster.'},
+   specializedCredit:{name:'Specialized Credit',desc:'Loan production accelerates with a measured increase in underwriting risk.'},
+   relationshipBanking:{name:'Relationship Banking',desc:'Deposit growth +12% and rate-sensitive runoff -25%, with 8% slower relationship growth.',effects:{deposits:1.12,runoff:.75,relationships:.92}}},
+  operations:{lean:{name:'Lean Delivery',desc:'Staff and facility expense fall while initiatives cost less.'},
+   resilience:{name:'Risk & Resilience',desc:'Controls and loss prevention become materially stronger.'},
+   processRedesign:{name:'Process Redesign',desc:'Banker throughput +12% and +1 execution capacity, at 3% more operating expense.',effects:{throughput:1.12,execution:1,expense:1.03}}},
+  acquisition:{dealmaker:{name:'Dealmaker',desc:'Acquisitions cost less and close with stronger market-share impact.'},
+   integrator:{name:'Integration Discipline',desc:'Acquired customers and assets transfer more cleanly with less attention.'},
+   consolidator:{name:'Consolidator',desc:'Business and merchant relationship growth +8%, at +0.8 corporate attention a month.',effects:{relationships:1.08,attention:.8}}},
+  risk:{provisioning:{name:'Conservative Provisioning',desc:'Credit risk on new loans -22%, at 7% less loan origination and a 25% larger liquidity reserve.',effects:{newLoanRisk:.78,loans:.93,reserve:1.25}},
+   capitalEfficiency:{name:'Capital Efficiency',desc:'Loan origination +12% and a 20% smaller liquidity reserve, at +6% new-loan risk and +1.2 compliance drift a month.',effects:{loans:1.12,reserve:.8,newLoanRisk:1.06,compliance:1.2}},
+   standing:{name:'Regulatory Standing',desc:'Compliance drift -2 and corporate attention -1.2 a month, at 2% more operating expense.',effects:{compliance:-2,attention:-1.2,expense:1.02}}}
+ });
+ const book=p=>p.researchTree;
+ function has(p,key){return enabled(p)&&!!book(p)?.nodes[key]?.completed;}
+ function familyNodes(family){return Object.keys(NODES).filter(k=>NODES[k].family===family);}
+ function learned(p,family){return familyNodes(family).filter(k=>has(p,k)).length;}
+ function level(p,family){if(!enabled(p)||!FAMILIES[family])return 0;return has(p,bySlot(family,'X'))?4:Math.min(3,learned(p,family));}
+ function spent(p,family){return enabled(p)&&FAMILIES[family]?familyNodes(family).reduce((t,k)=>t+(book(p)?.nodes[k]?.funded||0),0):0;}
+ function combination(p,key){const d=COMBINATIONS[key];return enabled(p)&&!!d&&d.requires.every(k=>has(p,k));}
+ function combinations(p){return Object.keys(COMBINATIONS).filter(k=>combination(p,k));}
+ // Every active source of an effect: learned nodes, combinations and the added models.
+ function sources(p){
+  if(!enabled(p))return [];const out=[];
+  for(const [k,d] of Object.entries(NODES))if(has(p,k))out.push({kind:'node',key:k,name:d.name,effects:d.effects});
+  for(const k of combinations(p))out.push({kind:'combination',key:k,name:COMBINATIONS[k].name,effects:COMBINATIONS[k].effects});
+  for(const [family,models] of Object.entries(MODELS)){const m=models[p.specializations?.[family]];if(m?.effects)out.push({kind:'model',key:family+':'+p.specializations[family],name:m.name,effects:m.effects});}
+  return out;
+ }
+ function multiplier(p,term){return sources(p).reduce((m,s)=>m*(s.effects[term]??1),1);}
+ function additive(p,term){return sources(p).reduce((t,s)=>t+(s.effects[term]||0),0);}
+ function effect(p,term){return ADDITIVE.includes(term)?additive(p,term):multiplier(p,term);}
+ // The model table in the shape researchModelTable returns.
+ function modelTable(){return Object.fromEntries(Object.entries(MODELS).map(([f,ms])=>[f,Object.fromEntries(Object.entries(ms).map(([k,m])=>[k,{name:m.name,desc:m.desc}]))]));}
+ function branchTable(){return Object.fromEntries(Object.entries(FAMILIES).map(([f,d])=>[f,{name:d.name,promise:d.promise,nodes:familyNodes(f).map(k=>({key:k,name:NODES[k].name,cost:NODES[k].cost,desc:NODES[k].text}))}]));}
+ function initialize(g,o){
+  if(o.researchTreeVersion!==1||o.digitalCommercialVersion!==1)return;g.researchTreeVersion=1;
+  for(const p of g.players){p.researchTreeVersion=1;p.researchTree={version:1,nodes:Object.fromEntries(Object.keys(NODES).map(k=>[k,{funded:0,completed:0}]))};}
+ }
+ function issue(p,key){
+  const d=NODES[key];if(!enabled(p)||!d)return 'This research requires Expanded 9.41.';if(has(p,key))return 'This research is already learned.';
+  const r=requires(key),missing=r.all.filter(k=>!has(p,k));
+  if(missing.length)return 'Learn '+missing.map(k=>NODES[k].name).join(' and ')+' in an earlier month.';
+  if(r.any.length&&!r.any.some(k=>has(p,k)))return 'Learn '+r.any.map(k=>NODES[k].name).join(' or ')+' in an earlier month.';
+  return '';
+ }
+ function spend(plan){return Object.values(plan?.nodeFunding||{}).reduce((t,x)=>t+(Number.isSafeInteger(x)&&x>0?x:0),0);}
+ function remaining(p,key){return NODES[key].cost-(book(p)?.nodes[key]?.funded||0);}
+ function validatePlan(p,plan){
+  if(plan.nodeFunding===undefined)return;
+  if(!enabled(p)||!plan.nodeFunding||Array.isArray(plan.nodeFunding)||typeof plan.nodeFunding!=='object')throw Error('Invalid research funding instruction.');
+  const families=new Set();
+  for(const [key,amount]of Object.entries(plan.nodeFunding)){
+   const why=issue(p,key);if(why)throw Error(why);
+   const left=remaining(p,key);
+   if(!Number.isSafeInteger(amount)||amount<Math.min(1000,left)||amount>Math.min(left,NODE_CAP))throw Error('Fund '+NODES[key].name+' with at least $1,000 (or its smaller final remainder) and at most $'+NODE_CAP.toLocaleString()+' a month.');
+   if(families.has(NODES[key].family))throw Error(FAMILIES[NODES[key].family].name+' researches one node at a time.');
+   families.add(NODES[key].family);
+  }
+ }
+ function quote(g,p,plan,key){
+  const d=NODES[key];if(!d)throw Error('Unknown research.');const without=copy(plan);delete without.nodeFunding?.[key];
+  const other=Object.keys(without.nodeFunding||{}).find(k=>NODES[k]?.family===d.family);
+  const b=planBudget(p,without,g),envelope=(without.departmentPolicy?.envelopes.research??Infinity)-spend(without),funded=book(p).nodes[key].funded,left=d.cost-funded,
+   reason=issue(p,key)||(other?'Staged funding for '+NODES[other].name+' uses this family\'s research slot this month.':''),
+   maximum=reason?0:Math.max(0,Math.floor(Math.min(envelope,left,NODE_CAP,Number.isFinite(b.discretionaryRemaining)?b.discretionaryRemaining:b.remaining)));
+  return {...d,key,funded,completed:book(p).nodes[key].completed,requires:requires(key),reason,maximum:maximum<Math.min(1000,left)?0:maximum,planned:plan.nodeFunding?.[key]||0,minimumMonths:Math.ceil(left/NODE_CAP),cap:NODE_CAP,
+   level:level(p,d.family),familyName:FAMILIES[d.family].name};
+ }
+ function settle(g,p,plan){
+  if(!enabled(p))return [];validatePlan(p,plan);const lines=[];
+  for(const [key,amount]of Object.entries(plan.nodeFunding||{})){
+   // No emergency borrowing or partial progress for unfunded research.
+   if(p.stats.cash<amount){lines.push(p.name+': '+NODES[key].name+' funding cancelled because cash is unavailable.');continue;}
+   p.accounting=AccountingPrototype.post(p.accounting,'research.capability',{cash:-amount,equity:-amount},-amount);syncAccounts(p);
+   const row=book(p).nodes[key],before=level(p,NODES[key].family);row.funded+=amount;
+   if(row.funded===NODES[key].cost){row.completed=g.cycle;const after=level(p,NODES[key].family);
+    lines.push(p.name+' learned '+NODES[key].name+' in '+FAMILIES[NODES[key].family].name+(after>before?' (level '+after+')':'')+'. Benefits begin next month.');}
+   else lines.push(p.name+' funded $'+amount.toLocaleString()+' of '+NODES[key].name+'.');
+  }
+  return lines;
+ }
+ function project(g,out,index){
+  if(!enabled(g))return;const p=g.players[index];
+  out.researchTreeVersion=1;out.me.researchTreeVersion=1;out.me.researchTree=copy(p.researchTree);
+  out.researchTreeRules={families:copy(FAMILIES),levels:copy(LEVEL_TEXT),nodes:Object.fromEntries(Object.entries(NODES).map(([k,d])=>[k,{...copy(d),requires:requires(k)}])),
+   combinations:copy(COMBINATIONS),models:copy(MODELS),terms:copy(TERMS),additive:[...ADDITIVE],cap:NODE_CAP};
+  out.me.researchCombinations=combinations(p);
+  out.strategyBranches=branchTable();out.strategySpecializations=modelTable();
+  out.capabilityTiers=Object.fromEntries(Object.keys(FAMILIES).map(f=>{let t=0;return [f,['F','A1','A2','X'].map(s=>t+=NODES[bySlot(f,s)].cost)];}));
+  if(p.submitted?.nodeFunding)out.me.pendingNodeFunding=copy(p.submitted.nodeFunding);
+  for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==out.me.id)delete plan.nodeFunding;
+ }
+ function validate(s,context){
+  const active=enabled(s),owners=context==='game'?s.players:[s.me],exact=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).sort().join()===keys.slice().sort().join();
+  if(s.researchTreeVersion!==undefined&&!active||s.version==='9.41'&&!active||active&&s.digitalCommercialVersion!==1)throw Error('Unsupported research tree rules.');
+  if(active)validateCampaignRules(s,context);
+  for(const p of owners){
+   if(p.researchTreeVersion!==(active?1:undefined)||!active&&p.researchTree!==undefined)throw Error('Invalid research tree boundary.');if(!active)continue;
+   if(p.digitalCommercial!==undefined)throw Error('A research tree campaign has no separate capability book.');
+   const b=p.researchTree;if(!exact(b,['version','nodes'])||b.version!==1||!exact(b.nodes,Object.keys(NODES)))throw Error('Invalid research tree book.');
+   for(const [key,row]of Object.entries(b.nodes)){
+    if(!exact(row,['funded','completed'])||!Number.isSafeInteger(row.funded)||row.funded<0||row.funded>NODES[key].cost||!Number.isSafeInteger(row.completed)||row.completed<0||row.completed>(s.gameOver?s.cycle:s.cycle-1)||!!row.completed!==(row.funded===NODES[key].cost))throw Error('Invalid research progress.');
+    // Funding may start only once prerequisites were learned in an earlier month.
+    const r=requires(key),before=k=>b.nodes[k].completed&&(!row.completed||b.nodes[k].completed<row.completed);
+    if(row.funded&&(!r.all.every(before)||r.any.length&&!r.any.some(before)))throw Error('Invalid research prerequisite timing.');
+   }
+   for(const [family,model]of Object.entries(p.specializations||{})){if(!MODELS[family]?.[model])throw Error('Unknown operating model in the research tree.');if(level(p,family)<1)throw Error('An operating model needs its research family\'s foundation.');}
+   if(context==='game'&&p.submitted)validatePlan(p,p.submitted);
+   if(p.pendingNodeFunding!==undefined){if(context!=='view'||!p.submitted)throw Error('Invalid pending research funding.');validatePlan(p,{nodeFunding:p.pendingNodeFunding});}
+  }
+  if(s.rival?.researchTree!==undefined||s.rival?.researchTreeVersion!==undefined||s.rival?.pendingNodeFunding!==undefined)throw Error('Private rival research exposed.');
+ }
+ // AI: the same sizing as the capability-track planner it replaces (55% of
+ // spare cash, one family or two above $1.2M spare, one node each), ranked by how
+ // well each family fits the bank, and always the next node on the family's path.
+ function nextNode(p,family){
+  const order=['F','A1','A2','X','B1','B2'].map(s=>bySlot(family,s));
+  return order.find(k=>!has(p,k)&&!issue(p,k))||null;
+ }
+ function botFit(p){
+  const s=p.stats,a=p.allocation,doctrine=typeof p.doctrine==='object'?p.doctrine.key:p.doctrine;
+  const fit={network:branchLevels(p)*2+a.service,digital:s.digital/12+(doctrine==='digital'?2:0),commercial:(s.business+s.merchant)/22+a.business,
+   operations:a.operations*1.6+p.projects.length,acquisition:s.influence/9,risk:s.loans/9e6+s.compliance/14+(s.chargeoffs||0)/6e6};
+  if(doctrine==='community')fit.network+=1.5;if(doctrine==='commercial')fit.commercial+=1.5;if(doctrine==='efficiency')fit.operations+=1.5;if(doctrine==='people')fit.network+=1;
+  return fit;
+ }
+ function bot(g,index,plan){
+  const p=g.players[index];if(!enabled(p))return plan;
+  plan.investments={};delete plan.nodeFunding;
+  if(tierRank(p)>=2)return plan;
+  const spare=p.stats.cash-planBudget(p,plan,g).total;if(spare<250000)return plan;
+  const fit=botFit(p),ranked=Object.keys(fit).sort((a,b)=>fit[b]-fit[a]||a.localeCompare(b)).filter(f=>nextNode(p,f));
+  // Research may use up to half of the AI's whole-plan spending limit, so the
+  // final reserve pass does not cut it to nothing after other planners spend.
+  const review=aiCashPlanningReview(g,index,plan);
+  let budget=Math.floor(Math.min(spare*.55,review?review.limit*.5:Infinity));
+  for(const family of ranked.slice(0,spare>1200000?2:1)){
+   if(budget<25000)break;const key=nextNode(p,family),q=quote(g,p,plan,key),amount=Math.min(NODE_CAP,budget,q.maximum);
+   if(amount>=Math.min(1000,remaining(p,key))){plan.nodeFunding={...(plan.nodeFunding||{}),[key]:amount};budget-=amount;}
+  }
+  return plan;
+ }
+ // Reserve passes reduce the last-staged research first, as they do for other spending.
+ function trim(p,plan,excess){
+  for(const key of Object.keys(plan.nodeFunding||{}).reverse()){
+   if(!excess())break;const next=plan.nodeFunding[key]-Math.ceil(excess());
+   if(next>=Math.min(1000,remaining(p,key))&&next>0)plan.nodeFunding[key]=next;else delete plan.nodeFunding[key];
+  }
+  if(plan.nodeFunding&&!Object.keys(plan.nodeFunding).length)delete plan.nodeFunding;
+ }
+ return Object.freeze({NODE_CAP,SLOTS,FAMILIES,LEVEL_TEXT,TERMS,ADDITIVE,NODES,COMBINATIONS,MODELS,enabled,has,level,spent,learned,requires,combination,combinations,sources,
+  multiplier,additive,effect,modelTable,branchTable,initialize,issue,spend,remaining,validatePlan,quote,settle,project,validate,bot,trim,nextNode,bySlot});
+})();
 // Expanded 9.37. Learned knowledge is separate from paid platforms and staff.
 // No implicit migration: previous campaigns retain their original research gates.
+// From 9.41 these five nodes live in the research tree; the functions below read
+// and fund them there, and every consumer of this module keeps its call sites.
 const DigitalCommercial=(()=>{
  const enabled=p=>p?.digitalCommercialVersion===1,copy=x=>JSON.parse(JSON.stringify(x));
  const NODES=Object.freeze({
@@ -4524,23 +4832,27 @@ const DigitalCommercial=(()=>{
   paymentsIntegration:{name:'Payments Integration',family:'Commercial Banking',cost:125000,requires:['cashManagementDesign'],effect:'Direct payroll and treasury delivery costs fall 10% when their respective applications are active. Merchant settlement cost falls 10% with an active treasury platform.'}
  });
  const CAP=100000;
- function has(p,key){return enabled(p)&&!!p.digitalCommercial?.nodes[key]?.completed;}
+ const tree=s=>ResearchTree.enabled(s);
+ function has(p,key){return tree(p)?ResearchTree.has(p,key):enabled(p)&&!!p.digitalCommercial?.nodes[key]?.completed;}
  function combined(p){return has(p,'paymentsIntegration')&&has(p,'workflowAutomation');}
- function initialize(g,o){if(o.digitalCommercialVersion!==1)return;g.digitalCommercialVersion=1;for(const p of g.players){p.digitalCommercialVersion=1;p.digitalCommercial={version:1,nodes:Object.fromEntries(Object.keys(NODES).map(k=>[k,{funded:0,completed:0}]))};}}
- function issue(p,key){const d=NODES[key];if(!enabled(p)||!d)return 'This capability requires Expanded 9.37.';if(has(p,key))return 'This capability is already completed.';const missing=d.requires.filter(k=>!has(p,k));return missing.length?'Complete '+missing.map(k=>NODES[k].name).join(' and ')+' in an earlier month.':'';}
+ function initialize(g,o){if(o.digitalCommercialVersion!==1)return;g.digitalCommercialVersion=1;for(const p of g.players){p.digitalCommercialVersion=1;if(o.researchTreeVersion===1)continue;p.digitalCommercial={version:1,nodes:Object.fromEntries(Object.keys(NODES).map(k=>[k,{funded:0,completed:0}]))};}}
+ function issue(p,key){if(tree(p))return ResearchTree.issue(p,key);const d=NODES[key];if(!enabled(p)||!d)return 'This capability requires Expanded 9.37.';if(has(p,key))return 'This capability is already completed.';const missing=d.requires.filter(k=>!has(p,k));return missing.length?'Complete '+missing.map(k=>NODES[k].name).join(' and ')+' in an earlier month.':'';}
  function spend(plan){return Object.values(plan?.nodeFunding||{}).reduce((n,x)=>n+(Number.isSafeInteger(x)&&x>0?x:0),0);}
  function validatePlan(p,plan){
+  if(tree(p))return ResearchTree.validatePlan(p,plan);
   if(plan.nodeFunding===undefined)return;
   if(!enabled(p)||!plan.nodeFunding||Array.isArray(plan.nodeFunding)||typeof plan.nodeFunding!=='object')throw Error('Invalid capability funding instruction.');
   for(const [key,amount]of Object.entries(plan.nodeFunding)){const why=issue(p,key);if(why)throw Error(why);if(!Number.isSafeInteger(amount)||amount<Math.min(1000,NODES[key].cost-p.digitalCommercial.nodes[key].funded)||amount>NODES[key].cost-p.digitalCommercial.nodes[key].funded)throw Error('Fund at least $1,000 (or the smaller final remainder) without exceeding the remaining node cost.');}
   if(spend(plan)>CAP)throw Error('The five-node programme shares a $100,000 monthly funding cap.');
  }
  function quote(g,p,plan,key){
+  if(tree(p))return ResearchTree.quote(g,p,plan,key);
   const d=NODES[key];if(!d)throw Error('Unknown capability.');const without=copy(plan);delete without.nodeFunding?.[key];
   const b=planBudget(p,without,g),envelope=(without.departmentPolicy?.envelopes.research??Infinity)-Object.values(without.investments||{}).reduce((n,x)=>n+x,0)-spend(without),funded=p.digitalCommercial.nodes[key].funded,reason=issue(p,key),maximum=reason?0:Math.max(0,Math.floor(Math.min(envelope,d.cost-funded,CAP-spend(without),Number.isFinite(b.discretionaryRemaining)?b.discretionaryRemaining:b.remaining)));
   return {...d,key,funded,completed:p.digitalCommercial.nodes[key].completed,reason,maximum:maximum<Math.min(1000,d.cost-funded)?0:maximum,planned:plan.nodeFunding?.[key]||0,minimumMonths:Math.ceil((d.cost-funded)/CAP),cap:CAP};
  }
  function settle(g,p,plan){
+  if(tree(p))return ResearchTree.settle(g,p,plan);
   if(!enabled(p))return [];validatePlan(p,plan);const lines=[];
   for(const [key,amount]of Object.entries(plan.nodeFunding||{})){
    // No automatic emergency borrowing or partial progress for unfunded work.
@@ -4562,8 +4874,10 @@ const DigitalCommercial=(()=>{
  function cost(p,kind,base){const active=serviceApplicationActive(p,kind==='merchant'?'treasury':kind);return Math.round(base*(has(p,'paymentsIntegration')&&active?.9:1));}
  function technology(p,depositWork){return depositWork*(has(p,'digitalArchitecture')?.8:1);}
  function bid(p){return has(p,'relationshipPlanning')?1:0;}
- function project(g,out,index){if(!enabled(g))return;out.digitalCommercialVersion=1;out.me.digitalCommercialVersion=1;out.me.digitalCommercial=copy(g.players[index].digitalCommercial);if(g.players[index].submitted?.nodeFunding)out.me.pendingNodeFunding=copy(g.players[index].submitted.nodeFunding);for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==out.me.id)delete plan.nodeFunding;}
+ function project(g,out,index){if(tree(g)){out.digitalCommercialVersion=1;out.me.digitalCommercialVersion=1;return ResearchTree.project(g,out,index);}if(!enabled(g))return;out.digitalCommercialVersion=1;out.me.digitalCommercialVersion=1;out.me.digitalCommercial=copy(g.players[index].digitalCommercial);if(g.players[index].submitted?.nodeFunding)out.me.pendingNodeFunding=copy(g.players[index].submitted.nodeFunding);for(const [id,plan]of Object.entries(out.lastPlans||{}))if(id!==out.me.id)delete plan.nodeFunding;}
  function validate(s,context){
+  // Tree campaigns keep this rule marker but hold their nodes in the research tree.
+  ResearchTree.validate(s,context);if(tree(s)){if(!enabled(s)||(context==='game'?s.players:[s.me]).some(p=>p.digitalCommercialVersion!==1))throw Error('Invalid capability rule boundary.');return;}
   const active=enabled(s),owners=context==='game'?s.players:[s.me],exact=(o,keys)=>o&&typeof o==='object'&&!Array.isArray(o)&&Object.keys(o).sort().join()===keys.slice().sort().join();
   if(s.digitalCommercialVersion!==undefined&&!active||s.version==='9.37'&&!active)throw Error('Unsupported Digital + Commercial rules.');
   if(active)validateCampaignRules(s,context);
@@ -4578,7 +4892,7 @@ const DigitalCommercial=(()=>{
  }
  // Called before department budgets and the final legal-plan coordinator.
  function bot(g,index,plan){
-  const p=g.players[index];if(!enabled(p))return plan;
+  const p=g.players[index];if(tree(p))return ResearchTree.bot(g,index,plan);if(!enabled(p))return plan;
   const order=['relationshipPlanning','digitalArchitecture','cashManagementDesign','workflowAutomation','paymentsIntegration'];
   const key=order.find(k=>!has(p,k)&&!issue(p,k));
   if(key){plan.investments={};const q=quote(g,p,plan,key),amount=Math.min(50000,q.maximum);if(amount>=Math.min(1000,NODES[key].cost-p.digitalCommercial.nodes[key].funded))plan.nodeFunding={[key]:amount};}
@@ -4961,7 +5275,18 @@ function managementPlan(p,input,economy,g=null){
   }else notes.push('Service manager paused: no fully supported mix fits the staff, vendor and sales limits. Existing capacity is unchanged.');
  }
  const r=m.research;
- if(r.enabled){
+ if(r.enabled&&ResearchTree.enabled(p)){
+  // Research tree: fund the next node of each priority family below its target level.
+  let remaining=Math.max(0,r.budget-ResearchTree.spend(plan));
+  for(const key of r.priority){
+   const target=r.targets[key],node=ResearchTree.nextNode(p,key);
+   if(!target||!node||strategyLevel(p,key)>=target||Object.keys(plan.nodeFunding||{}).some(k=>ResearchTree.NODES[k].family===key))continue;
+   const budget=planBudget(p,plan,g),reserveRoom=p.stats.cash-r.reserve-budget.total,advisory=servicePlanReview(p,plan,economy,g).spendingLimit-budget.total,left=ResearchTree.remaining(p,node);
+   const room=Math.min(remaining,left,ResearchTree.NODE_CAP,budget.remaining,reserveRoom,advisory),amount=room>=left?left:Math.floor(room/1000)*1000;
+   if(amount>=Math.min(1000,left)&&amount>0){plan.nodeFunding={...(plan.nodeFunding||{}),[node]:amount};remaining-=amount;notes.push('Recurring research staged $'+amount.toLocaleString()+' for '+ResearchTree.NODES[node].name+'.')}
+  }
+  if(remaining===r.budget)notes.push('Recurring research paused: targets reached, less than $1K remains, or cash/capital reserves prevent spending.');
+ }else if(r.enabled){
   let remaining=Math.max(0,r.budget-Object.values(plan.investments||{}).reduce((n,v)=>n+v,0));
   plan.investments=plan.investments||{};
   for(const key of r.priority){
@@ -5056,7 +5381,7 @@ function renewalPricingPlan(g,p,input){
 
 function validateRelationshipSave(g){
  if(g.managementVersion!==2){if(g.relationshipRecords!==undefined)throw Error('Unversioned relationship record');return g}
-const reportingRules=g.incomeHistoryVersion===1&&['9.29','9.30','9.31','9.32','9.33','9.34','9.35','9.36','9.37','9.38','9.39','9.40'].includes(g.version)&&validateCampaignRules(g,'game').valid;
+const reportingRules=g.incomeHistoryVersion===1&&['9.29','9.30','9.31','9.32','9.33','9.34','9.35','9.36','9.37','9.38','9.39','9.40','9.41'].includes(g.version)&&validateCampaignRules(g,'game').valid;
 if(!reportingRules&&g.version!=='8.2'&&!((['8.3','8.4','8.5','8.6','8.7','8.8','8.9','8.10','8.11','8.12','8.13'].includes(g.version)||(g.version==='8.14'&&g.featureRulesVersion===1)||(g.version==='8.15'&&g.productProgramsVersion===2)||(g.version==='9.0'&&g.financialGroupVersion===1)||(g.version==='9.1'&&g.financialGroupVersion===2)||(g.version==='9.2'&&g.financialGroupVersion===3)||(g.version==='9.3'&&g.financialGroupVersion===4)||(g.version==='9.4'&&g.financialGroupVersion===5)||(g.version==='9.5'&&g.financialGroupVersion===6)||(g.version==='9.6'&&g.financialGroupVersion===7)||(g.version==='9.7'&&g.financialGroupVersion===8)||(g.version==='9.8'&&g.financialGroupVersion===9)||(g.version==='9.9'&&g.financialGroupVersion===10)||(g.version==='9.10'&&g.financialGroupVersion===10&&g.commercialAccountsVersion===1)||(g.version==='9.11'&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(['9.13','9.14','9.15','9.16','9.17','9.18','9.19','9.20','9.21','9.22','9.23','9.24','9.25','9.26','9.27','9.28'].includes(g.version)&&g.investmentAssetsVersion===1&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10)||(g.version==='9.12'&&g.investmentServicesVersion===1&&g.facilityExtensionsVersion===1&&g.commercialAccountsVersion===1&&g.financialGroupVersion===10))&&[1,2].includes(g.customerDemandVersion)))throw Error('Relationship operations requires a compatible save format');
  const records=g.relationshipRecords,ids=g.serviceAgreements.map(c=>c.id).sort();
  if(!records||Object.keys(records).sort().join()!==ids.join())throw Error('Invalid relationship roster');
@@ -5762,7 +6087,9 @@ function initializeCreditPerformance(g, o) {
   return g;
 }
 function originationCreditGuard(p) {
-  return Math.max(.28, 1 - (departmentFunctionTaskFte(p,'risk',workforceAllocation(p).operations) + p.upgrades.training + p.upgrades.operations + strategyLevel(p,'operations')*.65)*.075) *
+  // In the 9.41 research tree loss control is Risk & Capital research, not Operations.
+  const capability=ResearchTree.enabled(p)?riskCapability(p,0):strategyLevel(p,'operations');
+  return ResearchTree.multiplier(p,'newLoanRisk') * Math.max(.28, 1 - (departmentFunctionTaskFte(p,'risk',workforceAllocation(p).operations) + p.upgrades.training + p.upgrades.operations + capability*.65)*.075) *
     (hasSpecialization(p,'operations','resilience') ? .82 : 1) * (productOption(p,'business').risk || 1) *
     (hasSpecialization(p,'commercial','specializedCredit') ? 1.08 : 1);
 }
@@ -5793,10 +6120,10 @@ function creditPerformanceForecast(p, economy, allocation = p.allocation, policy
   const exposures=p.creditProductsVersion===1?creditProductExposures(p):null;
   const moves = p.creditBook.cohorts.map(c => {
     const [early,late,nonperforming] = c.late;
-    const cured = [Math.floor(early*def.early*review.coverage), Math.floor(late*def.late*review.coverage)];
+    const cure = ResearchTree.multiplier(p,'cure'), cured = [Math.min(early,Math.floor(early*def.early*review.coverage*cure)), Math.min(late,Math.floor(late*def.late*review.coverage*cure))];
     const resolved = Math.min(nonperforming,Math.ceil(nonperforming*def.resolve*(.25+.75*review.coverage)));
     const productRisk=p.creditProductsVersion===1?creditProductRisk(p,c,economy,exposures):{incidence:1,severity:1};
-    const loss = Math.round(resolved*def.severity*productRisk.severity), recovered = resolved-loss;
+    const loss = Math.round(resolved*def.severity*productRisk.severity*ResearchTree.multiplier(p,'severity')), recovered = resolved-loss;
     const incidence = Math.min(.04, .006*c.risk/10000*(economy?.credit || 1)*(p.turnEffects.credit || 1)*productRisk.incidence);
     const entered = c.seasoning ? 0 : Math.floor(performingCredit(c)*incidence);
     const move = { entered,cured:cured[0]+cured[1],resolved,recovered,loss,
@@ -5994,7 +6321,7 @@ function segmentDepositSummary(p,g) {
       const counts = marketSplit(p.householdBook.markets[key][segment],Object.fromEntries(products.map(k => [k,Math.max(0,local[k].principal-local[k].exiting)])));
       for (const product of products) {
         const r=local[product],def=DEPOSIT_SERVICE[product]||DEPOSIT_SERVICE.highYield;
-        r.interest=Math.round(r.interest);r.fees=counts[product]*def.fee;r.service=Math.round(counts[product]*def.cost+r.principal*.00006);
+        r.interest=Math.round(r.interest);r.fees=counts[product]*def.fee;r.service=Math.round((counts[product]*def.cost+r.principal*.00006)*ResearchTree.multiplier(p,'depositService'));
         cells.push({key,segment,product,row:r});
         for(const f of Object.keys(row))row[f]+=r[f];
       }
@@ -11724,13 +12051,13 @@ function facilityRawOfficeMetrics(p,office) {
   const model=office.model;
   if(p.facilityNetwork?.version===2&&!FacilityNetwork.MODELS.includes(model)){
     const d=FacilityLifecycle.CATALOG[model];if(!d)throw Error('Unknown facility model.');
-    return {expense:d.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000,
-      depositCapacity:d.capacity.depositCapacity*profile.deposits*(1+state.service*.15),
+    return {expense:(d.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000)*ResearchTree.multiplier(p,'officeExpense'),
+      depositCapacity:d.capacity.depositCapacity*profile.deposits*(1+state.service*.15)*ResearchTree.multiplier(p,'officeDeposits'),
       loanCapacity:d.capacity.loanCapacity*profile.loans,serviceCapacity:d.capacity.serviceCapacity,advisoryCapacity:d.capacity.advisoryCapacity};
   }
   return {
-    expense:(model==='digital'?12000:22000)*profile.rent*(1-state.automation*.12)+state.service*2000,
-    depositCapacity:(model==='retail'?450000:model==='digital'?320000:230000)*profile.deposits*(1+state.service*.15),
+    expense:((model==='digital'?12000:22000)*profile.rent*(1-state.automation*.12)+state.service*2000)*ResearchTree.multiplier(p,'officeExpense'),
+    depositCapacity:(model==='retail'?450000:model==='digital'?320000:230000)*profile.deposits*(1+state.service*.15)*ResearchTree.multiplier(p,'officeDeposits'),
     loanCapacity:(model==='commercial'?430000:model==='retail'?250000:150000)*profile.loans,
     // Existing passive local service contribution, not employee headcount.
     serviceCapacity:.55+strategyLevel(p,'network')*.05+(model==='retail'?.3:model==='digital'?.22:0)
@@ -15693,7 +16020,7 @@ function planFinalCashReserve(g, index, input) {
       plan.departmentFunctionsPolicy.vendors[id]=Math.max(0,count-Math.ceil(excess()/DepartmentFunctions.FUNCTIONS[id].vendorRate));
     }
   }
-  if(plan.nodeFunding&&excess())plan.nodeFunding={};
+  if(plan.nodeFunding&&excess()){if(ResearchTree.enabled(p))ResearchTree.trim(p,plan,excess);else plan.nodeFunding={};}
   for (const key of Object.keys(plan.investments || {})) {
     plan.investments[key] = Math.max(0, plan.investments[key] - Math.ceil(excess()));
     if (plan.investments[key] < 1000) delete plan.investments[key];
@@ -18094,8 +18421,9 @@ function projectBankRivalry(g,out){
 function researchProgramRules(source){return source?.researchProgramVersion===1}
 // Branch and model tables are merged only for campaigns carrying the marker.
 // Every earlier campaign sees the original five branches and two models each.
-function researchBranchTable(source){return researchProgramRules(source)?RESEARCH_PROGRAM_BRANCHES:STRATEGY_BRANCHES}
-function researchModelTable(source){return researchProgramRules(source)?RESEARCH_PROGRAM_SPECIALIZATIONS:STRATEGY_SPECIALIZATIONS}
+// Expanded 9.41 research tree campaigns have six families and three models each.
+function researchBranchTable(source){return ResearchTree.enabled(source)?ResearchTree.branchTable():researchProgramRules(source)?RESEARCH_PROGRAM_BRANCHES:STRATEGY_BRANCHES}
+function researchModelTable(source){return ResearchTree.enabled(source)?ResearchTree.modelTable():researchProgramRules(source)?RESEARCH_PROGRAM_SPECIALIZATIONS:STRATEGY_SPECIALIZATIONS}
 function researchBranches(source){return Object.keys(researchBranchTable(source))}
 
 // --- one term per branch -------------------------------------------------
@@ -18104,7 +18432,7 @@ function researchBranches(source){return Object.keys(researchBranchTable(source)
 // the loss and compliance terms moves to risk; the Operations *staff* term is
 // untouched, so operations bankers still reduce losses exactly as before.
 function riskCapability(p,operationsProgress){
- return researchProgramRules(p)?strategyProgress(p,'risk'):operationsProgress;
+ return researchProgramRules(p)||ResearchTree.enabled(p)?strategyProgress(p,'risk'):operationsProgress;
 }
 // --- tier grants ---------------------------------------------------------
 // delta() clamps reputation/digital/morale/influence/momentum to 0-100. That
@@ -18140,21 +18468,21 @@ function researchDigitalLevel(p){return researchProgramRules(p)?strategyProgress
 function modelIs(p,branch,key){return researchProgramRules(p)&&p.specializations&&p.specializations[branch]===key}
 // Deposit and customer capacity per unit of service.
 function researchServiceMultiplier(p){
- return (modelIs(p,'network','retailDensity')?1.32:1)
+ return ResearchTree.multiplier(p,'service')*(modelIs(p,'network','retailDensity')?1.32:1)
   *(modelIs(p,'network','franchisePartners')?1.15:1)
   *(modelIs(p,'digital','customerExperience')?1.18:1)
   *(modelIs(p,'commercial','relationshipBanking')?.98:1);
 }
 // Deposit conversion rate.
 function researchDepositMultiplier(p){
- return (modelIs(p,'network','regionalHub')?1.26:1)
+ return ResearchTree.multiplier(p,'deposits')*(modelIs(p,'network','regionalHub')?1.26:1)
   *(modelIs(p,'digital','customerExperience')?1.12:1)
   *(modelIs(p,'commercial','relationshipBanking')?1.38:1)
   *(modelIs(p,'risk','provisioning')?.94:1);
 }
 // Recurring operating expense.
 function researchExpenseMultiplier(p){
- return (1-researchDigitalLevel(p)*.045)
+ return ResearchTree.multiplier(p,'expense')*(1-researchDigitalLevel(p)*.045)
   *(modelIs(p,'network','retailDensity')?1.04:1)
   *(modelIs(p,'network','franchisePartners')?.70:1)
   *(modelIs(p,'digital','automation')?.82:1)
@@ -18164,7 +18492,7 @@ function researchExpenseMultiplier(p){
 }
 // Work each service/lending banker gets through.
 function researchThroughputMultiplier(p){
- return (researchCombination(p,'straightThrough')?1.18:1)
+ return ResearchTree.multiplier(p,'throughput')*(researchCombination(p,'straightThrough')?1.18:1)
   *(1+researchDigitalLevel(p)*.055)
   *(modelIs(p,'digital','automation')?1.24:1)
   *(modelIs(p,'operations','processRedesign')?1.34:1)
@@ -18172,7 +18500,7 @@ function researchThroughputMultiplier(p){
 }
 // Gross loan origination capacity.
 function researchLoanMultiplier(p){
- return (modelIs(p,'commercial','specializedCredit')?1.02:1)
+ return ResearchTree.multiplier(p,'loans')*(modelIs(p,'commercial','specializedCredit')?1.02:1)
   *(modelIs(p,'risk','provisioning')?.93:1)
   *(modelIs(p,'risk','capitalEfficiency')?1.26:1)
   *(modelIs(p,'digital','dataLedCredit')?1.14:1);
@@ -18207,20 +18535,20 @@ function researchFundingCostMultiplier(p){
 }
 // Commercial fee income.
 function researchFeeMultiplier(p){
- return (researchCombination(p,'digitalTreasury')?1.22:1)
+ return ResearchTree.multiplier(p,'fees')*(researchCombination(p,'digitalTreasury')?1.22:1)
   *(modelIs(p,'commercial','treasury')?1.28:1)
   *(modelIs(p,'commercial','relationshipBanking')?1.10:1)
   *(modelIs(p,'network','franchisePartners')?.86:1);
 }
 // Business and merchant relationship acquisition.
 function researchRelationshipMultiplier(p){
- return (modelIs(p,'commercial','relationshipBanking')?1.0:1)
+ return ResearchTree.multiplier(p,'relationships')*(modelIs(p,'commercial','relationshipBanking')?1.0:1)
   *(modelIs(p,'commercial','treasury')?1.12:1)
   *(modelIs(p,'acquisition','consolidator')?1.14:1);
 }
 // Rate-sensitive deposit runoff.
 function researchRunoffMultiplier(p){
- return (researchCombination(p,'depositFranchise')?.72:1)
+ return ResearchTree.multiplier(p,'runoff')*(researchCombination(p,'depositFranchise')?.72:1)
   *(modelIs(p,'network','franchisePartners')?1.60:1)
   *(modelIs(p,'digital','customerExperience')?1.08:1)
   *(modelIs(p,'commercial','relationshipBanking')?.70:1)
@@ -18228,16 +18556,16 @@ function researchRunoffMultiplier(p){
 }
 // Liquidity reserve held back from origination; capitalEfficiency runs thinner.
 function researchReserveMultiplier(p){
- return (modelIs(p,'risk','capitalEfficiency')?.78:1)*(modelIs(p,'risk','provisioning')?1.35:1);
+ return ResearchTree.multiplier(p,'reserve')*(modelIs(p,'risk','capitalEfficiency')?.78:1)*(modelIs(p,'risk','provisioning')?1.35:1);
 }
 // Per-cycle additions to the two penalty stats. Down is good; their floor at 0
 // is deliberate, unlike the ceiling that made the digital tier grant worthless.
 function researchComplianceDelta(p){
- return (modelIs(p,'risk','standing')?-2.2:0)+(modelIs(p,'commercial','specializedCredit')?1.1:0)
+ return ResearchTree.additive(p,'compliance')+(modelIs(p,'risk','standing')?-2.2:0)+(modelIs(p,'commercial','specializedCredit')?1.1:0)
   +(modelIs(p,'risk','capitalEfficiency')?1.3:0);
 }
 function researchAttentionDelta(p){
- return (modelIs(p,'risk','standing')?-1.4:0)+(modelIs(p,'digital','dataLedCredit')?.7:0)
+ return ResearchTree.additive(p,'attention')+(modelIs(p,'risk','standing')?-1.4:0)+(modelIs(p,'digital','dataLedCredit')?.7:0)
   +(modelIs(p,'acquisition','consolidator')?.8:0);
 }
 
@@ -18993,7 +19321,7 @@ const MonetaryPolicy=(()=>{
  }
  return Object.freeze({choices,weights,enabled,initialize,validate,project,validatePlan,advance,holdingValue,income,debtInterest,liquid,consumeLiquid,sellForCash,finish,quote,bot});
 })();
-root.BWEngine={forecastDrivers,PartnerCards,DigitalCommercial,OutsideFunding,ExpandedBusiness,BrandCampaigns,HoldingCapital,MonetaryPolicy,BankAnnouncements,BANK_CRESTS,BANK_LOGO_LIMITS,bankLogoInfo,bankMonogram,bankIdentity,validBankIdentity,validateBankIdentity,validateBankIdentities,BALANCE_SHEET_LENDING_RULES,balanceSheetLendingRules,loanProductionCentralCapacity,researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
+root.BWEngine={forecastDrivers,PartnerCards,DigitalCommercial,ResearchTree,OutsideFunding,ExpandedBusiness,BrandCampaigns,HoldingCapital,MonetaryPolicy,BankAnnouncements,BANK_CRESTS,BANK_LOGO_LIMITS,bankLogoInfo,bankMonogram,bankIdentity,validBankIdentity,validateBankIdentity,validateBankIdentities,BALANCE_SHEET_LENDING_RULES,balanceSheetLendingRules,loanProductionCentralCapacity,researchCombination,researchCombinations,researchProductBarred,RESEARCH_COMBINATIONS,RESEARCH_PRODUCT_GATES,researchBranches,researchBranchTable,researchModelTable,researchProgramRules,RESEARCH_PROGRAM_BRANCHES,RESEARCH_PROGRAM_SPECIALIZATIONS,loanProductionBreakdown,opportunityCreditReview,facilityLifecycleProtectedBudget,facilityLifecycleStaff,facilityLifecycleLiveContext,operatingWorkloadMorale,departmentCustomerPreview,BankEarningsBridge,DepartmentFunctions,DepartmentFunctionContext,DepartmentDispatch,DepartmentDelivery,DepartmentProvider,defaultDepartmentFunctionsPolicy,defaultDepartmentFunctionsMandate,departmentFunctionsQuote,FacilityLifecycle,defaultFacilityLifecyclePlan,lifecycleInstructionQuote,facilityLifecycleStaffProposal,FacilityNetwork,defaultFacilityPolicy,facilityInstructionQuote,facilityProgressComparison,facilityOfficeMetrics,facilityRawOfficeMetrics,facilityNewOfficeCost,defaultDepartmentPlan,normalizeDepartmentPlan,departmentBudgetQuote,departmentDraft,DEPARTMENT_LEADERS,DEPARTMENT_POLICY_LIMITS,AGENCY_PRODUCTS,AGENCY_RULES,defaultAgencyPlan,normalizeAgencyPlan,agencyQuote,validateAgencyView,validateCorporateView,corporateStatement,groupLendingComparison,GroupAccounting,GROUP_SAFEGUARDS,CREDIT_ALLOCATION_STEPS,groupCapitalQuote,defaultGroupPlan,normalizeGroupPlan,validateFinancialGroupView,validateProductPricingView,campaignNeedsFreshHandshake,productPricingQuote,productPricingComparison,PRODUCT_PRICING_FLOWS,decisionQuote,CAMPAIGN_FEATURES,campaignRules,validateCampaignRules,previewFeatureSelection,campaignCapabilities,peerRulesIssue,campaignVersion,campaignVersionSupported,ONBOARDING_SHARES,ONBOARDING_CAPACITY,ONBOARDING_MAX_APPLICATIONS,ONBOARDING_MAX_PRINCIPAL,onboardingReview,onboardingBudget,applyOnboardingPolicy,normalizeOnboardingPlan,onboardingSalesStaff,customerEffectsComparison,RELATIONSHIP_OFFER_SHARES,RELATIONSHIP_OFFER_CAPACITY,RELATIONSHIP_OFFER_COST,relationshipOfferReview,relationshipOfferBudget,normalizeRelationshipOfferPlan,applyRelationshipOfferPolicy,REGIONAL_GROWTH_RATES,regionalGrowthReview,bankRecoveryReview,bankRecoveryOptions,ADVERTISING_BUDGETS,advertisingPreview,normalizeAdvertisingPlan,applyAdvertisingPolicy,PRODUCT_PROGRAM_PROJECTS,PRODUCT_RETIRE_COST,PRODUCT_LICENSE,PRODUCT_PROGRAM_ROYALTY,productProgramPolicy,productAggregateMix,normalizeProductProgramPlan,applyProductProgramPolicy,productProgramCosts,productTargetMix,SEGMENT_BALANCE_WEIGHTS,segmentDepositSummary,COLLECTION_APPROACHES,defaultCollectionsPolicy,validateCollectionsPolicy,normalizeCollectionsPlan,collectionsReview,creditPerformanceForecast,HOUSEHOLD_SERVICE,defaultHouseholdPolicy,validateHouseholdPolicy,householdServiceReview,normalizeHouseholdPlan,SPECIALIST_ROLES,WORKFORCE_TRAINING_BUDGETS,defaultWorkforcePolicy,emptySpecialistOrders,workforceReview,workforceTrainingQuote,specialistBonus,specialistPayroll,specialistHireCount,normalizeWorkforcePlan,migrateCampaign,repairSavedCampaign,repairSavedRivalry,projectTerms,projectStartTerms,projectPlanStatus,marketReentryPremium,projectTargetIssue,projectStartStatus,serviceWorkforceOptions,customerRelationshipReview,customerRelationshipPressure,CUSTOMER_SEGMENTS,CUSTOMER_MARKETS,customerDemand,customerBankFit,customerMixPlan,relationshipBonus,departmentScorecard,renewalPricingPlan,ANCHOR_CLIENTS,clientProfile,clientBidAdjustment,defaultManagement,validateManagement,managementPlan,servicePlanReview,serviceDeliveryOptions,serviceRecoveryPlan,SERVICE_TYPES,SERVICE_PRICING,SERVICE_APPLICATIONS,serviceLoad,serviceBidStatus,commercialSalesStaff,CONTRACT_FEE,CONTRACT_SERVICE,contractIncome,contractPower,RETAIL_DEPLOYMENTS,RETAIL_PLATFORM,termSummary,depositSummary,DEPOSIT_SERVICE,fundingPosition,CREDIT_TERMS,creditSummary,marketContribution,MARKET_RESOURCES,marketSupply,marketSplit,regionalProjectPreview,REGIONAL_MARKETS,regionalBranchMetrics,projectCatalog,validatePilot,pilot,bankColor,opportunityTerms,acquisitionTerms,AccountingPrototype,ensureSimulation,validateLedger,operatingPreview,planBudget,fundingStep,OPENING_STATS,doctrineProfile,syncDoctrine,CAPABILITY_TIERS,CAPABILITY_CAP_PER_CYCLE,capabilitySpend,capabilityNextCost,leadCapability,projectSlots,executionCapacity,usedCapacity,projectCapacity,hireCost,hireLimit,planInitiatives,planHires,projectCycles,projectCost,capitalRatio,capitalTier,tierRank,strategyLevel,strategyProgress,strategyTotal,strategyCapstone,strategyCostMultiplier,strategyBarred,capitalRequestStatus,competitiveActionStatus,resolveCompetitiveActions,COMPETITIVE_ACTIONS,CAPITAL_TIERS,RECEIVERSHIP_CYCLES,CAMPAIGN_ACTS,SCOPES,SCENARIOS,ROLES,DEPOSIT_POLICIES,LENDING_POLICIES,CAPITAL_POLICIES,PRODUCT_PORTFOLIOS,DOCTRINES,MACRO_REGIMES,TERRITORIES,STRATEGY_BRANCHES,STRATEGY_SPECIALIZATIONS,PROJECTS,OPPORTUNITY_TYPES,EVENTS,MANDATES,MILESTONES,createGame,submit,chooseBot:chooseOpenBot,publicState:openEndedPublicState,baseScore,finalScore,mandateStatus,controlledCount,normalizeAllocation,finishProject,depositContest,settleFunding,resolveMarketExits,updateCampaignAct,evaluateStrategicEnd,rematch,operate};
 
 const publicStateCore=root.BWEngine.publicState;
 Object.assign(root.BWEngine,{bankBasePayroll,IncomeReview,IncomeHistory,validateIncomeHistoryView,CreditWorkload,CommercialFeeEconomics,commercialServicePlanReview:(g,index,plan)=>withCorporateForecast(g,()=>commercialServicePlanReview(g,index,plan))});
@@ -19202,7 +19530,7 @@ function bindFeatureSelection(container, binding) {
     try {
       const descriptor = featureSelectionDescriptors().find(feature => feature.field === field);
       if (!descriptor || descriptor.available === false) throw Error('This optional system is unavailable in this engine.');
-      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
+      const proposal = edition ? E.previewCampaignEdition(options, edition, { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true, currentResearchTree: true }) : E.previewFeatureSelection(options, { field, value: requested ? descriptor.setupVersion : 0 });
       if (!proposal.rules.valid) throw Error(proposal.rules.issues.map(issue => issue.message).join(' '));
       const pending = { container: element, control: editionButton || control, proposal, revision: current.getRevision?.() ?? 0, before: JSON.stringify(options) };
       if (!proposal.requiresConfirmation) { commitFeatureSelection(pending); return; }
@@ -19223,7 +19551,7 @@ function initializeSetupFeatures() {
   // This is a new-game draft, not an import or a running campaign. Standard
   // Core gets the same reporting profile as an explicit Core edition choice.
   const options = E.campaignRules(initial, { context: 'lobby' }).enabled.length === 0
-    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true }).options : initial;
+    ? E.previewCampaignEdition(initial, 'core', { currentReporting: true, currentEconomics: true, currentRivalry: true, currentResearch: true, currentLending: true, currentMonetaryPolicy: true, currentBusiness: true, currentDigitalCommercial: true, currentPartnerCards: true, currentCardEconomics: true, currentBankCards: true, currentResearchTree: true }).options : initial;
   const refresh = selected => { container.innerHTML = renderFeatureSelection(selected); };
   refresh(options);
   // Read the committed selection, not the browser's already-toggled checkbox.
@@ -25028,6 +25356,7 @@ const GAME_HELP_TOPICS=[
  {id:'brand-campaigns',title:'Advertising budgets and sponsorship commitments',words:'marketing campaign sponsorship sports community burs branding budget contract cancel',requires:['expandedBusinessVersion'],workspace:'strategy',view:'campaigns',context:{campaignType:'advertising'},text:'Strategy → Campaigns has one regular targeted or general campaign and one sponsorship. Enter a monthly dollar budget or choose a preset. All served markets divides one budget. Advertising builds awareness; suitable products, finite customers and enough employee time still determine results. Review sponsorship shows this month, future payments, cancellation and end month. A new sponsor must fund its first payment; an existing contract remains an operating obligation during cash stress, even when exposure is suspended. Review month shows both expenses together. Start, completion and cancellation appear once in both banks’ events; current sponsors have a market badge.'},
  {id:'shared-digital',title:'Shared digital banking and focused service setup',words:'digital remote office platform payroll merchant treasury build license partner legacy initiatives',requires:['expandedBusinessVersion'],workspace:'banking',view:'services',context:{objectId:'digital-platform'},text:'Banking → Business services manages Payroll, Merchant services and Corporate treasury separately. Each service has pricing, shared delivery capacity, setup and a searchable client list. The shared digital platform can be built or licensed once for the bank. It uses central customer and technology staff; market demand and acquisition still matter. A physical studio gives local service but is never required to enable ordinary online banking in every region. Legacy marketing, technology, training and strategy launches are retired in new Expanded campaigns. Use Campaigns, Research, People, Markets and Treasury recovery instead. Old campaigns retain paid work and earned benefits under their original rules.'},
  {id:'card-routes',title:'Credit cards: partner-issued or issued by your bank',words:'cards credit card issue issuer partner cedar interchange receivables charge-off provision capital route platform',requires:['bankCardsVersion'],workspace:'banking',view:'cards',context:{objectId:'program'},text:'Banking → Cards offers two routes, chosen at launch and fixed afterwards. Partner-issued: Cedar Reserve funds and owns the balances and bears the losses; your bank pays a $2,500 license, $100 a month and $3 per account, and earns 1.5% of purchases and 25% of collected interest. Bank-issued: a $15,000 platform, $300 a month and $4 per account; your bank pays merchants from protected cash, owns the balances as receivables that count toward the capital ratio, keeps 2.2% of purchases and earns all the interest, and bears provisions, disputes and charge-offs. Bank-issued launch and new accounts need a capital ratio of at least 10%, and the program uses more Technology and Risk time. When protected cash runs short, new purchases pause; collections continue. Results show card income after losses separately from direct costs.'},
+ {id:'research-tree',title:'The research tree: families, paths, capstones and stacking',words:'research tree node family path capstone foundation level combination model stack stacking risk capital',requires:['researchTreeVersion'],workspace:'strategy',view:'research',context:{},text:'Strategy → Research has six families of six nodes: a foundation, two paths of two nodes and a capstone that needs the second node of either path. Select a node in the family’s tree to see its cost, prerequisites and effect, then fund it; each node takes up to $100,000 a month, one node per family, and applies from the month after it is fully paid. Each family’s level (up to 3, or 4 with the capstone) keeps the familiar capability effects, and every node adds its own. Effects of the same kind multiply, so everything learned stacks; Stacked effects lists every source. Combined research turns on when two named nodes are learned. Each family has three permanent operating models, chosen once its foundation is learned. Risk & Capital research now carries loss control.'},
  {id:'holding-capital',title:'Holding-company shares, dilution and voluntary repurchases',words:'issue repurchase buyback shares capital ownership rival shareholder dilution price',requires:['expandedBusinessVersion'],workspace:'group',view:'ownership',context:{objectId:'capital'},text:'Financial Group → Holding-company ownership separates parent shares from Treasury investments. Issue new shares to raise parent cash and equity while diluting ownership. Buy rival shares only with existing unreserved parent cash. Repurchases retire shares willingly sold by outside investors or by a rival with an explicit sell order. Current quotes, finite investor cash, spreads and limits can produce partial or zero fills. Founder control stays at least 51%. The quote shows cash, equity and ownership consequences; customer deposits and custody funds are never available for these trades. Selling securities from bank portfolio is a different Treasury action.'},
  {id:'federal-funds',title:'Fed decisions, bank investments and interest-rate exposure',words:'federal funds fed interest rate hike cut coupon bond treasury liquid fixed maturity yield sale borrowing',requires:['monetaryPolicyVersion'],tab:'overview',target:'#monetaryPolicyDesk',text:'Overview → Inspect bank impact shows the common Fed target range, next decision, current-book interest comparison and six-month contract schedule. Scenario buttons do not change the plan or predict the Fed. Liquid investments reprice monthly; fixed six- and 24-month investments keep their coupons. Higher yields reduce fixed holdings’ early-sale value, and lower yields increase it. A maturity returns principal, not income. Review and stage Liquid, Balanced or Longer fixed to change future investment policy; existing fixed contracts remain. At month end the bank invests cash above 15% of deposits plus payables, only if emergency debt is zero. Emergency interest uses opening debt and the current anchor plus 825 basis points annually. Customer investment accounts are separate. New Expanded campaigns use these rules; old saves and Core keep their own economics.'},
  {id:'investment-notes',title:'Fixed-term notes: commitment, coupons and issuer cash',words:'note term maturity fixed coupon principal lockup subscription dealer issuer liquidity',requires:['investmentNotesVersion'],tab:'group',groupDesk:'investments',target:'#investmentTitle',text:'Investment services → Client accounts → select an account → Fixed-term notes. Choose six or 24 months using existing account cash. The longer term is unavailable to near-term liquidity mandates. Review and stage the subscription; the coupon locks at monthly settlement. A filled subscription costs $5 and requires qualified service and operations work. Notes cannot be redeemed early. The outside dealer owes principal and coupons; payments require its actual cash, with due principal paid before coupons. Unpaid amounts remain claims, not spendable cash. Note claims count toward the customer investment limit and serviced assets. These are unsecured game investments, not insured bank deposits or a guaranteed market value. Remove working subscription also requires review and staging to cancel an existing staged instruction.'},
@@ -25286,6 +25615,9 @@ function strategyModelDescription(v,branch,key){
   };
   if(researchDescriptions[branch+':'+key])return researchDescriptions[branch+':'+key];
  }
+ // 9.41 research tree: these discounts stack with the family levels.
+ if(v.researchTreeVersion===1&&branch==='network'&&key==='regionalHub')return 'Office projects need one fewer work unit, on top of the one Network level 2 removes. This model does not increase regional deposit or loan capacity.';
+ if(v.researchTreeVersion===1&&branch==='operations'&&key==='lean')return 'Reduces base staff and facility operating expense by 10% and project costs by 15%, on top of the Operations level 3 discount. This model does not add execution capacity.';
  const corrections={
   'network:regionalHub':'Branch projects require one fewer work unit, the same non-stacking reduction as Network tier 2. This model does not increase regional deposit or loan capacity.',
   'digital:customerExperience':'Raises the organic deposit-acquisition multiplier by 7%, subject to supply and capacity limits. It does not directly add a household-acquisition bonus.',
@@ -25913,7 +26245,7 @@ function interfacePlanRows(v){
   }else if(key==='outsideAdvanceAmount'){
    addGroup([[key]],'Cedar Reserve Bank · one-month advance',{workspace:'banking',view:'treasury',context:{objectId:'outside-funding'}});
   }else if(key==='nodeFunding'){
-   for(const node of new Set([...Object.keys(baseline[key]||{}),...Object.keys(draft[key]||{})]))addGroup([[key,node]],E.DigitalCommercial.NODES[node]?.name||node,{workspace:'strategy',view:'research',context:{node}});
+   for(const node of new Set([...Object.keys(baseline[key]||{}),...Object.keys(draft[key]||{})]))addGroup([[key,node]],(E.ResearchTree.NODES[node]||E.DigitalCommercial.NODES[node])?.name||node,{workspace:'strategy',view:'research',context:{node}});
   }else if(key==='brandCampaignPolicy'){
    for(const kind of ['regular','sponsorship']){
     const count=rows.length;addGroup([[key,kind]],kind==='regular'?'Monthly advertising':'Sponsorship agreement',{workspace:'strategy',view:'campaigns',context:{campaignType:kind==='regular'?'advertising':'sponsorship'}});
@@ -27413,6 +27745,7 @@ function ipsResearchSelection(v,context={}){
  return {items,selected:keys.includes(wanted)?wanted:keys[0]};
 }
 function ipsStrategyResearch(v,route,mount){
+ if(researchTreeActive(v))return renderResearchTree(v,route,mount);
  const {items,selected}=ipsResearchSelection(v,route.context),[kind,key]=selected.split(':');
  // A link that names an item opens it directly, on phones too.
  const named=route.context?.research||route.context?.branch||route.context?.node;
@@ -27433,12 +27766,19 @@ function ipsAdvertisingForm(v,context){
  if(context?.market&&v.territories[context.market]&&form.inspectedMarket!==context.market&&!form.dirty){form.inspectedMarket=context.market;form.value.market=context.market;form.dirtyPaths.push('market');form.dirty=true;form.notice='Inspecting this market as a working campaign target. The monthly plan target is unchanged until you add it.';}
  return form;
 }
+// A model is chosen once the first milestone (in 9.41, the foundation node) is
+// reached or fully staged this month; adoption still waits for settlement.
+function ipsModelReady(v,branch,plan){
+ if(!researchTreeActive(v))return E.capabilitySpend(v.me,branch)+(plan.investments?.[branch]||0)>=v.capabilityTiers[branch][0];
+ const T=E.ResearchTree,foundation=T.bySlot(branch,'F');
+ return T.has(v.me,foundation)||(plan.nodeFunding?.[foundation]||0)>=T.remaining(v.me,foundation);
+}
 function ipsStrategyModels(v,route,mount){
  const branches=Object.keys(v.strategyBranches),branch=branches.includes(route.context?.branch)?route.context.branch:branches[0],locked=v.me.specializations[branch],form=ipsForm(v,'model-'+branch,{model:draft.specializations[branch]||''}),defs=v.strategySpecializations[branch];
  ipsSplit(v,route,mount,branches.map(key=>({key,name:v.strategyBranches[key].name,detail:v.me.specializations[key]?'Permanent model adopted':'Model not adopted'})),branch,'branch');
  const roadmap=({network:'roadmapNetwork',digital:'roadmapDigital',commercial:'roadmapCommercial',operations:'roadmapOperations',acquisition:'roadmapAcquisition'})[branch],replaces=roadmap&&E.planInitiatives(draft).includes(roadmap);
- const body='<h2>'+esc(v.strategyBranches[branch].name)+' operating model</h2><p>'+esc(locked?'The adopted model is permanent.':'Choose after the first milestone is funded. The planned model becomes permanent when the month resolves.')+'</p>'+ipsRouteButton('Fund this track’s research','strategy','research',{branch})+ipsField(form,'model','Operating model',{choices:[['','No planned model'],...Object.entries(defs).map(([key,d])=>[key,d.name])],disabled:!!locked})+'<div class="ips-profile-list">'+Object.entries(defs).map(([key,d])=>'<p><b>'+esc(d.name)+'</b><br>'+esc(strategyModelDescription(v,branch,key))+'</p>').join('')+'</div>'+(locked?'<p>Current permanent model: <b>'+esc(defs[locked]?.name||locked)+'</b></p>':'');
- ipsEditor(v,route,mount,'model-'+branch,form,body,(now,values)=>{const next=ipsCopy(draft);if(locked)throw Error('This operating model is already permanent.');if(values.model&&!defs[values.model])throw Error('Select an existing operating model.');if(values.model&&E.capabilitySpend(now.me,branch)+(next.investments[branch]||0)<now.capabilityTiers[branch][0])throw Error('Fund the first milestone before selecting an operating model.');if(values.model)next.specializations[branch]=values.model;else delete next.specializations[branch];if(values.model&&replaces){next.newProjects=E.planInitiatives(next).filter(k=>k!==roadmap);next.newProject=next.newProjects[0]||null;}return next;},()=>'<p>No additional research charge for model selection. Review the listed effects and permanence before adding.</p>',{replacement:replaces?'Replace planned '+(v.projects[roadmap]?.name||roadmap)+' with this model choice.':null});
+ const tree=researchTreeActive(v),body='<h2>'+esc(v.strategyBranches[branch].name)+' operating model</h2><p>'+esc(locked?'The adopted model is permanent.':tree?'Choose once the family’s foundation is learned, or fully staged this month. The planned model becomes permanent when the month resolves.':'Choose after the first milestone is funded. The planned model becomes permanent when the month resolves.')+'</p>'+ipsRouteButton(tree?'Open this family’s research':'Fund this track’s research','strategy','research',{branch})+ipsField(form,'model','Operating model',{choices:[['','No planned model'],...Object.entries(defs).map(([key,d])=>[key,d.name])],disabled:!!locked})+'<div class="ips-profile-list">'+Object.entries(defs).map(([key,d])=>'<p><b>'+esc(d.name)+'</b><br>'+esc(strategyModelDescription(v,branch,key))+'</p>').join('')+'</div>'+(locked?'<p>Current permanent model: <b>'+esc(defs[locked]?.name||locked)+'</b></p>':'');
+ ipsEditor(v,route,mount,'model-'+branch,form,body,(now,values)=>{const next=ipsCopy(draft);if(locked)throw Error('This operating model is already permanent.');if(values.model&&!defs[values.model])throw Error('Select an existing operating model.');if(values.model&&!ipsModelReady(now,branch,next))throw Error(researchTreeActive(now)?'Learn the foundation, or stage its full remaining cost, before selecting an operating model.':'Fund the first milestone before selecting an operating model.');if(values.model)next.specializations[branch]=values.model;else delete next.specializations[branch];if(values.model&&replaces){next.newProjects=E.planInitiatives(next).filter(k=>k!==roadmap);next.newProject=next.newProjects[0]||null;}return next;},()=>'<p>No additional research charge for model selection. Review the listed effects and permanence before adding.</p>',{replacement:replaces?'Replace planned '+(v.projects[roadmap]?.name||roadmap)+' with this model choice.':null});
 }
 function ipsStrategyCampaigns(v,route,mount){
  if(v.expandedBusinessVersion===1&&route.context?.campaignType!=="competitive")return renderBrandCampaigns(v,route,mount);
@@ -27457,7 +27797,7 @@ function ipsStrategyMandates(v,route,mount){
  ipsSplit(v,route,mount,items,selected,'mandate');
  if(selected==='objectives'){const m=v.me.mandate;return ipsRead(mount,'Board mandate',m?'<h3>'+esc(m.name)+'</h3><p>'+esc(m.desc)+'</p><p>'+esc(m.progress)+' · '+(m.achieved?'Achieved':'In progress')+'</p>'+ipsTable(['Achievement','Status'],Object.entries(v.milestoneDefinitions||{}).map(([k,d])=>[d.name,v.me.milestones[k]?'Achieved':d.desc])):'<p>No board mandate in this campaign.</p>');}
  if(selected==='prepare'){const f=ipsForm(v,'management-prepare',{prepare:true});return ipsEditor(v,route,mount,'management-prepare',f,'<h2>Prepare within planned mandates</h2><p>Review the exact proposed research and service changes. Existing explicit instructions take priority; nothing is applied until you add this proposal.</p>',now=>E.managementPlan({...now.me,focus:draft.focus},ipsCopy(draft),now.economy,now).plan,(now,next)=>departmentProposalComparison(now,['servicePolicy','investments','workforcePolicy'].filter(k=>JSON.stringify(next[k])!==JSON.stringify(draft[k])).map(key=>({key,before:draft[key],after:next[key]})),next));}
- const form=ipsForm(v,'research-mandate',draft.management.research);if(!Object.hasOwn(form.value,'first'))form.value.first=form.value.priority[0];const branches=Object.keys(form.value.targets),body='<h2>Recurring research mandate</h2><p>Limits prepare future monthly drafts. Saving them spends nothing and does not replace this month’s manual research.</p>'+ipsField(form,'enabled','Recurring funding',{choices:[['false','Paused'],['true','Enabled']]})+'<div class="ips-field-grid">'+ipsField(form,'budget','Monthly research budget ($)',{max:250000,step:1000})+ipsField(form,'reserve','Cash to protect after commitments ($)',{max:10000000})+'</div>'+ipsField(form,'first','First priority',{choices:branches.map(k=>[k,v.strategyBranches[k].name])})+'<h3>Milestone ceilings</h3>'+branches.map(k=>ipsField(form,'targets.'+k,v.strategyBranches[k].name,{choices:[0,1,2,3,4].map(n=>[n,n?'Tier '+n:'Do not fund'])})).join('')+'<p>Current priority order: '+form.value.priority.map(k=>esc(v.strategyBranches[k]?.name||k)).join(' → ')+'. Amounts round down to $1K. Products are not deployed by research funding.</p>'+ipsRouteButton('Prepare now from planned limits','strategy','mandates',{mandate:'prepare'})+ipsRouteButton('Shared research ceiling','people','leadership',{role:'limits'});
+ const form=ipsForm(v,'research-mandate',draft.management.research);if(!Object.hasOwn(form.value,'first'))form.value.first=form.value.priority[0];const branches=Object.keys(form.value.targets),body='<h2>Recurring research mandate</h2><p>Limits prepare future monthly drafts. Saving them spends nothing and does not replace this month’s manual research.</p>'+ipsField(form,'enabled','Recurring funding',{choices:[['false','Paused'],['true','Enabled']]})+'<div class="ips-field-grid">'+ipsField(form,'budget','Monthly research budget ($)',{max:250000,step:1000})+ipsField(form,'reserve','Cash to protect after commitments ($)',{max:10000000})+'</div>'+ipsField(form,'first','First priority',{choices:branches.map(k=>[k,v.strategyBranches[k].name])})+'<h3>Milestone ceilings</h3>'+branches.map(k=>ipsField(form,'targets.'+k,v.strategyBranches[k].name,{choices:[0,1,2,3,4].map(n=>[n,n?(researchTreeActive(v)?'Level ':'Tier ')+n:'Do not fund'])})).join('')+(researchTreeActive(v)?'<p class="micro">Recurring research funds the next node on each family’s path until it reaches the chosen level. Fund Risk &amp; Capital from Research.</p>':'')+'<p>Current priority order: '+form.value.priority.map(k=>esc(v.strategyBranches[k]?.name||k)).join(' → ')+'. Amounts round down to $1K. Products are not deployed by research funding.</p>'+ipsRouteButton('Prepare now from planned limits','strategy','mandates',{mandate:'prepare'})+ipsRouteButton('Shared research ceiling','people','leadership',{role:'limits'});
  if(!Object.hasOwn(form.value,'first'))form.value.first=form.value.priority[0];
  ipsEditor(v,route,mount,'research-mandate',form,body,(now,values)=>{const next=ipsCopy(draft),first=values.first||values.priority[0];next.management.research={enabled:String(values.enabled)==='true',budget:ipsNumber(values.budget,'Research budget',{step:1000,max:250000}),reserve:ipsNumber(values.reserve,'Research reserve',{max:10000000}),priority:[first,...values.priority.filter(k=>k!==first)],targets:Object.fromEntries(branches.map(k=>[k,ipsNumber(values.targets[k],'Milestone ceiling',{max:4})]))};E.validateManagement(next.management);return next;},()=>'<p>This instruction changes future draft preparation only. The next prepared proposal still requires your approval.</p>');
 }
@@ -27595,6 +27935,105 @@ function renderOutsideFunding(v,mount){
  const F=E.OutsideFunding,q=F.quote(v,v.me,draft),a=q.advance,book=q.book.accounts,rows=v.outsideFundingSnapshot.report;
  mount.insertAdjacentHTML('beforebegin','<h3>'+esc(q.name)+'</h3>'+financeFacts([['Available lender cash',financeMoney(q.available)],['Maximum per bank',financeMoney(q.limit)],['Fixed annual rate',(q.rateBp/100).toFixed(2)+'%'],['Term','One month · no rollover'],['Lender equity',financeMoney(book.equity)],['Lender funding claims',financeMoney(book.businessAssets)]])+financeNote('This is the existing funded outside lender, also used for acquisition finance. Both activities share one cash balance; no deposits, customers or money are created. Quotes are conditional on cash still available at settlement. Borrowing does not buy ownership.')+(a?'<h3>Your outstanding advance</h3>'+financeFacts([['Principal',financeMoney(a.principal)],['Accrued interest due',financeMoney(a.interestDue)],['Due at month end',a.due],['Annual contract rate',(a.rateBp/100).toFixed(2)+'%'],['Missed repayments',a.misses]]):'')+'<h3>Last settlement</h3>'+(rows.length?financeTable(['Instruction','Principal transferred','Interest expense accrued','Interest paid','Remaining obligation'],rows.map(r=>[r.kind,financeMoney(r.principal),financeMoney(r.interestAccrued),financeMoney(r.interestPaid),financeMoney(r.unpaid)])):financeNote('No advance activity in the last completed month.'))+financeNote('Principal transfers are financing, not income. Accrued interest is an expense and reduces bank equity, whether paid or unpaid. These financing-stage expenses appear in the retained-earnings bridge separately from operating profit. Funding liabilities are included in balance-sheet payables.'));
  financeEdit(v,mount,{key:'outside-advance',initial:{amount:draft.outsideAdvanceAmount||0},stageLabel:'Stage one-month advance',fields:[{path:'amount',label:'Principal requested ($)',min:0,max:F.LIMIT,step:1000}],build:(now,f,candidate)=>{candidate.outsideAdvanceAmount=f.amount;F.validatePlan(now,now.me,candidate);const quote=F.quote(now,now.me,candidate);return {candidate,facts:[['Lender',quote.name],['Principal',financeMoney(quote.amount)],['One-month interest',financeMoney(quote.interest)],['Total scheduled repayment',financeMoney(quote.amount+quote.interest)],['Maturity month',quote.maturity]],notes:quote.notes};}});
+}
+// Expanded 9.41 Strategy → Research. One page per research family draws its six
+// nodes as a tree beside the selected node's funding, so choosing a node never
+// leaves the page. Combined research and the stacked-effects summary are their
+// own pages in the same list. Presentation only: funding stages
+// draft.nodeFunding through the engine's own validation and quote.
+const RT_SLOT_LABEL={F:'Foundation',A1:'Path A · first',A2:'Path A · second',B1:'Path B · first',B2:'Path B · second',X:'Capstone'};
+function researchTreeActive(v){return v?.researchTreeVersion===1&&!!v.researchTreeRules&&!!v.me?.researchTree;}
+function rtStaged(v,family){const nodes=v.researchTreeRules.nodes;return Object.keys(draft?.nodeFunding||{}).find(k=>nodes[k]?.family===family)||null;}
+function rtNodeState(v,key){
+ const T=E.ResearchTree,d=v.researchTreeRules.nodes[key],row=v.me.researchTree.nodes[key],staged=draft?.nodeFunding?.[key]||0;
+ if(row.completed)return {state:'learned',label:'Learned month '+row.completed};
+ const why=T.issue(v.me,key);
+ if(why)return {state:'locked',label:'Locked',why};
+ if(staged)return {state:'staged',label:ipsMoney(staged)+' staged'+(row.funded?' · '+ipsMoney(row.funded)+' paid':'')};
+ if(row.funded)return {state:'progress',label:ipsMoney(row.funded)+' of '+ipsMoney(d.cost)+' paid'};
+ return {state:'open',label:ipsMoney(d.cost)+' · ready'};
+}
+function rtRequires(v,key){
+ const rules=v.researchTreeRules,r=rules.nodes[key].requires,name=k=>rules.nodes[k].name+(E.ResearchTree.has(v.me,k)?' ✓':'');
+ if(!r.all.length&&!r.any.length)return 'None · this is the family’s foundation';
+ return [r.all.map(name).join(' and '),r.any.length?'either '+r.any.map(name).join(' or '):''].filter(Boolean).join(', and ');
+}
+function researchTreeItems(v){
+ const T=E.ResearchTree,rules=v.researchTreeRules,items=[{heading:'Research families'}];
+ for(const [family,d] of Object.entries(rules.families)){
+  const staged=rtStaged(v,family);
+  items.push({key:'family:'+family,name:d.name,detail:'Level '+T.level(v.me,family)+' of 4 · '+T.learned(v.me,family)+' of 6 learned'+(staged?' · '+ipsMoney(draft.nodeFunding[staged])+' staged':'')});
+ }
+ items.push({heading:'Across families'},
+  {key:'view:combinations',name:'Combined research',detail:T.combinations(v.me).length+' of '+Object.keys(rules.combinations).length+' active'},
+  {key:'view:effects',name:'Stacked effects',detail:T.sources(v.me).length+' active sources'});
+ return items;
+}
+// Links may name a family ({branch}), a node ({node}) or an item ({research});
+// the 9.40 list keys (branch:x, node:x) still resolve for saved routes.
+function researchTreeSelection(v,context={}){
+ const rules=v.researchTreeRules,items=researchTreeItems(v),keys=items.filter(x=>x.key).map(x=>x.key);
+ let wanted=context.research||null,node=rules.nodes[context.node]?context.node:null;
+ if(wanted?.startsWith('node:')&&rules.nodes[wanted.slice(5)]){node=wanted.slice(5);wanted=null;}
+ if(wanted==='branch:combinations')wanted='view:combinations';else if(wanted?.startsWith('branch:'))wanted='family:'+wanted.slice(7);
+ wanted=wanted||(node?'family:'+rules.nodes[node].family:context.branch?'family:'+context.branch:null);
+ return {items,selected:keys.includes(wanted)?wanted:keys[0],node};
+}
+function renderResearchTree(v,route,mount){
+ const {items,selected,node}=researchTreeSelection(v,route.context),[kind,key]=selected.split(':');
+ // A link that names an item opens it directly, on phones too.
+ const named=route.context?.research||route.context?.branch||route.context?.node;
+ ipsSplit(v,{...route,context:{...route.context,research:named?selected:undefined}},mount,items,selected,'research');
+ if(kind==='view'&&key==='combinations')return researchTreeCombinations(v,mount);
+ if(kind==='view')return researchTreeEffects(v,mount);
+ return researchTreeFamily(v,route,mount,key,node);
+}
+function researchTreeFamily(v,route,mount,family,wanted){
+ const T=E.ResearchTree,rules=v.researchTreeRules,f=rules.families[family],keys=T.SLOTS.map(s=>T.bySlot(family,s)),token=ipsToken(v);
+ const node=keys.includes(wanted)?wanted:rtStaged(v,family)||keys.find(k=>!T.has(v.me,k)&&!T.issue(v.me,k))||keys.find(k=>!T.has(v.me,k))||keys[0];
+ const d=rules.nodes[node],q=T.quote(v,v.me,draft,node),level=T.level(v.me,family),learned=T.learned(v.me,family),staged=rtStaged(v,family);
+ const button=key=>{const n=rules.nodes[key],s=rtNodeState(v,key);return '<button type="button" class="rt-node rt-'+s.state+(key===node?' selected':'')+'" data-rt-node="'+esc(key)+'" aria-pressed="'+(key===node)+'"'+(s.why?' title="'+esc(s.why)+'"':'')+'><small>'+esc(RT_SLOT_LABEL[n.slot])+'</small><b>'+esc(n.name)+'</b><span>'+esc(n.text)+'</span><em>'+esc(s.label)+'</em></button>';};
+ const path=(p,a,b)=>'<div class="rt-path"><h4>Path '+p+' · '+esc(f.paths[p])+'</h4>'+button(T.bySlot(family,a))+'<span class="rt-link" aria-hidden="true"></span>'+button(T.bySlot(family,b))+'</div>';
+ const tree='<div class="rt-tree" role="group" aria-label="'+esc(f.name)+' research tree">'+button(keys[0])+'<span class="rt-link" aria-hidden="true"></span><div class="rt-paths">'+path('A','A1','A2')+path('B','B1','B2')+'</div><span class="rt-link" aria-hidden="true"></span>'+button(T.bySlot(family,'X'))+'<p class="micro">The capstone needs the second node of either path.</p></div>';
+ const nextLevel=q.completed?level:d.slot==='X'?4:Math.min(3,learned+1),combos=Object.values(rules.combinations).filter(c=>c.requires.includes(node));
+ const model=v.me.specializations?.[family],planned=draft.specializations?.[family],models=rules.models[family];
+ const status=q.completed?'<p class="notice">Learned at the end of month '+q.completed+'. Its effect has applied since month '+(q.completed+1)+'.</p>':q.reason?'<p class="notice warn">'+esc(q.reason)+'</p>':'';
+ const learnedNode=!!q.completed,locked=!learnedNode&&!!T.issue(v.me,node);
+ const form=ipsForm(v,'tree-'+node,{amount:draft.nodeFunding?.[node]||0});
+ const detail='<section class="rt-detail" aria-label="Selected research"><span class="interface-eyebrow">'+esc(RT_SLOT_LABEL[d.slot])+'</span><h3>'+esc(d.name)+'</h3><p>'+esc(d.text)+'</p>'+
+  '<dl class="rt-facts">'+[['Cost',ipsMoney(d.cost)],['Paid',ipsMoney(q.funded)],['Remaining',ipsMoney(d.cost-q.funded)],['Months at the cap',learnedNode?'Done':String(q.minimumMonths)]].map(([k,x])=>'<div><dt>'+esc(k)+'</dt><dd>'+esc(x)+'</dd></div>').join('')+'</dl>'+
+  '<p><b>Needs:</b> '+esc(rtRequires(v,node))+'.</p>'+(learnedNode?'':'<p>Learning it '+(nextLevel>level?'raises '+esc(f.name)+' to level '+nextLevel+'.':'keeps '+esc(f.name)+' at level '+level+' (level 3 is the most without the capstone).')+'</p>')+
+  (combos.length?'<p><b>Part of:</b> '+combos.map(c=>esc(c.name)).join(', ')+'.</p>':'')+status+
+  (learnedNode||locked?'':ipsField(form,'amount','Funding this month ($)',{max:rules.cap,help:'At most '+ipsMoney(rules.cap)+' a month, at least $1,000 (or the final remainder). Zero removes it. One node per family each month.'})+'<div class="ips-actions"><button type="button" class="btn" id="rtStageMax">Stage '+ipsMoney(q.maximum)+'</button></div>')+'</section>';
+ const body='<span class="interface-eyebrow">Research family</span><h2>'+esc(f.name)+'</h2><p>'+esc(f.promise)+'</p>'+
+  ipsFacts([['Family level',level+' of 4'],['Nodes learned',learned+' of 6'],['Paid research',ipsMoney(T.spent(v.me,family))],['Staged this month',staged?ipsMoney(draft.nodeFunding[staged]):'None']])+
+  '<div class="rt-layout">'+tree+detail+'</div>'+
+  '<h3>What each level gives</h3><p>'+esc(rules.levels[family])+'</p>'+
+  '<h3>Operating model</h3><p>'+(model?'Adopted: <b>'+esc(models[model]?.name||model)+'</b>. Models are permanent.':planned?'Planned: <b>'+esc(models[planned]?.name||planned)+'</b>. It becomes permanent when the month resolves'+(level<1?', once the foundation is learned':'')+'.':'Not chosen. Choose one of three once the foundation is learned.')+'</p>'+ipsRouteButton(model?'View operating models':'Compare operating models','strategy','models',{branch:family})+
+  '<p class="micro">Research is paid when the month resolves and applies from the following month. Effects of the same kind multiply, so everything learned stacks.</p>';
+ const candidate=(now,amount)=>{const next=ipsCopy(draft);next.nodeFunding={...(next.nodeFunding||{})};if(amount)next.nodeFunding[node]=amount;else delete next.nodeFunding[node];E.ResearchTree.validatePlan(now.me,next);const live=E.ResearchTree.quote(now,now.me,next,node);if(amount>live.maximum)throw Error('Protected cash, the monthly cap and the remaining cost allow at most '+ipsMoney(live.maximum)+'.');return next;};
+ let inspector;
+ if(learnedNode||locked){inspector=mount.querySelector?.('.ips-inspector')||mount;inspector.innerHTML=body;}
+ else inspector=ipsEditor(v,route,mount,'tree-'+node,form,body,(now,values)=>candidate(now,ipsNumber(values.amount,'Research funding',{max:rules.cap})),(now,next)=>'<p>'+ipsMoney(next.nodeFunding?.[node]||0)+' for '+esc(d.name)+' is paid when the month resolves. No benefit until the node is fully paid.</p>');
+ for(const b of inspector.querySelectorAll?.('[data-rt-node]')||[])b.addEventListener('click',()=>{if(!ipsCurrent(token,false))return;const key=b.dataset.rtNode;openInterfaceWorkspace('strategy','research',{...route.context,research:'family:'+family,node:key});$('[data-rt-node="'+key+'"]')?.focus?.({preventScroll:true});});
+ const max=inspector.querySelector?.('#rtStageMax');
+ if(max){max.disabled=q.maximum<=0||!ipsCurrent(token);max.title=q.reason||'Stage the most that fits this month';
+  max.addEventListener('click',()=>{if(!ipsCurrent(token))return;try{const now=currentView(),live=E.ResearchTree.quote(now,now.me,draft,node);if(live.maximum<=0)throw Error(live.reason||'No funding fits the current protected budget.');draft=candidate(now,live.maximum);ipsQuoteBudget(now,draft);delete ipsScope(now).forms['tree-'+node];renderReady(now);$('#rtStageMax')?.focus?.({preventScroll:true});}catch(e){form.notice=e.message;const n=$('#ipsNotice');if(n)n.textContent=e.message;}});}
+}
+function researchTreeCombinations(v,mount){
+ const T=E.ResearchTree,rules=v.researchTreeRules,node=k=>rules.nodes[k].name+' ('+rules.families[rules.nodes[k].family].name+')'+(T.has(v.me,k)?' ✓':'');
+ ipsRead(mount,'Combined research','<p>Each combination turns on by itself once both of its nodes are learned, in addition to what those nodes give. There is nothing extra to buy.</p>'+
+  Object.entries(rules.combinations).map(([key,c])=>'<article class="ips-profile-list rt-combo'+(T.combination(v.me,key)?' active':'')+'"><h3>'+esc(c.name)+' · '+(T.combination(v.me,key)?'Active':'Not active')+'</h3><p>'+esc(c.text)+'</p><p class="micro">Needs '+c.requires.map(k=>esc(node(k))).join(' + ')+'</p></article>').join(''));
+}
+// Every active source, grouped by what it changes, with the combined result.
+function researchTreeEffects(v,mount){
+ const T=E.ResearchTree,rules=v.researchTreeRules,sources=T.sources(v.me),terms=Object.keys(rules.terms).filter(t=>sources.some(s=>s.effects[t]!==undefined));
+ const total=t=>{const x=T.effect(v.me,t);if(rules.additive.includes(t))return (x>0?'+':'')+(Math.round(x*10)/10)+(t==='execution'||t==='acquisitionWork'?'':'/month');const pct=Math.round((x-1)*1000)/10;return (pct>0?'+':'')+pct+'%';};
+ const one=(t,x)=>rules.additive.includes(t)?(x>0?'+':'')+x:((x>1?'+':'')+Math.round((x-1)*1000)/10+'%');
+ const levels=Object.entries(rules.families).map(([k,f])=>[f.name,T.level(v.me,k)+' of 4',rules.levels[k]]);
+ ipsRead(mount,'Stacked effects','<p>Each row is one thing research changes. Every source on a row applies: percentages multiply and monthly drifts add, so nothing learned is wasted.</p>'+
+  (terms.length?ipsTable(['Effect','Combined','Sources'],terms.map(t=>[rules.terms[t],total(t),sources.filter(s=>s.effects[t]!==undefined).map(s=>s.name+' '+one(t,s.effects[t])).join(' · ')])):'<p class="notice">No node, combination or model effects yet. Learn a foundation to start.</p>')+
+  '<h3>Family levels</h3><p>Levels also drive the long-standing capability effects below, in addition to the rows above.</p>'+ipsTable(['Family','Level','Each level gives'],levels));
 }
 function renderPartnerCards(v,route,mount){
  const C=E.PartnerCards,R=C.rules(v.me),b=v.me.cardProgram,c=financeContext(route),choosing=v.me.bankCardsVersion===1&&b.status==='unlaunched',own=C.routeOf(v.me)==='bank';

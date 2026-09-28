@@ -165,4 +165,35 @@ test('research is one grouped page: capability tracks and digital and commercial
  assert.equal(bytes(h),before);
 });
 
+test('9.41 research tree: six families, the node tree beside its funding, and stacked effects',()=>{
+ const h=fresh();h.run("game=E.createGame({...E.previewCampaignEdition({},'expanded',{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true,currentBankCards:true,currentResearchTree:true}).options,mode:'hotseat',seed:'research-tree-page',created:1});newDraft(currentView());draft.decision='b';");
+ assert.equal(h.run('game.version'),'9.41');
+ const list=()=>h.elements.get('.ips-body').innerHTML,before=bytes(h);
+ show(h,'strategy','research');
+ for(const heading of ['Research families','Across families'])assert(list().includes('<h3 class="ips-directory-heading">'+heading+'</h3>'),heading);
+ for(const family of ['network','digital','commercial','operations','acquisition','risk'])assert(list().includes('data-ips-item="family:'+family+'"'),family);
+ for(const view of ['combinations','effects'])assert(list().includes('data-ips-item="view:'+view+'"'),view);
+ assert(list().includes('aria-pressed="true" data-ips-item="family:network"'),'Network & Markets opens by default');
+ assert.equal((html(h).match(/data-rt-node="/g)||[]).length,6,'The family page draws all six nodes');
+ assert.match(html(h),/<h3>Market Planning<\/h3>/,'The first node that can be funded is selected');
+ assert.doesNotMatch(list(),/Capability research|data-ips-item="branch:/,'No capability tracks in a tree campaign');
+ show(h,'strategy','research',{node:'integratedNetwork'});
+ assert.match(html(h),/<h2>Network &amp; Markets<\/h2>/);assert.match(html(h),/<h3>Integrated Network<\/h3>/);
+ assert.match(html(h),/either Relationship Retention or Standard Office Rollout/);assert.doesNotMatch(html(h),/ips-field-amount/,'A locked node has no funding field');
+ assert.equal(bytes(h),before,'Inspection changes nothing');
+ show(h,'strategy','research',{node:'marketPlanning'});input(h,'amount',40000);add(h);
+ assert.equal(h.run('draft.nodeFunding.marketPlanning'),40000);
+ show(h,'strategy','research',{node:'marketPlanning'});h.elements.get('#rtStageMax').listeners.click();
+ assert.equal(h.run('draft.nodeFunding.marketPlanning'),100000,'Stage max stages the node at the monthly cap');
+ show(h,'strategy','research',{node:'underwritingStandards'});input(h,'amount',30000);add(h);
+ assert.equal(h.run('draft.nodeFunding.underwritingStandards'),30000,'Families fund in parallel');
+ show(h,'strategy','research');assert.match(list(),/Level 0 of 4 · 0 of 6 learned · \$100K staged/);
+ show(h,'strategy','research',{research:'view:effects'});assert.match(html(h),/No node, combination or model effects yet/);
+ h.run("{const p=game.players[0];for(const k of ['relationshipRetention','complianceProgramme'])p.researchTree.nodes[k]={funded:E.ResearchTree.NODES[k].cost,completed:1};}");
+ show(h,'strategy','research',{research:'view:effects'});assert.match(html(h),/Rate-sensitive deposit runoff/);assert.match(html(h),/Relationship Retention -25% · Stable Funding Relationships -20%/);
+ show(h,'strategy','research',{research:'view:combinations'});assert.match(html(h),/Stable Funding Relationships · Active/);
+ show(h,'strategy','research',{research:'node:localServiceDesign'});assert.match(html(h),/<h3>Local Service Design<\/h3>/,'9.40 list keys still resolve');
+ show(h,'strategy','models',{branch:'digital'});choose(h,'model','dataLedCredit');assert.match(h.elements.get('#ipsQuote').innerHTML,/Learn the foundation, or stage its full remaining cost/);
+});
+
 console.log(JSON.stringify({suite:'interface-people-strategy',checks,scope:'Focused controller and engine checks, shared draft and dirty-form continuity, finite staffing, actual research rules and read-only reports; not browser visual acceptance.'}));

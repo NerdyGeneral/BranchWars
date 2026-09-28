@@ -42,9 +42,9 @@ CAMPAIGN EDITIONS
 New campaigns start as Core version 8.20, with six research branches and
 permanent operating models. After starting, open Research and check that it
 lists six capabilities, including RISK & CAPITAL. Choose Expanded edition and
-confirm for version 9.40: persistent bank rivalry, lending beyond local office
+confirm for version 9.41: persistent bank rivalry, lending beyond local office
 capacity, bank-wide digital platforms, brand campaigns and holding capital.
-Strategy > Research adds five paid capability nodes. Corporate treasury reuses
+Strategy > Research is a tree of 36 nodes in six families. Corporate treasury reuses
 the existing internal/partner platform, central delivery and actual fee book.
 Treasury > Outside-bank advance offers funded one-month borrowing with explicit
 interest and repayment. Banking > Cards launches a card program after Digital

@@ -7,7 +7,7 @@ const {verifyPackage,README,RUNTIME_FILES}=require('./package_release'),{assembl
 const digest=b=>createHash('sha256').update(b).digest('hex');
 const copy=v=>JSON.parse(JSON.stringify(v));
 const PROFILES=Object.freeze({
- current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true,currentBankCards:true},versions:{core:'8.20',expanded:'9.40'}},
+ current:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true,currentLending:true,currentMonetaryPolicy:true,currentBusiness:true,currentDigitalCommercial:true,currentPartnerCards:true,currentCardEconomics:true,currentBankCards:true,currentResearchTree:true},versions:{core:'8.20',expanded:'9.41'}},
  rc4:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true,currentResearch:true},versions:{core:'8.20',expanded:'9.33'}},
  rc2:{flags:{currentEconomics:true},versions:{core:'8.19',expanded:'9.32'}},
  rc3:{flags:{currentReporting:true,currentEconomics:true,currentRivalry:true},versions:{core:'8.19',expanded:'9.33'}}
@@ -75,7 +75,9 @@ function rematchRecovery(E,options,edition){
  assert.equal(restored.researchProgramVersion,edition==='core'?1:undefined);
  for(const owner of restored.players){
   assert.equal(owner.researchProgramVersion,edition==='core'?1:undefined);
-  assert.equal(E.researchBranches(owner).includes('risk'),edition==='core');
+  // Core's research programme and the Expanded 9.41 research tree both have Risk & Capital.
+  assert.equal(E.researchBranches(owner).includes('risk'),edition==='core'||owner.researchTreeVersion===1);
+  if(owner.researchTreeVersion===1)assert(Object.values(owner.researchTree.nodes).every(n=>!n.funded&&!n.completed),'Rematch must reset research nodes');
   assert(Object.values(owner.capability).every(amount=>amount===0),'Rematch must reset paid research');
   assert.deepEqual(copy(owner.specializations),{},'Rematch must reset earned models');
   if(owner.expandedBusinessVersion===1)assert.equal(owner.expandedBusiness.digital.route,'none','Rematch must reset paid digital platforms');

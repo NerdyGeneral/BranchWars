@@ -6,6 +6,7 @@
 const MODULAR_FEATURE_RULES_AVAILABLE = false;
 const CAMPAIGN_PEER_REQUIREMENTS = Object.freeze([
   ['bankCardsVersion', 'bankCardsSupported', 1, 1, 'Bank-issued cards', 'BANK CARDS'],
+  ['researchTreeVersion', 'researchTreeSupported', 1, 1, 'Research tree', 'RESEARCH TREE'],
   ['cardEconomicsVersion', 'cardEconomicsSupported', 1, 1, 'Partner card economics', 'CARD ECONOMICS'],
   ['partnerCardsVersion', 'partnerCardsSupported', 1, 1, 'Partner-issued cards', 'PARTNER CARDS'],
   ['digitalCommercialVersion', 'digitalCommercialSupported', 1, 1, 'Digital Commercial delivery', 'DIGITAL COMMERCIAL'],
@@ -114,7 +115,8 @@ const CAMPAIGN_FEATURES = Object.freeze([
   ['digitalCommercialVersion', 'Digital Commercial delivery', 1, 'expandedBusinessVersion', false, false, 'Five connected capabilities, shared treasury delivery and funded outside-bank advances.'],
   ['partnerCardsVersion', 'Partner-issued cards', 1, 'digitalCommercialVersion', false, false, 'Cedar Reserve funded cards, cash payments, losses and earned bank fees.'],
   ['cardEconomicsVersion', 'Partner card economics', 1, 'partnerCardsVersion', false, false, 'Costs scaled to the finite card book and retained lifetime contribution.'],
-  ['bankCardsVersion', 'Bank-issued cards', 1, 'cardEconomicsVersion', false, false, 'Your bank may issue, fund and own its card book: it earns the interest and interchange and bears the losses and capital.']
+  ['bankCardsVersion', 'Bank-issued cards', 1, 'cardEconomicsVersion', false, false, 'Your bank may issue, fund and own its card book: it earns the interest and interchange and bears the losses and capital.'],
+  ['researchTreeVersion', 'Research tree', 1, 'bankCardsVersion', false, false, 'Six research families of six nodes with branching paths, stacking effects, three operating models each and cross-family combinations.']
 ].map(([field, label, setupVersion, parent, visible, implicit, description]) => Object.freeze({
   field, label, setupVersion, visible, implicit, description, maturity: 'preview',
   available: field !== 'featureRulesVersion' || MODULAR_FEATURE_RULES_AVAILABLE,
@@ -137,6 +139,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
   ['partnerCardsVersion', 'partner cards version'],
   ['cardEconomicsVersion', 'card economics version'],
   ['bankCardsVersion', 'bank cards version'],
+  ['researchTreeVersion', 'research tree version'],
   ['digitalCommercialVersion', 'digital commercial version'],
   ['monetaryPolicyVersion', 'monetary policy version'],
   ['bankRivalryVersion', 'bank rivalry version'],
@@ -172,6 +175,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.researchTreeVersion===1)return '9.41';
   if(source.bankCardsVersion===1)return '9.40';
   if(source.cardEconomicsVersion===1)return '9.39';
   if(source.partnerCardsVersion===1)return '9.38';
@@ -219,7 +223,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
-  if(version==='9.40'||version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
+  if(version==='9.41'||version==='9.40'||version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
   if(version==='8.20'||version==='8.19'||version==='8.18'||version==='9.32')return true;
   if(version==='9.31')return true;
   if(version==='8.17'||version==='9.30')return true;
@@ -355,7 +359,7 @@ function previewFeatureSelection(source, { field, value }) {
 }
 // New-campaign edition selection only. Saved campaigns retain their authoritative
 // scalar versions; this proposal never migrates books or creates subsidiaries.
-function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false, currentMonetaryPolicy = false, currentBusiness = false, currentDigitalCommercial = false, currentPartnerCards = false, currentCardEconomics = false, currentBankCards = false } = {}) {
+function previewCampaignEdition(source, edition, { currentReporting = false, currentEconomics = false, currentRivalry = false, currentResearch = false, currentLending = false, currentMonetaryPolicy = false, currentBusiness = false, currentDigitalCommercial = false, currentPartnerCards = false, currentCardEconomics = false, currentBankCards = false, currentResearchTree = false } = {}) {
   if (!['core', 'expanded'].includes(edition)) throw Error('Unknown campaign edition.');
   const before = campaignRules(source, { context: 'lobby' });
   let options;
@@ -398,6 +402,7 @@ function previewCampaignEdition(source, edition, { currentReporting = false, cur
   if(currentPartnerCards&&options.digitalCommercialVersion===1)options.partnerCardsVersion=1;else delete options.partnerCardsVersion;
   if(currentCardEconomics&&options.partnerCardsVersion===1)options.cardEconomicsVersion=1;else delete options.cardEconomicsVersion;
   if(currentBankCards&&options.cardEconomicsVersion===1)options.bankCardsVersion=1;else delete options.bankCardsVersion;
+  if(currentResearchTree&&options.bankCardsVersion===1)options.researchTreeVersion=1;else delete options.researchTreeVersion;
   if(currentResearch&&currentEconomics&&edition==='core')options.researchProgramVersion=1;
   if(edition!=='core'||!currentResearch)delete options.researchProgramVersion;
   const rules = validateCampaignRules(options, 'lobby');

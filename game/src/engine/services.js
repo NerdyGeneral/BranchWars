@@ -186,7 +186,7 @@ function planServiceReserve(g,index,plan){
  plan=serviceRecoveryPlan(p,plan,g.economy,g);
  const limit=servicePlanReview(p,plan,g.economy,g).spendingLimit;
  for(const key of Object.keys(plan.investments||{})){const excess=Math.max(0,planBudget(p,plan,g).total-limit);plan.investments[key]=Math.max(0,plan.investments[key]-Math.ceil(excess));if(plan.investments[key]<1000)delete plan.investments[key]}
- if(plan.nodeFunding&&planBudget(p,plan,g).total>limit)plan.nodeFunding={};
+ if(plan.nodeFunding&&planBudget(p,plan,g).total>limit){if(ResearchTree.enabled(p))ResearchTree.trim(p,plan,()=>Math.max(0,planBudget(p,plan,g).total-limit));else plan.nodeFunding={};}
  if(planBudget(p,plan,g).total>limit)plan.hires=0;
  plan.newProjects=[...planInitiatives(plan)];
  while(plan.newProjects.length&&planBudget(p,plan,g).total>limit){plan.newProjects.pop();plan.newProject=plan.newProjects[0]||null}

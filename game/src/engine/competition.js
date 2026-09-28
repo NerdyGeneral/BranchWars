@@ -27,8 +27,8 @@ function opportunityTerms(o){
 function acquisitionTerms(g,p,target){
  const buyer=g.players.indexOf(p),seller=1-buyer,rival=g.players[seller],market=g.territories[target];
  if(buyer<0||!market||!rival)throw new Error('Invalid acquisition target');
- const deal=strategyLevel(p,'acquisition'),share=market.shares[seller]/100;
- return {buyer,seller,deal,depositTake:Math.round(Math.min(rival.stats.deposits*(.045+deal*.012)*Math.max(.45,share),4200000)),loanTake:Math.round(Math.min(rival.stats.loans*(.025+deal*.007)*Math.max(.4,share),1900000)),customerTake:Math.round(Math.min(rival.stats.customers*(.035+deal*.008),420))};
+ const deal=strategyLevel(p,'acquisition'),share=market.shares[seller]/100,won=ResearchTree.multiplier(p,'acquisitionTransfer');
+ return {buyer,seller,deal,depositTake:Math.round(Math.min(rival.stats.deposits*(.045+deal*.012)*Math.max(.45,share)*won,4200000)),loanTake:Math.round(Math.min(rival.stats.loans*(.025+deal*.007)*Math.max(.4,share)*won,1900000)),customerTake:Math.round(Math.min(rival.stats.customers*(.035+deal*.008)*won,420))};
 }
 function awardOpportunity(p,o){
  if(!authorizeDepartmentOpportunityAward(p,o))return;

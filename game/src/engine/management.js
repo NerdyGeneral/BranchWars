@@ -52,7 +52,18 @@ function managementPlan(p,input,economy,g=null){
   }else notes.push('Service manager paused: no fully supported mix fits the staff, vendor and sales limits. Existing capacity is unchanged.');
  }
  const r=m.research;
- if(r.enabled){
+ if(r.enabled&&ResearchTree.enabled(p)){
+  // Research tree: fund the next node of each priority family below its target level.
+  let remaining=Math.max(0,r.budget-ResearchTree.spend(plan));
+  for(const key of r.priority){
+   const target=r.targets[key],node=ResearchTree.nextNode(p,key);
+   if(!target||!node||strategyLevel(p,key)>=target||Object.keys(plan.nodeFunding||{}).some(k=>ResearchTree.NODES[k].family===key))continue;
+   const budget=planBudget(p,plan,g),reserveRoom=p.stats.cash-r.reserve-budget.total,advisory=servicePlanReview(p,plan,economy,g).spendingLimit-budget.total,left=ResearchTree.remaining(p,node);
+   const room=Math.min(remaining,left,ResearchTree.NODE_CAP,budget.remaining,reserveRoom,advisory),amount=room>=left?left:Math.floor(room/1000)*1000;
+   if(amount>=Math.min(1000,left)&&amount>0){plan.nodeFunding={...(plan.nodeFunding||{}),[node]:amount};remaining-=amount;notes.push('Recurring research staged $'+amount.toLocaleString()+' for '+ResearchTree.NODES[node].name+'.')}
+  }
+  if(remaining===r.budget)notes.push('Recurring research paused: targets reached, less than $1K remains, or cash/capital reserves prevent spending.');
+ }else if(r.enabled){
   let remaining=Math.max(0,r.budget-Object.values(plan.investments||{}).reduce((n,v)=>n+v,0));
   plan.investments=plan.investments||{};
   for(const key of r.priority){

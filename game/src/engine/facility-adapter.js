@@ -45,13 +45,13 @@ function facilityRawOfficeMetrics(p,office) {
   const model=office.model;
   if(p.facilityNetwork?.version===2&&!FacilityNetwork.MODELS.includes(model)){
     const d=FacilityLifecycle.CATALOG[model];if(!d)throw Error('Unknown facility model.');
-    return {expense:d.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000,
-      depositCapacity:d.capacity.depositCapacity*profile.deposits*(1+state.service*.15),
+    return {expense:(d.upkeep*profile.rent*(1-state.automation*.12)+state.service*2000)*ResearchTree.multiplier(p,'officeExpense'),
+      depositCapacity:d.capacity.depositCapacity*profile.deposits*(1+state.service*.15)*ResearchTree.multiplier(p,'officeDeposits'),
       loanCapacity:d.capacity.loanCapacity*profile.loans,serviceCapacity:d.capacity.serviceCapacity,advisoryCapacity:d.capacity.advisoryCapacity};
   }
   return {
-    expense:(model==='digital'?12000:22000)*profile.rent*(1-state.automation*.12)+state.service*2000,
-    depositCapacity:(model==='retail'?450000:model==='digital'?320000:230000)*profile.deposits*(1+state.service*.15),
+    expense:((model==='digital'?12000:22000)*profile.rent*(1-state.automation*.12)+state.service*2000)*ResearchTree.multiplier(p,'officeExpense'),
+    depositCapacity:(model==='retail'?450000:model==='digital'?320000:230000)*profile.deposits*(1+state.service*.15)*ResearchTree.multiplier(p,'officeDeposits'),
     loanCapacity:(model==='commercial'?430000:model==='retail'?250000:150000)*profile.loans,
     // Existing passive local service contribution, not employee headcount.
     serviceCapacity:.55+strategyLevel(p,'network')*.05+(model==='retail'?.3:model==='digital'?.22:0)
