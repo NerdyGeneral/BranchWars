@@ -3,3 +3,7 @@
 @media(min-width:1500px){.im-directory{position:sticky;top:calc(var(--interface-header-height,100px) + 18px)}}
 @media(max-width:1150px){.interface-markets{grid-template-columns:1fr;gap:14px}.im-inspector{padding:18px}.im-selection{grid-template-columns:1fr}.im-selection>.im-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.im-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.im-services{grid-template-columns:1fr}.im-staff-row{grid-template-columns:minmax(115px,1fr) 74px minmax(110px,1fr);gap:8px}}
 @media(max-width:800px){.interface-markets{grid-template-columns:1fr}.im-directory{padding:14px}.im-directory>nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.im-map-point span{font-size:10px}#expandedInterface .im-map-point small{font-size:8px}.im-directory .im-market-row{padding:10px;margin:0}.im-inspector-head{align-items:flex-start}.im-inspector-head h2{font-size:22px}.im-quote-facts{grid-template-columns:1fr}.im-staff-row{grid-template-columns:minmax(100px,1fr) 75px}.im-staff-row>small{grid-column:1/-1}.im-time-list li{flex-wrap:wrap}.im-inspector{padding:16px}.im-inspector .credit-summary,.im-inspector .decision-facts{grid-template-columns:1fr}}
+/* One row of office or market tasks under the inspector title. */
+.im-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid #d6e0ec}
+.im-tabs .btn{min-height:36px;padding:6px 12px;font-size:13px}
+.im-tabs .btn[aria-pressed="true"]{background:#e8f0fc;border-color:#3476d4;color:#174a8c}

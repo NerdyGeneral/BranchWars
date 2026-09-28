@@ -11,7 +11,7 @@ test('Legacy action focus is revealed in the Core inspector',()=>{
 });
 test('Inspecting markets preserves every plan field and the simulation',()=>{
  const h=fresh(),before=bytes(h);assert(h.run('inspectMarket(currentView(),testTarget)'));assert.equal(h.run('inspectedMarket(currentView())'),h.run('testTarget'));assert.equal(bytes(h),before);
- assert.match(h.c.imMount.innerHTML,/Inspecting only/);assert.match(h.c.imMount.innerHTML,/<b>Build here<\/b>/);assert.match(h.c.imMount.innerHTML,/Your offices here/);
+ assert.match(h.c.imMount.innerHTML,/Inspecting only/);assert.match(h.c.imMount.innerHTML,/>Build an office<\/button>/);assert.match(h.c.imMount.innerHTML,/Your offices here/);
  const build=h.c.imMount.querySelectorAll('[data-im-view="build"]');assert.equal(build.length,1,'One contextual construction entry');assert.equal(JSON.parse(build[0].dataset.imContext).market,h.run('testTarget'));
  build[0].listeners.click();assert.match(h.c.imMount.innerHTML,/New office types/);assert.equal(bytes(h),before);
 });
