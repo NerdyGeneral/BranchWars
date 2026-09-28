@@ -723,7 +723,7 @@ return Math.round(((s.deposits/1e6)*5.2+(s.loans/1e6)*5.6+s.customers*.02+s.busi
 
 | Key | Name | Effect |
 |---|---|---|
-| margin | Protect Margin | Lower funding cost and slower acquisition; price-sensitive balances may leave |
+| margin | Protect Margin | Stable funding, slower acquisition, strongest spread |
 | balanced | Balanced | Steady growth, moderate funding cost and runoff |
 | aggressive | Win Deposits | Fast growth with high funding cost and rate-sensitive runoff |
 

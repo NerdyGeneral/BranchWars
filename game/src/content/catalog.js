@@ -6,7 +6,7 @@ const CAMPAIGN_ACTS=[
 ];
 const SCENARIOS={balanced:'BALANCED ECONOMY',rate:'RATE SHOCK',regulatory:'REGULATORY SIEGE',growth:'GROWTH FRENZY'};
 const ROLES={service:{name:'Retail & Service',desc:'Households, deposits, reputation'},business:{name:'Business Banking',desc:'Business, treasury, merchant'},lending:{name:'Lending',desc:'Loan production and revenue'},operations:{name:'Operations & Risk',desc:'Controls and project execution'}};
-const DEPOSIT_POLICIES={margin:{name:'Protect Margin',desc:'Lower funding cost and slower acquisition; price-sensitive balances may leave'},balanced:{name:'Balanced',desc:'Steady growth, moderate funding cost and runoff'},aggressive:{name:'Win Deposits',desc:'Fast growth with high funding cost and rate-sensitive runoff'}};
+const DEPOSIT_POLICIES={margin:{name:'Protect Margin',desc:'Stable funding, slower acquisition, strongest spread'},balanced:{name:'Balanced',desc:'Steady growth, moderate funding cost and runoff'},aggressive:{name:'Win Deposits',desc:'Fast growth with high funding cost and rate-sensitive runoff'}};
 const LENDING_POLICIES={conservative:{name:'Conservative',desc:'Lower volume and risk'},balanced:{name:'Balanced',desc:'Measured loan growth'},growth:{name:'Growth',desc:'High volume and higher risk'}};
 const CAPITAL_POLICIES={liquid:{name:'Build Liquidity',desc:'Hold cash, slow expansion, absorb shocks'},balanced:{name:'Balanced',desc:'Fund steady growth with normal buffers'},reinvest:{name:'Reinvest',desc:'Accelerate growth at higher liquidity risk'}};
 const PRODUCT_PORTFOLIOS={
