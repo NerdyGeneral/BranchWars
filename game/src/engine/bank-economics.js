@@ -56,7 +56,7 @@ function coreBalanceTransfer(buyer,seller,deposits,loans){
  buyer.accounting=result.buyer;seller.accounting=result.seller;syncAccounts(buyer);syncAccounts(seller);
 }
 function coreBookAcquisition(g,p,project){
- const terms=acquisitionTerms(g,p,project.target),rival=g.players[terms.seller],previous=accountingSuppressed;
+ const terms=acquisitionTerms(g,p,project.target,project.rivalId),rival=g.players[terms.seller],previous=accountingSuppressed;
  let result;
  // Retain the authored customer/branch/market effects, replacing only their
  // four financial deltas with one conserved, backed book transfer.

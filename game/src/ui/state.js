@@ -40,6 +40,13 @@ function marketEntries(v){
     rank(a)-rank(b)||(b.value||0)-(a.value||0)||String(a.name||ak).localeCompare(String(b.name||bk)));
 }
 function toast(t){$('#toast').textContent=t;$('#toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.add('hidden'),2600)}
-function show(id){if(id!=='#gameScreen'&&typeof closeGameHelp==='function')closeGameHelp(false);['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function show(id){
+ if(id!=='#gameScreen'){
+  if(typeof closeGameHelp==='function')closeGameHelp(false);
+  if(typeof interfaceRestoreCore==='function')interfaceRestoreCore();
+  if(typeof coreMultiplayerRestore==='function')coreMultiplayerRestore();
+ }
+ ['#startScreen','#connectScreen','#lobbyScreen','#gameScreen','#gameOver'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden');
+}
 function setStartMessage(t){$('#startMsg').textContent=t||''}
 function setMode(next){mode=next;$$('.mode').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));$('#aiSetup').classList.toggle('hidden',mode!=='ai');$('#hotseatSetup').classList.toggle('hidden',mode!=='hotseat');$('#lanSetup').classList.toggle('hidden',mode!=='lan');$('#p2pSetup').classList.toggle('hidden',mode!=='p2p');$('#ghGuide').classList.toggle('hidden',mode!=='gh');$('#ghSetup').classList.toggle('hidden',mode!=='gh');setStartMessage('');renderSetupBankIdentities()}

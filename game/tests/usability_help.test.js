@@ -77,8 +77,24 @@ test('stale owners, months, connections and snapshots cannot navigate or restore
   const h=harness(all);h.run('openGameHelp()');h.run(change);assert.equal(h.run("navigateGameHelp('funds')"),false);assert(!h.$('#gameHelp').open);assert.equal(h.routes.length,0);assert.equal(h.$('#gameHelpOpen').focuses,0);
  }
  const h=harness(all);h.run('openGameHelp();lastCycle++;reconcileGameHelp()');assert(!h.$('#gameHelp').open);
- assert.match(read('ui/state.js'),/id!=='#gameScreen'&&typeof closeGameHelp/);
- assert.match(read('ui/results.js'),/function openGameOverlay\(id,buttonId\)\s*\{\s*if\(typeof closeGameHelp==='function'\)closeGameHelp\(false\)/);
+});
+test('screen transitions and overlays dismiss help without restoring stale focus',()=>{
+ const elements=new Map(),calls=[];
+ const element=id=>{if(!elements.has(id)){const classes=new Set(['hidden']);elements.set(id,{classList:{add:x=>classes.add(x),remove:x=>classes.delete(x),contains:x=>classes.has(x)},focus(options){this.focusOptions=options},querySelector(){return this.card},card:{scrollTop:17}})}return elements.get(id)};
+ const c={window:{BWEngine:{}},document:{querySelector:element,querySelectorAll:()=>[],activeElement:null},
+  closeGameHelp:restore=>calls.push(['help',restore]),interfaceRestoreCore:()=>calls.push(['interface']),coreMultiplayerRestore:()=>calls.push(['core']),render(){},renderFinal(){}};
+ vm.createContext(c);vm.runInContext(read('ui/state.js'),c);vm.runInContext(read('ui/results.js'),c);
+ c.show('#gameScreen');assert.deepEqual(calls,[],'remaining in the game must preserve help');
+ assert.equal(element('#gameScreen').classList.contains('hidden'),false);
+ for(const screen of ['#startScreen','#connectScreen','#lobbyScreen','#gameOver']){
+  calls.length=0;c.show(screen);assert.deepEqual(calls,[['help',false],['interface'],['core']]);
+  assert.equal(element(screen).classList.contains('hidden'),false);
+  assert.equal(element('#gameScreen').classList.contains('hidden'),true);
+ }
+ calls.length=0;c.openGameOverlay('#resolutionScreen','#resolutionTitle');
+ assert.deepEqual(calls,[['help',false]],'opening an overlay must close help without stealing focus');
+ assert.equal(element('#resolutionScreen').classList.contains('hidden'),false);assert.equal(element('.shell').inert,true);
+ assert.equal(element('#resolutionTitle').focusOptions.preventScroll,true);assert.equal(element('#resolutionScreen').card.scrollTop,0);
 });
 test('actual supported campaign profiles and navigation preserve drafts and books',()=>{
  if(!process.argv.includes('--source'))process.argv.push('--source');

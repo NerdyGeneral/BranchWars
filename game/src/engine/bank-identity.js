@@ -68,7 +68,7 @@ function bankIdentity(identity,name,seat=0){
 }
 function initializeBankIdentities(g,options){
  for(const [i,p] of g.players.entries()){
-  const identity=options[i===0?'identity1':'identity2'];
+  const identity=options.coreMultiplayerVersion===1?options.players[i].identity:options[i===0?'identity1':'identity2'];
   if(identity!==undefined)p.identity=bankIdentity(validateBankIdentity(identity),p.name,i);
  }
 }

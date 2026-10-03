@@ -119,8 +119,8 @@ awardOpportunity=function(p,o){
  }finally{marketTarget=old}
 };
 const marketAcquisition=acquisitionTerms;
-acquisitionTerms=function(g,p,target){
- const terms=marketAcquisition(g,p,target);if(!g.marketEconomy)return terms;
+acquisitionTerms=function(g,p,target,rivalId){
+ const terms=marketAcquisition(g,p,target,rivalId);if(!g.marketEconomy)return terms;
  const book=g.players[terms.seller].marketBook.markets[target];
  return {...terms,depositTake:Math.min(terms.depositTake,book.deposits),loanTake:Math.min(terms.loanTake,ordinaryLoanPrincipal(g.players[terms.seller],target)),customerTake:Math.min(terms.customerTake,book.customers)};
 };

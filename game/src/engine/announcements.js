@@ -24,7 +24,7 @@ const BankAnnouncements=(()=>{
  function validatePublished(source,banks){
   if(source.announcements===undefined)return;
   const rows=source.announcements,cycle=source.gameOver?source.cycle:source.cycle-1,seen=new Set();
-  if(!Array.isArray(rows)||!rows.length||rows.length>2||!Array.isArray(source.resolution))throw Error('Invalid published announcements.');
+  if(!Array.isArray(rows)||!rows.length||rows.length>(source.coreMultiplayerVersion===1?banks.length:2)||!Array.isArray(source.resolution))throw Error('Invalid published announcements.');
   for(const [index,row]of rows.entries()){
    if(!exact(row,['bankId','cycle','audience','text'])||!Number.isSafeInteger(row.cycle)||row.cycle!==cycle||row.cycle<1||seen.has(row.bankId))throw Error('Invalid published announcement identity.');
    const bank=banks.find(p=>p.id===row.bankId);if(!bank)throw Error('Unknown announcement speaker.');
@@ -36,7 +36,7 @@ const BankAnnouncements=(()=>{
   for(const p of g.players)if(p.submitted)validate(p.submitted.announcement);
   for(const plan of Object.values(g.lastPlans||{}))if(plan)validate(plan.announcement);
   validatePublished(g,g.players);
-  if(g.announcements?.length===2&&g.announcements[0].bankId!==g.players[0].id)throw Error('Announcements must retain seat order.');
+  if(g.coreMultiplayerVersion!==1&&g.announcements?.length===2&&g.announcements[0].bankId!==g.players[0].id)throw Error('Announcements must retain seat order.');
  }
  function project(g,out,index){
   const pending=g.players[index].submitted?.announcement;
@@ -46,7 +46,7 @@ const BankAnnouncements=(()=>{
  function validateView(v){
   if(v.rival?.pendingAnnouncement!==undefined)throw Error('Private rival announcement exposed.');
   if(v.me?.pendingAnnouncement!==undefined){if(!v.me.submitted)throw Error('An unsubmitted announcement cannot be public.');validate(v.me.pendingAnnouncement);}
-  validatePublished(v,[v.me,v.rival]);
+  validatePublished(v,v.coreMultiplayerVersion===1?v.banks:[v.me,v.rival]);
  }
  return {MAX_CHARACTERS,length,validate,format,publish,validateGame,project,validateView};
 })();

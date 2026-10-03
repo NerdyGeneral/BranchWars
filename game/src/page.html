@@ -32,6 +32,7 @@
 <style>/* @style-24 */</style>
 <style>/* @style-25 */</style>
 <style>/* @style-26 */</style>
+<style id="core-multiplayer-ui">/* @style-27 */</style>
 </head>
 <body>
 <div class="shell">
@@ -39,6 +40,7 @@
 
   <section id="startScreen" class="panel">
     <div class="kicker">OPEN A CAMPAIGN</div><div class="rule"></div>
+    <section id="coreMultiplayerSetup" aria-label="Core multiplayer campaign setup"></section>
     <div id="setupFeatureOptions" class="notice" aria-label="Optional campaign systems">
       <p class="small muted">Optional systems are off by default. Review their requirements before starting.</p>
       <input id="rivalryPilot" type="checkbox" hidden aria-label="rivalryPilot">
@@ -96,6 +98,7 @@
   </section>
 
   <main id="gameScreen" class="hidden">
+<section id="coreMultiplayerGame" hidden aria-label="Core multiplayer bank management"></section>
 <section id="expandedInterface" hidden aria-label="Expanded bank management"><header id="interfaceHeader"></header><div id="interfaceSession"></div><div class="interface-body"><nav id="interfaceNavigation" aria-label="Bank workspaces"></nav><div class="interface-main"><nav id="interfaceLocation" aria-label="Current location" tabindex="-1"></nav><div id="interfaceReturnBar"></div><section id="interfaceMonth" hidden></section><section id="interfaceMarkets" hidden></section><section id="interfaceBanking" hidden></section><section id="interfacePeople" hidden></section><section id="interfaceStrategy" hidden></section><section id="interfaceGroup" hidden></section><section id="interfaceReports" hidden></section><section id="interfaceReview" hidden></section><section id="interfaceUtilities" hidden></section></div></div></section>
     <section class="panel command-bar" aria-label="Campaign status and headline figures">
       <div class="command-bar-row">

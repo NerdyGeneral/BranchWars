@@ -37,7 +37,7 @@ function recordIncomeHistory(g){
  const cycle=g.gameOver?g.cycle:g.cycle-1;
  // Validate both results before replacing either book. Replays cannot append a
  // duplicate: normal submit calls this only for a new resolution identity.
- const next=g.players.map(p=>IncomeHistory.append(p.incomeHistory,p,cycle));
+ const next=g.players.map(p=>coreMultiplayer(g)&&p.eliminated&&p.eliminatedCycle<cycle?p.incomeHistory:IncomeHistory.append(p.incomeHistory,p,cycle));
  g.players.forEach((p,i)=>p.incomeHistory=next[i]);
 }
 function validateIncomeHistoryCampaign(g){
@@ -57,7 +57,7 @@ function validateIncomeHistoryCampaign(g){
  if(g.incomeHistoryVersion===undefined){if(['8.16','9.29'].includes(g.version)||g.players.some(p=>p.incomeHistory!==undefined))throw Error('Unversioned income history.');return;}
  validateCampaignRules(g,'game');
  const cycle=g.gameOver?g.cycle:g.cycle-1;
- for(const p of g.players)IncomeHistory.validate(p.incomeHistory,cycle);
+ for(const p of g.players)IncomeHistory.validate(p.incomeHistory,coreMultiplayer(g)&&p.eliminated?Math.min(cycle,p.eliminatedCycle):cycle);
 }
 function projectIncomeHistory(g,out,index){
  projectBankRivalry(g,out);
@@ -92,5 +92,5 @@ function validateIncomeHistoryView(v){
  validateCommercialServiceView(v);
  if(v.rival?.incomeHistory!==undefined)throw Error('Private rival income history exposed.');
  if(v.incomeHistoryVersion===undefined){if(['8.16','9.29'].includes(v.version)||v.me?.incomeHistory!==undefined)throw Error('Unversioned income history.');return;}
- validateCampaignRules(v,'view');IncomeHistory.validate(v.me?.incomeHistory,v.gameOver?v.cycle:v.cycle-1);
+ validateCampaignRules(v,'view');IncomeHistory.validate(v.me?.incomeHistory,v.coreMultiplayerVersion===1&&v.me?.eliminated?Math.min(v.gameOver?v.cycle:v.cycle-1,v.me.eliminatedCycle):v.gameOver?v.cycle:v.cycle-1);
 }

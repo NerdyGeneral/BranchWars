@@ -123,6 +123,37 @@ test('Core restoration returns shared controls to their original parents and vis
  assert(h.run(`$('#readyBtn').parentElement===originalHome`));assert.equal(h.run(`$('#readyBtn').hidden`),true);assert.equal(h.run(`$('#expandedInterface').hidden`),true);assert.equal(h.run(`$('#gameScreen').classList.contains('interface-enabled')`),false);
 });
 
+function activeExpandedShell(){
+ const h=fresh(),bodyClasses=new Set();
+ h.c.document.body.classList={add:key=>bodyClasses.add(key),remove:key=>bodyClasses.delete(key),contains:key=>bodyClasses.has(key)};
+ h.run(`originalReadyHome=$('#legacyReadyParent');$('#readyBtn').parentElement=originalReadyHome;interfaceState.route={workspace:'review',view:'plan',context:{}};renderExpandedInterface(currentView());`);
+ assert(bodyClasses.has('game-interface-active'));assert(h.run(`$('#readyBtn').parentElement===$('#interfaceSubmitActions')`));
+ return {h,bodyClasses};
+}
+
+test('leaving Expanded for start, connection, lobby or final screens restores shared controls and presentation',()=>{
+ for(const destination of ['#startScreen','#connectScreen','#lobbyScreen','#gameOver']){
+  const {h,bodyClasses}=activeExpandedShell(),before=h.run('JSON.stringify([game,draft])');h.c.destination=destination;h.run('show(destination)');
+  assert.equal(bodyClasses.has('game-interface-active'),false,destination+' restores the page masthead and background');
+  assert.equal(h.run(`$('#gameScreen').classList.contains('interface-enabled')`),false);
+  assert.equal(h.run(`$('#expandedInterface').hidden`),true);assert(h.run(`$('#readyBtn').parentElement===originalReadyHome`));
+  assert.equal(h.run('JSON.stringify([game,draft])'),before,'Screen transitions preserve the campaign and plan');
+ }
+ const {h,bodyClasses}=activeExpandedShell();h.run('leaveGame()');assert.equal(bodyClasses.has('game-interface-active'),false);assert.equal(h.run('game'),null);assert.equal(h.run('draft'),null);
+});
+
+test('game redraws and privacy or resolution overlays retain the Expanded interface and borrowed controls',()=>{
+ const {h,bodyClasses}=activeExpandedShell(),before=h.run('JSON.stringify([game,draft])');
+ h.run(`show('#gameScreen')`);
+ for(const overlay of ['#privacyScreen','#resolutionScreen']){
+  h.c.overlay=overlay;h.run(`openGameOverlay(overlay,overlay==='#privacyScreen'?'#privacyContinue':'#resolutionTitle')`);
+  assert(bodyClasses.has('game-interface-active'));assert.equal(h.run(`$('#gameScreen').classList.contains('interface-enabled')`),true);
+  assert.equal(h.run(`$('#expandedInterface').hidden`),false);assert(h.run(`$('#readyBtn').parentElement===$('#interfaceSubmitActions')`));
+  assert.equal(h.run(`$('.shell').inert`),true);h.run('closeGameOverlay(overlay)');assert.equal(h.run(`$('.shell').inert`),false);
+ }
+ assert.equal(h.run('JSON.stringify([game,draft])'),before);
+});
+
 test('score ticker uses final recorded closes, not early scoreDelta, current unlock changes or working plans',()=>{
  const h=fresh();h.run(`scoreView=currentView();scoreView.trend=[{cycle:0,meScore:100,rivalScore:200},{cycle:1,meScore:120,rivalScore:180}];scoreView.me.score=130;scoreView.rival.score=170;scoreView.scoreDelta={me:999,rival:-999};`);
  const before=h.run('JSON.stringify([game,draft,scoreView])');

@@ -1,4 +1,4 @@
-function chooseOpenBot(g,index){return withCorporateForecast(g,()=>{
+function chooseOpenBot(g,index){if(coreMultiplayer(g))return withRandom(g,'aiState',()=>chooseCoreMultiplayerBot(g,index));return withCorporateForecast(g,()=>{
  let plan=chooseOpenBotCore(g,index);
  plan=planCommercialAccounts(g,index,plan);
  plan=planFacilityExtensions(g,index,plan);

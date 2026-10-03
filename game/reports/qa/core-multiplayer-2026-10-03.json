@@ -1,0 +1,148 @@
+{
+  "date": "2026-10-03",
+  "status": "scoped-acceptance-passed",
+  "campaignVersion": "10.1",
+  "branch": "feat/core-four-bank-map",
+  "portableSha256": "f6db7819c726d495219a7ae86ed5013b55474057b2eb7fec2a1eb442e4240563",
+  "engineSha256": "a88fb854bd8e3388e883586db8cee85eabdfbf20fcc3928fe6cfb885e117f07a",
+  "scope": "Core Continental24/National12, two to four human/AI banks, private online rooms and preserved historical campaigns. Local development candidate, not published release acceptance.",
+  "coreBrowser": {
+    "passed": true,
+    "htmlSha256": "f6db7819c726d495219a7ae86ed5013b55474057b2eb7fec2a1eb442e4240563",
+    "command": "node game/tools/core_multiplayer_browser.js",
+    "browser": "System Chromium 151 via Playwright",
+    "checks": [
+      "Four-bank local campaign: 24 markets, explicit decision, hiring/research/focus, private covered handoff retaining each owner draft, two human submissions and two AI submissions resolve exactly once.",
+      "Real online room: four isolated human browser contexts, private projections and sealed readiness, exactly one month resolution, and remembered private seat survives closing and reopening its tab."
+    ],
+    "screens": [
+      "continental-map-desktop.png",
+      "bank-finances-desktop.png",
+      "bank-finances-mobile.png",
+      "continental-map-mobile.png",
+      "online-private-dashboard.png"
+    ],
+    "pageErrors": [],
+    "visualReview": "Desktop/mobile map and private financial reports inspected; tied market leaders use neutral borders; narrow maps and tables scroll within their containers.",
+    "mobileFinancialHistory": {
+      "passed": true,
+      "actualMonthRowVisible": true,
+      "horizontalScrollVerified": true,
+      "fullPageOffscreenPaintArtifactInvestigated": true
+    }
+  },
+  "coreEngine": {
+    "passed": true,
+    "command": "node game/tests/core_multiplayer.test.js",
+    "settledMonths": 120,
+    "halfReadyContinuationCases": 10,
+    "pureForecasts": 280,
+    "privateViews": 418
+  },
+  "coreStress": {
+    "passed": true,
+    "bankCounts": [
+      2,
+      3,
+      4
+    ],
+    "monthsPerCampaign": 120,
+    "totalMonths": 360,
+    "privateViews": 1080,
+    "checks": [
+      "accounting",
+      "ledger",
+      "market shares total100",
+      "strict exact save restoration",
+      "private financial history"
+    ]
+  },
+  "saves": {
+    "passed": true,
+    "mapTests": 6,
+    "saveTests": 8,
+    "additionalExactMonthEndImports": 192,
+    "scenarios": [
+      "balanced",
+      "rate",
+      "regulatory",
+      "growth"
+    ],
+    "bankCounts": [
+      3,
+      4
+    ]
+  },
+  "server": {
+    "passed": true,
+    "command": "node game/tests/multiplayer_server.test.js",
+    "checks": [
+      "four human seats and mixed AI",
+      "private authentication and projections",
+      "lobby readiness and revisions",
+      "duplicate/stale plans and recall",
+      "concurrent body and rollback consistency",
+      "durable restart with token and command recovery",
+      "failed storage rolls back",
+      "AI-only spectator advancement",
+      "bounded request bodies and hashed receipts",
+      "imported bank name compatibility"
+    ]
+  },
+  "ui": {
+    "passed": true,
+    "portableTests": 14,
+    "reportTests": 6,
+    "legacyInterfaceNodeTests": 73,
+    "reportRealEngineSeats": 4
+  },
+  "historical": {
+    "goldensPassed": true,
+    "goldenCampaigns": 20,
+    "goldenTurns": 790,
+    "preservedFixturesChanged": false,
+    "adjacentSuiteFiles": 18,
+    "nodeTestEntries": 50,
+    "creationComparisons": 1387,
+    "migrationComparisons": 41
+  },
+  "legacyBrowser": {
+    "passed": true,
+    "htmlSha256": "133e7d95ed12252ab0628641cf43dd3309926f905eb028438a9e7149b45e1293",
+    "scope": "Preceding artifact; the final change afterward adjusts only new Core multiplayer polling, covered by final Core browser and portable UI tests.",
+    "checks": 8,
+    "routes": 33,
+    "layouts": 62,
+    "pageErrors": []
+  },
+  "startup": {
+    "passed": true,
+    "workingDirectory": "/workspace/BranchWars",
+    "command": "HOST=127.0.0.1 node game/tools/multiplayer_server.js 8766 --data-dir /workspace/branchwars-room-data",
+    "restarted": true,
+    "healthVerified": true,
+    "servedHtmlMatchesPortable": true,
+    "configurationDraftSaved": [
+      "repositories mount_path=BranchWars",
+      "start_skill"
+    ]
+  },
+  "limitations": [
+    "No public HTTPS deployment performed.",
+    "No physical separate-computer session or real Internet latency acceptance.",
+    "Human balance testing and the complete fast/full release gates were not run for this candidate.",
+    "Host campaign exports intentionally contain every bank’s private state; ordinary seat views are private."
+  ],
+  "finalArtifactChecks": {
+    "passed": true,
+    "testEntries": 28,
+    "checks": [
+      "portable build and generated reference freshness",
+      "architecture",
+      "documentation links",
+      "gate shard coverage",
+      "Core UI and financial reporting",
+      "reference line-ending compatibility"
+    ]
+  }
+}

@@ -4,6 +4,11 @@ The [documentation index](../docs/README.md) is the starting point. Run
 `node tests/docs.test.js` from the game folder to verify document naming and
 local links; this gate also runs in `tests/capture_baseline.js`.
 
+For the 24-market Core mode, `node game/tools/multiplayer_server.js 8766`
+from the repository root starts the game and authoritative room API together.
+Use `--data-dir PATH` for persistent rooms. See [hosting and recovery](../docs/online-multiplayer.md)
+for public HTTPS hosting, seat keys, storage and restart instructions.
+
 ## Stabilization gates
 
 From the repository root:

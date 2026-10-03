@@ -1,5 +1,32 @@
 # Release status and known issues
 
+## October 3 — Core 10.1 multiplayer candidate
+
+The [approved plan](core-multiplayer-plan.md) is implemented as **Core · larger
+map & 2–4 banks** on the start screen. Continental has 24 fictional markets and
+four equal founding hubs; National retains 12 markets. Human and AI banks share
+simultaneous monthly settlement, targeted rivalry, private financial reports,
+local handoffs and strict saved continuation. Historical campaigns keep their
+existing rules.
+
+[Online rooms](online-multiplayer.md) use a dependency-free Node server with
+private seat credentials, readiness, reconnect keys and optional durable storage.
+Disconnected humans keep their seats. The host is trusted with full campaign
+backups, including every bank's private books and orders. Legacy LAN, Direct P2P
+and Repository Link retain their two-bank protocols.
+
+Verification includes 480 new-engine simulated months, 192 additional exact
+month-end imports, targeted acquisition and elimination cases, private views,
+real HTTP concurrency/replay/restart tests, and desktop/mobile browser workflows.
+Historical golden expectations passed unchanged: 20 campaigns and 790 turns.
+Eighteen adjacent historical suites and the existing interface regressions also
+passed. The [verification receipt](../reports/qa/core-multiplayer-2026-10-03.json)
+records the build and the scope of these checks.
+
+This is a local development candidate. Public HTTPS deployment, physical
+separate-computer acceptance, human balance testing and the complete release
+gate remain outstanding. No public service or release was published.
+
 ## September 28 — Planning repairs on PR #33
 
 Core and Expanded planning repairs are implemented and scoped-tested; see the

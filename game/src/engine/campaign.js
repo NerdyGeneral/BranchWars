@@ -3,10 +3,10 @@ function createBaseCampaign(o){
 
  const g={version:'8.1',mode:o.mode,scope,scenario:o.scenario||'balanced',difficulty:o.difficulty||'vp',
   cycle:1,maxCycles:null,act:0,buyoutPressure:[0,0],consolidationStalemate:0,event:null,economy:null,opportunities:[],
-  players:[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],
+  players:o.coreMultiplayerVersion===1?o.players.map(p=>({...player(p.name,p.isBot),eliminated:false})):[player(o.name1,false),player(o.name2||'Synergy Holdings AI',o.mode==='ai')],
   territories:{},trend:[],lastPlans:{},scoreDelta:{},resolution:[],resolutionId:0,log:[],
   gameOver:false,winnerId:null,rematchVotes:[],created:o.created===undefined?Date.now():o.created};
- g.players.forEach((p,i)=>p.color=bankColor(i?o.color2:o.color1,i));
+ g.players.forEach((p,i)=>p.color=bankColor(o.coreMultiplayerVersion===1?o.players[i].color:i?o.color2:o.color1,i));
  initializeBankIdentities(g,o);
  for(const[k,t]of Object.entries(TERRITORIES))if(t.tier<=SCOPES[scope].maxTier)g.territories[k]={...t,shares:[50,50],exitStreak:[0,0],exited:[false,false]};
  g.players[0].focus='downtown';
@@ -18,6 +18,7 @@ function createBaseCampaign(o){
  g.players[1].facilityMarkets.northside=['retail'];
  g.territories.downtown.shares=[56,44];
  g.territories.northside.shares=[44,56];
+ if(o.coreMultiplayerVersion===1){initializeCoreMap(g,o);g.buyoutPressure=Array(g.players.length).fill(0);}
  if(g.scenario==='rate')g.players.forEach(p=>{delta(p,'deposits',1600000);
  delta(p,'cash',250000)});
  if(g.scenario==='regulatory')g.players.forEach(p=>{p.stats.compliance=23;
@@ -29,7 +30,7 @@ function createBaseCampaign(o){
  chooseEconomy(g,true);
  g.event=chooseEvent(g);
  g.opportunities=makeOpportunities(g);
- addLog(g,`${g.players[0].name} and ${g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');
+ addLog(g,`${o.coreMultiplayerVersion===1?g.players.map(p=>p.name).join(', '):g.players[0].name+' and '+g.players[1].name} entered an open-ended market war. Opening regime: ${g.economy.name}.`,'SYSTEM');
  captureTrend(g,0);
  return g;
 }
@@ -39,6 +40,7 @@ function validateCreationOptions(o){
  if(o.startingWorkforce!==undefined&&o.startingWorkforce!=='covered')throw Error('Unsupported starting workforce instruction.');
 }
 function createGame(o){
+ if(o?.coreMultiplayerVersion!==undefined)o=prepareCoreMultiplayerOptions(o);
  validateCreationOptions(o);
  if(o.cardEconomicsVersion!==undefined||o.bankCardsVersion!==undefined||o.researchTreeVersion!==undefined)validateCampaignRules(o,'creation');
  if(o.bankRivalryVersion!==undefined||o.balanceSheetLendingVersion!==undefined||o.monetaryPolicyVersion!==undefined)validateCampaignRules(o,'creation');
@@ -112,6 +114,7 @@ function createGame(o){
  // Creation instruction only: persisted policies are canonical. Imports and
  // historical createGame calls never run this optional starting allocation.
  applyStartingWorkforce(g,o.startingWorkforce);
+ if(o.coreMultiplayerVersion===1)validateLedger(g);
  if(o.incomeHistoryVersion===1||o.featureRulesVersion===1||o.productProgramsVersion===2){g.version=campaignVersion(g);validatePilot(g)}
  return g;
 }

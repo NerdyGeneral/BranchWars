@@ -1,6 +1,7 @@
 function resolveMonthlySteps(g) {
-  const plans = g.players.map((p) => ({ ...p.submitted, allocation: { ...p.submitted.allocation } })),
-    before = [baseScore(g, 0), baseScore(g, 1)],
+  const eachBank=run=>g.players.forEach((p,i)=>{if(!coreMultiplayer(g)||!p.eliminated)run(p,i)});
+  const plans = g.players.map((p,i) => ({ ...(p.submitted||(coreMultiplayer(g)?defaultCoreMultiplayerPlan(g,i):null)), allocation: { ...p.submitted?.allocation } })),
+    before = g.players.map((_,i)=>baseScore(g,i)),
     L = [];
   if(g.companyCreditVersion===1)L.push(...recordLedgerStage(g,'settleCompanyCreditOrders','companies.credit',()=>settleCompanyCreditOrders(g,plans)));
   if(g.expandedBusinessVersion===1)L.push(...recordLedgerStage(g,'settleHoldingCapital','group.ownership',()=>HoldingCapital.settle(g,plans)));
@@ -17,7 +18,7 @@ function resolveMonthlySteps(g) {
   L.push(...prepareFacilityLifecycle(g,plans,openingLifecycleContexts));
   L.push(...prepareFacilityInstructions(g,plans,openingOfficeContexts));
   if(g.facilityExtensionsVersion===1)L.push(...recordLedgerStage(g,'prepareFacilityExtensions','facilities.extensions',()=>prepareFacilityExtensions(g,plans)));
-  g.players.forEach((p, i) => {
+  eachBank((p, i) => {
     p.allocation = Object.fromEntries(Object.keys(ROLES).map((k) => [k, plans[i].allocation[k]]));
     p.policies = {
       deposit: plans[i].depositPolicy,
@@ -45,6 +46,7 @@ function resolveMonthlySteps(g) {
     if(p.onboarding)p._onboardingBudget=onboardingBudget(p,plans[i]);
     if (p.workforce) p._workforceReserved = workforceLateReserve(p, plans[i]);
     p.focus = plans[i].focus;
+    if(coreMultiplayer(g))p.rivalId=g.players[coreRivalIndex(g,i,p.focus,plans[i].rivalId)].id;
     applyDecision(g, p, plans[i].decision);
     const aid = applyCapitalRequest(g, p, !!plans[i].capitalAction);
     if (aid) L.push(aid);
@@ -54,7 +56,7 @@ function resolveMonthlySteps(g) {
     L.push(...recordLedgerStage(g,'settleDepartmentLeadership','departments.leadership',()=>settleDepartmentLeadership(g,plans)));
     recordLedgerStage(g,'deliverDepartmentFunctions','departments.dispatch',()=>deliverDepartmentFunctions(g));
   }
-  g.players.forEach((p, i) => {
+  eachBank((p, i) => {
     for (const key of planInitiatives(plans[i])) {
       const msg = startProject(g, p, key, plans[i].specializations, projectPlanTarget(plans[i],key));
       if (msg) L.push(msg);
@@ -65,27 +67,27 @@ function resolveMonthlySteps(g) {
   // Route already-paid issuer distributions before later corporate spending
   // can reuse that cash. Final valuation still includes all later expenses.
   if(g.companySharesVersion===1)L.push(...recordLedgerStage(g,'settleCompanyDistributions','companies.shareIncome',()=>settleCompanyDistributions(g)));
-  g.players.forEach((p) => {
+  eachBank((p) => {
     if(p.commercialAccounts)p._commercialAccountQuarters=commercialAccountWork(p);
     const production=operate(g,p);
     L.push(p.departmentOffice?production+' Production profit excludes separately reported head-office department costs.':production);
   });
   L.push(...recordLedgerStage(g,'finishCorporateEconomy','companies.contracts',()=>finishCorporateEconomy(g)));
-  g.players.forEach((p) => {
+  eachBank((p) => {
     const msg = deleverage(g, p);
     if (msg) L.push(msg);
   });
   const contest = depositContest(g);
   L.push(...contest.lines);
-  g.players.forEach((p, i) => L.push(...settleFunding(g, p, contest.outflow[i])));
+  eachBank((p, i) => L.push(...settleFunding(g, p, contest.outflow[i])));
   L.push(...resolveOpportunities(g, plans));
   L.push(...simulateMarkets(g));
   L.push(...resolveMarketExits(g));
   L.push(...franchiseDividends(g));
   L.push(...advanceInstitutionProjects(g));
   L.push(...settleFacilityLifecycle(g,plans));
-  g.players.forEach((p) => L.push(...consequences(g, p)));
-  g.players.forEach((p, i) => {
+  eachBank((p) => L.push(...consequences(g, p)));
+  eachBank((p, i) => {
     const trained = settleWorkforceTraining(g, p);
     if (trained) L.push(trained);
     if(p.departmentOffice)recordLedgerStage(g,'settleDepartmentExperience','departments.experience',()=>{
@@ -115,16 +117,13 @@ function resolveMonthlySteps(g) {
   L.push(...awardMilestones(g));
   const actMessage = updateCampaignAct(g);
   if (actMessage) L.push(actMessage);
-  g.lastPlans = { [g.players[0].id]: plans[0], [g.players[1].id]: plans[1] };
-  g.players.forEach((p, i) => {
+  g.lastPlans = Object.fromEntries(g.players.flatMap((p,i)=>coreMultiplayer(g)&&p.eliminated?[]:[[p.id,plans[i]]]));
+  eachBank((p, i) => {
     if (!plans[i].capitalAction && p.capitalRestriction > 0) p.capitalRestriction--;
     p.submitted = null;
     p.turnEffects = {};
   });
-  g.scoreDelta = {
-    [g.players[0].id]: Math.round((baseScore(g, 0) - before[0]) * 10) / 10,
-    [g.players[1].id]: Math.round((baseScore(g, 1) - before[1]) * 10) / 10
-  };
+  g.scoreDelta = Object.fromEntries(g.players.map((p,i)=>[p.id,Math.round((baseScore(g,i)-before[i])*10)/10]));
   L.push(...settleRegionalGrowthWithLedger(g));
   if(g.sharedPremisesVersion===1)L.push(...recordLedgerStage(g,'settleSharedPremisesGroup','group.premises',()=>settleSharedPremisesGroup(g,plans)));
   else {

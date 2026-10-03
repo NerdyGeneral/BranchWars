@@ -1,0 +1,11 @@
+# Only executable release assets enter the build context.
+**
+!Dockerfile
+!game/
+!game/src/
+!game/src/**
+!game/tools/
+!game/tools/build_game.js
+!game/tools/multiplayer_server.js
+!game/BRANCH_WARS.html
+**/.*
