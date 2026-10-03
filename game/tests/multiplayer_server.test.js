@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const http = require('node:http');
+const crypto = require('node:crypto');
 const { once } = require('node:events');
 const { createServer, BODY_LIMIT } = require('../tools/multiplayer_server');
 
@@ -222,6 +223,102 @@ async function creationLimits(engineHtml) {
     await app.request('/rooms', { method: 'POST', body: { bankName: 'Rate Limited', players: 2 }, status: 429 });
   } finally { await app.close(); }
 }
+async function initialHandshakeChecks(engineHtml) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'branchwars-initial-key-'));
+  let app;
+  const createBody = { bankName: 'Retry Host', players: 4, coreMap: 'continental', seed: 'initial-key-restart', seatKey: crypto.randomBytes(32).toString('hex') };
+  const joinBodies = Array.from({ length: 3 }, (_, index) => ({ bankName: 'Retry Guest ' + (index + 1), seatKey: crypto.randomBytes(32).toString('hex') }));
+  async function loseResponse(routeName, body) {
+    let dropped = false;
+    app.server.once('request', (request, response) => {
+      assert.equal(request.method, 'POST'); assert.equal(request.url, '/api/multiplayer' + routeName);
+      // The canonical mutation and private storage complete before send calls
+      // end; destroy the real socket before the credential response arrives.
+      response.end = function () { dropped = true; this.destroy(); return this; };
+    });
+    await assert.rejects(app.request(routeName, { method: 'POST', body, status: 201 }));
+    assert(dropped, 'The initial private response must actually be dropped.');
+  }
+  function privateStorage() {
+    for (const file of fs.readdirSync(directory).filter(name => name.endsWith('.json'))) {
+      const text = fs.readFileSync(path.join(directory, file), 'utf8');
+      for (const body of [createBody, ...joinBodies]) assert(!text.includes(body.seatKey), 'Storage retained a plaintext initial seat key.');
+      const document = JSON.parse(text);
+      for (const seat of document.room.seats.filter(item => item.initialRequest)) {
+        assert.deepEqual(Object.keys(seat.initialRequest).sort(), ['action', 'fingerprint']);
+        assert.match(seat.initialRequest.fingerprint, /^[a-f0-9]{64}$/);
+      }
+    }
+  }
+  const reopen = async () => { await app.close(); app = await launch({ ...engineHtml, dataDir: directory, maxCreationsPerMinute: 2 }); };
+  try {
+    app = await launch({ ...engineHtml, dataDir: directory, maxCreationsPerMinute: 2 });
+    for (const seatKey of ['', null, false, 'a'.repeat(63), 'A'.repeat(64), 'g'.repeat(64)])
+      await app.request('/rooms', { method: 'POST', body: { ...createBody, seatKey }, status: 400 });
+    await loseResponse('/rooms', createBody); privateStorage(); await reopen();
+    const host = await app.request('/rooms', { method: 'POST', body: createBody });
+    assert(host.token === createBody.seatKey); assert.equal(host.seat, 0); assert.equal(host.lobby.revision, 1);
+    assert.equal(fs.readdirSync(directory).filter(name => name.endsWith('.json')).length, 1, 'Retry Create must not allocate a second room.');
+    const r = action => route(host.room, action);
+    const reordered = Object.fromEntries(Object.entries(createBody).reverse());
+    assert.equal((await app.request('/rooms', { method: 'POST', body: reordered })).room, host.room, 'Request key order must not change initial identity.');
+    const conflict = await app.request('/rooms', { method: 'POST', body: { ...createBody, seed: 'changed-intent' }, status: 409 });
+    assert.equal(conflict.code, 'handshake_conflict');
+    await app.request(r('join'), { method: 'POST', body: { ...joinBodies[0], seatKey: createBody.seatKey }, status: 409 });
+    await loseResponse(r('join'), joinBodies[0]);
+    const claimed = await app.request(r(), { token: host.token });
+    assert.equal(claimed.lobby.players.filter(seat => seat.claimed).length, 2); privateStorage(); await reopen();
+    const guest = await app.request(r('join'), { method: 'POST', body: joinBodies[0] });
+    assert(guest.token === joinBodies[0].seatKey); assert.equal(guest.seat, 1);
+    assert.equal(guest.lobby.revision, claimed.lobby.revision, 'Retry Join must not clear existing readiness or increment revision.');
+    await app.request(r('join'), { method: 'POST', body: { ...joinBodies[0], bankName: 'Changed Guest' }, status: 409 });
+    const secondRoom = await app.request('/rooms', { method: 'POST', body: { bankName: 'Other Retry Host', players: 2 }, status: 201 });
+    const otherConflict = await app.request(route(secondRoom.room, 'join'), { method: 'POST', body: joinBodies[0], status: 409 });
+    assert.equal(otherConflict.code, 'handshake_conflict', 'A private key cannot claim a second room or disclose its original seat.');
+    await app.request('/rooms', { method: 'POST', body: { ...createBody, seatKey: secondRoom.token }, status: 409 });
+    // Repeated initial retries do not consume the room creation rate limit.
+    await app.request('/rooms', { method: 'POST', body: createBody });
+    const seats = [host, guest];
+    const rename = fs.renameSync; fs.renameSync = () => { throw Error('simulated initial storage failure'); };
+    try { await app.request(r('join'), { method: 'POST', body: joinBodies[1], status: 503 }); } finally { fs.renameSync = rename; }
+    const afterStorageFailure = await app.request(r(), { token: host.token });
+    assert.equal(afterStorageFailure.lobby.players.filter(seat => seat.claimed).length, 2);
+    assert.equal(afterStorageFailure.lobby.revision, claimed.lobby.revision, 'A failed initial save must not reserve a seat or advance readiness.');
+    const concurrentJoin = async () => {
+      const response = await fetch(app.base + r('join'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(joinBodies[1]) });
+      return { status: response.status, value: await response.json() };
+    };
+    const duplicates = await Promise.all([concurrentJoin(), concurrentJoin()]);
+    assert.deepEqual(duplicates.map(result => result.status).sort(), [200, 201]);
+    assert(duplicates.every(result => result.value.seat === 2 && result.value.token === joinBodies[1].seatKey), 'Concurrent initial Join retries must recover exactly one private seat.');
+    seats.push(duplicates[0].value);
+    seats.push(await app.request(r('join'), { method: 'POST', body: joinBodies[2], status: 201 }));
+    const beforeDuplicate = await app.request(r(), { token: host.token });
+    await app.request(route(secondRoom.room, 'join'), { method: 'POST', body: { bankName: 'Other Retry Host', seatKey: crypto.randomBytes(32).toString('hex') }, status: 400 });
+    const revision = beforeDuplicate.lobby.revision;
+    for (const seat of seats) await app.request(r('ready'), { method: 'POST', token: seat.token, body: { revision, ready: true } });
+    const started = await app.request(r('start'), { method: 'POST', token: host.token, body: { revision } });
+    await reopen();
+    const resumedHost = await app.request('/rooms', { method: 'POST', body: createBody });
+    assert.equal(resumedHost.room, host.room); assert.deepEqual(resumedHost.state, started.state, 'Create retry after start/restart must recover current owner state.');
+    const resumedGuest = await app.request(r('join'), { method: 'POST', body: joinBodies[0] });
+    assert.equal(resumedGuest.seat, 1);
+    assert.equal(resumedGuest.lobby.revision, revision);
+    const exported = await app.request(r('export'), { token: host.token });
+    assert.equal(resumedGuest.state.me.id, exported.game.players[1].id);
+    const state = JSON.stringify(resumedGuest.state), save = JSON.stringify(exported.game);
+    for (const body of [createBody, ...joinBodies]) { assert(!state.includes(body.seatKey)); assert(!save.includes(body.seatKey)); }
+    assert(!state.includes('initialRequest')); assert(!save.includes('initialRequest')); privateStorage();
+    for (const [index, seat] of seats.entries()) {
+      const live = (await app.request(r(), { token: seat.token })).state;
+      await app.request(r('plan'), { method: 'POST', token: seat.token, body: envelope(live, 'initial-key-first-month-' + index, copy(app.server.engine.chooseBot(copy(exported.game), index))) });
+    }
+    const settled = await app.request(r(), { token: host.token }); assert.equal(settled.state.cycle, started.state.cycle + 1);
+    assert.equal((await app.request('/rooms', { method: 'POST', body: createBody })).state.cycle, settled.state.cycle);
+    const closed = await app.request(r('close'), { method: 'POST', token: host.token, body: { confirm: true } }); assert(closed.closed);
+    await app.request(r('join'), { method: 'POST', body: joinBodies[0], status: 404 });
+  } finally { if (app?.server.listening) await app.close(); fs.rmSync(directory, { recursive: true, force: true }); }
+}
 async function spectatorChecks(app) {
   const E = app.server.engine;
   const game = E.createGame({ coreMultiplayerVersion: 1, coreMap: 'continental', mode: 'hotseat', seed: 'core-n-3-continental', created: 1, players: [{ name: 'Retired Host', isBot: false }, { name: 'Remaining AI One', isBot: true }, { name: 'Remaining AI Two', isBot: true }] });
@@ -253,8 +350,8 @@ async function main() {
     app = await launch(); await delayedBodyChecks(app); const seats = await lobbyChecks(app); const saved = await turnChecks(app, seats); await savedAndAiChecks(app, saved); await spectatorChecks(app);
     await app.request('/rooms', { method: 'POST', raw: ' '.repeat(BODY_LIMIT + 1), status: 413 });
     const engineHtml = { engine: app.server.engine, html: '<!doctype html><title>Test transport document</title>' };
-    await app.close(); await restartChecks(engineHtml); await creationLimits(engineHtml);
-    console.log('Core multiplayer server PASS: four private human seats, authority/readiness/revision/input denials, concurrent body/rollback safety, bounded requests and command hashes, reserved disconnects, recall and single settlement, mixed AI play, safe save resume, spectator advancement with frozen retired books, hashed credentials, private atomic storage, restart/PID-reuse recovery, failed-storage retry, explicit room close and creation limits.');
+    await app.close(); await restartChecks(engineHtml); await creationLimits(engineHtml); await initialHandshakeChecks(engineHtml);
+    console.log('Core multiplayer server PASS: four private human seats, authority/readiness/revision/input denials, concurrent body/rollback safety, bounded requests and command hashes, reserved disconnects, recall and single settlement, mixed AI play, safe save resume, spectator advancement with frozen retired books, hashed credentials, private atomic storage, restart/PID-reuse recovery, failed-storage retry, explicit room close, creation limits, and private client-held initial-key retry after response loss/restart.');
   } finally { if (app?.server.listening) await app.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

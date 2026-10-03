@@ -1,18 +1,19 @@
 {
   "date": "2026-10-03",
-  "status": "scoped-acceptance-passed",
+  "status": "release-validation-in-progress",
   "campaignVersion": "10.1",
   "branch": "feat/core-four-bank-map",
-  "portableSha256": "f6db7819c726d495219a7ae86ed5013b55474057b2eb7fec2a1eb442e4240563",
+  "portableSha256": "f43bcb8203e150f81fd778407863a4b6b44a5daccb35672883133ee7c30f52b4",
   "engineSha256": "a88fb854bd8e3388e883586db8cee85eabdfbf20fcc3928fe6cfb885e117f07a",
-  "scope": "Core Continental24/National12, two to four human/AI banks, private online rooms and preserved historical campaigns. Local development candidate, not published release acceptance.",
+  "scope": "Core Continental24/National12, two to four human/AI banks, private online rooms and preserved historical campaigns. Development candidate on draft PR34; public deployment and full release acceptance remain outstanding.",
   "coreBrowser": {
     "passed": true,
-    "htmlSha256": "f6db7819c726d495219a7ae86ed5013b55474057b2eb7fec2a1eb442e4240563",
+    "htmlSha256": "f43bcb8203e150f81fd778407863a4b6b44a5daccb35672883133ee7c30f52b4",
     "command": "node game/tools/core_multiplayer_browser.js",
     "browser": "System Chromium 151 via Playwright",
     "checks": [
       "Four-bank local campaign: 24 markets, explicit decision, hiring/research/focus, private covered handoff retaining each owner draft, two human submissions and two AI submissions resolve exactly once.",
+      "Initial create and join replies dropped after actual server mutation: browser reload and Retry connection recover the original room/seat without duplicate rooms or stranded banks.",
       "Real online room: four isolated human browser contexts, private projections and sealed readiness, exactly one month resolution, and remembered private seat survives closing and reopening its tab."
     ],
     "screens": [
@@ -28,7 +29,8 @@
       "passed": true,
       "actualMonthRowVisible": true,
       "horizontalScrollVerified": true,
-      "fullPageOffscreenPaintArtifactInvestigated": true
+      "fullPageOffscreenPaintArtifactInvestigated": true,
+      "scope": "Earlier scoped mobile-history verification; report implementation unchanged by the subsequent connection repairs."
     }
   },
   "coreEngine": {
@@ -86,12 +88,16 @@
       "failed storage rolls back",
       "AI-only spectator advancement",
       "bounded request bodies and hashed receipts",
-      "imported bank name compatibility"
+      "imported bank name compatibility",
+      "private client-held initial key saved before Create/Join",
+      "lost initial response retries the same room/seat after browser reload or durable server restart",
+      "changed initial request, action or room cannot reuse an existing key",
+      "concurrent initial retries reserve one seat; failed storage permits a safe retry"
     ]
   },
   "ui": {
     "passed": true,
-    "portableTests": 14,
+    "portableTests": 22,
     "reportTests": 6,
     "legacyInterfaceNodeTests": 73,
     "reportRealEngineSeats": 4
@@ -109,7 +115,7 @@
   "legacyBrowser": {
     "passed": true,
     "htmlSha256": "133e7d95ed12252ab0628641cf43dd3309926f905eb028438a9e7149b45e1293",
-    "scope": "Preceding artifact; the final change afterward adjusts only new Core multiplayer polling, covered by final Core browser and portable UI tests.",
+    "scope": "Preceding artifact; subsequent client and server repairs affect new Core multiplayer. Exact current Core browser workflows and portable UI tests are recorded separately.",
     "checks": 8,
     "routes": 33,
     "layouts": 62,
@@ -125,24 +131,70 @@
     "configurationDraftSaved": [
       "repositories mount_path=BranchWars",
       "start_skill"
-    ]
+    ],
+    "scope": "Environment startup verified on pre-recovery candidate f6db7819c726d495219a7ae86ed5013b55474057b2eb7fec2a1eb442e4240563; final container verification covers the current candidate."
   },
   "limitations": [
-    "No public HTTPS deployment performed.",
+    "No public HTTPS service deployed; hosting account/destination remains unselected.",
     "No physical separate-computer session or real Internet latency acceptance.",
-    "Human balance testing and the complete fast/full release gates were not run for this candidate.",
+    "Complete standard and Windows release gates have not yet passed for the corrected candidate; CI must run again.",
+    "Human balance acceptance remains outstanding.",
     "Host campaign exports intentionally contain every bank’s private state; ordinary seat views are private."
   ],
   "finalArtifactChecks": {
     "passed": true,
-    "testEntries": 28,
+    "portableUiTests": 22,
     "checks": [
-      "portable build and generated reference freshness",
-      "architecture",
-      "documentation links",
-      "gate shard coverage",
-      "Core UI and financial reporting",
-      "reference line-ending compatibility"
+      "portable build and generated-reference freshness",
+      "architecture and documentation links",
+      "reviewed engine boundary backed by independent replay",
+      "actual four-browser, dropped-response/reload and idle-polling workflows",
+      "actual container monthly settlement and persistent crash recovery"
     ]
+  },
+  "connectionRepairs": {
+    "passed": true,
+    "browserReloadAfterDroppedCreateAndJoin": true,
+    "unchangedPollingPreservesControlCallbacks": true,
+    "confirmedSeatStorageFallback": true,
+    "privateKeysAbsentFromInvitesAndServerStorage": true,
+    "engineBytesUnchanged": true
+  },
+  "releaseBalance": {
+    "passed": true,
+    "command": "node game/tests/release_balance.test.js --report",
+    "campaigns": 16,
+    "completedMonths": 1920,
+    "skippedInitiatives": 0,
+    "cancelledInitiatives": 0,
+    "largestProjectedViewBytes": 559901,
+    "engineSha256": "a88fb854bd8e3388e883586db8cee85eabdfbf20fcc3928fe6cfb885e117f07a"
+  },
+  "deployment": {
+    "packageTested": true,
+    "command": "node deployment/container-smoke.js",
+    "portableSha256": "f43bcb8203e150f81fd778407863a4b6b44a5daccb35672883133ee7c30f52b4",
+    "runtime": "Node24, UID1000, read-only container root",
+    "persistentCrashRecoveryPassed": true,
+    "privateFilePermissionsPassed": true,
+    "renderBlueprintSchemaValid": true,
+    "publicServiceCreated": false,
+    "requires": "Hosting account and destination; Render template baseline is $7.25/month before usage charges."
+  },
+  "reviewedEngineBoundary": {
+    "engineSha256": "a88fb854bd8e3388e883586db8cee85eabdfbf20fcc3928fe6cfb885e117f07a",
+    "independentReplayPassed": true,
+    "referenceFixturesUnchanged": true,
+    "evidence": [
+      "CI37137165154 shards1-4 passed on2f9c0c3, including immutable behavior goldens, runtime stages, integrated recovery, Expanded compatibility, Core balance and forecasts.",
+      "Matching local engine passed integrated staffing, frozen Group7/8 replays, determinism, research AI, campaign lifecycle, save integrity and V3.1 boundary.",
+      "Complete source engine suite passed48 long campaigns."
+    ],
+    "completeReleaseGate": false
+  },
+  "publication": {
+    "draftPullRequest": "https://github.com/NerdyGeneral/BranchWars/pull/34",
+    "merged": false,
+    "releasePublished": false
   }
 }

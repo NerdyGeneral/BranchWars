@@ -7,6 +7,7 @@ let coreMultiOnline={base:'',room:'',seat:null,token:'',lobby:null,busy:false,ti
 let coreMultiLocalDrafts={campaign:null,cycle:null,plans:new Map()};
 let coreMultiConnecting=false;
 let coreMultiRemember=true;
+let coreMultiPending=null;
 const coreMultiCopy=value=>JSON.parse(JSON.stringify(value));
 const coreMultiMoney=value=>Number.isFinite(value)?'$'+Math.round(value).toLocaleString('en-US'):'Unavailable';
 const coreMultiColor=(color,i=0)=>/^#[0-9a-f]{6}$/i.test(String(color))?color:CORE_MULTI_COLORS[i%4];
@@ -141,7 +142,9 @@ function resumeCoreMultiplayer(restored){
 }
 function renderCoreMultiplayerSetup(){
  const mount=$('#coreMultiplayerSetup');if(!mount)return;
- mount.innerHTML='<details class="cm-setup" open><summary>Core · larger map & 2–4 banks</summary><p>Play 24 fictional markets with any mix of human and AI opponents. Human banks plan privately on one computer or join an online room.</p><div class="cm-setup-fields"><label for="cmBankCount">Banks<select id="cmBankCount">'+[2,3,4].map(n=>'<option value="'+n+'" '+(n===coreMultiSetup.count?'selected':'')+'>'+n+' banks</option>').join('')+'</select></label><label for="cmMapChoice">Map<select id="cmMapChoice"><option value="continental" '+(coreMultiSetup.map==='continental'?'selected':'')+'>Continental · 24 markets</option><option value="national" '+(coreMultiSetup.map==='national'?'selected':'')+'>National · 12 markets</option></select></label><label for="cmScenarioChoice">Economy<select id="cmScenarioChoice">'+Object.entries(E.SCENARIOS).map(([key,d])=>'<option value="'+key+'" '+(key===coreMultiSetup.scenario?'selected':'')+'>'+esc(d.name||d)+'</option>').join('')+'</select></label><label for="cmDifficultyChoice">Local AI difficulty<select id="cmDifficultyChoice">'+[['analyst','Junior analysts'],['vp','Regional VPs'],['chairman','Chairman’s office']].map(([key,label])=>'<option value="'+key+'" '+(key===coreMultiSetup.difficulty?'selected':'')+'>'+label+'</option>').join('')+'</select></label><label for="cmSeed">Seed (optional)<input id="cmSeed" maxlength="100" value="'+esc(coreMultiSetup.seed)+'" placeholder="A repeatable campaign seed"></label></div><div class="cm-setup-roster">'+coreMultiSetup.players.slice(0,coreMultiSetup.count).map((bank,i)=>'<fieldset><legend>Bank '+(i+1)+'</legend><label for="cmBankName'+i+'">Name<input id="cmBankName'+i+'" maxlength="36" value="'+esc(bank.name)+'"></label><label for="cmBankType'+i+'">Player<select id="cmBankType'+i+'" '+(!i?'disabled':'')+'><option value="human" '+(!bank.isBot?'selected':'')+'>Human</option><option value="ai" '+(bank.isBot?'selected':'')+'>AI</option></select></label><label for="cmBankColor'+i+'">Color<input id="cmBankColor'+i+'" type="color" value="'+coreMultiColor(bank.color,i)+'"></label></fieldset>').join('')+'</div><button type="button" class="btn primary" id="cmStartLocal">Start local campaign</button><div class="cm-online-setup"><h3>Online room</h3><p>Use a game server reachable by every player. Share its server address and room code. Each person joins their own private bank.</p><label for="cmServerUrl">Game server address<input id="cmServerUrl" type="url" value="'+esc(coreMultiDefaultServer())+'" placeholder="https://your-game-server.example"></label><label for="cmRoomCode">Room code<input id="cmRoomCode" maxlength="16" autocomplete="off" value="'+esc(coreMultiInitialRoom())+'" placeholder="Room code from the host"></label><div class="cm-actions"><button type="button" class="btn" id="cmCreateRoom">Create online room</button><button type="button" class="btn" id="cmJoinRoom">Join room as Bank 1 name</button><button type="button" class="btn" id="cmReconnectRoom">Reconnect remembered bank</button><label class="btn" for="cmReconnectKeyFile">Reconnect with private key</label><input id="cmReconnectKeyFile" type="file" accept=".json,application/json" hidden><label class="btn" for="cmRoomSaveFile">Create room from campaign save</label><input id="cmRoomSaveFile" type="file" accept=".json,application/json" hidden></div><label class="cm-check"><input id="cmRememberSeat" type="checkbox" checked> Remember this private bank on this device</label><p class="cm-note">Your private seat key stays in this browser. You can also download a reconnect key after joining.</p><p class="cm-note">Room creation uses the roster above. Human slots are claimed by joining; AI slots are filled by the server. Online uses the bank count, player types, map, economy, seed and Bank 1 name. Other names, colors and AI difficulty above apply to local play.</p></div><p id="cmSetupStatus" class="cm-status" role="status"></p></details>';
+ mount.innerHTML='<details class="cm-setup" open><summary>Core · larger map & 2–4 banks</summary><p>Play 24 fictional markets with any mix of human and AI opponents. Human banks plan privately on one computer or join an online room.</p><div class="cm-setup-fields"><label for="cmBankCount">Banks<select id="cmBankCount">'+[2,3,4].map(n=>'<option value="'+n+'" '+(n===coreMultiSetup.count?'selected':'')+'>'+n+' banks</option>').join('')+'</select></label><label for="cmMapChoice">Map<select id="cmMapChoice"><option value="continental" '+(coreMultiSetup.map==='continental'?'selected':'')+'>Continental · 24 markets</option><option value="national" '+(coreMultiSetup.map==='national'?'selected':'')+'>National · 12 markets</option></select></label><label for="cmScenarioChoice">Economy<select id="cmScenarioChoice">'+Object.entries(E.SCENARIOS).map(([key,d])=>'<option value="'+key+'" '+(key===coreMultiSetup.scenario?'selected':'')+'>'+esc(d.name||d)+'</option>').join('')+'</select></label><label for="cmDifficultyChoice">Local AI difficulty<select id="cmDifficultyChoice">'+[['analyst','Junior analysts'],['vp','Regional VPs'],['chairman','Chairman’s office']].map(([key,label])=>'<option value="'+key+'" '+(key===coreMultiSetup.difficulty?'selected':'')+'>'+label+'</option>').join('')+'</select></label><label for="cmSeed">Seed (optional)<input id="cmSeed" maxlength="100" value="'+esc(coreMultiSetup.seed)+'" placeholder="A repeatable campaign seed"></label></div><div class="cm-setup-roster">'+coreMultiSetup.players.slice(0,coreMultiSetup.count).map((bank,i)=>'<fieldset><legend>Bank '+(i+1)+'</legend><label for="cmBankName'+i+'">Name<input id="cmBankName'+i+'" maxlength="36" value="'+esc(bank.name)+'"></label><label for="cmBankType'+i+'">Player<select id="cmBankType'+i+'" '+(!i?'disabled':'')+'><option value="human" '+(!bank.isBot?'selected':'')+'>Human</option><option value="ai" '+(bank.isBot?'selected':'')+'>AI</option></select></label><label for="cmBankColor'+i+'">Color<input id="cmBankColor'+i+'" type="color" value="'+coreMultiColor(bank.color,i)+'"></label></fieldset>').join('')+'</div><button type="button" class="btn primary" id="cmStartLocal">Start local campaign</button><div class="cm-online-setup"><h3>Online room</h3><p>Use a game server reachable by every player. Share its server address and room code. Each person joins their own private bank.</p><label for="cmServerUrl">Game server address<input id="cmServerUrl" type="url" value="'+esc(coreMultiDefaultServer())+'" placeholder="https://your-game-server.example"></label><label for="cmRoomCode">Room code<input id="cmRoomCode" maxlength="16" autocomplete="off" value="'+esc(coreMultiInitialRoom())+'" placeholder="Room code from the host"></label><div class="cm-actions"><button type="button" class="btn" id="cmCreateRoom">Create online room</button><button type="button" class="btn" id="cmJoinRoom">Join room as Bank 1 name</button><button type="button" class="btn" id="cmRetryConnection" hidden>Retry connection</button><button type="button" class="btn" id="cmDiscardConnection" hidden>Discard pending connection</button><button type="button" class="btn" id="cmReconnectRoom">Reconnect remembered bank</button><label class="btn" for="cmReconnectKeyFile">Reconnect with private key</label><input id="cmReconnectKeyFile" type="file" accept=".json,application/json" hidden><label class="btn" for="cmRoomSaveFile">Create room from campaign save</label><input id="cmRoomSaveFile" type="file" accept=".json,application/json" hidden></div><label class="cm-check"><input id="cmRememberSeat" type="checkbox" checked> Remember this private bank on this device</label><p class="cm-note">Your private seat key stays in this browser. You can also download a reconnect key after joining.</p><p class="cm-note">Room creation uses the roster above. Human slots are claimed by joining; AI slots are filled by the server. Online uses the bank count, player types, map, economy, seed and Bank 1 name. Other names, colors and AI difficulty above apply to local play.</p></div><p id="cmSetupStatus" class="cm-status" role="status"></p></details>';
+ coreMultiPendingControls();if(coreMultiSavedPending())$('#cmSetupStatus').textContent='A room connection is unconfirmed. Retry it to recover the same bank.';
+ $('#cmRetryConnection').addEventListener('click',coreMultiRetryConnection);$('#cmDiscardConnection').addEventListener('click',coreMultiDiscardConnection);
  $('#cmBankCount').addEventListener('change',()=>{try{coreMultiReadSetup();coreMultiSetup.count=Number($('#cmBankCount').value);renderCoreMultiplayerSetup();}catch(error){$('#cmSetupStatus').textContent=error.message;}});
  $('#cmStartLocal').addEventListener('click',startCoreMultiplayer);$('#cmCreateRoom').addEventListener('click',()=>coreMultiConnect('create'));$('#cmJoinRoom').addEventListener('click',()=>coreMultiConnect('join'));$('#cmReconnectRoom').addEventListener('click',coreMultiReconnect);$('#cmReconnectKeyFile').addEventListener('change',event=>coreMultiImportKey(event.target.files[0]));$('#cmRoomSaveFile').addEventListener('change',event=>coreMultiCreateFromSave(event.target.files[0]));
 }
@@ -163,12 +166,52 @@ function coreMultiServer(raw){
  if(url.protocol!=='https:'&&!(url.protocol==='http:'&&local))throw Error('Use HTTPS for an internet server, or HTTP for a local-network server.');return url.href.replace(/\/$/,'');
 }
 function coreMultiCommandId(){return 'cm-'+(globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+'-'+Math.random().toString(36).slice(2));}
+function coreMultiSeatKey(){
+ if(!globalThis.crypto?.getRandomValues)throw Error('This browser cannot create a private reconnect key. Open the game in a current browser over HTTPS.');
+ return Array.from(globalThis.crypto.getRandomValues(new Uint8Array(32)),value=>value.toString(16).padStart(2,'0')).join('');
+}
+function coreMultiSavedPending(){
+ if(coreMultiPending)return coreMultiPending;
+ for(const storage of ['sessionStorage','localStorage'])try{
+  const saved=JSON.parse(globalThis[storage].getItem('branchWarsCorePending')||'null');
+  if(saved&&['create','join'].includes(saved.kind)&&typeof saved.base==='string'&&typeof saved.room==='string'&&/^[0-9a-f]{64}$/.test(saved.seatKey)&&saved.body&&typeof saved.body==='object'&&!Array.isArray(saved.body)&&typeof saved.remember==='boolean')return coreMultiPending=saved;
+ }catch(error){}
+ return null;
+}
+function coreMultiStorePending(pending){
+ const record=JSON.stringify(pending);let stored=false;
+ try{sessionStorage.setItem('branchWarsCorePending',record);stored=true;}catch(error){}
+ try{if(pending.remember){localStorage.setItem('branchWarsCorePending',record);stored=true;}else localStorage.removeItem('branchWarsCorePending');}catch(error){}
+ if(!stored)throw Error('The private reconnect key could not be saved. Free browser storage or allow this site to store data, then retry.');
+ coreMultiPending=pending;coreMultiPendingControls();
+}
+function coreMultiClearPending(){
+ coreMultiPending=null;for(const storage of ['sessionStorage','localStorage'])try{globalThis[storage].removeItem('branchWarsCorePending');}catch(error){}
+ coreMultiPendingControls();
+}
+function coreMultiPendingControls(){
+ const pending=coreMultiSavedPending();for(const id of ['cmRetryConnection','cmDiscardConnection'])if($('#'+id))$('#'+id).hidden=!pending;
+}
+function coreMultiRetryConnection(){const pending=coreMultiSavedPending();if(pending)return coreMultiConnect(pending.kind,undefined,pending);}
+function coreMultiDiscardConnection(){
+ if(coreMultiConnecting||!coreMultiSavedPending())return;
+ if(!confirm('The server may already have reserved your bank. Retry the connection to recover it. Discard this pending connection and start again?'))return;
+ coreMultiClearPending();$('#cmSetupStatus').textContent='Pending connection discarded. You can create or join a room again.';
+}
 function coreMultiPersist(){
  const record=JSON.stringify({base:coreMultiOnline.base,room:coreMultiOnline.room,seat:coreMultiOnline.seat,token:coreMultiOnline.token});
- try{sessionStorage.setItem('branchWarsCoreRoom',record);if(coreMultiRemember)localStorage.setItem('branchWarsCoreRoom',record);else localStorage.removeItem('branchWarsCoreRoom');}
- catch(error){coreMultiOnline.notice='Download a private reconnect key before closing this tab; browser reconnect storage is unavailable.';}
+ let stored=false;try{sessionStorage.setItem('branchWarsCoreRoom',record);stored=true;}catch(error){}
+ try{if(coreMultiRemember){localStorage.setItem('branchWarsCoreRoom',record);stored=true;}else localStorage.removeItem('branchWarsCoreRoom');}catch(error){}
+ if(!stored)coreMultiOnline.notice='Download a private reconnect key before closing this tab; browser reconnect storage is unavailable.';
+ return stored;
 }
-function coreMultiSavedSeat(){return JSON.parse(sessionStorage.getItem('branchWarsCoreRoom')||localStorage.getItem('branchWarsCoreRoom')||'null');}
+function coreMultiSavedSeat(){
+ for(const storage of ['sessionStorage','localStorage'])try{
+  const saved=JSON.parse(globalThis[storage].getItem('branchWarsCoreRoom')||'null');
+  if(saved&&typeof saved.token==='string'&&saved.token&&typeof saved.base==='string'&&typeof saved.room==='string'&&Number.isInteger(saved.seat)&&saved.seat>=0&&saved.seat<4)return saved;
+ }catch(error){}
+ return null;
+}
 function coreMultiDownload(value,name){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);}
 function coreMultiExportKey(){if(!coreMultiplayerOnlineActive())return;const session=coreMultiOnline;coreMultiDownload({format:'branch-wars-private-seat',version:1,base:session.base,room:session.room,seat:session.seat,token:session.token},'Branch_Wars_Private_Seat_'+session.room+'.json');}
 function coreMultiImportKey(file){
@@ -180,25 +223,37 @@ function coreMultiCreateFromSave(file){
 function coreMultiplayerDisconnect(){clearTimeout(coreMultiOnline.timer);coreMultiOnline={base:'',room:'',seat:null,token:'',lobby:null,busy:false,timer:null,generation:coreMultiOnline.generation+1,error:'',notice:'',connected:false};}
 async function coreMultiFetch(url,body,token=''){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
- try{const response=await fetch(url,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'Content-Type':'application/json'}),...(token?{Authorization:'Bearer '+token}:{})},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal,credentials:'omit',redirect:'error'});let result;try{result=await response.json();}catch(error){throw Error('The server did not return a game response. Check its address.');}if(!response.ok)throw Error(result.error||'Game server request failed ('+response.status+').');return result;}finally{clearTimeout(timer);}
+ try{const response=await fetch(url,{method:body===undefined?'GET':'POST',headers:{...(body===undefined?{}:{'Content-Type':'application/json'}),...(token?{Authorization:'Bearer '+token}:{})},body:body===undefined?undefined:JSON.stringify(body),signal:controller.signal,credentials:'omit',redirect:'error'});let result;try{result=await response.json();}catch(error){throw Error('The server did not return a game response. Check its address.');}if(!response.ok)throw Object.assign(Error(result.error||'Game server request failed ('+response.status+').'),{status:response.status,code:result.code});return result;}finally{clearTimeout(timer);}
 }
 function coreMultiAdopt(result){
- const changed=!!coreMultiOnline.error||JSON.stringify(coreMultiOnline.lobby)!==JSON.stringify(result.lobby||coreMultiOnline.lobby)||JSON.stringify(view)!==JSON.stringify(result.state||null);
- coreMultiOnline.lobby=result.lobby||coreMultiOnline.lobby;coreMultiOnline.seat=result.seat??coreMultiOnline.seat;coreMultiOnline.error='';coreMultiOnline.connected=true;game=null;view=result.state||null;seat=coreMultiOnline.seat;p2pRole='';mode='lan';
+ const nextView=result.state||null,stateChanged=JSON.stringify(view)!==JSON.stringify(nextView),changed=!!coreMultiOnline.error||JSON.stringify(coreMultiOnline.lobby)!==JSON.stringify(result.lobby||coreMultiOnline.lobby)||stateChanged;
+ coreMultiOnline.lobby=result.lobby||coreMultiOnline.lobby;coreMultiOnline.seat=result.seat??coreMultiOnline.seat;coreMultiOnline.error='';coreMultiOnline.connected=true;game=null;if(stateChanged)view=nextView;seat=coreMultiOnline.seat;p2pRole='';mode='lan';
  if(!changed&&$('#coreMultiplayerGame')?.hidden===false)return;
  if(view)renderCoreMultiplayer(view);else renderCoreMultiplayerOnline();
 }
-async function coreMultiConnect(kind,restoredGame){
+async function coreMultiConnect(kind,restoredGame,retry){
  if(coreMultiConnecting)return;coreMultiConnecting=true;const status=$('#cmSetupStatus'),generation=coreMultiOnline.generation;
- for(const id of ['cmCreateRoom','cmJoinRoom','cmReconnectRoom','cmStartLocal'])if($('#'+id))$('#'+id).disabled=true;
- try{const setup=coreMultiReadSetup(),base=coreMultiServer($('#cmServerUrl').value),room=$('#cmRoomCode').value.trim().toUpperCase();coreMultiRemember=$('#cmRememberSeat')?.checked!==false;if(kind==='join'&&!/^[A-Z0-9_-]{4,16}$/.test(room))throw Error('Enter the host’s room code.');status.textContent=kind==='create'?'Creating room…':'Joining room…';
-  const body=kind==='create'?{bankName:setup.players[0].name,players:setup.count,aiSeats:setup.players.slice(0,setup.count).flatMap((bank,i)=>bank.isBot?[i]:[]),coreMap:setup.map,scenario:setup.scenario,...(setup.seed?{seed:setup.seed}:{})}:{bankName:setup.players[0].name};
-  if(restoredGame)body.game=restoredGame;
-  const result=await coreMultiFetch(base+'/api/multiplayer/rooms'+(kind==='join'?'/'+encodeURIComponent(room)+'/join':''),body);if(typeof result.token!=='string'||!result.token)throw Error('The server did not issue a private seat key.');
+ let pending;
+ for(const id of ['cmCreateRoom','cmJoinRoom','cmReconnectRoom','cmStartLocal','cmRetryConnection','cmDiscardConnection'])if($('#'+id))$('#'+id).disabled=true;
+ try{
+  if(retry)pending=coreMultiCopy(retry);
+  else{
+   const setup=coreMultiReadSetup(),base=coreMultiServer($('#cmServerUrl').value),room=kind==='join'?$('#cmRoomCode').value.trim().toUpperCase():'';
+   const body=kind==='create'?{bankName:setup.players[0].name,players:setup.count,aiSeats:setup.players.slice(0,setup.count).flatMap((bank,i)=>bank.isBot?[i]:[]),coreMap:setup.map,scenario:setup.scenario,...(setup.seed?{seed:setup.seed}:{})}:{bankName:setup.players[0].name};
+   if(restoredGame)body.game=restoredGame;
+   const previous=coreMultiSavedPending();
+   if(previous&&(previous.kind!==kind||previous.base!==base||previous.room!==room||JSON.stringify(previous.body)!==JSON.stringify(body)))throw Error('A previous connection is still unconfirmed. Retry that connection first, or discard it before starting another.');
+   pending=previous||{kind,base,room,body,seatKey:coreMultiSeatKey(),remember:$('#cmRememberSeat')?.checked!==false};
+  }
+  const base=coreMultiServer(pending.base),room=pending.room;kind=pending.kind;
+  if(kind==='join'&&!/^[A-Z0-9_-]{4,16}$/.test(room))throw Error('Enter the host’s room code.');
+  coreMultiRemember=pending.remember;coreMultiStorePending(pending);status.textContent=kind==='create'?'Creating room…':'Joining room…';
+  const result=await coreMultiFetch(base+'/api/multiplayer/rooms'+(kind==='join'?'/'+encodeURIComponent(room)+'/join':''),{...pending.body,seatKey:pending.seatKey});if(result.token!==pending.seatKey)throw Error('The server did not confirm your private seat key. Retry this connection to recover your bank.');
   if(coreMultiOnline.generation!==generation){coreMultiDownload({format:'branch-wars-private-seat',version:1,base,room:result.room,seat:result.seat,token:result.token},'Branch_Wars_Private_Seat_'+result.room+'.json');return;}
-  coreMultiplayerDisconnect();resetLink();coreMultiOnline={...coreMultiOnline,base,room:result.room,seat:result.seat,token:result.token};draft=null;draftOwner='';lastCycle=0;coreMultiPersist();coreMultiAdopt(result);coreMultiPoll();
- }catch(error){status.textContent=error.name==='AbortError'?'The server did not respond in time. Check its address and retry.':error.message;}
- finally{coreMultiConnecting=false;for(const id of ['cmCreateRoom','cmJoinRoom','cmReconnectRoom','cmStartLocal'])if($('#'+id))$('#'+id).disabled=false;}
+  coreMultiplayerDisconnect();resetLink();coreMultiOnline={...coreMultiOnline,base,room:result.room,seat:result.seat,token:result.token};draft=null;draftOwner='';lastCycle=0;const remembered=coreMultiPersist();coreMultiAdopt(result);coreMultiPoll();
+  if(remembered)coreMultiClearPending();
+ }catch(error){if(pending&&error.status>=400&&error.status<500&&typeof error.code==='string'&&error.code!=='handshake_conflict')coreMultiClearPending();status.textContent=(error.name==='AbortError'?'The server did not respond in time.':error.message)+(coreMultiSavedPending()?' Use Retry connection to recover the same bank.':'');}
+ finally{coreMultiConnecting=false;coreMultiPendingControls();for(const id of ['cmCreateRoom','cmJoinRoom','cmReconnectRoom','cmStartLocal','cmRetryConnection','cmDiscardConnection'])if($('#'+id))$('#'+id).disabled=false;}
 }
 async function coreMultiReconnect(supplied){
  if(coreMultiConnecting)return;coreMultiConnecting=true;const status=$('#cmSetupStatus');

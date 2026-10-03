@@ -23,9 +23,23 @@ Eighteen adjacent historical suites and the existing interface regressions also
 passed. The [verification receipt](../reports/qa/core-multiplayer-2026-10-03.json)
 records the build and the scope of these checks.
 
-This is a local development candidate. Public HTTPS deployment, physical
-separate-computer acceptance, human balance testing and the complete release
-gate remain outstanding. No public service or release was published.
+The [draft candidate PR #34](https://github.com/NerdyGeneral/BranchWars/pull/34)
+also includes a tested persistent container and Render Blueprint. The complete
+release-balance command passed 16 campaigns and 1,920 months. Broader regressions
+found two stale review tests; the help check now exercises behavior, and the
+engine digest was reviewed against fresh independent historical replays without
+changing golden expectations.
+
+Connection acceptance additionally found and fixed lost initial Create/Join
+responses, unavailable session-storage fallback and controls becoming stale after
+an unchanged poll. The corrected client passes 22 portable UI tests and a real
+four-browser session with deliberately dropped replies, page reloads, idle polls,
+a simultaneous turn and host reconnection. The current container also survives
+forced recreation with the exact private campaign intact.
+
+Public HTTPS deployment, the [separate-location playtest](core-online-playtest.md),
+human balance testing and complete standard/Windows release gates remain
+outstanding. No public service, merge or release was published.
 
 ## September 28 — Planning repairs on PR #33
 

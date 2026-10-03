@@ -4,8 +4,10 @@
 
 [24-market Continental Core and up to four banks](core-multiplayer-plan.md) is
 implemented as the Core 10.1 development candidate, including local human/AI
-play and shared online rooms. [Release status](release-status.md) records its
-verification and remaining deployment, balance and release acceptance work.
+play and shared online rooms. Persistent container hosting is prepared, with
+initial connection retry, private key recovery and idle-polling fixes verified.
+[Release status](release-status.md) records its verification and remaining
+deployment, balance and release acceptance work.
 
 This document defines **scope, order and retained decisions**. Use the [implementation ledger](v3-usability.md#master-requirement-inventory-and-finish-gates) for retained completion history, the [Expanded interface inventory](expanded-interface.md) for the current UI source/control map, and [release status](release-status.md) for candidate evidence. Do not maintain a second completed/remaining table here.
 

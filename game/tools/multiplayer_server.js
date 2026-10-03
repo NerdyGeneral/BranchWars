@@ -52,6 +52,13 @@ function aiSeats(input, count, previous = []) {
     throw failure(400, 'invalid_settings', 'AI seats must be distinct seat numbers after the human host.');
   return [...list];
 }
+function initialRequest(body, action) {
+  if (body.seatKey === undefined) return null;
+  if (typeof body.seatKey !== 'string' || !/^[0-9a-f]{64}$/.test(body.seatKey))
+    throw failure(400, 'invalid_seat_key', 'Use a cryptographically random 256-bit private seat key.');
+  const intent = { ...body }; delete intent.seatKey;
+  return { action, fingerprint: crypto.createHash('sha256').update(canonicalJson(intent)).digest('hex') };
+}
 function loadEngine(html) {
   const source = html.match(/<script id="engine">([\s\S]*?)<\/script>/)?.[1];
   if (!source) throw Error('The assembled game has no engine.');
@@ -88,7 +95,17 @@ function createServer({ html = assemble().html, engine = loadEngine(html), maxRo
     let code; do { code = [...crypto.randomBytes(8)].map(n => alphabet[n % alphabet.length]).join(''); } while (rooms.has(code));
     return code;
   }
-  function seatDefinition(index, bot = false) { return { seat: index, name: 'Bank ' + (index + 1) + (bot ? ' AI' : ''), isBot: bot, color: COLORS[index], tokenHash: null, ready: bot, commands: new Map() }; }
+  function seatDefinition(index, bot = false) { return { seat: index, name: 'Bank ' + (index + 1) + (bot ? ' AI' : ''), isBot: bot, color: COLORS[index], tokenHash: null, initialRequest: null, ready: bot, commands: new Map() }; }
+  function retryInitial(body, identity, expectedRoom = null) {
+    if (!identity) return null;
+    for (const room of rooms.values()) for (const seat of room.seats) {
+      if (!tokenMatches(body.seatKey, seat.tokenHash)) continue;
+      if (!seat.initialRequest || seat.initialRequest.action !== identity.action || seat.initialRequest.fingerprint !== identity.fingerprint || expectedRoom && room.code !== expectedRoom)
+        throw failure(409, 'handshake_conflict', 'This private seat key already belongs to a different initial request. Retry the original request.');
+      return { room, seat };
+    }
+    return null;
+  }
   const directory = dataDir ? path.resolve(dataDir) : null;
   let lockFile = null;
   function processIdentity(pid) {
@@ -105,6 +122,8 @@ function createServer({ html = assemble().html, engine = loadEngine(html), maxRo
     if (room.seats.length !== room.settings.players) throw Error('Invalid stored seat count.');
     for (const [index, seat] of room.seats.entries()) {
       if (seat.seat !== index || typeof seat.isBot !== 'boolean' || typeof seat.ready !== 'boolean' || !/^#[0-9a-f]{6}$/i.test(seat.color) || (seat.tokenHash !== null && !/^[0-9a-f]{64}$/.test(seat.tokenHash)) || !Array.isArray(seat.commands) || seat.commands.length > 256 || seat.commands.some(entry => !Array.isArray(entry) || entry.length !== 2 || typeof entry[0] !== 'string' || typeof entry[1] !== 'string')) throw Error('Invalid stored seat.');
+      if (seat.initialRequest !== undefined && seat.initialRequest !== null && (!seat.tokenHash || !seat.initialRequest || typeof seat.initialRequest !== 'object' || Array.isArray(seat.initialRequest) || Object.keys(seat.initialRequest).length !== 2 || !['create', 'join'].includes(seat.initialRequest.action) || !/^[0-9a-f]{64}$/.test(seat.initialRequest.fingerprint))) throw Error('Invalid stored initial request.');
+      if (seat.initialRequest === undefined) seat.initialRequest = null;
       bankName(seat.name); seat.commands = new Map(seat.commands);
     }
     if (room.seats[0].isBot || !room.seats[0].tokenHash) throw Error('Invalid stored host.');
@@ -197,7 +216,9 @@ function createServer({ html = assemble().html, engine = loadEngine(html), maxRo
       if (request.method === 'GET' && url.pathname === '/favicon.ico') { response.writeHead(204, cors); response.end(); return; }
       if (request.method === 'GET' && url.pathname === PREFIX + '/health') { send(200, { ok: true, server: 'Branch Wars Core multiplayer', protocol: 1, coreMultiplayerVersion: 1 }); return; }
       if (request.method === 'POST' && url.pathname === PREFIX + '/rooms') {
-        const body = await readBody(request); exact(body, ['bankName', 'players', 'aiSeats', 'coreMap', 'scenario', 'seed', 'game']);
+        const body = await readBody(request); exact(body, ['bankName', 'players', 'aiSeats', 'coreMap', 'scenario', 'seed', 'game', 'seatKey']);
+        const identity = initialRequest(body, 'create'), retry = retryInitial(body, identity);
+        if (retry) { send(200, snapshot(retry.room, retry.seat, body.seatKey)); return; }
         const address = request.socket.remoteAddress || 'unknown', now = Date.now();
         for (const [key, item] of creationWindows) if (now - item.started >= 60000) creationWindows.delete(key);
         const window = creationWindows.get(address) || { started: now, count: 0 };
@@ -216,21 +237,23 @@ function createServer({ html = assemble().html, engine = loadEngine(html), maxRo
           room.seats[0].name = bankName(body.bankName === undefined ? 'Host Bank' : body.bankName);
           uniqueName(room, room.seats[0].name, room.seats[0]);
         }
-        const credential = newToken(); room.seats[0].tokenHash = tokenHash(credential); persist(room); rooms.set(room.code, room); window.count++; creationWindows.set(address, window); send(201, snapshot(room, room.seats[0], credential)); return;
+        const credential = identity ? body.seatKey : newToken(); room.seats[0].tokenHash = tokenHash(credential); room.seats[0].initialRequest = identity; persist(room); rooms.set(room.code, room); window.count++; creationWindows.set(address, window); send(201, snapshot(room, room.seats[0], credential)); return;
       }
       const match = url.pathname.match(/^\/api\/multiplayer\/rooms\/([A-Z2-9]{8})(?:\/([a-z-]+))?$/);
       if (!match) throw failure(404, 'not_found', 'Route not found.');
       let room = rooms.get(match[1]); if (!room) throw failure(404, 'room_not_found', 'Room not found.');
       const action = match[2] || '';
       if (request.method === 'POST' && action === 'join') {
-        const body = await readBody(request); exact(body, ['bankName']);
+        const body = await readBody(request, 65536); exact(body, ['bankName', 'seatKey']);
         room = rooms.get(match[1]); if (!room) throw failure(404, 'room_not_found', 'Room not found.');
+        const identity = initialRequest(body, 'join'), retry = retryInitial(body, identity, room.code);
+        if (retry) { send(200, snapshot(retry.room, retry.seat, body.seatKey)); return; }
         beforeStart(room); const seat = room.seats.find(item => !item.isBot && !item.tokenHash);
         if (!seat) throw failure(409, 'room_full', 'All human seats are reserved. Reconnect using your original token.');
         prepareMutation(room);
         if (body.bankName !== undefined) bankName(body.bankName);
         if (!room.imported) { const name = bankName(body.bankName === undefined ? seat.name : body.bankName); uniqueName(room, name, seat); seat.name = name; }
-        const credential = newToken(); seat.tokenHash = tokenHash(credential); clearReadiness(room); persist(room); send(201, snapshot(room, seat, credential)); return;
+        const credential = identity ? body.seatKey : newToken(); seat.tokenHash = tokenHash(credential); seat.initialRequest = identity; clearReadiness(room); persist(room); send(201, snapshot(room, seat, credential)); return;
       }
       let seat = authenticate(request, room);
       if (request.method === 'GET' && ['', 'resume'].includes(action)) { send(200, snapshot(room, seat)); return; }

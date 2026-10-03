@@ -27,6 +27,11 @@ test('rejected edit leaves the entire draft untouched and explains the problem',
 test('read-only polling permits local form edits while a mutating room request freezes the plan',()=>{
  const h=fresh();h.run('coreMultiOnline.busy=true;token=coreMultiToken();');assert.equal(h.run('coreMultiUpdate(token,next=>{next.hires=1;})'),true);assert.equal(h.run('draft.hires'),1);h.run('coreMultiOnline.writing=true;token=coreMultiToken();');const before=bytes(h);assert.equal(h.run('coreMultiUpdate(token,next=>{next.hires=2;})'),false);assert.equal(bytes(h),before);
 });
+test('unchanged polling preserves live callback frames while a changed snapshot invalidates them',()=>{
+ const h=fresh();h.run(`view=E.publicState(game,0);game=null;coreMultiOnline={...coreMultiOnline,room:'ABCDEFGH',seat:0,token:'polling-test-seat',lobby:{revision:1}};renderCoreMultiplayer(view);mountedToken=coreMultiToken();snapshot={lobby:{revision:1},seat:0,state:coreMultiCopy(view)};coreMultiAdopt(snapshot);`);
+ assert.equal(h.run('coreMultiCurrent(mountedToken,false)'),true);assert.equal(h.run('coreMultiUpdate(mountedToken,next=>{next.hires=1;})'),true);assert.equal(h.run('draft.hires'),1);
+ h.run('mountedToken=coreMultiToken();snapshot.state.banks[1].submitted=true;coreMultiAdopt(snapshot);');assert.equal(h.run('coreMultiCurrent(mountedToken,false)'),false);
+});
 test('old snapshot, old owner, old route-render and sealed callbacks cannot change the plan',()=>{
  for(const alteration of ['coreMultiUi.revision++;','seat=1;draft=null;renderCoreMultiplayer(currentView());','game.players[0].submitted={};','view=E.publicState(game,0);game=null;view=JSON.parse(JSON.stringify(view));']){const h=fresh();h.run('token=coreMultiToken();'+alteration);const before=bytes(h);assert.equal(h.run('coreMultiUpdate(token,next=>{next.hires=1;})'),false);assert.equal(bytes(h),before);}
 });
@@ -50,7 +55,59 @@ test('scenario setup options have real names and private key recovery controls a
  const h=fresh();h.run('renderCoreMultiplayerSetup();');const html=h.elements.get('#coreMultiplayerSetup').innerHTML;for(const name of Object.values(h.run('E.SCENARIOS')))assert(html.includes(name));for(const id of ['cmRememberSeat','cmReconnectKeyFile','cmRoomSaveFile'])assert(html.includes('id="'+id+'"'));
 });
 test('concurrent room creation is gated and superseded responses preserve a reconnect key without reopening play',async()=>{
- const h=fresh();let calls=0,respond;h.c.fetch=()=>{calls++;return new Promise(resolve=>{respond=()=>resolve({ok:true,json:async()=>({room:'ROOM1234',seat:0,token:'private-test-seat',lobby:{},state:null})});});};
+ const h=fresh();let calls=0,respond;h.c.fetch=(url,options)=>{calls++;const token=JSON.parse(options.body).seatKey;return new Promise(resolve=>{respond=()=>resolve({ok:true,json:async()=>({room:'ROOM1234',seat:0,token,lobby:{},state:null})});});};
  h.run(`coreMultiReadSetup=()=>coreMultiCopy(coreMultiSetup);$('#cmServerUrl').value='https://example.test';$('#cmRoomCode').value='';coreMultiDownload=()=>{recoveryDownloads=(typeof recoveryDownloads==='undefined'?0:recoveryDownloads)+1;};`);
  const first=h.run('coreMultiConnect("create")'),second=h.run('coreMultiConnect("create")');await second;assert.equal(calls,1);h.run('coreMultiplayerDisconnect();');respond();await first;assert.equal(h.run('coreMultiplayerOnlineActive()'),false);assert.equal(h.run('recoveryDownloads'),1);
+});
+function connectionHarness(){
+ const h=fresh();h.run(`coreMultiReadSetup=()=>coreMultiCopy(coreMultiSetup);$('#cmServerUrl').value='https://example.test';$('#cmRoomCode').value='ABCDEFGH';$('#cmRememberSeat').checked=true;coreMultiAdopt=()=>{};coreMultiPoll=()=>{};`);return h;
+}
+test('a lost initial response and a reload retry the exact private request and save the recovered seat',async()=>{
+ for(const kind of ['create','join']){
+  const first=connectionHarness();let sent;
+  first.c.fetch=async(url,options)=>{sent=JSON.parse(options.body);const persisted=JSON.parse(first.c.sessionStorage.getItem('branchWarsCorePending'));assert.equal(persisted.seatKey,sent.seatKey,'persist key before sending');throw Error('Connection interrupted');};
+  await first.run(`coreMultiConnect('${kind}')`);assert.match(sent.seatKey,/^[0-9a-f]{64}$/);assert.match(first.elements.get('#cmSetupStatus').textContent,/Retry connection/);
+  const restored=connectionHarness();restored.storage.set('branchWarsCorePending',first.storage.get('branchWarsCorePending'));let retries=0;
+  restored.c.fetch=async(url,options)=>{retries++;assert.deepEqual(JSON.parse(options.body),sent);return {ok:true,json:async()=>({room:'ABCDEFGH',seat:kind==='create'?0:1,token:sent.seatKey,lobby:{},state:null})};};
+  restored.run('renderCoreMultiplayerSetup();');assert.equal(restored.elements.get('#cmRetryConnection').hidden,false);assert(!restored.elements.get('#coreMultiplayerSetup').innerHTML.includes(sent.seatKey));
+  await restored.run('coreMultiRetryConnection()');assert.equal(retries,1);assert.equal(restored.run('coreMultiSavedPending()'),null);assert.equal(restored.run('coreMultiSavedSeat().token'),sent.seatKey);assert.equal(restored.storage.has('branchWarsCorePending'),false);
+  assert.equal(restored.run('coreMultiInvite().includes(coreMultiOnline.token)'),false);
+ }
+});
+test('retry preserves an imported campaign request without requiring the file again',async()=>{
+ const h=connectionHarness();let sent;h.c.fetch=async(url,options)=>{sent=JSON.parse(options.body);throw Error('Reply lost');};
+ await h.run('coreMultiConnect("create",game)');const before=JSON.stringify(sent);
+ h.run('game=null;coreMultiPending=null;');h.c.fetch=async(url,options)=>{assert.equal(JSON.stringify(JSON.parse(options.body)),before);return {ok:true,json:async()=>({room:'ABCDEFGH',seat:0,token:sent.seatKey,lobby:{},state:null})};};
+ await h.run('coreMultiRetryConnection()');assert.equal(h.run('coreMultiSavedPending()'),null);
+});
+test('an unconfirmed connection cannot silently be replaced by changed setup',async()=>{
+ const h=connectionHarness();let calls=0;h.c.fetch=async()=>{calls++;throw Error('Reply lost');};await h.run('coreMultiConnect("create")');const saved=h.run('JSON.stringify(coreMultiSavedPending())');
+ h.run('coreMultiSetup.players[0].name="Changed Bank";');await h.run('coreMultiConnect("create")');assert.equal(calls,1);assert.equal(h.run('JSON.stringify(coreMultiSavedPending())'),saved);
+ h.c.confirm=()=>false;h.run('coreMultiDiscardConnection()');assert.equal(h.run('JSON.stringify(coreMultiSavedPending())'),saved);
+ h.c.confirm=()=>true;h.run('coreMultiDiscardConnection()');assert.equal(h.run('coreMultiSavedPending()'),null);assert.equal(h.storage.has('branchWarsCorePending'),false);
+});
+test('initial requests require cryptographic keys and private storage before reserving a seat',async()=>{
+ for(const failure of ['crypto','storage']){
+  const h=connectionHarness();let calls=0;h.c.fetch=async()=>{calls++;throw Error('Unexpected request');};
+  if(failure==='crypto')h.c.crypto={};else{h.c.sessionStorage.setItem=()=>{throw Error('Unavailable')};h.c.localStorage.setItem=()=>{throw Error('Full')};}
+  await h.run('coreMultiConnect("create")');assert.equal(calls,0);assert.equal(h.run('coreMultiplayerOnlineActive()'),false);
+ }
+});
+test('definite rejection frees pending setup while uncertain proxy failures retain the recovery key',async()=>{
+ for(const response of [{status:400,code:'duplicate_name',retain:false},{status:409,code:'handshake_conflict',retain:true},{status:503,code:'unavailable',retain:true},{status:408,retain:true}]){
+  const h=connectionHarness();h.c.fetch=async()=>({ok:false,status:response.status,json:async()=>({error:'Request failed',...(response.code?{code:response.code}:{})})});
+  await h.run('coreMultiConnect("join")');assert.equal(!!h.run('coreMultiSavedPending()'),response.retain);
+ }
+});
+test('session-only pending recovery respects the remember preference and survives an unavailable session store when remembered',async()=>{
+ const h=connectionHarness();h.run("$('#cmRememberSeat').checked=false;");h.c.fetch=async()=>{throw Error('Reply lost');};await h.run('coreMultiConnect("join")');
+ assert.equal(h.storage.has('branchWarsCorePending'),false);assert(h.c.sessionStorage.getItem('branchWarsCorePending'));h.run('coreMultiPending=null;');assert.equal(h.run('coreMultiSavedPending().remember'),false);
+ const remembered=connectionHarness();remembered.c.sessionStorage.setItem=()=>{throw Error('Unavailable')};remembered.c.fetch=async()=>{throw Error('Reply lost');};await remembered.run('coreMultiConnect("join")');assert(remembered.storage.has('branchWarsCorePending'));
+});
+test('a confirmed remembered bank reconnects when the session store cannot be read or written',async()=>{
+ const h=connectionHarness();let token,requests=0;
+ h.c.sessionStorage.setItem=h.c.sessionStorage.getItem=()=>{throw Error('Session store unavailable')};
+ h.c.fetch=async(url,options)=>{requests++;if(options.body)token=JSON.parse(options.body).seatKey;else assert.equal(options.headers.Authorization,'Bearer '+token);return {ok:true,json:async()=>({room:'ABCDEFGH',seat:0,token,lobby:{},state:null})};};
+ await h.run('coreMultiConnect("create")');assert.equal(h.run('coreMultiSavedPending()'),null);assert.equal(h.run('coreMultiSavedSeat().token'),token);
+ h.run('coreMultiplayerDisconnect();');await h.run('coreMultiReconnect()');assert.equal(requests,2);assert.equal(h.run('coreMultiOnline.token'),token);
 });

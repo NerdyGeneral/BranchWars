@@ -55,6 +55,18 @@ private books and locked instructions. Keep it private. Exports never contain
 room access tokens. Ordinary polling and joins never send another seat's token
 or private bank state.
 
+Before Create or Join is sent, the browser saves a cryptographically random
+private seat key and its pending request. If the response is lost, use **Retry
+connection** to recover the same room and bank. Reloading the page retains this
+retry; restarting a server with durable storage retains the reservation. Retry
+the original request before changing its setup, or explicitly discard it.
+Session storage keeps pending recovery in the current tab. With **Remember this
+private bank on this device**, local storage also keeps it after closing the tab.
+An imported campaign's pending request includes the private backup until the
+connection is confirmed. These browser records and downloaded keys are private;
+ordinary invitations contain neither. The server saves only hashed credentials
+and fixed-size request fingerprints, retaining compatibility with older clients.
+
 Finished and abandoned rooms remain available for reconnection. To release a
 room, the host can explicitly POST `{"confirm":true}` to
 `/api/multiplayer/rooms/ROOMCODE/close` using their bearer token. This permanently
