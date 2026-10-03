@@ -4,6 +4,9 @@ A turn-based banking strategy game with Solo AI, Pass & Play, LAN and Repository
 
 ## Play
 
+- **Core · larger map & 2–4 banks:** choose the new setup on the start screen for
+  local human/AI play, or use [online rooms](docs/online-multiplayer.md) for players
+  connecting from separate locations.
 - **Solo / Pass & Play / Direct P2P:** run [OPEN_BRANCH_WARS.bat](OPEN_BRANCH_WARS.bat).
 - **Local-network host:** run [OPEN_LAN_GAME.bat](OPEN_LAN_GAME.bat). Friends use the address and room code shown by the host.
 - **GitHub multiplayer:** follow the [player guide](docs/player-guide.md). Update both computers and export saves before switching builds.

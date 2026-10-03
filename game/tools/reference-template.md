@@ -2,13 +2,43 @@
 
 <!--{{STAMP}}-->
 
-Two banks compete for the same markets. Both write a plan for the month in
-secret; both plans resolve at once. There is no turn order and no reactive play
+Banks compete for the same markets. Each writes a plan for the month in
+secret; all plans resolve at once. There is no turn order and no reactive play
 inside a cycle — you commit, and then you find out.
 
 ---
 
 ## 1. Playing a campaign
+
+### Core with two to four banks
+
+**Core · larger map & 2–4 banks** creates a separate **10.1** campaign. Choose
+human or AI controllers and a map; existing two-bank saves retain their rules.
+
+<!--{{CORE_MAPS}}-->
+
+Continental opens all 24 fictional markets immediately. Its four founding hubs
+have equal economic terms. Two banks start at opposite corners; three or four
+use the remaining hubs. Each bank receives one retail office and a six-point
+influence bonus in its own hub. National retains its original unlock schedule.
+The map's roads provide geographic context; Core projects use the selected
+monthly focus and do not require road adjacency.
+
+All active human banks must lock their plans before AI banks commit and the
+month resolves. Targeted rivalry names an opposing bank. Banks that enter
+receivership or lose their last market are eliminated, their books freeze,
+and surviving banks continue until one remains. When only AI banks remain,
+a spectator can explicitly advance one month at a time.
+
+Local play supports private handoffs. [Online rooms](online-multiplayer.md)
+use the Node server and private seat keys; a disconnected human keeps its seat
+and the month waits for its return. The host can export a full campaign backup,
+which includes every bank's private data. Legacy LAN, Direct P2P and Repository
+Link continue using their two-bank protocols.
+
+**Continental markets**
+
+<!--{{CORE_CONTINENTAL_MARKETS}}-->
 
 ### Current Expanded business rules
 

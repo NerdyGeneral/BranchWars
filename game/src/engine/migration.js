@@ -123,6 +123,7 @@ function repairSavedRivalry(g){
  return g;
 }
 function migrateCampaign(g){
+ if(g?.coreMultiplayerVersion!==undefined||g?.version==='10.1')return migrateCoreMultiplayerCampaign(g);
  if(!g||!Array.isArray(g.players)||g.players.length!==2||!g.territories||!Object.keys(g.territories).length)throw Error('Not a valid Branch Wars save.');
  validateBankIdentities(g);
  BankAnnouncements.validateGame(g);

@@ -3,9 +3,9 @@ const finish=()=>{if(done)return;done=true;clearTimeout(ceiling);clearTimeout(se
 check=()=>{if(peer.iceGatheringState==='complete')finish()},
 candidate=e=>{if(!e.candidate)return finish();found++;if(onProgress)onProgress(found);clearTimeout(settle);settle=setTimeout(finish,1200)};
 peer.addEventListener('icegatheringstatechange',check);peer.addEventListener('icecandidate',candidate);
-const ceiling=setTimeout(finish,20000)})}function validNetworkAddress(raw){if(/^[0-9.]+$/.test(raw)){const parts=raw.split('.');return parts.length===4&&parts.every(x=>/^\d{1,3}$/.test(x)&&Number(x)>=0&&Number(x)<=255)&&raw!=='0.0.0.0'}return /^[0-9a-fA-F:]{3,45}$/.test(raw)&&raw.includes(':')}
-function rememberLanIp(){const raw=($('#lanIp')&&$('#lanIp').value||'').trim();if(raw&&!validNetworkAddress(raw))throw Error('Enter a valid IPv4 address, such as 10.20.30.40.');lanIp=raw;if(lanIp){try{localStorage.setItem('branchWarsLanIp',lanIp)}catch{}}return lanIp}
-function loadLanIp(){let v='';const hash=String(location.hash||'');const m=hash.match(/lanip=([^&]+)/i);if(m)v=decodeURIComponent(m[1]).trim();if(!v){try{v=localStorage.getItem('branchWarsLanIp')||''}catch{}}if(v&&validNetworkAddress(v)&&$('#lanIp')){$('#lanIp').value=v;lanIp=v}}
+const ceiling=setTimeout(finish,20000)})}function validNetworkAddress(raw){if(/^[0-9.]+$/.test(raw)){const parts=raw.split('.');return parts.length===4&&parts.every(x=>/^\d{1,3}$/.test(x)&&Number(x)>=0&&Number(x)<=255)&&raw!=='0.0.0.0'}if(!/^[0-9a-fA-F:.]{3,45}$/.test(raw)||!raw.includes(':'))return false;try{new URL(`http://[${raw}]/`);return true}catch{return false}}
+function rememberLanIp(){const raw=($('#lanIp')&&$('#lanIp').value||'').trim();if(raw&&!validNetworkAddress(raw))throw Error('Enter a valid IP address, such as 10.20.30.40.');lanIp=raw;if(lanIp){try{localStorage.setItem('branchWarsLanIp',lanIp)}catch{}}return lanIp}
+function loadLanIp(){let v='';const hash=String(location.hash||'');const m=hash.match(/lanip=([^&]+)/i);if(m){try{v=decodeURIComponent(m[1]).trim()}catch{}}if(!v){try{v=localStorage.getItem('branchWarsLanIp')||''}catch{}}if(v&&validNetworkAddress(v)&&$('#lanIp')){$('#lanIp').value=v;lanIp=v}}
 // Browsers replace local addresses with .local mDNS names, which cannot be resolved
 // from another subnet. Every other field of the candidate stays in the clear, so
 // adding a copy that names our own address gives the rival something reachable to try.

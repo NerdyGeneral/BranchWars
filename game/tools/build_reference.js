@@ -144,6 +144,16 @@ sections.TERRITORIES = table(
   Object.entries(E.TERRITORIES).map(([k, t]) => [t.name, t.tier, t.unlock, t.value, (t.specialties || []).join(', '), t.note])
 );
 
+sections.CORE_MAPS = table(
+  ['Map', 'Markets', 'Founding locations'],
+  Object.entries(E.CORE_MAPS).map(([key, map]) => [map.name, map.count,
+    map.starts.map(id => E.coreMapTerritories(key)[id].name).join(' / ')])
+);
+sections.CORE_CONTINENTAL_MARKETS = table(
+  ['Market', 'Region', 'Value', 'Specialties'],
+  Object.values(E.coreMapTerritories('continental')).map(t => [t.name, t.mapRegion, t.value, t.specialties.join(', ')])
+);
+
 sections.ROLES = table(['Role', 'Name', 'What it drives'], Object.entries(E.ROLES).map(([k, r]) => [k, r.name, r.desc]));
 sections.SPECIALISTS = table(['Department', 'Specialist', 'Recruiting premium', 'Monthly salary premium', 'Workload effect'],
   Object.entries(E.SPECIALIST_ROLES).map(([k, r]) => [k, r.name, money(r.premium), '$' + r.payroll.toLocaleString('en-US'), r.effect]));

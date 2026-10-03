@@ -14,6 +14,7 @@ The frozen V3 ZIP/manual, V4 playtest and newer local development HTML are diffe
 | Need | Document |
 | --- | --- |
 | Learn how to play, host or recover | [Player guide](player-guide.md) |
+| Host or recover a two-to-four-bank Core room | [Online multiplayer](online-multiplayer.md) |
 | Mechanics and numerical values | [Generated game reference](game-reference.md) — generated from the local playable HTML, not automatically from newer source |
 | Frozen V3 handbook | [Matching field manual PDF](https://github.com/NerdyGeneral/BranchWars/blob/v3.0.0/releases/branch-wars-v3-manual.pdf) |
 | Current local handbook | [Development manual status](release-status.md#local-development-handbook--not-a-published-replacement) — guide-derived PDF; not a released replacement |

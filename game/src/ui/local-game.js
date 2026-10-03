@@ -11,6 +11,7 @@ function startLocal(which) {
   } catch (error) { setStartMessage(error.message); }
 }
 function resumeLocalCampaign(restored) {
+  if(restored.coreMultiplayerVersion===1){resumeCoreMultiplayer(restored);return;}
   if (['lan', 'p2p'].includes(restored.mode)) restored.mode = 'hotseat';
   resetLink(); view = null; p2pRole = '';
   game = restored; mode = game.mode; seat = 0; draft = null; draftOwner = ''; lastCycle = 0; lastResolutionId = game.resolutionId || 0;
@@ -38,10 +39,10 @@ function exportSave(){if(p2pRole==='guest'){toast('Only the multiplayer host can
 function enterGame(suppressReplay=false){
  show('#gameScreen');const v=currentView();if(suppressReplay&&v)lastResolutionId=v.resolutionId||0;render();
  if(suppressReplay&&v){
-  setWorkspaceTab('overview');
+  if(v?.coreMultiplayerVersion!==1)setWorkspaceTab('overview');
   const campaign=game||view,owner=v.me.id;
   const resetScroll=()=>{if((game||view)===campaign&&currentView()?.me.id===owner&&workspaceTab==='overview')window.scrollTo?.({top:0,left:0,behavior:'auto'});};
   if(typeof requestAnimationFrame==='function')requestAnimationFrame(resetScroll);else resetScroll();
  }
 }
-function leaveGame(){resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();game=null;view=null;p2pRole='';draft=null;draftOwner='';lastCycle=0;lastResolutionId=0;show('#startScreen');updateContinue()}
+function leaveGame(){if(typeof coreMultiplayerDisconnect==='function')coreMultiplayerDisconnect();resetLink();clearTimeout(gh.retryTimer);gh=emptyGh();lan.active=false;clearTimeout(lan.retryTimer);lan=emptyLan();game=null;view=null;p2pRole='';draft=null;draftOwner='';lastCycle=0;lastResolutionId=0;show('#startScreen');updateContinue()}

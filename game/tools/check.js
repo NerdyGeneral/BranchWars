@@ -179,6 +179,7 @@ for(const name of ['expanded_business','brand_campaigns','brand_campaigns_ui','h
  commands.push(['tests/'+name+'.test.js','--source']);commands.push(['tests/'+name+'.test.js','--portable']);
 }
 if(!args.includes('--full'))commands.push(...['announcements','bank_logos','bank_logo_uploads','banking_navigation','market_office_context'].map(name=>['tests/'+name+'.test.js','--portable']));
+commands.push(...['core_map','core_multiplayer','core_multiplayer_save','core_multiplayer_ui','core_multiplayer_reports','multiplayer_server'].map(name=>['tests/'+name+'.test.js']));
 commands.push(['tests/gate_shards.test.js']);
 const from=fromArgs[0]?.slice('--from='.length),start=from===undefined?0:commands.findIndex(command=>command[0]===from);
 if(start<0)throw Error('Unknown resume point: '+from);

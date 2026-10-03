@@ -175,6 +175,7 @@ const CAMPAIGN_OPTION_ERRORS = Object.freeze([
 ].map(Object.freeze));
 function campaignFeature(field) { return CAMPAIGN_FEATURES.find(row => row.field === field); }
 function campaignVersion(source) {
+  if(source.coreMultiplayerVersion===1)return '10.1';
   if(source.researchTreeVersion===1)return '9.41';
   if(source.bankCardsVersion===1)return '9.40';
   if(source.cardEconomicsVersion===1)return '9.39';
@@ -223,6 +224,7 @@ function campaignVersion(source) {
   return CAMPAIGN_VERSION_STAGES.find(([field, value]) => source[field] === value)?.[2] || '8.1';
 }
 function campaignVersionSupported(version) {
+  if(version==='10.1')return true;
   if(version==='9.41'||version==='9.40'||version==='9.39'||version==='9.38'||version==='9.37'||version==='9.33'||version==='9.34'||version==='9.35'||version==='9.36')return true;
   if(version==='8.20'||version==='8.19'||version==='8.18'||version==='9.32')return true;
   if(version==='9.31')return true;
@@ -234,6 +236,7 @@ function campaignVersionSupported(version) {
 }
 function campaignOptionIssues(source, context) {
   const issues = [];
+  if(source?.coreMultiplayerVersion!==undefined&&source.coreMultiplayerVersion!==1)issues.push({field:'coreMultiplayerVersion',code:'unsupported_version',message:'Unsupported Core multiplayer rules.'});
   for (const [field, name] of CAMPAIGN_OPTION_ERRORS) {
     const value = source[field], def = campaignFeature(field);
     if (value === undefined) continue;
@@ -267,6 +270,11 @@ function campaignRules(source, { context = 'creation' } = {}) {
         message: def.label + ' requires ' + campaignFeature(needed.field).label + '.' });
     }
   }
+  if(source.coreMultiplayerVersion===1){
+    versions.coreMultiplayerVersion=1;
+    if(versions.bankEconomicsVersion!==2||versions.researchProgramVersion!==1||versions.incomeHistoryVersion!==1||versions.commercialServiceVersion!==1)issues.push({field:'coreMultiplayerVersion',code:'missing_dependency',message:'Core multiplayer requires the current Core economics, research and reporting rules.'});
+    if(!['continental','national'].includes(source.coreMap))issues.push({field:'coreMap',code:'unsupported_map',message:'Choose a supported Core multiplayer map.'});
+  }else if(source.coreMap!==undefined)issues.push({field:'coreMap',code:'missing_dependency',message:'A multiplayer map requires Core multiplayer rules.'});
   if (modular) for (const field of ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion']) if (versions[field] > 0)
     issues.push({ field, code: 'unsupported_combination', message: campaignFeature(field).label + ' is not supported in the Modular combinations preview.' });
   if(versions.bankEconomicsVersion===2&&(versions.campaignRulesVersion>0||versions.companyCreditVersion>0||source.fundingRulesVersion===1))
@@ -277,7 +285,7 @@ function campaignRules(source, { context = 'creation' } = {}) {
     issues.push({field:'researchProgramVersion',code:'unsupported_combination',message:'The research programme requires Core balance-sheet economics.'});
   if(versions.bankRivalryVersion===1&&(versions.bankEconomicsVersion!==1||versions.companyCreditVersion!==1))
     issues.push({field:'bankRivalryVersion',code:'unsupported_combination',message:'Persistent bank rivalry requires the complete current Expanded banking rules.'});
-  if(versions.incomeHistoryVersion===1&&versions.companyCreditVersion!==1&&Object.entries(versions).some(([key,value])=>!['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion','researchProgramVersion'].includes(key)&&value>0))
+  if(versions.incomeHistoryVersion===1&&versions.companyCreditVersion!==1&&Object.entries(versions).some(([key,value])=>!['incomeHistoryVersion','commercialServiceVersion','bankEconomicsVersion','researchProgramVersion','coreMultiplayerVersion'].includes(key)&&value>0))
     issues.push({field:'incomeHistoryVersion',code:'unsupported_combination',message:'Persistent income reporting requires Core or the complete integrated Expanded rules.'});
   if (saved) {
     if (!campaignVersionSupported(source.version)) issues.push({ field: 'version', code: 'unsupported_save', message: 'Unsupported campaign save version.' });
@@ -291,12 +299,13 @@ function campaignRules(source, { context = 'creation' } = {}) {
     issues.push({ field: 'fundingRulesVersion', code: 'funding_version', message: 'Unsupported or inconsistent funding rules version.' });
   const options = Object.fromEntries(Object.entries(versions).filter(([field, value]) => !(['campaignRulesVersion', 'featureRulesVersion'].includes(field) && !value)));
   options.fundingRulesVersion = fundingRulesVersion;
+  if(source.coreMultiplayerVersion===1)options.coreMap=source.coreMap;
   return { context, featureRulesVersion: modular ? 1 : 0, version: campaignVersion(versions), options,
     enabled: CAMPAIGN_FEATURE_FIELDS.filter(field => versions[field] > 0),
     features: CAMPAIGN_FEATURES.map(def => ({ ...def, requires: campaignRequirements(def, modular), enabled: versions[def.field] > 0, version: versions[def.field],
       available: def.available && !(modular && ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion'].includes(def.field)),
       disabledReason: modular && ['relationshipOffersVersion', 'onboardingVersion', 'financialGroupVersion'].includes(def.field) ? 'Not supported in the Modular combinations preview.' : '' })),
-    issues, valid: issues.length === 0, signature: JSON.stringify({ versions, fundingRulesVersion }) };
+    issues, valid: issues.length === 0, signature: JSON.stringify({ versions, fundingRulesVersion, ...(source.coreMultiplayerVersion===1?{coreMap:source.coreMap}:{}) }) };
 }
 function validateCampaignRules(source, context = 'creation') {
   const rules = campaignRules(source, { context });

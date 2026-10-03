@@ -2,6 +2,43 @@
 const assert=require('node:assert/strict');
 const {harness,response}=require('./github_resilience.test.js');
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
+function lanAddressStartup(){
+ for(const malformed of ['%','%GG','%E0%A4'])for(const remembered of ['', '10.20.30.40']){
+  const h=harness();h.c.location={hash:'#lanip='+malformed};
+  if(remembered)h.storage.set('branchWarsLanIp',remembered);
+  assert.doesNotThrow(()=>h.run('loadLanIp()'),'malformed launcher addresses must not abort startup');
+  assert.equal(h.run('lanIp'),remembered);
+  assert.equal(h.c.document.querySelector('#lanIp').value,remembered);
+ }
+ for(const [hash,remembered,expected] of [
+  ['#lanip=10.20.30.40','','10.20.30.40'],
+  ['#lanip=%20fe80%3A%3A1%20&other=ignored','','fe80::1'],
+  ['','10.20.30.40','10.20.30.40'],
+  ['#lanip=999.20.30.40','',''],
+  ['#lanip=host.example','',''],
+  ['#lanip=fe80%3A%3A%3A1','',''],
+ ]){
+  const h=harness();h.c.location={hash};if(remembered)h.storage.set('branchWarsLanIp',remembered);
+  h.run('loadLanIp()');assert.equal(h.run('lanIp'),expected);assert.equal(h.c.document.querySelector('#lanIp').value,expected);
+ }
+ console.log('LAN address startup: malformed escapes cannot abort bootstrap; valid launcher and remembered addresses still load; invalid addresses stay ignored.');
+}
+function lanAddressValidation(){
+ const h=harness();
+ for(const address of ['10.20.30.40','127.0.0.1','::1','fe80::1','2001:db8::','2001:db8:0:1:2:3:4:5','::ffff:192.0.2.1']){
+  h.c.address=address;assert(h.run('validNetworkAddress(address)'),address+' must be accepted');
+  h.c.document.querySelector('#lanIp').value=address;
+  assert.equal(h.run('rememberLanIp()'),address);assert.equal(h.storage.get('branchWarsLanIp'),address);
+ }
+ const previous=h.run('lanIp');
+ for(const address of ['0.0.0.0','999.20.30.40','10.20.30',':::','fe80:::1','dead:beef','abcd:12345::1','1:2:3:4:5:6:7:8:9','1:2:3:4:5:6:7','::ffff:999.0.0.1','[::1]','fe80::1%eth0','host.example']){
+  h.c.address=address;assert.equal(h.run('validNetworkAddress(address)'),false,address+' must be rejected');
+  h.c.document.querySelector('#lanIp').value=address;
+  assert.throws(()=>h.run('rememberLanIp()'),/valid IP address/);
+  assert.equal(h.run('lanIp'),previous);assert.equal(h.storage.get('branchWarsLanIp'),previous,'invalid manual addresses must not replace remembered input');
+ }
+ console.log('LAN address validation: valid IPv4, compressed/full IPv6 and mapped IPv4 accepted; malformed addresses cannot be stored or published.');
+}
 function guest(){const h=harness('guest');h.run("view={cycle:1,me:{submitted:false},rival:{submitted:false}};sent=[];send=m=>sent.push(m);currentView=()=>view;planReady=()=>true;draft={cycle:1,privatePolicy:'owner only'};shown=[];show=s=>shown.push(s);messages=[];setStartMessage=s=>messages.push(s)");return h;}
 async function sealing(){
  const h=guest();h.run('hashes=[];ghPlanHash=(plan,nonce)=>new Promise(resolve=>hashes.push({plan,nonce,resolve}))');
@@ -169,5 +206,5 @@ async function transportHardening(){
  await stale.run("handleMessage({type:'recall',cycle:2})");assert.equal(stale.run('ghIncomingCommit'),null);
  console.log('Additional transport hardening: malformed/stalled LAN bodies, immutable LAN/GitHub queues, single ordered LAN poller, failed recall enqueue and stale-cycle recall passed.');
 }
-async function main(){await transportHardening();await sealing();await repositoryAttempts();await repositoryHappyPaths();await lanAttempts();await directAttempts();await replacementCredentials();console.log('Network lifecycle: single immutable seal; stale hash/view/cycle; retry; 6 repository replacements; create/collision/accepted-write recovery/join/host+guest resume happy paths; 8 LAN replacements; direct SDP/ICE/channel fences; active credential replacement and stale authentication passed.');}
+async function main(){lanAddressStartup();lanAddressValidation();await transportHardening();await sealing();await repositoryAttempts();await repositoryHappyPaths();await lanAttempts();await directAttempts();await replacementCredentials();console.log('Network lifecycle: single immutable seal; stale hash/view/cycle; retry; 6 repository replacements; create/collision/accepted-write recovery/join/host+guest resume happy paths; 8 LAN replacements; direct SDP/ICE/channel fences; active credential replacement and stale authentication passed.');}
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1});

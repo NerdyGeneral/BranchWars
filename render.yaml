@@ -1,0 +1,15 @@
+# Review the paid service and disk in Render before applying this Blueprint.
+services:
+  - type: web
+    name: branchwars
+    runtime: docker
+    plan: 0.5c-512mb
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    autoDeployTrigger: 'off'
+    healthCheckPath: /api/multiplayer/health
+    disk:
+      name: branchwars-rooms
+      mountPath: /var/data
+      sizeGB: 1

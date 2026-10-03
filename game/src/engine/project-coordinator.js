@@ -1,4 +1,5 @@
 function finishProject(g, p, project) {
+  if(coreMultiplayer(g)&&project?.key==='acquisition'&&project.rivalId&&g.players.find(p=>p.id===project.rivalId)?.eliminated)return p.name+' could not complete its acquisition: the target bank left the contest. Committed costs are not refunded.';
   const expanded = ExpandedBusiness.finish(g,p,project);
   if(expanded)return expanded;
   const programme = project && finishProductProgram(p, project.key);
@@ -42,7 +43,7 @@ function finishProject(g, p, project) {
   let depositSeller, taken;
   if (depositTransfer) {
     depositSeller = g.players.find((x) => x.id !== p.id);
-    const terms = acquisitionTerms(g, p, project.target);
+    const terms = acquisitionTerms(g, p, project.target, project.rivalId);
     taken = takeDeposits(depositSeller, project.target, terms.depositTake, true);
     depositBypass = true;
   }
@@ -52,7 +53,7 @@ function finishProject(g, p, project) {
     let creditSeller, transferred;
     if (creditTransfer) {
       creditSeller = g.players.find((x) => x.id !== p.id);
-      const terms = acquisitionTerms(g, p, project.target);
+      const terms = acquisitionTerms(g, p, project.target, project.rivalId);
       transferred = takeCredit(creditSeller, project.target, terms.loanTake);
       creditBypass = true;
     }
@@ -66,7 +67,7 @@ function finishProject(g, p, project) {
           let terms, seller;
           const oldBypass = marketBypass;
           if (marketTransfer) {
-            terms = acquisitionTerms(g, p, project.target);
+            terms = acquisitionTerms(g, p, project.target, project.rivalId);
             seller = g.players[terms.seller];
             marketBypass = true;
           }
@@ -135,7 +136,7 @@ function completeProjectSettlement(g, p, project) {
   const shares = regionalEntry ? [...g.territories[project.target].shares] : null;
   let result;
   if (p.accounting && project.key === 'acquisition') {
-    const terms = acquisitionTerms(g, p, project.target),
+    const terms = acquisitionTerms(g, p, project.target, project.rivalId),
       seller = g.players[terms.seller];
     const settlement = terms.depositTake - terms.loanTake;
     if (settlement > 0) provideCash(seller, settlement, terms.loanTake);
@@ -170,11 +171,11 @@ function completeProjectSettlement(g, p, project) {
         if (Array.isArray(territory.exited)) territory.exited[index] = false;
         territory.reentryUntil = territory.reentryUntil || [0, 0];
         territory.reentryUntil[index] = g.cycle + 4;
-        if (territory.shares[index] < 15) {
+        if (!coreMultiplayer(g)&&territory.shares[index] < 15) {
           territory.shares[index] = 15;
           territory.shares[1 - index] = 85;
         }
-        result += ' Re-entry secured 15% minimum launch share and four cycles to establish service.';
+        result += coreMultiplayer(g)?' Four-cycle establishment window; market share must be earned.':' Re-entry secured 15% minimum launch share and four cycles to establish service.';
       }
     } finally {
       accountingSource = oldSource;

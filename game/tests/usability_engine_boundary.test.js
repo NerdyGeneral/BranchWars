@@ -425,6 +425,19 @@ const engine=html.match(/<script id="engine">([\s\S]*?)<\/script>/)[1];
 // This digest records reviewed scope, not a long-run strategy balance guarantee.
 // Follow-up: preserve the legacy/Expanded relationship threshold and actual
 // income rows; focused Core, Expanded, forecast and research AI checks pass.
-const expected="9ae8036769f38a5ddd679cdeeff4cb30a7ca23b31fe0559134ee777f7f137a92";
+// Authorized Core 10.1, October 3: 24 fictional markets and two to four banks,
+// explicitly approved by the user. coreMultiplayerVersion 1 gates the new map,
+// settlement, competition, AI, reporting and strict save contract; old campaigns
+// retain their rules. The engine digest below was independently replayed before
+// review: CI run 37137165154 shards 1-4 passed on 2f9c0c3 (including the immutable
+// 20-campaign/790-turn behavior golden, runtime stages, integrated recovery,
+// Expanded compatibility, Core balance and forecast checks). The matching local
+// engine also passed integrated staffing/frozen Group7-8 replays, determinism,
+// research AI, campaign lifecycle, save integrity and the V3.1 boundary. The full
+// source engine suite passed its 48 long campaigns. No golden, preserved save or
+// reference build was changed. The subsequent HTTP recovery and UI polling
+// repairs leave these exact simulation bytes unchanged. This reviewed boundary
+// does not claim complete release-gate or human balance acceptance.
+const expected="a88fb854bd8e3388e883586db8cee85eabdfbf20fcc3928fe6cfb885e117f07a";
 assert.equal(createHash('sha256').update(engine).digest('hex'),expected,'The reviewed integration engine changed; repeat scoped compatibility and repair checks before updating its fingerprint');
 console.log(JSON.stringify({suite:'usability-engine-boundary',engineSha256:expected,scope:'Exact assembled simulation byte preservation; not UI, runtime or release acceptance.'}));

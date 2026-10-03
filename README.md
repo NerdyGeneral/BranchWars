@@ -42,6 +42,12 @@ Read the [rc4 notes](releases/v4-rc4-notes.md) for the research design and the
 
 ## Multiplayer
 
+**Core · larger map & 2–4 banks** adds the Continental map, any mix of human and
+AI banks, and shared online rooms. Choose it on the start screen for local play.
+For players in separate locations, run the included Node server on a reachable
+HTTPS host; see [online setup and recovery](game/docs/online-multiplayer.md).
+The new campaign uses save version `10.1`; existing campaigns keep their rules.
+
 LAN/Intranet, Direct P2P and Repository Link are all supported from the lobby. The host can
 also **resume a campaign from a save** in the lobby instead of starting a new one.
 

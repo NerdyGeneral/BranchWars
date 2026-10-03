@@ -7,6 +7,7 @@
       "engine/primitives.js",
       "engine/features.js",
       "content/catalog.js",
+      "content/core-map.js",
       "content/workforce.js",
       "engine/institution.js",
       "engine/territories.js",
@@ -134,6 +135,8 @@
       "engine/income-history.js",
       "engine/income-review.js",
       "engine/monetary-policy.js",
+      "engine/core-multiplayer.js",
+      "engine/core-multiplayer-save.js",
       "engine/api.js"
     ]
   },
@@ -214,6 +217,8 @@
       "ui/partner-cards.js",
       "ui/brand-campaigns.js",
       "ui/holding-capital.js",
+      "ui/core-multiplayer-reports.js",
+      "ui/core-multiplayer.js",
       "ui/bootstrap.js"
     ]
   },
@@ -244,6 +249,7 @@
     "styles/interface-markets.css",
     "styles/interface-banking-group.css",
     "styles/interface-people-strategy.css",
-    "styles/brand-campaigns.css"
+    "styles/brand-campaigns.css",
+    "styles/core-multiplayer.css"
   ]
 }

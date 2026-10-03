@@ -21,7 +21,9 @@ async function run(){
  const receipt={started:new Date().toISOString(),htmlSha256:createHash('sha256').update(html).digest('hex'),scope:'Generated game HTML in isolated Chromium; in-memory browser storage; all network blocked',errors:[],layouts:[],screens:[],routes:[],checks:[]};
  const browser=await chromium.launch({headless:true});
  try{
-  const context=await browser.newContext({viewport:{width:1366,height:768},acceptDownloads:true});await context.route('**/*',r=>r.abort());const page=await context.newPage();page.on('pageerror',e=>receipt.errors.push(e.stack));await start(page);
+  const context=await browser.newContext({viewport:{width:1366,height:768},acceptDownloads:true});await context.route('**/*',r=>r.abort());
+  const startup=await context.newPage();startup.on('pageerror',e=>receipt.errors.push(e.stack));await startup.goto('about:blank#lanip=%');await start(startup,'core');assert(await startup.locator('#gameScreen').isVisible());assert.deepEqual(receipt.errors,[],'Malformed LAN launcher text must not interrupt startup');await startup.close();receipt.checks.push('Malformed LAN address escapes leave startup and local play functional');
+  const page=await context.newPage();page.on('pageerror',e=>receipt.errors.push(e.stack));await start(page);
   assert(await page.locator('#interfaceHeader').innerText().then(t=>t.includes('Available to spend')));receipt.checks.push('Expanded starts through real setup UI with authoritative header');
   for(const workspace of ['markets','banking','people','strategy','group','reports']){
    await open(page,workspace);const mount=page.locator('#interface'+workspace[0].toUpperCase()+workspace.slice(1));
@@ -43,6 +45,7 @@ async function run(){
    }
   }
   await page.setViewportSize({width:1366,height:768});await page.evaluate(()=>{document.documentElement.style.zoom='1.25';});await open(page,'markets');await layout(page,'Markets CSS 125% zoom stress (not native browser zoom)',receipt);await page.screenshot({path:path.join(out,'markets-css125.png'),fullPage:true});receipt.screens.push('markets-css125.png');
+  await open(page,'utilities');await page.locator('#exitBtn').click();assert(await page.locator('#startScreen').isVisible());assert(await page.locator('.mast').isVisible());assert.equal(await page.locator('body').evaluate(el=>el.classList.contains('game-interface-active')),false);assert.equal(await page.locator('#exportBtn').evaluate(el=>!!el.closest('#expandedInterface')),false);await page.locator('#continueBtn').click();assert(await page.locator('#expandedInterface').isVisible());assert(await page.locator('#interfaceHeader').innerText().then(t=>t.includes('Month 4')));receipt.checks.push('Expanded exit restores the start-screen mast and shared controls; Continue restores the saved campaign');
   const core=await context.newPage();core.on('pageerror',e=>receipt.errors.push(e.stack));await start(core,'core');assert.equal(await core.locator('#expandedInterface').isVisible(),false);assert.equal(await core.locator('#gameScreen').isVisible(),true);receipt.checks.push('Core opens original functioning interface');
   assert.deepEqual(receipt.errors,[],'Unexpected browser errors');receipt.completed=new Date().toISOString();receipt.passed=true;
  }catch(error){receipt.failure=error.stack;throw error;}finally{fs.writeFileSync(path.join(out,'receipt.json'),JSON.stringify(receipt,null,2));await browser.close();}
